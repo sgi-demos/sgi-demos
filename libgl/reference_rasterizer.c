@@ -20,9 +20,9 @@ static int zbuffer_enabled;
 
 typedef uint16_t z_t;
 
-static unsigned char pixel_colors[480][800][4];
+static unsigned char pixel_colors[DISPLAY_HEIGHT][DISPLAY_WIDTH][4];
 static unsigned char *hwfb = NULL;
-static z_t pixel_depths[480][800];
+static z_t pixel_depths[DISPLAY_HEIGHT][DISPLAY_WIDTH];
 static const int Z_SHIFT = 16;
 
 static float min(float a, float b)
@@ -175,18 +175,18 @@ void pixel(int x, int y, float bary[3], void *data)
 
     z_t z = z_ >> Z_SHIFT;
 
-    if(!zbuffer_enabled || (z < pixel_depths[480 - 1 - y][x])) {
-        pixel_colors[480 - 1 - y][x][0] = r;
-        pixel_colors[480 - 1 - y][x][1] = g;
-        pixel_colors[480 - 1 - y][x][2] = b;
-        pixel_depths[480 - 1 - y][x] = z;
+    if(!zbuffer_enabled || (z < pixel_depths[DISPLAY_HEIGHT - 1 - y][x])) {
+        pixel_colors[DISPLAY_HEIGHT - 1 - y][x][0] = r;
+        pixel_colors[DISPLAY_HEIGHT - 1 - y][x][1] = g;
+        pixel_colors[DISPLAY_HEIGHT - 1 - y][x][2] = b;
+        pixel_depths[DISPLAY_HEIGHT - 1 - y][x] = z;
     }
 }
 
 void rasterizer_clear(uint8_t r, uint8_t g, uint8_t b)
 {
-    for(int j = 0; j < 480; j++)
-        for(int i = 0; i < 800; i++) {
+    for(int j = 0; j < DISPLAY_HEIGHT; j++)
+        for(int i = 0; i < DISPLAY_WIDTH; i++) {
             pixel_colors[j][i][0] = r;
             pixel_colors[j][i][1] = g;
             pixel_colors[j][i][2] = b;
@@ -216,16 +216,17 @@ void rasterizer_swap()
 
     if(hwfb != NULL) {
 
-	    memcpy(hwfb, pixel_colors, XMAXSCREEN * YMAXSCREEN * 4);
+	    memcpy(hwfb, pixel_colors, DISPLAY_WIDTH * DISPLAY_HEIGHT * 4);
+        printf("Swapped (copied) HW framebuffer %dx%d\n",DISPLAY_WIDTH, DISPLAY_HEIGHT);
 
     } else {
 
         char name[128];
         sprintf(name, "frame%04d.ppm", frame);
         FILE *fp = fopen(name, "wb");
-        fprintf(fp, "P6 800 480 255\n");
-            for(int j = 0; j < 480; j++) {
-                for(int i = 0; i < 800; i++) {
+        fprintf(fp, "P6 %d %d 255\n", DISPLAY_WIDTH, DISPLAY_HEIGHT);
+            for(int j = 0; j < DISPLAY_HEIGHT; j++) {
+                for(int i = 0; i < DISPLAY_WIDTH; i++) {
                     fwrite(pixel_colors[j][i], 1, 3, fp);
                 }
             }
@@ -237,10 +238,12 @@ void rasterizer_swap()
 
 int32_t rasterizer_winopen(char *title)
 {
-    if(getenv("USE_FRAMEBUFFER") != NULL) {
+    // In-memory framebuffer by default, USE_FRAMEPPMFILES to output each frame to .ppm file
+    if(getenv("USE_FRAMEPPMFILES") == NULL) {
         if (hwfb != NULL)
             free(hwfb);
-        hwfb = (unsigned char *)malloc(YMAXSCREEN * XMAXSCREEN * 4 * sizeof(unsigned char *));
+        hwfb = (unsigned char *)malloc(DISPLAY_WIDTH * DISPLAY_HEIGHT * 4 * sizeof(unsigned char *));
+        printf("Created HW framebuffer %dx%d\n",DISPLAY_WIDTH,DISPLAY_HEIGHT);
     }
 
     rasterizer_clear(0, 0, 0);
@@ -262,8 +265,8 @@ void rasterizer_zbuffer(int enable)
 void rasterizer_zclear(uint32_t z)
 {
     z = 0xffff; // XXX fpgasim does this
-    for(int j = 0; j < 480; j++)
-        for(int i = 0; i < 800; i++)
+    for(int j = 0; j < DISPLAY_HEIGHT; j++)
+        for(int i = 0; i < DISPLAY_WIDTH; i++)
             pixel_depths[j][i] = z;
 }
 
@@ -298,7 +301,7 @@ static void draw_screen_triangle(screen_vertex *s0, screen_vertex *s1, screen_ve
         v2[0] = floor(v2[0]);
         v2[1] = floor(v2[1]);
     }
-    static int viewport[4] = {0, 0, 800, 480};
+    static int viewport[4] = {0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT};
     screen_vertex s[3];
     s[0] = *s0;
     s[1] = *s1;
@@ -411,9 +414,9 @@ void draw_line(screen_vertex *v0, screen_vertex *v1)
             for(int i = 0; i < count; i++) {
                 for(int j = 0; j <= the_linewidth; j++) {
                     int k = (y - 256 * the_linewidth / 2) / 256 + j;
-                    pixel_colors[480 - 1 - k][x][0] = 255;
-                    pixel_colors[480 - 1 - k][x][1] = 255;
-                    pixel_colors[480 - 1 - k][x][2] = 255;
+                    pixel_colors[DISPLAY_HEIGHT - 1 - k][x][0] = 255;
+                    pixel_colors[DISPLAY_HEIGHT - 1 - k][x][1] = 255;
+                    pixel_colors[DISPLAY_HEIGHT - 1 - k][x][2] = 255;
                 }
                 y += dy/count;
                 x += dp;
@@ -428,9 +431,9 @@ void draw_line(screen_vertex *v0, screen_vertex *v1)
             for(int i = 0; i < count; i++) {
                 for(int j = 0; j <= the_linewidth; j++) {
                     int k = (x - 256 * the_linewidth / 2) / 256 + j;
-                    pixel_colors[480 - 1 - y][k][0] = 255;
-                    pixel_colors[480 - 1 - y][k][1] = 255;
-                    pixel_colors[480 - 1 - y][k][2] = 255;
+                    pixel_colors[DISPLAY_HEIGHT - 1 - y][k][0] = 255;
+                    pixel_colors[DISPLAY_HEIGHT - 1 - y][k][1] = 255;
+                    pixel_colors[DISPLAY_HEIGHT - 1 - y][k][2] = 255;
                 }
                 y += dp;
                 x += dx/count;
