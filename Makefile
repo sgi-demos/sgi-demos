@@ -9,3 +9,6 @@ all:
 	make -C jello
 	make -C buttonfly
 	make -C ideas
+	make -C flight
+	make -C colortest
+	make -C gltest
