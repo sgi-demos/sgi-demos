@@ -1,0 +1,33 @@
+#! /usr/demos/bin/slides
+.font 2
+.back 80 100 150,clear
+.size 100 1179 50 973
+.margins 60 60 10 10
+.back 0 0 130,clear
+.color 255 200 100,center on,shadow on 4,fade off,wait off,under on
+.sk 1
+Jello
+.under off
+.color 255 100 45
+.sk 2,underline off,shadow on 3
+Simulates the dynamics of an elastic body in real-time.
+.sk 1
+The icosohedron is made of 13 masses (one at each
+vertex and one more in the middle).  Each mass is
+connected to its neighbors by springs.
+.sk 1
+These formulas are linearly iterated for each mass:
+.color 200 100 255
+v = v + a dt
+p = p + v dt
+.color 255 100 45
+a is the acceleration vector
+(the sum of the forces due to the springs,
+walls, and gravity, divided by the mass),
+v is the velocity vector,
+p is the position vector.
+.sk 1
+Use the left mouse button to drop the jello.
+.sk 1
+Use the middle mouse button to reorient the container.
+.wait on

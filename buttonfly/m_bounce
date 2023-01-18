@@ -1,0 +1,18 @@
+Logo
+	../bounce/bounce ../bounce/logo.bin
+
+X29
+	../bounce/bounce ../bounce/x29.bin
+
+VW
+	../bounce/bounce ../bounce/vw.bin
+
+Martini
+	../bounce/bounce ../bounce/martini.bin
+
+Candlestick
+	../bounce/bounce ../bounce/canstick.bin
+
+Doughnut
+	../bounce/bounce ../bounce/doughnut.bin
+

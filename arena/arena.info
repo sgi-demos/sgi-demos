@@ -1,0 +1,19 @@
+#! /usr/demos/bin/slides
+.back 0 163 142,clear
+.color 224 224 100
+.font 2,center on
+.underline on
+ARENA
+.color 50 50 255
+.sk 2,underline off
+Simulates a future sport; press
+the ESC key to exit
+.sk 2
+Runs in colorindex mode
+.sk 2
+Draws only what it needs to
+.sk 2
+Can communicate across the ethernet
+to allow multi-player combat
+(Use the -n option)
+.wait on

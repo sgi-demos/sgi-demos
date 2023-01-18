@@ -1,0 +1,4 @@
+#! /bin/csh -f
+/usr/demos/bin/ideas
+
+journalplay /usr/demos/data/journal/ideas.j

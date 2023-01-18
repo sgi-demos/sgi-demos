@@ -1,0 +1,7 @@
+Arena
+	/usr/demos/bin/arena -d
+	.popup. Arena %t
+	.popup. Information
+	/usr/demos/graphics/arena.info
+	.popup. Manual
+	wsh -c /usr/demos/bin/manwsh 6 arena

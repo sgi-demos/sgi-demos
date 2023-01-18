@@ -1,0 +1,12 @@
+Bounce Lights
+	cd /usr/demos/data/models
+	/bin/ls *.bin | awk 'BEGIN{FS="."}{print $1 "\n\t/usr/demos/bin/bounce /usr/demos/data/models/" $0 "\n"}' -
+	echo "nothing\n\t/usr/demos/bin/bounce"
+	.menu. -
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+	.popup. Bounce %t
+	.popup. Information
+	/usr/demos/graphics/bounce.info
+	.popup. Manual
+	wsh -c /usr/demos/bin/manwsh 6 bounce

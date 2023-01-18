@@ -1,0 +1,19 @@
+.font 2
+.back 0 0 130,clear
+.size 100 1179 50 973
+.margins 60 60 10 10
+.back 100 100 200,clear
+.sk 2
+.color 230 120 0,center on,shadow on 4,fade off,wait off,under on
+       Buttonfly       
+.under off,shadow on 3
+.color 170 241 42,fade on 30
+.sk 2
+- To use, just press left mouse-button on buttons
+.sk 2
+- Right mouse-button has pop-up menus
+.sk 2
+- Uses backface removal and hardware lighting
+.sk 2
+- To re-configure, edit the .m files in /usr/demos
+.wait on

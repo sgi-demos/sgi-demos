@@ -1,0 +1,9 @@
+int sl_xl,sl_xr,sl_yt,sl_yb;
+int sl_y1,sl_y2,sl_y3;
+int sl_rxd,sl_sxd,sl_txd;
+float barmat[4][4];
+Angle r_xlast,r_ylast,r_zlast,rlast;
+float t_xlast,t_ylast,t_zlast,tlast;
+float s_xlast,s_ylast,s_zlast,slast;
+char axis;
+Object slider,slides,slidet;

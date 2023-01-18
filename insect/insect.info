@@ -1,0 +1,31 @@
+#! /usr/demos/bin/slides
+.font 2
+.back 80 100 150,clear
+.size 100 1179 50 973
+.margins 60 60 10 10
+.back 0 0 130,clear
+.color 255 200 100,center on,shadow on 4,fade off,wait off,under on
+.sk 1
+Insect
+.under off
+.sk 2,underline off,shadow on 3
+.color 100 255 200
+Demonstrates in real-time an algorithm for the
+motion of the joints of a six-legged device.
+.sk 1
+Originally written for the Iris 2400.
+.sk 1
+Uses backface-removal and the 'painters algorithm'
+to do hidden surface removal.
+.sk 1
+The lighting is done in software once when the program
+is started.  The shadow is done with a software built
+matrix and the 'multmatrix' function.
+.sk 1
+Use the left mouse button to move the eyepoint.
+.sk 1
+Use the middle mouse button to reorient the view.
+.sk 1
+Use the 'F' key to 'follow' the insect.
+.sk 1
+.wait on

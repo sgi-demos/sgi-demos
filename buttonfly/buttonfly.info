@@ -1,0 +1,30 @@
+#! /usr/demos/bin/slides
+.font 2
+.back 100 100 200,clear
+.size 100 1179 50 973
+.margins 60 60 10 10
+.back 60 30 100,clear
+.sk 2
+.color 230 120 0
+.center on,shadow on 4,fade off,wait off,under on
+Buttonfly
+.under off,shadow on 3
+.color 170 241 42
+.sk 2
+Buttonfly is a user configurable, graphical, hierarchical menu.
+.sk 1
+The program displays a button or set of buttons.
+Each button has a title.  When picked with the left mouse
+button the buttonfly button either runs a shell script
+(the blue buttons) or the button tumbles forward revealing
+another set of buttons on the back (the purple buttons).
+.sk 1
+An optional set of actions are available for each button
+through a pop-up menu brought up by holding the right
+mouse button down.  These actions are user configurable,
+but a standard set are available in the demo environment:
+.sk 1
+Information: a slide describing major features (this).
+.sk 1
+Manual: a window shell that displays the manual entry.
+.wait on

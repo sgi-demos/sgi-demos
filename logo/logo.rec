@@ -1,0 +1,4 @@
+#! /bin/csh -f
+/usr/demos/bin/logo
+
+journalplay /usr/demos/data/journal/logo.j

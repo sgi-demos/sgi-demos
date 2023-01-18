@@ -1,0 +1,9 @@
+Show Image
+	cd /usr/demos/data/images
+	/bin/ls *.rgb *.ci | awk 'BEGIN{FS="."}{print "show " $1 "\n\t/usr/sbin/ipaste /usr/demos/data/images/" $0 "\n"}'
+	.menu. -
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+	.popup. Ipaste %t
+	.popup. Manual
+	wsh -c /usr/demos/bin/manwsh 1 ipaste

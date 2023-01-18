@@ -1,0 +1,76 @@
+.PHONY: clean run
+
+OPT             =       -Os
+# -g
+
+INCDIRS         =       -I../sys_include -I../demo_include
+OLD_C_FLAGS     =       -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type
+
+TOOLROOT        ?=      $(HOME)/trees/gcc-arm-none-eabi-5_3-2016q1
+STM32FCUBEROOT  ?=      $(HOME)/trees/STM32Cube_FW_F4_V1.9.0
+GCC_LIB         ?=      $(TOOLROOT)/lib/gcc/arm-none-eabi/5.3.1
+
+CORTEX_M4_HWFP_CC_FLAGS = -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mhard-float -mfpu=fpv4-sp-d16 -mlittle-endian
+TARGET                  = STM32F415xx
+STM32F4XX_CMSIS_INC_PATH= $(STM32FCUBEROOT)/Drivers/CMSIS/Include/
+CORTEX_M4_HWFP_LIB_PATH = $(GCC_LIB)/armv7e-m/fpu
+
+APP=logo
+SRC=light.c logo.c 
+LIBGL_SRC=../libgl/gl.c ../libgl/vector.c # ../libgl/network.c
+
+ARM_SRC         = \
+        ../STM32Cube4/system_stm32f4xx.c \
+        ../STM32Cube4/stm32f4xx_it.c \
+        ../STM32Cube4/stm32f4xx_hal_cortex.c \
+        ../STM32Cube4/stm32f4xx_hal_pcd_ex.c \
+        ../STM32Cube4/stm32f4xx_hal_dma.c \
+        ../STM32Cube4/stm32f4xx_hal_gpio.c \
+        ../STM32Cube4/stm32f4xx_hal_pcd.c \
+        ../STM32Cube4/stm32f4xx_hal_rcc.c \
+        ../STM32Cube4/stm32f4xx_hal_uart.c \
+        ../STM32Cube4/stm32f4xx_hal_spi.c \
+        ../STM32Cube4/stm32f4xx_hal_tim.c \
+        ../STM32Cube4/stm32f4xx_hal_tim_ex.c \
+        ../STM32Cube4/stm32f4xx_hal.c \
+        ../STM32Cube4/stm32f4xx_ll_usb.c \
+        ../ARM/syscalls.c \
+        ../ARM/delay.c \
+        ../ARM/crc7.c \
+        ../ARM/leds.c \
+        ../ARM/monitor_queue.c \
+        ../ARM/uart.c \
+        ../ARM/utility.c \
+        ../ARM/sd_spi.c \
+        ../ARM/ff.c \
+        ../ARM/diskio.c \
+        ../ARM/logprintf.c \
+        ../ARM/main.c \
+        $(NULL)
+
+#        ../ARM/usbd_core.c \
+#        ../ARM/usbd_ioreq.c \
+#        ../ARM/usbd_ctlreq.c \
+#        ../ARM/usbd_conf.c \
+#        ../ARM/usbd_cdc.c \
+#        ../ARM/usbd_cdc_interface.c \
+#        ../ARM/usbd_desc.c \
+
+$(APP).hex: $(APP).elf
+	$(TOOLROOT)/bin/arm-none-eabi-objcopy -O ihex $< $@
+
+
+$(APP).elf: $(SRC) light.h $(LIBGL_SRC) $(ARM_SRC) ../STM32Cube4/startup_stm32f417xx.o
+	$(TOOLROOT)/bin/arm-none-eabi-gcc $(OPT) --specs=nosys.specs -DMAIN=main2 $(OLD_C_FLAGS) $(INCDIRS) -fno-builtin -I$(STM32F4XX_CMSIS_INC_PATH) -I../STM32Cube4 -D$(TARGET) $(CORTEX_M4_HWFP_CC_FLAGS) -L$(CORTEX_M4_HWFP_LIB_PATH) -T../ARM/STM32F415RG_FLASH.ld -lm -Wl,--gc-sections -o $@  ../STM32Cube4/startup_stm32f417xx.o $(SRC) $(LIBGL_SRC) $(ARM_SRC) -lm -lc
+
+../STM32Cube4/startup_stm32f417xx.o: ../STM32Cube4/startup_stm32f417xx.s
+	$(TOOLROOT)/bin/arm-none-eabi-gcc -Wall $(OPT) $(CORTEX_M4_HWFP_CC_FLAGS)  $< -c -o $@
+
+%.dfu: %.hex
+	python ../ARM/dfu-convert -i $< $@
+
+burn: logo.dfu
+	sudo dfu-util -d 0483:df11 -a 0 -D logo.dfu
+
+clean:
+	rm -f $(APP).elf

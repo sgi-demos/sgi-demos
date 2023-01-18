@@ -1,0 +1,6 @@
+Square Clock
+	clock
+Round Clock
+	/usr/NeWS/demo/roundclock -s &
+Mod Clock
+	/usr/NeWS/demo/roundclock -f -s &

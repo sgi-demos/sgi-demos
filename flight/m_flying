@@ -1,0 +1,12 @@
+flight
+	/usr/demos/bin/flight
+
+Heads Up flight
+	/usr/demos/bin/flight -h
+
+dogfight
+	/usr/demos/bin/dog
+
+shadow
+	/usr/demos/bin/shadow
+

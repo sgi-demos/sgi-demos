@@ -1,0 +1,61 @@
+#ifndef DEMOCOLORDEF
+#define DEMOCOLORDEF
+
+#define BUBBLE  1
+#define NONBUBBLE 0
+
+int m_type;
+
+int CLOCKCOLOR[2];
+int ARCHCOLORS[2];
+int NARCHCOLORS[2];
+int ROBOTCOLORS[2];
+int LIGHTCOLORS[2];
+int LIGHTBACK[2];
+
+int GRAY;
+int GRID;
+int SKYBLUE;
+int RAMPB;
+int RAMPE;
+int RAMPB2;
+int RAMPE2;
+int RAMPB3;
+int RAMPE3;
+int RAMPB4;
+int RAMPE4;
+int RAMPB5;
+int RAMPE5;
+
+int GREYRAMP[2];
+int NGREYRAMP[2];
+
+int CUENUM[2];
+int CUECOLOR0[2];
+int CUECOLOR1[2];
+int JETCOLORS[2];
+int NJETCOLORS[2];
+int CUECOLOR2[2];
+int CUECOLOR3[2];
+int CUECOLOR4[2];
+int CUECOLOR5[2];
+int CUECOLOR6[2];
+
+
+int SHUTTLE_BODY[2];
+int SHUTTLE_DOOR[2];
+/*int SHUTTLE_AXES[2];*/
+int SHUTTLE_BKGD[2];
+
+int NHEMECOLORS[2];
+
+int SURFCOLORS0[2];
+int SURFCOLORS1[2];
+int SURFCOLORS2[2];
+
+int SINGLE1_SWIZZLE[2];
+int SINGLE2_SWIZZLE[2];
+int DOUBLE1_SWIZZLE[2];
+int DOUBLE2_SWIZZLE[2];
+
+#endif // DEMOCOLORDEF

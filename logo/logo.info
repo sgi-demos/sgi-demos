@@ -1,0 +1,26 @@
+#! /usr/demos/bin/slides
+.font 2
+.back 80 100 150,clear
+.size 100 1179 50 973
+.margins 60 60 10 10
+.back 0 0 130,clear
+.color 255 100 200,center on,shadow on 4,fade off,wait off,under on
+.sk 1
+Grow A Logo
+.under off
+(logo)
+.sk 2,underline off,shadow on 3
+.color 255 200 100
+Demonstrates hardware lighting and z-buffering.
+.sk 1
+The shape has 1,296 independent quadrilaterals.  There
+are two infinite source, hardware-assisted lights.
+.sk 1
+The object is being rebuilt each frame, it isn't a list of
+pre-computed shapes.  It is worth noting that this is
+something that can't eficiently be done with display lists.
+.sk 1
+Press the left mouse button to start it over.
+.sk 1
+Use the middle mouse button to reorient the shape.
+.wait on

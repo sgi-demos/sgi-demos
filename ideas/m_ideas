@@ -1,0 +1,7 @@
+Ideas In Motion
+	/usr/demos/bin/ideas
+	.popup. Ideas %t
+	.popup. Manual
+	wsh -c /usr/demos/bin/manwsh 6 ideas
+	.popup. Information
+	/usr/demos/graphics/ideas.info

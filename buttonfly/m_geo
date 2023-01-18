@@ -1,0 +1,5 @@
+Geophysical Demos
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+	cat .m_geo_*
+	.menu. -

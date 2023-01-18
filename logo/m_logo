@@ -1,0 +1,7 @@
+Grow A Logo
+	/usr/demos/bin/logo
+	.popup. Logo %t
+	.popup. Information
+	/usr/demos/graphics/logo.info
+	.popup. Manual
+	wsh -c /usr/demos/bin/manwsh 6 logo

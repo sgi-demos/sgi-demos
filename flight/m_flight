@@ -1,0 +1,5 @@
+Flight Simulator
+	cat .m_flight_*
+	.menu. -
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0

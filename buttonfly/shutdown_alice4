@@ -1,0 +1,4 @@
+#! /bin/sh
+
+sleep 3
+/home/ubuntu/alice/alice4/software/fb_image_test/alice4view /home/ubuntu/alice/alice4/software/buttonfly/goodbye.png 0x38000000 3200 4

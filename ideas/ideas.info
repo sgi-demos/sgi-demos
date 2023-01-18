@@ -1,0 +1,30 @@
+#! /usr/demos/bin/slides
+.font 2
+.back 80 100 150,clear
+.size 100 1179 50 973
+.margins 60 60 10 10
+.back 0 0 130,clear
+.sk 2
+.color 255 200 100,center on,shadow on 4,fade off,wait off,under on
+Ideas in Motion
+.under off
+.color 200 255 100 
+.sk 2,underline off,shadow on 3
+Graphics intensive real-time animation.  It was written
+in C for the 4D70/GT and generates about eight to
+fourteen frames per second depending on the size
+of the window.
+.sk 1
+The motion and lighting are calculated on the fly.
+.sk 1
+The lighting on the logo and the lamp use an infinite
+source lighting model with a specular component and 
+were done using the hardware lighting support.
+.sk 1
+The lighting on the tabletop (the spotlight effect) was
+done in the software for each vertex of a 13 by 13 grid.
+.sk 1
+The logo and its shadow each contain 2016 meshed triangles.
+The lamp contains 384 meshed triangles.  The letters 
+contain approximately 1200 total meshed triangles.
+.wait on

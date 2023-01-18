@@ -1,0 +1,7 @@
+Jello
+	/usr/demos/bin/jello
+	.popup. Jello %t
+	.popup. Information
+	/usr/demos/cpu/jello.info
+	.popup. Manual
+	wsh -c /usr/demos/bin/manwsh 6 jello

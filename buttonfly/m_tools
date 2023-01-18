@@ -1,0 +1,14 @@
+Shell
+	wsh -f Screen-Bold.15
+Clocks
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+	.menu. .m_clock
+Calculator
+	/usr/NeWS/demo/calcul
+Color Tools
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+	.menu. .m_color
+Eyeballs
+	/usr/demos/bin/eye.ps
