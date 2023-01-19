@@ -217,7 +217,7 @@ void rasterizer_swap()
     if(hwfb != NULL) {
 
 	    memcpy(hwfb, pixel_colors, DISPLAY_WIDTH * DISPLAY_HEIGHT * 4);
-        printf("Swapped (copied) HW framebuffer %dx%d\n",DISPLAY_WIDTH, DISPLAY_HEIGHT);
+        printf("Swapped (copied) HW framebuffer %dx%d frame %d\n",DISPLAY_WIDTH, DISPLAY_HEIGHT, frame);
 
     } else {
 
