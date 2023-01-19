@@ -1,1 +1,3 @@
-/insect
+*.html
+*.js
+*.wasm

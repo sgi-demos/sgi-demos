@@ -25,14 +25,14 @@
 #define ECLIPSE8_NCOLORS 10
 #define ECLIPSE8_SKYBLUE 3
 
-Object screen,viewit,shadow,body,hip[6],thigh[6],shin[6],kneeball[6];
-Object body_shadow,hip_shadow,thigh_shadow,shin_shadow,kneeball_shadow;
+extern Object screen,viewit,shadow,body,hip[6],thigh[6],shin[6],kneeball[6];
+extern Object body_shadow,hip_shadow,thigh_shadow,shin_shadow,kneeball_shadow;
 
-Tag cphitag,cthetatag,cposittag,windowtag;
+extern Tag cphitag,cthetatag,cposittag,windowtag;
 
-Angle knee[6];
-Angle hip_phi[6];
-Angle hip_theta[6];
+extern Angle knee[6];
+extern Angle hip_phi[6];
+extern Angle hip_theta[6];
 
 extern Angle degrees();
 extern float dot();
@@ -40,44 +40,44 @@ extern float integer();
 extern float frac();
 extern float fabso();
 
-Coord sdepth;
-float glsin,glcos;
-float px,py;
-float light[3],phi,theta;
-Boolean legup[6];
-float legx[6],legy[6];
+extern Coord sdepth;
+extern float glsin,glcos;
+extern float px,py;
+extern float light[3],phi,theta;
+extern Boolean legup[6];
+extern float legx[6],legy[6];
 
-float cx,cy,cz,cvx,cvy,cvz;
-float dmr[6],fr[6];
-Angle ctheta,cphi,cvtheta,cvphi;
-Boolean follow;
+extern float cx,cy,cz,cvx,cvy,cvz;
+extern float dmr[6],fr[6];
+extern Angle ctheta,cphi,cvtheta,cvphi;
+extern Boolean follow;
 
-Coord b1[4][3];
-Coord b2[4][3];
-Coord b3[4][3];
-Coord b4[4][3];
-Coord b5[4][3];
-Coord b6[4][3];
-Coord h1[4][3];
-Coord h2[4][3];
-Coord h3[3][3];
-Coord t1[4][3];
-Coord t2[3][3];
-Coord t3[3][3];
-Coord t4[3][3];
-Coord t5[3][3];
-Coord t6[3][3];
-Coord t7[3][3];
-Coord t8[4][3];
-Coord s1[4][3];
-Coord s2[4][3];
-Coord s3[4][3];
-Coord s4[4][3];
-Coord s5[4][3];
-Coord k1[4][3];
-Coord k2[6][3];
-Coord k3[6][3];
-Coord b7[12][3];
-Coord b8[12][3];
-Icoord scr[4][2];
+extern Coord b1[4][3];
+extern Coord b2[4][3];
+extern Coord b3[4][3];
+extern Coord b4[4][3];
+extern Coord b5[4][3];
+extern Coord b6[4][3];
+extern Coord h1[4][3];
+extern Coord h2[4][3];
+extern Coord h3[3][3];
+extern Coord t1[4][3];
+extern Coord t2[3][3];
+extern Coord t3[3][3];
+extern Coord t4[3][3];
+extern Coord t5[3][3];
+extern Coord t6[3][3];
+extern Coord t7[3][3];
+extern Coord t8[4][3];
+extern Coord s1[4][3];
+extern Coord s2[4][3];
+extern Coord s3[4][3];
+extern Coord s4[4][3];
+extern Coord s5[4][3];
+extern Coord k1[4][3];
+extern Coord k2[6][3];
+extern Coord k3[6][3];
+extern Coord b7[12][3];
+extern Coord b8[12][3];
+extern Icoord scr[4][2];
 

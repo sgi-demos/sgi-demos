@@ -444,17 +444,18 @@ void draw_line(screen_vertex *v0, screen_vertex *v1)
 
 void rasterizer_draw(uint32_t type, uint32_t count, screen_vertex *screenverts)
 {
+    int i;
     switch(type) {
         case DRAW_POINTS:
             fprintf(stderr, "POINTS not implemented\n");
             break;
         case DRAW_LINES:
-            for(int i = 0; i < count / 2; i++) { 
+            for(i = 0; i < count / 2; i++) { 
                 draw_line(&screenverts[i * 2 + 0], &screenverts[i * 2 + 1]);
             }
             break;
         case DRAW_TRIANGLES:
-            for(int i = 0; i < count / 3; i++)
+            for(i = 0; i < count / 3; i++)
                 draw_screen_triangle(&screenverts[i * 3], &screenverts[i * 3 + 1], &screenverts[i * 3 + 2]);
             break;
     }

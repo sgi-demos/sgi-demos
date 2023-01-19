@@ -47,6 +47,7 @@
 
 static const int32_t DISPLAY_WIDTH = XMAXSCREEN + 1;
 static const int32_t DISPLAY_HEIGHT = YMAXSCREEN + 1;
+
 #define POLY_MAX 512
 
 /*
@@ -678,7 +679,7 @@ void process_tmesh(int32_t n, world_vertex *worldverts)
 	    static screen_vertex triangle[3];
 	    triangle[0] = screenverts[0];
 
-	    for(int i = 0; i < r - 2; i++) {
+	    for(i = 0; i < r - 2; i++) {
 		triangle[1] = screenverts[i + 1];
 		triangle[2] = screenverts[i + 2];
 		if(!backface_enabled || (ccw ^ !backface_cull(triangle)))
@@ -710,14 +711,14 @@ void process_polygon(int32_t n, world_vertex *worldverts)
         n = r;
     }
 
-    for(int i = 0; i < n; i++)
+    for(i = 0; i < n; i++)
         project_vertex(&vp[i], &screenverts[i]);
  
     // XXX break into a single draw of TRIANGLES instead of a single function call per triangle:
     static screen_vertex triangle[3];
     triangle[0] = screenverts[0];
 
-    for(int i = 0; i < n - 2; i++) {
+    for(i = 0; i < n - 2; i++) {
         triangle[1] = screenverts[i + 1];
         triangle[2] = screenverts[i + 2];
 	if(!backface_enabled || !backface_cull(triangle))
@@ -1353,7 +1354,7 @@ void color(Colorindex color) {
     // XXX alpha in color map?
 }
 
-void deflinestyle() { 
+void deflinestyle(int32_t index, Linestyle pattern) { 
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
@@ -1390,7 +1391,7 @@ void editobj(Object obj) {
     replace_mode = 0;
 }
 
-void frontbuffer() { 
+void frontbuffer(Boolean enable) { 
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
@@ -1420,7 +1421,7 @@ Tag gentag() {
     abort();
 }
 
-Boolean getbutton() { 
+Boolean getbutton(int button) { 
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
     return 0;
 }
@@ -2299,7 +2300,7 @@ void draw_screen_aarect_filled(int r, int g, int b, float left, float top, float
     static screen_vertex triangle[3];
     triangle[0] = q[0];
 
-    for(int i = 0; i < 2; i++) {
+    for(i = 0; i < 2; i++) {
         triangle[1] = q[i + 1];
         triangle[2] = q[i + 2];
 	if(!backface_enabled || !backface_cull(triangle))
@@ -2397,7 +2398,7 @@ void pup_draw(pup *p, int menu_left, int menu_top, int selected)
     draw_screen_aarect_outline(0, 0, 0, items_outline_left, items_outline_top, items_outline_right, items_outline_bottom);
     draw_screen_aarect_filled(255, 255, 255, items_fill_left, items_fill_top, items_fill_right, items_fill_bottom);
     int item_top = items_pane_top;
-    for(int i = 0; i < p->item_count; i++) {
+    for(i = 0; i < p->item_count; i++) {
         if(i == selected) {
             draw_screen_aarect_filled(0, 0, 0, items_fill_left + 1, item_top + 2, items_fill_right - 1, item_top - font_height - 2);
             draw_screen_string(255, 255, 255, items_pane_left, item_top - font_height, p->items[i].item);
@@ -3334,7 +3335,7 @@ void poly(int n, Coord p[][3]) {
         vec3f_set(worldverts[i].normal, 1, 0, 0);
     }
 
-    for(int i = 0; i < polygon_vert_count; i++) {
+    for(i = 0; i < polygon_vert_count; i++) {
         process_line(&worldverts[i], &worldverts[(i + 1) % polygon_vert_count]);
     }
 }
@@ -3460,17 +3461,17 @@ static void init_gl_state()
     the_viewport[4] = 0.0;
     the_viewport[5] = 1.0;
 
-    for(int i = 0; i < MAX_MATERIALS; i++)
+    for(i = 0; i < MAX_MATERIALS; i++)
         material_init(&materials[i]);
-    for(int i = 0; i < MAX_LIGHTS; i++)
+    for(i = 0; i < MAX_LIGHTS; i++)
         light_init(&lights[i]);
-    for(int i = 0; i < MAX_LMODELS; i++)
+    for(i = 0; i < MAX_LMODELS; i++)
         lmodel_init(&lmodels[i]);
 
-    for(int i = 0; i < MAX_LIGHTS; i++)
+    for(i = 0; i < MAX_LIGHTS; i++)
         lights_bound[i] = NULL;
 
-    for(int i = 0; i < CIRCLE_SEGMENTS; i++) {
+    for(i = 0; i < CIRCLE_SEGMENTS; i++) {
         float a = i * M_PI * 2 / CIRCLE_SEGMENTS;
         circle_verts[i][0] = cos(a);
         circle_verts[i][1] = sin(a);
@@ -3485,7 +3486,7 @@ static void init_gl_state()
     vec3ub_set(colormap[CYAN], 0, 255, 255);
     vec3ub_set(colormap[WHITE], 255, 255, 255);
 
-    for(int i = 0; i < MAX_PUPS; i++)
+    for(i = 0; i < MAX_PUPS; i++)
         pup_init(pups + i);
 
     signal(SIGWINCH, sigwinch);

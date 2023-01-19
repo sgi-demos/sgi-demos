@@ -17,6 +17,33 @@
 
 #include "EM_MAIN_LOOP_INIT.h"
 
+Object screen,viewit,shadow,body,hip[6],thigh[6],shin[6],kneeball[6];
+Object body_shadow,hip_shadow,thigh_shadow,shin_shadow,kneeball_shadow;
+
+Tag cphitag,cthetatag,cposittag,windowtag;
+
+Angle knee[6];
+Angle hip_phi[6];
+Angle hip_theta[6];
+
+Coord sdepth;
+float glsin,glcos;
+float px,py;
+float light[3],phi,theta;
+Boolean legup[6];
+float legx[6],legy[6];
+
+float cx,cy,cz,cvx,cvy,cvz;
+float dmr[6],fr[6];
+Angle ctheta,cphi,cvtheta,cvphi;
+Boolean follow;
+
+Coord k2[6][3];
+Coord k3[6][3];
+Coord b7[12][3];
+Coord b8[12][3];
+Icoord scr[4][2];
+
 Linestyle ls = 0xaaaa;
 
 short   halftone[] = {

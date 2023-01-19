@@ -159,7 +159,7 @@ extern void	cyclemap();
 extern void	dbtext();
 extern void	defbasis();
 extern void	defcursor(int32_t index, uint16_t *cursor);
-extern void	deflinestyle();
+extern void	deflinestyle(int32_t index, Linestyle pattern);
 extern void	defpattern(int32_t index, int size, Pattern16 mask);
 extern int32_t     defpup(char *menu);
 extern void	defrasterfont();
@@ -188,7 +188,7 @@ extern void	finish();
 extern void	font();
 extern void	foreground();
 extern void	freepup();
-extern void	frontbuffer();
+extern void	frontbuffer(Boolean enable);
 extern void	fudge();
 extern void	fullscrn();
 extern void	gbegin();
@@ -196,7 +196,7 @@ extern void	gconfig();
 extern Object	genobj();
 extern Tag	gentag();
 extern int32_t	getbuffer();
-extern Boolean	getbutton();
+extern Boolean	getbutton(int button);
 extern Boolean	getcmmode();
 extern int32_t	getcolor();
 extern void	getcpos();
@@ -481,6 +481,8 @@ extern void c3i(int c[3]);
 extern void v4f(float c[3]);
 extern void zfunction(int func);
 extern void czclear(int color, int depth);
+
+extern void gl_sincos(Angle angle, float *s, float *c);
 
 // Added by LK because demos needed it. I don't know what the real values should be.
 #define GLC_OLDPOLYGON 2001
