@@ -827,7 +827,7 @@ broadcast ("retracted my landing gear while on the ground");
 	    }
 	    if (thrust > max_throttle) thrust = max_throttle;
 	}
-#define DELAY (TPS/4)
+    int DELAY = (TPS/4);
 	/* tenths of degrees per tick	*/
 	int tilt_x = XMAXSCREEN * (getvaluator(DIAL0) - tilt_left) / (tilt_right - tilt_left);
 	tilt_x = XMIDDLE;
