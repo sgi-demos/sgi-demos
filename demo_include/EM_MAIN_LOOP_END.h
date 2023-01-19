@@ -1,0 +1,2 @@
+/* restore while */
+#undef while

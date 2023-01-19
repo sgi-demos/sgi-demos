@@ -15,6 +15,8 @@
 #include <democolors.c>
 #include "insect.h"
 
+#include "EM_MAIN_LOOP_INIT.h"
+
 Linestyle ls = 0xaaaa;
 
 short   halftone[] = {
@@ -52,12 +54,12 @@ long worgx, worgy;
 long wsizex, wsizey;
 long pikx, piky;
 
-
+#include "EM_MAIN_BEGIN.h"
 int main (argc, argv)
+#include "EM_MAIN_END.h"
 int	argc;
 char	*argv[];
 {
- 
     int     i,
             j,
             k;
@@ -148,7 +150,9 @@ new for ECLIPSE 8 bit machine  */
     draw_insect ();
     frontbuffer (FALSE);
 
+    #include "EM_MAIN_LOOP_BEGIN.h"
     while (TRUE) {
+    #include "EM_MAIN_LOOP_END.h"
 
 	while (qtest ()) {
 	    dev = qread (&val);
