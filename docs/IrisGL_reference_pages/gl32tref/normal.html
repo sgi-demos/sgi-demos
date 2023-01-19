@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>normal Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="noport.html">Previous</a>  |
+<a href="nurbscurve.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9b7"></A>normal Subroutine</H2>
+<A NAME="INDEX1252" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1253" REL="I2" TITLE="begin-end style"></A>
+<A NAME="INDEX1254" REL="I3" TITLE="normal"></A>
+<A NAME="INDEX1255" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1256" REL="I2" TITLE="normal vector"></A>
+<A NAME="INDEX1257" REL="I3" TITLE="setting"></A>
+<A NAME="INDEX1258" REL="I1" TITLE="normal subroutine (GL)"></A>
+
+<H3><A NAME="A142X9b9"></A>Purpose</H3>
+<P><A NAME="E1D7037794ceb"></A>Sets the current normal vector.</P>
+
+<H3><A NAME="A78C119"></A>Libraries</H3>
+<P><A NAME="E1D7037833ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7037857ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9bd"></A>C Syntax</H3>
+<PRE><A NAME="A142X9be"></A><B>void normal(Coord </B><A HREF="normal.html#A142X9c2"><I>narray</I></A><B>[3])</B></PRE>
+
+<H3><A NAME="A20C0e2f2"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A20C0e2f3"></A><B>SUBROUTINE NORMAL(</B><I>narray</I><B>)</B>
+<B>REAL </B><I>narray</I><B>(3)</B></PRE>
+
+<H3><A NAME="A142X9bf"></A>Description</H3>
+<P><A NAME="E1D7037970ceb"></A>The <B>normal</B> subroutine sets the current normal vector. The <I>x, y,</I> and <I>z</I> 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06el">modeling coordinates</A> stored in the parameter <A HREF="normal.html#A142X9c2"><I>narray</I></A> are transformed into eye coordinates using the inverse transpose of the current
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P036">viewing matrix</A>. These numbers are used to set the value for the current vertex normal. </P>
+
+<P><A NAME="E1D7037996ceb"></A>The passed parameter (<I>narray</I>) becomes the current normal and is used when the lighting algorithm is rerun for all subsequent vertices. It is not necessary to respecify a normal if it is unchanged. For example, a single call to the <B>n3f </B>subroutine is sufficient for a 
+flat-shaded polygon. However, the <B>n3f</B> subroutine must be called before the first vertex subroutine.</P>
+
+<P><A NAME="E1D7038021ceb"></A>Lighting calculations assume that the specified 
+normal is of unit length, as shown in the following equation:</P>
+
+<PRE>   x<SUP>2</SUP> + y<SUP>2</SUP> + z<SUP>2</SUP> = 1.0
+</PRE>
+
+<P><A NAME="E1D7038062ceb"></A>If the normal does not equal 1.0, or if no 
+lighting model is active, the results are unpredictable. </P>
+
+<P><A NAME="E1D7038088ceb"></A>The <B>normal </B>and <A HREF="n3f.html#A139X91ef3"><B>n3f</B></A> subroutines are the same in all respects. </P>
+
+<H3><A NAME="A142X9c1"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X9c2"></A><I>narray</I></TD>
+<TD>  Specifies the address of an array containing three floating point numbers representing the <I>x, y,</I> and <I>z</I> model coordinates. Corresponding indexes for these coordinates are:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Model Coordinate</B></TD>
+
+<TD><B>C Index</B></TD>
+
+<TD><B>FORTRAN Index</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>x</TD>
+
+<TD>0</TD>
+
+<TD>1</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>y</TD>
+
+<TD>1</TD>
+
+<TD>2</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>z</TD>
+
+<TD>2</TD>
+
+<TD>3</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A62C015d78"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7038184ceb"></A>This subroutine is part GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C11c"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11d"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11e"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X9d7"></A>Related Information</H3>
+<P><A NAME="E1D7038281ceb"></A>Binding a new material, light, or lighting model definition with the <A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> subroutine.</P>
+
+<P><A NAME="E1D7038306ceb"></A>Defining a new material, light, or lighting model with the <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> subroutine.<B>  </B></P>
+
+<P><A NAME="E1D7038332ceb"></A>Specifying a normal for lighting calculations with the <A HREF="n3f.html#A139X91ef3"><B>n3f</B></A> subroutine.</P>
+
+<P><A NAME="E1D7038358ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Creating <!--gl32prgd:--><A HREF="../gl32prgd/crlighteff.html#crlighteff.html">Lighting Effects</A>, 
+Drawing with <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Begin-End Style</A> Subroutines, and Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P><hr><center>
+[  <a href="noport.html">Previous</a>  |
+<a href="nurbscurve.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

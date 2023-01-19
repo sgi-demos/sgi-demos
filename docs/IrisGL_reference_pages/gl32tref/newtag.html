@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>newtag Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="newpup.html">Previous</a>  |
+<a href="noborder.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X93a4"></A>newtag Subroutine</H2>
+<A NAME="INDEX1224" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1225" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX1226" REL="I3" TITLE="newtag"></A>
+<A NAME="INDEX1227" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1228" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX1229" REL="I3" TITLE="inserting tag into at offset from existing tag"></A>
+<A NAME="INDEX1230" REL="I1" TITLE="newtag subroutine (GL)"></A>
+
+<H3><A NAME="A142X93a6"></A>Purpose</H3>
+<P><A NAME="E1D7001893ceb"></A>Inserts a tag at an offset from an existing tag.</P>
+
+<H3><A NAME="A79C16b"></A>Libraries</H3>
+<P><A NAME="E1D7001932ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7001961ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X93aa"></A>C Syntax</H3>
+<PRE><A NAME="A142X93ab"></A><B>void newtag(Int32 </B><A HREF="newtag.html#A142X93af"><I>newt</I></A><B>, Int32 </B><A HREF="newtag.html#A142X93b0"><I>oldtag</I></A><B>, Int32 </B><A HREF="newtag.html#A142X93b1"><I>offset</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010a85"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010a86"></A><B>SUBROUTINE NEWTAG(</B><I>newt</I><B>, </B><I>oldtag</I><B>, </B><I>offset</I><B>)</B>
+<B>INTEGER*4 </B><I>newtag</I><B>, </B><I>oldtag</I><B>, </B><I>offset</I></PRE>
+
+<H3><A NAME="A142X93ac"></A>Description</H3>
+<P><A NAME="E1D7002075ceb"></A>The <B>newtag</B> subroutine inserts a tag at a specified offset from the position marked by the <A HREF="newtag.html#A142X93b0"><I>oldtag</I></A> parameter.</P>
+
+<BLOCKQUOTE><A NAME="A318C9d8d"></A><B>Note: </B>This editing subroutine itself cannot be added to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X93ae"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X93af"></A><I>newt</I> </TD>
+<TD>  Specifies a numeric identifier.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X93b0"></A><I>oldtag</I> </TD>
+<TD>  Specifies a pre-existing tag to be used as a reference point for inserting the new tag.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X93b1"></A><I>offset</I> </TD>
+<TD>  Specifies the number of lines beyond the position of the old tag at which to place the new tag.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015cfe"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7002228ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C16e"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C16f"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C170"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X93c4"></A>Related Information</H3>
+<P><A NAME="E1D7002329ceb"></A>Marking a location in a display list with the <A HREF="maketag.html#A142X942c"><B>maketag</B></A> subroutine.</P>
+
+<P><A NAME="E1D7002354ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating <!--gl32prgd:--><A HREF="../gl32prgd/workobjects.html#workobjects.html">Objects (Display Lists)</A>.</P><hr><center>
+[  <a href="newpup.html">Previous</a>  |
+<a href="noborder.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

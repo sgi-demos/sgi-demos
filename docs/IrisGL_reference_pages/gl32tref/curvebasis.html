@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>curvebasis Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="curstype.html">Previous</a>  |
+<a href="curveit.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="sTS23a0marj"></A>curvebasis Subroutine</H2>
+<A NAME="INDEX333" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX334" REL="I2" TITLE="wire frame curve and surface patch"></A>
+<A NAME="INDEX335" REL="I3" TITLE="curvebasis"></A>
+<A NAME="INDEX336" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX337" REL="I2" TITLE="cubic spline curve basis matrix"></A>
+<A NAME="INDEX338" REL="I3" TITLE="setting"></A>
+<A NAME="INDEX339" REL="I1" TITLE="curvebasis subroutine (GL)"></A>
+
+<H3><A NAME="A213X910f97"></A>Purpose</H3>
+<P><A NAME="E1B086D763ceb"></A>Sets the current cubic spline curve basis matrix.</P>
+
+<H3><A NAME="A78C1f2"></A>Libraries</H3>
+<P><A NAME="E1B086D911ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B086E015ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X910f9a"></A>C Syntax</H3>
+<PRE><A NAME="A213X910f9b"></A><B>void curvebasis(Int32 </B><A HREF="curvebasis.html#A4Oh2220marj"><I>basis_id</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X910f76"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X910f79"></A><B>SUBROUTINE CURVEB(</B><I>basis_id</I><B>)</B>
+<B>INTEGER*4 </B><I>basis_id</I></PRE>
+
+<H3><A NAME="A213X910f9e"></A>Description</H3>
+<P><A NAME="E1B086E380ceb"></A>The <B>curvebasis</B> subroutine sets a basis matrix as defined by the <A HREF="defbasis.html#A150X930"><B>defbasis</B></A> subroutine as the current basis matrix to draw curve segments. The basis matrix determines how the system uses the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e7">control points</A> when drawing a curve.</P>
+
+<P><A NAME="E1B086E488ceb"></A>Depending on the basis matrix, the system draws 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03bf">Bezier curves</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03de">Cardinal spline curves</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A150P1959">B-spline curves</A>, and others. The system does not restrict you to a limited set of basis matrices. You can define basis matrices to match whatever constraints you want to place on the curve.</P>
+
+<H3><A NAME="A213X910fa1"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A4Oh2220marj"></A><I>basis_id</I> </TD>
+<TD>  Specifies the basis identifier of the basis matrix to use when drawing a curve.</TD></TR></TABLE>
+
+<H3><A NAME="A213X910fa2"></A>Example</H3>
+<P><A NAME="E1B086E747ceb"></A>The example C language program <A HREF="curve1_c.html#A16C0c804"><B>curve1.c</B></A> uses the <B>curvebasis</B> subroutine to select each of three previously defined basis matrices, then draws a curve using each basis matrix.</P>
+
+<H3><A NAME="A64C01657d"></A>Implementation Specifics</H3>
+<P><A NAME="E1B086E907ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1f5"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1f6"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1f7"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="C7BA70B484bett"></A>Related Information</H3>
+<P><A NAME="E1B086F226ceb"></A>Drawing a cubic spline curve with the <A HREF="crv.html#ZMS220marj"><B>crv</B></A> subroutine.</P>
+
+<P><A NAME="E1B086F333ceb"></A>Drawing a series of curve segments with the <A HREF="crvn.html#ESS22c0marj"><B>crvn</B></A> subroutine.</P>
+
+<P><A NAME="E1B086F439ceb"></A>Setting the number of line segments that compose a cubic spline curve with the <A HREF="curveprecision.html#aUS2120marj"><B>curveprecision</B></A> subroutine.</P>
+
+<P><A NAME="E1B086F545ceb"></A>Defining a cubic spline basis matrix with the <A HREF="defbasis.html#A150X930"><B>defbasis</B></A> subroutine.</P>
+
+<P><A NAME="E1B086F653ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">NURBS Curves and Surfaces</A>, and Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#drawwfcvs.html">Wire Frame Curves and Surface Patches</A>.</P><hr><center>
+[  <a href="curstype.html">Previous</a>  |
+<a href="curveit.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

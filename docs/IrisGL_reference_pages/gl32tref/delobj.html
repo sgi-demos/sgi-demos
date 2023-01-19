@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>delobj Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="defrasterfont.html">Previous</a>  |
+<a href="deltag.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X940a"></A>delobj Subroutine</H2>
+<A NAME="INDEX410" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX411" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX412" REL="I3" TITLE="delobj"></A>
+<A NAME="INDEX413" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX414" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX415" REL="I3" TITLE="deleting"></A>
+<A NAME="INDEX416" REL="I1" TITLE="delobj subroutine (GL)"></A>
+
+<H3><A NAME="A142X940c"></A>Purpose</H3>
+<P><A NAME="E1B09E0178ceb"></A>Deletes an object.</P>
+
+<H3><A NAME="A79C11f"></A>Libraries</H3>
+<P><A NAME="E1B09E0326ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B09E0429ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9410"></A>C Syntax</H3>
+<PRE><A NAME="A142X9411"></A><B>void delobj(Int32 </B><A HREF="delobj.html#A142X9415"><I>object</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010aa9"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010aaa"></A><B>SUBROUTINE DELOBJ(</B><I>object</I><B>)</B>
+<B>INTEGER*4 </B><I>object</I></PRE>
+
+<H3><A NAME="A142X9412"></A>Description</H3>
+<P><A NAME="E1B09E0791ceb"></A>The <B>delobj</B> subroutine deletes an entire object, freeing the entire display list and all associated tags. The object identifier becomes undefined and unused.</P>
+
+<BLOCKQUOTE><A NAME="A4C09c69"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>. </BLOCKQUOTE>
+
+
+<H3><A NAME="A142X9414"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X9415"></A><I>object</I></TD>
+<TD>  Specifies the identifier of the object to delete.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015d10"></A>Implementation Specifics</H3>
+<P><A NAME="E1B09E1113ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C122"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C123"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C124"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X942a"></A>Related Information</H3>
+<P><A NAME="E1B09E1433ceb"></A>Deleting tags from a display list with the <A HREF="deltag.html#A1N61210marj"><B>deltag</B></A> subroutine.</P>
+
+<P><A NAME="E1B09E1540ceb"></A>Opening an object for editing with the <A HREF="editobj.html#A142X9360"><B>editobj</B></A> subroutine.</P>
+
+<P><A NAME="E1B09E1647ceb"></A>Creating an object with the <A HREF="makeobj.html#A142X912d"><B>makeobj</B></A> subroutine.</P>
+
+<P><A NAME="E1B09E1754ceb"></A>Deleting a routine from an object with the <A HREF="objdelete.html#A142X9afd"><B>objdelete</B></A> subroutine.</P>
+
+<P><A NAME="E1B09E1861ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating <!--gl32prgd:--><A HREF="../gl32prgd/workobjects.html#workobjects.html">Objects (Display Lists)</A>.</P><hr><center>
+[  <a href="defrasterfont.html">Previous</a>  |
+<a href="deltag.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>popattributes Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="polygonlist.html">Previous</a>  |
+<a href="popmatrix.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="Vmx2140marj"></A>popattributes Subroutine</H2>
+<A NAME="INDEX1421" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1422" REL="I2" TITLE="attribute"></A>
+<A NAME="INDEX1423" REL="I3" TITLE="popattributes"></A>
+<A NAME="INDEX1424" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1425" REL="I2" TITLE="attribute stack"></A>
+<A NAME="INDEX1426" REL="I3" TITLE="popping"></A>
+<A NAME="INDEX1427" REL="I1" TITLE="popattributes subroutine (GL)"></A>
+
+<H3><A NAME="A213X912733"></A>Purpose</H3>
+<P><A NAME="E1D71B0776ceb"></A>Pops the attribute stack.</P>
+
+<H3><A NAME="A77C1115"></A>Libraries</H3>
+<P><A NAME="E1D71B0815ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D71B0840ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912736"></A>C Syntax</H3>
+<PRE><A NAME="A213X912737"></A><B>void popattributes(&nbsp;)</B></PRE>
+
+<H3><A NAME="A19C0e0fd"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A19C0e0fe"></A><B>SUBROUTINE POPATT</B></PRE>
+
+<H3><A NAME="A213X91273a"></A>Description</H3>
+<P><A NAME="E1D71B0948ceb"></A>The <B>popattributes </B>subroutine pops the attributes stack, restoring the values of the global state attributes most recently saved with the <A HREF="pushattributes.html#Thx220marj"><B>pushattributes</B></A> subroutine:  </P>
+
+<UL><LI><A NAME="A48C013780"></A>backbuffer enable (T or F)</LI>
+
+<LI><A NAME="A48C013781"></A>color map number (one of 16 <I>small</I> maps)</LI>
+
+<LI><A NAME="A48C013782"></A>colormode (Colormap or RGB)</LI>
+
+<LI><A NAME="A48C013783"></A>current color</LI>
+
+<LI><A NAME="A48C013784"></A>current font</LI>
+
+<LI><A NAME="A48C013785"></A>current linestyle</LI>
+
+<LI><A NAME="A48C013786"></A>current linestyle repeat factor</LI>
+
+<LI><A NAME="A48C013787"></A>current linewidth</LI>
+
+<LI><A NAME="A48C013788"></A>current pattern</LI>
+
+<LI><A NAME="A48C013789"></A>current writemask</LI>
+
+<LI><A NAME="A48C01378a"></A>drawmode (overlay, underlay, or main buffers)</LI>
+
+<LI><A NAME="A48C01378b"></A>draw_to_z_buffer enable (T or F)</LI>
+
+<LI><A NAME="A48C01378c"></A>frontbuffer enable (T or F)</LI>
+
+<LI><A NAME="A48C01378d"></A>logicop function</LI>
+
+<LI><A NAME="A48C01378e"></A>shademodel (Flat or Gouraud)</LI></UL>
+
+
+<H3><A NAME="A62C015c91"></A>Implementation Specifics</H3>
+<P><A NAME="E1D71B1253ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A77C1118"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1119"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C111a"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A318C9d49"></A>Related Information</H3>
+<P><A NAME="E1D71B1350ceb"></A>Enabling drawing in the back buffer with the <A HREF="backbuffer.html#A145X94a"><B>backbuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1D71B1375ceb"></A>Setting color map mode as the current mode with the <A HREF="cmode.html#A146X93d6"><B>cmode</B></A> subroutine.</P>
+
+<P><A NAME="E1D71B1401ceb"></A>Setting the color index in the current mode with the <A HREF="color.html#A146X9429"><B>color</B></A> subroutine.</P>
+
+<P><A NAME="E1D71B1426ceb"></A>Specifying the target framebuffer of the drawing subroutines with the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine.</P>
+
+<P><A NAME="E1D71B1452ceb"></A>Enabling drawing in the front buffer with the <A HREF="frontbuffer.html#A145X9a0"><B>frontbuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1D71B1477ceb"></A>Specifying the line width with the <A HREF="linewidth.html#A3mM11b0marj"><B>linewidth</B></A> subroutine.</P>
+
+<P><A NAME="E1D71B1503ceb"></A>Setting the repeat factor for the current linestyle with the <A HREF="lsrepeat.html#DmN1110marj"><B>lsrepeat</B></A> subroutine.</P>
+
+<P><A NAME="E1D71B1528ceb"></A>Pushing down the attribute stack with the <A HREF="pushattributes.html#Thx220marj"><B>pushattributes</B></A> subroutine.</P>
+
+<P><A NAME="E1D71B1554ceb"></A>Setting the current color in RGB mode with the <A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1D71B1579ceb"></A>Granting write access to a subset of available bitplanes in RGB mode with the <A HREF="RGBwritemask.html#A143X93fa"><B>RGBwritemask</B></A> subroutine.</P>
+
+<P><A NAME="E1D71B1605ceb"></A>Selecting a linestyle pattern with the <A HREF="setlinestyle.html#XFM1310marj"><B>setlinestyle</B></A> subroutine.</P>
+
+<P><A NAME="E1D71B1630ceb"></A>Selecting a pattern for filling polygons and rectangles with the <A HREF="setpattern.html#WeM11c0marj"><B>setpattern</B></A> subroutine.</P>
+
+<P><A NAME="E1D71B1656ceb"></A>Selecting the shading model used to draw a polygon with the <A HREF="shademodel.html#A143X9ab9"><B>shademodel</B></A> subroutine.</P>
+
+<P><A NAME="E1D71B1681ceb"></A>Granting write permission to a subset of available bitplanes in color map mode with the <A HREF="writemask.html#A143X9592"><B>writemask</B></A> subroutine.</P>
+
+<P><A NAME="E1D71B1707ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, and Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P><hr><center>
+[  <a href="polygonlist.html">Previous</a>  |
+<a href="popmatrix.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

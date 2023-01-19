@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>rectcopy Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="rect.html">Previous</a>  |
+<a href="rectf.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9d04"></A>rectcopy Subroutine</H2>
+<A NAME="INDEX1594" REL="I1" TITLE="rectcopy subroutine (GL)"></A>
+<A NAME="INDEX1595" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1596" REL="I2" TITLE="pixel block transfer"></A>
+<A NAME="INDEX1597" REL="I3" TITLE="copying pixel rectangle with zoom"></A>
+<A NAME="INDEX1598" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1599" REL="I2" TITLE="pixel block transfer"></A>
+<A NAME="INDEX1600" REL="I3" TITLE="rectcopy"></A>
+
+<H3><A NAME="A213X91209f"></A>Purpose</H3>
+<P><A NAME="E1D7300581ceb"></A>Copies a rectangle of pixels with an optional zoom.</P>
+
+<H3><A NAME="A79C1d6"></A>Libraries</H3>
+<P><A NAME="E1D7300620ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7300644ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X9120a2"></A>C Syntax</H3>
+<PRE><A NAME="A213X9120a3"></A><B>void rectcopy</B>
+<B>(Screencoord </B><A HREF="rectcopy.html#XJN2220marj"><I>xll</I></A><B>, Screencoord </B><A HREF="rectcopy.html#eON2300marj"><I>yll</I></A><B>, </B>
+<B>Screencoord </B><A HREF="rectcopy.html#AzON23a0marj"><I>xur</I></A><B>, Screencoord </B><A HREF="rectcopy.html#APN23a0marj"><I>yur</I></A><B>, </B>
+<B>Screencoord </B><A HREF="rectcopy.html#rQN2300marj"><I>newx</I></A><B>, Screencoord </B><A HREF="rectcopy.html#DSN23a0marj"><I>newy</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010b31"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010b32"></A><B>SUBROUTINE RECTCO(</B><I>xll</I><B>,</B> <I>yll</I><B>,</B> <I>xur</I><B>,</B> <I>yur</I><B>,</B> <I>newx</I><B>,</B><I> newy</I><B>)</B>
+<B>INTEGER*4 </B><I>xll</I><B>,</B> <I>yll</I><B>,</B> <I>xur</I><B>,</B> <I>yur</I><B>,</B> <I>newx</I><B>,</B><I> newy</I></PRE>
+
+<BLOCKQUOTE><A NAME="A79C1d9"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X9120a6"></A>Description</H3>
+<P><A NAME="E1D7300778ceb"></A>The <B>rectcopy</B> subroutine copies a rectangular array of pixels to another position on the screen. The current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A> and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P018">screenmask</A> mask the drawing of the copied region. Self-intersecting copies work correctly in all cases.</P>
+
+<P><A NAME="E1D7300804ceb"></A>Use the <A HREF="rectzoom.html#A142X9d26"><B>rectzoom</B></A> subroutine to zoom the destination independently in both the x and y directions. Self-intersecting copies also work correctly with zooming. </P>
+
+<P><A NAME="E1D7300829ceb"></A>Use the <B>readsource</B> subroutine to specify the front buffer, the back buffer, or the z-buffer as the source. </P>
+
+<P><A NAME="E1D7300855ceb"></A>On machines that support it, you can use the <B>rectzoom</B> subroutine to zoom the destination independently in both the x and y directions. Self-intersecting copies also work correctly with zooming. </P>
+
+<P><A NAME="E1D7300881ceb"></A>Pixel format is not considered during the copy. For example, if you copy pixels that contain color index data into an RGB window, the display controller cannot correctly interpret it.</P>
+
+<P><A NAME="E1D7300907ceb"></A>Use the <A HREF="frontbuffer.html#A145X9a0"><B>frontbuffer</B></A>, <A HREF="backbuffer.html#A145X94a"><B>backbuffer</B></A>, and <A HREF="zdraw.html#A143X97f5"><B>zdraw</B></A> subroutines to specify the destination.</P>
+
+<P><A NAME="E1D7300933ceb"></A>All coordinates are relative to the lower left corner of the window, not the screen or viewport.</P>
+
+<P><A NAME="E1D7300959ceb"></A>The <B>rectcopy </B>subroutine leaves the current character position unpredictable. The result of the <B>rectcopy </B>subroutine is undefined if the value of the <I>bool</I> parameter in the <A HREF="zbuffer.html#A143X97b1"><B>zbuffer</B></A> subroutine is TRUE.</P>
+
+<BLOCKQUOTE><A NAME="A318C9dcb"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X9120b0"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="XJN2220marj"></A><I>xll </I></TD>
+<TD>  Specifies the <I>x </I>coordinate of one corner of the rectangle.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="eON2300marj"></A><I>yll </I></TD>
+<TD>  Specifies the <I>y </I>coordinate of one corner of the rectangle.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="AzON23a0marj"></A><I>xur </I></TD>
+<TD>  Specifies the <I>x </I>coordinate of the opposite corner of the rectangle.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="APN23a0marj"></A><I>yur </I></TD>
+<TD>  Specifies the <I>y </I>coordinate of the opposite corner of the rectangle.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="rQN2300marj"></A><I>newx</I></TD>
+<TD>  Specifies the <I>x</I> coordinate of the lower left corner of the new position of the rectangle.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="DSN23a0marj"></A><I>newy</I><B></B></TD>
+<TD>  Specifies the <I>y</I> coordinate of the lower left corner of the new position of the rectangle.</TD></TR></TABLE>
+
+<H3><A NAME="A61C0159c1"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7301153ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C1da"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1db"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1dc"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c669"></A>Related Information</H3>
+<P><A NAME="E1D7301251ceb"></A>Specifying the source for pixels to be read with the <A HREF="readsource.html#A142X9cc0"><B>readsource</B></A> subroutine.</P>
+
+<P><A NAME="E1D7301276ceb"></A>Reading a rectangular array of pixels into host memory with the <A HREF="rectread.html#A142X9c7c"><B>rectread</B> or <B>lrectread</B></A> subroutine.</P>
+
+<P><A NAME="E1D7301302ceb"></A>Drawing a rectangular array of pixels into the frame buffer with the <A HREF="rectwrite.html#A142X9c9e"><B>rectwrite</B></A> subroutine.</P>
+
+<P><A NAME="E1D7301328ceb"></A>Specifying a zoom factor for rectangle copies and writes with the <A HREF="rectzoom.html#A142X9d26"><B>rectzoom</B></A> subroutine.</P>
+
+<P><A NAME="E1D7301354ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Reading and Writing <!--gl32prgd:--><A HREF="../gl32prgd/rwpixels.html#rwpixels.html">Pixels</A>.</P><hr><center>
+[  <a href="rect.html">Previous</a>  |
+<a href="rectf.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

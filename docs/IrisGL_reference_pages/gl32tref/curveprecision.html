@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>curveprecision Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="curveit.html">Previous</a>  |
+<a href="cyclemap.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="aUS2120marj"></A>curveprecision Subroutine</H2>
+<A NAME="INDEX347" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX348" REL="I2" TITLE="wire frame curve and surface patch"></A>
+<A NAME="INDEX349" REL="I3" TITLE="curveprecision"></A>
+<A NAME="INDEX350" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX351" REL="I2" TITLE="line segments"></A>
+<A NAME="INDEX352" REL="I3" TITLE="setting number used to draw a curve segment"></A>
+<A NAME="INDEX353" REL="I1" TITLE="curveprecision subroutine (GL)"></A>
+
+<H3><A NAME="A213X911017"></A>Purpose</H3>
+<P><A NAME="E1B08AD062ceb"></A>Sets the number of line segments that draw a curve segment.</P>
+
+<H3><A NAME="A78C1100"></A>Libraries</H3>
+<P><A NAME="E1B08AD212ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B08AD315ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X91101a"></A>C Syntax</H3>
+<PRE><A NAME="A213X91101b"></A><B>void curveprecision(Int16 </B><A HREF="curveprecision.html#vSh210marj"><I>nsegments</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X910ff9"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X910ffc"></A><B>SUBROUTINE CURVEP(</B><I>nsegments</I><B>)</B>
+<B>INTEGER*4 </B><I>nsegments</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C1103"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X91101e"></A>Description</H3>
+<P><A NAME="E1B08AD739ceb"></A>The <B>curveprecision </B>subroutine sets the number of line segments used to draw a curve segment. Whenever the <A HREF="crv.html#ZMS220marj"><B>crv</B></A>, <A HREF="crvn.html#ESS22c0marj"><B>crvn</B></A>, <A HREF="rcrv.html#WRS2380marj"><B>rcrv</B></A>, or <A HREF="rcrvn.html#A1TS2220marj"><B>rcrvn</B></A> subroutines execute, a number of straight line segments, represented by the <A HREF="curveprecision.html#vSh210marj"><I>nsegments</I></A> parameter, approximates each curve segment. Increasing the value of <I>nsegments</I> makes a smoother curve, but also increases the drawing time.</P>
+
+<H3><A NAME="A213X911020"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="vSh210marj"></A><I>nsegments</I></TD>
+<TD>  Specifies the number of line segments to use in drawing the curve segment.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911021"></A>Example</H3>
+<P><A NAME="E1B08AD997ceb"></A>The example C language program <A HREF="curve1_c.html#A16C0c804"><B>curve1.c</B></A> uses the <B>curveprecision</B> subroutine to draw three curves so that each curve is approximated by 20 line segments.</P>
+
+<H3><A NAME="A64C016585"></A>Implementation Specifics</H3>
+<P><A NAME="E1B08AE158ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1104"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1105"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1106"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911025"></A>Related Information</H3>
+<P><A NAME="E1B08AE475ceb"></A>Drawing a cubic spline curve with the <A HREF="crv.html#ZMS220marj"><B>crv</B></A> subroutine.</P>
+
+<P><A NAME="E1B08AE582ceb"></A>Drawing a series of curve segments with the <A HREF="crvn.html#ESS22c0marj"><B>crvn</B></A> subroutine.</P>
+
+<P><A NAME="E1B08AE689ceb"></A>Setting the current cubic spline curve basis matrix with the <A HREF="curvebasis.html#sTS23a0marj"><B>curvebasis</B></A> subroutine.</P>
+
+<P><A NAME="E1B08AE797ceb"></A>Drawing a rational curve with the <A HREF="rcrv.html#WRS2380marj"><B>rcrv</B></A> subroutine.</P>
+
+<P><A NAME="E1B08AE904ceb"></A>Drawing a series of rational curve segments with the <A HREF="rcrvn.html#A1TS2220marj"><B>rcrvn</B></A> subroutine.</P>
+
+<P><A NAME="E1B08AF012ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">NURBS Curves and Surfaces</A>, and Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#drawwfcvs.html">Wire Frame Curves and Surface Patches</A>.</P><hr><center>
+[  <a href="curveit.html">Previous</a>  |
+<a href="cyclemap.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

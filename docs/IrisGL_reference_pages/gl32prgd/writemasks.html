@@ -1,0 +1,607 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/writemasks.html Mon, 24 Jan 2022 16:28:12 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Writemasks and Logical Operations in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="alphablend.html">Previous</a>  |
+<a href="clrrstintgl.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="writemasks.html"></A>Writemasks and Logical Operations</H2>
+
+
+<P><A NAME="INDEX670"></A><A NAME="INDEX671"></A><A NAME="INDEX672"></A><A NAME="INDEX673"></A><A NAME="INDEX674"></A></P>
+
+
+<P><A NAME="A3C0EB48483mhay"></A>This section contains information on the
+following frame buffer update topics: </P>
+
+
+<UL><LI><A NAME="A74C1d4"></A><A HREF="writemasks.html#KVn21e0nita">Writemasks</A></LI>
+
+
+<LI><A NAME="A137C19e"></A><A HREF="writemasks.html#C711130nita">Partitions</A></LI>
+
+
+<LI><A NAME="A74C1d5"></A><A HREF="writemasks.html#A123JIM12">Writemask
+for the Z-Buffer</A></LI>
+
+
+<LI><A NAME="A74C1d7"></A><A HREF="writemasks.html#Tr24230nita">Logical
+Operation</A></LI></UL>
+
+
+<P><A NAME="A3C0EB48509mhay"></A>Various writemasks control what data is
+stored in each bitplane of the frame buffer by shielding portions of the
+frame buffer from being written into. In color map mode, the <B><A HREF="writemasks.html#A20C0e263">writemask</A></B>
+subroutine protects specified bitplanes from ordinary drawing routines.
+In RGB mode, the <B><A HREF="writemasks.html#A23C0f078">RGBwritemask</A></B>
+subroutine performs this function. The <B><A HREF="writemasks.html#A23C0f07e">zwritemask</A></B>
+subroutine controls writing into the <A HREF="Z-Buffering.html">z-buffer</A>.
+The <B><A HREF="writemasks.html#A23C0f085">logicop</A></B> subroutine specifies
+the logical operation to use when writing pixels. The <B><A HREF="writemasks.html#A20C0e266">getwritemask</A></B>
+subroutine and <B><A HREF="writemasks.html#A23C0f07a">gRGBmask</A></B>
+subroutine allow you to determine the current writemasks. </P>
+
+
+<H3><A NAME="A264X92b1"></A>List of GL Writemask and Logical Operation
+Subroutines<A NAME="INDEX675"></A> <A NAME="INDEX676"></A> <A NAME="INDEX677"></A>
+<A NAME="INDEX678"></A> <A NAME="INDEX679"></A> <A NAME="INDEX680"></A></H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b76"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/blendfunction.html#A143X9240">blendfunction</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies the alpha blending ratio.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b77"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getwritemask.html#A143X94c6">getwritemask</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the current writemask.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b78"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/gRGBmask.html#A143X94e8">gRGBmask</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the current RGB writemask. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b79"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/logicop.html#iM521a0marj">logicop</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies a logical operation for pixel writes. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b7a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/RGBwritemask.html#A143X93fa">RGBwritemask</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Grants write permission to a subset of available bitplanes (in RGB
+mode).</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b7b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/wmpack.html#A143X9570">wmpack</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies an RGBA writemask with a single packed integer. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b7c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/writemask.html#A143X9592">writemask</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Grants write permission to a subset of available bitplanes in color
+map mode. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b7d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zfunction.html#A22f0MARJ">zfunction</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies the function used for depth comparison. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b7e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zsource.html#A143X96d6">zsource</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Selects depth or color as the source for z comparisons. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b7f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zwritemask.html#A143X9817">zwritemask</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies which bits of the z-buffer are written during normal z-buffer
+operation. </TD></TR></TABLE>
+
+
+<P> </P>
+
+
+<H3><A NAME="KVn21e0nita"></A>Writemasks<A NAME="INDEX681"></A> <A NAME="INDEX682"></A>
+<A NAME="INDEX683"></A> <A NAME="INDEX684"></A> </H3>
+
+
+<P><A NAME="A3C0EB48543mhay"></A>In all cases when the system uses 
+<A HREF="specialterms.html#A31996bc">color
+map</A>s (the standard <A HREF="specialterms.html#A3C0F2A3129mhay">bitplanes</A>
+in <A HREF="specialterms.html#A25P03e3">color map mode</A>, and
+the overlay and underlay bitplanes), a writemask is available that can
+limit the drawing into the bitplanes. By default, the writemask is set
+up so that there are no drawing restrictions, but it is sometimes useful
+to limit the effects of the drawing routines. Two common cases are to provide
+the equivalent of extra overlay bitplanes and to display a layered scene
+where the contents of the layers are independent of each other. </P>
+
+
+<P><A NAME="A3C0EB48564mhay"></A>The writemask is described in terms of
+the standard drawing bitplanes, but exactly the same comments are true
+if the system is in overlay or underlay mode. For this discussion, it is
+assumed that only 8 of the 12 bitplanes are used, although the discussion
+applies equally well to different numbers, including 24 bitplanes. </P>
+
+
+<P><A NAME="A3C0EB48585mhay"></A>With 8 bitplanes, the color is a number
+from 0 to 255, which can be represented by 8 binary bits. For example,
+color 68 is <TT>01000100</TT>. Without writemask controls, if the color
+is set to 68, then every drawing subroutine puts <TT>01000100</TT> into
+the 8 bitplanes of the affected pixels. </P>
+
+
+<P><A NAME="A3C0EB48606mhay"></A>A writemask restricts this overwriting.
+If, in the previous example, the writemask were <TT>15&nbsp;(=&nbsp;00001111)</TT>,
+then only the bottom 4 bits of the color are written into the bitplanes
+(that is, with writemask, a 1 enables a bitplane for writing, and a 0 disables
+it). If the color is 68, then any pixels hit by a drawing subroutine would
+contain <TT>wxyz0100</TT>, where <TT>wxyz</TT> are the 4 bits that were
+previously there. The 0s (zeros) in the writemask prevent those bits from
+being overwritten. The default writemask is entirely 1s, so there is no
+restriction. </P>
+
+
+<P><A NAME="A3C0EB48627mhay"></A>Writemasks determine whether a new value
+can be stored in each bitplane. A 1 (one) in the writemask allows the system
+to store a new value (0 or 1) in the corresponding bitplane. A 0 (zero)
+prevents the system from storing a new value, and the corresponding bitplane
+retains its current value. </P>
+
+
+<P><A NAME="A3C0EB48648mhay"></A>In the <A HREF="figures/gl32p2.jpg">figure</A>,
+the values in the first and second bits (b1 and b2) do not change because
+the corresponding positions in the writemask are zero. All the other values
+(originally b3, b4, ...b8) change to a3, a4, ...a8 because the corresponding
+positions in the writemask are 1. Each value a1, ...a8 and b1, ...b8 is
+either 0 or 1, and the setting of the writemask determines whether the
+value is written. </P>
+
+
+<H4><A NAME="A74C1d9"></A>Writemask Example Programs </H4>
+
+
+<P><A NAME="A3C0EB48672mhay"></A>As a very simple example, suppose you
+wish to draw two completely independent electronic circuits on the screen,
+power and ground. You would like the power grid to be drawn in blue, the
+ground grid to be drawn in black, and short-circuits (where both power
+and ground appear) to be drawn in red. The background color is white. </P>
+
+
+<P><A NAME="A3C0EB48692mhay"></A>Initialize the program as follows: </P>
+
+
+<PRE><A NAME="A23C0f06a"></A>#define&nbsp;BACKGROUND&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*=00*/
+#define&nbsp;POWER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*=01*/
+#define&nbsp;GROUND&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*=10*/
+#define&nbsp;SHORT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*=11*/
+mapcolor(0,&nbsp;255,&nbsp;255,&nbsp;255);&nbsp;/*white*/
+mapcolor(1,&nbsp;0,&nbsp;0,&nbsp;255);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*blue*/
+mapcolor(2,&nbsp;0,&nbsp;0,&nbsp;0);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*black*/
+mapcolor(3,&nbsp;255,&nbsp;0,&nbsp;0);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*red*/</PRE>
+
+
+<P><A NAME="A3C0EB48714mhay"></A>Then draw all the power circuitry into
+bitplane 1 and the ground circuitry in bitplane 2. Where both power and
+ground appear, there is a 1 in both bitplanes, making color 3. </P>
+
+
+<P><A NAME="A3C0EB48734mhay"></A>To clear the window before drawing: </P>
+
+
+<PRE><A NAME="A23C0f06d"></A>writemask(3);
+color(BACKGROUND);
+clear();</PRE>
+
+
+<P><A NAME="A3C0EB48755mhay"></A>To draw power circuitry without affecting
+ground circuitry: </P>
+
+
+<PRE><A NAME="A23C0f06f"></A>writemask(1);
+color(1);
+&lt;drawing&nbsp;subroutines&gt;</PRE>
+
+
+<P><A NAME="A3C0EB48777mhay"></A>To draw ground circuitry without affecting
+power circuitry: </P>
+
+
+<PRE><A NAME="A23C0f071"></A>writemask(2);
+color(2);
+&lt;drawing&nbsp;subroutines&gt;</PRE>
+
+
+<P><A NAME="A3C0EB48799mhay"></A>To erase all power circuitry: </P>
+
+
+<PRE><A NAME="A23C0f073"></A>writemask(1);
+color(0);
+clear();</PRE>
+
+
+<P><A NAME="A3C0EB48820mhay"></A>To erase all ground circuitry: </P>
+
+
+<PRE><A NAME="A23C0f075"></A>writemask(2);
+color(0);
+clear();</PRE>
+
+
+<P><A NAME="A3C0EB48841mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/circuit_c.html#Ua32d0nita">circuit.c</A></B>
+example program demonstrates the use of writemasks by drawing power circuitry
+as previously discussed. </P>
+
+
+<H4><A NAME="A20C0e263"></A>writemask Subroutine </H4>
+
+
+<P><A NAME="A3C0EB48863mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/writemask.html#A143X9592">writemask</A></B>
+subroutine grants write permission to available bitplanes. It protects
+bitplanes, in the current drawing mode, that are reserved for special uses
+from ordinary drawing subroutines. The parameter is a mask with 1 bit available
+per bitplane. </P>
+
+
+<P><A NAME="A3C0EB48884mhay"></A>Whenever there are 1s in the writemask,
+the corresponding bits in the color index are written into the bitplanes.
+Zeros in the writemask mark bitplanes as read-only. These bitplanes are
+not changed, regardless of the bits in the color index. </P>
+
+
+<P><A NAME="A3C0EB48905mhay"></A>If the drawing mode is NORMALDRAW, the
+writemask affects the standard bitplanes; if the mode is OVERDRAW, the
+writemask affects the overlay bitplanes; if the mode is UNDERDRAW, the
+writemask affects the underlay bitplanes. Use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/RGBwritemask.html#A143X93fa">RGBwritemask</A></B>
+subroutine in <A HREF="specialterms.html#A26P0743">RGB mode</A>.</P>
+
+
+<P><A NAME="A3C0EB48925mhay"></A>It is very important to understand that
+with the writemask, the bit pattern at each pixel is additive. This means
+that although you can protect certain bits from being overwritten, all
+the bits at any pixel are still taken as a single integer or color index
+value. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A57C0150de"></A>void&nbsp;writemask(Colorindex&nbsp;writem)</PRE>
+
+
+<H4><A NAME="A20C0e266"></A>getwritemask Subroutine </H4>
+
+
+<P><A NAME="A3C0EB48948mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getwritemask.html#A143X94c6">getwritemask</A></B>
+subroutine returns the current writemask of the current drawing mode. The
+writemask is an integer with up to 12 significant bits, one for each available
+bitplane. Use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gRGBmask.html#A143X94e8">gRGBmask</A></B>
+subroutine in RGB mode. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A57C0150df"></A>Int32&nbsp;getwritemask()</PRE>
+
+
+<H4><A NAME="A23C0f078"></A>RGBwritemask Subroutine </H4>
+
+
+<P><A NAME="A3C0EB48971mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/RGBwritemask.html#A143X93fa">RGBwritemask</A></B>
+subroutine is the same as the <B>writemask</B> subroutine, except it functions
+in RGB mode. The <I>red</I>, <I>green</I>, and <I>blue</I> parameters are
+masks for each of the three sets of bitplanes. In the same way that writemasks
+affect drawing in bitplanes in NORMALDRAW color map mode, separate red,
+green, and blue masks can be applied in NORMALDRAW RGB mode. The syntax
+is as follows: </P>
+
+
+<PRE><A NAME="A57C0150e0"></A>void&nbsp;RGBwritemask(Int16&nbsp;red,&nbsp;Int16&nbsp;green,&nbsp;Int16&nbsp;blue)</PRE>
+
+
+<H4><A NAME="A23C0f07a"></A>gRGBmask Subroutine </H4>
+
+
+<P><A NAME="A3C0EB48994mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gRGBmask.html#A143X94e8">gRGBmask</A></B>
+subroutine returns the current RGB writemask as three 8-bit masks. This
+subroutine places masks in the low-order 8 bits of the locations pointed
+to by the <I>redmask</I>, <I>greenmask</I>, and <I>bluemask</I> parameters.
+The system must be in RGB mode when the <B>gRGBmask</B> subroutine executes.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A57C0150e1"></A>void&nbsp;gRGBmask(Int16&nbsp;*redmask,&nbsp;Int16&nbsp;*greenmask,&nbsp;Int16&nbsp;*bluemask)</PRE>
+
+
+<H3><A NAME="C711130nita"></A>Partitions </H3>
+
+
+<P><A NAME="A3C0EB49017mhay"></A>Partitioning is a method of slicing the
+frame buffer into a number of smaller subbuffers. Each subbuffer, or <I>partition</I>,
+has properties and a behavior like the main frame buffer, although not
+exactly. In some ways, partitions behave like overlays and underlays, and
+present characteristics of each as follows: </P>
+
+
+<UL><LI><A NAME="A137C1a0"></A>Any partition can be cleared and drawn into
+independently, without disturbing the contents of other partitions.</LI>
+
+
+<LI><A NAME="A137C1a1"></A>Partitions can be turned off and on (that is,
+made hidden or visible) without having to clear or redraw their contents.</LI>
+
+
+<LI><A NAME="A137C1a2"></A>Colors used in any partition can be changed
+at any time without having to clear or redraw the contents.</LI></UL>
+
+
+<P><A NAME="A3C0EB49041mhay"></A>Unlike overlays and underlays, partitions
+can be stacked in any order, and the stacking order can be changed dynamically,
+without having to redraw any geometry. </P>
+
+
+<P><A NAME="A3C0EB49062mhay"></A>A limitation of partitions is that there
+is a limited number of colors, with the following corollaries: </P>
+
+
+<UL><LI><A NAME="A137C1a5"></A>No, or limited, smooth (Gouraud) shading.</LI>
+
+
+<LI><A NAME="A137C1a6"></A>No RGB-style (direct color) drawing. Only color
+index operation is supported.</LI></UL>
+
+
+<P><A NAME="A3C0EB49085mhay"></A>The foundation of the partition is the
+writemask. Writemasks are used to protect one set of bitplanes while writing
+into another set. The concept of partitions can be actualized by careful
+choice of colors, writemasks, and color maps. </P>
+
+
+<P><A NAME="A3C0EB49106mhay"></A>Partitions are created by allocating bitplanes
+from the main frame buffer. A partition can be one or more bitplanes broad,
+up to the breadth of the frame buffer. Partitions are protected from one
+another by using writemasks. This protection mechanism allows the application
+developer to clear and draw into one partition while leaving the contents
+of other partitions alone. The stacking order of partitions, and their
+visibility or invisibility, are determined by the loaded color map. </P>
+
+
+<P><A NAME="A3C0EB49127mhay"></A>There are two generic types of partitions,
+depending on the hardware organization of the color maps and how they are
+connected to the frame buffer. These types of partitions are referred to
+here as <A HREF="writemasks.html#A137C1ab">indexed</A> and <A HREF="writemasks.html#A137C1ad">component</A>
+partitions. </P>
+
+
+<P><A NAME="A3C0EB49148mhay"></A>There are two types of color map organization:
+true-color maps and gamma-ramp-type color maps. In a true-color organization,
+a color index value is stored in the frame buffer. In the gamma-ramp organization,
+used by the POWERgraphics GTO and Model 730 Supergraphics Processor
+Subsystem and on the POWER Gt4 and POWER Gt4x,
+the frame buffer always stores RGB values, but the value of each individual
+component is passed through a look-up table, traditionally called a gamma
+ramp. These gamma ramps operate on a per-window basis, not a per-screen
+basis. </P>
+
+
+<H4><A NAME="A137C1ab"></A>Indexed Partitions </H4>
+
+
+<P><A NAME="A3C0EB49170mhay"></A>Partitions for true-color-map frame buffer
+organization use a combination of writemasks and special color maps, set
+by the user, to reconfigure the frame buffer dynamically into a set of
+overlay/underlay planes. The total number of bitplanes summed over the
+partitions must be equal to or less than log2 of the number of color map
+entries. </P>
+
+
+<H4><A NAME="A137C1ad"></A>Component Partitions </H4>
+
+
+<P><A NAME="A3C0EB49192mhay"></A>Partitions for gamma-ramp frame buffer
+organization use the same tools: color maps and writemasks. Instead of
+groups of bitplanes, however, this method uses sets of RGB triplets. </P>
+
+
+<P><A NAME="A3C0EB49213mhay"></A>A basic partition might be two bitplanes
+reserved out of the red buffer, two from the green buffer, and two from
+the blue buffer. To determine how many colors can be obtained with this
+partition, the user can pick one of the three available shades for red
+and, independently, pick one of the three shades of green and one of the
+three shades of blue. In this instance, all possible combinations yield
+3 x 3 x 3 = 27 different colors on the screen. These colors are not entirely
+independent of each other; they are mixtures of the component colors, of
+which there are only three. Therefore, only three totally, truly independent
+shades are possible. </P>
+
+
+<P><A NAME="A3C0EB49234mhay"></A>By judicious choice of the component colors
+(for example by a least-squares search of the LP space), a large number
+of visually distinct shades are possible. Thus, the RGB gamma-ramp partition
+is both limiting and expansive; a 256-entry gamma ramp can be made to display
+thousands of colors. What looks like two bitplanes can be made to show
+27 colors, because there are really 2 x 3 = 6 bitplanes. Three bitplanes
+can show 7 x 7 x 7 = 343 colors, because there are really 3 x 3 = 9 bitplanes,
+and so on. </P>
+
+
+<P><A NAME="A3C0EB49254mhay"></A>Example source code demonstrating the
+use of partitions can be found in the <B>/usr/lpp/GL/examples&nbsp;</B>directory.</P>
+
+
+<H3><A NAME="A123JIM12"></A>Writemask for the Z-Buffer<A NAME="INDEX685"></A>
+<A NAME="INDEX686"></A> <A NAME="INDEX687"></A> <A NAME="INDEX688"></A>
+<A NAME="INDEX689"></A> <A NAME="INDEX690"></A> </H3>
+
+
+<P><A NAME="A3C0EB49275mhay"></A>The following subroutines control accessibility
+and comparison values for the z-buffer. </P>
+
+
+<H4><A NAME="A23C0f07e"></A>zwritemask Subroutine </H4>
+
+
+<P><A NAME="A3C0EB49298mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/zwritemask.html#A143X9817">zwritemask</A></B>
+subroutine controls writing into the z-buffer. The valid settings are <TT>0</TT>
+(no write at all) and <TT>0xFFFFFF</TT> (write all the bits). This subroutine
+might be useful for a very complicated background into which a few objects
+are going to be drawn and moved quickly. Setting the <B>zwritemask</B>
+subroutine to zero locks in the background information and prevents its
+modification. Whether the new objects are drawn depends on the results
+of the depth comparison. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A57C0150e2"></A>void&nbsp;zwritemask(Int32&nbsp;mask)</PRE>
+
+
+<H4><A NAME="A23C0f080"></A>zfunction Subroutine </H4>
+
+
+<P><A NAME="A3C0EB49321mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/zfunction.html#A22f0MARJ">zfunction</A></B>
+subroutine compares the z value of the current context (destination value)
+of a pixel against the z value for the input (source value) pixel. If the
+result of the comparison matches the subroutine's parameter, the system
+draws new values into that pixel. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A57C0150e3"></A>void&nbsp;zfunction(Int32&nbsp;func)</PRE>
+
+
+<H4><A NAME="A23C0f082"></A>zsource Subroutine </H4>
+
+
+<P><A NAME="A3C0EB49343mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/zsource.html#A143X96d6">zsource</A></B>
+subroutine selects either depth or color as the source for <I>z</I> comparisons.
+After a call to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gbegin.html#JS4380nita">gbegin</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/ginit.html#LDg21c0marj">ginit</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/greset.html#xW42e0nita">greset</A></B>,
+or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winopen.html#A142X91549">winopen</A></B>
+subroutine, the default z-buffering is done with depth (z) values. </P>
+
+
+<BLOCKQUOTE><P><A NAME="C4C36D8790lpas"></A><B>Note: </B>The <B>zsource</B> subroutine
+is unavailable on the POWER Gt4 and POWER GXT1000 adapters.</P></BLOCKQUOTE>
+
+
+<P><A NAME="A3C0EB49365mhay"></A>You can set the source for comparison
+on color buffers rather than on the z-buffer. This is useful primarily
+for drawing antialiased lines that cross each other. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A57C0150e4"></A>void&nbsp;zsource(Int32&nbsp;source)</PRE>
+
+
+<P><A NAME="A3C0EB49386mhay"></A>The <A HREF="figures/gl32p88.jpg">figure</A>
+shows the implementation of the z-source function. </P>
+
+
+<H3><A NAME="Tr24230nita"></A>Logical Operation<A NAME="INDEX691"></A>
+<A NAME="INDEX692"></A> <A NAME="INDEX693"></A> <A NAME="INDEX694"></A></H3>
+
+
+<P><A NAME="A3C0EB49408mhay"></A>A logical operation determines how the
+system combines the color for each pixel produced by a primitive with the
+current color of the destination pixel in the frame buffer. </P>
+
+
+<H4><A NAME="A23C0f085"></A>logicop Subroutine </H4>
+
+
+<P><A NAME="A3C0EB49430mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/logicop.html#iM521a0marj">logicop</A></B>
+subroutine specifies the bit-wise logical operation for writing pixels.
+The logical operation is applied between the incoming (source) and existing
+(destination) values to generate the final pixel value. In color map mode,
+all writemask-enabled index bits (up to 12) are changed. In RGB mode, all
+enabled component bits (up to 24) are changed. </P>
+
+
+<P><A NAME="A3C0EB49450mhay"></A>The <B>logicop </B>subroutine is valid
+in all drawing modes (NORMALDRAW, UNDERDRAW, OVERDRAW, PUPDRAW, and CURSORDRAW)
+and in both color map and RGB modes. This subroutine affects all drawing
+operations, including points, lines, polygons, and pixel area transfers.
+The setting of the <B>logicop</B> subroutine does NOT apply to pixel block
+transfers to the z-buffer. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A57C0150e5"></A>void&nbsp;logicop(Int32&nbsp;opcode)</PRE>
+
+
+<P><A NAME="A3C0EB49472mhay"></A>You can also read <A HREF="configframebuf.html#configframebuf.html">&quot;Configuring
+the Frame Buffer&quot;</A> and how frame buffer update relates to <A HREF="animatescene.html#animatescene.html">&quot;Creating
+Animated Scenes&quot;</A> and &quot;Removing <A HREF="remhidden.html#remhidden.html">Hidden
+Surfaces&quot;</A>. </P>
+
+
+
+
+<hr><center>
+[  <a href="alphablend.html">Previous</a>  |
+<a href="clrrstintgl.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/writemasks.html Mon, 24 Jan 2022 16:28:13 GMT -->
+</HTML>
+

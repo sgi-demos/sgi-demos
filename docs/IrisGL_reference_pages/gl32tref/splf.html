@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>splf Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="singlebuffer.html">Previous</a>  |
+<a href="stepunit.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9afd"></A>splf Subroutine</H2>
+<A NAME="INDEX1838" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1839" REL="I2" TITLE="high-level drawing"></A>
+<A NAME="INDEX1840" REL="I3" TITLE="splf"></A>
+<A NAME="INDEX1841" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1842" REL="I2" TITLE="polygons"></A>
+<A NAME="INDEX1843" REL="I3" TITLE="filled, shaded"></A>
+<A NAME="INDEX1844" REL="I1" TITLE="splf subroutine (GL)"></A>
+
+<H3><A NAME="A143X9aff"></A>Purpose</H3>
+<P><A NAME="E1D74D8665ceb"></A>Draws a shaded filled polygon.</P>
+
+<H3><A NAME="A78C129f"></A>Libraries</H3>
+<P><A NAME="E1D74D8704ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D74D8729ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9b03"></A>C Syntax</H3>
+<PRE><A NAME="A143X9b04"></A><B>void splf</B>
+<B>(Int32 </B><A HREF="splf.html#A143X9b08"><I>n</I></A><B>,</B>
+<B>Coord </B><A HREF="splf.html#A143X9b09"><I>parray</I></A><B>[&nbsp;][3],</B>
+<B>Colorindex </B><A HREF="splf.html#A143X9b0a"><I>iarray</I></A><B>[&nbsp;])</B></PRE>
+<PRE><A NAME="t7h1f0marj"></A><B>void splfi</B>
+<B>(Int32 </B><A HREF="splf.html#A143X9b08"><I>n</I></A><B>,</B>
+<B>Icoord </B><A HREF="splf.html#A143X9b09"><I>parray</I></A><B>[&nbsp;][3],</B>
+<B>Colorindex </B><A HREF="splf.html#A143X9b0a"><I>iarray</I></A><B>[&nbsp;])</B></PRE>
+<PRE><A NAME="U8h2b0marj"></A><B>void splfs</B>
+<B>(Int32 </B><A HREF="splf.html#A143X9b08"><I>n</I></A><B>,</B>
+<B>Scoord </B><A HREF="splf.html#A143X9b09"><I>parray</I></A><B>[&nbsp;][3],</B>
+<B>Colorindex </B><A HREF="splf.html#A143X9b0a"><I>iarray</I></A><B>[&nbsp;])</B></PRE>
+<PRE><A NAME="v8h2d0marj"></A><B>void splf2</B>
+<B>(Int32 </B><A HREF="splf.html#A143X9b08"><I>n</I></A><B>,</B>
+<B>Coord </B><A HREF="splf.html#A143X9b09"><I>parray</I></A><B>[&nbsp;][2],</B>
+<B>Colorindex </B><A HREF="splf.html#A143X9b0a"><I>iarray</I></A><B>[&nbsp;])</B></PRE>
+<PRE><A NAME="D9h30marj"></A><B>void splf2i</B>
+<B>(Int32 </B><A HREF="splf.html#A143X9b08"><I>n</I></A><B>,</B>
+<B>Icoord </B><A HREF="splf.html#A143X9b09"><I>parray</I></A><B>[&nbsp;][2],</B>
+<B>Colorindex </B><A HREF="splf.html#A143X9b0a"><I>iarray</I></A><B>[&nbsp;])</B></PRE>
+<PRE><A NAME="V9h2f0marj"></A><B>void splf2s</B>
+<B>(Int32 </B><A HREF="splf.html#A143X9b08"><I>n</I></A><B>,</B>
+<B>Scoord </B><A HREF="splf.html#A143X9b09"><I>parray</I></A><B>[&nbsp;][2],</B>
+<B>Colorindex </B><A HREF="splf.html#A143X9b0a"><I>iarray</I></A><B>[&nbsp;])</B></PRE>
+
+<H3><A NAME="A28C01075b"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C01075c"></A><B>SUBROUTINE SPLF(</B><I>n</I><B>,</B> <I>parray</I><B>,</B> <I>iarray</I><B>)</B>
+<B>INTEGER*4 </B><I>n</I>
+<B>REAL </B><I>parray</I><B>(3,</B><I>n</I><B>)</B>
+<B>INTEGER*2 </B><I>iarray</I><B>(</B><I>n</I><B>)</B></PRE>
+<PRE><A NAME="A28C01075d"></A><B>SUBROUTINE SPLFI(</B><I>n</I><B>,</B> <I>parray</I><B>,</B> <I>iarray</I><B>)</B>
+<B>INTEGER*4 </B><I>n</I>
+<B>INTEGER*4 </B><I>parray</I><B>(3,</B><I>n</I><B>)</B>
+<B>INTEGER*2 </B><I>iarray</I><B>(</B><I>n</I><B>)</B></PRE>
+<PRE><A NAME="A28C01075e"></A><B>SUBROUTINE SPLFS(</B><I>n</I><B>,</B> <I>parray</I><B>,</B> <I>iarray</I><B>)</B>
+<B>INTEGER*4 </B><I>n</I>
+<B>INTEGER*2 </B><I>parray</I><B>(3,</B><I>n</I><B>)</B>
+<B>INTEGER*2 </B><I>iarray</I><B>(</B><I>n</I><B>)</B></PRE>
+<PRE><A NAME="A28C01075f"></A><B>SUBROUTINE SPLF2(</B><I>n</I><B>,</B> <I>parray</I><B>,</B> <I>iarray</I><B>)</B>
+<B>INTEGER*4 </B><I>n</I>
+<B>REAL </B><I>parray</I><B>(2,</B><I>n</I><B>)</B>
+<B>INTEGER*2 </B><I>iarray</I><B>(</B><I>n</I><B>)</B></PRE>
+<PRE><A NAME="A28C010760"></A><B>SUBROUTINE SPLF2I(</B><I>n</I><B>,</B> <I>parray</I><B>,</B> <I>iarray</I><B>)</B>
+<B>INTEGER*4 </B><I>n</I>
+<B>INTEGER*4 </B><I>parray</I><B>(2,</B><I>n</I><B>)</B>
+<B>INTEGER*2 </B><I>iarray</I><B>(</B><I>n</I><B>)</B></PRE>
+<PRE><A NAME="A28C010761"></A><B>SUBROUTINE SPLF2S(</B><I>n</I><B>,</B> <I>parray</I><B>,</B> <I>iarray</I><B>)</B>
+<B>INTEGER*4 </B><I>n</I>
+<B>INTEGER*2 </B><I>parray</I><B>(2,</B><I>n</I><B>)</B>
+<B>INTEGER*2 </B><I>iarray</I><B>(</B><I>n</I><B>)</B></PRE>
+
+<P><A NAME="E1D74D9020ceb"></A>All of the preceding routines are functionally the same. They differ only in the type declarations of their parameters and in whether they assume a two- or three-dimensional screen.</P>
+
+<H3><A NAME="A143X9b05"></A>Description</H3>
+<P><A NAME="E1D74D9066ceb"></A>The <B>splf</B> subroutine draws 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0611">Gouraud-shaded</A> polygons using the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791abd">pattern</A> and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemask</A>. Polygons are represented as arrays of points. The first and last points automatically connect to close a polygon. After the polygon is drawn, the current graphics position is set to the first point in the array. </P>
+
+<P><A NAME="E1D74D9092ceb"></A>The six different forms for the <B>splf</B> subroutine are as follows:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><BR></TD>
+
+<TD><B>2-D</B></TD>
+
+<TD><B>3-D</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int16</TD>
+
+<TD>splf2s</TD>
+
+<TD>splfs</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int32</TD>
+
+<TD>splf2i</TD>
+
+<TD>splfi</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>float</TD>
+
+<TD>splf2</TD>
+
+<TD>splf</TD></TR></TABLE>
+
+<P><A NAME="E1D74D9135ceb"></A>The 
+syntax
+ for each of the subroutine forms is the same except for the parameter type. They differ only in that <A HREF="splf.html#A143X9b04"><B>splf</B></A> expects real coordinates, <A HREF="splf.html#t7h1f0marj"><B>splfi</B></A> expects integer coordinates, and <A HREF="splf.html#U8h2b0marj"><B>splfs</B></A> expects short integer coordinates. In addition, the <A HREF="splf.html#v8h2d0marj"><B>splf2</B></A>* routines assume a 2-D point instead of a 3-D point.</P>
+
+<OL><LI><A NAME="A28C010762"></A>This subroutine must be used in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e3">color map mode</A>.</LI>
+
+<LI><A NAME="A318C9d60"></A>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI></OL>
+
+<H3><A NAME="A143X9b07"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9b08"></A><I>n</I> </TD>
+<TD>  Specifies the number of vertices in the polygon. There can be no more than 256 vertices in a single polygon. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9b09"></A><I>parray </I></TD>
+<TD>  Specifies an array containing the vertices of a polygon.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9b0a"></A><I>iarray </I></TD>
+<TD>  Specifies an array containing the color map indexes that determine the intensities of the vertices of the polygon.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015cde"></A>Implementation Specifics</H3>
+<P><A NAME="E1D74D9307ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C12a2"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12a3"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12a4"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9b1d"></A>Related Information</H3>
+<P><A NAME="E1D74D9404ceb"></A>Setting color map mode as the current mode with the <A HREF="cmode.html#A146X93d6"><B>cmode</B></A> subroutine.</P>
+
+<P><A NAME="E1D74D9430ceb"></A>Allowing the system to draw concave polygons with the <A HREF="concave.html#HXf320marj"><B>concave</B></A> subroutine.</P>
+
+<P><A NAME="E1D74D9456ceb"></A>Specifying the next point in a polygon with the <A HREF="pdr.html#bqf1c0marj"><B>pdr</B></A> subroutine.</P>
+
+<P><A NAME="E1D74D9481ceb"></A>Specifying the starting point for a polygon with the <A HREF="pmv.html#A139X91eed"><B>pmv</B></A> subroutine.</P>
+
+<P><A NAME="E1D74D9506ceb"></A>Drawing a polygon with the <A HREF="poly.html#avf2c0marj"><B>poly</B></A> subroutine.</P>
+
+<P><A NAME="E1D74D9532ceb"></A>Drawing a filled rectangle with the <A HREF="rectf.html#Q5g330marj"><B>rectf</B></A> subroutine.</P>
+
+<P><A NAME="E1D74D9557ceb"></A>Drawing a relative polygon with the <A HREF="rpdr.html#hrfa0marj"><B>rpdr</B></A> subroutine.</P>
+
+<P><A NAME="E1D74D9583ceb"></A>Moving the current graphics position to a starting point for a filled polygon relative to the current point with the <A HREF="rpmv.html#lXf370marj"><B>rpmv</B></A> subroutine.</P>
+
+<P><A NAME="E1D74D9609ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</A>.</P><hr><center>
+[  <a href="singlebuffer.html">Previous</a>  |
+<a href="stepunit.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

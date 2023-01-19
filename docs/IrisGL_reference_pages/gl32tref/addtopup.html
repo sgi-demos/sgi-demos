@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>addtopup Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="../gl32tref/glsubs.html">Previous</a>  |
+<a href="arc.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9109d"></A>addtopup Subroutine</H2>
+<A NAME="INDEX2" REL="I1" TITLE="addtopup subroutine (GL)"></A>
+<A NAME="INDEX3" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX4" REL="I2" TITLE="popp menus"></A>
+<A NAME="INDEX5" REL="I3" TITLE="adding items to existing"></A>
+<A NAME="INDEX6" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX7" REL="I2" TITLE="popp menu"></A>
+<A NAME="INDEX8" REL="I3" TITLE="addtopup"></A>
+<H3><A NAME="A142X9109f"></A>Purpose</H3>
+<P><A NAME="E1B0362548ceb"></A>Adds items to an existing pop-up menu.</P>
+
+<H3><A NAME="A79C1110"></A>Libraries</H3>
+<P><A NAME="E1B0362697ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0362800ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X910a3"></A>C Syntax</H3>
+<PRE><A NAME="A213X91215a"></A><B>void addtopup</B>
+<B>(Int32 </B><A HREF="addtopup.html#A213X91215f"><I>popup</I></A><B>,</B>
+<B>Char8 *</B> <A HREF="addtopup.html#A213X912160"><I>string</I></A><B>,</B>
+<B>Int32</B> <A HREF="addtopup.html#A213X912168"><I>argument</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010b4e"></A>FORTRAN Syntax</H3>
+<P><A NAME="E1B0363069ceb"></A><B>SUBROUTINE ADDTOP(</B><A HREF="addtopup.html#A213X91215f"><I>popup</I></A><B>,</B> <A HREF="addtopup.html#A213X912160"><I>string</I></A><B>, </B><A HREF="addtopup.html#A142X910a8"><I>length</I></A><B>, </B><A HREF="addtopup.html#A213X912168"><I>argument</I></A><B>)</B></P>
+
+<P><B>INTEGER*4</B> <I>popup</I></P>
+
+<P><B>CHARACTER*(*)</B> <I>string</I><B>(*)</B></P>
+
+<P><B>INTEGER*4</B> <I>length</I></P>
+
+<P><B>INTEGER*4</B> <I>argument</I></P>
+
+<H3><A NAME="A142X910a5"></A>Description</H3>
+<P><A NAME="E1B0363226ceb"></A>The <B>addtopup </B>subroutine adds items to the bottom of an existing pop-up menu. You can build a menu by using a call to the <A HREF="newpup.html#A142X91125"><B>newpup</B></A> subroutine to create a menu, followed by a call to the <B>addtopup </B>subroutine for each menu item that you want to add to the menu. </P>
+
+<P><A NAME="E1B0363333ceb"></A>To activate and display the menu, submit the menu to the <A HREF="dopup.html#A142X910e1"><B>dopup</B></A> subroutine. </P>
+
+<BLOCKQUOTE><A NAME="A318C9dda"></A><B>Note: </B>This subroutine cannot be used to add to a display list.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X910a7"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91215f"></A><I>popup</I></TD>
+<TD>  Specifies the identifier of the menu to which to add. The menu identifier is the returned function value of the menu creation call to either the <A HREF="newpup.html#A142X91125"><B>newpup</B></A> or <A HREF="defpup.html#A142X910bf"><B>defpup</B></A> subroutines.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912160"></A><I>string</I></TD>
+<TD>  Specifies the pointer to the text to add as a menu item. There are seven menu item type flags for optional pairing with each menu item: 
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912161"></A><B>%t </B></TD>
+<TD>  Marks item text as the menu title string. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912162"></A><B>%F </B></TD>
+<TD>  Invokes a routine for every selection from this menu except those marked with a <B>%n</B> flag. You must specify the invoked routine in the <A HREF="addtopup.html#A213X912168"><I>argument</I></A> parameter. The value of the menu item is used as a parameter of the executed routine. Thus, if you select the third menu item, the system passes 3 as a parameter to the function specified by the <B>%F</B> flag. Produces unpredictable results in FORTRAN.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912163"></A><B>%f </B></TD>
+<TD>  Invokes a routine when this particular menu item is selected. You must specify the invoked routine in the <A HREF="addtopup.html#A213X912168"><I>argument</I></A> parameter. The value of the menu item is passed as a parameter of the routine. Thus, if you select the third menu item, the system passes 3 as a parameter to the routine specified by the <B>%f</B> flag. If you have also used the<B> %F</B> flag within this menu, then the result of the <B>%f </B>flag is passed as a parameter of the <B>%F</B> flag. Produces unpredictable results in FORTRAN.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912164"></A><B>%l </B></TD>
+<TD>  Adds a line under the current entry. This is useful in providing visual clues for grouping like entries together. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912165"></A><B>%m </B></TD>
+<TD>  Pops up a menu whenever this menu item is selected. You must provide the menu identifier of the new menu in the <I>argument</I> parameter.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912166"></A><B>%n </B></TD>
+<TD>  Like the <B>%f</B> flag, this flag invokes a routine when the user selects this menu item. However, the <B>%n</B> flag differs from the <B>%f</B> flag in that it ignores the routine (if any) specified by the <B>%F</B> flag. The value of the menu item is passed as a parameter of the executed routine. Thus, if you select the third menu item, the system passes 3 as a parameter to the function specified by the <B>%f</B> flag. Produces unpredictable results in FORTRAN.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912167"></A><B>%x</B><I>n </I></TD>
+<TD>  Assigns a numeric value to this menu item. This value overrides the default position-based value assigned to this menu item (third item=3). You must enter the numeric value as the part of the text string specified by the <I>n</I> flag. Do not use the <A HREF="addtopup.html#A213X912168"><I>argument</I></A> parameter to specify the numeric value.</TD></TR></TABLE>
+
+
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A139X91ed7"></A>With the <B>|</B> (vertical bar) delimiter, you can specify multiple menu items in a text string. However, because there is only one <A HREF="addtopup.html#A213X912168"><I>argument</I></A> parameter, the text string can contain no more than one item type that references the <I>argument</I> parameter. </LI>
+
+<LI><A NAME="A108C1bc3"></A>In FORTRAN programming language, there is no pointer to a function. This restriction causes the <B>%f</B>, <B>%n</B>, and <B>%F</B> flags to produce unpredictable results.</LI></OL></BLOCKQUOTE>
+
+</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X910a8"></A><I>length</I></TD>
+<TD>  Specifies the length of the text string (for FORTRAN syntax).</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912168"></A><I>argument</I></TD>
+<TD>  Specifies the command or submenu to assign to the menu item. There can be only one <I>argument</I> parameter for each call to the <B>addtopup</B> subroutine. </TD></TR></TABLE>
+
+<H3><A NAME="A64C0165b8"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0364406ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1113"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1114"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1115"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c6a0"></A>Related Information</H3>
+<P><A NAME="E1B0364737ceb"></A>Defining a pop-up menu with the <A HREF="defpup.html#A142X910bf"><B>defpup</B></A> subroutine.</P>
+
+<P><A NAME="E1B0364853ceb"></A>Displaying a pop-up menu with the <A HREF="dopup.html#A142X910e1"><B>dopup</B></A> subroutine.</P>
+
+<P><A NAME="E1B0364984ceb"></A>Deallocating a pop-up menu and its data structures with the <A HREF="freepup.html#A142X91103"><B>freepup</B></A> subroutine.</P>
+
+<P><A NAME="E1B0365093ceb"></A>Allocating and initializing a structure for a new pop-up menu with the <A HREF="newpup.html#A142X91125"><B>newpup</B></A> subroutine.</P>
+
+<P><A NAME="E1B0365231ceb"></A>Enabling or disabling a given pop-up entry with the <A HREF="setpup.html#A5um1280marj"><B>setpup</B></A> subroutine.</P>
+
+<P><A NAME="E1B0365346ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/popupmenus.html#popupmenus.html">Pop-Up Menus</A>.</P><hr><center>
+[  <a href="../gl32tref/glsubs.html">Previous</a>  |
+<a href="arc.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,475 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/cursorgl.html Mon, 24 Jan 2022 16:28:19 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Creating a Cursor in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="managewinds.html">Previous</a>  |
+<a href="keyboardgl.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="cursorgl.html"></A>Creating a Cursor</H2>
+
+
+<P><A NAME="INDEX802"></A><A NAME="INDEX803"></A><A NAME="INDEX804"></A><A NAME="INDEX805"></A><A NAME="INDEX806"></A><A NAME="INDEX807"></A></P>
+
+
+<P><A NAME="A3C0ED57311mhay"></A>This section discusses the following aspects
+of cursors: </P>
+
+
+<UL><LI><A NAME="A258C01c238"></A><A HREF="cursorgl.html#Js12100nita">Introduction
+to Cursors</A> </LI>
+
+
+<LI><A NAME="A258C01c239"></A><A HREF="cursorgl.html#ks121c0nita">Defining
+a New Cursor</A> </LI>
+
+
+<LI><A NAME="A258C01c23a"></A><A HREF="cursorgl.html#A15C0c6be">Cross-Hair
+Cursor</A></LI>
+
+
+<LI><A NAME="A258C01c23b"></A><A HREF="cursorgl.html#gq123a0nita">Cursor
+Subroutines</A></LI></UL>
+
+
+<H3><A NAME="F2310marj"></A>List of GL Cursor Subroutines<A NAME="INDEX808"></A>
+<A NAME="INDEX809"></A> <A NAME="INDEX810"></A> <A NAME="INDEX811"></A>
+<A NAME="INDEX812"></A> <A NAME="INDEX813"></A> </H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bf7"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/curorigin.html#A150X9398">curorigin</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the origin of the cursor. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bf8"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/curson.html#ru1280nita">cursoff,
+curson</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Control cursor visibility. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bf9"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/curstype.html#A150X93ee">curstype</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Defines the type and size of cursor. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bfa"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/defcursor.html#A150X9444">defcursor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Defines the cursor. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bfb"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getcursor.html#sP1160nita">getcursor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the cursor characteristics. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bfc"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setcursor.html#ZR1nita">setcursor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets cursor characteristics. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A71DA01664csol"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/attachcursor.html#A71D6F2375csol">attachcursor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Couples cursor position to valuator device.</TD></TR></TABLE>
+
+
+<H3><A NAME="Js12100nita"></A>Introduction to Cursors </H3>
+
+
+<P><A NAME="A3C0ED57347mhay"></A>The cursor is handled with special cursor
+hardware. As the color guns scan the screen and cross the square region
+of the screen where the cursor is to be drawn, they look at the corresponding
+position in the cursor mask to see what color to draw. </P>
+
+
+<P><A NAME="A3C0ED57370mhay"></A>The cursor mask can be 1 or 2 bits deep.
+If the cursor mask is 0, the normal color is presented. If the mask is
+nonzero, the mask value is looked up in a color table (very similar to
+overlay) to find out what color to draw. The cursor color takes precedence
+over the overlay color. As with overlays, if the cursor mask is 1 bit deep,
+there is only one possible color. If the cursor mask is 2 bits deep, the
+cursor can have up to three colors. </P>
+
+
+<P><A NAME="A3C0ED57392mhay"></A>The system supports five different cursor
+types: a 16-by-16-bit cursor in one or three colors; a 32-by-32-bit cursor
+in one or three colors; and a cross-hair, one-color cursor. To specify
+a cursor completely, you need to specify not only its type, but also its
+shape and colors. In addition, every cursor has an origin, or <I>hot spot</I>,
+and can be turned on or off. See the <A HREF="figures/gl32p31.jpg">Sample
+Cursors</A> figure for examples of a 16-by-16-bit one-color cursor. </P>
+
+
+<P><A NAME="A3C0ED57415mhay"></A>Cursor number zero (0), the default cursor,
+is an arrow pointing to the upper left corner of the cursor glyph; its
+origin is at (0, 15), the tip of the arrow. The default cursor cannot be
+redefined and can always be used. The position of the origin of the cursor
+is set to the current values of the valuators that are attached to the
+cursor. </P>
+
+
+<H3><A NAME="ks121c0nita"></A>Defining a New Cursor </H3>
+
+
+<P><A NAME="A3C0ED57438mhay"></A>To define and use a new cursor, you must
+follow these steps: </P>
+
+
+<OL><LI><A NAME="A47C013597"></A>Enable or disable the visibility of the cursor
+with the <!--:libs:gl32tref:--><A HREF="../gl32tref/curson.html#ru1280nita"><B>curson</B>/<B>cursoff</B></A>
+subroutines.</LI>
+
+
+<LI><A NAME="A15C0c6ae"></A>Set the cursor type to one of the five allowable
+types with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/curstype.html#A150X93ee">curstype</A></B>
+subroutine.</LI>
+
+
+<LI><A NAME="A15C0c6af"></A>Define the cursor's shape and assign it a number
+with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defcursor.html#A150X9444">defcursor</A></B>
+subroutine.</LI>
+
+
+<LI><A NAME="A15C0c6b0"></A>If necessary, define its origin (or hot spot)
+with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/curorigin.html#A150X9398">curorigin</A></B>
+subroutine, and its colors with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/drawmode.html#A143X9460">drawmode</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapcolor.html#A146X9535">mapcolor</A></B>
+subroutines.</LI>
+
+
+<LI><A NAME="A15C0c6b1"></A>Finally, the new cursor becomes the current
+cursor with a call to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/setcursor.html#ZR1nita">setcursor</A></B>
+subroutine.</LI></OL>
+
+
+<P><A NAME="A3C0ED57466mhay"></A>The following <A HREF="figures/gl32p31.jpg">figure</A>
+illustrates various types of cursors. </P>
+
+
+<P><A NAME="A3C0ED57490mhay"></A>If an application needs a number of different
+cursors, it typically defines all of them on initialization, and then switches
+from one to another using the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/setcursor.html#ZR1nita">setcursor</A></B>
+(and perhaps. the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapcolor.html#A146X9535">mapcolor</A></B>)
+subroutine. Although they do not physically do so, cursors can be thought
+of as occupying one or two bitplanes of their own, which behave like overlay
+bitplanes as described previously. </P>
+
+
+<P><A NAME="A3C0ED57512mhay"></A>A one-color cursor uses one bitplane and
+a three-color cursor occupies two. Where there are zeros in the cursor's
+bitplanes, the contents of the standard, overlay, and underlay bitplanes
+appear. In the same way that overlay colors are defined, the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/drawmode.html#A143X9460">drawmode</A></B>
+and <B>mapcolor</B> subroutines define the cursor's colors. For example,
+call the following for a one-color cursor: </P>
+
+
+<PRE><A NAME="A15C0c6b5"></A>drawmode(CURSORDRAW);</PRE>
+
+
+<PRE><A NAME="A15C0c6b7"></A>mapcolor(1,&nbsp;r,&nbsp;g,&nbsp;b);</PRE>
+
+
+<P><A NAME="A3C0ED57537mhay"></A>Or, call the following for&nbsp;a three-color
+cursor: </P>
+
+
+<PRE><A NAME="A15C0c6b9"></A>mapcolor(1,&nbsp;r1,&nbsp;g1,&nbsp;b1);
+mapcolor(2,&nbsp;r2,&nbsp;g2,&nbsp;b2);
+mapcolor(3,&nbsp;r3,&nbsp;g3,&nbsp;b3);</PRE>
+
+
+<P><A NAME="A3C0ED57560mhay"></A>When the cursor pattern contains a 1(=01),
+the color value (r1, g1, b1) is presented. When the cursor pattern is 2(=10),
+the color value (r2, g2, b2) appears, and so on. Be sure, after you have
+defined the cursor's colors, to call: </P>
+
+
+<PRE><A NAME="A198C11de"></A>drawmode(NORMALDRAW)</PRE>
+
+
+<H3><A NAME="A15C0c6be"></A>Cross-Hair Cursor<A NAME="INDEX814"></A> <A NAME="INDEX815"></A>
+<A NAME="INDEX816"></A> <A NAME="INDEX817"></A> <A NAME="INDEX818"></A>
+<A NAME="INDEX819"></A> </H3>
+
+
+<P><A NAME="A3C0ED57585mhay"></A>The cross-hair cursor is formed with two
+1-pixel-wide, intersecting lines, one horizontal and one vertical that
+extend completely across the screen. Its origin is at the intersection
+of the two lines. This one-color cursor always uses cursor color 3 as its
+color. The color of the cross-hair cursor is set by mapping color index
+1. </P>
+
+
+<P><A NAME="A3C0ED57607mhay"></A>The cross-hair cursor consists of a default
+glyph that cannot be changed. If you assign a value to it with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defcursor.html#A150X9444">defcursor</A></B>
+subroutine, the user-defined glyph is ignored. The cross-hair cursor does
+not work if more than one window is open. </P>
+
+
+<H3><A NAME="gq123a0nita"></A>Cursor Subroutines </H3>
+
+
+<P><A NAME="A3C0ED57630mhay"></A>The following GL subroutines control cursors.</P>
+
+
+<H4><A NAME="Pot42e0marj"></A>curson and cursoff Subroutines </H4>
+
+
+<P><A NAME="A3C0ED57655mhay"></A>The <!--:libs:gl32tref:--><A HREF="../gl32tref/curson.html#ru1280nita"><B>curson</B>
+and <B>cursoff</B></A> subroutines turn the cursor visibility on and off,
+respectively. However, they execute fairly slowly and should not be heavily
+used. These subroutines control only the visibility of the cursor and do
+not disable or enable the cursor or mouse-button click events inside the
+current window. The <B>curson</B> subroutine is the default. The syntax
+for the <B>curson</B> and <B>cursoff</B> subroutines is as follows: </P>
+
+
+<PRE><A NAME="A66C016c03"></A>void&nbsp;curson()</PRE>
+
+
+<PRE><A NAME="A66C016c04"></A>void&nbsp;cursoff()</PRE>
+
+
+<P><A NAME="A3C0ED57680mhay"></A>GL formerly required the cursor to be
+turned off before any drawing was attempted and turned on again after drawing
+was completed. This is no longer required. However, existing code that
+is being ported to the current release may often use this function. This
+code should be modified to remove these subroutines, or the subroutines
+should be effectively removed by using <TT>#ifdef</TT> with the C programming
+language preprocessor. If this is not done, performance will be adversely
+and severely affected. </P>
+
+
+<H4><A NAME="A15C0c6c1"></A>curstype Subroutine </H4>
+
+
+<P><A NAME="A3C0ED57705mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/curstype.html#A150X93ee">curstype</A></B>
+subroutine defines the current cursor type. The value given in the <I>type</I>
+parameter is C16X1, C16X2, C32X1, C32X2, or CCROSS. This value is used
+by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defcursor.html#A150X9444">defcursor</A></B>
+subroutine to determine the dimensions of the arrays that define the cursor's
+shape. The default value is C16x1. The CCROSS value indicates a predefined
+cross-hair cursor, which is one pixel wide. The hot spot is at the center
+of the cross. Its default center is (15, 15). The CCROSS value uses cursor
+color 3. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A66C016c05"></A>void&nbsp;curstype(Int32&nbsp;type)</PRE>
+
+
+<P><A NAME="A3C0ED57728mhay"></A>After you call the <B>curstype</B> subroutine,
+call the <B>defcursor</B> subroutine to specify the appropriate-sized array
+and assign a numeric value to the cursor glyph. </P>
+
+
+<H4><A NAME="A42C01281c"></A>defcursor Subroutine </H4>
+
+
+<P><A NAME="A3C0ED57753mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defcursor.html#A150X9444">defcursor</A></B>
+subroutine defines a cursor glyph. The <I>index</I> parameter is an index
+into the table of defined cursors, and the <I>cursor</I> parameter is an
+array of bits of the correct size, which depends on the current cursor
+type. The format of the array of bits is exactly the same as that for characters
+in a font. The 16-bit word at the lower-left of the cursor bitmap is given
+first, then (if the cursor is 32 bits wide) the word to its right. Continue
+in this way to the top of the cursor bitmap for either 16 or 64 words.
+If the cursor is three-colored, another set of 16 or 64 words follows (again
+beginning at the bottom) for the second plane of the mask. The syntax is
+as follows: </P>
+
+
+<PRE><A NAME="A66C016c06"></A>void&nbsp;defcursor(Int32&nbsp;index,&nbsp;Uint16&nbsp;*cursor)</PRE>
+
+
+<H4><A NAME="A15C0c6cb"></A>curorigin Subroutine </H4>
+
+
+<P><A NAME="A3C0ED57778mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/curorigin.html#A150X9398">curorigin</A></B>
+sets the origin of a cursor. The origin is the point on the cursor that
+aligns with the current cursor valuators. The lower-left corner of the
+cursor has coordinates (0,0). Before calling the <B>curorigin</B> subroutine,
+you must define the cursor with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defcursor.html#A150X9444">defcursor</A></B>
+subroutine. The <I>index&nbsp;</I>parameter is an index into the cursor
+table created by the <B>defcursor</B> subroutine. The <B>curorigin</B>
+subroutine does not take effect until there is a call to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/setcursor.html#ZR1nita">setcursor</A></B>
+subroutine. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A66C016c07"></A>void&nbsp;curorigin(Int16&nbsp;index,&nbsp;Int16&nbsp;xorigin,&nbsp;Int16&nbsp;yorigin)</PRE>
+
+
+<H4><A NAME="A15C0c6cf"></A>setcursor Subroutine </H4>
+
+
+<P><A NAME="A3C0ED57804mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/setcursor.html#ZR1nita">setcursor</A></B>
+subroutine sets the cursor characteristics. It selects a cursor glyph from
+among those defined with the <B>defcursor</B> subroutine. The <I>index</I>
+parameter picks a glyph from the definition table. The <I>color</I> and
+<I>writemask</I> parameters are ignored. They are present for compatibility
+with older systems that still make use of them. Set the color for the cursor
+with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapcolor.html#A146X9535">mapcolor</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/drawmode.html#A143X9460">drawmode</A></B>
+subroutines. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A66C016c08"></A>void&nbsp;setcursor(Int16&nbsp;index,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Colorindex&nbsp;color,&nbsp;Colorindex&nbsp;writemask)</PRE>
+
+
+<H4><A NAME="A15C0c6d5"></A>getcursor Subroutine </H4>
+
+
+<P><A NAME="A3C0ED57829mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getcursor.html#sP1160nita">getcursor</A></B>
+subroutine returns the cursor characteristics. It returns two values: the
+cursor glyph (in the <I>index</I> parameter) and a Boolean value (in the
+<I>bool</I> parameter) indicating whether the cursor is visible. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A15C0c6d7"></A><B>Note: </B>The <I>color</I> and <I>writemask</I>
+parameters are included for compatibility with previous versions; otherwise,
+they provide no useful information for current usage. </P></BLOCKQUOTE>
+
+
+<P><A NAME="A3C0ED57852mhay"></A>The syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C0153a4"></A>void&nbsp;getcursor(Int16&nbsp;*index,&nbsp;Colorindex&nbsp;*color,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Colorindex&nbsp;*writemask,&nbsp;Int32&nbsp;*bool)</PRE>
+
+
+<P><A NAME="A3C0ED57876mhay"></A>The default is the glyph index 0 in the
+cursor table, displayed with the color 1, drawn in the first available
+bitplane, and automatically updated on each vertical retrace. </P>
+
+
+<P><A NAME="A3C0ED57897mhay"></A>The following example program defines
+a three-color, 32-by-32-bit cursor in the shape of an American flag with
+12 stars: </P>
+
+
+<PRE><A NAME="A65C016835"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A65C016836"></A>main&nbsp;()
+{
+&nbsp;&nbsp;&nbsp;&nbsp;winopen(&quot;flag&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;setflag();
+&nbsp;&nbsp;&nbsp;&nbsp;color(0);
+&nbsp;&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;&nbsp;sleep(20);
+}</PRE>
+
+
+<PRE><A NAME="A65C016837"></A>setflag()
+{
+&nbsp;&nbsp;&nbsp;&nbsp;static&nbsp;short&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curs2[128]&nbsp;=&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0x6666,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;0x6666,&nbsp;0xffff,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0x6666,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;0x6666,&nbsp;0xffff,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0x6666,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;0x6666,&nbsp;0xffff,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;0xffff,</PRE>
+
+
+<PRE><A NAME="A65C016838"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;0xffff,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;0xffff,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,&nbsp;0xffff,
+&nbsp;&nbsp;&nbsp;&nbsp;0xffff,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0,&nbsp;0xffff,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;};</PRE>
+
+
+<PRE><A NAME="A198C11df"></A>&nbsp;&nbsp;&nbsp;&nbsp;curstype(C32X2);
+&nbsp;&nbsp;&nbsp;&nbsp;drawmode(CURSORDRAW);
+&nbsp;&nbsp;&nbsp;&nbsp;mapcolor(1,255,0,0);
+&nbsp;&nbsp;&nbsp;&nbsp;mapcolor(2,0,0,255);
+&nbsp;&nbsp;&nbsp;&nbsp;mapcolor(3,255,255,255);
+&nbsp;&nbsp;&nbsp;&nbsp;defcursor(1,curs2);
+&nbsp;&nbsp;&nbsp;&nbsp;setcursor(1,0,0);
+&nbsp;&nbsp;&nbsp;&nbsp;drawmode(NORMALDRAW);
+}</PRE>
+
+
+
+
+<hr><center>
+[  <a href="managewinds.html">Previous</a>  |
+<a href="keyboardgl.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/cursorgl.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+

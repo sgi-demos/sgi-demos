@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>zfunction Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="zdraw.html">Previous</a>  |
+<a href="zsource.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A22f0MARJ"></A>zfunction Subroutine</H2>
+<A NAME="INDEX2124" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2125" REL="I2" TITLE="frame buffer update control"></A>
+<A NAME="INDEX2126" REL="I3" TITLE="zfunction"></A>
+<A NAME="INDEX2127" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2128" REL="I2" TITLE="hidden surface"></A>
+<A NAME="INDEX2129" REL="I3" TITLE="zfunction"></A>
+<A NAME="INDEX2130" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2131" REL="I2" TITLE="depth comparison"></A>
+<A NAME="INDEX2132" REL="I3" TITLE="specifying function used for"></A>
+<A NAME="INDEX2133" REL="I1" TITLE="zfunction subroutine (GL)"></A>
+
+<H3><A NAME="A213X91237b"></A>Purpose</H3>
+<P><A NAME="E1D7707970ceb"></A>Specifies the function used for depth comparison.</P>
+
+<H3><A NAME="A78C123d"></A>Libraries</H3>
+<P><A NAME="E1D7708009ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7708034ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X91237e"></A>C Syntax</H3>
+<PRE><A NAME="A213X91237f"></A><B>void zfunction(Int32</B> <A HREF="zfunction.html#Bon2370marj"><I>func</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X91235c"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X91235f"></A><B>SUBROUTINE ZFUNCT(</B><I>func</I><B>)</B>
+<B>INTEGER*4 </B><I>func</I></PRE>
+
+<H3><A NAME="A213X912382"></A>Description</H3>
+<P><A NAME="E1D7708146ceb"></A>The <B>zfunction </B>subroutine compares the <I>z</I> value of the current contents (destination value) of a pixel against the <I>z</I> value for the contents that you want to write to that pixel (source, or incoming, value). </P>
+
+<P><A NAME="E1D7708172ceb"></A>For example, if the <I>func</I> parameter is ZF_LESS and if the source <I>z</I> is less than the destination <I>z</I>, the system overwrites the destination pixel value with the source pixel value.  </P>
+
+<BLOCKQUOTE><A NAME="A258C01c535"></A><B>Note: </B>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. 
+(See "<!--gl32prgd:--><A HREF="../gl32prgd/powerstation730.html#NITAXIO">Hardware Considerations</A>".) </BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912387"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Bon2370marj"></A><I>func</I></TD>
+<TD>  Expects one of eight possible flags used when comparing <I>z</I> values.  The available flags are: 
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>ZF_NEVER</TD>
+
+<TD>ZFNEVE</TD>
+
+<TD>Never overwrite the destination pixel value.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>ZF_LESS</TD>
+
+<TD>ZFLESS</TD>
+
+<TD>Overwrite the destination pixel value if the <I>z</I> of the source pixel value is less than the z of destination value.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>ZF_EQUAL</TD>
+
+<TD>ZFEQUA</TD>
+
+<TD>Overwrite the destination pixel value if the <I>z </I>of the source pixel value is equal to the z of destination value.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>ZF_LEQUAL</TD>
+
+<TD>ZFLEQU</TD>
+
+<TD>Overwrite the destination pixel value if the z of the source pixel value is less than or equal to the z of destination value.  (This is the default value.)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>ZF_GREATER</TD>
+
+<TD>ZFGREA</TD>
+
+<TD>Overwrite the destination pixel value if the z of the source pixel value is greater than the z of destination value.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>ZF_NOTEQUAL</TD>
+
+<TD>ZFNOTE</TD>
+
+<TD>Overwrite the destination pixel value if the z of the source pixel value is not equal to the z of destination value.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>ZF_GEQUAL</TD>
+
+<TD>ZFGEQU</TD>
+
+<TD>Overwrite the destination pixel value if the z of the source pixel value is greater than or equal to the z of destination value.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>ZF_ALWAYS</TD>
+
+<TD>ZFALWA</TD>
+
+<TD>Always overwrite the destination pixel value.</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A64C0165ea"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7708308ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1240"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1241"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1242"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912394"></A>Related Information</H3>
+<P><A NAME="E1D7708408ceb"></A>Clearing the color bitplanes and the z-buffer simultaneously with the <A HREF="czclear.html#A143X92c8"><B>czclear</B></A> subroutine.</P>
+
+<P><A NAME="E1D7708437ceb"></A>Initiating z-buffer mode with the <A HREF="zbuffer.html#A143X97b1"><B>zbuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1D7708462ceb"></A>Selecting depth or color as the source for <B>z</B> comparisons with the <A HREF="zsource.html#A143X96d6"><B>zsource</B></A> subroutine.</P>
+
+<P><A NAME="E1D7708488ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/writemasks.html#writemasks.html">Writemasks and Logical Operations</A>, and Removing 
+<!--gl32prgd:--><A HREF="../gl32prgd/remhidden.html#remhidden.html">Hidden Surfaces</A>.</P><hr><center>
+[  <a href="zdraw.html">Previous</a>  |
+<a href="zsource.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

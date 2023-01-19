@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>strwidth Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="stepunit.html">Previous</a>  |
+<a href="subpixel.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X93ec"></A>strwidth Subroutine</H2>
+<A NAME="INDEX1852" REL="I1" TITLE="strwidth subroutine (GL)"></A>
+<A NAME="INDEX1853" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1854" REL="I2" TITLE="query"></A>
+<A NAME="INDEX1855" REL="I3" TITLE="returning"></A>
+<A NAME="INDEX1856" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1857" REL="I2" TITLE="text"></A>
+<A NAME="INDEX1858" REL="I3" TITLE="strwidth"></A>
+<A NAME="INDEX1859" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1860" REL="I2" TITLE="text"></A>
+<A NAME="INDEX1861" REL="I3" TITLE="returning text string width"></A>
+
+<H3><A NAME="A144X93ee"></A>Purpose</H3>
+<P><A NAME="E1D74F5846ceb"></A>Returns the width of the specified text string.</P>
+
+<H3><A NAME="A79C1253"></A>Libraries</H3>
+<P><A NAME="E1D74F5885ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D74F5910ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X93f2"></A>C Syntax</H3>
+<PRE><A NAME="A213X912662"></A><B>Int32 strwidth(Char8 * </B><A HREF="strwidth.html#A144X93f7"><I>string</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c0c"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c0d"></A><B>INTEGER*4 FUNCTION STRWID(</B><A HREF="strwidth.html#A144X93f7"><I>string</I></A><B>, </B><A HREF="strwidth.html#A144X93f8"><I>length</I></A><B>) </B>
+<B>CHARACTER*(*) </B><I>string</I>
+<B>INTEGER*4 </B><I>length</I></PRE>
+
+<H3><A NAME="A144X93f4"></A>Description</H3>
+<P><A NAME="E1D74F6023ceb"></A>The <B>strwidth </B>subroutine returns the width of a text string in pixels, using the character-spacing parameters of the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P073b">raster font</A>. This subroutine is useful when you do a simple mapping from 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P017">screen space</A> to 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06el">modeling space</A>. </P>
+
+<P><A NAME="E1D74F6048ceb"></A>Undefined characters have zero width. </P>
+
+<BLOCKQUOTE><A NAME="A318C9f25"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A144X93f6"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A144X93f7"></A><I>string</I></TD>
+<TD>  Specifies the name of the string.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A144X93f8"></A><I>length</I></TD>
+<TD>  Specifies the number of characters in the string.</TD></TR></TABLE>
+
+<H3><A NAME="A30C011056"></A>Example</H3>
+<P><A NAME="E1D74F6164ceb"></A>The example C language program <A HREF="prompt_c.html#A16C0c8de"><B>prompt.c</B></A> uses the <B>strwidth</B> subroutine to get the number of pixels needed to draw a prompt string. </P>
+
+<H3><A NAME="A62C015d92"></A>Implementation Specifics</H3>
+<P><A NAME="E1D74F6207ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C1256"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1257"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1258"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X940c"></A>Related Information</H3>
+<P><A NAME="E1D74F6305ceb"></A>Mapping a point on the screen into a line in 3-D modeling coordinates with the <A HREF="mapw.html#A213X9119fe"><B>mapw</B></A> subroutine.</P>
+
+<P><A NAME="E1D74F6331ceb"></A>Mapping a point on the screen into a line in 2-D modeling coordinates with the <A HREF="mapw2.html#A213X911a56"><B>mapw2</B></A> subroutine.</P>
+
+<P><A NAME="E1D74F6357ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Creating <!--gl32prgd:--><A HREF="../gl32prgd/textchars.html#textchars.html">Text Characters</A>, <!--gl32prgd:--><A HREF="../gl32prgd/picknselect.html#picknselect.html">Picking and Selecting Overview</A>, Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System.</P><hr><center>
+[  <a href="stepunit.html">Previous</a>  |
+<a href="subpixel.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

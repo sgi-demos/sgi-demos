@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>curson or cursoff Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="curorigin.html">Previous</a>  |
+<a href="curstype.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="ru1280nita"></A>curson or cursoff Subroutine</H2>
+<A NAME="INDEX315" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX316" REL="I2" TITLE="cursor"></A>
+<A NAME="INDEX317" REL="I3" TITLE="cursoff"></A>
+<A NAME="INDEX318" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX319" REL="I2" TITLE="cursor"></A>
+<A NAME="INDEX320" REL="I3" TITLE="setting origin of"></A>
+<A NAME="INDEX321" REL="I1" TITLE="cursoff subroutine (GL)"></A>
+<A NAME="INDEX322" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX323" REL="I2" TITLE="cursor"></A>
+<A NAME="INDEX324" REL="I3" TITLE="curson"></A>
+<A NAME="INDEX325" REL="I1" TITLE="curson subroutine (GL)"></A>
+
+<H3><A NAME="A213X910e09"></A>Purpose</H3>
+<P><A NAME="E1B082F996ceb"></A>Controls cursor visibility by window.</P>
+
+<H3><A NAME="A78C1cc"></A>Libraries</H3>
+<P><A NAME="E1B0830148ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0830252ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X910e0c"></A>C Syntax</H3>
+<PRE><A NAME="A213X910e0d"></A><B>void curson(&nbsp;)</B></PRE>
+<PRE><A NAME="A213X910e0e"></A><B>void cursoff(&nbsp;)</B></PRE>
+
+<H3><A NAME="A17C0d9b6"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A17C0d9b7"></A><B>SUBROUTINE CURSON</B></PRE>
+<PRE><A NAME="A17C0d9b8"></A><B>SUBROUTINE CURSOF</B></PRE>
+
+<H3><A NAME="A213X910e12"></A>Description</H3>
+<P><A NAME="E1B0830704ceb"></A>The <B>curson</B> and <B>cursoff</B> subroutines control the visibility of the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A263A93ae">cursor</A> in the current window. These subroutines control only the visibility of the cursor and do not disable or enable the cursor or mouse button click events inside the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A>. The <B>curson</B> subroutine is the default. </P>
+
+<P><A NAME="E1B0830810ceb"></A>Use the <A HREF="getcursor.html#sP1160nita"><B>getcursor</B></A> subroutine to find out if the cursor is visible. </P>
+
+<BLOCKQUOTE><A NAME="A318C9ccb"></A><B>Note: </B>These subroutines cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A29C010a04"></A>Example</H3>
+<P><A NAME="E1B0831021ceb"></A>The example C language program <A HREF="text_c.html#A16C0c9b2"><B>text.c</B></A> uses <B>cursoff</B> subroutine to turn off the cursor while drawing. The program uses the <B>curson</B> subroutine to turn on the cursor after drawing. </P>
+
+<H3><A NAME="A64C01656c"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0831182ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1cf"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1d0"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1d1"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X910e1e"></A>Related Information</H3>
+<P><A NAME="E1B0831501ceb"></A>Setting the origin of a cursor with the <A HREF="curorigin.html#A150X9398"><B>curorigin</B></A> subroutine.</P>
+
+<P><A NAME="E1B0831609ceb"></A>Defining the type and size of a cursor with the <A HREF="curstype.html#A150X93ee"><B>curstype</B></A> subroutine.</P>
+
+<P><A NAME="E1B0831715ceb"></A>Defining a cursor with the <A HREF="defcursor.html#A150X9444"><B>defcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0831822ceb"></A>Returning the cursor characteristics with the <A HREF="getcursor.html#sP1160nita"><B>getcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0831929ceb"></A>Setting the cursor characteristics with the <A HREF="setcursor.html#ZR1nita"><B>setcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0832036ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/cursorgl.html#cursorgl.html">Creating a Cursor</A>, and Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="curorigin.html">Previous</a>  |
+<a href="curstype.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

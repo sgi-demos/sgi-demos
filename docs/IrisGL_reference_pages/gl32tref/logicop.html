@@ -1,0 +1,248 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>logicop Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="loadXfont.html">Previous</a>  |
+<a href="lookat.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="iM521a0marj"></A>logicop Subroutine</H2>
+<A NAME="INDEX1080" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1081" REL="I2" TITLE="frame buffer update control"></A>
+<A NAME="INDEX1082" REL="I3" TITLE="color"></A>
+<A NAME="INDEX1083" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1084" REL="I2" TITLE="pixel writes"></A>
+<A NAME="INDEX1085" REL="I3" TITLE="specifying a logical operation for"></A>
+<A NAME="INDEX1086" REL="I1" TITLE="logicop subroutine (GL)"></A>
+<H3><A NAME="A213X912109"></A>Purpose</H3>
+<P><A NAME="E1B168C176ceb"></A>Specifies the logical, arithmetic, or comparison operation for pixel updates.</P>
+
+<H3><A NAME="A78C11f5"></A>Libraries</H3>
+<P><A NAME="E1B168C332ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B168C436ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X91210c"></A>C Syntax</H3>
+<PRE><A NAME="A213X91210d"></A><B>void logicop(Int32</B> <A HREF="logicop.html#Ko522c0marj"><I>opcode</I></A><B>)</B></PRE>
+
+<H3><A NAME="A28C01076b"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C01076c"></A><B>SUBROUTINE LOGICO(</B><I>opcode</I><B>)</B>
+<B>INTEGER*4</B> <I>opcode</I></PRE>
+
+<H3><A NAME="A213X912110"></A>Description</H3>
+<P><A NAME="E1B168C811ceb"></A>The <B>logicop </B>subroutine specifies the bitwise logical, arithmetic, or comparison operation for 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06fd">pixel</A> updates. The operation is applied between the incoming (source) and existing (destination) values to generate the final pixel value. In 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e3">color map mode</A>, all 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemask</A>-enabled index bits (up to 12) are changed. In 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>, all enabled component bits (up to 32) are changed. </P>
+
+<P><A NAME="E1B168C919ceb"></A>The <B>logicop </B>subroutine defaults to the value of LO_SRC, meaning that the incoming (source) value replaces the existing (destination) value.</P>
+
+<P><A NAME="E1B168D029ceb"></A>The arithmetic and comparison operations treat each channel (R, G, and B) separately. That is, the result of an arithmetic or comparison operation in one channel does not affect the others; each channel is treated as a separate 8-bit entity, rather than a part of a 24-bit quantity. For example, if the <A HREF="logicop.html#Ko522c0marj"><I>opcode</I></A> parameter is set to the LO_MAX value, if the current pixel has an RGB intensity of (119, 34, 230), and the incoming pixel has an intensity of (180, 180, 180), the final pixel value is (180, 180, 230).</P>
+
+<P><A NAME="E1B168D142ceb"></A>The pixel color comparisons do not affect the way the z-buffer works. Z-buffer comparisons and color comparisons can be done simultaneously. The color of a pixel is updated only if the z-buffer comparison passed first; the color is then updated if the color comparison test passes. This function is more general than that provided by the <B>zsource</B> subroutine with a ZSRC_COLOR setting because it does <I>not</I> disable z-comparisons the way that the <B>zsource</B> subroutine does.</P>
+
+<P><A NAME="E1B168D254ceb"></A>The arithmetic operations in each channel saturate, rather than wrap around. Because each color channel is 8 bits deep, color values saturate at 255 and 0. For example, if the <A HREF="logicop.html#Ko522c0marj"><I>opcode</I></A> parameter is set to the LO_SUM value, if the current pixel has an RGB intensity of (119, 34, 230), and the incoming pixel has an intensity of (180, 180, 180), then the final pixel value is (255, 214, 255).</P>
+
+<P><A NAME="E1B168D368ceb"></A>It is not possible to do logical and blending operations simultaneously. When the <A HREF="logicop.html#Ko522c0marj"><I>opcode</I></A> parameter is set to any value other than LO_SRC, the <A HREF="blendfunction.html#A143X9240"><B>blendfunction</B></A> subroutine values <A HREF="blendfunction.html#A143X924b"><I>sfactor</I></A> and <A HREF="blendfunction.html#A143X924c"><I>dfactor</I></A> are forced to their default values, BF_ONE and BF_ZERO, respectively. Likewise, calling the <B>blendfunction </B>subroutine with arguments other than BF_ONE and BF_ZERO forces the logical opcode to a value of LO_SRC.</P>
+
+<P><A NAME="E1B168D478ceb"></A>Unlike the <B>blendfunction </B>subroutine, the <B>logicop </B>subroutine is valid in all drawing modes (NORMALDRAW, UNDERDRAW, OVERDRAW, PUPDRAW, CURSORDRAW) and in both color map and RGB modes. Like the <B>blendfunction</B> subroutine, it affects all drawing operations, including points, lines, polygons, and pixel area transfers. The <B>logicop </B>subroutine does <I>not</I> affect pixel block transfers (blits) into the z-buffer.</P>
+
+<P><A NAME="E1B168D588ceb"></A>The <B>logicop</B> subroutine functions in systems without alpha bitplanes.</P>
+
+<BLOCKQUOTE><A NAME="A79C1378"></A><B>Note: </B>Use the <B>logicop</B> subroutine when drawing antialiased lines to improve the appearance of intersecting lines.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912117"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Ko522c0marj"></A><I>opcode</I></TD>
+<TD>  Token indicating which of the following operations should be in effect:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Operation</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_ZERO</TD>
+
+<TD>LOZERO</TD>
+
+<TD>0</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_AND</TD>
+
+<TD>LOAND</TD>
+
+<TD>src AND dst</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_ANDR</TD>
+
+<TD>LOANDR</TD>
+
+<TD>src AND (NOT dst)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_SRC</TD>
+
+<TD>LOSRC</TD>
+
+<TD>src</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_ANDI</TD>
+
+<TD>LOANDI</TD>
+
+<TD>(NOT src) AND dst</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_DST</TD>
+
+<TD>LODST</TD>
+
+<TD>dst</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_XOR</TD>
+
+<TD>LOXOR</TD>
+
+<TD>src XOR dst</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_OR</TD>
+
+<TD>LOOR</TD>
+
+<TD>src OR dst</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_NOR</TD>
+
+<TD>LONOR</TD>
+
+<TD>NOT (src OR dst)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_XNOR</TD>
+
+<TD>LOXNOR</TD>
+
+<TD>NOT (src XOR dst)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_NDST</TD>
+
+<TD>LONDST</TD>
+
+<TD>NOT dst</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_ORR</TD>
+
+<TD>LOORR</TD>
+
+<TD>src OR (NOT dst)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_NSRC</TD>
+
+<TD>LONSRC</TD>
+
+<TD>NOT src</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_ORI</TD>
+
+<TD>LOORI</TD>
+
+<TD>(NOT src) OR dst</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_NAND</TD>
+
+<TD>LONAND</TD>
+
+<TD>NOT (src AND dst)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_ONE</TD>
+
+<TD>LOONE</TD>
+
+<TD>1</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_MAX</TD>
+
+<TD>LOMAX</TD>
+
+<TD>D=Maximum (S, D)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_MIN</TD>
+
+<TD>LOMIN</TD>
+
+<TD>D=Minimum (S, D)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_SUM</TD>
+
+<TD>LOSUM</TD>
+
+<TD>D= D + S (saturated)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_DMS</TD>
+
+<TD>LODMS</TD>
+
+<TD>D= D - S (saturated)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_SMD</TD>
+
+<TD>LOSMD</TD>
+
+<TD>D= S - D (saturated)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LO_AVG</TD>
+
+<TD>LOAVG</TD>
+
+<TD>D=(S + D) / 2</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A64C0165d0"></A>Implementation Specifics</H3>
+<P><A NAME="E1B168E445ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="A27C010445"></A>The numeric assignment of the 22 operation names were chosen to be identical to those defined by the AIXwindows system.</P>
+
+<P><A NAME="A79C137a"></A>The LO_MAX, LO_MIN, LO_SUM, LO_DMS, LO_SMD, and LO_AVG values are not supported on the 3-D Color Graphics Processor, the Supergraphics Processor Subsystem, or the POWER GXT1000 adapter.</P>
+
+<H3><A NAME="A78C11f8"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11f9"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11fa"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912123"></A>Related Information</H3>
+<P><A NAME="E1B168E766ceb"></A>Specifying the alpha blending ratio with the <A HREF="blendfunction.html#A143X9240"><B>blendfunction</B></A> subroutine.</P>
+
+<P><A NAME="E1B168E878ceb"></A>Specifying either depth or color as the source for <I>z</I> comparisons with the <A HREF="zsource.html#A143X96d6"><B>zsource</B></A> subroutine.</P>
+
+<P><A NAME="E1B168F122ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>.</P>
+
+<P><A NAME="E1B168F231ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/writemasks.html#writemasks.html">Writemasks and Logical Operations</A>
+ and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="loadXfont.html">Previous</a>  |
+<a href="lookat.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

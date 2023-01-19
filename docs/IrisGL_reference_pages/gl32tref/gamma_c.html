@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>gamma.c Example C Language Program for GL
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="font3_c.html">Previous</a>  |
+<a href="iobounce_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A101C12370"></A>gamma.c Example C Language Program for GL</H2>
+<A NAME="INDEX2308" REL="I1" TITLE="gamma.c example program (GL)"></A>
+<A NAME="INDEX2309" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2310" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2311" REL="I3" TITLE="gamma ramps"></A>
+<A NAME="INDEX2312" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2313" REL="I2" TITLE="gamma ramps"></A>
+<A NAME="INDEX2314" REL="I3" TITLE="color maps"></A>
+<A NAME="INDEX2315" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2316" REL="I2" TITLE="antialiasing"></A>
+<A NAME="INDEX2317" REL="I3" TITLE="gamma ramps"></A>
+<PRE><A NAME="A64EAA1082ttay"></A>#include &lt;stdio.h>
+#include &lt;math.h>
+#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EAA1237ttay"></A>/* Example:  gammaramp.c */</PRE>
+<PRE><A NAME="A64EAA1526ttay"></A>/*
+ * This example program shows the use of gamma ramps.  Gamma ramps
+ * are useful for correcting the appeareance of photographs
+ * (images) and antialiased lines (to correct for monitor
+ * phosphors), and for implementing color-map tricks.
+ *
+ * Pressing PF7 or PF8 changes the gamma correction factor and 
+ * loads the new gamma ramp.  A window shows the current gamma 
+ * factor and a black-to-white scale.
+ */</PRE>
+<PRE><A NAME="A64EAA1690ttay"></A>/* ----------------------------------------------------------- */</PRE>
+<PRE><A NAME="A64EAA1875ttay"></A>/*
+ * This routine prints out the current value of gamma in a window.
+ * At the bottom of the window is a color bar.  
+ */</PRE>
+<PRE><A NAME="A64EAA2026ttay"></A>void show_val (float gam)
+{</PRE>
+<PRE><A NAME="A64EAA2358ttay"></A>&nbsp;&nbsp;&nbsp;char gamstr[32];   
+&nbsp;&nbsp;&nbsp;cpack (0x0);         /* black */
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;cpack (0xff);        /* red */
+&nbsp;&nbsp;&nbsp;cmov2 (10, 80);
+&nbsp;&nbsp;&nbsp;charstr ("Currently, the gamma correction factor is ");
+&nbsp;&nbsp;&nbsp;sprintf (gamstr, "%3.2f", gam);
+&nbsp;&nbsp;&nbsp;charstr (gamstr);   
+&nbsp;&nbsp;&nbsp;cmov2 (10, 60);
+&nbsp;&nbsp;&nbsp;charstr ("To lower gamma, press PF7");
+&nbsp;&nbsp;&nbsp;cmov2 (10, 40);
+&nbsp;&nbsp;&nbsp;charstr ("To raise gamma, press PF8");   /* draw a sample color bar */
+&nbsp;&nbsp;&nbsp;cpack (0x0);         /* black */
+&nbsp;&nbsp;&nbsp;pmv2 (10, 10);
+&nbsp;&nbsp;&nbsp;pdr2 (10, 25);
+&nbsp;&nbsp;&nbsp;cpack (0xffffff);    /* white */
+&nbsp;&nbsp;&nbsp;pdr2 (390, 25);
+&nbsp;&nbsp;&nbsp;pdr2 (390, 10);
+&nbsp;&nbsp;&nbsp;pclos ();</PRE>
+<PRE><A NAME="A64EAA2501ttay"></A>}</PRE>
+<PRE><A NAME="A64EAA2665ttay"></A>/* ----------------------------------------------------------- */</PRE>
+<PRE><A NAME="A64EAA4246ttay"></A>/* 
+ * The following routine updates the adapter gamma ramps 
+ * based on the value of gamma passed to it.  Note that the 
+ * entire screen is affected (because there is only one set 
+ * of ramps for the entire screen).
+ */
+void update_ramps (float gam) {
+&nbsp;&nbsp;&nbsp;short rramp[256], gramp[256], bramp[256];
+&nbsp;&nbsp;&nbsp;int i;
+&nbsp;&nbsp;&nbsp;double corr, og;   /* compute the new gamma ramp */
+&nbsp;&nbsp;&nbsp;og = 1.0 / (gam + 0.00001);
+&nbsp;&nbsp;&nbsp;corr = 255.0 * pow ((double) (1.0 / 255.0), og);
+&nbsp;&nbsp;&nbsp;for (i=0; i&lt;256; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rramp[i] = gramp[i] = bramp[i] = (short) (corr * pow((float) (i), og));
+&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;/* load the new gamma ramp */
+&nbsp;&nbsp;&nbsp;gammaramp (rramp, gramp, bramp);
+}</PRE>
+<PRE><A NAME="A64EAA4410ttay"></A>/* ----------------------------------------------------------- */</PRE>
+<PRE><A NAME="A64EAA4964ttay"></A>main() {
+&nbsp;&nbsp;&nbsp;float gamma = 1.0;
+&nbsp;&nbsp;&nbsp;float delta = 0.05;
+&nbsp;&nbsp;&nbsp;short dev, val;   
+&nbsp;&nbsp;&nbsp;prefsize (400, 100);
+&nbsp;&nbsp;&nbsp;minsize (400, 100);
+&nbsp;&nbsp;&nbsp;maxsize (400, 100);         /* disable resizing of window */
+&nbsp;&nbsp;&nbsp;winopen ("gamma-ramp demo");
+&nbsp;&nbsp;&nbsp;RGBmode ();                 /* gamma ramps work in color map mode too! */
+&nbsp;&nbsp;&nbsp;gconfig ();   
+&nbsp;&nbsp;&nbsp;update_ramps (gamma);       /* initialize the gamma ramps */
+&nbsp;&nbsp;&nbsp;show_val (gamma);           /* print current value of gamma */
+&nbsp;&nbsp;&nbsp;qdevice (RIGHTMOUSE);       /* queue up desired devices */
+&nbsp;&nbsp;&nbsp;qdevice (ESCKEY);
+&nbsp;&nbsp;&nbsp;qdevice (F7KEY);
+&nbsp;&nbsp;&nbsp;qdevice (F8KEY);   
+&nbsp;&nbsp;&nbsp;while (TRUE) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dev = qread (&amp;val);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch (dev) {         
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case ESCKEY:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case RIGHTMOUSE:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(0);         
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case F7KEY:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (val == FALSE) break;  /* do nothing for key release */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gamma += delta;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;update_ramps (gamma);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;show_val (gamma);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;         
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case F8KEY:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (val == FALSE) break;  /* do nothing for key release */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gamma -= delta;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;update_ramps (gamma);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;show_val (gamma);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;         
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case REDRAW:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;show_val (gamma);         
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAA5107ttay"></A>}</PRE>
+
+<H3><A NAME="A200C1177"></A>Related Information</H3>
+<P><A NAME="E1D7837848ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/smjaglines.html#A4rO1220nita">Pixel Coverage</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I> describes aspects of antialiasing (smoothing lines for screen display) related to color variation in the pixels.</P>
+
+<hr><center>
+[  <a href="font3_c.html">Previous</a>  |
+<a href="iobounce_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

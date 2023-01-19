@@ -1,0 +1,881 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/textchars.html Mon, 24 Jan 2022 16:27:52 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Creating Text Characters in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="rwpixels.html">Previous</a>  |
+<a href="smjaglines.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="textchars.html"></A>Creating Text Characters</H2>
+
+
+<P><A NAME="INDEX242"></A><A NAME="INDEX243"></A><A NAME="INDEX244"></A><A NAME="INDEX245"></A><A NAME="INDEX246"></A><A NAME="INDEX247"></A><A NAME="INDEX248"></A></P>
+
+
+<P><A NAME="A3C0E52E762mhay"></A>This section includes the following aspects
+of character creation in GL: </P>
+
+
+<UL><LI><A NAME="A258C01c248"></A><A HREF="textchars.html#XJk1200nita">Character
+Strings</A></LI>
+
+
+<LI><A NAME="AACE1CD553ttay"></A><A HREF="textchars.html#A161C1ac">International
+Text Support</A></LI>
+
+
+<LI><A NAME="A258C01c249"></A><A HREF="textchars.html#Qi62180nita">Fonts</A></LI>
+
+
+<LI><A NAME="A258C01c24a"></A><A HREF="textchars.html#AWM2270nita">Font
+Query Subroutines</A></LI></UL>
+
+
+<P><A NAME="A3C0E52E790mhay"></A>The GL supports the rapid display of rasterized
+characters in multiple fonts. The fonts can be fixed or variable pitch
+and can be different point sizes. You can design and use your own fonts
+or make use of the Enhanced X-Windows fonts supplied with the system.
+The system also provides query functions to determine information about
+the currently defined font. </P>
+
+
+<P><A NAME="A3C0E52E813mhay"></A>For information on getting a list of available
+fonts, see the <B><!--:libs:x11tr:--><A HREF="../x11tr/pdf/XListFont.pdf">XListFonts</A></B>
+function. </P>
+
+
+<H3><A NAME="A264X9371"></A>List of GL Text Subroutines<A NAME="INDEX249"></A>
+<A NAME="INDEX250"></A> <A NAME="INDEX251"></A> <A NAME="INDEX252"></A>
+<A NAME="INDEX253"></A> <A NAME="INDEX254"></A> </H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c55"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/charstr.html#A143X9cfb">charstr</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a string of raster characters on the screen.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c56"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/cmov.html#A143X9d1d">cmov</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Moves the current character position.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c57"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/defrasterfont.html#A143X9d3f">defrasterfont</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Defines bitmaps for a raster font. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c58"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/font.html#A143X9d61">font</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Selects a raster font.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c59"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getcpos.html#A144X9364">getcpos</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the current character position.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c5a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getdescender.html#A144X9386">getdescender</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the baseline extent of the longest character descender.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c5b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getfont.html#A144X93a8">getfont</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the current raster font number.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A161C1169"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getfontencoding.html#Az7960nita">getfontencoding</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the font encoding of the current raster font.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A161C116a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getfonttype.html#Y89340nita">getfonttype</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the font type of the current raster font.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c5c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getheight.html#A144X93ca">getheight</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the maximum character height in the current raster font.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A38C012070"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/loadXfont.html#vUO390nita">loadXfont</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Loads an Enhanced X-Windows font into the font table.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c5d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/strwidth.html#A144X93ec">strwidth</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the width of a specified text string.</TD></TR></TABLE>
+
+
+<H3><A NAME="XJk1200nita"></A>Character Strings<A NAME="INDEX255"></A>
+<A NAME="INDEX256"></A> <A NAME="INDEX257"></A> <A NAME="INDEX258"></A>
+<A NAME="INDEX259"></A> <A NAME="INDEX260"></A> <A NAME="INDEX261"></A>
+<A NAME="INDEX262"></A> </H3>
+
+
+<P><A NAME="A3C0E52E851mhay"></A>The <B><A HREF="textchars.html#A16C0ca48">cmov</A></B>
+subroutine determines where the system draws text on the screen, and the
+<B><A HREF="textchars.html#A17C0d8cc">charstr</A></B> subroutine draws
+a string of characters. The <B><A HREF="textchars.html#A17C0d8fe">strwidth</A></B>
+subroutine returns the width of a text string. </P>
+
+
+<P><A NAME="A3C0E52E875mhay"></A>The system draws the character string
+in the current font, which, by default, is a fixed-width, sans-serif font
+nine pixels wide. Strings drawn with raster fonts are not scaled, therefore
+although a labeled object shrinks as it moves away from the viewer, the
+label stays the same size. Similarly, no matter what rotation is in effect,
+the character string maintains the same orientation (horizontal for any
+standard font) because fonts are defined in 2-D with respect to the raster
+display. Scaling, rotating, or translating such 2-D primitives has no meaning
+in a 3-D context. </P>
+
+
+<H4><A NAME="A16C0ca48"></A>cmov Subroutine </H4>
+
+
+<P><A NAME="A3C0E52E901mhay"></A>The 
+<A HREF="specialterms.html#A25P03e9">current
+character position</A> determines where the system draws text on the screen.
+The <B><A HREF="textchars.html#A16C0ca48">cmov</A></B> subroutine moves
+the current character position to a specified point in the same way that
+the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/move.html#pofmarj">move</A></B>
+subroutine sets the current line-drawing position. The <I>x</I>, <I>y</I>,
+and <I>z</I> parameters are given as integers, short integers, or real
+numbers in 2-D or 3-D and specify a point in world coordinates. </P>
+
+
+<P><A NAME="A3C0E52E925mhay"></A>The <B>cmov</B> subroutine transforms
+the world coordinates into window coordinates, which become the new character
+position. The <B>cmov</B> subroutine does not affect the current graphics
+position. </P>
+
+
+<P><A NAME="A3C0E52E948mhay"></A>If the current character position is clipped
+out by the current viewing transformation, the character position is set
+to invalid, and any character strings that are drawn do not appear. The
+<B>cmov</B> subroutine does not cause anything to be drawn. It simply sets
+the current character position where drawing occurs when the <B><A HREF="textchars.html#A17C0d8cc">charstr</A></B>
+subroutine is issued. </P>
+
+
+<P><A NAME="A3C0E52E971mhay"></A>The parameters are (<I>x</I>, <I>y</I>)
+for the <B>cmov2</B> subroutines and (<I>x</I>, <I>y</I>, <I>z</I>) for
+the <B>cmov</B> subroutines. The syntax for the <B>cmov</B> and <B>cmov2</B>
+subroutines is as follows: </P>
+
+
+<PRE><A NAME="A258C01c252"></A>void&nbsp;cmov(Coord&nbsp;x,&nbsp;Coord&nbsp;y,&nbsp;Coord&nbsp;z)</PRE>
+
+
+<PRE><A NAME="A258C01c253"></A>void&nbsp;cmov2(Coord&nbsp;x,&nbsp;Coord&nbsp;y)
+
+
+</PRE>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="3"><B>Forms of the cmov Subroutine</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Parameter Type</B> </TD>
+
+
+<TD><B>2-D</B> </TD>
+
+
+<TD><B>3-D</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int16 </TD>
+
+
+<TD><B>cmov2s</B> </TD>
+
+
+<TD><B>cmovs</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int32 </TD>
+
+
+<TD><B>cmov2i</B> </TD>
+
+
+<TD><B>cmovi</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Float </TD>
+
+
+<TD><B>cmov2</B> </TD>
+
+
+<TD><B>cmov</B> </TD></TR></TABLE>
+
+
+<H4><A NAME="A17C0d8cc"></A>charstr Subroutine </H4>
+
+
+<P><A NAME="A3C0E52F001mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/charstr.html#A143X9cfb">charstr</A></B>
+subroutine draws a string of raster characters. The origin of the first
+character in the string is the current character position. After the system
+draws the string, it updates the current character position to the pixel
+to the right of the last character in the string. Character strings are
+null-terminated in C. The text string is drawn in the current font and
+color. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A59C015475"></A>void&nbsp;charstr(Char8&nbsp;*string)</PRE>
+
+
+<P><A NAME="A3C0E52F026mhay"></A>If the origin of a character string lies
+outside the <A HREF="specialterms.html#A27P039">viewport</A>,
+none of the characters in the string are drawn. If the origin is inside
+the viewport, the characters are individually clipped to the 
+<A HREF="specialterms.html#A27P018">screenmask</A>.
+The screenmask is normally set to the same size as the viewport, although
+it can be set smaller than the viewport to enable two kinds of clipping,
+as illustrated in the Gross and Fine Clipping <A HREF="figures/gl32p37.jpg">figure</A>
+. </P>
+
+
+<P><A NAME="A3C0E52F050mhay"></A>Gross clipping removes all strings that
+start outside the viewport. Fine clipping trims individual characters to
+the screenmask. Viewport clipping and screenmask clipping apply to all
+drawing primitives as well. However, the difference between these two types
+of clipping is usually not important, except for character strings. </P>
+
+
+<P><A NAME="A3C0E52F074mhay"></A>Characters are drawn in the current color.
+Unless the font is specifically changed in the program, character strings
+are drawn in the current font. The default font is <TT><A HREF="textchars.html#A135C1281">font0</A></TT>,
+defined when the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winopen.html#A142X91549">winopen</A></B>
+subroutine is called. The following example program, <TT>rasterchars</TT>,
+draws two lines of text. The program assumes the default font is less than
+12 pixels high. </P>
+
+
+<PRE><A NAME="A258C01c255"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A258C01c256"></A>main()
+{&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;500,&nbsp;100,&nbsp;500);
+&nbsp;&nbsp;&nbsp;winopen(&quot;rasterchars&quot;);
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;cmov2i(50,80);
+&nbsp;&nbsp;&nbsp;charstr(&quot;The&nbsp;first&nbsp;line&nbsp;is&nbsp;drawn&nbsp;&quot;);
+&nbsp;&nbsp;&nbsp;charstr(&quot;in&nbsp;two&nbsp;parts.&nbsp;&quot;);
+&nbsp;&nbsp;&nbsp;cmov2i(50,&nbsp;66);
+&nbsp;&nbsp;&nbsp;charstr(&quot;This&nbsp;line&nbsp;is&nbsp;14&nbsp;pixels&nbsp;lower.&nbsp;&quot;);
+&nbsp;&nbsp;&nbsp;sleep(10);&nbsp;/*&nbsp;pause&nbsp;for&nbsp;ten&nbsp;seconds */
+}</PRE>
+
+
+<P><A NAME="A3C0E52F100mhay"></A>The <TT>rasterchars</TT> program illustrates
+the following: </P>
+
+
+<UL><LI><A NAME="A149C189a"></A>First, notice that the first line is drawn
+in two parts. The first <B>cmov2i</B> subroutine sets the current character
+position to 50 pixels over and 80 pixels up from the lower left corner
+of the window. After the first string is drawn, the current character position
+is advanced to follow the space character at the end of the line. When
+the phrase <TT>in&nbsp;two&nbsp;parts</TT>. is drawn, it continues from
+the current character position.</LI>
+
+
+<LI><A NAME="A149C189b"></A>Finally, the character position is reset to
+start below the beginning of the top line, and the second line is drawn.
+
+
+<BLOCKQUOTE><A NAME="A258C01c258"></A><B>Note: </B>The characters are drawn in the
+current color. Because nothing was mentioned in the program about fonts,
+all the strings are drawn in the current font. </BLOCKQUOTE></LI></UL>
+
+
+<H4><A NAME="A258C01c259"></A>Example Program Using the rotate Subroutine</H4>
+
+
+<P><A NAME="A3C0E52F129mhay"></A>The following example uses the <B>rotate</B>
+subroutine and illustrates that character strings are drawn in the same
+orientation no matter where they move, and that the current character move
+function of the <B>cmov</B> subroutine is transformed like any other geometry.
+In the example, the <B>rotate</B> subroutine rotates the polygon about
+the <I>z</I> axis (coming directly out of the screen) by 5 degrees each
+time. The rotation is about the origin, so vertex <TT>p1</TT> should remain
+fixed. The vertex callouts rotate with the vertices. </P>
+
+
+<PRE><A NAME="A258C01c25b"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A258C01c25c"></A>float&nbsp;p1[]&nbsp;=&nbsp;{0.0,&nbsp;0.0};
+float&nbsp;p2[]&nbsp;=&nbsp;{0.6,&nbsp;0.0};
+float&nbsp;p3[]&nbsp;=&nbsp;{0.0,&nbsp;0.6};</PRE>
+
+
+<PRE><A NAME="A258C01c25d"></A>main()
+{</PRE>
+
+
+<PRE><A NAME="A258C01c25e"></A>&nbsp;&nbsp;&nbsp;long&nbsp;i;</PRE>
+
+
+<PRE><A NAME="A258C01c25f"></A>&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;500,&nbsp;100,&nbsp;500);
+&nbsp;&nbsp;&nbsp;winopen(&quot;rasterchars&quot;);
+&nbsp;&nbsp;&nbsp;ortho2(-1.0,&nbsp;1.0,&nbsp;-1.0,&nbsp;1.0);
+&nbsp;&nbsp;&nbsp;for&nbsp;(i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;40;&nbsp;i++)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(BLACK);</PRE>
+
+
+<PRE><A NAME="A258C01c260"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(50,&nbsp;'z');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bgnpolygon();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v2f(p1);&nbsp;v2f(p2);&nbsp;v2f(p3);</PRE>
+
+
+<PRE><A NAME="A258C01c261"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endpolygon();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(GREEN);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmov2(0.0,&nbsp;0.0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charstr(&quot;vert1&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmov2(0.6,&nbsp;0.0);</PRE>
+
+
+<PRE><A NAME="A258C01c262"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charstr(&quot;vert2&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmov2(0.0,&nbsp;0.6);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charstr(&quot;vert3&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sleep(1);
+&nbsp;&nbsp;&nbsp;}
+}</PRE>
+
+
+<H3><A NAME="A161C1ac"></A>International Text Support<A NAME="INDEX263"></A>
+<A NAME="INDEX264"></A> <A NAME="INDEX265"></A> </H3>
+
+
+<P><A NAME="A3C0E52F162mhay"></A>The <B>charstr</B> subroutine supports
+both single-and double-byte raster character rendering. </P>
+
+
+<P><A NAME="A3C0E52F185mhay"></A>If the current font is a double-byte font,
+this subroutine expects the first two bytes to represent the first character,
+the second two bytes to represent the next character, and so on. Double-byte
+fonts are useful in languages with extremely large character sets such
+as Japanese and Chinese. </P>
+
+
+<P><A NAME="A3C0E52F208mhay"></A>If the current font is a single-byte font,
+each byte represents one character. The ASCII code set is an example of
+a single-byte font. </P>
+
+
+<P><A NAME="A3C0E52F231mhay"></A>It is the user's responsibility to determine
+if the currently bound font is a single- or double-byte font and to pass
+the appropriate string. To determine the font type, use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getfonttype.html#Y89340nita">getfonttype</A></B>
+subroutine. </P>
+
+
+<H4><A NAME="A608CCB521ttay"></A>Using Double-Byte Character Sets<A NAME="INDEX266"></A>
+<A NAME="INDEX267"></A> <A NAME="INDEX268"></A> </H4>
+
+
+<P><A NAME="A3C0E52F257mhay"></A>Currently, the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winopen.html#A142X91549">winopen</A></B>
+subroutine does not support double-byte character set (DBCS) window titles.
+To set the name of a GL window to a DBCS string, use the <B><!--:libs:x11tr:--><A HREF="../x11tr/pdf/XSeWMName.pdf">XSetWMName</A></B>
+subroutine. The window id of a GL window can be obtained with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getXdpy.html#A114C13c">getXwid</A></B>
+subroutine. To use DBCS strings in a pop-up menu, redefine the default
+font (font id 0) to be a DBCS font. This can be done with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/loadXfont.html#vUO390nita">loadXfont</A></B>
+subroutine. Note that only <B>loadXfont</B> can be used to redefine font
+id 0; the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defrasterfont.html#A143X9d3f">defrasterfont</A></B>
+subroutine does not allow font id 0 to be redefined. Be sure to specify
+pop-up menu entries as DBCS strings. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/charstr.html#A143X9cfb">charstr</A></B>
+subroutine does support DBCS output, provided that the current font is
+a DBCS font. </P>
+
+
+<H4><A NAME="A608CCC172ttay"></A>Using the charstr Subroutine to Render
+Japanese and Asian Fonts<A NAME="INDEX269"></A> <A NAME="INDEX270"></A>
+<A NAME="INDEX271"></A> <A NAME="INDEX272"></A> <A NAME="INDEX273"></A>
+<A NAME="INDEX274"></A> </H4>
+
+
+<P><A NAME="A3C0E52F283mhay"></A>The following code fragment demonstrates
+how double-byte fonts can be loaded and used for rendering in GL. An example
+program illustrating this use can be found in the <B>/usr/lpp/GL/examples/jischarstr.c</B>
+file. </P>
+
+
+<PRE><A NAME="A608CCC736ttay"></A>char* jisX0201 =
+ &quot;-ibm_aix-gothic-medium-r-normal--35-230-100-100-m-170-jisx0201.1976-0&quot;;
+     
+char* jisX0208 =
+ &quot;-ibm_aix-gothic-medium-r-normal--35-230-100-100-m-340-jisx0208.1983-0&quot;;   char* ibmUDC   =
+   &quot;-ibm_aix-gothic-medium-r-normal--35-230-100-100-m-340-ibm-udcjp&quot;;   loadXfont( 2, jisX0201);   /* Kana Font */
+   loadXfont( 3, jisX0208);   /* Kanji Font */
+   loadXfont( 4, ibmUDC);     /* IBM User Defined Chars */
+ 
+ font(2)
+ charstr(&quot;k1k2k300&quot;);      /* Draw Kana Character */
+ 
+ font(3);
+ charstr(&quot;K1K2K300&quot;);      /* Draw Kanji string */</PRE>
+
+
+<BLOCKQUOTE><P><A NAME="A608CCC951ttay"></A><B>Note: </B>The two null bytes are required
+to terminate a DBCS string. A single null byte is not sufficient; a short
+word whose first byte is null, but whose second byte is not is still a
+valid glyph index. </P></BLOCKQUOTE>
+
+
+<H4><A NAME="A17C0d8fe"></A>strwidth Subroutine </H4>
+
+
+<P><A NAME="A3C0E52F312mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/strwidth.html#A144X93ec">strwidth</A></B>
+subroutine returns the width of a text string in pixels, using the character-spacing
+parameters in the current raster font. This text string can be any null-terminated
+ASCII string of characters. Characters in some fonts may not be all the
+same width, so the <B>strwidth</B> subroutine does not necessarily return
+the width of a character times the number of characters in the string.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A59C015476"></A>Int32&nbsp;strwidth(Char8&nbsp;*string)</PRE>
+
+
+<H3><A NAME="Qi62180nita"></A>Fonts<A NAME="INDEX275"></A> <A NAME="INDEX276"></A>
+<A NAME="INDEX277"></A> <A NAME="INDEX278"></A> <A NAME="INDEX279"></A>
+<A NAME="INDEX280"></A> <A NAME="INDEX281"></A> <A NAME="INDEX282"></A></H3>
+
+
+<P><A NAME="A3C0E52F337mhay"></A>A GL raster font is a collection of up
+to 255 rectangular arrays of masks. If a 1 (one) appears in a mask, then
+the corresponding pixel is turned on to the current color. If a 0 (zero)
+appears, the pixel remains as it is. For example, the following bitmasks
+might be used to draw the character A: </P>
+
+
+<PRE><A NAME="Xu62340nita"></A><B>Binary&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hexadecimal</B></PRE>
+
+
+<PRE><A NAME="A17C0d901"></A>0000011000000000&nbsp;=&nbsp;0x0600</PRE>
+
+
+<PRE><A NAME="A17C0d902"></A>0000011000000000&nbsp;=&nbsp;0x0600</PRE>
+
+
+<PRE><A NAME="A17C0d903"></A>0000111100000000&nbsp;=&nbsp;0x0F00</PRE>
+
+
+<PRE><A NAME="A17C0d904"></A>0000111100000000&nbsp;=&nbsp;0x0F00</PRE>
+
+
+<PRE><A NAME="A17C0d905"></A>0001100110000000&nbsp;=&nbsp;0x1980</PRE>
+
+
+<PRE><A NAME="A17C0d906"></A>0001100110000000&nbsp;=&nbsp;0x1980</PRE>
+
+
+<PRE><A NAME="A17C0d907"></A>0011000011000000&nbsp;=&nbsp;0x30C0</PRE>
+
+
+<PRE><A NAME="A17C0d908"></A>0011111111000000&nbsp;=&nbsp;0x3FC0</PRE>
+
+
+<PRE><A NAME="A17C0d909"></A>0110000001100000&nbsp;=&nbsp;0x6060</PRE>
+
+
+<PRE><A NAME="A17C0d90a"></A>0110000001100000&nbsp;=&nbsp;0x6060</PRE>
+
+
+<PRE><A NAME="A17C0d90b"></A>1100000000110000&nbsp;=&nbsp;0xC030</PRE>
+
+
+<PRE><A NAME="A17C0d90c"></A>1100000000110000&nbsp;=&nbsp;0xC030</PRE>
+
+
+<P><A NAME="A3C0E52F374mhay"></A>To define a single character, you need
+the following variables: </P>
+
+
+<UL><LI><A NAME="A149C189c"></A>bitmask</LI>
+
+
+<LI><A NAME="A149C189d"></A>width</LI>
+
+
+<LI><A NAME="A149C189e"></A>height</LI>
+
+
+<LI><A NAME="A149C189f"></A>xoffset</LI>
+
+
+<LI><A NAME="A149C18a0"></A>yoffset</LI>
+
+
+<LI><A NAME="A149C18a1"></A>xincrement</LI></UL>
+
+
+<P><A NAME="A3C0E52F402mhay"></A>The <B><A HREF="textchars.html#A17C0d913">defrasterfont</A></B>
+subroutine allows you to define a collection of characters with these variables.</P>
+
+
+<P><A NAME="A3C0E52F425mhay"></A>Raster font characters are defined by
+a bitmap, 1 bit per pixel. The width and height of the character, the number
+of bits in one row of the bitmap, and the baseline position are also specified.</P>
+
+
+<P><A NAME="A3C0E52F448mhay"></A>Each array of bitmasks defining an ASCII
+character makes up a bitmask entry for that character. For the previous
+example, the ASCII value of A is 65 (decimal), so entry 65 in the font
+is associated with the bitmask. If such a font were defined, the string
+AAA would draw three copies of the character shown in this bitmask. </P>
+
+
+<P><A NAME="A3C0E52F471mhay"></A>In addition to the bitmask information
+for each character, you need to know the width and height of the character
+in pixels. The width cannot be inferred from the bitmask, because all bitmask
+data comes in 16-bit words. In the previous example, the width of the A
+is 12 bits; that is, a maximum of 12 bits would be written horizontally
+for this character. The height is also 12 bits. </P>
+
+
+<P><A NAME="A3C0E52F496mhay"></A>Normally, a character's origin is at the
+lower-left corner of the bitmask, and this is the case for the previous
+example. The origin for a character is what is put at the current character
+position. For a character with a descender, such as g, (see <A HREF="figures/gl32p36.jpg">illustration</A>),
+you need extra bits that lie below the current character position. Therefore,
+the origin should not be at the lower-left corner. Two values, <I>xoffset</I>
+and <I>yoffset</I>, tell how far the character's origin must be moved to
+bring it to the lower-left corner. For characters with descenders, the
+<I>yoffset</I> value is typically negative. </P>
+
+
+<P><A NAME="A3C0E52F519mhay"></A>Finally, another number for each character
+indicates how far to the right the current character position must be advanced
+after drawing the character. This number is usually different from the
+width and is labeled the <I>x</I> increment. In the previous example of
+the bitmap for the <A HREF="textchars.html#Xu62340nita">letter A</A>, the
+character position is advanced by about 14 pixels to leave a little space
+between characters. </P>
+
+
+<P><A NAME="A3C0E52F542mhay"></A>To simplify matters, the character bitmasks
+are packed together in one array of 16-bit values, so the bitmask is determined
+by the offset into the bitmask array. For example, if the font contained
+the A example previously described as its first character, and a bitmask
+for the letter B as its second, the offset for the letter B would be 12
+short integers (the length of the bitmask definition of the letter A).
+The length and width together determine the number of short integers in
+a character's definition. </P>
+
+
+<P><A NAME="A3C0E52F565mhay"></A>The <B><A HREF="textchars.html#biM2210nita">font</A></B>
+subroutine selects the font for use when drawing a character string and
+this font remains the current font until changed by another call to the
+<B>font</B> subroutine. </P>
+
+
+<H4><A NAME="A135C1281"></A>Default Font (font 0) </H4>
+
+
+<P><A NAME="A3C0E52F590mhay"></A>The default font is that font associated
+with font index 0. The user cannot use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defrasterfont.html#A143X9d3f">defrasterfont</A></B>
+subroutine to redefine this font. The user can, however, change this font
+by setting the <B>$GLFONT0</B> environment variable. </P>
+
+
+<P><A NAME="A3C0E52F613mhay"></A>The default font for the AIX
+version 3.2 operating system supports ISO8859-1 encoding. This font is
+a fixed-width font, <I>X</I> pixels high, <I>Y</I> pixels wide, and is
+a euro-sans-serif type font. </P>
+
+
+<H4><A NAME="A17C0d913"></A>defrasterfont Subroutine </H4>
+
+
+<P><A NAME="A3C0E52F638mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defrasterfont.html#A143X9d3f">defrasterfont</A></B>
+subroutine defines bitmaps for a raster font. The <I>chars</I> parameter
+contains a description of each character in the font. The figure <A HREF="figures/gl32p36.jpg">Using
+the <B>defrasterfont</B> Subroutine to Describe a Character</A> includes:</P>
+
+
+<UL><LI><A NAME="A149C18a3"></A>The height and width of the character in pixels.</LI>
+
+
+<LI><A NAME="A149C18a4"></A>The offsets from the character origin to the
+lower left-corner of the bounding box.</LI>
+
+
+<LI><A NAME="A149C18a5"></A>An offset into the array of rasters.</LI>
+
+
+<LI><A NAME="A149C18a6"></A>The amount to add to the current character
+<I>x</I> position after drawing the character.</LI></UL>
+
+
+<P><A NAME="A3C0E52F665mhay"></A>The <I>chars</I> parameter is an array
+of structures of type <TT>Fontchar</TT>, defined in the standard<B> /usr/include/gl/gl.h</B>
+file. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c269"></A>void&nbsp;defrasterfont(Int32&nbsp;index,&nbsp;Int16&nbsp;height,&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Int16&nbsp;numchars,&nbsp;Fontchar&nbsp;chars[],&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Int16&nbsp;numraster,&nbsp;Int16&nbsp;raster[])&nbsp;</PRE>
+
+
+<P><A NAME="A3C0E52F689mhay"></A>The <I>raster</I> parameter is an array
+of bitmap-information shorts given in the <I>numraster</I> parameter. It
+is a one-dimensional array of bitmask bytes ordered from left to right,
+then bottom to top. Mask bits are left justified in the character's bounding
+box. </P>
+
+
+<P><A NAME="A3C0E52F712mhay"></A>The following code fragment draws the
+g character (as illustrated in the following <A HREF="figures/gl32p36.jpg">figure</A>):</P>
+
+
+<PRE><A NAME="A41C012721"></A>defrasterfont&nbsp;(n,&nbsp;ht,&nbsp;nc,&nbsp;chars,&nbsp;nr,&nbsp;rasters);</PRE>
+
+
+<PRE><A NAME="A41C012722"></A>chars&nbsp;[`g']&nbsp;=&nbsp;{&nbsp;&nbsp;724,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8,&nbsp;&nbsp;9,&nbsp;&nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;byte&nbsp;offset&nbsp;&nbsp;&nbsp;w&nbsp;&nbsp;&nbsp;h&nbsp;&nbsp;xoffset&nbsp;yoffset&nbsp;&nbsp;xinc
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;into&nbsp;rasterarray</PRE>
+
+
+<PRE><A NAME="A41C012723"></A>Int16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[]&nbsp;&nbsp;=&nbsp;{...
+rasterarray&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...</PRE>
+
+
+<PRE><A NAME="A41C012724"></A>position&nbsp;724&nbsp;&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0x7E00,&nbsp;0xC300,&nbsp;0x0300,&nbsp;0x0300,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0x7F00,&nbsp;0xC300,&nbsp;0xC300,&nbsp;0xC300,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0x7E00,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+
+
+
+</PRE>
+
+
+<H4><A NAME="biM2210nita"></A>font Subroutine </H4>
+
+
+<P><A NAME="A3C0E52F742mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/font.html#A143X9d61">font</A></B>
+subroutine selects the font the system uses whenever the <B>charstr</B>
+subroutine draws a text string. The <I>fontnum</I> parameter is an index
+into the font table built by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defrasterfont.html#A143X9d3f">defrasterfont</A></B>
+subroutine or loaded with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/loadXfont.html#vUO390nita">loadXfont</A></B>
+subroutine. This font remains the current font until you use the <B>font</B>
+subroutine to select another font. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c26a"></A>void&nbsp;font(Int32&nbsp;fontnum)</PRE>
+
+
+<P><A NAME="A3C0E52F766mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/font3_c.html#A149C18a9">font3.c</A></B>
+example program defines a font with three characters: a lowercase j, an
+arrow, and the Greek letter sigma. The j is assigned to the ASCII value
+of j, and the arrow and sigma are assigned to ASCII values 1 and 2 (written
+\001 and \002 in the C code). Two sample strings are then written out,
+the first of which contains only characters that are defined, while the
+second contains undefined characters. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A149C18a8"></A><B>Note: </B>When characters are not defined,
+no error occurs but nothing is printed out for them. </P></BLOCKQUOTE>
+
+
+<H4><A NAME="A44C012b67"></A>loadXfont Subroutine </H4>
+
+
+<P><A NAME="A3C0E52F793mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/loadXfont.html#vUO390nita">loadXfont</A></B>
+subroutine loads an Enhanced X-Windows font so that it can be used
+by GL applications for rendering text. The application must provide a valid
+font name. There are several ways to obtain a valid font name. The easiest
+way is to use Enhanced X-Windows subroutines that return lists of
+installed fonts, with the assumption that a font file is already installed
+on the system. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/xfonts_c.html#Up45120nita">xfonts.c</A></B>
+example program (found in  in<I> GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I>) shows subroutines that
+can be used. </P>
+
+
+<P><A NAME="A3C0E52F816mhay"></A>Given a font name, this subroutine searches
+the file system (along the font path) for that font. If the font name is
+found, the subroutine loads it into the GL table of defined fonts. In other
+words, the <B>loadXfont</B> subroutine works much like the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defrasterfont.html#A143X9d3f">defrasterfont</A></B>
+subroutine, except that the character bitmaps are obtained from pre-installed
+files. The directory path that is searched for fonts can be controlled
+with Enhanced X-Windows routines. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A59C015478"></A>void&nbsp;loadXfont(Int32&nbsp;id_num,&nbsp;Char8&nbsp;*name)</PRE>
+
+
+<H3><A NAME="AWM2270nita"></A>Font Query Subroutines </H3>
+
+
+<P><A NAME="A3C0E52F841mhay"></A>The following subroutines return information
+about the current font (what number it is, how high the characters are,
+and how long a descender any character has). </P>
+
+
+<H4><A NAME="A18C0dca3"></A>getfont Subroutine </H4>
+
+
+<P><A NAME="A3C0E52F866mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getfont.html#A144X93a8">getfont</A></B>
+subroutine returns the index of the current raster font. The syntax is
+as follows: </P>
+
+
+<PRE><A NAME="A258C01c283"></A>Int32&nbsp;getfont()</PRE>
+
+
+<H4><A NAME="A18C0dca5"></A>getheight Subroutine </H4>
+
+
+<P><A NAME="A3C0E52F894mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getheight.html#A144X93ca">getheight</A></B>
+subroutine returns the maximum height of a character in the current raster
+font, including ascenders (present in such characters as the letters t
+and h, which ascend above the baseline) and descenders (present in such
+characters as the letters y and p, which descend below the baseline). It
+returns the height in pixels. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c284"></A>Int32&nbsp;getheight()</PRE>
+
+
+<H4><A NAME="A48C01377d"></A>getcpos Subroutine </H4>
+
+
+<P><A NAME="A3C0E52F920mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getcpos.html#A144X9364">getcpos</A></B>
+subroutine gets the current character position, in screen coordinates relative
+to the lower-left corner of the window, and writes it into the parameters.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c285"></A>void&nbsp;getcpos(Screencoord&nbsp;*ix,&nbsp;Screencoord&nbsp;*iy)</PRE>
+
+
+<H4><A NAME="A18C0dca7"></A>getdescender Subroutine </H4>
+
+
+<P><A NAME="A3C0E52F948mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getdescender.html#A144X9386">getdescender</A></B>
+subroutine returns the longest descender in the current font. It returns
+the number of pixels that the longest descender goes below the baseline.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c286"></A>Int32&nbsp;getdescender()</PRE>
+
+
+<H4><A NAME="A161C1b1"></A>getfontencoding </H4>
+
+
+<P><A NAME="A3C0E52F974mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getfontencoding.html#Az7960nita">getfontencoding</A></B>
+subroutine returns the font encoding of the current raster font. The syntax
+is as follows: </P>
+
+
+<PRE><A NAME="A161C1b3"></A>void&nbsp;getfontencoding&nbsp;(char&nbsp;*&nbsp;end)</PRE>
+
+
+<H4><A NAME="A161C1b4"></A>getfonttype </H4>
+
+
+<P><A NAME="A3C0E530000mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getfonttype.html#Y89340nita">getfonttype</A></B>
+subroutine returns the font type of the current raster font. Fonts may
+be either single-byte character set (SBCS) or double-byte character set
+(DBCS) fonts. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A161C1b6"></A>int&nbsp;getfonttype()</PRE>
+
+
+
+
+<hr><center>
+[  <a href="rwpixels.html">Previous</a>  |
+<a href="smjaglines.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/textchars.html Mon, 24 Jan 2022 16:27:53 GMT -->
+</HTML>
+

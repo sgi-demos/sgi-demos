@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>minsize Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="maxsize.html">Previous</a>  |
+<a href="mmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="MJ13260marj"></A>minsize Subroutine</H2>
+<A NAME="INDEX1175" REL="I1" TITLE="minsize subroutine (GL)"></A>
+<A NAME="INDEX1176" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1177" REL="I2" TITLE="window"></A>
+<A NAME="INDEX1178" REL="I3" TITLE="minsize"></A>
+<A NAME="INDEX1179" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1180" REL="I2" TITLE="window sizes"></A>
+<A NAME="INDEX1181" REL="I3" TITLE="specifying minimum"></A>
+
+<H3><A NAME="A213X912b6b"></A>Purpose</H3>
+<P><A NAME="E1D6F8B586ceb"></A>Specifies the minimum size of a window.</P>
+
+<H3><A NAME="A79C1305"></A>Libraries</H3>
+<P><A NAME="E1D6F8B630ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D6F8B659ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912b6e"></A>C Syntax</H3>
+<PRE><A NAME="A213X912b6f"></A><B>void minsize(Int32 </B><A HREF="minsize.html#Ce43290marj"><I>x</I></A><B>, Int32 </B><A HREF="minsize.html#Te4390marj"><I>y</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c41"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c42"></A><B>SUBROUTINE MINSIZ(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>, </B><I>y</I></PRE>
+
+<H3><A NAME="A213X912b72"></A>Description</H3>
+<P><A NAME="E1D6F8B787ceb"></A>The <B>minsize </B>subroutine specifies the minimum size (in pixels) of a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A>. It is called at the beginning of a graphics program, but only takes effect when the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine is called. </P>
+
+<P><A NAME="E1D6F8B817ceb"></A>The <B>minsize </B>subroutine can also be called in conjunction with the <A HREF="winconstraints.html#A142X914c1"><B>winconstraints</B></A> subroutine to modify the enforced minimum size after the window is created. The default minimum size is 40 pixels wide and 30 pixels high. The window can be reshaped, but cannot become smaller than the specified minimum size. </P>
+
+<P><A NAME="E1D6F8B847ceb"></A>With the <B>minsize</B> subroutine, the programmer can prevent the user from resizing a window to a size smaller than the specified size.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f61"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912b76"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Ce43290marj"></A><I>x</I></TD>
+<TD>  Specifies the minimum width in pixels of a window. The lowest legal value for this parameter is 21.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Te4390marj"></A><I>y</I></TD>
+<TD>  Specifies the minimum height in pixels of a window. The lowest legal value for this parameter is 21.</TD></TR></TABLE>
+
+<H3><A NAME="A61C0159f4"></A>Implementation Specifics</H3>
+<P><A NAME="E1D6F8B978ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1308"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1309"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C130a"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912b7c"></A>Related Information</H3>
+<P><A NAME="E1D6F8C083ceb"></A>Specifying pixel values to be added to a window with the <A HREF="fudge.html#A142X917a6"><B>fudge</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F8C109ceb"></A>Obtaining the size of the window with the <A HREF="getsize.html#X513200marj"><B>getsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F8C139ceb"></A>Specifying the size of a window icon with the <A HREF="iconsize.html#LA13e0marj"><B>iconsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F8C168ceb"></A>Specifying the maximum size of a window with the <A HREF="maxsize.html#A142X916d6"><B>maxsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F8C194ceb"></A>Constraining the size of a window with the <A HREF="prefsize.html#A142X91671"><B>prefsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F8C223ceb"></A>Specifying a window size change in discrete steps with the <A HREF="stepunit.html#A142X91bd2"><B>stepunit</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F8C252ceb"></A>Binding window constraints to the current window with the <A HREF="winconstraints.html#A142X914c1"><B>winconstraints</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F8C279ceb"></A>Creating a window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine. </P>
+
+<P><A NAME="E1D6F8C309ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="maxsize.html">Previous</a>  |
+<a href="mmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

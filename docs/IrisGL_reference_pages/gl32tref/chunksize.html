@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>chunksize Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="charstr.html">Previous</a>  |
+<a href="circ.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9c38"></A>chunksize Subroutine</H2>
+<A NAME="INDEX200" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX201" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX202" REL="I3" TITLE="chunksize"></A>
+<A NAME="INDEX203" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX204" REL="I2" TITLE="display list"></A>
+<A NAME="INDEX205" REL="I3" TITLE="specifying the amount of memory for"></A>
+<A NAME="INDEX206" REL="I1" TITLE="chunksize subroutine (GL)"></A>
+
+<H3><A NAME="A142X9c3a"></A>Purpose</H3>
+<P><A NAME="E1B064A903ceb"></A>Specifies the amount of memory to be allocated for a display list.</P>
+
+<H3><A NAME="A79C1d"></A>Libraries</H3>
+<P><A NAME="E1B064B053ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B064B157ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9c3e"></A>C Syntax</H3>
+<PRE><A NAME="A142X9c3f"></A><B>void chunksize(Int32 </B><A HREF="chunksize.html#A142X9c43"><I>chunk</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010aa1"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010aa2"></A><B>SUBROUTINE CHUNKS(</B><I>chunk</I><B>)</B>
+<B>INTEGER*4 </B><I>chunk</I></PRE>
+
+<H3><A NAME="A142X9c40"></A>Description</H3>
+<P><A NAME="E1B064B519ceb"></A>The <B>chunksize</B> subroutine gives the system a hint about the appropriate amount of memory to be allocated when compiling a display list. The system may, on occasion, override the hint.</P>
+
+<P><A NAME="E1B064B628ceb"></A>As you add primitives to a display list, the <A HREF="chunksize.html#A142X9c43"><I>chunk</I></A> parameter is the unit size (in bytes) by which the memory allocated to the display list grows. The default chunk size is 1024 bytes. A chunk size that is much smaller than the final size of the display list leads to inefficiencies due to fragmentation. A chunk size that is larger than the final display list contains unused, and therefore wasted, memory. </P>
+
+<P><A NAME="E1B064B737ceb"></A>Most subroutines add from 4 to 28 bytes to the display list; subroutines that accept arrays as parameters (for example, the <A HREF="poly.html#avf2c0marj"><B>poly</B></A> subroutine and <A HREF="polf.html#Zsf1c0marj"><B>polf</B></A> subroutine) typically add to the display list in proportion to the length of the array. Some experimentation may be necessary to determine the optimal chunk size for an application.</P>
+
+<BLOCKQUOTE><A NAME="A10C0abff"></A><B>Note: </B>This editing subroutine itself cannot be added to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>. </BLOCKQUOTE>
+
+
+<H3><A NAME="A142X9c42"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X9c43"></A><I>chunk </I></TD>
+<TD>  Specifies the minimum memory size to allocate for an object.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015d0c"></A>Implementation Specifics</H3>
+<P><A NAME="E1B064C061ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C110"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C111"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C112"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X9c58"></A>Related Information</H3>
+<P><A NAME="E1B064C380ceb"></A>Unfragmenting and compacting the memory storage of an object with the <A HREF="compactify.html#A142X9c5a"><B>compactify</B></A> subroutine. </P>
+
+<P><A NAME="E1B064C487ceb"></A>Initializing the system with the <A HREF="ginit.html#LDg21c0marj"><B>ginit</B></A> subroutine. </P>
+
+<P><A NAME="E1B064C593ceb"></A>Creating an object with the <A HREF="makeobj.html#A142X912d"><B>makeobj</B></A> subroutine. </P>
+
+<P><A NAME="E1B064C702ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating <!--gl32prgd:--><A HREF="../gl32prgd/workobjects.html#workobjects.html">Objects (Display Lists)</A>.</P><hr><center>
+[  <a href="charstr.html">Previous</a>  |
+<a href="circ.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

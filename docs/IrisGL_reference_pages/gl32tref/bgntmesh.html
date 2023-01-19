@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>bgntmesh or endtmesh Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="bgnsurface.html">Previous</a>  |
+<a href="bgntrim.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X9694"></A>bgntmesh or endtmesh Subroutine</H2>
+<A NAME="INDEX117" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX118" REL="I2" TITLE="begin-end style"></A>
+<A NAME="INDEX119" REL="I3" TITLE="bgntmesh"></A>
+<A NAME="INDEX120" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX121" REL="I2" TITLE="vertex"></A>
+<A NAME="INDEX122" REL="I3" TITLE="triangle mesh"></A>
+<A NAME="INDEX123" REL="I1" TITLE="bgntmesh subroutine (GL)"></A>
+<A NAME="INDEX124" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX125" REL="I2" TITLE="begin-end style"></A>
+<A NAME="INDEX126" REL="I3" TITLE="endtmesh"></A>
+<A NAME="INDEX127" REL="I1" TITLE="endtmesh subroutine (GL)"></A>
+<H3><A NAME="A144X9696"></A>Purpose</H3>
+<P><A NAME="E1B04FF617ceb"></A>Begins or ends interpretation of vertex subroutines as triangle mesh vertices.</P>
+
+<H3><A NAME="A77C1365"></A>Libraries</H3>
+<P><A NAME="E1B04FF765ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B04FF870ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X969a"></A>C Syntax</H3>
+<PRE><A NAME="A213X912837"></A><B>void bgntmesh(&nbsp;)</B></PRE>
+<PRE><A NAME="A107C1292"></A><B>void endtmesh(&nbsp;)</B></PRE>
+
+<H3><A NAME="A20C0e2df"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A20C0e2e0"></A><B>SUBROUTINE BGNTME</B></PRE>
+<PRE><A NAME="A107C1293"></A><B>SUBROUTINE ENDTME</B></PRE>
+
+<H3><A NAME="A144X969c"></A>Description</H3>
+<P><A NAME="E1B0500321ceb"></A>The <B>bgntmesh</B> subroutine begins the system interpretation of vertex <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html#A264X925d">(begin-end style)</A> subroutines as triangle mesh vertices, which are used to define a mesh of triangles.</P>
+
+<P><A NAME="E1B0500431ceb"></A>The <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0612">graphics pipeline</A> maintains two vertex registers. The first and second vertices are loaded into the registers. When the third vertex routine is executed, the system draws a triangle through the vertices and replaces the older of the register vertices with the third vertex.</P>
+
+<P><A NAME="E1B0500542ceb"></A>For each new vertex subroutine, the system draws a triangle through the new vertex and the stored vertices, then replaces the older stored vertex with the new vertex. </P>
+
+<P><A NAME="E1B0500650ceb"></A>To replace the more recent of the stored vertices, call the <A HREF="swaptmesh.html#A144X9782"><B>swaptmesh</B></A> subroutine. For example, the code sequence: </P>
+<PRE><A NAME="A16C0cd13"></A>bgntmesh();
+&nbsp;v3f(zero);
+&nbsp;v3f(one);
+&nbsp;v3f(two);
+&nbsp;v3f(three);
+endtmesh();</PRE>
+
+<P><A NAME="E1B0500816ceb"></A>draws two triangles, <SAMP>(zero,one,two)</SAMP> and <SAMP>(one,two,three)</SAMP>, while the code sequence: </P>
+<PRE><A NAME="A16C0cd15"></A>bgntmesh();
+&nbsp;v3f(zero);
+&nbsp;v3f(one);
+&nbsp;swaptmesh();
+&nbsp;v3f(two);
+&nbsp;v3f(three);
+endtmesh();</PRE>
+
+<P><A NAME="E1B0500981ceb"></A>draws two triangles, <SAMP>(zero,one,two)</SAMP> and <SAMP>(zero,two,three)</SAMP>. There is no limit to the number of times that the <B>swaptmesh</B> subroutine can be called. </P>
+
+<P><A NAME="E1B0501089ceb"></A>Between the <B>bgntmesh</B> and <B>endtmesh</B> subroutines, you can issue only the following Graphics Library subroutines:</P>
+
+<UL><LI><A NAME="A228C1257"></A><A HREF="c.html#A143X9262"><B>c</B></A></LI>
+
+<LI><A NAME="A228C1258"></A><A HREF="color.html#A146X9429"><B>color</B></A></LI>
+
+<LI><A NAME="A228C1259"></A><A HREF="cpack.html#A143X9284"><B>cpack</B> </A></LI>
+
+<LI><A NAME="A228C125a"></A><A HREF="lmbind.html#XeZ2340marj"><B>lmbind </B></A></LI>
+
+<LI><A NAME="A228C125b"></A><A HREF="lmcolor.html#ofZ220marj"><B>lmcolor</B></A></LI>
+
+<LI><A NAME="A228C125c"></A><A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A></LI>
+
+<LI><A NAME="A228C125d"></A><A HREF="n3f.html#A139X91ef3"><B>n3f</B></A></LI>
+
+<LI><A NAME="A228C125e"></A><A HREF="normal.html#A142X9b7"><B>normal</B></A> </LI>
+
+<LI><A NAME="A228C125f"></A><A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> </LI>
+
+<LI><A NAME="A228C1260"></A><A HREF="v.html#A144X97a4"><B>v</B></A> </LI></UL>
+
+
+<P><A NAME="E1B0501658ceb"></A>Use the <A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> and <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> subroutines to respecify only materials and their properties.</P>
+
+<P><A NAME="E1B0501766ceb"></A>If you want to use the <A HREF="backface.html#A143X974b"><B>backface</B></A> subroutine, specify the vertices of the first triangle in counterclockwise order. All triangles in the mesh have the same rotation as the first triangle in a mesh so that backfacing works correctly.</P>
+
+<H3><A NAME="A62C015d6a"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0501926ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1B0502038ceb"></A>The POWER Gt4 and POWER Gt4x adapters support only a limited number of vertices between the <B>bgntmesh</B> and <B>endtmesh</B> subroutines. The actual limit can vary from less than 200 vertices to more than 400 vertices, depending on whether or not colors, normals, or material properties are specified between the begin and end pair. If only vertices are specified between a begin and end pair, then at least 255 vertices are supported. Specifying normals, colors, material properties, or the <B>swaptmesh</B> subroutine decreases the overall maximum. If all attributes are specified, only 198 vertices are supported.</P>
+
+<P><A NAME="E1B0502147ceb"></A>The POWERgraphics GTO and the 3D Color Graphics Processor support a maximum of 255 vertices between the <B>bgntmesh</B> and <B>endtmesh</B> subroutines.</P>
+
+<P><A NAME="A3CBCD36402bolt"></A>The POWERgraphics GXT1000 supports an arbitrary number of vertices between the <B>bgntmesh</B> and <B>endtmesh</B> subroutines. </P>
+
+<H3><A NAME="A77C1368"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1369"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C136a"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c3e4"></A>Related Information</H3>
+<P><A NAME="E1B0502467ceb"></A>Setting the current color in RGB mode with the <A HREF="c.html#A143X9262"><B>c</B></A> subroutine.</P>
+
+<P><A NAME="E1B0502573ceb"></A>Toggling the triangle mesh register pointer with the <A HREF="swaptmesh.html#A144X9782"><B>swaptmesh</B></A> subroutine.</P>
+
+<P><A NAME="E1B0502681ceb"></A>Transferring a vertex to the graphics pipe with the <A HREF="v.html#A144X97a4"><B>v</B></A> subroutine.</P>
+
+<P><A NAME="E1B0502788ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing with <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Begin-End Style</A> Subroutines, and Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P><hr><center>
+[  <a href="bgnsurface.html">Previous</a>  |
+<a href="bgntrim.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

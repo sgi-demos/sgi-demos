@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>linesmooth Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="lgetdepth.html">Previous</a>  |
+<a href="linewidth.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="Ew1f0marj"></A>linesmooth Subroutine</H2>
+<A NAME="INDEX1024" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1025" REL="I2" TITLE="antialiasing"></A>
+<A NAME="INDEX1026" REL="I3" TITLE="linesmooth"></A>
+<A NAME="INDEX1027" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1028" REL="I2" TITLE="antialiasing"></A>
+<A NAME="INDEX1029" REL="I3" TITLE="of lines"></A>
+<A NAME="INDEX1030" REL="I1" TITLE="linesmooth subroutine (GL)"></A>
+
+<H3><A NAME="A213X912942"></A>Purpose</H3>
+<P><A NAME="E1B1547433ceb"></A>Turns line antialiasing on and off.</P>
+
+<H3><A NAME="A75C1164"></A>Libraries</H3>
+<P><A NAME="E1B1547596ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1547737ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912945"></A>C Syntax</H3>
+<PRE><A NAME="A213X912946"></A><B>void linesmooth(Int32 </B><A HREF="linesmooth.html#A213X912953"><I>mode</I></A><B>&nbsp;)</B></PRE>
+
+<H3><A NAME="A213X91291f"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X912922"></A><B>SUBROUTINE LINESM(</B><I>mode</I><B>)</B>
+<B>INTEGER*4 </B><I>mode</I></PRE>
+
+<H3><A NAME="A213X912949"></A>Description</H3>
+<P><A NAME="E1B1548162ceb"></A>The <B>linesmooth</B> subroutine allows the drawing of 
+antialiased lines
+ in color map and RGB modes. </P>
+
+<P><A NAME="E1B1548279ceb"></A>In RGB mode, the current color is blended with the contents of the frame buffer in a read-modify-write operation. That is, the new pixel color is a calculated blend of the old pixel color and the current color, based on the percentage of overlap of the line with the pixel.</P>
+
+<P><A NAME="E1B1548399ceb"></A>In color map mode, the low-order 4 bits of the current color index are replaced with a value representing the pixel coverage. Therefore, a color ramp must be loaded, with the low-order 4 bits of the color ramp blending between the foreground and background colors.</P>
+
+<P><A NAME="E1B1548563ceb"></A>This type of color-index antialiasing hardware design allows the user to implement one of several antialiasing algorithms. One algorithm draws monocolored lines on a multicolored background; the other draws multicolored lines on a monochrome background. Refer to the section on <!--gl32prgd:--><A HREF="../gl32prgd/smjaglines.html#A8k32380nita">"Smoothing Jagged Lines with Antialiasing"</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I> for examples and further detail. </P>
+
+<P><A NAME="E1B1548693ceb"></A>Only solid (nonpatterned), unit-width lines are supported. That is, for antialiased lines to be drawn correctly, set <SAMP>linewidth=1</SAMP> using the <A HREF="linewidth.html#A3mM11b0marj"><B>linewidth</B></A> subroutine, <SAMP>linestyle=0xffff</SAMP> using the <A HREF="deflinestyle.html#A143X9b1f"><B>deflinestyle</B></A> subroutine, and <SAMP>lsrepeat=1</SAMP> using the <A HREF="lsrepeat.html#DmN1110marj"><B>lsrepeat</B></A> subroutine.</P>
+
+<OL><LI><A NAME="A5FB6F9522ttay"></A>In order for antialiased lines and points to be displayed as visually smooth, gamma correction <I>must</I> be performed. A gamma correction factor in the range of 2.4 to 2.7 is suggested. If gamma correction is not performed, lines are not displayed as smooth, but exhibit a <I>roping</I> or <I>braiding</I> effect, as if the line were composed of separate, intertwining strands. For more information on gamma-correcting antialiased lines, see <!--gl32prgd:--><A HREF="../gl32prgd/smjaglines.html#A8k32380nita">"Smoothing Jagged Lines with Antialiasing"</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</LI>
+
+<LI><A NAME="A5FB6F9746ttay"></A>Only solid, single, pixel-wide lines can be antialiased, and they cannot be used in conjunction with shading processor functions such as z-buffer, light, shade, and depth cue.</LI></OL>
+
+<H3><A NAME="A213X912952"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912953"></A><I>mode</I></TD>
+<TD>  Sets line-drawing mode as follows:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="3"><B>Mode Constants</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>SML_ON</TD>
+
+<TD>SMLON</TD>
+
+<TD>Enables smooth lines.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>SML_OFF</TD>
+
+<TD>SMLOFF</TD>
+
+<TD>Disables smooth lines.</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A75C1167"></A>Example</H3>
+<P><A NAME="E1B1549298ceb"></A>The example C language program <A HREF="alias_c.html#JBm90nita"><B>alias.c</B></A> uses the <B>linesmooth</B> subroutine to draw antialiased lines. Other examples that use the <B>linesmooth</B> subroutine include the <A HREF="alias_fore_c.html#A114C19e6"><B>alias_fore.c</B></A> and <A HREF="alias_back_c.html#A114C19c9"><B>alias_back.c</B></A> example programs.</P>
+
+<H3><A NAME="A258C01c35f"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1549484ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<OL><LI><A NAME="A258C01c360"></A>The 3-D Color Graphics Processor supports antialiased lines only in color map mode. Only solid (nonpatterned) unit width lines are supported. On this adapter, the value <SAMP>0xf</SAMP> represents maximum pixel coverage, and <SAMP>0x0</SAMP> represents minimum pixel coverage. That is, the following color ramp should be loaded:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>3-D Display Graphics Processor Color Ramp</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Low-Order </B><B>4 Bits</B></TD>
+
+<TD><B>Ramp</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0000</TD>
+
+<TD>(1/16) * foreground color + (15/16) * background color</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0001</TD>
+
+<TD>(2/16) * foreground color + (14/16) * background color</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0010</TD>
+
+<TD>(3/16) * foreground color + (13/16) * background color</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD> . . . .</TD>
+
+<TD> . . . . . .</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>1111</TD>
+
+<TD>(16/16) * foreground color + (0/16) * background color</TD></TR></TABLE>
+
+For the 3-D Color Graphics Processor, the appearance of the intersections of color-index-mode antialiased lines and points can be significantly improved by setting the value of the <A HREF="zsource.html#A143X96d6"><B>zsource</B></A> subroutine to ZSRC_COLOR and the value of the <A HREF="zfunction.html#A22f0MARJ"><B>zfunction</B></A> subroutine to ZF_GREATER. Refer to the subsection on <!--gl32prgd:--><A HREF="../gl32prgd/smjaglines.html#A8k32380nita">improving intersections</A> within <!--gl32prgd:--><A HREF="../gl32prgd/smjaglines.html#A8k32380nita">"Smoothing Jagged Lines with Antialiasing"</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I> for more details.</LI>
+
+<LI><A NAME="A258C01c361"></A>The Supergraphics Processor supports antialiased lines in RGB mode only. Only solid (nonpatterned) unit width lines are supported.</LI>
+
+<LI><A NAME="A94C122fd"></A>The POWER Gt4 and POWER Gt4x adapters support antialiasing in both RGB and color index modes. For these adapters, RGB-mode antialiased lines are drawn significantly slower than normal lines. For these adapters, the appearance of the intersections of color-index-mode antialiased lines can be improved significantly by setting the value of the <A HREF="logicop.html#iM521a0marj"><B>logicops</B></A> subroutine to LO_MAX.</LI>
+
+<LI><A NAME="E1B154A113ceb"></A>The 8-bit POWERstation 730 and the 8-bit POWERgraphics GTO adapter do not support the drawing of antialiased lines. The 24-bit option must be installed for antialiased line support.</LI>
+
+<LI><A NAME="A3CFCB36947janb"></A>When anti-aliased lines and points are drawn in RGB mode, a coverage factor (alpha value) for pixels on and near the anti-aliased objects is computed. This coverage factor is used to blend the color of the anti-aliased point or line with the contents of the frame buffer. The way in which the blending occurs is controlled by the <B>blendfunctio</B>n subroutine. When rendering anti-aliased objects in RGB mode, set the blendfunction to an appropriate value.</LI>
+
+<LI><A NAME="A3CFCB36966janb"></A>The POWERgraphics GXT1000 supports anti-aliased line rendering in both color-index and RGB rendering modes. </LI></OL>
+
+<H3><A NAME="A213X91293b"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A75C1169"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A75C116a"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c367"></A>Related Information</H3>
+<P><A NAME="E1B154A522ceb"></A>Specifying antialiasing of points with the <A HREF="pntsmooth.html#W3o220marj"><B>pntsmooth</B></A> subroutine.</P>
+
+<P><A NAME="E1B154A648ceb"></A>Controlling the placement of point, line, and polygon vertices with the <A HREF="subpixel.html#jIZ1120marj"><B>subpixel</B></A> subroutine.</P>
+
+<P><A NAME="E1B154A762ceb"></A>Smoothing Jagged Lines with <!--gl32prgd:--><A HREF="../gl32prgd/smjaglines.html#smjaglines.html">Antialiasing</A>, Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A>, Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>.</P><hr><center>
+[  <a href="lgetdepth.html">Previous</a>  |
+<a href="linewidth.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

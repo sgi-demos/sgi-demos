@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>rpdr Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="rpatch.html">Previous</a>  |
+<a href="rpmv.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="hrfa0marj"></A>rpdr Subroutine</H2>
+<A NAME="INDEX1706" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1707" REL="I2" TITLE="moveraw style"></A>
+<A NAME="INDEX1708" REL="I3" TITLE="rpdr"></A>
+<A NAME="INDEX1709" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1710" REL="I2" TITLE="polygons"></A>
+<A NAME="INDEX1711" REL="I3" TITLE="drawing relative"></A>
+<A NAME="INDEX1712" REL="I1" TITLE="rpdr subroutine (GL)"></A>
+<H3><A NAME="A213X912e6e"></A>Purpose</H3>
+<P><A NAME="E1D73D3476ceb"></A>Performs a relative polygon draw.</P>
+
+<H3><A NAME="A78C1321"></A>Libraries</H3>
+<P><A NAME="E1D73D3515ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D73D3540ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912e71"></A>C Syntax</H3>
+<PRE><A NAME="A213X912e72"></A><B>void rpdr</B>
+<B>(Coord </B><A HREF="rpdr.html#A213X912e7d"><I>dx</I></A><B>, Coord</B> <A HREF="rpdr.html#A213X912e7e"><I>dy</I></A><B>, Coord</B> <A HREF="rpdr.html#A213X912e7f"><I>dz</I></A><B>)</B></PRE>
+<PRE><A NAME="QQf370marj"></A><B>void rpdri</B>
+<B>(Icoord </B><A HREF="rpdr.html#A213X912e7d"><I>dx</I></A><B>, Icoord</B> <A HREF="rpdr.html#A213X912e7e"><I>dy</I></A><B>, Icoord</B> <A HREF="rpdr.html#A213X912e7f"><I>dz</I></A><B>)</B></PRE>
+<PRE><A NAME="cQf230marj"></A><B>void rpdrs</B>
+<B>(Scoord </B><A HREF="rpdr.html#A213X912e7d"><I>dx</I></A><B>, Scoord</B> <A HREF="rpdr.html#A213X912e7e"><I>dy</I></A><B>, Scoord</B> <A HREF="rpdr.html#A213X912e7f"><I>dz</I></A><B>)</B></PRE>
+<PRE><A NAME="pQf1f0marj"></A><B>void rpdr2</B>
+<B>(Coord </B><A HREF="rpdr.html#A213X912e7d"><I>dx</I></A><B>, Coord</B> <A HREF="rpdr.html#A213X912e7e"><I>dy</I></A><B>)</B></PRE>
+<PRE><A NAME="A2Rf230marj"></A><B>void rpdr2i</B>
+<B>(Icoord </B><A HREF="rpdr.html#A213X912e7d"><I>dx</I></A><B>, Icoord</B> <A HREF="rpdr.html#A213X912e7e"><I>dy</I></A><B>)</B></PRE>
+<PRE><A NAME="ERf230marj"></A><B>void rpdr2s</B>
+<B>(Scoord </B><A HREF="rpdr.html#A213X912e7d"><I>dx</I></A><B>, Scoord</B> <A HREF="rpdr.html#A213X912e7e"><I>dy</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010b0d"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010b0e"></A><B>SUBROUTINE RPDR(</B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I><B>)</B>
+<B>REAL </B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I></PRE>
+<PRE><A NAME="A29C010b0f"></A><B>SUBROUTINE RPDRI(</B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I><B>)</B>
+<B>INTEGER*4 </B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I></PRE>
+<PRE><A NAME="A29C010b10"></A><B>SUBROUTINE RPDRS(</B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I><B>)</B>
+<B>INTEGER*2 </B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I></PRE>
+<PRE><A NAME="A29C010b11"></A><B>SUBROUTINE RPDR2(</B><I>dx</I><B>, </B><I>dy</I><B>)</B>
+<B>REAL </B><I>dx</I><B>, </B><I>dy</I></PRE>
+<PRE><A NAME="A29C010b12"></A><B>SUBROUTINE RPDR2I(</B><I>dx</I><B>, </B><I>dy</I><B>)</B>
+<B>INTEGER*4 </B><I>dx</I><B>, </B><I>dy</I></PRE>
+<PRE><A NAME="A29C010b13"></A><B>SUBROUTINE RPDR2S(</B><I>dx</I><B>, </B><I>dy</I><B>)</B>
+<B>INTEGER*2 </B><I>dx</I><B>, </B><I>dy</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C1324"></A><B>Note: </B>For FORTRAN users, the INTEGER*2 versions of this subroutine, <B>RPDRS</B> and <B>RPDR2S</B>, should not be called with integer constant parameters. For example, 2 is an integer constant; JJ is an integer variable. The XL FORTRAN compiler, invoked by the <B>xlf</B> command, stores all integer constants as long integers (INTEGER*4), not as short integers (INTEGER*2). Invoking one of the short versions of this subroutine with an integer constant will result in unexpected behavior.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912e75"></A>Description</H3>
+<P><A NAME="E1D73D3862ceb"></A>The <B>rpdr</B> subroutine is the relative version of the <A HREF="pdr.html#bqf1c0marj"><B>pdr</B></A> subroutine. It specifies the next point in a filled polygon, using the previous point (the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03eb">current graphics position</A>) as the origin.</P>
+
+<P><A NAME="E1D73D3888ceb"></A>There can be no more than 256 vertices in a polygon. Therefore, there can be no more than 255 calls to the <B>rpdr</B> subroutine between calls to the <A HREF="rpmv.html#lXf370marj"><B>rpmv</B></A> and <A HREF="pclos.html#t2g270marj"><B>pclos</B></A> subroutines. </P>
+
+<P><A NAME="E1D73D3914ceb"></A>The <B>rpdr</B> subroutine updates the current graphics position. The next routine starts drawing from that point. </P>
+
+<BLOCKQUOTE><A NAME="A213X912e79"></A><B>Note: </B>Do not place routines that invalidate the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03eb">current graphics position</A> within sequences of moves and draws.</BLOCKQUOTE>
+
+
+<P><A NAME="E1D73D3959ceb"></A>The six different forms for the <B>rpdr</B> subroutine are as follows:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><BR></TD>
+
+<TD><B>2-D</B></TD>
+
+<TD><B>3-D</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int16</TD>
+
+<TD>rpdr2s</TD>
+
+<TD>rpdrs</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int32</TD>
+
+<TD>rpdr2i</TD>
+
+<TD>rpdri</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>float</TD>
+
+<TD>rpdr2</TD>
+
+<TD>rpdr </TD></TR></TABLE>
+
+<P><A NAME="E1D73D4001ceb"></A>The syntax for each of the subroutine forms is the same except for the parameter type. They differ only in that <A HREF="rpdr.html#A213X912e72"><B>rpdr</B></A> expects real coordinates, <A HREF="rpdr.html#QQf370marj"><B>rpdri</B></A> expects integer coordinates, and <A HREF="rpdr.html#cQf230marj"><B>rpdrs</B></A> expects short integer coordinates. In addition, the <A HREF="rpdr.html#pQf1f0marj"><B>rpdr2</B></A> routines assume a 2-D point instead of a 3-D point.</P>
+
+<H3><A NAME="A213X912e7c"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912e7d"></A><I>dx</I></TD>
+<TD>  Specifies the distance from the <I>x</I> coordinate of the current graphics position to the <I>x</I> coordinate of the next corner of the polygon.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912e7e"></A><I>dy</I></TD>
+<TD>  Specifies the distance from the <I>y</I> coordinate of the current graphics position to the <I>y</I> coordinate of the next corner of the polygon.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912e7f"></A><I>dz</I></TD>
+<TD>  Specifies the distance from the <I>z</I> coordinate of the current graphics position to the <I>z</I> coordinate of the next corner of the polygon.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015d26"></A>Implementation Specifics</H3>
+<P><A NAME="E1D73D4119ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1325"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1326"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1327"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912e8d"></A>Related Information</H3>
+<P><A NAME="E1D73D4216ceb"></A>Allowing the system to draw concave polygons with the <A HREF="concave.html#HXf320marj"><B>concave</B></A> subroutine.</P>
+
+<P><A NAME="E1D73D4241ceb"></A>Closing a filled polygon with the <A HREF="pclos.html#t2g270marj"><B>pclos</B></A> subroutine.</P>
+
+<P><A NAME="E1D73D4267ceb"></A>Specifying the next point in a polygon with the <A HREF="pdr.html#bqf1c0marj"><B>pdr</B></A> subroutine.</P>
+
+<P><A NAME="E1D73D4292ceb"></A>Specifying the starting point for a polygon with the <A HREF="pmv.html#A139X91eed"><B>pmv</B></A> subroutine.</P>
+
+<P><A NAME="E1D73D4318ceb"></A>Moving the current graphics position to a starting point for a filled polygon relative to the current point with the <A HREF="rpmv.html#lXf370marj"><B>rpmv</B></A> subroutine.</P>
+
+<P><A NAME="E1D73D4343ceb"></A>Selecting the shading model used to draw a polygon with the <A HREF="shademodel.html#A143X9ab9"><B>shademodel</B></A> subroutine.</P>
+
+<P><A NAME="E1D73D4369ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing with <!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Move-Draw Style</A> Subroutines, and <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>.</P><hr><center>
+[  <a href="rpatch.html">Previous</a>  |
+<a href="rpmv.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

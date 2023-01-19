@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>genobj Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="gconfig.html">Previous</a>  |
+<a href="gentag.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X91ea"></A>genobj Subroutine</H2>
+<A NAME="INDEX560" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX561" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX562" REL="I3" TITLE="genobj"></A>
+<A NAME="INDEX563" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX564" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX565" REL="I3" TITLE="returning a unique integer for use as identifier"></A>
+<A NAME="INDEX566" REL="I1" TITLE="genobj subroutine (GL)"></A>
+
+<H3><A NAME="A142X91ec"></A>Purpose</H3>
+<P><A NAME="E1B0C94542ceb"></A>Returns a unique integer for use as an object identifier. </P>
+
+<H3><A NAME="A79C131"></A>Libraries</H3>
+<P><A NAME="E1B0C94690ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0C94793ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X91f0"></A>C Syntax</H3>
+<PRE><A NAME="A142X91f1"></A><B>Int32 genobj(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010a6d"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010a6e"></A><B>INTEGER*4 FUNCTION GENOBJ</B></PRE>
+
+<H3><A NAME="A142X91f2"></A>Description</H3>
+<P><A NAME="E1B0C95150ceb"></A>The <B>genobj</B> subroutine generates unique 31-bit integer numbers for use as 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A255B9bc">object</A> identifiers.</P>
+
+<P><A NAME="E1B0C95267ceb"></A>When using a combination of user-defined and <B>genobj</B>-defined numbers to generate object numbers, ensure that each combination is unique because the <B>genobj</B> subroutine will not generate an object name that is currently in use. </P>
+
+<P><A NAME="E1B0C95374ceb"></A>The <A HREF="isobj.html#A142X920c"><B>isobj</B></A> subroutine can affirm the uniqueness of an object number.</P>
+
+<BLOCKQUOTE><A NAME="A318C9d7e"></A><B>Note: </B>This editing subroutine itself cannot be added to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X91f8"></A>Return Value</H3>
+<P><A NAME="E1B0C95595ceb"></A>A unique 31-bit integer for use as an object identifier.</P>
+
+<H3><A NAME="A62C015cf4"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0C95755ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C134"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C135"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C136"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X920a"></A>Related Information</H3>
+<P><A NAME="E1B0C96074ceb"></A>Drawing an instance of an object with the <A HREF="callobj.html#A142X91c8"><B>callobj</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C96183ceb"></A>Opening an object for editing with the <A HREF="editobj.html#A142X9360"><B>editobj</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C96290ceb"></A>Returning a unique integer for use as a tag with the <A HREF="gentag.html#A48x2120marj"><B>gentag</B></A> subroutine. </P>
+
+<P><A NAME="E1B0C96397ceb"></A>Establishing the uniqueness of an object number with the <A HREF="isobj.html#A142X920c"><B>isobj</B></A> subroutine. </P>
+
+<P><A NAME="E1B0C96505ceb"></A>Creating an object with the <A HREF="makeobj.html#A142X912d"><B>makeobj</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C96614ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating <!--gl32prgd:--><A HREF="../gl32prgd/workobjects.html#workobjects.html">Objects (Display Lists)</A>.</P><hr><center>
+[  <a href="gconfig.html">Previous</a>  |
+<a href="gentag.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

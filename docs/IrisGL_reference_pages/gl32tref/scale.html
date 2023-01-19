@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>scale Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="sboxf.html">Previous</a>  |
+<a href="screenspace.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X95a6"></A>scale Subroutine</H2>
+<A NAME="INDEX1734" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1735" REL="I2" TITLE="coordinate transformation"></A>
+<A NAME="INDEX1736" REL="I3" TITLE="scale"></A>
+<A NAME="INDEX1737" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1738" REL="I2" TITLE="graphical primitive"></A>
+<A NAME="INDEX1739" REL="I3" TITLE="scaling and mirroring"></A>
+<A NAME="INDEX1740" REL="I1" TITLE="scale subroutine (GL)"></A>
+
+<H3><A NAME="A144X95a8"></A>Purpose</H3>
+<P><A NAME="E1D740F005ceb"></A>Scales and mirrors drawing primitives.</P>
+
+<H3><A NAME="A78C1b7"></A>Libraries</H3>
+<P><A NAME="E1D740F046ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D740F071ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X95ac"></A>C Syntax</H3>
+<PRE><A NAME="A213X912718"></A><B>void scale(Float32 </B><A HREF="scale.html#A9fO1f0marj"><I>x</I></A><B>, Float32 </B><A HREF="scale.html#NfO1270marj"><I>y</I></A><B>, Float32 </B><A HREF="scale.html#bfO190marj"><I>z</I></A><B>)</B></PRE>
+
+<H3><A NAME="A15C0c700"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A15C0c701"></A><B>SUBROUTINE SCALE(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I><B>)</B>
+<B>REAL </B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I></PRE>
+
+<H3><A NAME="A61C0159d0"></A>Description</H3>
+<P><A NAME="E1D740F185ceb"></A>The <B>scale </B>subroutine shrinks, expands, and mirrors drawing primitives. Values with a magnitude greater than 1 expand the drawing primitive; values with a magnitude less than 1 shrink it. Negative values mirror the primitive. Mirroring will left-right reverse, up-down reverse, or front-back reverse a drawing primitive, depending on which of the three directions is given a negative value.</P>
+
+<P><A NAME="E1D740F211ceb"></A>The <B>scale </B>subroutine is a 
+modeling routine; it changes the current <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P021">transformation matrix</A>. All drawing primitives drawn after the <B>scale </B>subroutine executes are affected. </P>
+
+<P><A NAME="E1D740F236ceb"></A>Use the <A HREF="pushmatrix.html#A144X9540"><B>pushmatrix</B></A> and <A HREF="popmatrix.html#A144X951e"><B>popmatrix</B></A> subroutines to limit the scope of the <B>scale </B>subroutine.</P>
+
+<P><A NAME="E1D740F277ceb"></A>If lighting is on, and the <B>scale</B> subroutine is called with unequal arguments, the lighting pipeline is forced to renormalize every normal automatically. This may degrade performance on some adapters.</P>
+
+<H3><A NAME="A144X95b0"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A9fO1f0marj"></A><I>x</I></TD>
+<TD>  Specifies scaling of the drawing primitive in the <I>x</I> direction. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="NfO1270marj"></A><I>y</I></TD>
+<TD>  Specifies scaling of the drawing primitive in the <I>y</I> direction. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="bfO190marj"></A><I>z</I></TD>
+<TD>  Specifies scaling of the drawing primitive in the <I>z</I> direction. </TD></TR></TABLE>
+
+<H3><A NAME="A29C010b62"></A>Example</H3>
+<P><A NAME="E1D740F392ceb"></A>The example C language program <A HREF="cylinder2_c.html#A16C0c87c"><B>cylinder2.c</B></A> draws one cylinder, then uses the <B>scale</B> subroutine before drawing a second, differently sized cylinder.</P>
+
+<H3><A NAME="A62C015d3e"></A>Implementation Specifics</H3>
+<P><A NAME="E1D740F437ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1ba"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1bb"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1bc"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X95c6"></A>Related Information</H3>
+<P><A NAME="E1D740F533ceb"></A>Popping the transformation matrix stack with the <A HREF="popmatrix.html#A144X951e"><B>popmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1D740F559ceb"></A>Pushing down the transformation matrix stack with the <A HREF="pushmatrix.html#A144X9540"><B>pushmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1D740F584ceb"></A>Rotating a graphical primitive (floating-point version) with the <A HREF="rot.html#A144X9562"><B>rot</B></A> subroutine.</P>
+
+<P><A NAME="E1D740F613ceb"></A>Rotating a graphical primitive (fixed-point version) with the <A HREF="rotate.html#A8g2120marj"><B>rotate</B></A> subroutine.</P>
+
+<P><A NAME="E1D740F639ceb"></A>Translating a graphical primitive with the <A HREF="translate.html#A144X95c8"><B>translate</B></A> subroutine.</P>
+
+<P><A NAME="E1D740F665ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="sboxf.html">Previous</a>  |
+<a href="screenspace.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/exhwindcalls.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Chapter 13. Using Enhanced X-Windows Calls with GL Subroutines
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="textport.html">Previous</a>  |
+<a href="enhxwndrestr.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H1><A NAME="exhwindcalls.html"></A>Chapter 13. Using Enhanced X-Windows
+Calls with GL Subroutines </H1>
+
+
+<P><A NAME="A3C0F009372mhay"></A>This section describes how GL drawing
+subroutines can be used with AIXwindows window management
+routines to control the mapping of windows, set window properties, and
+create widgets. The subroutines and techniques described in this section
+allow the user to mix Enhanced X-Windows and GL calls within the
+same program. However, not all possible mixings of Enhanced X-Windows
+and GL within the same program result in predictable behavior. To use GL
+and Enhanced X-Windows together constructively, it is important to
+have a basic understanding of the internal structure and implementation
+of GL in the AIXwindows Environment/6000. </P>
+
+
+<P><A NAME="A3C0F009393mhay"></A>In general, there are two kinds of GL
+subroutines: those used for drawing or controlling the hardware and those
+used for window management, obtaining input, and managing pop-up menus.
+Drawing subroutines (such as <B><!--:libs:gl32tref:--><A HREF="../gl32tref/v.html#A144X97a4">v3f</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/loadmatrix.html#A144X9430">loadmatrix</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/nurbssurface.html#A252X98b9">nurbssurface</A></B>)
+and hardware control subroutines (such as <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gconfig.html#hS4260nita">gconfig</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/zfunction.html#A22f0MARJ">zfunction</A></B>)
+access and control the graphics adapter directly. That is, there are no
+complex code layers between these subroutines and the graphics adapter.
+Specifically, this means that the X server remains ignorant of the current
+state and contents of a GL window. Eliminating complex code layers improves
+calculation time. </P>
+
+
+<P><A NAME="A3C0F009413mhay"></A>In contrast, window management subroutines
+(such as <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winpop.html#A142X9156b">winpop</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/icontitle.html#sH13240marj">icontitle</A></B>)
+and input subroutines (such as <B><!--:libs:gl32tref:--><A HREF="../gl32tref/qread.html#A143X989">qread</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getbutton.html#A143X91">getbutton</A></B>)
+are implemented as a layer on top of the Enhanced X-Windows Protocol.
+As a result, all input and events are obtained from the X server, and the
+X server knows about and carries out all requests to create, move, map,
+and resize windows. In this way, a single centralized process manages all
+windows visible on the screen. </P>
+
+
+<P><A NAME="A3C0F009434mhay"></A>The differences between direct access
+subroutines and those that work through the X server affect how GL and
+Enhanced X-Windows can and cannot be used together. The following
+section discusses restrictions on GL and Enhanced X-Windows use.
+Later sections discuss and give examples of how GL and Enhanced X-Windows
+calls can be used together. </P>
+
+
+<P><A NAME="A3C0F009454mhay"></A>For more information on using Enhanced X-Windows
+calls with GL subroutines, see: </P>
+
+
+<UL><LI><A NAME="DF754C8579meki"></A><A HREF="enhxwndrestr.html#enhxwndrestr.html">Restrictions
+on Using Enhanced X-Windows Calls with GL Subroutines</A> </LI>
+
+
+<LI><A NAME="DF754C8631meki"></A><A HREF="enhxinterop.html#enhxinterop.html">Enhanced X-Windows
+and GL Interoperability</A>  
+
+<BLOCKQUOTE><P><A NAME="A110C1aa"></A><B>Note: </B>This section deals with an advanced
+topic and may be difficult to understand unless the reader has a good conceptual
+and practical grasp of GL and the Enhanced X-Windows System. </P></BLOCKQUOTE></LI></UL>
+
+
+
+
+<hr><center>
+[  <a href="textport.html">Previous</a>  |
+<a href="enhxwndrestr.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/exhwindcalls.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+

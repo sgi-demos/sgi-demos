@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>gammaramp Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="fullscrn.html">Previous</a>  |
+<a href="gbegin.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="Kz4nita"></A>gammaramp Subroutine</H2>
+<A NAME="INDEX539" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX540" REL="I2" TITLE="color map and RGB mode"></A>
+<A NAME="INDEX541" REL="I3" TITLE="gammaramp"></A>
+<A NAME="INDEX542" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX543" REL="I2" TITLE="color correction"></A>
+<A NAME="INDEX544" REL="I3" TITLE="defining a color map ramp for"></A>
+<A NAME="INDEX545" REL="I1" TITLE="gammaramp subroutine (GL)"></A>
+<H3><A NAME="A237X944f6"></A>Purpose</H3>
+<P><A NAME="E1B0C35473ceb"></A>Defines a color map ramp for gamma correction.</P>
+
+<H3><A NAME="A78C131"></A>Libraries</H3>
+<P><A NAME="E1B0C35620ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0C35723ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A237X944f9"></A>C Syntax</H3>
+<PRE><A NAME="A237X944fa"></A><B>void gammaramp</B>
+<B>(Int16</B> <A HREF="gammaramp.html#Io4270nita"><I>red</I></A><B>[256], Int16</B> <A HREF="gammaramp.html#Vo4210nita"><I>green</I></A><B>[256], Int16</B> <A HREF="gammaramp.html#jo470nita"><I>blue</I></A><B>[256])</B></PRE>
+
+<H3><A NAME="A237X944d6"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A237X944d9"></A><B>SUBROUTINE GAMMAR(</B><I>red</I><B>,</B> <I>green</I><B>,</B> <I>blue</I><B>)</B>
+<B>INTEGER*2 </B><I>red</I><B>(256),</B> <I>green</I><B>(256),</B> <I>blue</I><B>(256)</B></PRE>
+
+<H3><A NAME="A237X944fd"></A>Description</H3>
+<P><A NAME="E1B0C36093ceb"></A>The <B>gammaramp</B> subroutine supplies a level of indirection for all color map and RGB values. It can provide 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P060f">gamma correction</A>, equalize monitors with different color characteristics, or modify the color warmth of the monitor. The default setting has red[<I>i</I>]=green[<I>i</I>]=blue[<I>i</I>]=<I>i</I>.</P>
+
+<P><A NAME="E1B0C36202ceb"></A>When the system draws an object in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>, it writes the actual red, green, and blue values to the bitplanes. However, the values displayed on the screen are the indirect values: <I>red</I>, <I>green</I>, <I>blue</I> (where <I>red</I>, <I>green</I>, <I>blue</I> are the arrays last specified by the <B>gammaramp</B> subroutine).</P>
+
+<P><A NAME="E1B0C36309ceb"></A>In <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e3">color map mode</A>, objects written in color <I>i</I> are displayed as <I>red</I>, <I>green</I>, <I>blue</I>.</P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A258C01c413"></A>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. 
+(See "<!--gl32prgd:--><A HREF="../gl32prgd/powerstation730.html#NITAXIO">Hardware Considerations</A>".) </LI>
+
+<LI><A NAME="A258C01c414"></A>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A237X94502"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Io4270nita"></A><I>red</I></TD>
+<TD>  Specifies an array of 256 elements, each containing a setting for the red electron gun.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Vo4210nita"></A><I>green</I></TD>
+<TD>  Specifies an array of 256 elements, each containing a setting for the green electron gun.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="jo470nita"></A><I>blue</I></TD>
+<TD>  Specifies an array of 256 elements, each containing a setting for the blue electron gun.</TD></TR></TABLE>
+
+<H3><A NAME="A64C016562"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0C36892ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="A3CFC6BD544janb"></A>The POWERgraphics GXT1000 supports entire-screen gammaramps. Setting the gammaramp on the GXT1000 will affect all windows on the screen, including X11 windows.</P>
+
+<H3><A NAME="A78C134"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C135"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C136"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A237X94507"></A>Related Information</H3>
+<P><A NAME="E1B0C37215ceb"></A>Setting color map mode as the current mode with the <A HREF="cmode.html#A146X93d6"><B>cmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C37323ceb"></A>Setting the current color in color map mode with the <A HREF="color.html#A146X9429"><B>color</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C37429ceb"></A>Changing a color map entry to an RGB value with the <A HREF="mapcolor.html#A146X9535"><B>mapcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C37537ceb"></A>Setting the current color in RGB mode with the <A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C37643ceb"></A>Working in 
+<!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="fullscrn.html">Previous</a>  |
+<a href="gbegin.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

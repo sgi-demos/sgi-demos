@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/mapcoords2wrld.html Mon, 24 Jan 2022 16:28:18 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Mapping Screen Coordinates to World Coordinates in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="useobject.html">Previous</a>  |
+<a href="objectedit.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="mapcoords2wrld.html"></A>Mapping Screen Coordinates to World Coordinates</H2>
+
+
+<P><A NAME="INDEX717"></A>
+<A NAME="INDEX718"></A>
+<A NAME="INDEX719"></A><A NAME="INDEX720"></A>
+<A NAME="INDEX721"></A><A NAME="INDEX722"></A>
+<A NAME="INDEX723"></A></P>
+
+
+<P><A NAME="A3C0EC25768mhay"></A>The following subroutines map screen coordinates
+to world coordinates. If you want to know what the world coordinate values
+are for the screen coordinates of an object, these subroutines provide
+a 2-D and a 3-D method to perform the mapping. </P>
+
+
+<H3><A NAME="A13C0bd0e"></A>mapw Subroutine </H3>
+
+
+<P><A NAME="A3C0EC25789mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapw.html#A213X9119fe">mapw</A></B>
+subroutine takes a 2-D screen point and maps it onto a line in 3-D world
+space. Its <I>viewobj</I> parameter contains the <A HREF="specialterms.html#A27P021">viewing</A>,
+<A HREF="specialterms.html#A27P021">projection</A>, and <A HREF="specialterms-2.html">viewport
+transformations</A> that map the current displayed objects to the screen.</P>
+
+
+<P><A NAME="A3C0EC25809mhay"></A>The <B>mapw</B> subroutine reverses these
+transformations and maps the 
+<A HREF="specialterms.html#A27P017">screen
+coordinates</A> back to 
+<A HREF="specialterms.html#A27P03d">world
+coordinates</A>. It returns two points in the <I>(modelx1</I>, <I>modely1</I>,
+<I>modelz1)</I> and the <I>(modelx2</I>, <I>modely2</I>, <I>modelz2)</I>
+parameters, which specify the endpoints of the line. The <I>screenx</I>
+and <I>screeny</I> parameters specify the screen point to be mapped. The
+syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C015393"></A>void&nbsp;mapw(Int32&nbsp;viewobj,&nbsp;Screencoord&nbsp;screenx,&nbsp;Screencoord&nbsp;screeny,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Coord&nbsp;*modelx1,&nbsp;Coord&nbsp;*modely1,&nbsp;Coord&nbsp;*modelz1,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Coord&nbsp;*modelx2,&nbsp;Coord&nbsp;*modely2,&nbsp;Coord&nbsp;*modelz2)</PRE>
+
+
+<H3><A NAME="A13C0bd15"></A>mapw2 Subroutine </H3>
+
+
+<P><A NAME="A3C0EC25832mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapw2.html#A213X911a56">mapw2</A></B>
+subroutine is the 2-D version of the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapw.html#A213X9119fe">mapw</A></B>
+subroutine. In 2-D, the system maps screen coordinates to world coordinates rather than to a line. The <I>viewobj</I> parameter contains
+the <A HREF="specialterms.html#A27P021">projection</A> and <A HREF="specialterms.html#A27P021">viewing</A>
+transformations that map the displayed objects to world coordinates; the
+<I>screenx</I> and <I>screeny</I> parameters define screen coordinates.
+The <I>modelx</I> and <I>modely</I> parameters return the corresponding
+world coordinates. If the transformations in the <I>viewobj</I> parameter
+are not two-dimensional (orthogonal) projections, the result is undefined.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C015394"></A>void&nbsp;mapw2(Int32&nbsp;viewobj,&nbsp;Screencoord&nbsp;screenx,&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Screencoord&nbsp;screeny,&nbsp;Coord&nbsp;*modelx,&nbsp;Coord&nbsp;*modely)</PRE>
+
+
+
+
+<hr><center>
+[  <a href="useobject.html">Previous</a>  |
+<a href="objectedit.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/mapcoords2wrld.html Mon, 24 Jan 2022 16:28:19 GMT -->
+</HTML>
+

@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/defobject.html Mon, 24 Jan 2022 16:28:13 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Defining an Object in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="listobjects.html">Previous</a>  |
+<a href="useobject.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="defobject.html"></A>Defining an Object</H2>
+
+
+<P><A NAME="INDEX711"></A><A NAME="INDEX712"></A><A NAME="INDEX713"></A><A NAME="INDEX714"></A><A NAME="INDEX715"></A><A NAME="INDEX716"></A></P>
+
+
+<P><A NAME="A3C0EC25280mhay"></A>Create and name objects with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/makeobj.html#A142X912d">makeobj</A></B>
+subroutine. When you call the <B>makeobj</B> subroutine, the system defines
+an object. Its <I>object</I> parameter is a signed 32-bit integer, which
+is the object's numeric identifier. </P>
+
+
+<P><A NAME="A3C0EC25300mhay"></A>When the <B>makeobj</B> subroutine executes,
+the system enters the object's numeric identifier into a symbol table and
+allocates memory for its list of drawing routines. This opens a new, empty
+object to which you can add drawing routines. When you open an object for
+editing, drawing routines are not executed and drawn on the screen, but
+are added to the list until the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/closeobj.html#A142X915b">closeobj</A></B>
+subroutine is called. </P>
+
+
+<P><A NAME="A3C0EC25321mhay"></A>Thus, a graphical object is a list of
+primitive drawing routines to be executed. Drawing the display list consists
+of executing each routine in the listed order. There is no flow control,
+such as looping, iteration, or condition tests (except for the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bbox2.html#A142X922e">bbox2</A></B>
+subroutine). </P>
+
+
+<BLOCKQUOTE><P><A NAME="A13C0bcd6"></A><B>Note: </B>Not all Graphics Library routines
+can be put in a display list. A general rule is to include drawing routines
+and not to include routines that return values. If you have a question
+about a particular subroutine, check that entry in &quot;<A HREF="glsubcats.html#eG441f0marj">Choosing
+the Right GL Subroutine</A>&quot;. </P></BLOCKQUOTE>
+
+
+<H3><A NAME="A13C0bcd7"></A>makeobj Subroutine </H3>
+
+
+<P><A NAME="A3C0EC25343mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/makeobj.html#A142X912d">makeobj</A></B>
+subroutine creates a graphical object. It takes one parameter, a signed
+32-bit integer that is associated with the object. If the <I>object</I>
+parameter is the number of an existing object, the contents of that object
+are deleted. </P>
+
+
+<P><A NAME="A3C0EC25363mhay"></A>When the <B>makeobj</B> subroutine executes,
+the object number is entered into a symbol table and memory is allocated
+for a display list. Subsequent graphics routines are compiled into the
+display list instead of executing. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C0153a0"></A>void&nbsp;makeobj(Int32&nbsp;object)</PRE>
+
+
+<H3><A NAME="A13C0bcdc"></A>closeobj Subroutine </H3>
+
+
+<P><A NAME="A3C0EC25385mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/closeobj.html#A142X915b">closeobj</A></B>
+subroutine terminates the object definition and closes the open object.
+All the routines in the graphical object between the <B>makeobj</B> and
+<B>closeobj</B> subroutines are part of the object definition. </P>
+
+
+<P><A NAME="A3C0EC25405mhay"></A>The following fragment shows the object
+definition of a simple shape, as illustrated in the following <A HREF="figures/gl32p35.jpg">figure</A>.</P>
+
+
+<PRE><A NAME="A38C01207a"></A>makeobj(sphere=genobj);
+for&nbsp;(phi=0;&nbsp;phi&amp;le;PI;&nbsp;phi=PI/9){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(theta=0;&nbsp;theta&amp;le;2*PI;&nbsp;theta+=PI/18){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x=sin(theta)&nbsp;*&nbsp;cos(phi);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y=sin(theta)&nbsp;*&nbsp;sin(phi);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;z=cos(theta);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(theta==0)move&nbsp;(x,y,z);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;draw&nbsp;(x,y,z);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+}
+closeobj();
+
+
+
+</PRE>
+
+
+<P><A NAME="A3C0EC25428mhay"></A>If you specify a numeric identifier that
+is already in use, the system replaces the existing object definition with
+the new one. To ensure your object's numeric identifier is unique, use
+the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/isobj.html#A142X920c">isobj</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/genobj.html#A142X91ea">genobj</A></B>
+subroutines. </P>
+
+
+<H3><A NAME="A13C0bce1"></A>isobj Subroutine </H3>
+
+
+<P><A NAME="A3C0EC25449mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/isobj.html#A142X920c">isobj</A></B>
+subroutine tests whether there is an existing object with a given numeric
+identifier. Its <I>object</I> parameter specifies the desired numeric identifier.
+The <B>isobj</B> subroutine returns TRUE if an object exists with the specified
+numeric identifier, and FALSE if none exists. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A58C0153a1"></A>Int32&nbsp;isobj(Int32&nbsp;object)</PRE>
+
+
+<H3><A NAME="A13C0bce5"></A>genobj Subroutine </H3>
+
+
+<P><A NAME="A3C0EC25471mhay"></A>Use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/genobj.html#A142X91ea">genobj</A></B>
+subroutine to generate a unique numeric identifier. It does not generate
+current numeric identifiers. This subroutine is useful in naming objects
+when it is impossible to anticipate what the current numeric identifier
+will be when the routine is called. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C0153a2"></A>Int32&nbsp;genobj()</PRE>
+
+
+<H3><A NAME="A13C0bce8"></A>delobj Subroutine </H3>
+
+
+<P><A NAME="A3C0EC25493mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/delobj.html#A142X940a">delobj</A></B>
+subroutine deletes an object. It frees all memory storage associated with
+the object. The numeric identifier is undefined until it is reused to create
+a new object. The system ignores calls to deleted or undefined objects.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A68C017196"></A>void&nbsp;delobj(Int32&nbsp;object)</PRE>
+
+
+
+
+<hr><center>
+[  <a href="listobjects.html">Previous</a>  |
+<a href="useobject.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/defobject.html Mon, 24 Jan 2022 16:28:13 GMT -->
+</HTML>
+

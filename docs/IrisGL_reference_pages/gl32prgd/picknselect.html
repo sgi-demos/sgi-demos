@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/picknselect.html Mon, 24 Jan 2022 16:28:19 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Chapter 11. Picking and Selecting
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="objectedit.html">Previous</a>  |
+<a href="listofpkselsbs.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H1><A NAME="picknselect.html"></A>Chapter 11. Picking and Selecting </H1>
+
+
+<P><A NAME="A3C0EC60867mhay"></A>GL provides two related mechanisms for
+returning information about where primitives are being drawn: </P>
+
+
+<UL><LI><A NAME="DF74C97747meki"></A><A HREF="listofpkselsbs.html#listofpkselsbs.html">List
+of GL Picking and Selecting Subroutines</A> </LI>
+
+
+<LI><A NAME="A258C01c0e7"></A><A HREF="Picking.html#Picking.html">Picking</A></LI>
+
+
+<LI><A NAME="A258C01c0e8"></A><A HREF="Selecting.html#Selecting.html">Selecting</A></LI></UL>
+
+
+<P><A NAME="A3C0EC60890mhay"></A><A HREF="Picking.html#Picking.html">Picking</A>
+returns all primitives that are currently being drawn in the vicinity of
+the cursor. <A HREF="Selecting.html#Selecting.html">Selecting</A> returns all
+primitives that are being drawn into a 3-D rectilinear volume in 
+<A HREF="specialterms.html#A27P03d">world
+space</A>. Both methods return the same type of data and use the same general
+mechanism for their operation. They differ in the way that the 
+<A HREF="specialterms.html#A26P06fa">picking
+region</A> or selecting volume
+is specified. </P>
+
+
+<P><A NAME="A3C0EC60910mhay"></A>There are three concepts behind picking/selecting:</P>
+
+
+<UL><LI><A NAME="A38C012073"></A>The picking/selecting region is the area of
+the screen (for picking) or of world space (for selecting) that is sensitized.</LI>
+
+
+<LI><A NAME="A38C012074"></A>The format of the returned data is controlled
+by the <A HREF="specialterms.html#A26P06e3">name stack</A> and the routines that manipulate the name stack.</LI>
+
+
+<LI><A NAME="A38C012075"></A>The method of structuring a program to make
+use of picking/selecting.</LI></UL>
+
+
+
+
+<hr><center>
+[  <a href="objectedit.html">Previous</a>  |
+<a href="listofpkselsbs.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/picknselect.html Mon, 24 Jan 2022 16:28:19 GMT -->
+</HTML>
+

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>maketag Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="makeobj.html">Previous</a>  |
+<a href="mapcolor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X942c"></A>maketag Subroutine</H2>
+<A NAME="INDEX1127" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1128" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX1129" REL="I3" TITLE="maketag"></A>
+<A NAME="INDEX1130" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1131" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX1132" REL="I3" TITLE="inserting marker tag into"></A>
+<A NAME="INDEX1133" REL="I1" TITLE="maketag subroutine (GL)"></A>
+
+<H3><A NAME="A142X942e"></A>Purpose</H3>
+<P><A NAME="E1D6F34967ceb"></A>Inserts a marker tag into a display list.</P>
+
+<H3><A NAME="A79C157"></A>Libraries</H3>
+<P><A NAME="E1D6F35012ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D6F35040ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9432"></A>C Syntax</H3>
+<PRE><A NAME="A142X9433"></A><B>void maketag(Int32 </B><A HREF="maketag.html#A142X9437"><I>tag</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010a69"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010a6a"></A><B>SUBROUTINE MAKETA(</B><I>tag</I><B>)</B>
+<B>INTEGER*4 </B><I>tag</I></PRE>
+
+<H3><A NAME="A142X9434"></A>Description</H3>
+<P><A NAME="E1D6F35152ceb"></A>The <B>maketag</B> subroutine inserts a marker, or tag, at the current editing location of the currently open 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>. The current editing position is usually at the end of the display list, if the display list was recently opened with the <A HREF="makeobj.html#A142X912d"><B>makeobj</B></A> subroutine or <A HREF="editobj.html#A142X9360"><B>editobj</B></A> subroutine. </P>
+
+<P><A NAME="E1D6F35177ceb"></A>The current position can be maneuvered with the <A HREF="objdelete.html#A142X9afd"><B>objdelete</B></A>, <A HREF="objinsert.html#A142X9adb"><B>objinsert</B></A>, and <A HREF="objreplace.html#A142X9b50"><B>objreplace</B></A> subroutines. Tags can be used to help in the maneuvering through and editing of display lists.</P>
+
+<P><A NAME="E1D6F35204ceb"></A>There are two predefined tags, <SAMP>STARTTAG</SAMP> and <SAMP>ENDTAG</SAMP>, which mark the beginning and end of the display list. Tags should be unique within a single object; however, there is no restriction regarding uniqueness across different objects. Unique tags can be generated with the <A HREF="gentag.html#A48x2120marj"><B>gentag</B></A> subroutine.</P>
+
+<BLOCKQUOTE><A NAME="A31C011285"></A><B>Note: </B>This editing subroutine itself cannot be added to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X9436"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X9437"></A><I>tag</I></TD>
+<TD>  Specifies a 31-bit numeric identifier assigned to a routine in the display list.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015cf2"></A>Implementation Specifics</H3>
+<P><A NAME="E1D6F35305ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C15a"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C15b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C15c"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X944c"></A>Related Information</H3>
+<P><A NAME="E1D6F35403ceb"></A>Deleting tags from a display list with the <A HREF="deltag.html#A1N61210marj"><B>deltag</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F35429ceb"></A>Returning a unique integer for use as a tag number with the <A HREF="gentag.html#A48x2120marj"><B>gentag</B></A> subroutine. </P>
+
+<P><A NAME="E1D6F35454ceb"></A>Establishing the uniqueness of a tag number with the <A HREF="istag.html#JXw220marj"><B>istag</B></A> subroutine. </P>
+
+<P><A NAME="E1D6F35480ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating <!--gl32prgd:--><A HREF="../gl32prgd/workobjects.html#workobjects.html">Objects (Display Lists)</A>.</P><hr><center>
+[  <a href="makeobj.html">Previous</a>  |
+<a href="mapcolor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

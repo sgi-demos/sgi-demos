@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getmcolor Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getmatrix.html">Previous</a>  |
+<a href="getmcolors.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="nXI1100marj"></A>getmcolor Subroutine</H2>
+<A NAME="INDEX752" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX753" REL="I2" TITLE="color map and RGB mode"></A>
+<A NAME="INDEX754" REL="I3" TITLE="getmcolor"></A>
+<A NAME="INDEX755" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX756" REL="I2" TITLE="color map entry"></A>
+<A NAME="INDEX757" REL="I3" TITLE="getting a copy of RGB values for"></A>
+<A NAME="INDEX758" REL="I1" TITLE="getmcolor subroutine (GL)"></A>
+
+<H3><A NAME="A213X910dac"></A>Purpose</H3>
+<P><A NAME="E1B0FD5562ceb"></A>Gets a copy of the RGB values for a color map entry.</P>
+
+<H3><A NAME="A78C13e"></A>Libraries</H3>
+<P><A NAME="E1B0FD5712ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0FD5816ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X910daf"></A>C Syntax</H3>
+<PRE><A NAME="A213X910db0"></A><B>void getmcolor</B>
+<B>(Colorindex </B><A HREF="getmcolor.html#liG2200marj"><I>index</I></A><B>,</B>
+<B>Int16</B> *<A HREF="getmcolor.html#yiG21c0marj"><I>red</I></A><B>,</B> <B>Int16</B> *<A HREF="getmcolor.html#A8jG2320marj"><I>green</I></A><B>, Int16</B> *<A HREF="getmcolor.html#IjG22c0marj"><I>blue</I></A><B>)</B></PRE>
+
+<H3><A NAME="A18C0dcf4"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A18C0dcf5"></A><B>SUBROUTINE GETMCO(</B><I>index</I><B>,</B> <I>red</I><B>,</B> <I>green</I><B>,</B> <I>blue</I><B>)</B>
+<B>INTEGER*4</B> <I>index</I>
+<B>INTEGER*2</B> <I>red</I><B>,</B> <I>green</I><B>,</B> <I>blue</I></PRE>
+
+<H3><A NAME="A213X910db3"></A>Description</H3>
+<P><A NAME="E1B0FD6190ceb"></A>The <B>getmcolor </B>subroutine gets the red, green, and blue components of a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A31996bc">color map</A> entry and copies them to the specified locations. This subroutine returns only the values associated with a slot in the current color table. It does not return, nor does it set, the current drawing color. For the current drawing color, use the <A HREF="getcolor.html#A146X924b"><B>getcolor</B></A> subroutine in color map mode, and the <A HREF="gRGBcolor.html#ESL13a0marj"><B>gRGBcolor</B></A> subroutine in RGB mode.</P>
+
+<BLOCKQUOTE><A NAME="A318C9cb7"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X910db6"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="liG2200marj"></A><I>index</I></TD>
+<TD>  Specifies the index into the color map.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="yiG21c0marj"></A><I>red</I></TD>
+<TD>  Specifies a pointer to the location into which to copy the red value of the color specified by <I>index</I>.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A8jG2320marj"></A><I>green</I></TD>
+<TD>  Specifies a pointer to the location into which to copy the green value of the color specified by <I>index</I>.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="IjG22c0marj"></A><I>blue</I></TD>
+<TD>  Specifies a pointer to the location into which to copy the blue value of the color specified by <I>index</I>.</TD></TR></TABLE>
+
+<H3><A NAME="A29C010a02"></A>Example</H3>
+<P><A NAME="E1B0FD6677ceb"></A>The example C language program <A HREF="overlay_c.html#A11C0b47c"><B>overlay.c</B></A> uses the <B>getmcolor</B> subroutine to save the values in the color map before changing them with the <A HREF="mapcolor.html#A146X9535"><B>mapcolor</B></A> subroutine.</P>
+
+<H3><A NAME="A64C01655c"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0FD6838ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C141"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C142"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C143"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X910dc1"></A>Related Information</H3>
+<P><A NAME="E1B0FD7159ceb"></A>Choosing a set of bitplanes for drawing with the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B0FD7267ceb"></A>Returning the current color with the <A HREF="getcolor.html#A146X924b"><B>getcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0FD7374ceb"></A>Returning the number of the current color map with the <A HREF="getmap.html#A146X94e2"><B>getmap</B></A> subroutine.</P>
+
+<P><A NAME="E1B0FD7482ceb"></A>Returning the current RGB color with the <A HREF="gRGBcolor.html#ESL13a0marj"><B>gRGBcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0FD7588ceb"></A>Changing a color map entry to an RGB value with the <A HREF="mapcolor.html#A146X9535"><B>mapcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0FD7695ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System.</P>
+
+<P><A NAME="E1B0FD7803ceb"></A>Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="getmatrix.html">Previous</a>  |
+<a href="getmcolors.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

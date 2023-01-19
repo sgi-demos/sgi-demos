@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>pushname Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="pushmatrix.html">Previous</a>  |
+<a href="pushviewport.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A213X911b48"></A>pushname Subroutine</H2>
+<A NAME="INDEX1480" REL="I1" TITLE="pushname subroutine (GL)"></A>
+<A NAME="INDEX1481" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1482" REL="I2" TITLE="picking and selecting"></A>
+<A NAME="INDEX1483" REL="I3" TITLE="pushing new name onto name stack"></A>
+<A NAME="INDEX1484" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1485" REL="I2" TITLE="picking and selecting"></A>
+<A NAME="INDEX1486" REL="I3" TITLE="pushname"></A>
+
+<H3><A NAME="A213X911b4a"></A>Purpose</H3>
+<P><A NAME="E1D722B224ceb"></A>Pushes a new name onto the name stack.</P>
+
+<H3><A NAME="A79C1bb"></A>Libraries</H3>
+<P><A NAME="E1D722B263ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D722B288ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911b4d"></A>C Syntax</H3>
+<PRE><A NAME="A213X911b4e"></A><B>void pushname(Int16 </B><A HREF="pushname.html#b8A11e0marj"><I>name</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X911b28"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X911b2b"></A><B>SUBROUTINE PUSHNA(</B><I>name</I><B>)</B>
+<B>INTEGER*4 </B><I>name</I></PRE>
+
+<BLOCKQUOTE><A NAME="A79C1be"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911b51"></A>Description</H3>
+<P><A NAME="E1D722B420ceb"></A>The <B>pushname</B> subroutine pushes the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06e3">name stack</A> down one level and puts a new 16-bit name on top.</P>
+
+<P><A NAME="E1D722B446ceb"></A>The <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06e3">name stack</A> must first have been initialized with the <A HREF="initnames.html#YlD250marj"><B>initnames</B></A> subroutine. At least one name must have been loaded onto the stack with the <A HREF="loadname.html#A213X9119af"><B>loadname</B></A> subroutine. The system stores the contents of the name stack in a buffer if a hit has occurred since the late time that the name stack was touched. </P>
+
+<P><A NAME="E1D722B471ceb"></A>This subroutine is ignored outside of 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06fa">picking</A> or 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P019">selecting</A> mode.</P>
+
+<H3><A NAME="A213X911b43"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="b8A11e0marj"></A><I>name</I></TD>
+<TD>  Specifies the name to add to the name stack.</TD></TR></TABLE>
+
+<H3><A NAME="A30C010fea"></A>Example</H3>
+<P><A NAME="E1D722B548ceb"></A>The example C language program <A HREF="pick1_c.html#A13C0bd9f"><B>pick1.c</B></A> calls the <B>pushname</B> subroutine to push the name stack and put a new name on the top. </P>
+
+<H3><A NAME="A62C015cc6"></A>Implementation Specifics</H3>
+<P><A NAME="E1D722B592ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1bf"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1c0"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1c1"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911b66"></A>Related Information</H3>
+<P><A NAME="E1D722B690ceb"></A>Putting the system in selecting mode with the <A HREF="gselect.html#A213X9118b2"><B>gselect</B></A> subroutine.</P>
+
+<P><A NAME="E1D722B715ceb"></A>Initializing the name stack with the <A HREF="initnames.html#YlD250marj"><B>initnames</B></A> subroutine.</P>
+
+<P><A NAME="E1D722B741ceb"></A>Loading the name on top of the name stack with the <A HREF="loadname.html#A213X9119af"><B>loadname</B></A> subroutine.</P>
+
+<P><A NAME="E1D722B767ceb"></A>Putting the system in picking mode with the <A HREF="pick.html#h632f0nita"><B>pick</B></A> subroutine.</P>
+
+<P><A NAME="E1D722B793ceb"></A>Popping a name off name stack with the <A HREF="popname.html#A213X911af9"><B>popname</B></A> subroutine.</P>
+
+<P><A NAME="E1D722B819ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and <!--gl32prgd:--><A HREF="../gl32prgd/picknselect.html#picknselect.html">Picking and Selecting</A> Overview.</P><hr><center>
+[  <a href="pushmatrix.html">Previous</a>  |
+<a href="pushviewport.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

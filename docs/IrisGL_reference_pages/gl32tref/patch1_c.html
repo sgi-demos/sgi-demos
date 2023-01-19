@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>patch1.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="paint_c.html">Previous</a>  |
+<a href="pick1_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A17C0daf"></A>patch1.c Example C Language Program
+</H2>
+<A NAME="INDEX2372" REL="I1" TITLE="patch1.c example program (GL)"></A>
+<A NAME="INDEX2373" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2374" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2375" REL="I3" TITLE="curve and surface patch"></A>
+<A NAME="INDEX2376" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2377" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2378" REL="I3" TITLE="surface patch, wire frame"></A>
+<A NAME="INDEX2379" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2380" REL="I2" TITLE="surface patch, wire frame"></A>
+<A NAME="INDEX2381" REL="I3" TITLE="drawing"></A>
+<PRE><A NAME="A64EB40961ttay"></A>/* Example C Language Program patch1.c */</PRE>
+<PRE><A NAME="A64EB41160ttay"></A>/*
+This program draws three surface patches. First, one based on
+Bezier curves, then one based on B-Spline curves, and
+finally one based on Cardinal curves.
+*/</PRE>
+<PRE><A NAME="A64EB41316ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EB41497ttay"></A>Matrix beziermatrix = {
+  { -1,  3, -3, 1 },
+  {  3, -6,  3, 0 },
+  { -3,  3,  0, 0 },
+  {  1,  0,  0, 0 }};</PRE>
+<PRE><A NAME="A64EB41692ttay"></A>Matrix cardinalmatrix = { 
+  { -0.5,  1.5, -1.5,  0.5 },
+  {  1.0, -2.5,  2.0, -0.5 },
+  { -0.5,  0.0,  0.5,  0.0 },
+  {  0.0,  1.0,  0.0,  0.0 }};</PRE>
+<PRE><A NAME="A64EB41902ttay"></A>Matrix bsplinematrix = {
+  { -1.0/6.0, 3.0/6.0, -3.0/6.0, 1.0/6.0 },
+  {  3.0/6.0, -6.0/6.0, 3.0/6.0, 0.0     },
+  { -3.0/6.0,  0.0,     3.0/6.0, 0.0     },
+  {  1.0/6.0,  4.0/6.0, 1.0/6.0, 0.0     }};</PRE>
+<PRE><A NAME="A64EB42051ttay"></A>#define BEZIER 1</PRE>
+<PRE><A NAME="A64EB42199ttay"></A>#define CARDINAL 2</PRE>
+<PRE><A NAME="A64EB42348ttay"></A>#define BSPLINE 3</PRE>
+<PRE><A NAME="A64EB42544ttay"></A>Coord geomx[4][4] = {
+  {   0.0, 100.0, 200.0, 300.0} ,
+  {   0.0, 100.0, 200.0, 300.0},
+  { 700.0, 600.0, 500.0, 400.0},
+  { 700.0, 600.0, 500.0, 400.0}};</PRE>
+<PRE><A NAME="A64EB42740ttay"></A>Coord geomy[4][4] = { 
+  { 400.0, 500.0, 600.0, 700.0},
+  {   0.0, 100.0, 200.0, 300.0},
+  {   0.0, 100.0, 200.0, 300.0},
+  { 400.0, 500.0, 600.0, 700.0}};</PRE>
+<PRE><A NAME="A64EB42937ttay"></A>Coord geomz[4][4] = { 
+  { 100.0, 200.0, 300.0, 400.0 },
+  { 100.0, 200.0, 300.0, 400.0 },
+  { 100.0, 200.0, 300.0, 400.0 },
+  { 100.0, 200.0, 300.0, 400.0 }};</PRE>
+<PRE><A NAME="A64EB43082ttay"></A>main()
+{</PRE>
+<PRE><A NAME="A64EB43237ttay"></A>  Device dev;
+  short val;    </PRE>
+<PRE><A NAME="A64EB43473ttay"></A>  initialize();    
+  while (TRUE) {        
+    if (qtest()) {
+      dev = qread(&amp;val);            
+      if (dev == ESCKEY) {
+        gexit();
+        exit();
+      }
+      else if (dev == REDRAW) {
+        reshapeviewport();
+        drawpatch();
+      }
+    }
+  }</PRE>
+<PRE><A NAME="A64EB43616ttay"></A>}</PRE>
+<PRE><A NAME="A64EB43762ttay"></A>initialize()
+{</PRE>
+<PRE><A NAME="A64EB43909ttay"></A>  int gid;    </PRE>
+<PRE><A NAME="A64EB44110ttay"></A>  prefsize(400,400);
+  gid = winopen("patch1");    
+  qdevice(ESCKEY);
+  qdevice(REDRAW);
+  qenter(REDRAW,gid);    
+  ortho(-100.0, 800.0, -100.0, 800.0, -800.0, 100.0);</PRE>
+<PRE><A NAME="A64EB44253ttay"></A>}</PRE>
+<PRE><A NAME="A64EB44399ttay"></A>drawpatch()
+{</PRE>
+<PRE><A NAME="A64EB44547ttay"></A>  int i,j,xx,yy;</PRE>
+<PRE><A NAME="A64EB45435ttay"></A>  color(BLACK);
+  clear();   
+  defbasis(BEZIER, beziermatrix);    /* define a basis matrix 
+                                        called BEZIER */
+  defbasis(CARDINAL,cardinalmatrix); /* define a basis matrix 
+                                        called CARDINAL */
+  defbasis(BSPLINE,bsplinematrix);   /* define a basis matrix 
+                                        called BSPLINE */
+  patchbasis(BEZIER,BEZIER);     /* a Bezier basis will be used 
+                                    for both directions in the 
+                                    first patch */
+  patchcurves(4,7);              /* seven curve segments will be 
+                                    drawn in the u direction and 
+                                    four in the v direction */
+  patchprecision(20,20);         /* the curve segments in u 
+                                    direction will consist of 20 
+                                    line segments (the lowest 
+                                    multiple of vcurves greater 
+                                    than usegments) and the curve
+                                    segments in the v direction 
+                                    will consist of 21 line 
+                                    segments (the lowest multiple
+                                    of ucurves greater than 
+                                    vsegments) */
+  color(RED);
+  patch(geomx,geomy,geomz);      /* the patch is drawn based on 
+                                    the sixteen specified control
+                                    points */
+  patchbasis(CARDINAL,CARDINAL); /* the bases for both directions
+                                    are reset */
+  color(GREEN);
+  patch(geomx,geomy,geomz);      /* another patch is drawn using 
+                                    the same control points but a
+                                    different basis */
+  patchbasis(BSPLINE,BSPLINE);   /* the bases for both directions
+                                    are reset again */
+  color(BLUE);
+  patch(geomx,geomy,geomz);      /* a third patch is drawn */</PRE>
+<PRE><A NAME="A64EB45697ttay"></A>  color(WHITE);                  /* show the control points */
+  for ( i = 0 ; i &lt; 4 ; i++ )  {
+    for ( j = 0 ; j &lt; 4 ; j++ )  {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for ( xx = -2 ; xx &lt; 2 ; xx++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for ( yy = -2 ; yy &lt; 2 ; yy++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pnt( geomx[i][j] + (Coord) xx , geomy[i][j] + (Coord) yy ,
+               geomz[i][j] );
+        }
+      }
+    }
+  }</PRE>
+<PRE><A NAME="A64EB45839ttay"></A>}</PRE>
+<PRE><A NAME="A64EB46138ttay"></A>/*
+  Changes:
+     - The prefposition changed to a prefsize (400,400);
+       Was:  prefposition(XMAXSCREEN/4, XMAXSCREEN*3/4, YMAXSCREEN/4, 
+             YMAXSCREEN*3/4);
+     - The ortho parameters where changed
+          ortho(0.0-20.0, (float)(XMAXSCREEN*3/4), 
+              0.0-20.0, (float)(YMAXSCREEN*3/4), 
+              (float)XMAXSCREEN, -(float)XMAXSCREEN);
+       Now:
+          ortho(-100.0, 800.0, -100.0, 800.0, -800.0, 100.0);</PRE>
+<PRE><A NAME="A64EB46281ttay"></A>*/</PRE>
+
+<H3><A NAME="A200C1141"></A>Related Information</H3>
+<P><A NAME="E1D7889186ceb"></A>The <A HREF="patch.html#A143X95b4"><B>patch</B></A> subroutine<A HREF="A143X95b4.html" REL="PAGENUM"></A>, <A HREF="patchbasis.html#A143X95d6"><B>patchbasis</B></A> subroutine<A HREF="A143X95d6.html" REL="PAGENUM"></A>, <A HREF="patchcurves.html#A143X95f8"><B>patchcurves</B></A> subroutine<A HREF="A143X95f8.html" REL="PAGENUM"></A>, <A HREF="patchprecision.html#A143X961a"><B>patchprecision</B></A> subroutine<A HREF="A143X961a.html" REL="PAGENUM"></A>.</P>
+
+<P><A NAME="E1D7889213ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#A300X9dae">Drawing Surfaces</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I> describes the mathematics and programming statements involved in creating three-dimensional surfaces (or patches) with wire frames of curve segments.</P>
+
+<hr><center>
+[  <a href="paint_c.html">Previous</a>  |
+<a href="pick1_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

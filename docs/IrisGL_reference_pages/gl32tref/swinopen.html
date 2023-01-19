@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>swinopen Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="swaptmesh.html">Previous</a>  |
+<a href="textport.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A2T741b0nita"></A>swinopen Subroutine</H2>
+<A NAME="INDEX1896" REL="I1" TITLE="swinopen subroutine (GL)"></A>
+<A NAME="INDEX1897" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1898" REL="I2" TITLE="window"></A>
+<A NAME="INDEX1899" REL="I3" TITLE="swinopen"></A>
+<A NAME="INDEX1900" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1901" REL="I2" TITLE="windows"></A>
+<A NAME="INDEX1902" REL="I3" TITLE="creating restricted subwindow"></A>
+<A NAME="INDEX1903" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1904" REL="I2" TITLE="subwindows"></A>
+<A NAME="INDEX1905" REL="I3" TITLE="creating restricted"></A>
+
+<H3><A NAME="A58C015411"></A>Purpose</H3>
+<P><A NAME="E1D7542835ceb"></A>Creates a restricted subwindow.</P>
+
+<H3><A NAME="A79C132d"></A>Libraries</H3>
+<P><A NAME="E1D7542874ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7542898ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A58C015414"></A>C Syntax</H3>
+<PRE><A NAME="A58C015415"></A><B>Int32 swinopen(Int32 *</B><A HREF="swinopen.html#NL74f0nita"><I>parentid</I></A><B>)</B></PRE>
+
+<H3><A NAME="A58C015416"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A58C015417"></A><B>INTEGER*4 FUNCTION SWINOP(</B><I>parentid</I><B>)</B>
+<B>INTEGER*4 </B><I>parentid</I></PRE>
+
+<H3><A NAME="A58C015418"></A>Description</H3>
+<P><A NAME="E1D7543010ceb"></A>The <B>swinopen </B>subroutine creates a subwindow inside a parent window. The subwindow is mapped (created and displayed) immediately upon receipt of this call. The subwindow then becomes the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A60P0189">current window</A>.</P>
+
+<P><A NAME="E1D7543036ceb"></A>Subwindows have no border and therefore cannot be moved by the applications user. Other than this, subwindows behave very much like windows created with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine. </P>
+
+<P><A NAME="E1D7543063ceb"></A>When a subwindow is created, a completely independent graphics context is also created for it. That is, subwindows have their own current color linestyle, pattern, matrix stack, viewport stack, attribute stack, name stack, and so on. These attributes are not shared with the parent. The attributes are initialized to their default values (for example, empty stack). See the <A HREF="greset.html#xW42e0nita"><B>greset</B></A> subroutine for the list of default values.</P>
+
+<P><A NAME="E1D7543088ceb"></A>The position of a subwindow is measured relative to the origin of the parent window. Subwindows move with the parent window. If a parent window is moved, all of its subwindows move with it.</P>
+
+<P><A NAME="E1D7543115ceb"></A>Subwindows are clipped to the boundaries of the parent window. That is, by drawing inside a subwindow, one can never draw outside of the boundaries of the parent window. Otherwise, subwindows can be positioned arbitrarily inside a parent window, even if such positioning means that the subwindow is completely clipped. If a subwindow is exposed or otherwise needs redrawing, both the parent and the subwindow receive redraw events.</P>
+
+<P><A NAME="E1D7543141ceb"></A>Because subwindows cannot be moved or resized by the user, none of the window constraint subroutines have any meaning and therefore do not affect the state of a subwindow. Window constraint subroutines include the <A HREF="minsize.html#MJ13260marj"><B>minsize</B></A>, <A HREF="maxsize.html#A142X916d6"><B>maxsize</B></A>, and <A HREF="stepunit.html#A142X91bd2"><B>stepunit</B></A> subroutines. Because subwindows have no border, they cannot be given a title. Subwindows also cannot be iconified.</P>
+
+<P><A NAME="E1D7543167ceb"></A>Subwindows can be pushed and popped. Subwindows can be positioned or moved with either the <A HREF="prefposition.html#A142X9164f"><B>prefposition</B></A> or <A HREF="prefsize.html#A142X91671"><B>prefsize</B></A> subroutine followed by a call to the <A HREF="winconstraints.html#A142X914c1"><B>winconstraints</B></A> subroutine, or by using the <A HREF="winposition.html#A142X9158d"><B>winposition</B></A> or <A HREF="winmove.html#A142X91527"><B>winmove</B></A> subroutine.</P>
+
+<P><A NAME="E1D7543196ceb"></A>Subwindows can have sub-subwindows. The origin of a sub-subwindow is measured relative to the origin of the subwindow (its parent).</P>
+
+<BLOCKQUOTE><A NAME="A59C0154a7"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>. </BLOCKQUOTE>
+
+
+<H3><A NAME="A58C015420"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="NL74f0nita"></A><I>parentid</I></TD>
+<TD>  Specifies the identifier, or handle, of the parent window. </TD></TR></TABLE>
+
+<H3><A NAME="A58C015421"></A>Return Value</H3>
+<P><A NAME="E1D7543292ceb"></A>The identifier, or handle, for the subwindow.</P>
+
+<H3><A NAME="A61C015a06"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7543336ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1330"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1331"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1332"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A58C015425"></A>Related Information</H3>
+<P><A NAME="E1D7543432ceb"></A>Creating a new window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine.</P>
+
+<P><A NAME="E1D7543458ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="swaptmesh.html">Previous</a>  |
+<a href="textport.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

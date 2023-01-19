@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>pwlcurve Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="pushviewport.html">Previous</a>  |
+<a href="qdevice.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A257X9fc"></A>pwlcurve Subroutine</H2>
+<A NAME="INDEX1494" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1495" REL="I2" TITLE="NURBS curves and surfaces"></A>
+<A NAME="INDEX1496" REL="I3" TITLE="pwlcurve"></A>
+<A NAME="INDEX1497" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1498" REL="I2" TITLE="curve"></A>
+<A NAME="INDEX1499" REL="I3" TITLE="piecewise linear trimming"></A>
+<A NAME="INDEX1500" REL="I1" TITLE="pwlcurve subroutine (GL)"></A>
+
+<H3><A NAME="A257X9fe"></A>Purpose</H3>
+<P><A NAME="E1D7247312ceb"></A>Describes a piecewise linear trimming curve for NURBS surfaces.</P>
+
+<H3><A NAME="A78C134f"></A>Libraries</H3>
+<P><A NAME="E1D7247351ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7247375ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A257X9101"></A>C Syntax</H3>
+<PRE><A NAME="A257X9102"></A><B>void pwlcurve</B>
+<B>(Int32</B> <A HREF="pwlcurve.html#A257X910b"><I>count</I></A><B>,</B>
+<B>Float64</B> <B>*</B><A HREF="pwlcurve.html#A257X910c"><I>data_array</I></A><B>,</B>
+<B>Int32</B> <A HREF="pwlcurve.html#A257X910d"><I>stride</I></A><B>,</B>
+<B>Int32</B> <A HREF="pwlcurve.html#A257X910e"><I>type</I></A><B>)</B></PRE>
+
+<H3><A NAME="A257X9db"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A257X9de"></A><B>SUBROUTINE PWLCUR(</B><I>count</I><B>,</B> <I>data_array</I><B>,</B> <I>stride</I><B>,</B> <I>type</I><B>)</B>
+<B>INTEGER*4</B> <I>count</I><B>,</B> <I>stride</I><B>,</B> <I>type</I>
+<B>REAL*8 </B><I>data_array</I><B>(*)</B></PRE>
+
+<H3><A NAME="A257X9105"></A>Description</H3>
+<P><A NAME="E1D7247490ceb"></A>The <B>pwlcurve </B>subroutine describes a piecewise linear curve, which consists of a list of coordinate pairs in the parameter space for a Non-Uniform Rational B-Spline (NURBS) surface. A piecewise linear curve can be used to describe a trimming loop. Use trimming loop definitions within surface definitions, as defined by the <A HREF="bgnsurface.html#A251X9d7"><B>bgnsurface</B></A> subroutine.</P>
+
+<P><A NAME="E1D7247516ceb"></A>The trimming loops are closed curves that the system uses to set the boundaries of a NURBS surface. Describe a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P11542">trimming loop</A> by using a series of NURBS curves (as defined by the <A HREF="nurbscurve.html#A255X93ca"><B>nurbscurve</B></A> subroutine), piecewise linear curves, or both. These points are connected together with straight lines to form a path. </P>
+
+<P><A NAME="E1D7247543ceb"></A>If a piecewise linear curve is an approximation to a real curve, the points should be close enough together that the resulting path will appear curved at the resolution used in the application.</P>
+
+<P><A NAME="E1D7247569ceb"></A>Use piecewise linear curves within trimming loop definitions. A trimming loop definition is a set of oriented curve commands that describe a closed loop. To mark the beginning of a trimming loop definition, use the <A HREF="bgntrim.html#A251X98d"><B>bgntrim</B></A> subroutine. To mark the end of a trimming loop definition, use an <A HREF="bgntrim.html#A251X98d"><B>endtrim</B></A> subroutine.</P>
+
+<P><A NAME="E1D7247596ceb"></A>The system displays the region of the NURBS surface that is to the left of the trimming curves as the parameter increases. Thus, for a counterclockwise-oriented trimming curve, the displayed region of the NURBS surface is the region inside the curve. For a clockwise-oriented trimming curve, the displayed region of the NURBS surface is the region outside the curve.</P>
+
+<H3><A NAME="A257X910a"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A257X910b"></A><I>count</I></TD>
+<TD>  Specifies the number of points on the curve.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A257X910c"></A><I>data_array</I></TD>
+<TD>  Specifies an array containing the curve points.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A257X910d"></A><I>stride</I></TD>
+<TD>  Specifies the offset (in bytes) between points on the curve.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A257X910e"></A><I>type</I></TD>
+<TD>  Specifies a value indicating the point type. Currently, the only data type supported is N_ST, corresponding to pairs of s-t coordinates. The <I>stride</I> parameter is used in case the curve points are part of an array of larger structure elements. The <B>pwlcurve </B>subroutine searches for the <I>count</I>-th coordinate pair beginning at <I>data_array </I>+ <I>count</I> * <I>stride</I>. </TD></TR></TABLE>
+
+<H3><A NAME="A62C015da6"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7247732ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1352"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1353"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1354"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A257X9113"></A>Related Information</H3>
+<P><A NAME="E1D7247830ceb"></A>Marking the beginning and end of a NURBS surface trimming loop with the <A HREF="bgntrim.html#A251X98d"><B>bgntrim</B> and <B>endtrim</B></A> subroutines. </P>
+
+<P><A NAME="E1D7247856ceb"></A>Marking the beginning and end of a NURBS surface definition with the <A HREF="bgnsurface.html#A251X9d7"><B>bgnsurface </B>and <B>endsurface</B></A> subroutines. </P>
+
+<P><A NAME="E1D7247881ceb"></A>Returning the current value of a trimmed NURBS surfaces display property with the <A HREF="getnurbsproperty.html#A252X986e"><B>getnurbsproperty</B></A> subroutine. </P>
+
+<P><A NAME="E1D7247907ceb"></A>Controlling the shape of a NURBS trimming curve with the <A HREF="nurbscurve.html#A255X93ca"><B>nurbscurve</B></A> subroutine. </P>
+
+<P><A NAME="E1D7247932ceb"></A>Controlling the shape of a NURBS surface with the <A HREF="nurbssurface.html#A252X98b9"><B>nurbssurface</B></A> subroutine. </P>
+
+<P><A NAME="E1D7247959ceb"></A>Setting a property for the display of trimmed NURBS with the <A HREF="setnurbsproperty.html#A257X911b"><B>setnurbsproperty</B></A> subroutine. </P>
+
+<P><A NAME="E1D7247984ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">NURBS Curves and Surfaces</A>.</P><hr><center>
+[  <a href="pushviewport.html">Previous</a>  |
+<a href="qdevice.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,542 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/coordtransfrms.html Mon, 24 Jan 2022 16:28:02 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Coordinate Transformations
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="listofcoords.html">Previous</a>  |
+<a href="user-deftrans.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="coordtransfrms.html"></A>Coordinate Transformations </H2>
+
+
+<P><A NAME="A3C0E9A2475mhay"></A>When displaying 3-D shapes, it is useful
+to be able to move the shapes around relative to each other and to the
+viewer; to rotate and scale them; and to be able to change the viewer's
+point of view, field of view, and orientation. The subroutines that perform
+coordinate transformations allow you to manipulate geometric figures and
+viewpoints in 3-D space in very general ways. </P>
+
+
+<P><A NAME="A3C0E9A2495mhay"></A>GL converts the 3-D coordinates of geometric
+figures into pixels on the screen in the following operations: </P>
+
+
+<OL><LI><A NAME="A264X9138"></A>A set of 3-D operations, such as rotation,
+translation, and scaling moves the objects and viewpoint to the desired
+position for a given scene.</LI>
+
+
+<LI><A NAME="A264X9139"></A>A subsequent operation maps 3-D points to 2-D
+screen coordinates, taking into consideration the portion of 3-D space
+(as well as its orientation with respect to the screen) that is visible
+during a given scene.</LI></OL>
+
+
+<P><A NAME="A3C0E9A2519mhay"></A>The 3-D operations can be further divided
+into projection, viewing, and modeling transformations. Conversion from
+the original 3-D figures to the 2-D pixels on the screen is handled by
+another set of subroutines, including the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/viewport.html#qrY270marj">viewport</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lsetdepth.html#naR120marj">lsetdepth</A></B>
+subroutines. </P>
+
+
+<H3><A NAME="A264X913c"></A>Types of Coordinate Systems </H3>
+
+
+<P><A NAME="A3C0E9A2540mhay"></A>There are basically five coordinate systems
+of interest. First, there is a 3-D system defined in right-handed Cartesian
+floating-point coordinates; vertices are specified in (<I>x</I>,<I>y,z</I>)
+triplets. Let us refer to this as the modeling coordinate system. There
+are no limits to the size of sensible coordinates (other than the largest
+legal floating-point value). </P>
+
+
+<P><A NAME="A3C0E9A2561mhay"></A>The second system is the world coordinate
+system, also a 3-D floating-point coordinate system. World coordinates
+are used conceptually for locating the entire scene. For example, the drawing
+of a bolt may be defined at the origin of the modeling coordinate system
+(because this is the easiest way to define a bolt), but that bolt may be
+drawn repetitively in many different places in world coordinates. </P>
+
+
+<P><A NAME="A3C0E9A2582mhay"></A>The third is called the eye, or viewer,
+coordinate system. The position of all things is measured with respect
+to the location of the viewer's eye. GL uses the same set of subroutines
+to manipulate the placement of shapes in these first three coordinate systems.
+These subroutines become the modeling, viewing, and projection transformations,
+depending on the order in which they are called and the mode the system
+is in. </P>
+
+
+<P><A NAME="A3C0E9A2603mhay"></A>The fourth is called the normalized coordinate
+system. This system is also 3-D with floating-point values, but its range
+is limited to -1.0 &amp;le; <I>x</I>,<I>y</I>,<I>z </I>&amp;le; 1.0. The
+3-D cube defined by these limits is convenient for clipping. After transformation
+to the normalized system, the clipping hardware eliminates all geometry
+with coordinates outside the range of -1.0 to 1.0. </P>
+
+
+<P><A NAME="A3C0E9A2624mhay"></A>The <I>x</I> and <I>y</I> coordinates
+of this 3-D cube are scaled directly into the fifth coordinate system,
+usually called the screen coordinate system. If you draw into an arbitrarily
+placed window on the screen, the pixel at the lower-left corner of the
+window has screen coordinates (0,0). Because screen coordinates represent
+pixel values, they are always expressed in integers, so the transformation
+from normalized coordinates to screen coordinates might involve some rounding
+and consequent loss of accuracy. </P>
+
+
+<P><A NAME="A3C0E9A2644mhay"></A>Screen coordinates are typically thought
+of as 2-D, but in fact all three dimensions of the normalized coordinates
+are scaled, and there is a screen <I>z</I> coordinate that can be used
+for many things, such as hidden surface removal and depth-cueing. </P>
+
+
+<H3><A NAME="A30C010fc0"></A>Types of Transformations </H3>
+
+
+<P><A NAME="A3C0E9A2666mhay"></A>This section contains information on:</P>
+
+
+<UL><LI><A NAME="A258C01c169"></A><A HREF="coordtransfrms.html#A264X916c">Modeling
+Transformations</A></LI>
+
+
+<LI><A NAME="A258C01c16a"></A><A HREF="coordtransfrms.html#A264X915f">Viewing
+Transformations</A></LI>
+
+
+<LI><A NAME="A96C16"></A><A HREF="coordtransfrms.html#A264X9141">Projection
+Transformations</A></LI></UL>
+
+
+<P><A NAME="A3C0E9A2689mhay"></A>To map between the five coordinate systems,
+there are four distinct types of coordinate transformations. These are
+as follows: </P>
+
+
+<UL><LI><A NAME="A30C010fc2"></A><A HREF="coordtransfrms.html#A264X916c">Modeling
+transformations</A>, which map from modeling coordinates to world coordinates.
+That is, they take a 3-D figure drawn in modeling coordinates and indicate
+how it is placed in world coordinates.</LI>
+
+
+<LI><A NAME="A30C010fc3"></A><A HREF="coordtransfrms.html#A264X915f">Viewing
+transformations</A>, which map from world coordinates to eye coordinates.
+That is, they indicate the location of the eye and the direction in which
+it is looking, and relate that to world coordinates.</LI>
+
+
+<LI><A NAME="A30C010fc4"></A><A HREF="coordtransfrms.html#A264X9141">Projection
+transformations</A>, which map from eye coordinates to normalized device
+coordinates. Projection transformations are usually used to control the
+amount of perspective in the scene.</LI>
+
+
+<LI><A NAME="A30C010fc5"></A>Viewport transformations, which map from normalized
+device coordinates (NDC) to device coordinates (DC) (also called screen
+coordinates or window-relative coordinates). These control the placement
+of the drawn scene on the monitor; that is, where it appears on the screen.
+Viewport transformations are not full-fledged transformations like the
+previous three; for example, rotations are not allowed. These transformations
+are controlled by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/viewport.html#qrY270marj">viewport</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lsetdepth.html#naR120marj">lsetdepth</A></B>
+subroutines.</LI></UL>
+
+
+<P><A NAME="A3C0E9A2714mhay"></A>These transformations are represented
+in the following <A HREF="figures/gl32p4.jpg">figure</A>. </P>
+
+
+<H3><A NAME="A264X916c"></A>Modeling Transformations<A NAME="INDEX415"></A>
+<A NAME="INDEX416"></A> <A NAME="INDEX417"></A> <A NAME="INDEX418"></A></H3>
+
+
+<P><A NAME="A3C0E9A2737mhay"></A>When you create a graphical object, or
+geometric model, the system creates it with respect to its own coordinate
+system. You can manipulate the entire object using the modeling transformation
+subroutines: <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rotate.html#A8g2120marj">rotate</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/rot.html#A144X9562">rot</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/translate.html#A144X95c8">translate</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/scale.html#A144X95a6">scale</A></B>.
+By combining or linking together drawing subroutines, you can create more
+complex modeling transformations that express relationships between different
+parts of a complex object. </P>
+
+
+<P><A NAME="A3C0E9A2757mhay"></A>All objects drawn after these subroutines
+execute are transformed as specified by the individual subroutine. Therefore,
+<A HREF="cntrltransfrms.html#cntrltransfrms.html">controlling the order</A> in which you
+specify transformation operations is extremely important. </P>
+
+
+<H4><A NAME="A264X9181"></A>rotate Subroutine </H4>
+
+
+<P><A NAME="A3C0E9A2780mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rotate.html#A8g2120marj">rotate</A></B>
+subroutine rotates graphical objects by specifying an angle and an axis
+of rotation. The angle is given in tenths of degrees according to the right-hand
+rule: if the right hand is wrapped around the axis of rotation, the fingers
+curl in the same direction as positive rotation, and the thumb point in
+the same direction as the axis of rotation. A right-handed rotation is
+counterclockwise. An x, y, or z character defines the axis of rotation.
+(The character can be uppercase or lowercase.) </P>
+
+
+<BLOCKQUOTE><P><A NAME="A30C010fc6"></A><B>Note: </B>In the following discussion, the
+word <I>object</I> refers to the general idea of a drawn thing or shape
+(graphical primitive). It does not refer specifically to display lists.</P></BLOCKQUOTE>
+
+
+<P><A NAME="A3C0E9A2801mhay"></A>All objects drawn after the <B>rotate</B>
+subroutine executes are rotated. </P>
+
+
+<P><A NAME="A3C0E9A2821mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rot.html#A144X9562">rot</A></B>
+subroutine is similar to the <B>rotate</B> subroutine, except that the
+angle is given in floating point. Both subroutines create a <A HREF="figures/gl32p82.jpg">matrix</A>
+and premultiply it into the current matrix. </P>
+
+
+<P><A NAME="A3C0E9A2842mhay"></A>The <B>rot</B> and <B>rotate</B> subroutines
+syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c16e"></A>void&nbsp;rotate(Angle&nbsp;angle,&nbsp;Char8&nbsp;axis)</PRE>
+
+
+<PRE><A NAME="A258C01c16f"></A>void&nbsp;rot(Float32&nbsp;angle,&nbsp;Char8&nbsp;axis)</PRE>
+
+
+<H4><A NAME="A300X9c21"></A>translate Subroutine </H4>
+
+
+<P><A NAME="A3C0E9A2866mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/translate.html#A144X95c8">translate</A></B>
+subroutine moves the object origin to the point specified in the current
+object coordinate system. All objects drawn after the <B>translate</B>
+subroutine executes are translated. The <B>translate</B> subroutine creates
+a <A HREF="figures/gl32p83.jpg">matrix</A> and premultiplies it into the
+current matrix. </P>
+
+
+<P><A NAME="A3C0E9A2886mhay"></A>The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c170"></A>void&nbsp;translate(Coord&nbsp;x,&nbsp;Coord&nbsp;y,&nbsp;Coord&nbsp;z)</PRE>
+
+
+<H4><A NAME="A300X9c22"></A>scale Subroutine </H4>
+
+
+<P><A NAME="A3C0E9A2909mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/scale.html#A144X95a6">scale</A></B>
+subroutine shrinks, expands, and mirrors objects. Its three parameters
+(<I>x</I>, <I>y</I>, <I>z</I>) specify scaling in each of the three coordinate
+directions. Values with magnitudes greater than 1 expand the object; values
+with magnitudes less than 1 shrink it. Negative values cause mirroring.</P>
+
+
+<P><A NAME="A3C0E9A2929mhay"></A>All objects that are drawn after the <B>scale</B>
+subroutine executes are scaled. The <B>scale</B> subroutine creates a <A HREF="figures/gl32p84.jpg">matrix</A>
+and premultiplies it into the current matrix. </P>
+
+
+<P><A NAME="A3C0E9A2949mhay"></A>The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c171"></A>void&nbsp;scale(Float32&nbsp;x,&nbsp;Float32&nbsp;y,&nbsp;Float32&nbsp;z)</PRE>
+
+
+<P><A NAME="A3C0E9A2970mhay"></A>The modeling subroutines are illustrated
+in the following <A HREF="figures/gl32p5.jpg">figure</A>. </P>
+
+
+<P><A NAME="A3C0E9A2992mhay"></A>The modeling subroutines are not commutative:
+if you reverse the order of operations, you can get different results.
+The following <A HREF="figures/gl32p6.jpg">figure</A> shows (a) a rotation
+of 60 degrees about the origin followed by a translation of 4 degrees in
+the X direction. Part (b) shows the same operation performed in the reverse
+order. Rotations are about the origin of the coordinate system. </P>
+
+
+<H3><A NAME="A264X915f"></A>Viewing Transformations<A NAME="INDEX419"></A>
+<A NAME="INDEX420"></A> <A NAME="INDEX421"></A> <A NAME="INDEX422"></A></H3>
+
+
+<P><A NAME="A3C0E9A3015mhay"></A>The viewing transformations allow you
+to specify the position of the eye in the world coordinate system, and
+to specify the direction toward which it is looking. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/polarview.html#A144X94fc">polarview</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lookat.html#A144X9452">lookat</A></B>
+subroutines provide convenient ways to do this. </P>
+
+
+<H4><A NAME="A300X9c1d"></A>polarview Subroutine </H4>
+
+
+<P><A NAME="A3C0E9A3037mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/polarview.html#A144X94fc">polarview</A></B>
+subroutine assumes that the object you are viewing is near the origin.
+The eye's position is specified by a radius (distance from the origin)
+and by angles measuring the azimuth and elevation. The specification is
+similar to polar coordinates, hence, the name. There is still one degree
+of freedom because these values tell only where the eye is relative to
+the object. A <I>twist</I> parameter tells which direction is up. </P>
+
+
+<P><A NAME="A3C0E9A3058mhay"></A>The angle of incidence equals the angle
+between the Z-axis in world coordinates and the location of the origin
+of viewing coordinates. The angle of azimuth equals the angle between the
+X-axis in world coordinates and the <I>x</I>,<I>y</I> coordinates of the
+origin of the viewing coordinates. </P>
+
+
+<P><A NAME="A3C0E9A3079mhay"></A>To understand incidence and azimuth, imagine
+that you are standing at the origin in world coordinates. You are facing
+north, along the Y-axis, with the X-axis on your right. The Z-axis points
+straight up, towards the zenith. There is a very large eye in the sky,
+looking down at you. It is located at the origin of the viewing coordinate
+system. This eye is the system, and whatever that eye sees appears on the
+screen. </P>
+
+
+<P><A NAME="A3C0E9A3100mhay"></A>Where is the eye? The azimuth is the compass
+point at which it is located: 0 degrees if straight north, 90 degrees if
+straight east, and so on, in a clockwise fashion (in conformance with astronomical
+usage). The incidence is the angle down from zenith: 0 degrees means the
+eye is directly overhead; 90 degrees means that the eye is on the horizon.</P>
+
+
+<P><A NAME="A3C0E9A3120mhay"></A>The altitude (again following astronomical
+usage) is precisely equal to 90 degrees minus the incidence. This coordinate
+system is called <I>horizon coordinates</I> or <I>topocentric coordinates</I>.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c172"></A>void&nbsp;polarview(Coord&nbsp;distance,&nbsp;Angle&nbsp;azimuth,&nbsp;Angle&nbsp;incidence,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Angle&nbsp;twist)</PRE>
+
+
+<P><A NAME="A3C0E9A3141mhay"></A>The following <A HREF="figures/gl32p7.jpg">figure</A>
+illustrates this viewpoint concept. </P>
+
+
+<H4><A NAME="A300X9c1e"></A>lookat Subroutine </H4>
+
+
+<P><A NAME="A3C0E9A3164mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lookat.html#A144X9452">lookat</A></B>
+subroutine allows you to specify the eye's position in space and a point
+at which it is looking. Both points are given with Cartesian <I>x</I>,
+<I>y</I>, and <I>z</I> coordinates. A <I>twist</I> parameter specifies
+the angle of rotation. Once you specify the eye position, the point you
+are looking at could be any point along a line, and the identical transformation
+is specified. This viewpoint concept is illustrated in the following <A HREF="figures/gl32p8.jpg">figure</A>.</P>
+
+
+<P><A NAME="A3C0E9A3186mhay"></A>Both viewing subroutines work in conjunction
+with a projection subroutine. If you wish to view point (1, 2, 3) from
+point (4, 5, 6) in perspective, use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/perspective.html#A144X94da">perspective</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lookat.html#A144X9452">lookat</A></B>
+subroutines in conjunction. When the orthogonal projections are used, the
+exact position of the eye used in the viewing subroutines does not make
+any difference. The only thing that matters is the viewing direction. </P>
+
+
+<P><A NAME="A3C0E9A3206mhay"></A>The viewing transformations work mathematically
+by transforming, by means of rotations and translations, the position of
+the eye to the origin and by adjusting the viewing direction so that it
+lies along the negative Z axis. </P>
+
+
+<P><A NAME="A3C0E9A3226mhay"></A>The <B>polarview</B> and <B>lookat</B>
+subroutines create a <A HREF="figures/gl32p85.jpg">matrix</A> and premultiply
+it into the current matrix. </P>
+
+
+<H3><A NAME="A264X9141"></A>Projection Transformations<A NAME="INDEX423"></A>
+<A NAME="INDEX424"></A> <A NAME="INDEX425"></A> <A NAME="INDEX426"></A></H3>
+
+
+<P><A NAME="A3C0E9A3248mhay"></A>Viewing items in perspective on the computer
+screen is like looking at them through a rectangular piece of perfectly
+transparent glass. Imagine drawing a line from your eye through the glass
+to an item. The line colors a dot on the glass the same color as the spot
+on the item intersected by that line. If this were done for all possible
+lines through the glass, if the coloring were perfect, and the eye not
+allowed to move, then the picture painted on the glass would be indistinguishable
+from the true scene. </P>
+
+
+<P><A NAME="A3C0E9A3268mhay"></A>The collection of all the lines leaving
+your eye and passing through the glass would form an infinite four-sided
+pyramid with its apex at your eye. Anything outside the pyramid would not
+appear on the glass, so the four planes passing through your eye and the
+edges of the glass would clip out invisible items. These are called the
+<I>left</I>, <I>right</I>, <I>bottom</I>, and <I>top</I> clipping planes.</P>
+
+
+<P><A NAME="A3C0E9A3289mhay"></A>The geometry hardware also provides two
+other clipping planes that eliminate anything too far from the eye or too
+near the eye. They are called the <I>near</I> and <I>far</I> clipping planes.
+Near and far clipping is always turned on, but it is possible to set the
+near plane very close to the eye and the far plane very far from the eye
+so that all the geometric items of interest are visible. </P>
+
+
+<P><A NAME="A3C0E9A3309mhay"></A>Because floating-point calculations are
+not exact, it is a good idea to move the near plane as far as possible
+from the eye, and to bring in the far plane as close as possible. This
+gives optimal resolution for distance-based operations such as those discussed
+in <A HREF="remhidden.html#remhidden.html">&quot;Removing Hidden Surfaces&quot;</A>
+ and <A HREF="depth-cueing.html">&quot;Performing Depth-Cueing&quot;</A>.</P>
+
+
+<P><A NAME="A3C0E9A3329mhay"></A>Thus, for a perspective view, the region
+that is visible looks like an Egyptian pyramid with the top sliced off.
+The technical name for this is a frustum, or rectangular viewing frustum.</P>
+
+
+<H4><A NAME="A300X9c1a"></A>perspective Subroutine </H4>
+
+
+<P><A NAME="A3C0E9A3351mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/perspective.html#A144X94da">perspective</A></B>
+subroutine maps a frustum of eye, or viewer, space so that it exactly fills
+the viewport. This frustum is part of a pyramid whose apex is at the origin
+(0.0, 0.0, 0.0), whose base is parallel to the X<I>-</I>Y plane, and which
+extends along the negative Z axis. In other words, it is the view obtained
+when the eye at the origin looks down the negative Z axis, and the plate
+of glass is perpendicular to the line of sight, as shown in the <A HREF="figures/gl32p9.jpg">figure</A>.</P>
+
+
+<P><A NAME="A3C0E9A3372mhay"></A>The <B>perspective</B> subroutine has
+four parameters: the field of view in the y direction, the aspect ratio,
+and the distances to the near and far clipping planes. Typically, the aspect
+ratio is chosen so that it is the same as the aspect ratio of the window
+on the screen, but it need not be. The distances to the near and far clipping
+planes are floating-point values. </P>
+
+
+<P><A NAME="A3C0E9A3393mhay"></A>Mathematically, the <B>perspective</B>
+subroutine works by mapping the 3-D volume enclosed by the viewing frustum
+into normalized device coordinates. Any point outside the frustum is mapped
+to a point outside the cube; that is, at least one of its coordinates is
+greater than 1.0 or less than -1.0. The clipping hardware then eliminates
+all the geometry outside the normalized viewing cube, and the <I>x</I>
+and <I>y</I> coordinates of the remaining geometry are scaled linearly
+to fill the window on the screen. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c173"></A>void&nbsp;perspective(Angle&nbsp;fovy,&nbsp;Float32&nbsp;aspect,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Coord&nbsp;near,&nbsp;Coord&nbsp;far)</PRE>
+
+
+<P><A NAME="A3C0E9A3415mhay"></A>All the projection transformations work
+basically the same way. A viewing volume is mapped into the normalized
+cube, the geometry outside the cube is clipped out, and the remaining data
+is linearly scaled to fill the window (actually the viewport). The only
+differences between the projection transformations are the definitions
+of the viewing volumes. </P>
+
+
+<H4><A NAME="A300X9c1b"></A>window Subroutine </H4>
+
+
+<P><A NAME="A3C0E9A3436mhay"></A>Another perspective projection transformation
+is the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/window.html#A144X95ea">window</A></B>
+subroutine. This subroutine is similar to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/perspective.html#A144X94da">perspective</A></B>
+subroutine, but its viewing frustum is defined in terms of distances to
+the left, right, bottom, top, near, and far clipping planes. </P>
+
+
+<P><A NAME="A3C0E9A3457mhay"></A>The <B>window</B> subroutine specifies
+the position and size of the rectangular viewing frustum closest to the
+eye (in the near clipping plane) and the location of the far clipping plane.
+The following <A HREF="figures/gl32p10.jpg">figure</A> illustrates this
+function, defining a viewing window in the X-Y plane looking down the negative
+Z axis. A perspective view of the image is projected onto the window. The
+syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c174"></A>void&nbsp;window(Coord&nbsp;left,&nbsp;Coord&nbsp;right,&nbsp;Coord&nbsp;bottom,&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Coord&nbsp;top,&nbsp;Coord&nbsp;near,&nbsp;Coord&nbsp;far)
+
+
+
+</PRE>
+
+
+<P><A NAME="A3C0E9A3479mhay"></A>The perspective transformation subroutines
+create <A HREF="figures/gl32p86.jpg">matrices</A> and load them as the
+projection matrix. </P>
+
+
+<H4><A NAME="A300X9c1c"></A>ortho and ortho2 Subroutines </H4>
+
+
+<P><A NAME="A3C0E9A3500mhay"></A>The other two projection subroutines that
+are part of GL are the orthogonal transformations. Their viewing volumes
+are rectangular boxes. They correspond to the limiting case of a perspective
+frustum as the eye is moved infinitely far away and the field of view decreases
+appropriately. </P>
+
+
+<P><A NAME="A3C0E9A3521mhay"></A>Another way to think of the <B>ortho</B>
+subroutines is that the geometry outside the box is clipped out, and the
+geometry inside is projected parallel to the Z axis onto a face parallel
+to the X-Y plane. </P>
+
+
+<P><A NAME="A3C0E9A3541mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496">ortho</A></B>
+subroutine allows you to specify the entire box: the X, Y, and Z limits.
+The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496">ortho2</A></B>
+subroutine, usually used for 2-D drawing, requires a specification of the
+X and Y limits only. The Z limits are assumed to be -1 and 1. Objects with
+<I>z</I> coordinates outside the range -1.0 &amp;le; z &amp;le; 1.0 are
+clipped out. </P>
+
+
+<P><A NAME="A3C0E9A3561mhay"></A>The following <A HREF="figures/gl32p11.jpg">figure</A>
+illustrates this function, defining a viewing window in the X-Y plane looking
+down the negative Z axis. An orthographic view of the object between the
+near and far planes is projected onto the window. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A258C01c175"></A>void&nbsp;ortho(Coord&nbsp;left,&nbsp;Coord&nbsp;right,&nbsp;Coord&nbsp;bottom,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Coord&nbsp;top,&nbsp;Coord&nbsp;near,&nbsp;Coord&nbsp;far)</PRE>
+
+
+<P><A NAME="A3C0E9A3584mhay"></A>The orthographic subroutines create <A HREF="figures/gl32p87.jpg">matrices</A>
+and load them as the projection matrix. </P>
+
+
+
+<hr><center>
+[  <a href="listofcoords.html">Previous</a>  |
+<a href="user-deftrans.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/coordtransfrms.html Mon, 24 Jan 2022 16:28:06 GMT -->
+</HTML>
+

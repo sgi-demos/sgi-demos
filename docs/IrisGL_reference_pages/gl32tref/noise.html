@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>noise Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="noborder.html">Previous</a>  |
+<a href="noport.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9174"></A>noise Subroutine</H2>
+<A NAME="INDEX1238" REL="I1" TITLE="noise subroutine (GL)"></A>
+<A NAME="INDEX1239" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1240" REL="I2" TITLE="device"></A>
+<A NAME="INDEX1241" REL="I3" TITLE="squelching noisy valuators"></A>
+<A NAME="INDEX1242" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1243" REL="I2" TITLE="queue and device"></A>
+<A NAME="INDEX1244" REL="I3" TITLE="noise"></A>
+
+<H3><A NAME="A143X9176"></A>Purpose</H3>
+<P><A NAME="E1D701C992ceb"></A>Filters valuator motion.</P>
+
+<H3><A NAME="A79C1158"></A>Libraries</H3>
+<P><A NAME="E1D701D031ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D701D056ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X917a"></A>C Syntax</H3>
+<PRE><A NAME="A143X917b"></A><B>void noise(Device</B> <A HREF="noise.html#A143X917f"><I>valuator</I></A><B>, Int16</B> <A HREF="noise.html#A143X9180"><I>delta</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c7a"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c7b"></A><B>SUBROUTINE NOISE(</B><I>valuator</I><B>, </B><I>delta</I><B>)</B>
+<B>INTEGER*4 </B><I>valuator</I><B>, </B><I>delta</I></PRE>
+
+<BLOCKQUOTE><A NAME="A79C115b"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X917c"></A>Description</H3>
+<P><A NAME="E1D701D189ceb"></A>The <B>noise</B> subroutine provides squelch for noisy 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A79P07a">valuators</A>. It prevents a valuator from reporting small fluctuations in movement that are not meaningful. For example, <B>noise(</B><I>valuator</I><B>,5) </B>means that the specified valuator must move at least 5 units before it makes a new queue entry. </P>
+
+<P><A NAME="E1D701D214ceb"></A>A valuator must be queued before the <B>noise</B> subroutine is called.</P>
+
+<P><A NAME="E1D701D239ceb"></A>The default noise value for all valuators other than the timer devices is 1. The default noise value for the timer devices (TIMERx) is 10,000.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f8a"></A><B>Note: </B>This subroutine cannot be used to add to a
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X917e"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X917f"></A><I>valuator</I></TD>
+<TD>  Specifies a single-value input device.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9180"></A><I>delta</I></TD>
+<TD>  Specifies the number of units of change required before the valuator can make a new queue entry.</TD></TR></TABLE>
+
+<H3><A NAME="A64C016623"></A>Implementation Specifics</H3>
+<P><A NAME="E1D701D361ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A143X9190"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C115c"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C115d"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C115e"></A><B>/usr/include/gl/device.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C115f"></A><B>/usr/include/gl/fdevice.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9194"></A>Related Information</H3>
+<P><A NAME="E1D701D497ceb"></A>Assigning an initial value to a valuator with the <A HREF="setvaluator.html#A143X921e"><B>setvaluator</B></A> subroutine.</P>
+
+<P><A NAME="E1D701D522ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/cntrlques.html#cntrlques.html">Controlling Queues and Devices</A>
+ and <!--gl32prgd:--><A HREF="../gl32prgd/keyboardgl.html#keyboardgl.html">Using the Keyboard</A>.</P><hr><center>
+[  <a href="noborder.html">Previous</a>  |
+<a href="noport.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

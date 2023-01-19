@@ -1,0 +1,615 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/drawnurbs.html Mon, 24 Jan 2022 16:28:01 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Drawing NURBS Curves and Surface Patches in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="drawwfcvs.html">Previous</a>  |
+<a href="workcoords.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="drawnurbs.html"></A>Drawing NURBS Curves and Surface Patches</H2>
+
+
+<P><A NAME="INDEX341"></A><A NAME="INDEX342"></A><A NAME="INDEX343"></A><A NAME="INDEX344"></A><A NAME="INDEX345"></A><A NAME="INDEX346"></A><A NAME="INDEX347"></A><A NAME="INDEX348"></A></P>
+
+
+<P><A NAME="A3C0E532690mhay"></A>The section on NURBS curves and surface
+patches includes discussions on the following: </P>
+
+
+<UL><LI><A NAME="A258C01c2e5"></A>NURBS Curves and Surfaces <A HREF="drawnurbs.html#xMJ4140nita">Introduction</A></LI>
+
+
+<LI><A NAME="A40C01265a"></A><A HREF="drawnurbs.html#A300X9e64">B-Spline
+Curves and Surfaces</A> </LI>
+
+
+<LI><A NAME="A40C01265b"></A><A HREF="drawnurbs.html#A300X9e6b">NURBS Interface</A></LI>
+
+
+<LI><A NAME="A40C01265c"></A><A HREF="drawnurbs.html#A300X9e72">NURBS Surface
+Description</A></LI>
+
+
+<LI><A NAME="A40C01265d"></A><A HREF="drawnurbs.html#A300X9e92">Trimming</A></LI>
+
+
+<LI><A NAME="A40C01265e"></A><A HREF="drawnurbs.html#A300X9ec2">Controlling
+Display Properties</A></LI></UL>
+
+
+<H3><A NAME="A264X92f9"></A>List of GL NURBS Curve and Surface Patch Subroutines<A NAME="INDEX349"></A>
+<A NAME="INDEX350"></A> <A NAME="INDEX351"></A> <A NAME="INDEX352"></A>
+<A NAME="INDEX353"></A> <A NAME="INDEX354"></A> <A NAME="INDEX355"></A>
+<A NAME="INDEX356"></A> <A NAME="INDEX357"></A> <A NAME="INDEX358"></A>
+<A NAME="INDEX359"></A> <A NAME="INDEX360"></A> </H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c05"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnsurface.html#A251X9d7">bgnsurface</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Marks the beginning of a NURBS surface definition. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c06"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgntrim.html#A251X98d">bgntrim</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Marks the beginning of a NURBS surface trimming loop. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A47C01359b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnsurface.html#A251X9d7">endsurface</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Marks the end of a NURBS surface definition. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A47C01359c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgntrim.html#A251X98d">endtrim</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Marks the end of a NURBS surface trimming loop. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c07"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getnurbsproperty.html#A252X986e">getnurbsproperty</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the current value of a trimmed NURBS surfaces display property.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c08"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/nurbscurve.html#A255X93ca">nurbscurve</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Controls the shape of a NURBS trimming curve. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c09"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/nurbssurface.html#A252X98b9">nurbssurface</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Controls the shape of an untrimmed NURBS surface. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c0a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pwlcurve.html#A257X9fc">pwlcurve</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Describes a piecewise linear trimming curve for NURBS surfaces. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c0b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setnurbsproperty.html#A257X911b">setnurbsproperty</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the property for display of trimmed NURBS surfaces. </TD></TR></TABLE>
+
+
+<P> </P>
+
+
+<H3><A NAME="xMJ4140nita"></A>NURBS Curves and Surfaces Introduction </H3>
+
+
+<P><A NAME="A3C0E532731mhay"></A>GL provides subroutines that draw parametric
+non-uniform rational B-spline surfaces (NURBS) that can be trimmed with
+NURBS curves and <A HREF="specialterms.html#rEf3b0nita">piecewise
+linear curves</A>. </P>
+
+
+<P><A NAME="A3C0E532753mhay"></A>As you can with most other graphics library
+primitives, you can transform NURBS curves and surfaces with the standard
+GL modeling commands. You must use the standard lighting models when rendering
+NURBS curves and surfaces. </P>
+
+
+<H3><A NAME="A300X9e64"></A>B-Spline Curves and Surfaces<A NAME="INDEX361"></A>
+<A NAME="INDEX362"></A> <A NAME="INDEX363"></A> <A NAME="INDEX364"></A>
+<A NAME="INDEX365"></A> <A NAME="INDEX366"></A> <A NAME="INDEX367"></A>
+<A NAME="INDEX368"></A> <A NAME="INDEX369"></A> <A NAME="INDEX370"></A>
+<A NAME="INDEX371"></A> </H3>
+
+
+<P><A NAME="A3C0E532777mhay"></A>The following <A HREF="figures/gl32p41.jpg">figure</A>
+illustrates a spline with a set of 8 control points. Notice how the spline
+(or curve) is attracted to the control points, but does not necessarily
+pass through any of them. </P>
+
+
+<P><A NAME="A3C0E532800mhay"></A>The figure entitled <A HREF="figures/gl32p42.jpg">Effects
+of Moving a Control Point</A> illustrates the result of moving the sixth
+control point from the left to a series of locations, and the corresponding
+B-splines created as the one control point moves. Notice that moving the
+control point affects only a portion of the curve near the control point.
+This is an important property of B-splines; the influence of the control
+points is local. </P>
+
+
+<P><A NAME="A3C0E532823mhay"></A>In fact, for cubic B-splines, each small
+segment of the curve is controlled by the positions of 4 control points.
+In this example, the curve is actually drawn as 5 small segments. The first
+is controlled by points 1, 2, 3, 4; the second by 2, 3, 4, 5; and so on.</P>
+
+
+<P><A NAME="A3C0E532845mhay"></A>The last segment is controlled by control
+points 5, 6, 7, and 8. When the sixth control point is moved, the only
+parts of the spline affected are those controlled by points 3, 4, 5, 6,
+points 4, 5, 6, 7, and points 5, 6, 7, 8. </P>
+
+
+<P><A NAME="A3C0E532867mhay"></A>In the two preceding examples, the control
+points are evenly spaced in the horizontal direction. This is not necessary,
+as illustrated In the following figure, <A HREF="figures/gl32p43.jpg">Uneven
+Control Point Spacing</A>. </P>
+
+
+<P><A NAME="A3C0E532892mhay"></A>Any number of control points greater than
+4 can be used to define a cubic B-spline. The spline is actually drawn
+in segments, each of which is controlled by successive sets of 4 control
+points. </P>
+
+
+<P><A NAME="A3C0E532915mhay"></A>Trimmed NURBS surfaces are a convenient
+means of representing curving, bent, and cut surfaces. The bends and curves
+of the surface are represented by a polynomial mapping of a 2-D space (the
+s-t plane, or domain) into 3-D space. A rational polynomial mapping can
+be achieved in 3-space if the s-t plane is mapped into projective 4-space.
+Cuts and holes in the surface can be achieved by the use of trimming loops,
+which are closed curves in s-t space. Trimming loops help describe what
+subset of the s-t plane should actually be mapped into 3-space (drawn on
+the monitor). Trimming loops themselves may be specified as NURBS curves
+or as piecewise linear curves. </P>
+
+
+<H3><A NAME="A300X9e6b"></A>NURBS Interface<A NAME="INDEX372"></A> <A NAME="INDEX373"></A>
+<A NAME="INDEX374"></A> <A NAME="INDEX375"></A> <A NAME="INDEX376"></A>
+<A NAME="INDEX377"></A> <A NAME="INDEX378"></A> <A NAME="INDEX379"></A></H3>
+
+
+<P><A NAME="A3C0E532938mhay"></A>To describe an untrimmed NURBS surface,
+you must specify these controlling factors: </P>
+
+
+<UL><LI><A NAME="A300X9e6d"></A>A set of nondecreasing knot values in both
+the s and t directions.</LI>
+
+
+<LI><A NAME="A300X9e6e"></A>The order (which is the degree + 1) of the
+surface in both directions.</LI>
+
+
+<LI><A NAME="A300X9e6f"></A>A rectangular set of control points.</LI></UL>
+
+
+<P><A NAME="A3C0E532965mhay"></A>The control points can be either three-
+or four-dimensional, corresponding respectively to polynomial (sometimes
+called nonrational) and rational surfaces. In three dimensions, the coordinates
+have the form (<I>x</I>, <I>y</I>, <I>z</I>), and in four, (<I>wx</I>,
+<I>wy</I>, <I>wz</I>, <I>w</I>). </P>
+
+
+<P><A NAME="A3C0E532987mhay"></A>Certain dependencies exist between the
+surface orders, the knot counts, and the number of control points; that
+is to say, you specify the surface orders and the knot counts in order
+to obtain the control points. If Os and Ot are the surface orders in the
+s and t directions, and if Ks and Kt are the knot counts in those directions,
+then the control points must form a rectangular array of size (Ks&nbsp;-&nbsp;Os)*(Kt&nbsp;-&nbsp;Ot).</P>
+
+
+<H3><A NAME="A300X9e72"></A>NURBS Surface Description<A NAME="INDEX380"></A>
+<A NAME="INDEX381"></A> <A NAME="INDEX382"></A> <A NAME="INDEX383"></A>
+<A NAME="INDEX384"></A> <A NAME="INDEX385"></A> <A NAME="INDEX386"></A>
+<A NAME="INDEX387"></A> <A NAME="INDEX388"></A> <A NAME="INDEX389"></A>
+<A NAME="INDEX390"></A> </H3>
+
+
+<P><A NAME="A3C0E533010mhay"></A>You define an untrimmed NURBS surface
+with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/nurbssurface.html#A252X98b9">nurbssurface</A></B>
+subroutine as shown in this example program: </P>
+
+
+<PRE><A NAME="A300X9e74"></A>nurbssurface&nbsp;(
+&nbsp;&nbsp;&nbsp;Int32&nbsp;sknot_count,&nbsp;&nbsp;&nbsp;/*&nbsp;of&nbsp;s&nbsp;knots&nbsp;*/
+&nbsp;&nbsp;&nbsp;Float64&nbsp;s_knot[],&nbsp;&nbsp;&nbsp;/*&nbsp;non-decreasing&nbsp;knot&nbsp;values&nbsp;in&nbsp;s&nbsp;*/
+&nbsp;&nbsp;&nbsp;Int32&nbsp;tknot_count,&nbsp;&nbsp;&nbsp;/*&nbsp;number&nbsp;of&nbsp;t&nbsp;knots&nbsp;*/
+&nbsp;&nbsp;&nbsp;Float64&nbsp;t_knot[],&nbsp;&nbsp;&nbsp;/*&nbsp;non-decreasing&nbsp;knot&nbsp;values&nbsp;in&nbsp;t*/
+&nbsp;&nbsp;&nbsp;Int32&nbsp;s_byte_stride,&nbsp;/*&nbsp;offset&nbsp;to&nbsp;next&nbsp;control&nbsp;point&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;in&nbsp;the&nbsp;s&nbsp;direction&nbsp;*/
+&nbsp;&nbsp;&nbsp;Int32&nbsp;t_byte_stride,&nbsp;/*&nbsp;offset&nbsp;to&nbsp;next&nbsp;control&nbsp;point*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;in&nbsp;the&nbsp;t&nbsp;direction&nbsp;*/
+&nbsp;&nbsp;&nbsp;double&nbsp;*ctlarray,&nbsp;&nbsp;&nbsp;/*&nbsp;pointer&nbsp;to&nbsp;first&nbsp;control&nbsp;point&nbsp;*/
+&nbsp;&nbsp;&nbsp;Int32&nbsp;s_order,&nbsp;&nbsp;&nbsp;/*&nbsp;surface&nbsp;order&nbsp;in&nbsp;s&nbsp;parameter&nbsp;*/
+&nbsp;&nbsp;&nbsp;Int32&nbsp;t_order,&nbsp;&nbsp;&nbsp;/*&nbsp;surface&nbsp;order&nbsp;in&nbsp;t&nbsp;parameter&nbsp;*/
+&nbsp;&nbsp;&nbsp;Int32&nbsp;type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;rational&nbsp;or&nbsp;polynomial&nbsp;*/
+)</PRE>
+
+
+<P><A NAME="A3C0E533034mhay"></A>This implementation of NURBS surfaces
+supports up to order 4. Trimming curves can be up to order 8. </P>
+
+
+<P><A NAME="A3C0E533057mhay"></A>Many of the parameters in the preceding
+example are explained in the following: </P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A300X9e85"></A><TT>s_knot[]</TT> </TD>
+
+
+<TD>An array of length <TT>sknot_count</TT></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A300X9e86"></A><TT>t_knot[]</TT> </TD>
+
+
+<TD>An array of length <TT>tknot_count</TT></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A300X9e87"></A><TT>s_order</TT> </TD>
+
+
+<TD>The order of the surface in the s direction </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A300X9e88"></A><TT>t_order</TT> </TD>
+
+
+<TD>The order of the surface in the t direction</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A300X9e89"></A><TT>type</TT> </TD>
+
+
+<TD>One of the constants N_XYZ or N_XYZW (defined in the <B>gl/gl.h</B>
+file) depending on whether the control points are nonrational (3 coordinates),
+or rational (4 coordinates).</TD></TR></TABLE>
+
+
+<P><A NAME="A3C0E533087mhay"></A>The description of control points is somewhat
+unusual. The <I>s_byte_stride</I> parameter indicates the offset (in bytes)
+between successive control points in the s direction, and <I>t_byte_stride</I>
+does the same thing for the t direction. This interface is powerful in
+that the only requirement is that the <I>x</I>, <I>y</I>, <I>z</I>, and
+possibly <I>w</I> coordinates are placed in successive memory locations.
+The data may be a part of a larger data structure, or the points may form
+part of a larger array. For example, suppose the data appears as follows:</P>
+
+
+<PRE><A NAME="A300X9e8b"></A>struct&nbsp;ptdata
+{
+&nbsp;&nbsp;&nbsp;Int32&nbsp;tag1,&nbsp;tag2;
+&nbsp;&nbsp;&nbsp;float&nbsp;x,&nbsp;y,&nbsp;z,&nbsp;w;
+}&nbsp;&nbsp;&nbsp;points[5][6];</PRE>
+
+
+<P><A NAME="A3C0E533110mhay"></A>Then the <I>s_byte_stride</I> parameter
+should be set to <TT>sizeof(struct&nbsp;ptdata)</TT>, and the <I>t_byte_stride</I>
+parameter should be set to <TT>6*sizeof(struct&nbsp;ptdata)</TT>, and the
+<I>ctlarray</I> parameter should be <TT>ptdata</TT> or <TT>&amp;(points[0][0].x)</TT>.</P>
+
+
+<P><A NAME="A3C0E533132mhay"></A>As another example, suppose that the data
+were declared as previously, but only a square of 4 by 4 control points
+is needed from the middle of the array including everything between and
+including <TT>points[1][1]</TT> and <TT>points[4][4]</TT>. In that case,
+the <I>s_byte_stride</I> and <I>t_byte_stride</I> parameters are as previously,
+but the<I> ctlarray</I> parameter is set to <TT>&amp;(points[1][1].x)</TT>.</P>
+
+
+<BLOCKQUOTE><P><A NAME="A300X9e91"></A><B>Note: </B>In both examples, the type is N_XYZW
+because the data includes the homogeneous <I>w</I> coordinate. </P></BLOCKQUOTE>
+
+
+<H3><A NAME="A300X9e92"></A>Trimming<A NAME="INDEX391"></A> <A NAME="INDEX392"></A>
+<A NAME="INDEX393"></A> <A NAME="INDEX394"></A> <A NAME="INDEX395"></A>
+<A NAME="INDEX396"></A> <A NAME="INDEX397"></A> <A NAME="INDEX398"></A>
+<A NAME="INDEX399"></A> <A NAME="INDEX400"></A> <A NAME="INDEX401"></A>
+<A NAME="INDEX402"></A> </H3>
+
+
+<P><A NAME="A3C0E533156mhay"></A>A trimming curve or trimming loop defines
+the visible regions in a NURBS surface. You can define trimming curves
+by the following methods: </P>
+
+
+<UL><LI><A NAME="A151C12297"></A>NURBS curves, using the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/nurbscurve.html#A255X93ca">nurbscurve</A></B>
+subroutine.</LI>
+
+
+<LI><A NAME="A151C12298"></A>Piecewise linear curves, using the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pwlcurve.html#A257X9fc">pwlcurve</A></B>
+subroutine.</LI>
+
+
+<LI><A NAME="A151C12299"></A>Any combination of these two.</LI></UL>
+
+
+<P><A NAME="A3C0E533182mhay"></A>In any case, the trimming curve must be
+closed: that is, the coordinates of the first and last points of the trimming
+curve must be identical (within a tolerance of 10E-6). Because NURBS curves
+normally do not pass through the control point, one way to ensure a closed
+curve is to repeat the coordinates for the control point a number of times
+equal to the order of the curve. For example, quadruple the control points
+for a fourth-order curve if you wish to make the curve pass through that
+point. Another technique is to construct a knot vector that generates positional
+continuity of the endpoints of the curve. </P>
+
+
+<P><A NAME="A3C0E533204mhay"></A>When error checking is activated, the
+software sends error messages and does not display the NURBS surfaces associate
+with the faulty trim data. Likewise, the end points of piecewise linear
+curves and the NURBS curves used to form a compound trimming curve must
+touch. </P>
+
+
+<P><A NAME="A3C0E533227mhay"></A>A NURBS surface is the result of a mathematical
+function that maps domain space to model space. You determine the visible
+parts of the NURBS surface by defining a trim region. The trim region is
+the area of the NURBS surface in which the surface domain is trimmed by
+a closed directed loop (composed of one or more trimming curves) in s-t
+space, where the interior of the loop is defined to be the region to the
+left of the loop. The surface domain can be trimmed by many such loops,
+as long as they describe a consistent region. The loops can neither touch
+nor intersect (except at their end points, which must touch), and their
+orientations must also be consistent. The following <A HREF="figures/gl32p44.jpg">figure</A>
+illustrates a set of 5 loops that describe a valid trimming region. The
+image of the shaded portion is the trimmed NURBS surface. </P>
+
+
+<P><A NAME="A3C0E533250mhay"></A>If no trimming information is provided,
+the entire surface is drawn. If any trimming loops are given, the outer
+loop (or loops) must be counterclockwise. Thus to describe a region that
+consists of the whole surface minus a small circle in the middle, two trimming
+loops must be specified: one running clockwise around the circle, and another
+running counterclockwise around the entire s-t domain. </P>
+
+
+<P><A NAME="A3C0E533272mhay"></A>A trimming loop can be described either
+as piecewise linear curves (a series of s-t coordinates locating successive
+points along a path), or as NURBS curves in the s-t plane. A loop can be
+described either by a single NURBS curve, by a piecewise linear curve,
+or as a series of curves (of either type) joined head to tail. </P>
+
+
+<P><A NAME="A3C0E533295mhay"></A>The general form of the interface to describe
+a trimmed or untrimmed NURBS surface looks like this: </P>
+
+
+<PRE><A NAME="A300X9e99"></A>&nbsp;&nbsp;&nbsp;bgnsurface();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nurbssurface(.&nbsp;.&nbsp;.);
+&nbsp;&nbsp;&nbsp;bgntrim();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nurbscurve(.&nbsp;.&nbsp;.);
+&nbsp;&nbsp;&nbsp;endtrim();
+&nbsp;&nbsp;&nbsp;bgntrim();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pwlcurve(.&nbsp;.&nbsp;.);
+&nbsp;&nbsp;&nbsp;endtrim();
+&nbsp;&nbsp;&nbsp;bgntrim();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nurbscurve(.&nbsp;.&nbsp;.);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pwlcurve(.&nbsp;.&nbsp;.);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nurbscurve(.&nbsp;.&nbsp;.);
+&nbsp;&nbsp;&nbsp;endtrim();
+&nbsp;&nbsp;&nbsp;endsurface();</PRE>
+
+
+<P><A NAME="A3C0E533320mhay"></A>Each trimming loop is surrounded by a
+<B>bgntrim</B> and <B>endtrim</B> subroutine pair. A single curve defines
+the first two trimming loops; the third loop consists of three segments,
+connected head to tail. The last point of each curve segment must touch
+the first point of the next, and the last point of the last segment must
+touch the first point of the first segment. The <B>nurbssurface</B> subroutine
+describes the untrimmed surface and appears before any trimming information.
+The trimmed surface description is bracketed by a <B>bgnsurface</B> and
+an <B>endsurface</B> subroutine pair. </P>
+
+
+<P><A NAME="A3C0E533342mhay"></A>The other subroutines specifically related
+to the properties of NURBS surfaces are <B><!--:libs:gl32tref:--><A HREF="../gl32tref/setnurbsproperty.html#A257X911b">setnurbsproperty</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getnurbsproperty.html#A252X986e">getnurbsproperty</A></B>.
+These subroutines allow the user to set and get drawing tolerances of various
+types. </P>
+
+
+<P><A NAME="A3C0E533364mhay"></A>All the subroutines in the <A HREF="drawnurbs.html#A300X9e99">example</A>,
+except for the <B>getnurbsproperty</B> subroutine, can be used in display
+lists. In this implementation, NURBS surfaces described in display lists
+usually run faster because some of the display computations can be cached
+between display list traversals. </P>
+
+
+<P><A NAME="A3C0E533387mhay"></A>All the parameters are passed with strict
+call-by-value semantics. This means that the system copies all values,
+including trim points and control points, at the time of the call. For
+example, if you have an array containing control points, and you define
+a NURBS surface in a display list using it and then change the value in
+your array, the display list will continue to draw the surface using the
+original control point values. </P>
+
+
+<H4><A NAME="A300X9eab"></A>nurbscurve Subroutine </H4>
+
+
+<P><A NAME="A3C0E533410mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/nurbscurve.html#A255X93ca">nurbscurve</A></B>
+subroutine can be used only within a <B>bgntrim/endtrim</B> loop and in
+curves of up to order 8. </P>
+
+
+<P><A NAME="A3C0E533433mhay"></A>The structure of the parameters is analogous
+to those for the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/nurbssurface.html#A252X98b9">nurbssurface</A></B>
+subroutine, except, of course, there is only one dimension to describe.
+When the <B>nurbscurve </B>subroutine describes a trimming curve, it must
+be two-dimensional, so the only legal values for type are N_STW and N_ST.
+The control point formats for N_STW and N_ST are (<I>ws</I>, <I>wt</I>,
+<I>w</I>) and (<I>s</I>, <I>t</I>), respectively. </P>
+
+
+<P><A NAME="A3C0E533455mhay"></A>If a single curve defines the entire trimming
+loop, both ends of the curve must lie at the same point and must be included
+in the parameter count. </P>
+
+
+<P><A NAME="A3C0E533478mhay"></A>When you trim a NURBS surface with a NURBS
+trimming curve, the software analytically calculates coordinates on the
+surface and their corresponding normal vectors for each point on the tessellated
+NURBS trimming curve. </P>
+
+
+<PRE><A NAME="A300X9ead"></A>nurbscurve&nbsp;(
+Int32&nbsp;knot_count,&nbsp;&nbsp;&nbsp;/*&nbsp;number&nbsp;of&nbsp;knots&nbsp;*/
+Float64&nbsp;knot_list[],&nbsp;&nbsp;&nbsp;/*&nbsp;non-decreasing&nbsp;knot&nbsp;sequence&nbsp;*/
+Int32&nbsp;stride,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;byte&nbsp;offset&nbsp;to&nbsp;next&nbsp;control&nbsp;point&nbsp;*/
+Float32&nbsp;*ctlarray,&nbsp;&nbsp;&nbsp;/*&nbsp;pointer&nbsp;to&nbsp;first&nbsp;control&nbsp;point&nbsp;*/
+Int32&nbsp;order,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;spline&nbsp;order&nbsp;*/
+Int32&nbsp;type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;spline&nbsp;type&nbsp;--&nbsp;2D,&nbsp;3D,&nbsp;rational,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;polynomial&nbsp;*/
+)</PRE>
+
+
+<H4><A NAME="A300X9eb9"></A>pwlcurve Subroutine </H4>
+
+
+<P><A NAME="A3C0E533505mhay"></A>To define a piecewise linear trimming
+curve, use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pwlcurve.html#A257X9fc">pwlcurve</A></B>
+subroutine. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A68C017194"></A>void&nbsp;pwlcurve(Int32&nbsp;count,&nbsp;Float64&nbsp;*data_array,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Int32&nbsp;stride,&nbsp;Int32&nbsp;type)</PRE>
+
+
+<P><A NAME="A3C0E533528mhay"></A>The trimming curve in the s-t plane is
+drawn by connecting each point in the <I>data_array</I> parameter to the
+next. It is as important to increment the trim point count as it is to
+duplicate the last point. In other words, although the last and first points
+are identical, they must be specified and counted twice. </P>
+
+
+<H3><A NAME="A300X9ec2"></A>Controlling Display Properties<A NAME="INDEX403"></A>
+<A NAME="INDEX404"></A> <A NAME="INDEX405"></A> </H3>
+
+
+<P><A NAME="A3C0E533551mhay"></A>The following subroutines control NURBS
+curves and surfaces display properties. </P>
+
+
+<H4><A NAME="A66C016bf4"></A>setnurbsproperty and getnurbsproperty Subroutines</H4>
+
+
+<P><A NAME="A3C0E533574mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/setnurbsproperty.html#A257X911b">setnurbsproperty</A></B>
+subroutine changes various properties that control the rendering of NURBS
+curves and surfaces. The call uses this format: </P>
+
+
+<PRE><A NAME="A300X9ec4"></A>void&nbsp;setnurbsproperty(Int32&nbsp;property,&nbsp;Float32&nbsp;value)</PRE>
+
+
+<P><A NAME="A3C0E533598mhay"></A>A list of properties is defined in the
+<B>/usr/include/gl/gl.h</B> file and includes N_PIXEL_TOLERANCE and N_ERRORCHECKING.
+Each has some reasonable default value but can be changed to affect the
+accuracy of some part of the rendering. You can get the current value of
+any of these properties with a call to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getnurbsproperty.html#A252X986e">getnurbsproperty</A></B>
+subroutine. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A68C017195"></A>void&nbsp;getnurbsproperty(Int32&nbsp;property,&nbsp;Float32&nbsp;*value)</PRE>
+
+
+<P><A NAME="A3C0E533620mhay"></A>For maximum generality, express the value
+of a property in floating point. For some properties, only integer values
+make sense, but you must still pass them in floating-point form; for example,
+1.0 means TRUE. </P>
+
+
+<P><A NAME="A3C0E533642mhay"></A>The values of the properties are global
+to a process, and each call to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/setnurbsproperty.html#A257X911b">setnurbsproperty</A></B>
+subroutine changes this global state. </P>
+
+
+<P><A NAME="A3C0E533664mhay"></A>The properties have the following meanings:</P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A300X9ecd"></A>N_PIXEL_TOLERANCE </TD>
+
+
+<TD>A value representing how accurately a NURBS surface is to be rendered.
+Smaller values indicate more accuracy.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A300X9ece"></A>ERRORCHECKING </TD>
+
+
+<TD>If TRUE, performs additional error checking.</TD></TR></TABLE>
+
+
+
+
+<hr><center>
+[  <a href="drawwfcvs.html">Previous</a>  |
+<a href="workcoords.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/drawnurbs.html Mon, 24 Jan 2022 16:28:02 GMT -->
+</HTML>
+

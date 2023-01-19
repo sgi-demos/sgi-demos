@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/SGIfiletrans.html Mon, 24 Jan 2022 16:28:21 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>SGI GL File Transfer Compiling and Linking
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="portSGIapps.html">Previous</a>  |
+<a href="SGIperformance.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="SGIfiletrans.html"></A>SGI GL File Transfer Compiling and Linking</H2>
+<A NAME="INDEX980" REL="I1" TITLE="GL environment"></A>
+<A NAME="INDEX981" REL="I2" TITLE="SGI GL file transfer compiling, &amp; linking"></A>
+<P><A NAME="A3C0F27A585mhay"></A>The Silicon Graphics workstations offered since1990 include: Personal IRIS, GT Graphics, POWERSeries 4D/200, and POWERSeries 4D/300. Data in each pair of bytes is restored in different order on these platforms than the order data is restored on your system. There are two ways to overcome this problem while transferring files:</P>
+
+<OL><LI><A NAME="C1C7A5B901chuc"></A>Receive original archive files from the source platform, and swap bytes on the destination platform: 
+
+<PRE><A NAME="C1C7A5B975chuc"></A>dd if=/dev/rmt0 conv=swab | tar -xf -</PRE></LI>
+
+<LI><A NAME="C1C7A5C052chuc"></A>Use the nonswap tape device when writing tapes on SGI systems. This will write a QIC 150 format tape on an IRIS machine, which then can be read by your system.
+
+<PRE><A NAME="C1C7A5C123chuc"></A>tar -cf/dev/rmt0/tps0d7ns</PRE></LI></OL>
+
+<P><A NAME="A3C0F27A601mhay"></A>To code a C program in your GL environment, the related GL include files should be specified in the program.</P>
+<PRE><A NAME="C1C7A5C268chuc"></A>#include &lt;gl/gl.h></PRE>
+<PRE><A NAME="C1C7A5C339chuc"></A>#include &lt;gl.device.h></PRE>
+
+<P><A NAME="A3C0F27A623mhay"></A>Application programs from a source platform usually invoke unsupported and obsolete subroutines. The <B>glport.h</B> file is provided for those who do not wish to clean up these old interfaces. Include the following statements in the application to declare these old subroutines void:</P>
+<PRE><A NAME="C1C7A5C491chuc"></A>#define _GL_PORT_C_ 1</PRE>
+<PRE><A NAME="C1C7A5C561chuc"></A>#include &lt;gl/glport.h></PRE>
+
+<P><A NAME="A3C0F27A646mhay"></A><B>On SGI platforms, </B>GL is shipped in two libraries: <B>libgl.a</B> and <B>libgl_s.a</B>. Linking to the first library results in a static link to GKL subroutines: the code for the GL routines is placed directly in the application binary, swelling its size considerably. The second library is a shared library. Linking to it does not pull GL library code into the application binary; rather, the shared library is dynamically loaded when the application is run. This results in a smaller application binary and in decreased memory usage when multiple GL applications are running simultaneously.</P>
+
+<P><A NAME="A3C0F27A666mhay"></A>On your platform, there is only one library, <B>libgl.a</B>. This library is a shared library by default. One must not link a GL application nonshared on your equipment. On newer SGI GL releases, GL applications must link to both <B>libgl.a</B> and <B>libX11.a</B>, even though X11 is not being used directly. This is not required on your platform; such linkage is performed automatically.</P>
+
+<P><A NAME="A3C0F27A686mhay"></A>The following GL subroutines are no longer supported. The functions that they formerly accomplished are not applicable to the current system. They are considered obsolete and should not be used in new code development. As an aid to portability, stubs for these subroutines can be found in the <B>/usr/lpp/gl/examples/gifts/glports.h</B> file.</P>
+
+<H3><A NAME="C1C7A5C788chuc"></A>Undefined Functions</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5C857chuc"></A><B>dbtext</B></TD>
+<TD>  <B>endpupmode</B></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5C926chuc"></A><B>pupmode</B></TD>
+<TD>  <B>setfastcom </B></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5C993chuc"></A><B>setslowcom</B></TD>
+<TD>  </TD></TR></TABLE>
+
+<H3><A NAME="C1C7A5D064chuc"></A>Redefined Functions</H3>
+<PRE><A NAME="C1C7A5D138chuc"></A><B>#define getdepth lgetdepth  </B></PRE>
+<PRE><A NAME="C1C7A5D210chuc"></A><B>#define RGBrange IRGBrange</B></PRE>
+<PRE><A NAME="C1C7A5D281chuc"></A><B>#define setdepth lsetdepth </B></PRE>
+
+<H3><A NAME="C1C7A5D358chuc"></A>Functions Returning Only One Value</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5D426chuc"></A><B>endfeedback</B></TD>
+<TD>  0   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5D496chuc"></A><B>gethitcode</B></TD>
+<TD>  0   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5D565chuc"></A><B>ismex</B></TD>
+<TD>  TRUE     </TD></TR></TABLE>
+
+<H3><A NAME="C1C7A5D641chuc"></A>Functions Having Null Definitions</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5D711chuc"></A><B>clearhitcode</B></TD>
+<TD>  devport  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5D783chuc"></A><B>feedback</B></TD>
+<TD>  foreground   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5D853chuc"></A><B>getlsbackup</B></TD>
+<TD>  getpor   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5D922chuc"></A><B>getport</B></TD>
+<TD>  getresetls  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5D990chuc"></A><B>gettp</B></TD>
+<TD>  gewrite   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5E062chuc"></A><B>gRGBcursor</B></TD>
+<TD>  imakebackground  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5E132chuc"></A><B>lsbackup</B></TD>
+<TD>  pagecolor  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5E206chuc"></A><B>pagewritemask</B></TD>
+<TD>  passthrough   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5E275chuc"></A><B>resetls</B></TD>
+<TD>  RGBcursor   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5E345chuc"></A><B>setshade</B></TD>
+<TD>  shaderange   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5E416chuc"></A><B>textcolor</B></TD>
+<TD>  textinit  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5E490chuc"></A> <B>textwritemask</B></TD>
+<TD>  winattach   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5E558chuc"></A><B>xfpt</B></TD>
+<TD>  xfpti   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5E625chuc"></A><B>xfpts</B></TD>
+<TD>  xfpt2   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5E693chuc"></A><B>xfpt2i</B></TD>
+<TD>  xfpt2s   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5E761chuc"></A><B>xfpt4s</B></TD>
+<TD>  xfpt4i   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5E827chuc"></A><B>xfpt4</B>     </TD>
+<TD>  </TD></TR></TABLE>
+
+<H3><A NAME="C1C7A5E904chuc"></A>Functions That Are Not Defined in libgl.a</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5E970chuc"></A><B>dglopen</B>   </TD>
+<TD>  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5F036chuc"></A><B>dglclose</B>   </TD>
+<TD>  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5F113chuc"></A><B>callfunc</B></TD>
+<TD>  (define as null in <B>glport.h</B>)   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5F180chuc"></A><B>e_callfunc</B>   </TD>
+<TD>  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5F256chuc"></A><B>setvideo</B></TD>
+<TD>  (define as null in <B>glport.h</B>)   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5F331chuc"></A><B>getvideo</B></TD>
+<TD>  (define as null in <B>glport.h</B>)   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5F406chuc"></A><B>setmonitor</B></TD>
+<TD>  (define as null in <B>glport.h</B>)   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5F480chuc"></A><B>getmonitor</B></TD>
+<TD>  (returns HZ60)   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C7A5F554chuc"></A><B>getothermonitor</B></TD>
+<TD>  (returns HZ60)   </TD></TR></TABLE><hr><center>
+[  <a href="portSGIapps.html">Previous</a>  |
+<a href="SGIperformance.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/SGIfiletrans.html Mon, 24 Jan 2022 16:28:21 GMT -->
+</HTML>
+
+

@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>qtest Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="qreset.html">Previous</a>  |
+<a href="rcrv.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9cd"></A>qtest Subroutine</H2>
+<A NAME="INDEX1538" REL="I1" TITLE="qtest subroutine (GL)"></A>
+<A NAME="INDEX1539" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1540" REL="I2" TITLE="queue"></A>
+<A NAME="INDEX1541" REL="I3" TITLE="checking event queue contents"></A>
+<A NAME="INDEX1542" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1543" REL="I2" TITLE="queue and device"></A>
+<A NAME="INDEX1544" REL="I3" TITLE="qtest"></A>
+
+<H3><A NAME="A143X9cf"></A>Purpose</H3>
+<P><A NAME="E1D728D903ceb"></A>Checks the contents of the event queue.</P>
+
+<H3><A NAME="A79C1186"></A>Libraries</H3>
+<P><A NAME="E1D728D942ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D728D966ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9d3"></A>C Syntax</H3>
+<PRE><A NAME="A143X9d4"></A><B>Int32 qtest(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010c72"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c73"></A><B>INTEGER*4 FUNCTION QTEST</B></PRE>
+
+<H3><A NAME="A143X9d5"></A>Description</H3>
+<P><A NAME="E1D728E075ceb"></A>The<B> qtest</B> subroutine returns zero if the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0484">event queue</A> is empty. Otherwise, it returns the device number of the first entry. The queue remains unchanged.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f84"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A215X988e"></A>Return Value</H3>
+<P><A NAME="E1D728E136ceb"></A>The device number of the first entry (0 if the event queue is empty).</P>
+
+<H3><A NAME="A30C011068"></A>Example</H3>
+<P><A NAME="E1D728E177ceb"></A>The example C language program <A HREF="scrn_rotate_c.html#A16C0c92f"><B>scrn_rotate.c</B></A> uses the <B>qtest</B> subroutine to check if there is any input from the queued devices. </P>
+
+<H3><A NAME="A64C01661d"></A>Implementation Specifics</H3>
+<P><A NAME="E1D728E220ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A143X9e9"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1189"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C118a"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C118b"></A><B>/usr/include/gl/device.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C118c"></A><B>/usr/include/gl/fdevice.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9ed"></A>Related Information</H3>
+<P><A NAME="E1D728E356ceb"></A>Creating an event queue entry with the <A HREF="qenter.html#A143X9152"><B>qenter</B></A> subroutine.</P>
+
+<P><A NAME="E1D728E382ceb"></A>Reading the first entry in the event queue with the <A HREF="qread.html#A143X989"><B>qread</B></A> subroutine.</P>
+
+<P><A NAME="E1D728E407ceb"></A>Emptying the event queue with the <A HREF="qreset.html#A143X9ab"><B>qreset</B></A> subroutine.</P>
+
+<P><A NAME="E1D728E432ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and <!--gl32prgd:--><A HREF="../gl32prgd/cntrlques.html#cntrlques.html">Controlling Queues and Devices</A>.</P><hr><center>
+[  <a href="qreset.html">Previous</a>  |
+<a href="rcrv.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

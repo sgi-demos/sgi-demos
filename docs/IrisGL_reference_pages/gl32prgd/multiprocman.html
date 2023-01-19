@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/multiprocman.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>Multiple Process Management
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="progconsider.html">Previous</a>  |
+<a href="linkncompil.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="multiprocman.html"></A>Multiple Process Management</H2>
+<P><A NAME="A3C0F110534mhay"></A>Special considerations apply to the use of the <B>fork</B>, <B>vfork</B>, and other subroutines and to rendering processes used in conjunction with asynchronous handlers.</P>
+
+<H3><A NAME="A42664C499ttay"></A>Using the fork, execl, execv and Other Subroutines</H3>
+<P><A NAME="A3C0F110556mhay"></A>When using the <B>fork</B> or <B>vfork</B> subroutine with an Enhanced X-Windows, X Toolkit, or AIXwindows application, open a separate display connection (socket) with the <B>XOpenDisplay</B> or <B>XtOpenDisplay</B> subroutines for the forked process. The child process should never use the same display connection as the parent. Display connections are embodied with sockets and sockets are inherited by the child process. Any attempt to have multiple processes writing to the same display connection results in the random interleaving of X protocol packets at the word level. The resulting data written to the socket is generally invalid in the form of undefined X protocol packets that cannot be interpreted by the X server.</P>
+
+<P><A NAME="A3C0F110577mhay"></A>The <B>exec</B> and <B>fork</B> subroutines may be used within GL with some restrictions. The GL library manipulates a complex collection of resources. State information is stored in many places: in global (non-exported) variables in the process .data segment; in the X server; in the kernel, as part of the process table; and in the graphics hardware. Children created with the <B>fork</B> subroutine inherit (duplicate copies of) some, but not all of this state information. For example, the <B>fork</B> subroutine does not cause the X server to treat the child process as if it were a new client. In fact, the X server is ignorant of the fact that a fork has taken place. Similarly, the <B>exec</B> routine will overlay the old process image (in particular, wiping out values stored in global variables), but does not reset state contained in the X server or the kernel. (For example, the <B>exec</B> routine does not automatically close files or sockets.)</P>
+
+<H4><A NAME="A42664D533ttay"></A>Current Restrictions</H4>
+<P><A NAME="A3C0F110597mhay"></A>The following restrictions apply to the use of the <B>exec</B> and <B>fork</B> subroutines within a GL application:</P>
+
+<UL><LI><A NAME="A5B2643114vbia"></A>If the <B>exec</B> subroutine is used alone (that is, not immediately preceded by a call to the <B>fork</B> subroutine), and the new process image or any future overlays need to use GL, then the GL <B>gexit</B> subroutine must be called before the <B>exec</B> subroutine. This is required to reset process attributes; if this is not done, GL initialization performed by the new process image will be unsuccessful.</LI>
+
+<LI><A NAME="A5B2643386vbia"></A>If the <B>fork</B> subroutine is used alone (that is, not immediately followed by the <B>exec</B> subroutine) then the child process must not attempt to make any additional GL subroutine calls. Drawing by the child process may hang the graphics adapter or the X server, or may cause unpredictable results and place the system in an unpredictable state.
+
+
+<P><A NAME="A5B2643665vbia"></A>In particular, the child process should not call the <B>gexit</B> subroutine. Because of a known implementation problem, the <B>gexit</B> subroutine adversely affects the parent process and the GL subroutine call in the child process.</P></LI>
+
+<LI><A NAME="A5B2643954vbia"></A>If the <B>fork</B> subroutine is used alone (that is, without a trailing <B>exec</B> subroutine) and both the child and the parent processes use GL, then the <B>gexit</B> subroutine must be called before the <B>fork</B> subroutine.</LI>
+
+<LI><A NAME="A5B2644188vbia"></A>If the <B>fork</B> subroutine is followed by an <B>exec</B> subroutine, the procedures for gracefully resetting the system depend on whether the <B>exec</B> subroutine occurs in the parent or in the child.
+
+
+<P><A NAME="A5B2644400vbia"></A>If the <B>exec</B> subroutine is performed in the parent, then a <B>gexit</B> subroutine must precede the <B>exec</B> subroutine.</P>
+
+
+
+
+<P><A NAME="A5B2644656vbia"></A>If the <B>exec</B> subroutine is performed by the child, then calling the <B>gexit</B> routine can be avoided, but at a risk. Failing to call the <B>gexit</B> subroutine leaves connections and shared memory segments open; this will prevent a process from performing more than nine consecutive forks in a row.</P></LI>
+
+<LI><A NAME="A5B2645099vbia"></A>For programs that end normally (for example, by using the <B>exit</B> subroutine), the <B>gexit</B> subroutine should be called first. In some circumstances, failure to do so can leave a process in the zombie state. Zombies are most likely to occur if the exiting process has child processes that are using GL subroutine calls.</LI></UL>
+
+
+<H3><A NAME="A42664D979ttay"></A>Using Signals and Other Asynchronous Event Systems</H3>
+<P><A NAME="A3C0F110628mhay"></A>GL is not designed to support rendering in a re-entrant fashion from within the same process. In particular, GL rendering from asynchronous handlers, such as signal handlers, is not recommended.</P>
+
+
+<P><A NAME="A3C0F110649mhay"></A>All GL rendering routines are interruptable; they do not mask any signals. GL rendering routines are particularly vulnerable when communicating with the graphics adapter. Adapter commands may be many words in length but must arrive in atomic units; adapter commands with embedded miscellaneous text or symbols may hang the adapter. If a GL routine is interrupted while writing to the adapter, and the interrupting routine also writes to the adapter, the resulting adapter command is embedded in the previously started data stream, thus corrupting it.</P>
+
+<P><A NAME="A3C0F110669mhay"></A>If the application performs rendering from within a signal handler, then the application must protect itself. This can be accomplished by masking all relevant signals before beginning rendering and unmasking them after completion. The application must mask all occurrences of rendering, whether within the signal handler or within the main program. Failure to do so risks corruption of the data stream and a hang of the graphic adapter.</P>
+
+<hr><center>
+[  <a href="progconsider.html">Previous</a>  |
+<a href="linkncompil.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/multiprocman.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+
+

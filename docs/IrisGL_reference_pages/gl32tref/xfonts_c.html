@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>xfonts.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="worms_c.html">Previous</a>  |
+<a href="zbuffer1_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="Up45120nita"></A>xfonts.c Example C Language Program
+</H2>
+<A NAME="INDEX2508" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2509" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2510" REL="I3" TITLE="text"></A>
+<A NAME="INDEX2511" REL="I1" TITLE="xfonts.c example program (GL)"></A>
+<A NAME="INDEX2512" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2513" REL="I2" TITLE="text"></A>
+<A NAME="INDEX2514" REL="I3" TITLE="Enhanced X-Windows fonts"></A>
+<A NAME="INDEX2515" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2516" REL="I2" TITLE="fonts"></A>
+<A NAME="INDEX2517" REL="I3" TITLE="Windows"></A>
+<PRE><A NAME="A64EAC1882ttay"></A>/*
+xfonts.c</PRE>
+<PRE><A NAME="A64EAC2053ttay"></A>This program demonstrates how to use Enhanced X-Windows
+fonts in a
+GL application
+*/</PRE>
+<PRE><A NAME="A64EAC2217ttay"></A>#include &lt;gl/gl.h>
+#include &lt;X11/Xlib.h>
+#include &lt;stdio.h></PRE>
+<PRE><A NAME="A64EAC2467ttay"></A>main()
+{
+  Int32 wid;                   /* the GL window ID */
+  Display *dpy;                /* structure describing X session*/
+  int num_fonts;               /* number of fonts X server found */
+  char **fontlist;             /* array of strings
+                                  (available font names) */</PRE>
+<PRE><A NAME="A64EAC2637ttay"></A>  prefsize (150,150);
+  wid = winopen ("xfonts");
+  color (BLACK);
+  clear();</PRE>
+<PRE><A NAME="A64EAC2818ttay"></A>  /* get the connection to X */
+  /* Normally, the default display is unix:0 */
+  dpy = XOpenDisplay ("unix:0");</PRE>
+<PRE><A NAME="A64EAC3020ttay"></A>   /* Get the names of all fonts that might be Helvetica fonts */
+   /* (have "helv" appearing in their font name) */
+  fontlist = XListFonts (dpy, "*helv*", 1000, &amp;num_fonts);</PRE>
+<PRE><A NAME="A64EAC3230ttay"></A>   /* other useful X font subroutines are:
+    * XListFonts
+    * XListFontsWithInfo
+    * XFreeFontNames
+    * XFreeFontInfo
+    * XSetFontPath
+    * XGetFontPath
+    * XFreeFontPath
+    */</PRE>
+<PRE><A NAME="A64EAC3435ttay"></A>  /* We have decided, by some criteria, to use the fifth
+   * available Helvetica font (assuming that at least five
+   * Helvetica fonts are found). We will give it an id of 433.
+   */</PRE>
+<PRE><A NAME="A64EAC3614ttay"></A>  if ( num_fonts &lt; 4 ) {
+    fprintf (stderr,"Not enough fonts found!!!\n");
+    exit (-1);
+  }</PRE>
+<PRE><A NAME="A64EAC3766ttay"></A>  loadXfont (433, fontlist[4]);</PRE>
+<PRE><A NAME="A64EAC3932ttay"></A>   /* get rid of the font name list */
+  XFreeFontNames (fontlist);</PRE>
+<PRE><A NAME="A64EAC4130ttay"></A>   /* we want to use this font to draw a string */
+  font (433);   /* do it */
+  cmov2 (43.0, 56.0);
+  color (RED);
+  charstr ("Hello, World");   
+  sleep (5);
+}</PRE>
+<PRE><A NAME="A64EAC4302ttay"></A>/*
+  Changes: 
+     -  from wid = winopen "xfonts"); to wid = winopen ("xfonts");
+*/</PRE>
+
+<H3><A NAME="A201C117f"></A>Related Information</H3>
+<P><A NAME="E1D792B137ceb"></A>The <A HREF="loadXfont.html#vUO390nita"><B>loadXfont</B></A> subroutine<A HREF="vUO390nita.html" REL="PAGENUM"></A> loads an Enhanced X-Windows font into the font table.</P>
+
+<P><A NAME="E1D792B164ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/textchars.html#Qi62180nita">Fonts</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I> describes font assignment in GL, and discusses relevant subroutines.</P>
+
+<hr><center>
+[  <a href="worms_c.html">Previous</a>  |
+<a href="zbuffer1_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

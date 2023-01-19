@@ -1,0 +1,2946 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/glsubmodal.html Mon, 24 Jan 2022 16:28:21 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>GL Subroutine Modality
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="glsubsS-Z.html">Previous</a>  |
+<a href="descrtable.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+<H1><A NAME="glsubmodal.html"></A>Appendix B. GL Subroutine Modality </H1>
+
+
+<P><A NAME="A3C0F1ED517mhay"></A>The following keywords from the subroutine
+modality list express applicable modalities for each GL subroutine. </P>
+
+
+<TABLE><TR VALIGN="TOP" ALIGN="LEFT"><TH NOWRAP="NOWRAP">Keyword</TH>
+
+
+<TH>Indicates that the subroutine</TH></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="XTN180nita"></A><B>display list</B> </TD>
+
+
+<TD>Can be used inside a display list (object).</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="BUN1360nita"></A><B>current window</B> </TD>
+
+
+<TD>Affects only the current window.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="D5N1230nita"></A><B>push</B> </TD>
+
+
+<TD>Is affected by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pushattributes.html#Thx220marj">pushattributes</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/popattributes.html#Vmx2140marj">popattributes</A></B>
+subroutines.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="V6N190nita"></A><B>bgn</B> </TD>
+
+
+<TD>Can be invoked between <B>bgn...</B>, <B>end...</B> subroutine calls.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="RpN11c0nita"></A><B>winopen</B> </TD>
+
+
+<TD>Applies to next <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winopen.html#A142X91549">winopen</A></B>
+or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winconstraints.html#A142X914c1">winconstraints</A></B>
+subroutine call.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="EBN11f0nita"></A><B>gconfig</B> </TD>
+
+
+<TD>Only takes effect when the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gconfig.html#hS4260nita">gconfig</A></B>
+subroutine is called.</TD></TR></TABLE>
+
+
+<TABLE><CAPTION></CAPTION>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TH NOWRAP="NOWRAP">Name</TH>
+
+
+<TH>Effective Modality</TH></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C180f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/addtopup.html#A142X9109d">addtopup</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1810"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/arc.html#tEp310nita">arc</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1811"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/arcf.html#AJp60nita">arcf</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD><A NAME="A86C1812"></A> </TD>
+
+
+<TD NOWRAP="NOWRAP" COLSPAN="2"><B><!--:libs:gl32tref:--><A HREF="../gl32tref/attachcursor.html">attachcursor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1813"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/backbuffer.html#A145X94a">backbuffer</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1814"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/backface.html#A143X974b">backface</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1815"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bbox2.html#A142X922e">bbox2</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A> (only)</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1816"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnclosedline.html#A144X960c">bgnclosedline</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1817"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnline.html#A144X962e">bgnline</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1818"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpoint.html#A144X9650">bgnpoint</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1819"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpolygon.html#A144X9672">bgnpolygon</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C181a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnsurface.html#A251X9d7">bgnsurface</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C181b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgntmesh.html#A144X9694">bgntmesh</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C181c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgntrim.html#A251X98d">bgntrim</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C181d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/blankscreen.html#A144X9128">blankscreen</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C181e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/blanktime.html#A144X9178">blanktime</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C181f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/blendfunction.html#A143X9240">blendfunction</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1820"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/blink.html#A146X937c">blink</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1821"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/blkqread.html#A143X91fc">blkqread</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1822"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/c.html#A143X9262">c</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A>, <A HREF="glsubmodal.html#V6N190nita">bgn</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1823"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/callobj.html#A142X91c8">callobj</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1824"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/charstr.html#A143X9cfb">charstr</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1825"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/chunksize.html#A142X9c38">chunksize</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1826"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/circ.html#ZJpnita">circ</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1827"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/circf.html#sJp120nita">circf</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1828"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/clear.html#cEH1160marj">clear</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1829"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/clkoff.html#A213X9112de"><B>clkon</B>/<B>clkoff</B></A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C182a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/closeobj.html#A142X915b">closeobj</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C182b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/cmode.html#A146X93d6">cmode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#EBN11f0nita">gconfig</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C182c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/cmov.html#A143X9d1d">cmov</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C182d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/color.html#A146X9429">color</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A>, <A HREF="glsubmodal.html#V6N190nita">bgn</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C182e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/color.html#A146X9429">colorf</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A>, <A HREF="glsubmodal.html#V6N190nita">bgn</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C182f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/compactify.html#A142X9c5a">compactify</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1830"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/concave.html#HXf320marj">concave</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1831"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/cpack.html#A143X9284">cpack</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A>, <A HREF="glsubmodal.html#V6N190nita">bgn</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1832"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/crv.html#ZMS220marj">crv</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1833"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/crvn.html#ESS22c0marj">crvn</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1834"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/curorigin.html#A150X9398">curorigin</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1835"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/curson.html#ru1280nita"><B>cursoff</B>/<B>curson</B></A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1836"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/curstype.html#A150X93ee">curstype</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1837"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/curvebasis.html#sTS23a0marj">curvebasis</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1838"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/curveit.html#LPS22c0marj">curveit</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1839"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/curveprecision.html#aUS2120marj">curveprecision</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C183a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/cyclemap.html#A143X92a6">cyclemap</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C183b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/czclear.html#A143X92c8">czclear</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C183c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/defbasis.html#A150X930">defbasis</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C183d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/defcursor.html#A150X9444">defcursor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C183e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/deflinestyle.html#A143X9b1f">deflinestyle</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C183f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/defpattern.html#A143X9b41">defpattern</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1840"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/defpup.html#A142X910bf">defpup</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1841"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/defrasterfont.html#A143X9d3f">defrasterfont</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1842"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/delobj.html#A142X940a">delobj</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1843"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/deltag.html#A1N61210marj">deltag</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1844"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/depthcue.html#PNK22d0marj">depthcue</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1845"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/dopup.html#A142X910e1">dopup</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1846"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/doublebuffer.html#A145X91a7">doublebuffer</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#EBN11f0nita">gconfig</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1847"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/draw.html#EYf2e0marj">draw</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1848"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/drawmode.html#A143X9460">drawmode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1849"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/editobj.html#A142X9360">editobj</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C184a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnclosedline.html#A144X960c">endclosedline</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C184b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/endfullscrn.html#laa350marj">endfullscrn</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C184c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnline.html#A144X962e">endline</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C184d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/endpick.html#A213X91185b">endpick</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C184e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpoint.html#A144X9650">endpoint</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C184f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpolygon.html#A144X9672">endpolygon</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1850"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/endselect.html#A213X91190c">endselect</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1851"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnsurface.html#A251X9d7">endsurface</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1852"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgntmesh.html#A144X9694">endtmesh</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1853"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgntrim.html#A251X98d">endtrim</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1854"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/font.html#A143X9d61">font</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1855"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/freepup.html#A142X91103">freepup</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1856"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/frontbuffer.html#A145X9a0">frontbuffer</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1857"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/frontface.html#A74C12">frontface</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1858"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/fudge.html#A142X917a6">fudge</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#RpN11c0nita">winopen</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1859"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/fullscrn.html#Qga140marj">fullscrn</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C185a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/gammaramp.html#Kz4nita">gammaramp</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C185b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/gbegin.html#JS4380nita">gbegin</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C185c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/gconfig.html#hS4260nita">gconfig</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C185d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/genobj.html#A142X91ea">genobj</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C185e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/gentag.html#A48x2120marj">gentag</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C185f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getbackface.html#A143X976d">getbackface</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1860"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getbuffer.html#A145X9f6">getbuffer</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1861"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getbutton.html#A143X91">getbutton</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1862"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getcmmode.html#A146X948e">getcmmode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1863"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getcolor.html#A146X924b">getcolor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1864"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getcpos.html#A144X9364">getcpos</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1865"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getcursor.html#sP1160nita">getcursor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1866"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getdcm.html#A5OK230marj">getdcm</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1867"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getdescender.html#A144X9386">getdescender</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1868"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getdev.html#A143X923">getdev</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1869"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getdisplaymode.html#A145X9206">getdisplaymode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C186a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getdrawmode.html#A143X9482">getdrawmode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C186b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getfont.html#A144X93a8">getfont</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A141C11620"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getfontencoding.html#Az7960nita">getfontencoding</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A141C11621"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getfonttype.html#Y89340nita">getfonttype</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C186c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getgdesc.html#t9311e0marj">getgdesc</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C186d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getgpos.html#CZf60marj">getgpos</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C186e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getheight.html#A144X93ca">getheight</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C186f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getlsrepeat.html#A143X9ba7">getlsrepeat</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1870"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getlstyle.html#A143X9bc9">getlstyle</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1871"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getlwidth.html#A213X91299c">getlwidth</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1872"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmap.html#A146X94e2">getmap</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1873"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmatrix.html#A144X940e">getmatrix</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1874"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmcolor.html#nXI1100marj">getmcolor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1875"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmcolors.html#UI2f0marj">getmcolors</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1876"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmmode.html#idZ2e0marj">getmmode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1877"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getnurbsproperty.html#A252X986e">getnurbsproperty</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1878"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getopenobj.html#A142X9382">getopenobj</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1879"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getorigin.html#A142X91f76">getorigin</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C187a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getpattern.html#A143X9b63">getpattern</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C187b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getplanes.html#A143X94a4">getplanes</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C187c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getscrmask.html#A213X911c47">getscrmask</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C187d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getsize.html#X513200marj">getsize</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C187e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getsm.html#A143X9a53">getsm</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C187f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getvaluator.html#A143X945">getvaluator</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1880"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getviewport.html#A142X9107">getviewport</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1881"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getwritemask.html#A143X94c6">getwritemask</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A115C1104e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getXdpy.html#A114C13c">getXdpy</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A115C1104f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getXdpy.html#A114C13c">getXwid</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1882"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getzbuffer.html#A9SR350marj">getzbuffer</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1883"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/gexit.html#xT41a0nita">gexit</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1884"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/ginit.html#LDg21c0marj">ginit</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1885"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/greset.html#xW42e0nita">greset</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1886"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/gRGBcolor.html#ESL13a0marj">gRGBcolor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1887"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/gRGBmask.html#A143X94e8">gRGBmask</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1888"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/gselect.html#A213X9118b2">gselect</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1889"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/gsync.html#A4h41120marj">gsync</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C188a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/gversion.html#A237X9480e">gversion</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C188b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/iconsize.html#LA13e0marj">iconsize</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#RpN11c0nita">winopen</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C188c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/icontitle.html#sH13240marj">icontitle</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#RpN11c0nita">winopen</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C188d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/initnames.html#YlD250marj">initnames</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C188e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/isobj.html#A142X920c">isobj</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C188f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/isqueued.html#A143X91da">isqueued</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1890"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/istag.html#JXw220marj">istag</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1891"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/keepaspect.html#A142X91896">keepaspect</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#RpN11c0nita">winopen</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1892"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/lampoff.html#A213X9113bc"><B>lampon</B>/<B>lampoff</B></A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1893"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/lgetdepth.html#qTc320marj">lgetdepth</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1894"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/linesmooth.html#Ew1f0marj">linesmooth</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1895"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/linewidth.html#A3mM11b0marj">linewidth</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1896"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmbind.html#XeZ2340marj">lmbind</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#V6N190nita">bgn</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1897"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmcolor.html#ofZ220marj">lmcolor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#V6N190nita">bgn</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1898"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C1899"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/loadmatrix.html#A144X9430">loadmatrix</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C189a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/loadname.html#A213X9119af">loadname</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C189b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/loadXfont.html#vUO390nita">loadXfont</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C189c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/logicop.html#iM521a0marj">logicop</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C189d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/lookat.html#A144X9452">lookat</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C189e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c">lrectread</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C189f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectwrite.html#A142X9c9e">lrectwrite</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18a0"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/lRGBrange.html#A143X93d8">lRGBrange</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18a1"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/lsetdepth.html#naR120marj">lsetdepth</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18a2"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/lshaderange.html#fkk1d0marj">lshaderange</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18a3"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/lsrepeat.html#DmN1110marj">lsrepeat</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"></TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><B><!--:libs:gl32tref:--><A HREF="../gl32tref/makeobj.html#A142X912d">makeobj</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18a5"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/maketag.html#A142X942c">maketag</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18a6"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapcolor.html#A146X9535">mapcolor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18a7"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapcolors.html#cv2170marj">mapcolors</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18a8"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapw.html#A213X9119fe">mapw</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18a9"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapw2.html#A213X911a56">mapw2</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18aa"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/maxsize.html#A142X916d6">maxsize</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#RpN11c0nita">winopen</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18ab"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/minsize.html#MJ13260marj">minsize</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#RpN11c0nita">winopen</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18ac"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/mmode.html#XhZ2370marj">mmode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18ad"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/move.html#pofmarj">move</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18ae"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/multimap.html#A146X9593">multimap</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#EBN11f0nita">gconfig</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18af"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/multmatrix.html#A144X9474">multmatrix</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"></TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><B><!--:libs:gl32tref:--><A HREF="../gl32tref/n3f.html#A139X91ef3">n3f</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#V6N190nita">bgn</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A86C18b1"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/newpup.html#A142X91125">newpup</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C165"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/newtag.html#A142X93a4">newtag</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C166"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/noborder.html#A142X91d7a">noborder</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#RpN11c0nita">winopen</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C167"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/noise.html#A143X9174">noise</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C168"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/noport.html#ZN13170marj">noport</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#RpN11c0nita">winopen</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C169"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/normal.html#A142X9b7">normal</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#V6N190nita">bgn</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C16a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/nurbscurve.html#A255X93ca">nurbscurve</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C16b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/nurbssurface.html#A252X98b9">nurbssurface</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"></TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><B><!--:libs:gl32tref:--><A HREF="../gl32tref/objdelete.html#A142X9afd">objdelete</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C16d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/objinsert.html#A142X9adb">objinsert</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C16e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/objreplace.html#A142X9b50">objreplace</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C16f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/onemap.html#A146X95ef">onemap</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#EBN11f0nita">gconfig</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C170"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496">ortho</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C171"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496">ortho2</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C172"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/overlay.html#A143X950a">overlay</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#EBN11f0nita">gconfig</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"></TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><B><!--:libs:gl32tref:--><A HREF="../gl32tref/patch.html#A143X95b4">patch</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C174"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchbasis.html#A143X95d6">patchbasis</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C175"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchcurves.html#A143X95f8">patchcurves</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C176"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchprecision.html#A143X961a">patchprecision</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C177"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pclos.html#t2g270marj">pclos</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C178"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pdr.html#bqf1c0marj">pdr</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C179"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/perspective.html#A144X94da">perspective</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C17a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pick.html#h632f0nita">pick</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C17b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/picksize.html#A6cv180marj">picksize</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C17c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pixmode.html#bav30marj">pixmode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C17d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pmv.html#A139X91eed">pmv</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C17e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pnt.html#Ptf3a0marj">pnt</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C17f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pntsmooth.html#W3o220marj">pntsmooth</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C180"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/polarview.html#A144X94fc">polarview</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C181"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/polf.html#Zsf1c0marj">polf</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C182"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/poly.html#avf2c0marj">poly</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C183"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/polygonlist.html#Xto2d0nita">polygonlist</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A115C11050"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/polygonlist.html#Xto2d0nita">polylinelist</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C185"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/popattributes.html#Vmx2140marj">popattributes</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C186"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/popmatrix.html#A144X951e">popmatrix</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C187"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/popname.html#A213X911af9">popname</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C188"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/popviewport.html#A213X911d3c">popviewport</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C189"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/prefposition.html#A142X9164f">prefposition</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#RpN11c0nita">winopen</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C18a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/prefsize.html#A142X91671">prefsize</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#RpN11c0nita">winopen</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C18b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pushattributes.html#Thx220marj">pushattributes</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C18c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pushmatrix.html#A144X9540">pushmatrix</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C18d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pushname.html#A213X911b48">pushname</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C18e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pushviewport.html#A213X911bee">pushviewport</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C18f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pwlcurve.html#A257X9fc">pwlcurve</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"></TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><B><!--:libs:gl32tref:--><A HREF="../gl32tref/qdevice.html#A143X967">qdevice</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C191"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/qenter.html#A143X9152">qenter</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C192"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/qread.html#A143X989">qread</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C193"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/qreset.html#A143X9ab">qreset</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C194"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/qtest.html#A143X9cd">qtest</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"></TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rcrv.html#WRS2380marj">rcrv</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C196"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rcrvn.html#A1TS2220marj">rcrvn</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C197"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rdr.html#gpf1c0marj">rdr</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C198"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/readpixels.html#A142X91059">readpixels</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C199"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/readRGB.html#A142X9107b">readRGB</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C19a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/readsource.html#A142X9cc0">readsource</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C19b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rect.html#KAg110marj">rect</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C19c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectcopy.html#A142X9d04">rectcopy</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C19d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectf.html#Q5g330marj">rectf</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C19e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c">rectread</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C19f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectwrite.html#A142X9c9e">rectwrite</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1a0"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectzoom.html#A142X9d26">rectzoom</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1a1"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/reshapeviewport.html#A7LQ3b0marj">reshapeviewport</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1a2"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/RGBcolor.html#A143X9394">RGBcolor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A>, <A HREF="glsubmodal.html#V6N190nita">bgn</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1a3"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/RGBmode.html#A143X93b6">RGBmode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#EBN11f0nita">gconfig</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1a4"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/RGBwritemask.html#A143X93fa">RGBwritemask</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1a5"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/ringbell.html#A213X911463">ringbell</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1a6"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rmv.html#kzf90marj">rmv</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1a7"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rot.html#A144X9562">rot</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1a8"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rotate.html#A8g2120marj">rotate</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1a9"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rpatch.html#O5k2marj">rpatch</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1aa"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rpdr.html#hrfa0marj">rpdr</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1ab"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rpmv.html#lXf370marj">rpmv</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"></TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><B><!--:libs:gl32tref:--><A HREF="../gl32tref/sbox.html#A213X91178a">sbox</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1ad"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/sboxf.html#Jte1190marj">sboxf</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1ae"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/scale.html#A144X95a6">scale</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1af"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/screenspace.html#A213X911cf1">screenspace</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1b0"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/scrmask.html#fwN250marj">scrmask</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1b1"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setbell.html#A213X9114ae">setbell</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1b2"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setcursor.html#ZR1nita">setcursor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1b3"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setdblights.html#A213X911501">setdblights</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1b4"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setlinestyle.html#XFM1310marj">setlinestyle</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1b5"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setmap.html#A146X9646">setmap</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1b6"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setnurbsproperty.html#A257X911b">setnurbsproperty</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1b7"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setpattern.html#WeM11c0marj">setpattern</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1b8"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setpup.html#A5um1280marj">setpup</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1b9"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setvaluator.html#A143X921e">setvaluator</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1ba"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/shademodel.html#A143X9ab9">shademodel</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1bb"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/singlebuffer.html#A145X9259">singlebuffer</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#EBN11f0nita">gconfig</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1bc"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/splf.html#A143X9afd">splf</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1bd"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/stepunit.html#A142X91bd2">stepunit</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#RpN11c0nita">winopen</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1be"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/strwidth.html#A144X93ec">strwidth</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1bf"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/subpixel.html#jIZ1120marj">subpixel</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1c0"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/swapbuffers.html#A145X9302">swapbuffers</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1c1"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/swapinterval.html#A145X92af">swapinterval</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1c2"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/swaptmesh.html#A144X9782">swaptmesh</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1c3"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/swinopen.html#A2T741b0nita">swinopen</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"></TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><B><!--:libs:gl32tref:--><A HREF="../gl32tref/textport.html#A143X9cb7">textport</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1c5"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/tie.html#A143X9196">tie</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1c6"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/tpoff.html#A143X9c2f">tpoff</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1c7"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/tpon.html#A14k110nita">tpon</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1c8"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/translate.html#A144X95c8">translate</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"></TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><B><!--:libs:gl32tref:--><A HREF="../gl32tref/underlay.html#Az5O370nita">underlay</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A>, <A HREF="glsubmodal.html#EBN11f0nita">gconfig</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1ca"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/unqdevice.html#A143X91b8">unqdevice</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"></TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><B><!--:libs:gl32tref:--><A HREF="../gl32tref/v.html#A144X97a4">v</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#V6N190nita">bgn</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1cc"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/viewport.html#qrY270marj">viewport</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"></TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winclose.html#A142X91418">winclose</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1ce"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winconstraints.html#A142X914c1">winconstraints</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1cf"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/windepth.html#A142X914e3">windepth</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1d0"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/window.html#A144X95ea">window</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1d1"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winget.html#A142X91505">winget</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1d2"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winmove.html#A142X91527">winmove</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1d3"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winopen.html#A142X91549">winopen</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1d4"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winpop.html#A142X9156b">winpop</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1d5"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winposition.html#A142X9158d">winposition</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1d6"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winpush.html#A4X13320marj">winpush</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1d7"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winset.html#NY1320marj">winset</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1d8"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/wintitle.html#A142X915f3">wintitle</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A115C11051"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winX.html#A114C163">winX</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1d9"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/wmpack.html#A143X9570">wmpack</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1da"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/writemask.html#A143X9592">writemask</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A>, <A HREF="glsubmodal.html#D5N1230nita">push</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1db"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/writepixels.html#A142X9e62">writepixels</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1dc"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/writeRGB.html#A142X9ff2">writeRGB</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#BUN1360nita">current window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"></TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zbuffer.html#A143X97b1">zbuffer</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1de"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zclear.html#A143X97d3">zclear</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1df"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zdraw.html#A143X97f5">zdraw</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1e0"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zfunction.html#A22f0MARJ">zfunction</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1e1"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zsource.html#A143X96d6">zsource</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A87C1e2"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zwritemask.html#A143X9817">zwritemask</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><A HREF="glsubmodal.html#XTN180nita">display list</A>, <A HREF="glsubmodal.html#BUN1360nita">current
+window</A></TD></TR></TABLE>
+
+<hr><center>
+[  <a href="glsubsS-Z.html">Previous</a>  |
+<a href="descrtable.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/glsubmodal.html Mon, 24 Jan 2022 16:28:21 GMT -->
+</HTML>
+

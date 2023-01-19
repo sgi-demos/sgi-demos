@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>frontface Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="frontbuffer.html">Previous</a>  |
+<a href="fudge.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A74C12"></A>frontface Subroutine</H2>
+<A NAME="INDEX518" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX519" REL="I2" TITLE="removing surface"></A>
+<A NAME="INDEX520" REL="I3" TITLE="frontface"></A>
+<A NAME="INDEX521" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX522" REL="I2" TITLE="frontfacing polygons"></A>
+<A NAME="INDEX523" REL="I3" TITLE="display"></A>
+<A NAME="INDEX524" REL="I1" TITLE="frontface subroutine (GL)"></A>
+<H3><A NAME="A74C13"></A>Purpose</H3>
+<P><A NAME="E1B0BD4999ceb"></A>Controls frontfacing polygon removal.</P>
+
+<H3><A NAME="A74C15"></A>Library</H3>
+<P><A NAME="E1B0BD5148ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0BD5251ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A74C18"></A>C Syntax</H3>
+<PRE><A NAME="A74C19"></A><B>void frontface (Int32 </B><I>mode</I><B>)</B></PRE>
+
+<H3><A NAME="A74C1a"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A74C1b"></A><B>SUBROUTINE FRONTF(</B><I>mode</I><B>)</B>
+<B>INTEGER*4 </B><I>mode</I></PRE>
+
+<H3><A NAME="A74C1c"></A>Description</H3>
+<P><A NAME="E1B0BD5616ceb"></A>The <B>frontface </B>subroutine allows or suppresses the display of frontfacing filled polygons. With the <A HREF="backface.html#A143X974b"><B>backface</B></A> subroutine, it is useful for drawing polygons that have different colors on each side. The <B>frontface</B> subroutine can also be useful for performing a primitive kind of 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P061d">hidden surface</A> removal.</P>
+
+<P><A NAME="E1B0BD5725ceb"></A>A frontfacing polygon is defined as a polygon whose vertices are in counterclockwise order in screen coordinates. When frontfacing polygon removal is on, the system displays only polygons whose vertices are in clockwise order.</P>
+
+<P><A NAME="E1B0BD5834ceb"></A>If both frontfacing and backfacing polygon removal is enabled, no filled polygons are displayed. (An exception is made if the graphics pipeline cannot determine if a polygon is front- or backfacing because it is degenerate or otherwise exceptional.)</P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A108C13"></A>Matrices that negate coordinates, such as <SAMP>scale(-1.0,&nbsp;1.0,&nbsp;1.0)</SAMP>, reverse the directional order of a polygon's points and can cause the <B>frontface</B> subroutine to do the opposite of what is intended.</LI>
+
+<LI><A NAME="A98C1e"></A>If a polygon is extremely small or has degenerate vertices, the graphics pipeline cannot determine if the polygon is frontfacing. In such cases, the polygon is rendered by default.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A74C1e"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A74C1f"></A><I>mode</I></TD>
+<TD>  Sets action of subroutine:</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A74C110"></A></TD>
+<TD>  True = Enables frontfacing polygon removal.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A74C111"></A></TD>
+<TD>  False = Disables frontfacing polygon removal.</TD></TR></TABLE>
+
+<H3><A NAME="A74C113"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0BD6371ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1B0BD6490ceb"></A>The 3-D Color Graphics Processor does not support this subroutine. It has no effect and is ignored.</P>
+
+<P><A NAME="E1B0BD6599ceb"></A>
+On the POWERgraphics GTO adapter
+On the POWERgraphics GTO and POWER GXT1000 adapters, either frontfacing polygon removal or backfacing polygon removal can be specified, but not both simultaneously. Enabling frontfacing culling disables backfacing culling.</P>
+
+<H3><A NAME="A74C115"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A74C116"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A74C117"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A74C118"></A>Related Information</H3>
+<P><A NAME="E1B0BD6917ceb"></A>Enabling or disabling backfacing polygon removal with the <A HREF="backface.html#A143X974b"><B>backface</B></A> subroutine.</P>
+
+<P><A NAME="E1B0BD7023ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Removing <!--gl32prgd:--><A HREF="../gl32prgd/remhidden.html#remhidden.html">Hidden Surfaces</A>.</P><hr><center>
+[  <a href="frontbuffer.html">Previous</a>  |
+<a href="fudge.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

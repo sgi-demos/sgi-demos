@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>setvaluator Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="setpup.html">Previous</a>  |
+<a href="shademodel.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X921e"></A>setvaluator Subroutine</H2>
+<A NAME="INDEX1814" REL="I1" TITLE="setvaluator subroutine (GL)"></A>
+<A NAME="INDEX1815" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1816" REL="I2" TITLE="device"></A>
+<A NAME="INDEX1817" REL="I3" TITLE="assigning valuator initial value"></A>
+<A NAME="INDEX1818" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1819" REL="I2" TITLE="queue and device"></A>
+<A NAME="INDEX1820" REL="I3" TITLE="setvaluator"></A>
+
+<H3><A NAME="A143X9220"></A>Purpose</H3>
+<P><A NAME="E1D74AC704ceb"></A>Assigns an initial value to a valuator.</P>
+
+<H3><A NAME="C46F282313nqui"></A>Libraries</H3>
+<P><A NAME="E1D74AC743ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D74AC767ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9224"></A>C Syntax</H3>
+<PRE><A NAME="A143X9225"></A><B>void setvaluator</B>
+<B>(Device </B><A HREF="setvaluator.html#A143X9229"><I>val</I></A><B>, </B>
+<B>Int16</B> <A HREF="setvaluator.html#A143X922a"><I>init</I></A><B>, Int16</B> <A HREF="setvaluator.html#A143X922b"><I>min</I></A><B>, Int16</B> <A HREF="setvaluator.html#A213X912c4c"><I>max</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c89"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c8a"></A><B>SUBROUTINE SETVAL(</B><I>val</I><B>, </B><I>init</I><B>, </B><I>min</I><B>, </B><I>max</I><B>)</B>
+<B>INTEGER*4 </B><I>val</I><B>, </B><I>init</I><B>,</B><I> min</I><B>,</B><I> max</I></PRE>
+
+<BLOCKQUOTE><A NAME="C46F282773nqui"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X9226"></A>Description</H3>
+<P><A NAME="E1D74AC902ceb"></A>The <B>setvaluator</B> subroutine sets the initial value and the minimum and maximum values the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A1379161d">device</A> can assume. </P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A143X9239"></A>Some devices, such as tablets, report values fixed to a grid. In such a case, the device defines an initial position and is ignored. </LI>
+
+<LI><A NAME="A64C01662c"></A>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI>
+
+<LI><A NAME="BC21347905vbia"></A>When there is a conflict between GL standards and AIXwindows standards, the AIXwindows standard overrides the GL standard. The <B>setvaluator</B> subroutine cannot be used to restrict the movement of the cursor because the AIXwindows standard states that no client process (such as GL) can restrict the cursor.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A143X9228"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9229"></A><I>val</I> </TD>
+<TD>  Specifies the device number for the <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A79P07a">valuator</A> being set.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X922a"></A><I>init</I> </TD>
+<TD>  Specifies the initial value to be assigned to the valuator.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X922b"></A><I>min</I> </TD>
+<TD>  Specifies the minimum value that the device can assume.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912c4c"></A><I>max</I> </TD>
+<TD>  Specifies the maximum value that the device can assume.</TD></TR></TABLE>
+
+<H3><A NAME="A64C01662d"></A>Implementation Specifics</H3>
+<P><A NAME="E1D74AD113ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="C46F283554nqui"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C46F283630nqui"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C46F283706nqui"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C46F283783nqui"></A><B>/usr/include/gl/device.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C46F283859nqui"></A><B>/usr/include/gl/fdevice.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X923e"></A>Related Information</H3>
+<P><A NAME="E1D74AD248ceb"></A>Returning the current state of a valuator with the <A HREF="getvaluator.html#A143X945"><B>getvaluator</B></A> subroutine.</P>
+
+<P><A NAME="E1D74AD273ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/keyboardgl.html#keyboardgl.html">Using the Keyboard</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/cntrlques.html#cntrlques.html">Controlling Queues and Devices</A>.</P><hr><center>
+[  <a href="setpup.html">Previous</a>  |
+<a href="shademodel.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

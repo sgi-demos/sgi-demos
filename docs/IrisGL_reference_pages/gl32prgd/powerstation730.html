@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/powerstation730.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>IBM RISC System/6000 POWERstation 730 and POWERgraphics GTO Supergraphics Processor Subsystem
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="3dclrproc.html">Previous</a>  |
+<a href="powerGt4.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="powerstation730.html"></A>IBM RISC System/6000 POWERstation 730 and POWERgraphics GTO Supergraphics Processor Subsystem</H2>
+<A NAME="INDEX950" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX951" REL="I2" TITLE="hardware"></A>
+<A NAME="INDEX952" REL="I3" TITLE="processor"></A>
+<A NAME="INDEX953" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX954" REL="I2" TITLE="hardware"></A>
+<A NAME="INDEX955" REL="I3" TITLE="processor"></A>
+<P><A NAME="A3C0F166591mhay"></A>The IBM RISC System/6000 POWERstation 730 has the Supergraphics Processor Subsystem adapter built in. This model has an extra-wide case to accommodate the Supergraphics Processor. The Supergraphics Processor Subsystem adapter cannot be removed, although other display adapters can be added. The POWERstation 730 is available in two standard configurations: with double-buffered 24-bit frame buffer and with double-buffered 8-bit frame buffer.</P>
+
+<P><A NAME="A3C0F166611mhay"></A>The IBM RISC System/6000 POWERgraphics GTO consists of a Supergraphics Processor Subsystem packaged in its own case with a power supply. A cable connects the POWERgraphics GTO to a Micro Channel adapter, which can be plugged into any IBM RISC System/6000. It is available in double-buffered 8-bit and double-buffered 24-bit configurations. The 24-bit POWERgraphics GTO is functionally equivalent to the IBM RISC Sytem/6000 POWERstation 730 Supergraphics Processor Subsystem. The 8-bit POWERgraphics GTO differs from the POWERstation 730 in that it lacks the Shading Processor (ShP) and the z-buffer. </P>
+
+<H3><A NAME="A258C01c13e"></A>IBM RISC System/6000 POWERstation 730 and POWERgraphics GTO, 24-Bit Configuration</H3>
+<P><A NAME="A3C0F166632mhay"></A>This configuration contains a total of 48 bitplanes in the main color frame buffer, 4 bits of overlay and a 21-bit z-buffer. There are multiple independent 256-entry color maps.</P>
+
+<P><A NAME="A3C0F166652mhay"></A>In single-buffered RGB mode, there are 24 bitplanes in the main color buffer, organized in an 888 RGB fashion. In double-buffered RGB mode, the front buffer and the back buffer each have 24 bitplanes. Dithering is not required and not supported.</P>
+
+<P><A NAME="A3C0F166672mhay"></A>In single-buffered color map mode, 8 bitplanes are available to select from a 256-entry color map. In double-buffered color map mode, there are 8 bitplanes in the front and back buffers each (a total of 16).</P>
+
+<P><A NAME="A3C0F166692mhay"></A>The RISC System/6000 POWERstation 730 and POWERgraphics GTO support a 21-bit z-buffer, and the operation of the z-buffer is modified. The following subroutines are affected:</P>
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A258C01c143"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/lsetdepth.html#naR120marj"><B>lsetdepth</B></A>
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  The valid values for the parameters are 0x0 &lt;= near &lt;= far &lt;= 0x1fffff.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A258C01c144"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/greset.html#xW42e0nita"><B>greset</B></A>
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  The default depth range and shade range is from 0x0 to 0x1fffff.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A258C01c145"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/zclear.html#A143X97d3"><B>zclear</B></A>
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  This function clears to the value that is farthest from the viewer for the default z comparison function. This value is 0x0.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A258C01c146"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/zfunction.html#A22f0MARJ"><B>zfunction</B></A>
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  The only valid values for the parameter are ZF_LEQUAL, ZF_GEQUAL, ZF_ALWAYS. The default depth comparison function is ZF_GEQUAL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A258C01c147"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/zsource.html#A143X96d6"><B>zsource</B></A>
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  The only valid value is ZSRC_DEPTH.</TD></TR></TABLE>
+
+<BLOCKQUOTE><A NAME="A258C01c148"></A><B>Note: </B>The values written into the z-buffer are a nonlinear function of the z distance.</BLOCKQUOTE>
+
+
+<H3><A NAME="A258C01c149"></A>IBM RISC System/6000 POWERstation 730 and POWERgraphics GTO, 8-Bit Configuration</H3>
+<P><A NAME="A3C0F166720mhay"></A>This configuration contains a total of 16 bitplanes in the main color frame buffer, 2 bits of overlay and a 21-bit z-buffer. There are multiple independent 256-entry color maps.</P>
+
+<P><A NAME="A3C0F166739mhay"></A>The 8-bit RISC System/6000 POWERgraphics GTO does not include the Shading Processor (ShP) and the z-buffer. Therefore, it does not support the Shading Processor, gouraud shading, lighting, depthcueing, blending, and z-buffering.</P>
+
+<P><A NAME="A3C0F166759mhay"></A>The 8-bit RISC System/6000 POWERstation 730 Supergraphics Processor Subsystem includes the ShP and the z-buffer, and therefore, does support the associated capabilities.</P>
+
+<P><A NAME="A3C0F166779mhay"></A>This configuration does not support RGB mode (and therefore does not support dithering). The only supported frame buffer modes are color map single buffered and color map double buffered.</P>
+
+<P><A NAME="A3C0F166799mhay"></A>In single-buffered color map mode, 8 bitplanes are available to select from a 256-entry color map. In double-buffered color map mode, there are 8 bitplanes each in the front and back buffers (a total of 16).</P>
+
+<P><A NAME="A3C0F166818mhay"></A>The POWERstation 730 and POWERstation support a 21-bit z-buffer, which operates as described in the 24-bit configuration.</P>
+
+<H3><A NAME="NITAXIO"></A>Hardware Considerations<A NAME="INDEX956" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX957" REL="I2" TITLE="hardware"></A>
+<A NAME="INDEX958" REL="I1" TITLE="hardware considerations"></A>
+<A NAME="INDEX959" REL="I2" TITLE="GL"></A>
+</H3>
+<P><A NAME="A3C0F166839mhay"></A>The RISC System/6000 Supergraphics Processor Subsystem contains specialized matrix multiplication hardware. As a result, the operation of the <!--:libs:gl32tref:--><A HREF="../gl32tref/loadmatrix.html#A144X9430"><B>loadmatrix</B></A> and <!--:libs:gl32tref:--><A HREF="../gl32tref/multmatrix.html#A144X9474"><B>multmatrix</B></A> subroutines are modified. These subroutines accept only matrices of the following form:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="4"><B>Acceptable Matrices for     </B><B>Supergraphics Processor Subsystem </B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>a11</B></TD>
+
+<TD><B>a12</B></TD>
+
+<TD><B>a13</B></TD>
+
+<TD><B>k * a13</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>a21</B></TD>
+
+<TD><B>a22</B></TD>
+
+<TD><B>a23</B></TD>
+
+<TD><B>k * a23</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>a31</B></TD>
+
+<TD><B>a32</B></TD>
+
+<TD><B>a33</B></TD>
+
+<TD><B>k * a33</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>a41</B></TD>
+
+<TD><B>a42</B></TD>
+
+<TD><B>a43</B></TD>
+
+<TD><B>a44</B></TD></TR></TABLE>
+
+<P><A NAME="A3C0F166861mhay"></A>Matrices of this type support all rotations and translations and most of the common perspective transformations.</P>
+
+<P><A NAME="A3C0F166880mhay"></A>The following constraints on patterns and linestyles apply to the Supergraphics Processor Subsystem:</P>
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A258C01c07b"></A><B>Patterns</B></TD>
+<TD>  Cannot be drawn and used if:
+
+
+<UL><LI><A NAME="A258C01c07c"></A>Shademodel is set to Gouraud.</LI>
+
+<LI><A NAME="A258C01c07d"></A>Lighting is being used.</LI>
+
+<LI><A NAME="A258C01c07e"></A>The z-buffer is being used for depth comparisons.</LI>
+
+<LI><A NAME="A633C31841ttay"></A>Depth-cueing is being used.
+
+
+<P>The only supported pattern sizes are 16x16 and 32x32. Affected subroutines are <!--:libs:gl32tref:--><A HREF="../gl32tref/defpattern.html#A143X9b41"><B>defpattern</B></A>, <!--:libs:gl32tref:--><A HREF="../gl32tref/lmbind.html#XeZ2340marj"><B>lmbind</B></A>, <!--:libs:gl32tref:--><A HREF="../gl32tref/setpattern.html#WeM11c0marj"><B>setpattern</B></A>, <!--:libs:gl32tref:--><A HREF="../gl32tref/shademodel.html#A143X9ab9"><B>shademodel</B></A>, and <!--:libs:gl32tref:--><A HREF="../gl32tref/zbuffer.html#A143X97b1"><B>zbuffer</B></A>.</P></LI></UL>
+
+</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A258C01c080"></A><B>Lines</B></TD>
+<TD>  Linestyle repeat factors must be a multiple of 4. Valid values run from 4 to 252 in multiples of 4. The lowest possible value for the linestyle repeat factor is 4. The affected subroutine is <!--:libs:gl32tref:--><A HREF="../gl32tref/lsrepeat.html#DmN1110marj"><B>lsrepeat</B></A>.</TD></TR></TABLE>
+
+<P><A NAME="A3C0F166926mhay"></A>The following constraints apply to material properties on the Supergraphics Processor Subsystem:</P>
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A258C01c087"></A><B>Materials</B></TD>
+<TD>  Material properties cannot be changed on a per-vertex basis. In particular, all calls to the <!--:libs:gl32tref:--><A HREF="../gl32tref/lmbind.html#XeZ2340marj"><B>lmbind</B></A> and <!--:libs:gl32tref:--><A HREF="../gl32tref/lmcolor.html#ofZ220marj"><B>lmcolor</B></A> subroutines made between <B>bgn...</B> and <B>end...</B> style primitives are ignored. This is true for triangular strips only and not polygons, points, and lines.</TD></TR></TABLE><hr><center>
+[  <a href="3dclrproc.html">Previous</a>  |
+<a href="powerGt4.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/powerstation730.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+
+

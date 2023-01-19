@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>picksize Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="pick.html">Previous</a>  |
+<a href="pixmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A6cv180marj"></A>picksize Subroutine</H2>
+<A NAME="INDEX1372" REL="I1" TITLE="picksize subroutine (GL)"></A>
+<A NAME="INDEX1373" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1374" REL="I2" TITLE="picking and selecting"></A>
+<A NAME="INDEX1375" REL="I3" TITLE="setting picking region dimensions"></A>
+<A NAME="INDEX1376" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1377" REL="I2" TITLE="picking and selecting"></A>
+<A NAME="INDEX1378" REL="I3" TITLE="picksize"></A>
+
+<H3><A NAME="A237X945da"></A>Purpose</H3>
+<P><A NAME="E1D712B072ceb"></A>Sets the dimensions of the picking region.</P>
+
+<H3><A NAME="A79C1ac"></A>Libraries</H3>
+<P><A NAME="E1D712B112ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D712B137ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A237X945dd"></A>C Syntax</H3>
+<PRE><A NAME="A237X945de"></A><B>void picksize(Int16 </B><A HREF="picksize.html#jBx1340marj"><I>deltax</I></A><B>, Int16 </B><A HREF="picksize.html#AzBx180marj"><I>deltay</I></A><B>)</B></PRE>
+
+<H3><A NAME="A237X945ba"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A237X945bd"></A><B>SUBROUTINE PICKSI(</B><I>deltax</I><B>, </B><I>deltay</I><B>)</B>
+<B>INTEGER*4 </B><I>deltax</I><B>, </B><I>deltay</I></PRE>
+
+<BLOCKQUOTE><A NAME="A79C1af"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A237X945e1"></A>Description</H3>
+<P><A NAME="E1D712B270ceb"></A>The <B>picksize</B> subroutine sets the dimensions of the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06fb">picking region</A>. The default setting is 10x10 pixels. In 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06fa">picking mode</A>, any drawing primitives that intersect the picking region are reported as 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P061e">hits</A>.</P>
+
+<P><A NAME="E1D712B296ceb"></A>If a drawing primitive overlaps or intrudes upon the picking volume, a hit is recorded. The hit is recorded by placing the depth of the name stack into the next vacant slot in the buffer, followed by the entire contents of the name stack. </P>
+
+<P><A NAME="E1D712B322ceb"></A>The bottom of the name stack is transferred to the buffer first, followed by the second from the bottom entry of the name stack, and so forth. In other words, the data from bottom to top is mapped from left to right. </P>
+
+<BLOCKQUOTE><A NAME="A318C9d08"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A237X945e4"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="jBx1340marj"></A><I>deltax</I></TD>
+<TD>  Specifies the new width of the <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06fb">picking region</A>.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="AzBx180marj"></A><I>deltay</I></TD>
+<TD>  Specifies the new height of the picking region.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015cc2"></A>Implementation Specifics</H3>
+<P><A NAME="E1D712B440ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1b0"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1b1"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1b2"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A237X945e9"></A>Related Information</H3>
+<P><A NAME="E1D712B537ceb"></A>Putting the system in picking mode with the <A HREF="pick.html#h632f0nita"><B>pick</B></A> subroutine.</P>
+
+<P><A NAME="E1D712B563ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and 
+<!--gl32prgd:--><A HREF="../gl32prgd/picknselect.html#picknselect.html">Picking and Selecting</A> Overview.</P><hr><center>
+[  <a href="pick.html">Previous</a>  |
+<a href="pixmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

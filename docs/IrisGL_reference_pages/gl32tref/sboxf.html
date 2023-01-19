@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>sboxf, sboxfi, or sboxfs Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="sbox.html">Previous</a>  |
+<a href="scale.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="Jte1190marj"></A>sboxf, sboxfi, or sboxfs Subroutine</H2>
+<A NAME="INDEX1727" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1728" REL="I2" TITLE="high-level drawing"></A>
+<A NAME="INDEX1729" REL="I3" TITLE="sboxf"></A>
+<A NAME="INDEX1730" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1731" REL="I2" TITLE="rectangle"></A>
+<A NAME="INDEX1732" REL="I3" TITLE="filled, screenligned"></A>
+<A NAME="INDEX1733" REL="I1" TITLE="sboxf subroutine (GL)"></A>
+<H3><A NAME="A220X9d38"></A>Purpose</H3>
+<P><A NAME="E1D7400063ceb"></A>Draws a filled screen-aligned rectangle.</P>
+
+<H3><A NAME="A78C1298"></A>Libraries</H3>
+<P><A NAME="E1D7400102ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7400126ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A220X9d3b"></A>C Syntax</H3>
+<PRE><A NAME="A5SD2130marj"></A><B>void sboxf</B>
+<B>(Coord</B> <A HREF="sboxf.html#A220X9d43"><I>x1</I></A><B>, Coord</B> <A HREF="sboxf.html#A220X9d44"><I>y1</I></A><B>, </B>
+<B>Coord</B> <A HREF="sboxf.html#A220X9d45"><I>x2</I></A><B>, Coord</B> <A HREF="sboxf.html#A220X9d46"><I>y2</I></A><B>)</B></PRE>
+<PRE><A NAME="NSD2b0marj"></A><B>void sboxfi</B>
+<B>(Icoord</B> <A HREF="sboxf.html#A220X9d43"><I>x1</I></A><B>, Icoord</B> <A HREF="sboxf.html#A220X9d44"><I>y1</I></A><B>, </B>
+<B>Icoord</B> <A HREF="sboxf.html#A220X9d45"><I>x2</I></A><B>, Icoord</B> <A HREF="sboxf.html#A220X9d46"><I>y2</I></A><B>)</B></PRE>
+<PRE><A NAME="ZSD22d0marj"></A><B>void sboxfs</B>
+<B>(Scoord</B> <A HREF="sboxf.html#A220X9d43"><I>x1</I></A><B>, Scoord</B> <A HREF="sboxf.html#A220X9d44"><I>y1</I></A><B>, </B>
+<B>Scoord</B> <A HREF="sboxf.html#A220X9d45"><I>x2</I></A><B>, Scoord</B> <A HREF="sboxf.html#A220X9d46"><I>y2</I></A><B>)</B></PRE>
+
+<H3><A NAME="A28C01072c"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C01072d"></A><B>SUBROUTINE SBOXF(</B><I>x1</I><B>,</B><I> y1</I><B>,</B><I> x2</I><B>,</B><I> y2</I><B>)</B>
+<B>REAL</B> <I>x1</I><B>,</B><I> y1</I><B>,</B><I> x2</I><B>,</B><I> y2</I></PRE>
+<PRE><A NAME="A28C01072e"></A><B>SUBROUTINE SBOXFI(</B><I>x1</I><B>,</B><I> y1</I><B>,</B><I> x2</I><B>,</B><I> y2</I><B>)</B>
+<B>INTEGER*4</B> <I>x1</I><B>,</B><I> y1</I><B>,</B><I> x2</I><B>,</B><I> y2</I></PRE>
+<PRE><A NAME="A28C01072f"></A><B>SUBROUTINE SBOXFS(</B><I>x1</I><B>,</B><I> y1</I><B>,</B><I> x2</I><B>,</B><I> y2</I><B>)</B>
+<B>INTEGER*2</B> <I>x1</I><B>,</B><I> y1</I><B>,</B><I> x2</I><B>,</B><I> y2</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C129b"></A><B>Note: </B>For FORTRAN users, the INTEGER*2 version, the <B>SBOXFS</B> subroutine, should not be called with integer constant parameters. For example, 2 is an integer constant; JJ is an integer variable. The XL FORTRAN compiler, invoked by the <B>xlf</B> command, stores all integer constants as long integers (INTEGER*4), not as short integers (INTEGER*2). Invoking the short version of this subroutine with an integer constant will result in unexpected behavior.</BLOCKQUOTE>
+
+
+<P><A NAME="E1D7400320ceb"></A>All of the foregoing functions are essentially the same except for the type declarations of the parameters.  </P>
+
+<H3><A NAME="A220X9d3e"></A>Description</H3>
+<P><A NAME="E1D7400362ceb"></A>The <B>sboxf </B>subroutine draws a filled, two-dimensional, screen-aligned rectangle using the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A31996bc">color</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemask</A>, and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791abd">pattern</A>. Only these attributes, not the normal area-fill attributes, are used. Most of the lighting/shading/viewing pipeline is bypassed.  </P>
+
+<P><A NAME="E1D7400388ceb"></A>The sides of the rectangle are parallel to the screen <I>x</I> and <I>y</I> axes. This rectangle cannot be rotated. The <I>z</I> coordinate is set to zero.</P>
+
+<P><A NAME="E1D7400414ceb"></A>The <B>sboxf</B> subroutine performs the same function as the <A HREF="clear.html#cEH1160marj"><B>clear</B></A> subroutine. A function equivalent to the <B>sboxf</B> subroutine can be obtained by setting the screenmask to the desired size, calling the <B>clear</B> subroutine, and then resetting the screenmask. Note that when you use the <B>clear</B> subroutine, the lighting, backfacing, depth-cueing, z-buffering, or Gouraud shading does not need to be turned off.</P>
+
+<P><A NAME="E1D7400440ceb"></A>When you use the <B>sboxf</B> subroutine, you must not use lighting, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03bd">backfacing</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A150P19d9">depth-cueing</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P1160a">z-buffering</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0611">Gouraud shading</A>, or alpha blending.</P>
+
+<H3><A NAME="A220X9d42"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A220X9d43"></A><I>x1</I></TD>
+<TD>  Specifies the <I>x</I> screen coordinate of a corner of the filled box.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A220X9d44"></A><I>y1</I></TD>
+<TD>  Specifies the <I>y</I> screen coordinate of a corner of the filled box.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A220X9d45"></A><I>x2</I></TD>
+<TD>  Specifies the <I>x</I> screen coordinate of the opposite corner of the filled box.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A220X9d46"></A><I>y2</I></TD>
+<TD>  Specifies the <I>y</I> screen coordinate of the opposite corner of the filled box.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015cca"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7400577ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="A3CFD420486janb"></A>The operation  of the <B>sbox</B> and <B>sboxf</B> subroutines are identical to the <B>rect</B> and <B>rectf</B> subroutines on the POWERgraphics Gt4 and the GXT1000 adapters.</P>
+
+<H3><A NAME="A78C129c"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C129d"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C129e"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A237X94648"></A>Related Information</H3>
+<P><A NAME="E1D7400674ceb"></A>Clearing to the screenmask with the <A HREF="clear.html#cEH1160marj"><B>clear</B></A> subroutine.</P>
+
+<P><A NAME="E1D7400700ceb"></A>Drawing a filled rectangle with the <A HREF="rectf.html#Q5g330marj"><B>rectf</B></A> subroutine.</P>
+
+<P><A NAME="E1D7400728ceb"></A>Drawing a screen-aligned rectangle with the <A HREF="sbox.html#A213X91178a"><B>sbox</B></A> subroutine.</P>
+
+<P><A NAME="E1D7400754ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</A>.</P><hr><center>
+[  <a href="sbox.html">Previous</a>  |
+<a href="scale.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

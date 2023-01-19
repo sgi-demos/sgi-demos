@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/alphablend.html Mon, 24 Jan 2022 16:28:12 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Alpha Blending Modes
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="underovermodes.html">Previous</a>  |
+<a href="writemasks.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="alphablend.html"></A>Alpha Blending Modes </H2>
+
+
+<P><A NAME="INDEX666"></A><A NAME="INDEX667"></A><A NAME="INDEX668"></A><A NAME="INDEX669"></A></P>
+
+
+<P><A NAME="A3C0EB48269mhay"></A>Alpha-blending provides a mechanism for
+drawing semi-transparent surfaces. With alpha-blending enabled, pixel colors
+in the frame buffer can be blended in varying proportion with the color
+of the graphics primitive being drawn. The proportion is referred to as
+the &quot;transparency&quot; or alpha value. In normal usage, the incoming
+color is multiplied by alpha, while the existing color is multiplied by
+one minus alpha, and the two are summed, to determine the resulting color.
+That is, the blending is linear: </P>
+
+
+<P><A NAME="A70614B061csol"></A>FinalColor = alpha * IncomingColor + (1.0-alpha)
+* ExistingColor </P>
+
+
+<P><A NAME="A3C0EB48291mhay"></A>In this normal mode of operation, the
+whole can never be more than the sum of the parts, because (alpha + (1.0-alpha))
+equals one. Generically, the blending can be more general: </P>
+
+
+<P><A NAME="A70614B687csol"></A>FinalColor = alpha * IncomingColor + beta
+* ExistingColor </P>
+
+
+<P><A NAME="A3C0EB48313mhay"></A>This usage is more rare, and is used only
+for special purposes. In GL, the blending is done on a per pixel basis;
+that is, the blending is done for each pixel individually. Blending is
+supported in RGB mode only; blending in color index mode is not well supported.
+The blending is performed for the red, green and blue channels individually:</P>
+
+
+<P><A NAME="A70614E695csol"></A>FinalRed = alpha * IncomingRed + beta *
+ExistingRed </P>
+
+
+<P><A NAME="C4EE249532lpas"></A>FinalGreen = alpha * IncomingGreen + beta
+* ExistingGreen </P>
+
+
+<P><A NAME="C4EE249637lpas"></A>FinalBlue = alpha * IncomingBlue + beta
+* ExistingBlue </P>
+
+
+<P><A NAME="A3C0EB48336mhay"></A>The alpha and beta blending factors can
+be set with the <B>blendfunction</B> subroutine. For more information on
+this subroutine, please refer to the Graphics Technical Reference. </P>
+
+
+<P><A NAME="A3C0EB48358mhay"></A>By its very nature, alpha-blending is
+order dependent. That is, drawing one semi-transparent polygon after another
+gives a different visual result than drawing the one before the other.
+In most cases, it is desirable to draw the image from back to front, drawing
+the closest semi-transparent polygon last. The graphics system does not
+automatically order or re-order graphics primitives to be in the right
+order when alpha-blending is enabled; it is up to the graphics program
+to order drawing. Note that the z-buffer, while useful for hidden surface
+removal, does not actually provide any ordering. That is, if a more distant
+polygon is drawn after a closer, semi-transparent polygon, that more distant
+polygon does not automatically appear behind the semi-transparent polygon.</P>
+
+
+<P><A NAME="A3C0EB48379mhay"></A>An example program illustrating alpha-blending
+can be found in the <B>/usr/lpp/GL/examples</B> file. </P>
+
+
+<P><A NAME="A3C0EB48400mhay"></A>For information on specifying the function
+to be used for alpha blending, see the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/blendfunction.html#A143X9240">blendfunction</A></B>
+subroutine. </P>
+
+
+<P><A NAME="A3C0EB48421mhay"></A>For information on setting the current
+color in RGB mode, see the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/c.html#A143X9262">c</A></B>
+subroutine. </P>
+
+
+<P><A NAME="A3C0EB48441mhay"></A>For information on specifying RGBA color
+with a single packed 32-bit integer, see the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/cpack.html#A143X9284">cpack</A></B>
+subroutine. </P>
+
+
+<P><A NAME="A3C0EB48462mhay"></A>For information on defining a new material,
+light, or lighting model, see the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+subroutine. </P>
+
+
+
+<hr><center>
+[  <a href="underovermodes.html">Previous</a>  |
+<a href="writemasks.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/alphablend.html Mon, 24 Jan 2022 16:28:12 GMT -->
+</HTML>
+

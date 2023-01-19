@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>move  Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="mmode.html">Previous</a>  |
+<a href="multimap.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="pofmarj"></A>move  Subroutine</H2>
+<A NAME="INDEX1189" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1190" REL="I2" TITLE="moveraw style"></A>
+<A NAME="INDEX1191" REL="I3" TITLE="move"></A>
+<A NAME="INDEX1192" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1193" REL="I2" TITLE="graphics position"></A>
+<A NAME="INDEX1194" REL="I3" TITLE="moving"></A>
+<A NAME="INDEX1195" REL="I1" TITLE="move subroutine (GL)"></A>
+
+<H3><A NAME="A213X912cb2"></A>Purpose</H3>
+<P><A NAME="E1D6FAC908ceb"></A>Moves the current graphics position to a specified point.</P>
+
+<H3><A NAME="A78C12f1"></A>Libraries</H3>
+<P><A NAME="E1D6FAC950ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D6FAC978ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912cb5"></A>C Syntax</H3>
+<PRE><A NAME="A213X912cb6"></A><B>void move</B>
+<B>(Coord </B><A HREF="move.html#A213X912cc0"><I>x</I></A><B>, Coord</B> <A HREF="move.html#A213X912cc1"><I>y</I></A><B>, Coord</B> <A HREF="move.html#A213X912cc2"><I>z</I></A><B>)</B></PRE>
+<PRE><A NAME="A43c260marj"></A><B>void movei</B>
+<B>(Icoord </B><A HREF="move.html#A213X912cc0"><I>x</I></A><B>, Icoord</B> <A HREF="move.html#A213X912cc1"><I>y</I></A><B>, Icoord</B> <A HREF="move.html#A213X912cc2"><I>z</I></A><B>)</B></PRE>
+<PRE><A NAME="J3c120marj"></A><B>void moves</B>
+<B>(Scoord </B><A HREF="move.html#A213X912cc0"><I>x</I></A><B>, Scoord</B> <A HREF="move.html#A213X912cc1"><I>y</I></A><B>, Scoord</B> <A HREF="move.html#A213X912cc2"><I>z</I></A><B>)</B></PRE>
+<PRE><A NAME="Y3c2a0marj"></A><B>void move2</B>
+<B>(Coord </B><A HREF="move.html#A213X912cc0"><I>x</I></A><B>, Coord</B> <A HREF="move.html#A213X912cc1"><I>y</I></A><B>)</B></PRE>
+<PRE><A NAME="m3c360marj"></A><B>void move2i</B>
+<B>(Icoord </B><A HREF="move.html#A213X912cc0"><I>x</I></A><B>, Icoord</B> <A HREF="move.html#A213X912cc1"><I>y</I></A><B>)</B></PRE>
+<PRE><A NAME="Y4c360marj"></A><B>void move2s</B>
+<B>(Scoord </B><A HREF="move.html#A213X912cc0"><I>x</I></A><B>, Scoord</B> <A HREF="move.html#A213X912cc1"><I>y</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010abf"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010ac0"></A><B>SUBROUTINE MOVE(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I><B>)</B>
+<B>REAL </B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I></PRE>
+<PRE><A NAME="A29C010ac1"></A><B>SUBROUTINE MOVEI(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I></PRE>
+<PRE><A NAME="A29C010ac2"></A><B>SUBROUTINE MOVES(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I><B>)</B>
+<B>INTEGER*2 </B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I></PRE>
+<PRE><A NAME="A29C010ac3"></A><B>SUBROUTINE MOVE2(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>REAL </B><I>x</I><B>, </B><I>y</I></PRE>
+<PRE><A NAME="A29C010ac4"></A><B>SUBROUTINE MOVE2I(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>, </B><I>y</I></PRE>
+<PRE><A NAME="A29C010ac5"></A><B>SUBROUTINE MOVE2S(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>INTEGER*2 </B><I>x</I><B>, </B><I>y</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C12f4"></A><B>Note: </B>For FORTRAN users, the INTEGER*2 versions of this subroutine, <B>MOVES</B> and <B>MOVE2S</B>, should not be called with integer constant parameters. For example, 2 is an integer constant; JJ is an integer variable. The XL FORTRAN compiler, invoked by the 
+
+<B>xlf</B> command, stores all integer constants as long integers (INTEGER*4), not as short integers (INTEGER*2). Invoking one of the short versions of this subroutine with an integer constant will result in unexpected behavior.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912cb9"></A>Description</H3>
+<P><A NAME="E1D6FAD330ceb"></A>The <B>move </B>subroutine changes (without drawing) the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03eb">current graphics position</A> to the point specified by the <I>x, y</I>, and <I>z</I> parameters. The graphics position is the point from which the next drawing routine starts drawing. </P>
+
+<P><A NAME="E1D6FAD358ceb"></A>The value of <B>move2(</B><I>x</I><B>, </B><I>y</I><B>) </B>is equivalent to <B>move(</B><I>x</I><B>, </B><I>y</I><B>, </B>0.0<B>)</B>. </P>
+
+<P><A NAME="E1D6FAD387ceb"></A>The six different forms for the <B>move</B> subroutine are as follows:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><BR></TD>
+
+<TD><B>2-D</B></TD>
+
+<TD><B>3-D</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int16</TD>
+
+<TD>move2s</TD>
+
+<TD>moves</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int32</TD>
+
+<TD>move2i</TD>
+
+<TD>movei</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>float</TD>
+
+<TD>move2</TD>
+
+<TD>move</TD></TR></TABLE>
+
+<P><A NAME="E1D6FAD435ceb"></A>The <A HREF="move.html#A213X912cb5">syntax</A> for each of the subroutine forms is the same except for the parameter types.  They differ only in that <A HREF="move.html#A213X912cb6"><B>move</B></A> expects real coordinates, <A HREF="move.html#A43c260marj"><B>movei</B></A> expects integer coordinates, and <A HREF="move.html#J3c120marj"><B>moves</B></A> expects short integer coordinates. In addition, the <A HREF="move.html#Y3c2a0marj"><B>move2</B></A>* routines assume a 2-D point instead of a 3-D point.</P>
+
+<BLOCKQUOTE><A NAME="A318C9dac"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912cbf"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912cc0"></A><I>x</I></TD>
+<TD>  Specifies the new <I>x</I> coordinate for the current graphics position.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912cc1"></A><I>y</I></TD>
+<TD>  Specifies the new <I>y</I> coordinate for the current graphics position.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912cc2"></A><I>z</I></TD>
+<TD>  Specifies the new <I>z</I> coordinate for the current graphics position.</TD></TR></TABLE>
+
+<H3><A NAME="A30C010ffc"></A>Example</H3>
+<P><A NAME="E1D6FAD588ceb"></A>The example C language program <A HREF="depthcue_c.html#A16C0c8ff"><B>depthcue.c</B></A> uses the <B>movei</B> subroutine when defining a graphical object to move the graphics position without drawing any lines. </P>
+
+<H3><A NAME="A62C015d16"></A>Implementation Specifics</H3>
+<P><A NAME="E1D6FAD631ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C12f5"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12f6"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12f7"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912cd0"></A>Related Information</H3>
+<P><A NAME="E1D6FAD755ceb"></A>Drawing a line with the <A HREF="draw.html#EYf2e0marj"><B>draw</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FAD789ceb"></A>Specifying the starting point for a polygon with the <A HREF="pmv.html#A139X91eed"><B>pmv</B></A> subroutine.  </P>
+
+<P><A NAME="E1D6FAD824ceb"></A>Drawing a point with the <A HREF="pnt.html#Ptf3a0marj"><B>pnt</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FAD866ceb"></A>Drawing a relative line with the <A HREF="rdr.html#gpf1c0marj"><B>rdr</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FAD896ceb"></A>Moving the current graphics position to a point relative to the current point with the <A HREF="rmv.html#kzf90marj"><B>rmv</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FAD931ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Drawing with <!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Move-Draw Style</A> Subroutines.</P><hr><center>
+[  <a href="mmode.html">Previous</a>  |
+<a href="multimap.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>gRGBcolor Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="greset.html">Previous</a>  |
+<a href="gRGBmask.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="ESL13a0marj"></A>gRGBcolor Subroutine</H2>
+<A NAME="INDEX916" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX917" REL="I2" TITLE="attribute"></A>
+<A NAME="INDEX918" REL="I3" TITLE="gRGBcolor"></A>
+<A NAME="INDEX919" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX920" REL="I2" TITLE="color, current"></A>
+<A NAME="INDEX921" REL="I3" TITLE="returning in RGB mode"></A>
+<A NAME="INDEX922" REL="I1" TITLE="gRGBcolor subroutine (GL)"></A>
+
+<H3><A NAME="C7540A2146vbia"></A>Purpose</H3>
+<P><A NAME="E1B1352858ceb"></A>Gets the current RGB color values.</P>
+
+<H3><A NAME="C7540A2308vbia"></A>Libraries</H3>
+<P><A NAME="E1B1353008ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1353112ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="C7540A2541vbia"></A>C Syntax</H3>
+<P><A NAME="E1B1353270ceb"></A><B>void gRGBcolor</B></P>
+
+<P><B>(Int16 </B><A HREF="gRGBcolor.html#D8HTi5bvbia"><I>red</I></A><B>, Int16</B> <A HREF="gRGBcolor.html#O8HTi3a8vbia"><I>green</I></A><B>, Int16</B> <A HREF="gRGBcolor.html#b8HTi15vbia"><I>blue</I></A><B>)</B></P>
+
+<H3><A NAME="C7540A2691vbia"></A>FORTRAN Syntax</H3>
+<P><A NAME="E1B1353453ceb"></A><B>SUBROUTINE GRGBCO(</B><I>red</I><B>,</B> <I>green</I><B>,</B> <I>blue</I><B>)</B></P>
+
+<P><B>INTEGER*2 </B><I>red</I><B>, </B><I>green</I><B>, </B><I>blue</I></P>
+
+<H3><A NAME="C7540A2837vbia"></A>Description</H3>
+<P><A NAME="E1B1353613ceb"></A>The <B>gRGBcolor</B> subroutine gets the current RGB color values and copies them into the parameters.</P>
+
+<OL><LI><A NAME="C7540A3086vbia"></A>This subroutine cannot be used to add to a display list.</LI>
+
+<LI><A NAME="C7540A3162vbia"></A>This subroutine is available in RGB mode. It will not function in color map mode.</LI></OL>
+
+<H3><A NAME="C7540A3230vbia"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="D8HTi5bvbia"></A><I>red</I></TD>
+<TD>  Specifies the pointer to the location into which to copy the current red value.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="O8HTi3a8vbia"></A><I>green</I></TD>
+<TD>  Specifies the pointer to the location into which to copy the current green value.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="b8HTi15vbia"></A><I>blue</I></TD>
+<TD>  Specifies the pointer to the location into which to copy the current blue value.</TD></TR></TABLE>
+
+<H3><A NAME="C7540A3477vbia"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1354151ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="C7540A3621vbia"></A>Files</H3>
+<P><A NAME="E1B1354308ceb"></A><B>/usr/include/gl/gl.h&nbsp;&nbsp;&nbsp;</B>Contains C language constant and variable type definitions for GL.</P>
+
+<P><A NAME="E1B1354416ceb"></A><B>/usr/include/gl/fgl.h&nbsp;&nbsp;&nbsp;</B>Contains FORTRAN constant and variable type definitions for GL.</P>
+
+<H3><A NAME="C7E4C06383bett"></A>Related Information</H3>
+<P><A NAME="E1B1354574ceb"></A>Returning the current color with the <A HREF="getcolor.html#A146X924b"><B>getcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B1354682ceb"></A>Getting a copy of the RGB values for a color map entry with the <A HREF="getmcolor.html#nXI1100marj"><B>getmcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B1354790ceb"></A>Setting the current color in RGB mode with the <A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B1354901ceb"></A>Setting a display mode that bypasses the color map with the <A HREF="RGBmode.html#A143X93b6"><B>RGBmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B1355011ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/undergraphadapt.html#undergraphadapt.html">Understanding the Adapter</A>, <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Working in Color Map and RGB Modes</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, and 
+<!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying the System</A>.</P><hr><center>
+[  <a href="greset.html">Previous</a>  |
+<a href="gRGBmask.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

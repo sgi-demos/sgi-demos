@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>patchbasis Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="patch.html">Previous</a>  |
+<a href="patchcurves.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X95d6"></A>patchbasis Subroutine</H2>
+<A NAME="INDEX1323" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1324" REL="I2" TITLE="wire frame curve and surface patch"></A>
+<A NAME="INDEX1325" REL="I3" TITLE="patchbasis"></A>
+<A NAME="INDEX1326" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1327" REL="I2" TITLE="cubic spline basis matrix"></A>
+<A NAME="INDEX1328" REL="I3" TITLE="setting"></A>
+<A NAME="INDEX1329" REL="I1" TITLE="patchbasis subroutine (GL)"></A>
+
+<H3><A NAME="A143X95d8"></A>Purpose</H3>
+<P><A NAME="E1D70C4362ceb"></A>Sets the current spline surface basis matrices.</P>
+
+<H3><A NAME="A78C111e"></A>Libraries</H3>
+<P><A NAME="E1D70C4401ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D70C4425ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X95dc"></A>C Syntax</H3>
+<PRE><A NAME="A143X95dd"></A><B>void patchbasis(Int32 </B><A HREF="patchbasis.html#A143X95e1"><I>uid</I></A><B>, Int32</B> <A HREF="patchbasis.html#A143X95e2"><I>vid</I></A><B>)</B></PRE>
+
+<H3><A NAME="A26C0fde5"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A26C0fde6"></A><B>SUBROUTINE PATCHB(</B><I>uid</I>, <I>vid</I><B>)</B>
+<B>INTEGER*4 </B><I>uid</I>, <I>vid</I></PRE>
+
+<H3><A NAME="A143X95de"></A>Description</H3>
+<P><A NAME="E1D70C4538ceb"></A>The <B>patchbasis</B> subroutine sets the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03be">basis matrices</A> (defined by the <A HREF="defbasis.html#A150X930"><B>defbasis</B></A> subroutine) for the <I>uid</I> and <I>vid</I> parametric directions of a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06f7">surface patch</A>. The <A HREF="patch.html#A143X95b4"><B>patch</B></A> subroutine uses the current <I>u</I> and <I>v</I> bases when it executes.</P>
+
+<H3><A NAME="A143X95e0"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X95e1"></A><I>uid</I> </TD>
+<TD>  Specifies the basis that defines how the control points determine the shape of the patch in the <I>u</I> direction.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X95e2"></A><I>vid</I> </TD>
+<TD>  Specifies the basis that defines how the control points determine the shape of the patch in the <I>v</I> direction.</TD></TR></TABLE>
+
+<H3><A NAME="A30C010fd4"></A>Example</H3>
+<P><A NAME="E1D70C4633ceb"></A>The example C language program 
+<A HREF="patch1_c.html#A17C0daf"><B>patch1.c</B></A> calls the <B>patchbasis</B> subroutine before calling the <A HREF="patch.html#A143X95b4"><B>patch</B></A> subroutine to set the basis matrix for drawing the curves that represent each surface patch.</P>
+
+<H3><A NAME="A64C016596"></A>Implementation Specifics</H3>
+<P><A NAME="E1D70C4677ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1121"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1122"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1123"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X95f6"></A>Related Information</H3>
+<P><A NAME="E1D70C4773ceb"></A>Defining a cubic spline basis matrix with the <A HREF="defbasis.html#A150X930"><B>defbasis</B></A> subroutine.</P>
+
+<P><A NAME="E1D70C4803ceb"></A>Drawing a surface patch with the <A HREF="patch.html#A143X95b4"><B>patch</B></A> subroutine.</P>
+
+<P><A NAME="E1D70C4828ceb"></A>Setting the number of curves used to represent a patch with the <A HREF="patchcurves.html#A143X95f8"><B>patchcurves</B></A> subroutine.</P>
+
+<P><A NAME="E1D70C4854ceb"></A>Setting the precision at which curves are drawn with the <A HREF="patchprecision.html#A143X961a"><B>patchprecision</B></A> subroutine.</P>
+
+<P><A NAME="E1D70C4879ceb"></A>Drawing a rational surface patch with the <A HREF="rpatch.html#O5k2marj"><B>rpatch</B></A> subroutine.</P>
+
+<P><A NAME="E1D70C4909ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">NURBS Curves and Surfaces</A>, and Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#drawwfcvs.html">Wire Frame Curves and Surface Patches</A>.</P><hr><center>
+[  <a href="patch.html">Previous</a>  |
+<a href="patchcurves.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

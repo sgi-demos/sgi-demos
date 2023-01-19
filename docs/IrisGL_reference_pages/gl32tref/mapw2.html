@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>mapw2 Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="mapw.html">Previous</a>  |
+<a href="maxsize.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A213X911a56"></A>mapw2 Subroutine</H2>
+<A NAME="INDEX1158" REL="I1" TITLE="mapw2 subroutine (GL)"></A>
+<A NAME="INDEX1159" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1160" REL="I2" TITLE="picking and selecting"></A>
+<A NAME="INDEX1161" REL="I3" TITLE="screen coordinates to 2 modeling coordinates"></A>
+<A NAME="INDEX1162" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1163" REL="I2" TITLE="picking and selecting"></A>
+<A NAME="INDEX1164" REL="I3" TITLE="mapw2"></A>
+<A NAME="INDEX1165" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1166" REL="I2" TITLE="coordinate transformation"></A>
+<A NAME="INDEX1167" REL="I3" TITLE="mapw2"></A>
+
+<H3><A NAME="A213X911a58"></A>Purpose</H3>
+<P><A NAME="E1D6F6F148ceb"></A>Computes the inverse mapping from screen coordinates to 2-D modeling coordinates.</P>
+
+<H3><A NAME="A79C164"></A>Libraries</H3>
+<P><A NAME="E1D6F6F186ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D6F6F210ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911a5b"></A>C Syntax</H3>
+<PRE><A NAME="A213X911a5c"></A><B>void mapw2</B>
+<B>(Int32 </B><A HREF="mapw2.html#A213X911a65"><I>viewobj</I></A><B>, </B>
+<B>Screencoord</B> <A HREF="mapw2.html#A213X911a63"><I>screenx</I></A><B>, Screencoord</B> <A HREF="mapw2.html#A213X911a64"><I>screeny</I></A><B>, </B>
+<B>Coord *</B><A HREF="mapw2.html#A213X911a66"><I>modelx</I></A><B>, Coord *</B><A HREF="mapw2.html#A213X911a67"><I>modely</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X911a34"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X911a37"></A><B>SUBROUTINE MAPW2(</B><I>viewobj</I><B>, </B><I>screenx</I><B>, </B><I>screeny</I><B>, </B><I>modelx</I><B>, </B><I>modely</I><B>)</B>
+<B>INTEGER*4 </B><I>viewobj</I><B>,</B><I> screenx</I><B>, </B><I>screeny</I>
+<B>REAL </B><I>modelx</I><B>, </B><I>modely</I></PRE>
+
+<BLOCKQUOTE><A NAME="A79C167"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911a5f"></A>Description</H3>
+<P><A NAME="E1D6F6F343ceb"></A>The <B>mapw2</B> subroutine maps a point on the screen into 2-D 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06el">modeling coordinates</A>. This subroutine is the 2-D version of the <A HREF="mapw.html#A213X9119fe"><B>mapw</B></A> subroutine.</P>
+
+<BLOCKQUOTE><A NAME="A318C9d05"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911a62"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911a65"></A><I>viewobj</I><B></B></TD>
+<TD>  Specifies a primitive containing the viewport, projection, viewing, and modeling 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P021">transformations</A> that define modeling space.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911a63"></A><I>screenx</I><B></B></TD>
+<TD>  Specifies a point in screen coordinates.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911a64"></A><I>screeny</I><B></B></TD>
+<TD>  Specifies a point in screen coordinates.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911a66"></A><I>modelx</I></TD>
+<TD>  Specifies the corresponding <I>x</I> model coordinate.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911a67"></A><I>modely</I></TD>
+<TD>  Specifies the corresponding <I>y</I> model coordinate.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015cc0"></A>Implementation Specifics</H3>
+<P><A NAME="E1D6F6F517ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C168"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C169"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C16a"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911a7a"></A>Related Information</H3>
+<P><A NAME="E1D6F6F613ceb"></A>Creating a new object in the display list with the <A HREF="makeobj.html#A142X912d"><B>makeobj</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F6F639ceb"></A>Computing the inverse mapping from screen coordinates to 3-D modeling coordinates with the <A HREF="mapw.html#A213X9119fe"><B>mapw</B></A> subroutine. </P>
+
+<P><A NAME="E1D6F6F664ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/picknselect.html#picknselect.html">Picking and Selecting</A> Overview, and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="mapw.html">Previous</a>  |
+<a href="maxsize.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

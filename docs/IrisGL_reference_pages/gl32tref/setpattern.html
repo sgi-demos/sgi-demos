@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>setpattern Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="setnurbsproperty.html">Previous</a>  |
+<a href="setpup.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="WeM11c0marj"></A>setpattern Subroutine</H2>
+<A NAME="INDEX1800" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1801" REL="I2" TITLE="attribute"></A>
+<A NAME="INDEX1802" REL="I3" TITLE="RGBcolor"></A>
+<A NAME="INDEX1803" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1804" REL="I2" TITLE="color"></A>
+<A NAME="INDEX1805" REL="I3" TITLE="current"></A>
+<A NAME="INDEX1806" REL="I1" TITLE="RGBcolor subroutine (GL)"></A>
+
+<H3><A NAME="A60C01575a"></A>Purpose</H3>
+<P><A NAME="E1D748F898ceb"></A>Selects a pattern for filling polygons and rectangles.</P>
+
+<H3><A NAME="A77C1315"></A>Libraries</H3>
+<P><A NAME="E1D748F937ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D748F962ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A60C01575e"></A>C Syntax</H3>
+<PRE><A NAME="A60C01575f"></A><B>void setpattern(Int32 </B><A HREF="setpattern.html#A213X912a04"><I>index</I></A><B>)</B></PRE>
+
+<H3><A NAME="A60C015760"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A60C015761"></A><B>SUBROUTINE SETPAT(</B><I>index</I><B>)</B>
+<B>INTEGER*4 </B><I>index</I></PRE>
+
+<H3><A NAME="A60C015762"></A>Description</H3>
+<P><A NAME="E1D7490074ceb"></A>The <B>setpattern</B> subroutine selects a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791abd">pattern</A> from a table of patterns previously defined by the <A HREF="defpattern.html#A143X9b41"><B>defpattern</B></A> subroutine. The pattern, an area-fill attribute, is used whenever an area-fill primitive is invoked. These primitives include filled polygons, rectangles, circles, and arcs.</P>
+
+<P><A NAME="E1D7490100ceb"></A>The default pattern is 0 (zero), which is solid. If you specify an undefined pattern, the default pattern is selected.</P>
+
+<BLOCKQUOTE><A NAME="A77C1318"></A><B>Note: </B>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. (
+See "<!--gl32prgd:--><A HREF="../gl32prgd/powerstation730.html#NITAXIO">Hardware Considerations</A>".) </BLOCKQUOTE>
+
+
+<H3><A NAME="A60C015765"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912a04"></A><I>index</I></TD>
+<TD>  Specifies the index into the table of defined patterns.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015c8d"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7490198ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A77C1319"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C131a"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C131b"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A77C1320"></A>Related Information</H3>
+<P><A NAME="E1D7490295ceb"></A>Setting the current color index in color map mode with the <A HREF="color.html#A146X9429"><B>color</B></A> subroutine.</P>
+
+<P><A NAME="E1D7490321ceb"></A>Defining a pattern with the <A HREF="defpattern.html#A143X9b41"><B>defpattern</B></A> subroutine.</P>
+
+<P><A NAME="E1D7490346ceb"></A>Returning the index of the current fill pattern with the <A HREF="getpattern.html#A143X9b63"><B>getpattern</B></A> subroutine.</P>
+
+<P><A NAME="E1D7490372ceb"></A>Granting write permission to a subset of available bitplanes in color map mode with the <A HREF="writemask.html#A143X9592"><B>writemask</B></A> subroutine.</P>
+
+<P><A NAME="E1D7490398ceb"></A>
+<!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#drawwfcvs.html">Drawing Wire Frame Curves and Surface Patches</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">Drawing NURBS Curves and Surfaces</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Drawing with Move-Draw Style Subroutines</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Drawing with Begin-End Style Subroutines</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware Used by GL</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</A>.</P><hr><center>
+[  <a href="setnurbsproperty.html">Previous</a>  |
+<a href="setpup.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>keepaspect Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="istag.html">Previous</a>  |
+<a href="lampoff.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X91896"></A>keepaspect Subroutine</H2>
+<A NAME="INDEX996" REL="I1" TITLE="keepaspect subroutine (GL)"></A>
+<A NAME="INDEX997" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX998" REL="I2" TITLE="window"></A>
+<A NAME="INDEX999" REL="I3" TITLE="keepaspect"></A>
+<A NAME="INDEX1000" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1001" REL="I2" TITLE="windows"></A>
+<A NAME="INDEX1002" REL="I3" TITLE="specifying"></A>
+
+<H3><A NAME="A142X91898"></A>Purpose</H3>
+<P><A NAME="E1B14DE080ceb"></A>Specifies the aspect ratio of a window.</P>
+
+<H3><A NAME="A79C12f9"></A>Libraries</H3>
+<P><A NAME="E1B14DE229ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B14DE336ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9189c"></A>C Syntax</H3>
+<PRE><A NAME="A213X912b80"></A><B>void keepaspect(Int32 </B><A HREF="keepaspect.html#GZ3350marj"><I>x</I></A><B>, Int32 </B><A HREF="keepaspect.html#VZ33190marj"><I>y</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c43"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c44"></A><B>SUBROUTINE KEEPAS(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>, </B><I>y</I></PRE>
+
+<H3><A NAME="A142X9189e"></A>Description</H3>
+<P><A NAME="E1B14DE706ceb"></A>The<B> keepaspect </B>subroutine specifies the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A78P0547">aspect ratio</A> of a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A>. It is called at the beginning of a graphics program, but only takes effect when the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine is called. The resulting window maintains the aspect ratio specified in the<B> keepaspect </B>subroutine, even if the window changes size. </P>
+
+<P><A NAME="E1B14DE819ceb"></A>For example, <SAMP>keepaspect(1,1)</SAMP> always results in a square window. The<B> keepaspect </B>subroutine can also be called in conjunction with the <A HREF="winconstraints.html#A142X914c1"><B>winconstraints</B></A> subroutine to modify the enforced aspect ratio after the window is created. </P>
+
+<P><A NAME="E1B14DE929ceb"></A>With the <B>keepaspect</B> subroutine, the programmer can prevent the user from resizing a window to an aspect ratio that is different from the specified ratio.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f64"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X918a0"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="GZ3350marj"></A><I>x</I></TD>
+<TD>  Specifies the horizontal proportion of the aspect ratio.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="VZ33190marj"></A><I>y</I></TD>
+<TD>  Specifies the vertical proportion of the aspect ratio.</TD></TR></TABLE>
+
+<H3><A NAME="A142X918a6"></A>Example</H3>
+<P><A NAME="E1B14DF310ceb"></A>The example C language program <A HREF="colored_c.html"><B>colored.c</B></A> uses the <B>keepaspect</B> subroutine to restrict a window to a specific aspect ratio.</P>
+
+<H3><A NAME="A61C0159f6"></A>Implementation Specifics</H3>
+<P><A NAME="E1B14DF471ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C12fc"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12fd"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12fe"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X918b6"></A>Related Information</H3>
+<P><A NAME="E1B14DF798ceb"></A>Specifying pixel values to be added to a window with the <A HREF="fudge.html#A142X917a6"><B>fudge</B></A> subroutine.</P>
+
+<P><A NAME="E1B14DF905ceb"></A>Constraining the location and size of a window with the <A HREF="prefposition.html#A142X9164f"><B>prefposition</B></A> subroutine.</P>
+
+<P><A NAME="E1B14E0015ceb"></A>Constraining the size of a window with the <A HREF="prefsize.html#A142X91671"><B>prefsize</B></A> subroutine.</P>
+
+<P><A NAME="E1B14E0123ceb"></A>Binding window constraints to the current window with the <A HREF="winconstraints.html#A142X914c1"><B>winconstraints</B></A> subroutine. </P>
+
+<P><A NAME="E1B14E0230ceb"></A>Creating a window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine. </P>
+
+<P><A NAME="E1B14E0342ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="istag.html">Previous</a>  |
+<a href="lampoff.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>cylinder2.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="cylinder1_c.html">Previous</a>  |
+<a href="depthcue_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c87c"></A>cylinder2.c Example C Language Program
+</H2>
+<A NAME="INDEX2251" REL="I1" TITLE="cylinder2.c example program (GL)"></A>
+<A NAME="INDEX2252" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2253" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2254" REL="I3" TITLE="lighting"></A>
+<A NAME="INDEX2255" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2256" REL="I2" TITLE="lighting"></A>
+<A NAME="INDEX2257" REL="I3" TITLE="example program"></A>
+<A NAME="INDEX2258" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2259" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2260" REL="I3" TITLE="cylinder"></A>
+<PRE><A NAME="A64EA45456ttay"></A>/*
+ *  cylinder2.c:
+ *
+ *  This program displays two intersecting cylinders, using a
+ *  different surface material for each cylinder.  In addition, each
+ *  cylinder is lit by two light source.
+ *
+ *  This program requires the z-buffer option.
+ *
+ */</PRE>
+<PRE><A NAME="A64EA45617ttay"></A>#include &lt;gl.h>
+#include &lt;math.h>
+#include &lt;stdio.h></PRE>
+<PRE><A NAME="A64EA45782ttay"></A>#define RADIUS 0.9
+#define TWOPI 6.28318530
+#define PI 3.14159265</PRE>
+<PRE><A NAME="A64EA45993ttay"></A>/* define black RGB color */
+float  blackvec[3] = {0.0, 0.0, 0.0};&nbsp;&nbsp;&nbsp;
+Matrix idmat = {1.0,0.0,0.0,0.0,  /* identity matrix */
+                0.0,1.0,0.0,0.0,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0,0.0,1.0,0.0,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0,0.0,0.0,1.0};</PRE>
+<PRE><A NAME="A64EA46182ttay"></A>/* define a polygon with some structures */
+typedef struct {&nbsp;&nbsp;&nbsp;/* 3-D vertex structure */
+    Coord x;
+    Coord y;
+    Coord z;
+} POINT;</PRE>
+<PRE><A NAME="A64EA46359ttay"></A>typedef struct {&nbsp;&nbsp;&nbsp;/* lighted polygon struct */
+    POINT vertex[4];
+    POINT normal[4];
+} POLYGON;</PRE>
+<PRE><A NAME="A64EA46534ttay"></A>int number_of_polys;&nbsp;&nbsp;&nbsp;/* cylinder polygon count */
+POLYGON *polygon;&nbsp;&nbsp;&nbsp;/* polygon list pointer */</PRE>
+<PRE><A NAME="A64EA46757ttay"></A>/* define property arrays */
+float shiny_material[] =  
+    {SPECULAR,  0.8, 0.8, 0.8, /* light gray reflectance */
+     DIFFUSE,   0.4, 0.4, 0.4, /* gray reflectance */
+     SHININESS, 30.0,          /* focused highlight */
+     LMNULL};</PRE>
+<PRE><A NAME="A64EA46993ttay"></A>float purple_material[] = 
+    {SPECULAR,  0.3, 0.3, 0.3, /* gray reflectance */
+     DIFFUSE,   0.8, 0.0, 0.8, /* purple reflectance */
+     SHININESS, 3.0,           /* unfocused highlight */
+     AMBIENT,   0.2,0.0,0.2,   /* purple reflectance */
+     LMNULL};</PRE>
+<PRE><A NAME="A64EA47183ttay"></A>float blue_light[] =
+    {LCOLOR,    0.0,0.0,0.6,   /* blue light */
+     POSITION,  0.0,0.1,0.0,0.0,  /* Y axis at infinity */
+     LMNULL};</PRE>
+<PRE><A NAME="A64EA47488ttay"></A>/*
+** def_light_calc()
+** Tell the Graphics Library to DEFINE a
+** lighting calculation that accounts for
+** ambient, diffuse, and specular reflection.
+** This lighting calculation defines a second
+** material and light source.
+*/ 
+def_light_calc() { 
+    lmdef(DEFMATERIAL, 1, 11, shiny_material); 
+    lmdef(DEFMATERIAL, 2, 15, purple_material);
+    lmdef(DEFLIGHT, 1, 0, NULL);
+    lmdef(DEFLIGHT, 2, 10, blue_light);
+    lmdef(DEFLMODEL, 1, 0, NULL);
+}</PRE>
+<PRE><A NAME="A64EA47742ttay"></A>/*
+** use_light_calc()
+** Tell the Graphics Library to USE
+** the lighting calculation that we 
+** defined earlier.
+*/
+use_light_calc()
+{
+    lmbind(LIGHT0, 1);&nbsp;&nbsp;&nbsp;/* use light source description 1 */
+    lmbind(LIGHT1, 2);&nbsp;&nbsp;&nbsp;/* use light source description 2 */
+    lmbind(LMODEL, 1);&nbsp;&nbsp;&nbsp;/* use lighting model 1 */
+}</PRE>
+<PRE><A NAME="A64EA48106ttay"></A>/* 
+** make_cylinder()
+** Draw a cylinder using (2 * n) polygons
+** to approximate the curvature and n polygons
+** to describe the length. This requires (2 * n^2)
+** polygons to describe the cylinder. Compute
+** the surface normal at each vertex so we can
+** use the hardware lighting facility to perform
+** lighting calculations.
+*/
+make_cylinder(n)
+int n;
+{
+    POLYGON *p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* polygon list pointer */
+    float theta, dtheta,/* current angle and angle */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        /* increment around section */
+&nbsp;&nbsp;&nbsp;  x, dx;&nbsp;&nbsp;&nbsp;/* current position and */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* increment along cylinder side */
+    int vertex_i;&nbsp;&nbsp;&nbsp;/* vertex counter */</PRE>
+<PRE><A NAME="A64EA48312ttay"></A>    /* allocate and point to enough */
+    /* memory for all the polygons */
+    number_of_polys = 2 * n * n;
+    p = polygon = (POLYGON *)
+&nbsp;&nbsp;&nbsp;malloc(number_of_polys * sizeof(POLYGON));</PRE>
+<PRE><A NAME="A64EA48494ttay"></A>    dx = 3.0/n;&nbsp;&nbsp;&nbsp;/* n polygons for 3.0 units of length */
+    dtheta = PI/n; /* length of polygon along curvature */</PRE>
+<PRE><A NAME="A64EA48881ttay"></A>    /* for each layer of polygons */
+    /* along length of cylinder ... */
+    for (x = -1.5; x &lt; 1.5; x = x+dx) {
+&nbsp;&nbsp;&nbsp;/* ... and for each polygon */
+&nbsp;&nbsp;&nbsp;/* describing the circumference */
+        for (theta = 0.0; theta &lt; TWOPI; theta += dtheta) {&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;    /* calculate the four points */
+&nbsp;&nbsp;&nbsp;    /* describing the polygon */
+&nbsp;&nbsp;&nbsp;    p->vertex[0].x = p->vertex[1].x = x;
+&nbsp;&nbsp;&nbsp;    p->vertex[0].y = p->vertex[3].y = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RADIUS * cos(theta);
+&nbsp;&nbsp;&nbsp;    p->vertex[0].z = p->vertex[3].z = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RADIUS * sin(theta);
+&nbsp;&nbsp;&nbsp;    p->vertex[1].y = p->vertex[2].y = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RADIUS * cos(theta + dtheta);
+&nbsp;&nbsp;&nbsp;    p->vertex[1].z = p->vertex[2].z = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RADIUS * sin(theta + dtheta);
+&nbsp;&nbsp;&nbsp;    p->vertex[2].x = p->vertex[3].x = x + dx;</PRE>
+<PRE><A NAME="A64EA49130ttay"></A>&nbsp;&nbsp;&nbsp;    /* calculate the four normals of unit length */
+&nbsp;&nbsp;&nbsp;    for (vertex_i = 0; vertex_i &lt; 4; vertex_i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p->normal[vertex_i].x = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p->normal[vertex_i].y = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    p->vertex[vertex_i].y / RADIUS;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p->normal[vertex_i].z = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    p->vertex[vertex_i].z / RADIUS;
+&nbsp;&nbsp;&nbsp;    }
+&nbsp;&nbsp;&nbsp;    p++; 
+&nbsp;&nbsp;&nbsp;}
+    }
+}</PRE>
+<PRE><A NAME="A64EA49439ttay"></A>/* 
+** draw_cylinder()
+** This subroutine increments through the 4
+** vertices describing each polygon of the
+** cylinder defined in make_cylinder.  Note
+** how a normal is sent to the graphics
+** hardware before each vertex so that the
+** lighting facility will compute the color
+** for each vertex based on the lighting
+** parameters that we are using.
+*/
+draw_cylinder()
+{
+    POLYGON *p;&nbsp;&nbsp;&nbsp; /* pointer into polygon list */
+    int poly_i;&nbsp;&nbsp;&nbsp; /* polygon counter */</PRE>
+<PRE><A NAME="A64EA49634ttay"></A>    /* start at first polygon and */
+    /* increment through all of them */
+    p = polygon;
+    for (poly_i = 0; poly_i &lt; number_of_polys; poly_i++) {</PRE>
+<PRE><A NAME="A64EA4B165ttay"></A>&nbsp;&nbsp;&nbsp;bgnpolygon();&nbsp;&nbsp;&nbsp;/* describe the polygon */
+            n3f(&amp;p->normal[0]);  
+            v3f(&amp;p->vertex[0]);  
+            n3f(&amp;p->normal[1]);  
+            v3f(&amp;p->vertex[1]);  
+            n3f(&amp;p->normal[2]);  
+            v3f(&amp;p->vertex[2]);  
+            n3f(&amp;p->normal[3]);  
+            v3f(&amp;p->vertex[3]);  
+&nbsp;&nbsp;&nbsp;endpolygon();
+&nbsp;&nbsp;&nbsp;p++;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* go to the next polygon */
+    }
+}</PRE>
+<PRE><A NAME="A64EA4B324ttay"></A>/*
+** Main Program 
+*/
+main()
+{
+    int i;</PRE>
+<PRE><A NAME="A64EA4B539ttay"></A>    /* set up graphics environment */
+    prefposition(100, 600, 100, 600);
+    winopen("cylinder");
+    RGBmode();
+    doublebuffer();
+    gconfig();
+    lsetdepth(0, 0x7FFFFF);
+    zbuffer(TRUE);</PRE>
+<PRE><A NAME="A64EA4B753ttay"></A>    /* Use mmode() to set up projection */
+    /* and viewing matrices for lighting */
+    mmode(MVIEWING);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    perspective(400, 1.0, 4.0, 12.0);
+    loadmatrix(idmat);
+    lookat(0.0,0.0,8.0,0.0,0.0,0.0,0);</PRE>
+<PRE><A NAME="A64EA4B921ttay"></A>    /* let there be light !!!! */
+    def_light_calc();
+    use_light_calc();</PRE>
+<PRE><A NAME="A64EA4C134ttay"></A>    /* Rotate cylinders in 2 deg. increments */
+    /* about Y and Z axis for 180 frames */
+    make_cylinder(25);
+    for (i = 0; i &lt; 180; i++) {   
+        c3f(blackvec);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+        clear();
+&nbsp;&nbsp;&nbsp;zclear();</PRE>
+<PRE><A NAME="A64EA4C429ttay"></A>&nbsp;&nbsp;&nbsp;pushmatrix();
+    &nbsp;&nbsp;&nbsp;    rot(i * 2.0, 'Z');
+&nbsp;&nbsp;&nbsp;    rot(i * 2.0, 'Y'); 
+&nbsp;&nbsp;&nbsp;    /* use white shiny material for cyl 1*/
+&nbsp;&nbsp;&nbsp;    lmbind(MATERIAL, 1);
+            draw_cylinder();
+&nbsp;&nbsp;&nbsp;    pushmatrix();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+&nbsp;&nbsp;&nbsp;        rot(90.0, 'Y');
+&nbsp;&nbsp;&nbsp;        scale(0.9,0.9,0.9);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* use purple rough material for cyl 2 */
+&nbsp;&nbsp;&nbsp;        lmbind(MATERIAL, 2);
+                draw_cylinder();
+&nbsp;&nbsp;&nbsp;    popmatrix();
+&nbsp;&nbsp;&nbsp;popmatrix();
+&nbsp;&nbsp;&nbsp;swapbuffers();
+    }
+    sleep(3);
+}</PRE>
+
+<H3><A NAME="A200C1150"></A>Related Information</H3>
+<P><A NAME="E1D77E9297ceb"></A>The <A HREF="bgnpolygon.html#A144X9672"><B>bgnpolygon</B></A> or <B>endpolygon</B> subroutine<A HREF="A144X9672.html" REL="PAGENUM"></A>, <A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> subroutine<A HREF="XeZ2340marj.html" REL="PAGENUM"></A>, <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B> </A>subroutine<A HREF="rgZ2250marj.html" REL="PAGENUM"></A>, <A HREF="n3f.html#A139X91ef3"><B>n3f</B></A> subroutine<A HREF="A139X91ef3.html" REL="PAGENUM"></A>, <A HREF="scale.html#A144X95a6"><B>scale</B></A> subroutine<A HREF="A144X95a6.html" REL="PAGENUM"></A>, <A HREF="v.html#A144X97a4"><B>v</B></A> subroutine<A HREF="A144X97a4.html" REL="PAGENUM"></A>.</P>
+
+<P><A NAME="E1D77E9323ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/lightbasics.html#lightbasics.html">Lighting Basics</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<hr><center>
+[  <a href="cylinder1_c.html">Previous</a>  |
+<a href="depthcue_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

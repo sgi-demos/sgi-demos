@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>overlay.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="octahedron_c.html">Previous</a>  |
+<a href="paint_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A11C0b47c"></A>overlay.c Example C Language Program
+</H2>
+<A NAME="INDEX2361" REL="I1" TITLE="overlay.c example program (GL)"></A>
+<A NAME="INDEX2362" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2363" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2364" REL="I3" TITLE="hidden surface removal"></A>
+<A NAME="INDEX2365" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2366" REL="I2" TITLE="hidden surface removal"></A>
+<A NAME="INDEX2367" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64EADB588ttay"></A>/*
+overlay.c</PRE>
+<PRE><A NAME="A64EADB750ttay"></A>This program demonstrates how to use overlay bitplanes.
+*/</PRE>
+<PRE><A NAME="A64EADB906ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EADC103ttay"></A>main ()
+{
+&nbsp;&nbsp;&nbsp;Colorindex heat;
+&nbsp;&nbsp;&nbsp;int i, xpos = 1013, ypos = 1013, rampup();
+&nbsp;&nbsp;&nbsp;float xspd = 0.0, yspd = 0.0, yaccel = -1.0;
+&nbsp;&nbsp;&nbsp;float yacc = -.4,  yreflect = -0.6;</PRE>
+<PRE><A NAME="A64EADC774ttay"></A>&nbsp;&nbsp;&nbsp;prefposition(0, XMAXSCREEN, 0, YMAXSCREEN);
+&nbsp;&nbsp;&nbsp;winopen ("overlay");
+&nbsp;&nbsp;&nbsp;doublebuffer ();
+&nbsp;&nbsp;&nbsp;overlay (2);
+&nbsp;&nbsp;&nbsp;gconfig ();
+&nbsp;&nbsp;&nbsp;get_cmap();
+&nbsp;&nbsp;&nbsp;drawmode (OVERDRAW);             /* Get into the overlay bitplanes */
+&nbsp;&nbsp;&nbsp;mapcolor (1, 255, 0, 0);
+&nbsp;&nbsp;&nbsp;mapcolor (2, 0, 255, 0);
+&nbsp;&nbsp;&nbsp;mapcolor (3, 0, 255, 255);
+&nbsp;&nbsp;&nbsp;color (1);
+&nbsp;&nbsp;&nbsp;rectfi (200, 200, 300, 300);     /* Draw some rectangles for a ball to roll 
+&nbsp;&nbsp;&nbsp;under. */
+&nbsp;&nbsp;&nbsp;color (2);
+&nbsp;&nbsp;&nbsp;rectfi (500, 500, 600, 600);
+&nbsp;&nbsp;&nbsp;color (3);
+&nbsp;&nbsp;&nbsp;rectfi (800, 800, 900, 900);
+&nbsp;&nbsp;&nbsp;rectfi (850, 500, 950, 600);
+&nbsp;&nbsp;&nbsp;rectfi (750, 400, 850, 500);
+&nbsp;&nbsp;&nbsp;rectfi (650, 300, 750, 400);
+&nbsp;&nbsp;&nbsp;drawmode (NORMALDRAW);
+&nbsp;&nbsp;&nbsp;mapcolor (0, 0, 0, 0);
+&nbsp;&nbsp;&nbsp;mapcolor (1, 255, 255, 0);
+&nbsp;&nbsp;&nbsp;mapcolor (10, 255, 255, 255);
+&nbsp;&nbsp;&nbsp;rampup(12, 82, 255, 255, 0, 255, 0, 0);
+&nbsp;&nbsp;&nbsp;setbell(1);
+&nbsp;&nbsp;&nbsp;while (!getbutton (MIDDLEMOUSE)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i = 0; i &lt; 1013 &amp;&amp; !getbutton(MIDDLEMOUSE); i = i + 3)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color (BLUE);                /* Roll the ball up and 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   to the right */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear ();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((i==210) || (i==510) || (i==810))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ringbell();                /* Ring the bell everytime */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((i>250) &amp;&amp; (i&lt;550))      /* the ball gets to the    */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color (2);                 /* next rectangle.         */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if ((i>550) &amp;&amp; (i&lt;850))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color (5);                 /* change the ball's color */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (i>850)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color (10);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color (1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circfi (i, i, 10);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;swapbuffers ();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EADD048ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yspd = 0.0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (heat=82, ypos=1013; ypos>=5 &amp;&amp; !getbutton(MIDDLEMOUSE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    ypos+=yspd)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color (BLUE);        /* drop the ball back to the bottom */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear ();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color (heat--);      /* change the ball's color          */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yspd += yacc;        /* as it falls.                     */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circfi (1013, ypos, 10);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;swapbuffers ();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EADD339ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yspd = -60.0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (xpos=1013, ypos=10; xpos>=-0&amp;&amp; !getbutton(MIDDLEMOUSE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    xpos -= 5)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ypos &lt;= 10)      /* roll the ball back to the beginning, */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yspd *= yreflect;  /* and keep updating its'   */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color (BLUE);        /* bounce-ability per frame */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear ();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color (1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ypos += yspd;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yspd += yaccel;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circfi (xpos, ypos, 10);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;swapbuffers ();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EADD549ttay"></A>&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;drawmode (OVERDRAW);     /* clean up the overlay bitplanes */
+&nbsp;&nbsp;&nbsp;color (0);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;drawmode(NORMALDRAW);
+&nbsp;&nbsp;&nbsp;restore_cmap();          /* restore the color map */
+&nbsp;&nbsp;&nbsp;greset();
+&nbsp;&nbsp;&nbsp;gexit ();
+}</PRE>
+<PRE><A NAME="A64EADD753ttay"></A>/*
+Make a color ramp.  Make an interpolated ramp from the 1st 
+arguement's index to the second one. The 3rd, and 4th are red's 
+low and hi indexes (5&amp;6 green's, 7&amp;8 are blue's). 
+*/</PRE>
+<PRE><A NAME="A64EADD908ttay"></A>#define round(n)     ((int) (n + 0.5))</PRE>
+<PRE><A NAME="A64EADE744ttay"></A>rampup(first_lutv,last_lutv,minR,maxR,minG,maxG,minB,maxB)
+unsigned short first_lutv, last_lutv, /* Start &amp; end ramp values. */
+minR, maxR,                           /* Low and high red, */
+minG, maxG,                           /* green, */
+minB, maxB;                           /* and blue values */
+{
+&nbsp;&nbsp;&nbsp;unsigned short len_red, len_green,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;len_blue,                         /* Length of each color */
+&nbsp;&nbsp;&nbsp;  i;                                /* Counter for number of steps */
+&nbsp;&nbsp;&nbsp;short red, gre, blu;                /* lut values */
+&nbsp;&nbsp;&nbsp;float rdx, gdx, bdx,                /* Sizes of rgb increments */
+&nbsp;&nbsp;&nbsp;  r, g, b,                          /* A position on the ramp */
+&nbsp;&nbsp;&nbsp;  steps;                            /* No. of steps along the ramp 
+                                         at which intensity assignments
+                                         will be made */
+&nbsp;&nbsp;&nbsp;/* Determine length of ramp*/
+&nbsp;&nbsp;&nbsp;steps = (float) (last_lutv-first_lutv + 1);
+&nbsp;&nbsp;&nbsp;len_red   = (maxR - minR);          /* determine length of red */
+&nbsp;&nbsp;&nbsp;len_green = (maxG - minG);          /* determine length of green */
+&nbsp;&nbsp;&nbsp;len_blue  = (maxB - minB);          /* determine length of blue */
+&nbsp;&nbsp;&nbsp;rdx = (float) len_red   / steps;    /* compute step   */
+&nbsp;&nbsp;&nbsp;gdx = (float) len_green / steps;    /* sizes of r, g, */
+&nbsp;&nbsp;&nbsp;bdx = (float) len_blue  / steps;    /* and b values   */
+&nbsp;&nbsp;&nbsp;r = minR;                           /* Assign starting */
+&nbsp;&nbsp;&nbsp;g = minG;                           /* indexes for each */
+&nbsp;&nbsp;&nbsp;b = minB;                           /* color value      */
+&nbsp;&nbsp;&nbsp;for (i = first_lutv; i &lt;= last_lutv; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;red = (short) round(r);           /* Round off the */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gre = (short) round(g);           /* given r, g,   */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;blu = (short) round(b);           /* and b values  */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mapcolor(i, red, gre, blu);       /* assign next color 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   map index */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r += rdx;                         /* Increment the */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g += gdx;                         /* color indexes */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b += bdx;
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EADE887ttay"></A>}</PRE>
+<PRE><A NAME="A64EADF036ttay"></A>#define MAXCOLI 255</PRE>
+<PRE><A NAME="A64EADF203ttay"></A>static short CarrayR[MAXCOLI+1], CarrayG[MAXCOLI+1], CarrayB[MAXCOLI+1];</PRE>
+<PRE><A NAME="A64EADF353ttay"></A>unsigned short index;</PRE>
+<PRE><A NAME="A64EADF569ttay"></A>get_cmap() {
+&nbsp;&nbsp;&nbsp;short rcomp, gcomp, bcomp;
+&nbsp;&nbsp;&nbsp;for (index=0; index&lt;=MAXCOLI; index++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getmcolor(index,&amp;rcomp, &amp;gcomp, &amp;bcomp);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CarrayR[index] = rcomp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CarrayG[index] = gcomp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CarrayB[index] = bcomp;
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EADF711ttay"></A>}</PRE>
+<PRE><A NAME="A64EADF900ttay"></A>restore_cmap() {
+&nbsp;&nbsp;&nbsp;for (index=0; index&lt;=MAXCOLI; index++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mapcolor(index,CarrayR[index], 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    CarrayG[index], CarrayB[index]);
+}</PRE>
+
+<H3><A NAME="A201C1185"></A>Related Information</H3>
+<P><A NAME="E1D786D974ceb"></A>The <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine<A HREF="../gl32tref/hS4260nita" REL="PAGENUM"></A>, <A HREF="getmcolor.html#nXI1100marj"><B>getmcolor</B></A> subroutine<A HREF="../gl32tref/nXI1100marj" REL="PAGENUM"></A>, <A HREF="overlay.html#A143X950a"><B>overlay</B></A> subroutine<A HREF="../gl32tref/A143X950a" REL="PAGENUM"></A>.</P>
+
+<hr><center>
+[  <a href="octahedron_c.html">Previous</a>  |
+<a href="paint_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

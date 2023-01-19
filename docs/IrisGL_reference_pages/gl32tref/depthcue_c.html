@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>depthcue.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="cylinder2_c.html">Previous</a>  |
+<a href="../gl32tref/doily_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c8ff"></A>depthcue.c Example C Language Program
+</H2>
+<A NAME="INDEX2261" REL="I1" TITLE="depthcue.c example program (GL)"></A>
+<A NAME="INDEX2262" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2263" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2264" REL="I3" TITLE="curve and surface patch"></A>
+<A NAME="INDEX2265" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2266" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2267" REL="I3" TITLE="cube"></A>
+<PRE><A NAME="A64EA35339ttay"></A>/* depthcue.c Example C Language Program 
+ *
+ * Draws a depthcue'd 3-d wireframe cube with lots of 
+ * little points inside. Moving the mouse rotates the
+ * cube.
+ * NEAR and FAR (Z) clipplanes map to z values of
+ * getgdesc(GD_ZMIN) and getgdesc(GD_ZMAX) respectively.
+ * Points near NEAR are the brightest, those near FAR are
+ * the dimmest. Give two hexadecimal values on the command
+ * line to specify which zvalues are mapped to bright
+ * and dark.
+ *
+ * Press the middle mouse to quit.
+ */</PRE>
+<PRE><A NAME="A64EA35502ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h>
+#include &lt;math.h></PRE>
+<PRE><A NAME="A64EA35651ttay"></A>#define CUBE 9531</PRE>
+<PRE><A NAME="A64EA35799ttay"></A>float hrand();</PRE>
+<PRE><A NAME="A64EA35965ttay"></A>/*Hold the colormap values*/
+static short *CarrayR, *CarrayG, *CarrayB;</PRE>
+<PRE><A NAME="A64EA37547ttay"></A>main (argc,argv)
+int argc;
+char **argv;
+{
+  int val, i;
+  long near, far,           /*Z buffer and depth cueing*/
+     nearest, farthest;     /*information*/
+  float inc, c;
+  short lo_end=128,         /*Low/High index of the colormap*/ 
+     hi_end=255;            /*Used for the depth cueing*/</PRE>
+<PRE><A NAME="A64EA37728ttay"></A>  prefposition(200, 600, 200, 600);
+  winopen("depthcue");
+  winconstraints();
+  doublebuffer();
+  gconfig();</PRE>
+<PRE><A NAME="A64EA37914ttay"></A>  /*Find out the nearest and farthest values of the z mapping*/
+  nearest   = getgdesc(GD_ZMIN);
+  farthest  = getgdesc(GD_ZMAX);</PRE>
+<PRE><A NAME="A64EA38129ttay"></A>  if (argc == 5) {
+    near = strtol(argv[1], (char **) NULL, 0);
+    far = strtol(argv[2], (char **) NULL, 0);
+    lo_end = strtol(argv[3], (char **) NULL, 0);
+    hi_end = strtol(argv[4], (char **) NULL, 0);</PRE>
+<PRE><A NAME="A64EA38334ttay"></A>  }
+  else if (argc == 3)  {
+    near = strtol(argv[1], (char **) NULL, 0);
+    far = strtol(argv[2], (char **) NULL, 0);
+  }
+  else {
+    near = nearest;
+    far  = farthest;
+  }</PRE>
+<PRE><A NAME="A64EA38513ttay"></A>  if (near &lt; nearest)  near=nearest; /*Clamp to adapters constraints*/
+  if (far  > farthest) far=farthest;</PRE>
+<PRE><A NAME="A64EA38926ttay"></A>  reshapeviewport();
+  perspective(600, 1.0, 350.0, 1400.0);
+  lookat(0.0, 0.0, 700.0, 0.0, 0.0, 0.0, 0);
+  qdevice(KEYBD);    
+  makeobj(CUBE);              /* generate a bunch of random points */
+  for (i = 0; i &lt; 100; i++)
+    pnt(hrand(-200.0,200.0), hrand(-200.0,200.0), 
+        hrand(-200.0,200.0)); /* and a cube */
+  movei(-200, -200, -200);
+  drawi( 200, -200, -200);
+  drawi( 200,  200, -200);
+  drawi(-200,  200, -200);
+  drawi(-200, -200, -200);
+  drawi(-200, -200,  200);
+  drawi(-200,  200,  200);
+  drawi(-200,  200, -200);
+  movei(-200,  200,  200);
+  drawi( 200,  200,  200);
+  drawi( 200, -200,  200);
+  drawi(-200, -200,  200);
+  movei( 200,  200,  200);
+  drawi( 200,  200, -200);
+  movei( 200, -200, -200);
+  drawi( 200, -200,  200);
+  closeobj();</PRE>
+<PRE><A NAME="A64EA39103ttay"></A>  /*Save the current colormap so it can be reset when the program ends*/
+  save_cmap(lo_end,hi_end); </PRE>
+<PRE><A NAME="A64EA39280ttay"></A>  /* load the color map with a cyan ramp */
+  /* starting at lo_end and going to hi_end inclusively */</PRE>
+<PRE><A NAME="A64EA39478ttay"></A>  inc = 255.0/((float)(hi_end-lo_end));
+  c = 0.0;
+  for (i = lo_end; i &lt;= hi_end; i++)
+    {
+      c += inc;
+      mapcolor(i, 0,(Int16) c, (Int16) c);
+    }</PRE>
+<PRE><A NAME="A64EA39735ttay"></A>  /*Print out the information about the color and z buffer*/
+  printf (" near    = %ld, far      = %ld \n", near, far);
+  printf (" nearest = %ld, farthest = %ld \n", nearest, farthest);
+  printf (" low colormap = %d, high colormap = %d\n", lo_end, hi_end);
+  printf (" number of colors in ramp = %d \n", 1+hi_end-lo_end);</PRE>
+<PRE><A NAME="A64EA39981ttay"></A>  /* Set the range of z values that will be stored in the  */
+  /* bitplanes.  The percentage takes care of the error    */
+  /* accumulation that occurs when the farthest limits are */
+  /* used.                                                 */
+  lsetdepth((long)(near*0.98), (long)(far*0.98));</PRE>
+<PRE><A NAME="A64EA3A202ttay"></A>  /* set up the mapping of z values to color map           */
+  /* indexes: z value nearest is mapped to index lo_end    */
+  /* and z value farthest is mapped to index hi_end        */
+  lshaderange(lo_end,hi_end,nearest,farthest);</PRE>
+<PRE><A NAME="A64EA3A414ttay"></A>  /* turn on depthcue mode:  the color index of each       */
+  /* pixel in points and lines is determined from the      */
+  /* z value of the pixel                                  */
+  depthcue(TRUE);</PRE>
+<PRE><A NAME="A64EA3A678ttay"></A>  /* until a key is pressed, rotate cube according to      */
+  /* movement of the mouse                                 */
+  while (!getbutton(MIDDLEMOUSE)) {
+    pushmatrix();
+    rotate(3*getvaluator(MOUSEY), 'x');
+    rotate(3*getvaluator(MOUSEX), 'y');
+    color(BLACK);
+    clear();
+    callobj(CUBE);
+    popmatrix();
+    swapbuffers();
+  }</PRE>
+<PRE><A NAME="A64EA3A856ttay"></A>  /*Restore the colormap*/
+  restore_cmap(lo_end,hi_end);
+  /*Exit gracefully*/
+  gexit();
+  exit(1);
+}</PRE>
+<PRE><A NAME="A64EA3B097ttay"></A>/* this routine returns random numbers in the            */
+/* specified range                                       */
+float hrand(low,high)
+float low,high;
+{
+  float val;    
+  val = ((float)( (short)rand() &amp; 0xffff)) / ((float)0xffff);
+  return( (2.0 * val * (high-low)) + low);
+}</PRE>
+<PRE><A NAME="A64EA3B266ttay"></A>/*This saves the colormap*/
+save_cmap(lo_end,hi_end)
+short lo_end,hi_end;
+{</PRE>
+<PRE><A NAME="A64EA3B460ttay"></A>  CarrayR = calloc (lo_end+hi_end,sizeof(short));
+  CarrayG = calloc (lo_end+hi_end,sizeof(short));
+  CarrayB = calloc (lo_end+hi_end,sizeof(short));</PRE>
+<PRE><A NAME="A64EA3B633ttay"></A>  getmcolors ((Int16 const)lo_end,(Int16 const)hi_end,
+     CarrayR, CarrayG, CarrayB);
+}</PRE>
+<PRE><A NAME="A64EA3B834ttay"></A>/*This restores the colormap*/
+restore_cmap(lo_end,hi_end)
+short lo_end,hi_end;
+{
+  mapcolors ((Int16 const)lo_end,(Int16 const)hi_end,
+     CarrayR, CarrayG, CarrayB);
+}</PRE>
+<PRE><A NAME="A64EA3C214ttay"></A>/*Changes
+    -  Put constants in the program for the colormap creation
+    -  This program accept 2 arguments that are the nearest and
+       farthest z values which are used for the depth cueing.
+       This program called: lshaderange(128,255,-0x40000,0x3FFFFF);
+       now:    lshaderange(lo_end,hi_end,nearest,farthest);
+    -  Used a define for the object number (called CUBE)
+    -  Save/restore the colormap
+    -  The defaults of the near and far z mappings are no longer
+       hard coded  ( near = -0x400000; far = 0x3fffff;), but are
+       initialized with getgdesc.  Also the near and far mappings
+       are clamped to there min and max values respectively.
+*/</PRE>
+
+<H3><A NAME="A200C116a"></A>Related Information</H3>
+
+<hr><center>
+[  <a href="cylinder2_c.html">Previous</a>  |
+<a href="../gl32tref/doily_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

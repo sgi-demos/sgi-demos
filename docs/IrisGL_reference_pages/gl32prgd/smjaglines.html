@@ -1,0 +1,633 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/smjaglines.html Mon, 24 Jan 2022 16:27:53 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Smoothing Jagged Lines with Antialiasing in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="textchars.html">Previous</a>  |
+<a href="drawwfcvs.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="smjaglines.html"></A>Smoothing Jagged Lines with Antialiasing</H2>
+
+
+<P><A NAME="INDEX283"></A><A NAME="INDEX284"></A><A NAME="INDEX285"></A><A NAME="INDEX286"></A><A NAME="INDEX287"></A><A NAME="INDEX288"></A></P>
+
+
+<P><A NAME="A3C0E530025mhay"></A>This discussion of antialiasing includes
+the following topics: </P>
+
+
+<UL><LI><A NAME="A258C01c28d"></A><A HREF="smjaglines.html#mqO1260nita">Antialiasing
+Introduction</A></LI>
+
+
+<LI><A NAME="A258C01c28e"></A><A HREF="smjaglines.html#A4rO1220nita">Pixel
+Coverage</A></LI>
+
+
+<LI><A NAME="A78C1412"></A><A HREF="smjaglines.html#A8k32380nita">Improving
+Intersections</A></LI>
+
+
+<LI><A NAME="A258C01c28f"></A><A HREF="smjaglines.html#frO140nita">Depth-Cueing</A></LI></UL>
+
+
+<P><A NAME="A3C0E530052mhay"></A>Other topics that affect or are affected
+by antialiasing subroutines include <A HREF="depth-cueing.html">&quot;Performing
+Depth-Cueing&quot;</A>, <A HREF="remhidden.html#remhidden.html">&quot;Removing
+Hidden Surfaces&quot;</A>, and &quot;Working in <A HREF="workcolor.html#workcolor.html">Color
+Map and RGB</A> Modes&quot;. </P>
+
+
+<H3><A NAME="JUI11e0marj"></A>List of GL Antialiasing Subroutines<A NAME="INDEX289"></A>
+<A NAME="INDEX290"></A> <A NAME="INDEX291"></A> <A NAME="INDEX292"></A>
+<A NAME="INDEX293"></A> <A NAME="INDEX294"></A> </H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A320C930a2"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/linesmooth.html#Ew1f0marj">linesmooth</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies antialiasing of lines.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A320C930a3"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pntsmooth.html#W3o220marj">pntsmooth</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies antialiasing of points. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A320C930a1"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/subpixel.html#jIZ1120marj">subpixel</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Controls placement of point, line, and polygon vertices. </TD></TR></TABLE>
+
+
+<H3><A NAME="mqO1260nita"></A>Antialiasing Introduction </H3>
+
+
+<P><A NAME="A3C0E530081mhay"></A>Antialiasing makes lines and points drawn
+on the display screen appear smooth. You can draw smooth lines using antialiasing
+with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/linesmooth.html#Ew1f0marj">linesmooth</A></B>
+subroutine. </P>
+
+
+<P><A NAME="A3C0E530104mhay"></A>When lines are drawn on a raster computer
+screen, they are often displayed as jagged, especially if they are nearly
+(but not quite) horizontal or vertical. The reason is that when a line
+is drawn on the screen, the true mathematical line is approximated by a
+series of points that happen to lie on the pixel grid. Except for a few
+special cases (horizontal, vertical, and 45-degree lines), many of the
+approximating pixels are not on the mathematical line connecting the two
+pixels. </P>
+
+
+<P><A NAME="A3C0E530127mhay"></A>As an example, consider the worst case:
+a line that connects (0, 0) to (1279, 1). It moves up one pixel for every
+1280 pixels it moves sideways. The line is rendered as two horizontal segments
+640 pixels long, one having <I>y</I> coordinate 0 and one having <I>y</I>
+coordinate 1. Although the pixels are small, you can easily detect the
+jump from <I>y</I>=0 to<I> y</I>=1. </P>
+
+
+<P><A NAME="A3C0E530149mhay"></A>The following <B>jagged.c</B> example
+program illustrates the problem of lines that are displayed as jagged on
+the computer screen: </P>
+
+
+<PRE><A NAME="A258C01c292"></A>#include&nbsp;&lt;gl/gl.h&gt;
+#include&nbsp;&lt;gl/device.h&gt;</PRE>
+
+
+<PRE><A NAME="A258C01c293"></A>Int32&nbsp;vert1[2]&nbsp;=&nbsp;{100,&nbsp;100};
+Int32&nbsp;vert2[2]&nbsp;=&nbsp;{500,&nbsp;0};</PRE>
+
+
+<PRE><A NAME="A258C01c294"></A>main()
+{
+&nbsp;&nbsp;&nbsp;Int32&nbsp;xorg,&nbsp;yorg;</PRE>
+
+
+<PRE><A NAME="A258C01c295"></A>&nbsp;&nbsp;&nbsp;winopen(&quot;Jagged&quot;);
+&nbsp;&nbsp;&nbsp;doublebuffer();
+&nbsp;&nbsp;&nbsp;gconfig();
+&nbsp;&nbsp;&nbsp;getorigin(&amp;xorg,&nbsp;&amp;yorg);
+&nbsp;&nbsp;&nbsp;while&nbsp;(TRUE)&nbsp;{</PRE>
+
+
+<PRE><A NAME="A258C01c296"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(WHITE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vert2[0]&nbsp;=&nbsp;getvaluator(MOUSEX)&nbsp;-&nbsp;xorg;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vert2[1]&nbsp;=&nbsp;getvaluator(MOUSEY)&nbsp;-&nbsp;yorg;</PRE>
+
+
+<PRE><A NAME="A258C01c297"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bgnline();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v2i(vert1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v2i(vert2);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endline();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;swapbuffers();
+&nbsp;&nbsp;&nbsp;}
+}</PRE>
+
+
+<P><A NAME="A3C0E530178mhay"></A>This example draws a line from the point
+(100, 100) to the current cursor position. Move the cursor around and notice
+how jagged the lines are displayed especially when they are nearly vertical
+or horizontal. Even at angles far from vertical or horizontal, there is
+some jaggedness, but it is not as noticeable. The jagged effect that you
+see is called aliasing, and techniques to eliminate or reduce it are called
+antialiasing. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A5FB3D5553ttay"></A><B>Note: </B>Only solid, single, pixel-wide
+lines can be antialiased, and they cannot be used in conjunction with shading
+processor functions such as z-buffer, light, shade, and depthcue. </P></BLOCKQUOTE>
+
+
+<H3><A NAME="A4rO1220nita"></A>Pixel Coverage </H3>
+
+
+<P><A NAME="A3C0E530203mhay"></A>One way to smooth a line is to vary the
+coloring of the pixels along the path according to how much of each pixel
+is covered by the line and how much is background color. This is illustrated
+in the following <A HREF="figures/gl32p38.jpg">figure</A>. This illustration
+shows a short line drawn between the pixels (2,2) and (5,4). Each square
+represents a pixel, and the ideal line segment is the tilted rectangle.
+This rectangle is exactly one pixel wide, and the centers of pixels C and
+L are one-half pixel from the end of the rectangle. This is exactly the
+shape of rectangle that would be drawn parallel to the axes. </P>
+
+
+<P><A NAME="A3C0E530227mhay"></A>Each pixel can be set to only a single
+color. In the figure <A HREF="figures/gl32p38.jpg">Antialiased Line</A>,
+the ideal line hits parts of 14 pixels, and none of them are covered completely.
+The affected pixels are labeled A through N, and the chart at the side
+shows the percentage of each pixel that is covered by the ideal rectangle.
+Here, 87% of C and L are covered, while less than 1 % of E and J are covered.</P>
+
+
+<P><A NAME="A3C0E530250mhay"></A>Other pixels have intermediate-sized intersections.
+If pure white were color 1.0 and pure black were 0.0, a reasonable antialiased
+line could be drawn by coloring A and B as <TT>.04051</TT> (almost black),
+C as <TT>.87847</TT> (almost white), and so on. </P>
+
+
+<H4><A NAME="A258C01c299"></A>linesmooth Subroutine </H4>
+
+
+<P><A NAME="A3C0E530274mhay"></A>GL automatically draws antialiased lines
+in both RGB and color map modes. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/linesmooth.html#Ew1f0marj">linesmooth</A></B>
+subroutine turns this capability on and off. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A258C01c2a2"></A>void&nbsp;linesmooth(Int32&nbsp;mode)</PRE>
+
+
+<H5><A NAME="A258C01c29b"></A>RGB Mode </H5>
+
+
+<P><A NAME="A3C0E530301mhay"></A>If antialiasing is turned on in RGB mode,
+the drawing of antialiased lines proceeds automatically. The drawing hardware
+automatically performs what is called a &quot;read-modify-write&quot; operation
+into the frame buffer. That is, it reads the color of a pixel in the frame
+buffer, computes a new color for that pixel, and then writes it back into
+the frame buffer. The color that is computed is a blend of the pixel color
+and the current drawing color, the blend being based on the overlap of
+the line with the pixel. </P>
+
+
+<P><A NAME="A3C0E530323mhay"></A>To draw antialiased lines in RGB mode,
+you need only to call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/linesmooth.html#Ew1f0marj">linesmooth</A></B>
+subroutine, and then proceed to draw as normal. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A175C1dc0"></A><B>Note: </B>In order for antialiased lines
+and points to appear visually smooth, gamma correction <I>must</I> be performed.
+Gamma correction is performed by loading a gamma-corrected color ramp with
+the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gammaramp.html#Kz4nita">gammaramp</A></B>
+subroutine. Gamma-corrected ramps are nonlinear ramps from dark colors
+to light, usually specified with a power function, but sometimes logarithmically.
+Gamma correction is required to take into account nonlinearities in the
+display electronics, in the phosphorescence of the display phosphors, in
+the human visual system, and in the pixel coverage sampling algorithm.
+If gamma correction is not performed, lines do not appear smooth, but exhibit
+a <I>roping</I> or <I>braiding</I> effect, as if the line were composed
+of separate, intertwining strands. </P></BLOCKQUOTE>
+
+
+<P><A NAME="A175C1dc1"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gamma_c.html#A101C12370">gamma.c</A></B>
+example program demonstrates how a gamma-corrected ramp may be constructed
+and loaded on the system. A gamma correction factor in the range of 2.4
+to 2.7 is suggested. </P>
+
+
+<H5><A NAME="A258C01c29e"></A>Color Map Mode </H5>
+
+
+<P><A NAME="A3C0E530350mhay"></A>Drawing antialiased lines in color map
+mode requires greater involvement from the application. In particular,
+a special color map, called a color ramp, must be loaded. To understand
+the color ramp, it helps to know what the hardware does in color map mode.</P>
+
+
+<P><A NAME="A3C0E530374mhay"></A>When antialiasing is turned on, the hardware
+replaces the low-order 4 bits of the current color index with a number
+ranging from 0 to 15 that represents the fractional pixel coverage. When
+a line is drawn, the index values stored into the frame buffer are these
+modified color values. As a result of this replacement of values, the images
+do not look correct on the screen. To alleviate this problem, the low-order
+4 bits of the color map must contain a ramp from the foreground color (the
+color of the line) and the background color (the color to which the frame
+buffer was cleared). </P>
+
+
+<P><A NAME="A3C0E530396mhay"></A>In the following example, 16 consecutive
+cells in the color map are filled with colors that are uniformly spaced
+between black and white: </P>
+
+
+<PRE><A NAME="A320C9308c"></A>for&nbsp;(i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;16;&nbsp;i++)
+{
+&nbsp;&nbsp;&nbsp;mapcolor(144+i,&nbsp;i*17,&nbsp;i*17,&nbsp;i*17);
+}</PRE>
+
+
+<P><A NAME="A3C0E530420mhay"></A>This maps color entries 144 through 159
+to shades of gray having equal red, green, and blue components of 0, 17,
+34, 51, 68, 85, 102, 119, 136, 153, 170, 187, 204, 221, 238, and 255. The
+starting number, 144, is not completely arbitrary. For antialiasing to
+work, the starting number must be an exact multiple of 16. The number 144
+is large enough that the color map entries affected do not conflict those
+lower entries in the color map used in many simple applications. </P>
+
+
+<P><A NAME="A3C0E530443mhay"></A>If antialiasing is turned on with the
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/linesmooth.html#Ew1f0marj">linesmooth</A></B>
+subroutine, the percentage each pixel is covered by the ideal line is approximated
+by the hardware, and that number is scaled uniformly into the range of
+16 consecutive shades to find the color to paint the pixel. The <B>smooth.c</B>
+example program that follows is a slight modification of the <B><A HREF="#A3C0E530149mhay">jagged.c</A></B>
+example program. It behaves similarly except that smooth lines are drawn
+if the left mouse button is pressed. </P>
+
+
+<PRE><A NAME="A258C01c2a3"></A>#include&nbsp;&lt;gl/gl.h&gt;
+#include&nbsp;&lt;gl/device.h&gt;</PRE>
+
+
+<PRE><A NAME="A258C01c2a4"></A>Int32&nbsp;vert1[2]&nbsp;=&nbsp;{100,&nbsp;100};
+Int32&nbsp;vert2[2]&nbsp;=&nbsp;{500,&nbsp;0};</PRE>
+
+
+<PRE><A NAME="A258C01c2a5"></A>main()
+{
+&nbsp;&nbsp;&nbsp;Int32&nbsp;xorg,&nbsp;yorg,&nbsp;i;</PRE>
+
+
+<PRE><A NAME="A258C01c2a6"></A>&nbsp;&nbsp;&nbsp;winopen(&quot;smooth&quot;);
+&nbsp;&nbsp;&nbsp;doublebuffer();
+&nbsp;&nbsp;&nbsp;gconfig();
+&nbsp;&nbsp;&nbsp;getorigin(&amp;xorg,&nbsp;&amp;yorg);
+&nbsp;&nbsp;&nbsp;for&nbsp;(i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;16;&nbsp;i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mapcolor(144+i,&nbsp;i*17,&nbsp;i*17,&nbsp;i*17);</PRE>
+
+
+<PRE><A NAME="A258C01c2a7"></A>&nbsp;&nbsp;&nbsp;while&nbsp;(TRUE)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(getbutton(LEFTMOUSE))&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linesmooth(TRUE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(144);</PRE>
+
+
+<PRE><A NAME="A258C01c2a8"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;else&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linesmooth(FALSE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(WHITE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vert2[0]&nbsp;=&nbsp;getvaluator(MOUSEX)&nbsp;-&nbsp;xorg;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vert2[1]&nbsp;=&nbsp;getvaluator(MOUSEY)&nbsp;-&nbsp;yorg;</PRE>
+
+
+<PRE><A NAME="A258C01c2a9"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bgnline();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v2i(vert1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v2i(vert2);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endline();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;swapbuffers();
+&nbsp;&nbsp;&nbsp;}
+}</PRE>
+
+
+<P><A NAME="A3C0E530474mhay"></A>Before anything is drawn, the color map
+entries between 144 and 159 are loaded with shades of gray. Then, in the
+main loop, the left mouse button is examined, and the color is set either
+to white, if the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/linesmooth.html#Ew1f0marj">linesmooth</A></B>
+subroutine is turned off, or to 144 if it is turned on. </P>
+
+
+<P><A NAME="A3C0E530498mhay"></A>You can draw multicolor antialiased lines
+on arbitrary multicolored backgrounds if you load suitable ramps. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/alias_c.html#JBm90nita">alias.c</A></B>
+example program partitions eight adapter bitplanes into two that store
+the background image and two that store the line colors, with the remaining
+four being overridden by the antialiasing hardware. The color map is loaded
+with ramps from all possible line colors to all possible background colors.
+The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/alias_back_c.html#A114C19c9">alias_back.c</A></B>
+example program illustrates the drawing of antialiased lines of multiple
+foreground colors on a monochrome background. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/alias_fore_c.html#A114C19e6">alias_fore.c</A></B>
+example program, in contrast, illustrates drawing antialiased lines of
+a single foreground color on an arbitrary multicolored background. </P>
+
+
+<P><A NAME="A3C0E530521mhay"></A>The accurate selection of ramp intensities
+is imperative for effective visual appearance. The ramp must include corrections
+for nonlinearities in the electronics, the screen phosphors, and the human
+eye. Such corrected ramps are usually referred to as gamma ramps. In the
+<B>alias.c </B>example program, the colors are gamma corrected. The gamma
+ramp hardware, however, is not used; rather, the corrections are folded
+in with the color ramps. </P>
+
+
+<BLOCKQUOTE><P><B>Notes: </B> </P>
+
+
+<OL><LI><A NAME="A258C01c2ad"></A>The Supergraphics Processor Subsystem does
+not support antialiasing in color map mode.</LI>
+
+
+<LI><A NAME="A258C01c2ae"></A>The High-Performance 3D Color Graphics Processor
+does not support antialiasing in RGB mode.</LI></OL></BLOCKQUOTE>
+
+
+<P><A NAME="A3C0E530548mhay"></A>Other topics that affect or are affected
+by antialiasing subroutines include <A HREF="depth-cueing.html">Performing
+Depth-Cueing</A>, <A HREF="remhidden.html#remhidden.html">Removing Hidden
+Surfaces</A>, and Working in <A HREF="workcolor.html#workcolor.html">Color Map
+and RGB</A> Modes. </P>
+
+
+<H3><A NAME="A8k32380nita"></A>Improving Intersections </H3>
+
+
+<P><A NAME="A3C0E530562mhay"></A>When antialiased lines cross each other,
+there may be some undesirable presentations because the hardware is interpolating
+between the line color and the background color. It does not take into
+account any other lines that may already be drawn. Thus, if a program draws
+a series of smooth lines all crossing each other at the same point, you
+might expect the intersection to be almost entirely the color of the line.
+However, the hardware continues to average the original background color
+into each new line. The following example program, <B>linesmooth1.c</B>,
+which draws a multirayed star, illustrates the problem: </P>
+
+
+<PRE><A NAME="A78C1421"></A>#include&nbsp;&lt;gl/gl.h&gt;
+#include&nbsp;&lt;math.h&gt;
+#define&nbsp;PI&nbsp;3.14159265
+#define&nbsp;RADIUS&nbsp;2.0</PRE>
+
+
+<PRE><A NAME="A78C1422"></A>main()
+{
+&nbsp;&nbsp;&nbsp;long&nbsp;i;
+&nbsp;&nbsp;&nbsp;float&nbsp;x,&nbsp;y,&nbsp;radangle;</PRE>
+
+
+<PRE><A NAME="A78C1423"></A>&nbsp;&nbsp;&nbsp;keepaspect(1,&nbsp;1);
+&nbsp;&nbsp;&nbsp;winopen(&quot;linesmooth1&quot;);
+&nbsp;&nbsp;&nbsp;ortho2(-1.0,&nbsp;1.0,&nbsp;-1.0,&nbsp;1.0);
+&nbsp;&nbsp;&nbsp;for&nbsp;(i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;16;&nbsp;i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mapcolor(256+i,&nbsp;17*i,&nbsp;17*i,&nbsp;17*i);
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(256);
+&nbsp;&nbsp;&nbsp;linesmooth(TRUE);</PRE>
+
+
+<PRE><A NAME="A78C1424"></A>&nbsp;&nbsp;&nbsp;for&nbsp;(i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;=&nbsp;180;&nbsp;i&nbsp;+=&nbsp;10)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;radangle&nbsp;=&nbsp;i*PI/180.0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;=&nbsp;RADIUS*cos(radangle);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y&nbsp;=&nbsp;RADIUS*sin(radangle);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;move2(-x,&nbsp;-y);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;draw2(x,&nbsp;y);
+&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;sleep(20);
+}</PRE>
+
+
+<P><A NAME="A3C0E530590mhay"></A>The first ray drawn contains pixels blended
+with the background color to smooth the line. Each successive line's color
+is also blended with the original background color and is unaffected, even
+close to the intersection, by the color resulting from the previous line's
+blending. The pixels surrounding the center of the star are no brighter
+than any other line portion that has been averaged with the background
+color. Antialiased lines in color map mode have no effect on the color
+of successively drawn lines. </P>
+
+
+<P><A NAME="A3C0E530613mhay"></A>The interpolation problem is also apparent
+when two lines that are nearly parallel cross each other. One solution
+to this sort of problem can be obtained by using the z-buffering hardware
+for color comparisons. Instead of using the z-buffer to draw objects that
+are nearest the viewer, the z-buffering compares each new pixel color with
+the existing color for that pixel and causes the brightest color to be
+drawn. This is not a perfect solution, but it gives good results. The point
+at the intersection of two lines is at least as bright as the lines were
+originally. </P>
+
+
+<H3><A NAME="A78C1427"></A>Example Program With and Without Color Comparison</H3>
+
+
+<P><A NAME="A3C0E530636mhay"></A>The following example program, <B>linesmooth2.c</B>,
+draws a pair of intersecting lines both with and without the color comparison.
+As it runs, press the left mouse button to see the effects of a z-buffer
+type color comparison. </P>
+
+
+<PRE><A NAME="A78C1429"></A>#include&nbsp;&lt;gl/gl.h&gt;
+#include&nbsp;&lt;math.h&gt;
+#include&nbsp;&lt;device.h&gt;
+#define&nbsp;PI&nbsp;3.14159265
+#define&nbsp;RADIUS&nbsp;300.0</PRE>
+
+
+<PRE><A NAME="A78C142a"></A>main()
+{
+&nbsp;&nbsp;&nbsp;long&nbsp;i;
+&nbsp;&nbsp;&nbsp;float&nbsp;x,&nbsp;y,&nbsp;radangle;</PRE>
+
+
+<PRE><A NAME="A78C142b"></A>&nbsp;&nbsp;&nbsp;keepaspect(1,&nbsp;1);
+&nbsp;&nbsp;&nbsp;winopen(&quot;linesmooth2&quot;);
+&nbsp;&nbsp;&nbsp;doublebuffer();
+&nbsp;&nbsp;&nbsp;ortho2(-1.0,&nbsp;1.0,&nbsp;-1.0,&nbsp;1.0);
+&nbsp;&nbsp;&nbsp;RGBmode();
+&nbsp;&nbsp;&nbsp;gconfig();
+&nbsp;&nbsp;&nbsp;frontbuffer(TRUE);
+&nbsp;&nbsp;&nbsp;wmpack(0xffffffff);
+&nbsp;&nbsp;&nbsp;cpack(0);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;frontbuffer(FALSE);
+&nbsp;&nbsp;&nbsp;cmode();
+&nbsp;&nbsp;&nbsp;gconfig();</PRE>
+
+
+<PRE><A NAME="A78C142c"></A>&nbsp;&nbsp;&nbsp;for&nbsp;(i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;16;&nbsp;i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mapcolor(48+i,&nbsp;17*i,&nbsp;17*i,&nbsp;17*i);
+&nbsp;&nbsp;&nbsp;linesmooth(TRUE);
+&nbsp;&nbsp;&nbsp;for&nbsp;(i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;1000000;&nbsp;i++)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(getbutton(LEFTMOUSE))&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zbuffer(TRUE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zsource(ZSRC_COLOR);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zfunction(ZF_GEQUAL);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;else&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zbuffer(FALSE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(48);</PRE>
+
+
+<PRE><A NAME="A78C142d"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;move2(-1.0,&nbsp;0.0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;draw2(1.0,&nbsp;0.0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;move2(-1.0,&nbsp;-sin(i/30.0)*.05);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;draw2(1.0,&nbsp;sin(i/30.0*.05);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;swapbuffers();
+&nbsp;&nbsp;&nbsp;}
+}</PRE>
+
+
+<P><A NAME="A3C0E530665mhay"></A>The <B>linesmooth2.c</B> example program
+has several interesting features. The hardware that does the comparison
+to find the largest color index actually compares the entire 24-bit contents
+of the pixel. The same physical memory is used for RGB information as is
+used for color indexes, but the color index data occupies only the low-order
+12 bits. If there is garbage in the high-order bits, perhaps left behind
+by previous windows, this has no effect on the displayed values. Because
+the comparisons are made on the full 24 bits, the garbage contents can
+have an effect on the results of the comparisons. </P>
+
+
+<P><A NAME="A3C0E530688mhay"></A>For this reason, it is a good idea to
+clear out all 32 bits completely before starting. This is done by putting
+the system in RGB mode, and then writing a zero (for all 32 bits) with
+a writemask of 0xffffffff (all 32 bits enabled). This guarantees that everything
+in the high-order bits of the frame buffer is set to zero. Because the
+<B>linesmooth2.c</B> example program is double buffered, this must be done
+for both the front and back buffers by setting <TT>frontbuffer(TRUE)</TT>.</P>
+
+
+<H3><A NAME="A78C1430"></A>Enabling Color Comparison </H3>
+
+
+<P><A NAME="A3C0E530712mhay"></A>Three things must be done to enable the
+z-buffer color comparison properly: </P>
+
+
+<UL><LI><A NAME="A78C1432"></A>The z-buffer must be turned on by setting <TT>zbuffer(TRUE)</TT>.</LI>
+
+
+<LI><A NAME="A78C1433"></A>The z-buffer must be set to do a color comparison
+instead of a depth comparison with <TT>zsource(ZSRC_COLOR)</TT>.</LI>
+
+
+<LI><A NAME="A78C1434"></A>The color comparison must be changed by setting
+<TT>zfunction(ZF_GEQUAL)</TT>.</LI></UL>
+
+
+<P><A NAME="A3C0E530738mhay"></A>The comparison function is ZF_GEQUAL (it
+could also be ZF_GREATER), so that the new value is written into the pixel
+if its value is greater than or equal to the current value. (In standard
+z-buffer comparisons, values are written if they are closer to the eye:
+ZF_LESS or ZF_LEQUAL.) </P>
+
+
+<H4><A NAME="A258C01c2af"></A>pntsmooth Subroutine </H4>
+
+
+<P><A NAME="A3C0E530762mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pntsmooth.html#W3o220marj">pntsmooth</A></B>
+subroutine draws antialiased points. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c2b1"></A>void&nbsp;pntsmooth(Int32&nbsp;mode)</PRE>
+
+
+<H4><A NAME="A258C01c2b2"></A>subpixel Subroutine </H4>
+
+
+<P><A NAME="A3C0E530788mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/subpixel.html#jIZ1120marj">subpixel</A></B>
+subroutine controls the placement of point, line, and polygon vertices
+in <A HREF="specialterms.html#A27P017">screen coordinates</A>.
+The default value of the <I>bool</I> parameter is False, causing vertices
+to be snapped to the center of the nearest pixel after they have been transformed
+to screen coordinates. The <B>subpixel </B>subroutine is typically set
+to True while smooth points or smooth lines are being drawn. </P>
+
+
+<P>The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c2b4"></A>void&nbsp;subpixel(Int32&nbsp;bool)</PRE>
+
+
+<H3><A NAME="frO140nita"></A>Depth-Cueing </H3>
+
+
+<P><A NAME="A3C0E530812mhay"></A>It is possible to draw lines that are
+both antialiased and depth-cued in color map mode, but not in RGB mode
+The depth-cueing hardware maps the transformed <I>z</I> component linearly
+into a region of the color map. If the color map is arranged as a series
+of 16-entry ramps, each beginning at a multiple of 16, and each mapping
+a range from the background color to a series of brighter and brighter
+colors, depth-cueing and antialiasing work together. </P>
+
+
+<P><A NAME="A3C0E530835mhay"></A>First, the depth-cueing calculation gives
+a position within the map corresponding to how bright a fully illuminated
+pixel on a line should be. Then the antialiasing hardware calculates a
+percentage pixel coverage, and the appropriate entry from the 16 color
+range is chosen. Although it is an approximation, this method gives reasonably
+good results. </P>
+
+
+
+
+<hr><center>
+[  <a href="textchars.html">Previous</a>  |
+<a href="drawwfcvs.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/smjaglines.html Mon, 24 Jan 2022 16:27:53 GMT -->
+</HTML>
+

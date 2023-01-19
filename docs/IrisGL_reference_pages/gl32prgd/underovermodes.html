@@ -1,0 +1,294 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/underovermodes.html Mon, 24 Jan 2022 16:28:12 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Underlay and Overlay Modes in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="animatescene.html">Previous</a>  |
+<a href="alphablend.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="underovermodes.html"></A>Underlay and Overlay Modes</H2>
+
+
+<P><A NAME="INDEX652"></A><A NAME="INDEX653"></A><A NAME="INDEX654"></A><A NAME="INDEX655"></A><A NAME="INDEX656"></A><A NAME="INDEX657"></A><A NAME="INDEX658"></A><A NAME="INDEX659"></A></P>
+
+
+<P><A NAME="A3C0EB47929mhay"></A>Underlay and overlay modes in GL overlays
+and underlays are independent frame buffers that lie over and lie under,
+respectively, the principal frame buffer. They can be drawn into and cleared
+independently from the main frame buffer. In this way, they provide a convenience
+to the graphics programmer: color values in the underlays and overlays
+can be changed without destroying the contents of the main frame buffer.
+If the picture in the main frame buffer took a long time to draw, and the
+program needs to put up a quick status indicator, or perform some other
+temporary communications with the user, the overlay planes may be the ideal
+place to do so. For example, GL pop-up menus use the overlay planes. When
+the pop-up menus are erased, the contents of the principal frame buffer
+are unharmed. In some ways, overlays and underlays are not as powerful
+as the main frame buffer: they contain fewer bitplanes (2 or 4, depending
+on the graphics adapter) and thus a more limited selection of colors; they
+can be used only in color index mode, and they do not support Gouraud shading.</P>
+
+
+<P><A NAME="A3C0EB47950mhay"></A>The concept of partitions is in many ways
+similar to that of overlays. Partitions can be independently cleared and
+drawn into; their stacking order can be changed, and they can be made invisible.
+Partitions, unlike overlays, are not separate bitplanes, but are a partitioning
+of the principal frame buffer; thus their name. For more information on
+partitions, please refer to <A HREF="writemasks.html#C711130nita">Partitions</A>.</P>
+
+
+<P><A NAME="A3C0EB47971mhay"></A>You can control information overlaid on
+top of, and placed underneath, the main color frame buffer by setting the
+number of bitplanes used for overlay and underlay. </P>
+
+
+<P><A NAME="A3C0EB47992mhay"></A>Overlay bitplanes supply additional bits
+of information at each pixel. You can configure the system to have 0, 2,
+or 4 overlay bitplanes, depending on the <A HREF="undergraphadapt.html#undergraphadapt.html">installed
+adapter</A>. Whenever all the overlay bitplanes contain 0 at a pixel, the
+color of the pixel from the main color bitplanes is presented on the screen.</P>
+
+
+<P><A NAME="A3C0EB48014mhay"></A>If any of the overlay planes contains
+a nonzero entry (there are three ways for this to happen with two overlay
+bitplanes: 01, 10, and 11), the overlay value is looked up in a separate
+color table, and that color is presented instead. The overlay color lookup
+table behaves exactly like the standard color map, except that the lookup
+table only has three usable entries. </P>
+
+
+<P><A NAME="A3C0EB48036mhay"></A>Underlay bitplanes are similar in concept,
+in that there are extra bits for each pixel. The values of these extra
+bits are normally ignored unless the color in the standard bitplanes is
+0. In that case, the underlay color is looked up in a color map and presented.
+Thus, the underlay color shows up only if there is nothing (the pixel value
+equals 0) in the standard bitplanes. With two underlay bitplanes, there
+are four possible underlay colors. </P>
+
+
+<P><A NAME="A3C0EB48058mhay"></A>Overlay and underlay planes can be used
+in single or double buffer mode, and in color map or RGB mode. Overlay
+bitplanes are useful for such things as menus, construction lines, rubber-banding
+lines, and so forth. Underlay planes might be used for background grids
+that appear wherever nothing else is drawn. (See the figure entitled <A HREF="figures/gl32p1.jpg">Frame
+Buffer Configuration</A>.) </P>
+
+
+<P><A NAME="A3C0EB48079mhay"></A>Many of the same operations are available
+for operating on overlay or underlay bitplanes as are available for the
+standard bitplanes in color map mode. The color map subroutines (the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/color.html#A146X9429">color</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/getcolor.html#A146X924b">getcolor</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmcolor.html#nXI1100marj">getmcolor</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmcolors.html#UI2f0marj">getmcolors</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapcolor.html#A146X9535">mapcolor</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapcolors.html#cv2170marj">mapcolors</A></B>
+subroutines) affect the overlay and underlay bitplanes if the system is
+in overlay or underlay mode. </P>
+
+
+<P><A NAME="A3C0EB48101mhay"></A>For example, in overlay mode, the <B>color</B>
+subroutine sets the overlay color, the <B>getcolor</B> subroutine gets
+the current overlay color, the <B>mapcolor</B> subroutine affects entries
+in the overlay map, and the <B>getmcolor</B> subroutine reads those entries.
+In overlay mode, all drawing routines draw into the overlay bitplanes rather
+than the standard bitplanes. The routines are similarly redefined for underlay
+mode. Use the <B><A HREF="underovermodes.html#A19C0e0c9">drawmode</A></B>
+subroutine to set the overlay or underlay mode. </P>
+
+
+<P><A NAME="A3C0EB48122mhay"></A>To set the number of user-defined bitplanes
+you want to use for underlay color or overlay color, call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/underlay.html#Az5O370nita">underlay</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/overlay.html#A143X950a">overlay</A></B>
+subroutines. You cannot use the user-defined bitplanes for overlay and
+underlay color simultaneously. Call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gconfig.html#hS4260nita">gconfig</A></B>
+subroutine after the <B>overlay</B> or <B>underlay</B> subroutines to activate
+their settings. </P>
+
+
+<H3><A NAME="A258C01c100"></A>List of Underlay and Overlay Mode Subroutines<A NAME="INDEX660"></A>
+<A NAME="INDEX661"></A> <A NAME="INDEX662"></A> <A NAME="INDEX663"></A>
+<A NAME="INDEX664"></A> <A NAME="INDEX665"></A> </H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A258C01c101"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/color.html#A146X9429">color</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the current color in color map mode. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A258C01c102"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/drawmode.html#A143X9460">drawmode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Chooses a set of bitplanes for drawing.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A258C01c103"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getcolor.html#A146X924b">getcolor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the current color in color map mode.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A258C01c104"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmcolor.html#nXI1100marj">getmcolor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Gets a copy of the RGB values for a color map entry.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A258C01c105"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapcolor.html#A146X9535">mapcolor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Changes a color map entry to a specified RGB value.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A258C01c106"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/overlay.html#A143X950a">overlay</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the number of bitplanes used for overlay.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A258C01c107"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/underlay.html#Az5O370nita">underlay</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the number of bitplanes used for underlay.</TD></TR></TABLE>
+
+
+<P> </P>
+
+
+<H3><A NAME="BC9D4F0403vbia"></A>Default Configuration </H3>
+
+
+<P><A NAME="A3C0EB48153mhay"></A>By default, the auxiliary (overlay and
+underlay) planes are always enabled, for all windows, including the root
+window. Overlays can be disabled for a window only by the application that
+created the window (Overlays are disabled by making the subroutine calling
+sequence <TT>overlay(0); gconfig();</TT>. When overlays are disabled, their
+contents are not visible.) </P>
+
+
+<P><A NAME="A3C0EB48174mhay"></A>Overlays are by default enabled for the
+root window. The default has the following results: </P>
+
+
+<OL><LI><A NAME="A6F8E72870csol"></A>When an application renders into the overlays
+while in fullscreen mode, the rendered drawing is visible even if it overlies
+other windows. </LI>
+
+
+<LI><A NAME="A6F8E73198csol"></A>Garbage generated by other applications
+can be left behind in the overlay planes. Since the overlay planes are
+not automatically cleared when a program terminates, drawings intentionally
+or unintentionally left behind in the overlay remain visible. You can use
+the following code fragment to clear garbage left in the overlay planes:
+
+
+<PRE><A NAME="A6F8E73474csol"></A>{
+ fullscrn();      /* Gain access to the entire screen    */
+ drawmode(OVERDRAW);  /* Access the overlay planes specifically */
+ color(0);       /* The transparent overlay color     */
+ clear();
+ drawmode(NORMALDRAW); /* Return to normal operation       */
+ endfullscrn();     /* Reset clipping to window boundaries  */
+ }
+</PRE></LI></OL>
+
+
+<P>The <B>/usr/lpp/GL/examples/clover.c</B> file contains an example of
+the prior code segment. </P>
+
+
+<H3><A NAME="A6F5E01324csol"></A>Configuring Underlay and Overlay Planes</H3>
+
+
+<P><A NAME="A3C0EB48221mhay"></A>Overlays are configured by making the
+<B>overlay</B>(<I>n</I>); <B>gconfig</B>; subroutine calling sequence ,
+after having set n equal to the number of desired overlay planes. The number
+of acceptable values for n are extremely limited, and depend on the installed
+adapter. Refer to the section &quot;Understanding the Adapter&quot; for
+information about the number of supported overlay planes for a given adapter.
+This number can also be queried at run time with the <B>getgdesc</B> subroutine.
+When overlays are disabled (equivalently, when zero overlay planes are
+configured, by calling <TT>overlay(0); gconfig);</TT>), they become invisible.
+Although the actual bitplanes are still physically present, their actual
+contents are no longer visible on the screen. For most of the currently
+supported graphics adapters, the overlay planes are <I>not</I> cleared
+when they are disabled;any data stored in them remains more or less intact.</P>
+
+
+<H4><A NAME="A19C0e0c9"></A>drawmode Subroutine </H4>
+
+
+<P><A NAME="A3C0EB48245mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/drawmode.html#A143X9460">drawmode</A></B>
+subroutine is used to put the system into overlay or underlay mode, or
+back into normal mode after drawing into the overlay bitplanes is finished.
+The OVERDRAW and UNDERDRAW settings in the <B>drawmode</B> subroutine put
+the system into overlay and underlay mode. The NORMALDRAW setting returns
+the system to the default, where the color subroutines refer to the standard
+bitplanes. The other settings for this subroutine are PUPDRAW, which sets
+operations for the pop-up menu, and CURSORDRAW, which sets operations for
+the cursor. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A57C0150dd"></A>void&nbsp;drawmode(Int32&nbsp;mode)
+
+
+
+</PRE>
+
+
+
+
+<hr><center>
+[  <a href="animatescene.html">Previous</a>  |
+<a href="alphablend.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/underovermodes.html Mon, 24 Jan 2022 16:28:12 GMT -->
+</HTML>
+

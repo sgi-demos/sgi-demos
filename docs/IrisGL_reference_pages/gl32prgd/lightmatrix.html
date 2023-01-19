@@ -1,0 +1,381 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/lightmatrix.html Mon, 24 Jan 2022 16:28:08 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Lighting in Matrix Mode
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="advlightcap.html">Previous</a>  |
+<a href="lightsubs.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="lightmatrix.html"></A>Lighting in Matrix Mode </H2>
+
+
+<P><A NAME="INDEX554"></A><A NAME="INDEX555"></A><A NAME="INDEX556"></A><A NAME="INDEX557"></A><A NAME="INDEX558"></A><A NAME="INDEX559"></A><A NAME="INDEX560"></A><A NAME="INDEX561"></A></P>
+
+
+<P><A NAME="A3C0EA81894mhay"></A>This section outlines the technique of
+creating lighting effects in matrix mode: </P>
+
+
+<UL><LI><A NAME="A258C01bfd8"></A><A HREF="lightmatrix.html#FPL220marj">Transforming
+Vectors</A> into Normalized Device Coordinates</LI>
+
+
+<LI><A NAME="A258C01bfd9"></A><A HREF="lightmatrix.html#A342C9733a">Positioning
+the Lights</A></LI></UL>
+
+
+<H3><A NAME="FPL220marj"></A>Transforming Vectors into Normalized Device
+Coordinates </H3>
+
+
+<P><A NAME="A3C0EA81918mhay"></A>If you are not doing lighting calculations,
+the geometric transformation pipeline is relatively simple. Vertices (vectors)
+representing positions in 3-D space are transformed into normalized device
+coordinates (NDCs, that is, 3-D cubes whose <I>x</I>, <I>y</I>, and <I>z</I>
+coordinates are restricted to lie between -1.0 and 1.0) and then scaled
+to the physical window (and screen) integer coordinates. </P>
+
+
+<P><A NAME="A3C0EA81939mhay"></A>The transformation to NDCs is accomplished
+by multiplying the input vector by a matrix that represents the combined
+actions of modeling, viewing, and <A HREF="coordtransfrms.html#A264X9141">projection
+transformations</A>. Each of the individual transformations is represented
+by a matrix, and these can all be multiplied together to yield one matrix
+that has the same effect as the sequential application of all the individual
+matrices. (See <A HREF="workcoords.html#workcoords.html">&quot;Working with
+Coordinate Systems&quot;</A>for more information.) </P>
+
+
+<P><A NAME="A3C0EA81960mhay"></A>For lighting calculations, the transformation
+is done in two steps because the calculations require vectors transformed
+by the modeling and viewing matrices but not yet projected. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/mmode.html#XhZ2370marj">mmode</A></B>
+subroutine is required to put the system into the two-step mode when lighting
+is turned on. </P>
+
+
+<P><A NAME="A3C0EA81981mhay"></A>In the one-step mode, all transformations
+are kept on one transformation stack, and all transformation subroutines
+operate on that stack. In the two-step mode, modeling/viewing transformations
+are kept separate from the projection transformations. The modeling/viewing
+transformations are kept on a stack; the projection matrix is kept separately
+and is not on a stack. </P>
+
+
+<P><A NAME="A3C0EA82002mhay"></A>There are three matrix modes: MSINGLE,
+MVIEWING, and MPROJECTION. The default is MSINGLE, the one-step mode. The
+system can be placed in the one-step mode by calling </P>
+
+
+<PRE><A NAME="A34C011a70"></A>mmode(MSINGLE);</PRE>
+
+
+<P><A NAME="A3C0EA82024mhay"></A>although, by default, it is already in
+that mode. To use lighting the system MUST be placed in the MVIEWING mode.
+This is done by making the call </P>
+
+
+<PRE><A NAME="A342C97328"></A>mmode(MVIEWING);</PRE>
+
+
+<P><A NAME="A3C0EA82046mhay"></A>After this call, all matrix subroutines
+operate on the matrix stack. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmatrix.html#A144X940e">getmatrix</A></B>
+subroutine returns the top matrix on the modeling/viewing stack; the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/loadmatrix.html#A144X9430">loadmatrix</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/multmatrix.html#A144X9474">multmatrix</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/rotate.html#A8g2120marj">rotate</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/translate.html#A144X95c8">translate</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/scale.html#A144X95a6">scale</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/lookat.html#A144X9452">lookat</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/polarview.html#A144X94fc">polarview</A></B>
+all operate on the top matrix of the stack. Note, however, that the perspective
+projection subroutines (<B><!--:libs:gl32tref:--><A HREF="../gl32tref/perspective.html#A144X94da">perspective</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/window.html#A144X95ea">window</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496">ortho2</A></B>,
+or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496">ortho</A></B>)
+are an exception: they do <I>not</I> operate on the modeling/viewing stack,
+but rather affect the projection matrix directly. </P>
+
+
+<P><A NAME="A3C0EA82068mhay"></A>If the application needs to define a customized
+perspective transformation (one that is not covered by <B>perspective,
+window, ortho</B>, or <B>ortho2</B>) while lighting is turned on, the application
+should go into MPROJECTION mode by calling </P>
+
+
+<PRE><A NAME="A342C9732f"></A>mmode(MPROJECTION);</PRE>
+
+
+<P><A NAME="A3C0EA82092mhay"></A>In this mode all the matrix subroutines
+operate on the projection matrix. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmatrix.html#A144X940e">getmatrix</A></B>
+subroutine returns the current projection matrix. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/loadmatrix.html#A144X9430">loadmatrix</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/multmatrix.html#A144X9474">multmatrix</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/rot.html#A144X9562">rot</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/rotate.html#A8g2120marj">rotate</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/translate.html#A144X95c8">translate</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/scale.html#A144X95a6">scale</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/lookat.html#A144X9452">lookat</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/polarview.html#A144X94fc">polarview</A></B>
+all operate directly on the projection matrix, as well as the usual projection
+subroutines (<B><!--:libs:gl32tref:--><A HREF="../gl32tref/perspective.html#A144X94da">perspective</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/window.html#A144X95ea">window</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496">ortho2</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496">ortho</A></B>).
+On the other hand, the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pushmatrix.html#A144X9540">pushmatrix</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/popmatrix.html#A144X951e">popmatrix</A></B>
+calls make no sense in this mode because the stack is not directly accessible.
+Furthermore, no drawing should be done while in MPROJECTION mode; the system
+is not configured for drawing when it is in this mode. When you are finished
+defining the projection matrix, you should go back directly to MVIEWING
+mode. Please heed the following note of caution: </P>
+
+
+<BLOCKQUOTE><P><A NAME="A34C011a75"></A><B>Attention: </B>Entering or leaving MSINGLE
+mode scrambles the contents of the matrix stack and leaves the current
+projection matrix undefined. </P></BLOCKQUOTE>
+
+
+<P><A NAME="A3C0EA82115mhay"></A>When you write a GL program, you must
+always remember to initialize the transformations. By default, they are
+NOT pre-initialized by the system. In the one-step mode (MSINGLE mode),
+a call to <B>loadmatrix</B> or to one of the four projection subroutines
+(<B><!--:libs:gl32tref:--><A HREF="../gl32tref/perspective.html#A144X94da">perspective</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/window.html#A144X95ea">window</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496">ortho2</A></B>,
+or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496">ortho</A></B>)
+is sufficient. In the two-step mode, both the projection and the modeling/viewing
+matrices must be initialized. Again, calls to the projection subroutines
+are sufficient to initialize the projection matrix; the modeling/viewing
+matrix can be initialized by a call to the <B>loadmatrix</B> subroutine
+while in MVIEWING mode. </P>
+
+
+<P><A NAME="A3C0EA82136mhay"></A>Normally, you load the identity matrix
+(a 4x4 matrix with ones running along the diagonal, the other entries zero),
+although any matrix may be loaded. The initialization is required because
+most of the matrix subroutines (<B><!--:libs:gl32tref:--><A HREF="../gl32tref/multmatrix.html#A144X9474">multmatrix</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/rot.html#A144X9562">rot</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/rotate.html#A8g2120marj">rotate</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/translate.html#A144X95c8">translate</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/scale.html#A144X95a6">scale</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/lookat.html#A144X9452">lookat</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/polarview.html#A144X94fc">polarview</A></B>
+) multiply into the current matrix, and if that matrix does not exist,
+the multiplication cannot take place. Remember, if you intend to use lighting,
+you must leave MSINGLE mode before performing the initialization. </P>
+
+
+<P><A NAME="A3C0EA82157mhay"></A>Like vertices, normal vectors associated
+with the vertices must also be transformed. However, normals are transformed
+according to different mathematical rules than vertices. For lighting calculations,
+the normal vectors are multiplied by the inverse transpose of the 3X3 upper
+left submatrix of the modeling/viewing transformation. </P>
+
+
+<P><A NAME="A3C0EA82178mhay"></A>As you operate on the modeling/viewing
+stack, its inverse transpose is automatically kept up to date. </P>
+
+
+<P><A NAME="A3C0EA82199mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmmode.html#idZ2e0marj">getmmode</A></B>
+subroutine returns the current matrix mode. The values returned can be
+compared to the values of MSINGLE, MPROJECTION, and MVIEWING to determine
+the current mode. Mode identifiers are defined in the <B>/usr/include/gl/gl.h</B>file. </P>
+
+
+<P><A NAME="A3C0EA82219mhay"></A>The following <A HREF="figures/gl32p26.jpg">figure</A>
+illustrates the calculations done to each vertex sent down the pipeline
+in MVIEWING mode. </P>
+
+
+<H3><A NAME="A342C9733a"></A>Positioning the Lights </H3>
+
+
+<P><A NAME="A3C0EA82242mhay"></A>When a light is bound with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmbind.html#XeZ2340marj">lmbind</A></B>
+subroutine, the location it takes up in world space depends on the transformation
+on the top of the matrix stack. That is, the coordinates of the light are
+run through the geometry pipeline just as any other 3-D coordinate would
+be. This must be kept in mind when rendering complex, animated scenes.</P>
+
+
+<P><A NAME="A3C0EA82264mhay"></A>How to draw a scene where the eyepoint
+changes from frame to frame, while the light remains fixed in world coordinates,
+or to draw a scene where the light moves about from frame to frame, might
+not be immediately obvious. Therefore, we summarize the following steps
+to achieve a moving eyepoint and/or to have moving lights. There are five
+general cases: </P>
+
+
+<UL><LI><A NAME="A342C9733c"></A>A static eyepoint and a static light.</LI>
+
+
+<LI><A NAME="A342C9733d"></A>A static eyepoint and a moving light.</LI>
+
+
+<LI><A NAME="A342C9733e"></A>A moving eyepoint and a static light.</LI>
+
+
+<LI><A NAME="A342C9733f"></A>A moving eyepoint and a moving light.</LI>
+
+
+<LI><A NAME="A342C97340"></A>A moving eyepoint with the light attached
+to the eyepoint.</LI></UL>
+
+
+<P><A NAME="A3C0EA82289mhay"></A>The general rules for binding lights are:</P>
+
+
+<UL><LI><A NAME="A342C97342"></A>Call <TT>lmbind(LIGHT#,&nbsp;index</TT>) after
+changing the view.</LI>
+
+
+<LI><A NAME="A342C97343"></A>Call <TT>lmbind(LIGHT#,&nbsp;index</TT>) only
+when transformations for the light are premultiplied on the stack.</LI>
+
+
+<LI><A NAME="A342C97344"></A>Never call <TT>lmbind(LIGHT#,&nbsp;index)</TT>
+when transformations for surfaces are premultiplied on the stack.</LI></UL>
+
+
+<P><A NAME="A3C0EA82313mhay"></A>The detailed steps in setting up the viewing
+transformations, the modeling transformation, and the lighting model specifications
+for each of these five cases are outlined here. The first four cases all
+use the following pseudocode: </P>
+
+
+<OL><LI><A NAME="A342C97347"></A>Specify the <A HREF="coordtransfrms.html#A264X915f">viewing
+transformation</A>.</LI>
+
+
+<LI><A NAME="A32C01163f"></A>Push the transformation stack.</LI>
+
+
+<LI><A NAME="A32C011640"></A>Set up the modeling matrix to position the
+light correctly.</LI>
+
+
+<LI><A NAME="A32C011641"></A>Call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmbind.html#XeZ2340marj">lmbind</A></B>
+subroutine to bind the light source.</LI>
+
+
+<LI><A NAME="A32C011642"></A>Pop the transformation stack.</LI>
+
+
+<LI><A NAME="A32C011643"></A>Push the transformation stack.</LI>
+
+
+<LI><A NAME="A32C011644"></A>Draw the objects.</LI>
+
+
+<LI><A NAME="A32C011645"></A>Pop the transformation stack.</LI></OL>
+
+
+<H4><A NAME="A32C011646"></A>A Static Eyepoint and a Static Light </H4>
+
+
+<P><A NAME="A3C0EA82343mhay"></A>In this scenario, the drawing loop simply
+repeats steps 6 through 8. Presumably, the objects are drawn in different
+locations each time through the loop, if you are interested in having moving
+objects. </P>
+
+
+<H4><A NAME="A342C9734b"></A>A Static Eyepoint and a Moving Light </H4>
+
+
+<P><A NAME="A3C0EA82365mhay"></A>In this scenario, the drawing loop returns
+to step 2 and repeats steps 2 through 8. Each time through the loop, change
+the modeling transformation in step 3 to move the light. You can have either
+moving or static objects by changing step 7. </P>
+
+
+<H4><A NAME="A342C97354"></A>A Moving Eyepoint and a Static Light </H4>
+
+
+<P><A NAME="A3C0EA82388mhay"></A>In this scenario, the drawing loop returns
+to step 1 and repeats steps 1 through 8. Each time through the loop, change
+the viewing transformation in step 1 to move the eyepoint. Do not change
+the modeling matrix in step 3 if you do not want the light to move around
+in world coordinates. Again, you can have either moving or static objects
+by changing step&nbsp;7. </P>
+
+
+<H4><A NAME="A342C9735b"></A>A Moving Eyepoint and a Moving Light </H4>
+
+
+<P><A NAME="A3C0EA82410mhay"></A>In this scenario, the drawing loop returns
+to step 1 and repeats steps 1 through 8. Each time through the loop, change
+the viewing transformation in step 1 to move the eyepoint. Change the modeling
+matrix in step 3 to move the light around. Again, you can have either moving
+or static objects by changing step 7. </P>
+
+
+<H4><A NAME="A342C97365"></A>A Moving Eyepoint with the Light Attached
+to the Eyepoint </H4>
+
+
+<P><A NAME="A3C0EA82432mhay"></A>This scenario requires a different sequence
+of steps: </P>
+
+
+<OL><LI><A NAME="A342C97366"></A>Specify the <A HREF="coordtransfrms.html#A264X915f">viewing
+transformation</A>.</LI>
+
+
+<LI><A NAME="A32C01164c"></A>Set up the modeling matrix to position the
+light correctly.</LI>
+
+
+<LI><A NAME="A342C97367"></A>Call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmbind.html#XeZ2340marj">lmbind</A></B>
+subroutine to bind the light source.</LI>
+
+
+<LI><A NAME="A342C97368"></A>Specify the viewing transformation again.</LI>
+
+
+<LI><A NAME="A32C01164d"></A>Push the transformation stack.</LI>
+
+
+<LI><A NAME="A342C97369"></A>Draw the objects.</LI>
+
+
+<LI><A NAME="A32C01164e"></A>Pop the transformation stack.</LI></OL>
+
+
+<P><A NAME="A3C0EA82460mhay"></A>In this case, the drawing loop returns
+to step 4 and repeats steps 4 through 7. Each time through the loop, change
+the viewing transformation in step 4 to move the eyepoint. Again, you can
+have either moving or static objects by changing step 6. </P>
+
+
+
+
+<hr><center>
+[  <a href="advlightcap.html">Previous</a>  |
+<a href="lightsubs.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/lightmatrix.html Mon, 24 Jan 2022 16:28:09 GMT -->
+</HTML>
+

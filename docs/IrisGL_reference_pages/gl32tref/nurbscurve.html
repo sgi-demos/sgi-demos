@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>nurbscurve Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="normal.html">Previous</a>  |
+<a href="nurbssurface.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A255X93ca"></A>nurbscurve Subroutine</H2>
+<A NAME="INDEX1259" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1260" REL="I2" TITLE="NURBS curves and surfaces"></A>
+<A NAME="INDEX1261" REL="I3" TITLE="nurbscurve"></A>
+<A NAME="INDEX1262" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1263" REL="I2" TITLE="trimming curve"></A>
+<A NAME="INDEX1264" REL="I3" TITLE="NURBS"></A>
+<A NAME="INDEX1265" REL="I1" TITLE="nurbscurve subroutine (GL)"></A>
+
+<H3><A NAME="A255X93cc"></A>Purpose</H3>
+<P><A NAME="E1D7046179ceb"></A>Controls the shape of a NURBS trimming curve.</P>
+
+<H3><A NAME="A78C1342"></A>Libraries</H3>
+<P><A NAME="E1D7046218ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7046242ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A255X93d0"></A>C Syntax</H3>
+<PRE><A NAME="A255X93d1"></A><B>void nurbscurve</B>
+<B>(Int32</B> <A HREF="nurbscurve.html#A255X93db"><I>knot_count</I></A><B>,</B>
+<B>Float64</B> <A HREF="nurbscurve.html#A255X93dc"><I>knot_list</I></A><B>[&nbsp;],</B>
+<B>Int32</B> <A HREF="nurbscurve.html#A255X93dd"><I>stride</I></A><B>,</B>
+<B>Float64</B> <B>*</B><A HREF="nurbscurve.html#A255X93de"><I>ctlarray</I></A><B>,</B>
+<B>Int32</B> <A HREF="nurbscurve.html#A255X93df"><I>order</I></A><B>,</B>
+<B>Int32</B> <A HREF="nurbscurve.html#A255X93e0"><I>type</I></A><B>)</B></PRE>
+
+<H3><A NAME="A255X93a9"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A255X93ac"></A><B>SUBROUTINE NURBSC(</B><I>knot_count</I><B>,</B> <I>knot_list</I><B>,</B>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>stride</I><B>,</B> <I>ctlarray</I><B>,</B> <I>order</I><B>,</B> <I>type</I><B>)</B>
+<B>INTEGER*4</B> <I>knot_count</I><B>,</B> <I>stride</I><B>, </B><I>order</I><B>, </B><I>type</I>
+<B>REAL*8</B> <I>knot_list</I><B>(</B><I>knot_count</I><B>),</B> <I>ctlarray</I><B>(*)</B></PRE>
+
+<H3><A NAME="A255X93d5"></A>Description</H3>
+<P><A NAME="E1D7046355ceb"></A>The <B>nurbscurve </B>subroutine describes a Non-Uniform Rational B-Spline (NURBS) curve.  Use NURBS curves within 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P11542">trimming loop</A> definitions. To mark the beginning and end of a trimming loop definition, use the <A HREF="bgntrim.html#A251X98d"><B>bgntrim</B></A> and <A HREF="bgntrim.html#A251X98d"><B>endtrim</B></A> subroutines.   </P>
+
+<P><A NAME="E1D7046381ceb"></A>Use trimming loop definitions within NURBS surface definitions, as defined by the  <A HREF="bgnsurface.html#A251X9d7"><B>bgnsurface</B></A> subroutine. Describe a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P11542">trimming loop</A> by using a series of NURBS curves, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#rEf3b0nita">piecewise linear curves</A> (as defined by the <A HREF="pwlcurve.html#A257X9fc"><B>pwlcurve</B></A> subroutine), or both.  </P>
+
+<P><A NAME="E1D7046407ceb"></A>The system displays the region of the NURBS surface that is to the left of the trimming curves as the parameter increases. Thus, for a counterclockwise-oriented trimming curve, the displayed region of the NURBS surface is the region inside the curve. For a clockwise-oriented trimming curve, the displayed region of the NURBS surface is the region outside the curve.  </P>
+
+<P><A NAME="E1D7046433ceb"></A>The <A HREF="nurbscurve.html#A255X93dd"><I>stride</I></A> parameter is used when the control points are part of an array of larger structure elements. The <B>nurbscurve</B> subroutine searches for the <I>n</I>th control point pair or triple beginning at 
+byte address:</P>
+
+<P><A NAME="E1D7046456ceb"></A><I>*(ctlarray + n</I> <SAMP>x</SAMP> <I>stride)</I></P>
+
+<H3><A NAME="A255X93da"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A255X93db"></A><I>knot_count</I></TD>
+<TD>  Specifies the number of knots. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A255X93dc"></A><I>knot_list</I></TD>
+<TD>  Specifies an array of <I>knot_count </I>nondecreasing knot values. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A255X93dd"></A><I>stride </I></TD>
+<TD>  Specifies the offset (in bytes) between successive curve control points.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A255X93de"></A><I>ctlarray </I></TD>
+<TD>  Specifies an array containing control points for the NURBS curve. The coordinates must appear as either <I>(x, y) </I>pairs or as <I>(x, y, w) </I>triples. The offset between successive control points is given by <I>stride</I>. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A255X93df"></A><I>order </I></TD>
+<TD>  Specifies the order of the NURBS curve. The order is one more than the degree, hence, a cubic curve has an order of 4. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A255X93e0"></A><I>type </I></TD>
+<TD>  Specifies a value indicating the control point type. Current options are as follows:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>N_ST</TD>
+
+<TD>NST</TD>
+
+<TD>Indicates 2-dimensional control points.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>N_STW</TD>
+
+<TD>NSTW</TD>
+
+<TD>Indicates 3-dimensional (rational) control points.</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A62C015da2"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7046643ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1345"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1346"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1347"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A255X93e5"></A>Related Information</H3>
+<P><A NAME="E1D7046740ceb"></A>Marking the beginning and end of a NURBS surface definition with the <A HREF="bgnsurface.html#A251X9d7"><B>bgnsurface </B>and <B>endsurface</B></A> subroutines. </P>
+
+<P><A NAME="E1D7046765ceb"></A>Marking the beginning and end of a NURBS surface trimming loop with the <A HREF="bgntrim.html#A251X98d"><B>bgntrim</B> and <B>endtrim</B></A> subroutines. </P>
+
+<P><A NAME="E1D7046791ceb"></A>Returning the current value of a trimmed NURBS surfaces display property with the <A HREF="getnurbsproperty.html#A252X986e"><B>getnurbsproperty</B></A> subroutine. </P>
+
+<P><A NAME="E1D7046816ceb"></A>Controlling the shape of a untrimmed NURBS surface with the <A HREF="nurbssurface.html#A252X98b9"><B>nurbssurface</B></A> subroutine. </P>
+
+<P><A NAME="E1D7046841ceb"></A>Describing a piecewise linear trimming curve for NURBS surfaces with the <A HREF="pwlcurve.html#A257X9fc"><B>pwlcurve</B></A> subroutine. </P>
+
+<P><A NAME="E1D7046868ceb"></A>Setting a property for the display of trimmed NURBS with the <A HREF="setnurbsproperty.html#A257X911b"><B>setnurbsproperty</B></A> subroutine. </P>
+
+<P><A NAME="E1D7046894ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">NURBS Curves and Surfaces</A>.</P><hr><center>
+[  <a href="normal.html">Previous</a>  |
+<a href="nurbssurface.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

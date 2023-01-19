@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>bgntrim or endtrim Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="bgntmesh.html">Previous</a>  |
+<a href="blankscreen.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A251X98d"></A>bgntrim or endtrim Subroutine</H2>
+<A NAME="INDEX128" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX129" REL="I2" TITLE="NURBS curves and surfaces"></A>
+<A NAME="INDEX130" REL="I3" TITLE="bgntrim"></A>
+<A NAME="INDEX131" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX132" REL="I2" TITLE="surface (NURBS)"></A>
+<A NAME="INDEX133" REL="I3" TITLE="trimming loop"></A>
+<A NAME="INDEX134" REL="I1" TITLE="endtrim subroutine (GL)"></A>
+<A NAME="INDEX135" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX136" REL="I2" TITLE="NURBS curves and surfaces"></A>
+<A NAME="INDEX137" REL="I3" TITLE="endtrim"></A>
+<A NAME="INDEX138" REL="I1" TITLE="bgntrim subroutine (GL)"></A>
+
+<H3><A NAME="A251X98f"></A>Purpose</H3>
+<P><A NAME="E1B051F651ceb"></A>Delimit a NURBS surface trimming loop.</P>
+
+<H3><A NAME="A78C1335"></A>Libraries</H3>
+<P><A NAME="E1B051F798ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B051F902ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A251X992"></A>C Syntax</H3>
+<PRE><A NAME="A251X993"></A><B>void bgntrim(&nbsp;)</B>
+<B>void endtrim(&nbsp;)</B></PRE>
+
+<H3><A NAME="A251X96c"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A251X96f"></A><B>SUBROUTINE BGNTRI</B>
+<B>SUBROUTINE ENDTRI</B></PRE>
+
+<H3><A NAME="A251X996"></A>Description</H3>
+<P><A NAME="E1B0520266ceb"></A>The <B>bgntrim </B>and <B>endtrim </B>subroutines mark the beginning and end of a definition for a trimming loop. A trimming loop is a set of oriented curves (forming a closed curve) that defines boundaries of a Non-Rational B-Spline (NURBS) surface. Include these trimming loop definitions in the definition of a NURBS surface.</P>
+
+<P><A NAME="E1B0520376ceb"></A>The definition for a NURBS surface may contain many trimming loops. For example, in a definition for NURBS surface that resembles a rectangle with a hole punched out, there are two trimming loops. One loop defines the outer edge of the rectangle. The other trimming loop defines the hole punched out of the rectangle. The definitions of each of these trimming loops is bracketed by a <B>bgntrim/endtrim </B>pair.</P>
+
+<P><A NAME="E1B0520487ceb"></A>The definition of a single closed trimming loop may consist of multiple curve segments, each described as a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#rEf3b0nita">piecewise linear curve</A> (as defined by the <A HREF="pwlcurve.html#A257X9fc"><B>pwlcurve</B></A> subroutine), or as a single NURBS curve (as defined by the <A HREF="nurbscurve.html#A255X93ca"><B>nurbscurve</B></A> subroutine), or as a combination of both in any order. The only GL subroutines that can appear in a trimming loop definition (between the <B>bgntrim</B> and <B>endtrim</B> subroutines) are the <B>pwlcurve</B> and <B>nurbscurve</B> subroutines.</P>
+
+<P><A NAME="E1B0520593ceb"></A>The following code fragment defines a single trimming loop that consists of one piecewise linear curve and two NURBS curves: </P>
+<PRE><A NAME="A251X99b"></A>bgntrim();&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;pwlcurve(...);&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;nurbscurve(...);&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;nurbscurve(...);&nbsp;
+endtrim();</PRE>
+
+<P><A NAME="E1B0520760ceb"></A>The area of the NURBS surface that the system displays is the region in the domain to the left of the trimming curve as the curve parameter increases. Thus, the resultant visible region of the NURBS surface is inside for a counterclockwise trimming loop and outside for a clockwise trimming loop. For the rectangle mentioned previously, the trimming loop for the outer edge of the rectangle should run counterclockwise, and the trimming loop for the hole punched out should run clockwise.</P>
+
+<P><A NAME="E1B0520868ceb"></A>If you use more than one curve to define a single trimming loop, the curve segments must form a closed loop. In other words, the endpoint of each curve must be the starting point of the next curve, and the endpoint of the final curve must be the starting point of the first curve. </P>
+
+<P><A NAME="E1B0520976ceb"></A>If the endpoints of the curve are sufficiently close together but not exactly coincident, the system coerces the endpoints to match. If the endpoints are not sufficiently close, the system generates an error message and ignores the entire trimming loop.</P>
+
+<P><A NAME="E1B0521086ceb"></A>If a trimming loop definition contains multiple curves, the direction of the curves must be consistent. In other words, the inside must be to the left of the curves. Nested trimming loops are legal as long as the curve orientations alternate correctly. If no trimming information is given for a NURBS surface, the entire surface is drawn.</P>
+
+<H3><A NAME="A62C015d9a"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0521246ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1338"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1339"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C133a"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A251X9a3"></A>Related Information</H3>
+<P><A NAME="E1B0521565ceb"></A>Marking the beginning and end of a NURBS surface definition with the <A HREF="bgnsurface.html#A251X9d7"><B>bgnsurface</B> and <B>endsurface</B></A> subroutines. </P>
+
+<P><A NAME="E1B0521671ceb"></A>Returning the current value of a trimmed NURBS surfaces display property with the <A HREF="getnurbsproperty.html#A252X986e"><B>getnurbsproperty</B></A> subroutine. </P>
+
+<P><A NAME="E1B0521780ceb"></A>Controlling the shape of a NURBS trimming curve with the <A HREF="nurbscurve.html#A255X93ca"><B>nurbscurve</B></A> subroutine. </P>
+
+<P><A NAME="E1B0521887ceb"></A>Controlling the shape of a NURBS surface with the <A HREF="nurbssurface.html#A252X98b9"><B>nurbssurface</B></A> subroutine. </P>
+
+<P><A NAME="E1B0521994ceb"></A>Describing a piecewise linear trimming curve for NURBS surfaces with the <A HREF="pwlcurve.html#A257X9fc"><B>pwlcurve</B></A> subroutine. </P>
+
+<P><A NAME="E1B0522101ceb"></A>Setting a property for the display of trimmed NURBS with the <A HREF="setnurbsproperty.html#A257X911b"><B>setnurbsproperty</B></A> subroutine. </P>
+
+<P><A NAME="E1B0522209ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">NURBS Curves and Surfaces</A>.</P><hr><center>
+[  <a href="bgntmesh.html">Previous</a>  |
+<a href="blankscreen.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

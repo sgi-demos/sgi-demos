@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getlwidth Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getlstyle.html">Previous</a>  |
+<a href="getmap.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A213X91299c"></A>getlwidth Subroutine</H2>
+<A NAME="INDEX728" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX729" REL="I2" TITLE="query"></A>
+<A NAME="INDEX730" REL="I3" TITLE="getlwidth"></A>
+<A NAME="INDEX731" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX732" REL="I2" TITLE="attribute"></A>
+<A NAME="INDEX733" REL="I3" TITLE="getlwidth"></A>
+<A NAME="INDEX734" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX735" REL="I2" TITLE="linewidth"></A>
+<A NAME="INDEX736" REL="I3" TITLE="returning"></A>
+<A NAME="INDEX737" REL="I1" TITLE="getlwidth subroutine (GL)"></A>
+
+<H3><A NAME="A213X91299e"></A>Purpose</H3>
+<P><A NAME="E1B0F72240ceb"></A>Returns the current linewidth.</P>
+
+<H3><A NAME="A77C1103"></A>Libraries</H3>
+<P><A NAME="E1B0F72389ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0F72492ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X9129a1"></A>C Syntax</H3>
+<PRE><A NAME="A213X9129a2"></A><B>Int32 getlwidth(&nbsp;)</B></PRE>
+
+<H3><A NAME="A19C0e0f7"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A19C0e0f8"></A><B>INTEGER*4 FUNCTION GETLWI</B></PRE>
+
+<H3><A NAME="A213X9129a5"></A>Description</H3>
+<P><A NAME="E1B0F72851ceb"></A>The <B>getlwidth</B> subroutine returns the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A172P1437">linewidth</A> in pixels.  </P>
+
+<BLOCKQUOTE><A NAME="A318C9d3a"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X9129a8"></A>Return Value</H3>
+<P><A NAME="E1B0F73061ceb"></A>The current linewidth in pixels.</P>
+
+<H3><A NAME="A62C015c8b"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0F73222ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A11C0b4e5"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1106"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1107"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c3a8"></A>Related Information</H3>
+<P><A NAME="E1B0F73546ceb"></A>Specifying a linewidth with the <A HREF="linewidth.html#A3mM11b0marj"><B>linewidth</B></A> subroutine.</P>
+
+<P><A NAME="E1B0F73656ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#drawwfcvs.html">Drawing Wire Frame Curves and Surface Patches</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">Drawing NURBS Curves and Surfaces</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Drawing with Begin-End Style Subroutines</A>, <!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Drawing with Move-Draw Style Subroutines</A>, <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Working in Color Map and RGB Modes</A>, <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying the System</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware Used by GL</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</A>.</P><hr><center>
+[  <a href="getlstyle.html">Previous</a>  |
+<a href="getmap.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

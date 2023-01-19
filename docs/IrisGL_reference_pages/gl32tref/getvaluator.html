@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getvaluator Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getsm.html">Previous</a>  |
+<a href="getviewport.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X945"></A>getvaluator Subroutine</H2>
+<A NAME="INDEX850" REL="I1" TITLE="getvaluator subroutine (GL)"></A>
+<A NAME="INDEX851" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX852" REL="I2" TITLE="query"></A>
+<A NAME="INDEX853" REL="I3" TITLE="getvaluator"></A>
+<A NAME="INDEX854" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX855" REL="I2" TITLE="device"></A>
+<A NAME="INDEX856" REL="I3" TITLE="returning valuator state"></A>
+<A NAME="INDEX857" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX858" REL="I2" TITLE="queue and device"></A>
+<A NAME="INDEX859" REL="I3" TITLE="getvaluator"></A>
+
+<H3><A NAME="A143X947"></A>Purpose</H3>
+<P><A NAME="E1B116F835ceb"></A>Returns the current state of a valuator.</P>
+
+<H3><A NAME="C41DF3F703nqui"></A>Libraries</H3>
+<P><A NAME="E1B116F983ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1170087ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912c07"></A>C Syntax</H3>
+<PRE><A NAME="A213X912c08"></A><B>Int32 getvaluator(Device </B><A HREF="getvaluator.html#A143X950"><I>device</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c5f"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c60"></A><B>INTEGER*4 FUNCTION GETVAL(</B><I>device</I><B>)</B>
+<B>INTEGER*4</B> <I>device</I></PRE>
+
+<H3><A NAME="A143X94d"></A>Description</H3>
+<P><A NAME="E1B1170456ceb"></A>The <B>getvaluator</B> subroutine returns the current value (an integer) of the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A79P07a">valuator</A> specified in the <A HREF="getvaluator.html#A143X950"><I>device</I></A> parameter. </P>
+
+<BLOCKQUOTE><A NAME="A318C9f78"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X94f"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X950"></A><I>device</I></TD>
+<TD>  Identifier of the valuator (such as MOUSEX or BPADX) to be read.</TD></TR></TABLE>
+
+<H3><A NAME="A143X953"></A>Return Value</H3>
+<P><A NAME="E1B1170772ceb"></A>The value stored at the device named by the <I>device</I> parameter.</P>
+
+<H3><A NAME="A30C011060"></A>Example</H3>
+<P><A NAME="E1B1170928ceb"></A>The example C language program <A HREF="select1_c.html#A16C0c970"><B>select1.c</B></A> uses the <B>getvaluator</B> subroutine to obtain the mouse coordinates whenever the left mouse button is pressed.</P>
+
+<H3><A NAME="A109C01a710"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1171091ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A143X961"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C41DF40769nqui"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C41DF40845nqui"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C41DF40921nqui"></A><B>/usr/include/gl/device.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C41DF40997nqui"></A><B>/usr/include/gl/fdevice.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X965"></A>Related Information</H3>
+<P><A NAME="E1B1171527ceb"></A>Reading a list of valuators with the <A HREF="getdev.html#A143X923"><B>getdev</B></A> subroutine.</P>
+
+<P><A NAME="E1B1171634ceb"></A>Assigning initial, minimum, and maximum values to a valuator with the <A HREF="setvaluator.html#A143X921e"><B>setvaluator</B></A> subroutine.</P>
+
+<P><A NAME="E1B1171742ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/cntrlques.html#cntrlques.html">Controlling Queues and Devices</A>, <!--gl32prgd:--><A HREF="../gl32prgd/keyboardgl.html#keyboardgl.html">Using the Keyboard</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying the System</A>.</P><hr><center>
+[  <a href="getsm.html">Previous</a>  |
+<a href="getviewport.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>draw.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="doublebuff_c.html">Previous</a>  |
+<a href="font3_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c922"></A>draw.c Example C Language Program
+</H2>
+<A NAME="INDEX2288" REL="I1" TITLE="draw.c example program (GL)"></A>
+<A NAME="INDEX2289" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2290" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2291" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2292" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2293" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2294" REL="I3" TITLE="line"></A>
+<A NAME="INDEX2295" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2296" REL="I2" TITLE="line"></A>
+<A NAME="INDEX2297" REL="I3" TITLE="drawing"></A>
+<PRE><A NAME="A64EA73254ttay"></A>/*
+draw.c</PRE>
+<PRE><A NAME="A64EA73413ttay"></A>An absolutely minimal line drawing program.
+*/</PRE>
+<PRE><A NAME="A64EA73569ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EA73714ttay"></A>main()
+{</PRE>
+<PRE><A NAME="A64EA73876ttay"></A>&nbsp;&nbsp;&nbsp;Device dev;
+&nbsp;&nbsp;&nbsp;short val;
+&nbsp;&nbsp;&nbsp;unsigned short xpos, ypos;    </PRE>
+<PRE><A NAME="A64EA74283ttay"></A>&nbsp;&nbsp;&nbsp;initialize();    
+&nbsp;&nbsp;&nbsp;while(TRUE) {        
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dev = qread(&amp;val);        
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch(dev) {               /* wait for mouse down */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case ESCKEY:                /* quit */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gexit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case REDRAW:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reshapeviewport();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case MIDDLEMOUSE:           /* move */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qread(&amp;xpos);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qread(&amp;ypos);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;move2i(xpos, ypos);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qread(&amp;val);              /* these three reads clear out */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qread(&amp;val);              /* the queue */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qread(&amp;val);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;            
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case LEFTMOUSE:             /* draw */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qread(&amp;xpos);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qread(&amp;ypos);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;draw2i(xpos, ypos);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qread(&amp;val);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qread(&amp;val);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qread(&amp;val);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EA74425ttay"></A>}</PRE>
+<PRE><A NAME="A64EA74572ttay"></A>initialize()
+{</PRE>
+<PRE><A NAME="A64EA74725ttay"></A>&nbsp;&nbsp;&nbsp;int gid;
+&nbsp;&nbsp;&nbsp;float xmax,ymax;   </PRE>
+<PRE><A NAME="A64EA75011ttay"></A>&nbsp;&nbsp;&nbsp;prefposition(XMAXSCREEN/4, XMAXSCREEN*3/4, YMAXSCREEN/4, 
+&nbsp;&nbsp;&nbsp;    YMAXSCREEN*3/4);
+&nbsp;&nbsp;&nbsp;gid = winopen("draw");   
+&nbsp;&nbsp;&nbsp;xmax = .5 + (float) XMAXSCREEN;
+&nbsp;&nbsp;&nbsp;ymax = .5 + (float) YMAXSCREEN;
+&nbsp;&nbsp;&nbsp;ortho2(xmax/4.0,xmax*3.0/4.0,ymax/4.0,ymax*3.0/4.0);   
+&nbsp;&nbsp;&nbsp;qdevice(ESCKEY);
+&nbsp;&nbsp;&nbsp;qdevice(LEFTMOUSE);
+&nbsp;&nbsp;&nbsp;qdevice(MIDDLEMOUSE);
+&nbsp;&nbsp;&nbsp;tie(LEFTMOUSE, MOUSEX, MOUSEY);
+&nbsp;&nbsp;&nbsp;tie(MIDDLEMOUSE, MOUSEX, MOUSEY);   
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(RED);</PRE>
+<PRE><A NAME="A64EA75154ttay"></A>}</PRE>
+
+<H3><A NAME="A200C1171"></A>Related Information</H3>
+<P><A NAME="E1D781C475ceb"></A>The <A HREF="getdrawmode.html#A143X9482"><B>getdrawmode</B></A> subroutine<A HREF="../gl32tref/A143X9482" REL="PAGENUM"></A>.</P>
+
+<P><A NAME="E1D781C501ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/underframebuf.html#underframebuf.html">Understanding the Frame Buffer in GL</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I> explains the use of different buffers.</P>
+
+<hr><center>
+[  <a href="doublebuff_c.html">Previous</a>  |
+<a href="font3_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

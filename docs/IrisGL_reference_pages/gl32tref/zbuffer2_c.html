@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>zbuffer2.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="zbuffer1_c.html">Previous</a>  |
+<a href="zoing_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="MYO10nita"></A>zbuffer2.c Example C Language Program
+</H2>
+<A NAME="INDEX2525" REL="I1" TITLE="zbuffer2.c example program (GL)"></A>
+<A NAME="INDEX2526" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2527" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2528" REL="I3" TITLE="frame buffer"></A>
+<A NAME="INDEX2529" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2530" REL="I2" TITLE="frame buffer"></A>
+<A NAME="INDEX2531" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64EBEF837ttay"></A>/* Example: zbuffer2.c */
+/*
+This program illustrates z buffering. It draws three parallel
+pipeds rotating through each other.</PRE>
+<PRE><A NAME="A64EBF0003ttay"></A>This program requires a 24-bit adapter and the z buffer option.
+*/</PRE>
+<PRE><A NAME="A64EBF0160ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EBF0396ttay"></A>float v0[3] = {-1.0, -1.0, -1.0} ;
+float v1[3] = { -1.0, -1.0, 1.0};
+float v2[3] = { -1.0, 1.0, 1.0};
+float v3[3] = { -1.0, 1.0, -1.0};
+float v4[3] = { 1.0, -1.0, -1.0};
+float v5[3] = { 1.0, -1.0, 1.0};
+float v6[3] = { 1.0, 1.0, 1.0};
+float v7[3] = { 1.0, 1.0, -1.0};</PRE>
+<PRE><A NAME="A64EBF0545ttay"></A>Int32 delaycount;</PRE>
+<PRE><A NAME="A64EBF1141ttay"></A>main(argc, argv)
+int     argc;
+char    *argv[];
+{
+&nbsp;&nbsp;&nbsp;Int32 xrot, yrot, zrot;
+&nbsp;&nbsp;&nbsp;xrot = yrot = zrot = 0;
+&nbsp;&nbsp;&nbsp;if (argc == 1)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delaycount = 0;
+&nbsp;&nbsp;&nbsp;else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delaycount = 1;
+&nbsp;&nbsp;&nbsp;keepaspect(1, 1);
+&nbsp;&nbsp;&nbsp;prefposition (0,800,0,800);
+&nbsp;&nbsp;&nbsp;winopen("zbuffer");
+&nbsp;&nbsp;&nbsp;RGBmode();
+&nbsp;&nbsp;&nbsp;if (delaycount == 0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doublebuffer();
+&nbsp;&nbsp;&nbsp;gconfig();
+&nbsp;&nbsp;&nbsp;ortho(-4.0, 4.0, -4.0, 4.0, -4.0, 4.0);
+&nbsp;&nbsp;&nbsp;while (1) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pushmatrix();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(xrot, 'x');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(yrot, 'y');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(zrot, 'z');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xrot += 11;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yrot += 15;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (xrot + yrot > 3500) zrot += 23;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (xrot > 3600) xrot -= 3600;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (yrot > 3600) yrot -= 3600;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (zrot > 3600) zrot -= 3600;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cpack(0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (getbutton(LEFTMOUSE)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zbuffer(TRUE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zclear();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zbuffer(FALSE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pushmatrix();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scale(1.2, 1.2, 1.2);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translate(.3, .2, .2);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (getbutton(MIDDLEMOUSE)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reshapeviewport();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawcube();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;popmatrix();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pushmatrix();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(450+zrot, 'x');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(300-xrot, 'y');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scale(1.8, .8, .8);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawcube();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;popmatrix();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pushmatrix();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(500+yrot, 'z');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(-zrot, 'x');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translate(-.3, -.2, .6);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scale(1.4, 1.2, .7);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawcube();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;popmatrix();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (delaycount == 0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;swapbuffers();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;popmatrix();
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EBF1284ttay"></A>}</PRE>
+<PRE><A NAME="A64EBF1438ttay"></A>delay()
+{
+&nbsp;&nbsp;&nbsp;sleep(delaycount);
+}</PRE>
+<PRE><A NAME="A64EBF3031ttay"></A>drawcube()
+{
+&nbsp;&nbsp;&nbsp;cpack(0xff);
+&nbsp;&nbsp;&nbsp;bgnpolygon();
+&nbsp;&nbsp;&nbsp;v3f(v0); 
+&nbsp;&nbsp;&nbsp;v3f(v1); 
+&nbsp;&nbsp;&nbsp;v3f(v2); 
+&nbsp;&nbsp;&nbsp;v3f(v3);
+&nbsp;&nbsp;&nbsp;endpolygon();
+&nbsp;&nbsp;&nbsp;delay();
+&nbsp;&nbsp;&nbsp;cpack(0xff00);
+&nbsp;&nbsp;&nbsp;bgnpolygon();
+&nbsp;&nbsp;&nbsp;v3f(v0); 
+&nbsp;&nbsp;&nbsp;v3f(v4); 
+&nbsp;&nbsp;&nbsp;v3f(v5); 
+&nbsp;&nbsp;&nbsp;v3f(v1);
+&nbsp;&nbsp;&nbsp;endpolygon();
+&nbsp;&nbsp;&nbsp;delay();
+&nbsp;&nbsp;&nbsp;cpack(0xff0000);
+&nbsp;&nbsp;&nbsp;bgnpolygon();
+&nbsp;&nbsp;&nbsp;v3f(v4); 
+&nbsp;&nbsp;&nbsp;v3f(v7); 
+&nbsp;&nbsp;&nbsp;v3f(v6); 
+&nbsp;&nbsp;&nbsp;v3f(v5);
+&nbsp;&nbsp;&nbsp;endpolygon();
+&nbsp;&nbsp;&nbsp;delay();
+&nbsp;&nbsp;&nbsp;cpack(0xffff);
+&nbsp;&nbsp;&nbsp;bgnpolygon();
+&nbsp;&nbsp;&nbsp;v3f(v3); 
+&nbsp;&nbsp;&nbsp;v3f(v7); 
+&nbsp;&nbsp;&nbsp;v3f(v6); 
+&nbsp;&nbsp;&nbsp;v3f(v2);
+&nbsp;&nbsp;&nbsp;endpolygon();
+&nbsp;&nbsp;&nbsp;delay();
+&nbsp;&nbsp;&nbsp;cpack(0xff00ff);
+&nbsp;&nbsp;&nbsp;bgnpolygon();
+&nbsp;&nbsp;&nbsp;v3f(v5); 
+&nbsp;&nbsp;&nbsp;v3f(v1); 
+&nbsp;&nbsp;&nbsp;v3f(v2); 
+&nbsp;&nbsp;&nbsp;v3f(v6);
+&nbsp;&nbsp;&nbsp;endpolygon();
+&nbsp;&nbsp;&nbsp;delay();
+&nbsp;&nbsp;&nbsp;cpack(0xffff00);
+&nbsp;&nbsp;&nbsp;bgnpolygon();
+&nbsp;&nbsp;&nbsp;v3f(v0); 
+&nbsp;&nbsp;&nbsp;v3f(v4); 
+&nbsp;&nbsp;&nbsp;v3f(v7); 
+&nbsp;&nbsp;&nbsp;v3f(v3);
+&nbsp;&nbsp;&nbsp;endpolygon();
+}</PRE>
+<PRE><A NAME="A64EBF3210ttay"></A>/*
+  Changes:
+     - Adding reshapeviewport when middlemouse
+     - Added a prefposition(0,800,0,800);
+*/</PRE>
+
+<H3><A NAME="A201C11b6"></A>Related Information</H3>
+<P><A NAME="E1D7944648ceb"></A>The <A HREF="zbuffer.html#A143X97b1"><B>zbuffer</B></A> subroutine<A HREF="A143X97b1.html" REL="PAGENUM"></A>, <A HREF="zclear.html#A143X97d3"><B>zclear</B></A> subroutine<A HREF="A143X97d3.html" REL="PAGENUM"></A>.</P>
+
+<P><A NAME="E1D7944674ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/Z-Buffering.html">Zbuffering</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I> introduces basic concepts about displaying objects closest to the viewer.</P>
+
+<hr><center>
+[  <a href="zbuffer1_c.html">Previous</a>  |
+<a href="zoing_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

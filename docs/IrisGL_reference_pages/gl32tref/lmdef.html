@@ -1,0 +1,354 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>lmdef Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="lmcolor.html">Previous</a>  |
+<a href="loadmatrix.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="rgZ2250marj"></A>lmdef Subroutine</H2>
+<A NAME="INDEX1052" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1053" REL="I2" TITLE="lighting"></A>
+<A NAME="INDEX1054" REL="I3" TITLE="lmdef"></A>
+<A NAME="INDEX1055" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1056" REL="I2" TITLE="lighting model, light source, or material"></A>
+<A NAME="INDEX1057" REL="I3" TITLE="defining"></A>
+<A NAME="INDEX1058" REL="I1" TITLE="lmdef subroutine (GL)"></A>
+<H3><A NAME="A213X911d88"></A>Purpose</H3>
+<P><A NAME="E1B15F0262ceb"></A>Defines a new material, light, or lighting model.</P>
+
+<H3><A NAME="A75C1157"></A>Libraries</H3>
+<P><A NAME="E1B15F0412ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B15F0519ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911d8b"></A>C Syntax</H3>
+<PRE><A NAME="A213X911d8c"></A><B>void lmdef</B>
+<B>(Int16 </B><A HREF="lmdef.html#s35110marj"><I>deftype</I></A><B>, Int32</B> <A HREF="lmdef.html#A25511f0marj"><I>index</I></A><B>, </B>
+<B>Int16 </B><A HREF="lmdef.html#H55150marj"><I>numpoints</I></A><B>, Float32 </B><A HREF="lmdef.html#U551390marj"><I>properties</I></A><B>[&nbsp;])</B></PRE>
+
+<H3><A NAME="A213X911d65"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X911d68"></A><B>SUBROUTINE LMDEF(</B><I>deftype</I><B>, </B><I>index</I><B>, </B><I>numpoints</I><B>, </B><I>properties</I><B>)</B>
+<B>INTEGER*4 </B><I>deftype</I><B>, </B><I>numpoints</I><B>, </B><I>index</I>
+<B>REAL </B><I>properties</I><B>(</B><I>numpoints</I><B>)</B></PRE>
+
+<BLOCKQUOTE><A NAME="A75C115a"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when started from a FORTRAN program, although it accepts short integers when started from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911d93"></A>Description</H3>
+<P><A NAME="E1B15F0952ceb"></A>The <B>lmdef</B> subroutine defines a new material, light, or lighting model.</P>
+
+<P><A NAME="E1B15F1065ceb"></A>The type of definition (material, light, or lighting model) is specified by the <A HREF="lmdef.html#s35110marj"><I>deftype</I></A> parameter. The definition is read from the <A HREF="lmdef.html#U551390marj"><I>properties</I></A> array and stored in the appropriate definition table at the index specified by the <A HREF="lmdef.html#A25511f0marj"><I>index</I></A> parameter. </P>
+
+<P><A NAME="E1B15F1173ceb"></A>You can make incremental changes to a material, light, or lighting model definition. Each call to the <B>lmdef</B> subroutine changes only the properties specified in the <A HREF="lmdef.html#U551390marj"><I>properties</I></A> array. </P>
+
+<P><A NAME="E1B15F1285ceb"></A>Any property of any definition can be changed regardless of whether that definition is currently bound. Changes made to a definition that is currently bound by the <A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> subroutine are effective immediately.</P>
+
+<P><A NAME="E1B15F1393ceb"></A>Index 0 (zero) of the material, light, and lighting model definition tables contains predefined definitions. These predefined definitions have set all properties to their default values and cannot be changed. Their values are as follows:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Value</B></TD>
+
+<TD><B>Function</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>DEFMATERIAL</TD>
+
+<TD>Turns off lighting. Most efficient way to disable calculations. Equivalent to lighting model 0.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>DEFLIGHT </TD>
+
+<TD>Turns off lighting. Binding light 0 to a light turns off that light.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>DEFLMODEL</TD>
+
+<TD>Turns off lighting.</TD></TR></TABLE>
+
+<P><A NAME="E1B15F1561ceb"></A>To turn off lighting, bind material 0 as the current material. You can also turn off lighting by binding lighting model 0 as the current lighting model, but this method is less efficient than binding material 0. To turn off a light, but not all lighting calculations, bind light definition 0 to the light you want to turn off.</P>
+
+<P><A NAME="E1B15F1669ceb"></A>There is a unique properties table for each category of definition created by this routine (materials, light sources, or lighting models). Indexes within each of these categories are independent. Valid entries for this parameter range from 1 to 65535. In each category, index 0 is reserved.</P>
+
+<P><A NAME="E1B15F1783ceb"></A>For maximum efficiency, use the default values for all properties. Lighting model performance is best if relatively few properties are changed from the default. A definition can be reset to all default values by calling the <B>lmdef </B>subroutine with the symbolic constant LMNULL as the first command token in the <A HREF="lmdef.html#U551390marj"><I>properties</I></A> array.</P>
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="ABA44D1737ttay"></A>The default material values are as follows:</TD>
+<TD>  <TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911d9d"></A>EMISSION</TD>
+<TD>  0.0, 0.0, 0.0</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911d9e"></A>AMBIENT</TD>
+<TD>  0.2, 0.2, 0.2</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911d9f"></A>DIFFUSE</TD>
+<TD>  0.8, 0.8, 0.8</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911da0"></A>SPECULAR</TD>
+<TD>  0.0, 0.0, 0.0</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911da1"></A>SHININESS</TD>
+<TD>  0.0</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911da2"></A>ALPHA</TD>
+<TD>  1.0</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A75C115b"></A>COLORINDEXES</TD>
+<TD>  0.0, 127.5, 255.0</TD></TR></TABLE></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911da4"></A>The default light values are as follows:</TD>
+<TD>  <TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911da5"></A>AMBIENT</TD>
+<TD>  0.0, 0.0, 0.0</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911da6"></A>LCOLOR</TD>
+<TD>  1.0, 1.0, 1.0</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911da7"></A>POSITION</TD>
+<TD>  0.0, 0.0, 1.0, 0.0</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A95C1231e"></A>SPOTDIRECTION</TD>
+<TD>  0.0, 0.0, -1.0</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A95C1231f"></A>SPOTLIGHT</TD>
+<TD>  0.0, 180.0</TD></TR></TABLE></TD></TR></TABLE>
+
+<P><A NAME="E1B15F2635ceb"></A>The default lighting model values are as follows:</P>
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911da9"></A>AMBIENT</TD>
+<TD>  0.2, 0.2, 0.2</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911daa"></A>LOCALVIEWER</TD>
+<TD>  0.0</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911dab"></A>ATTENUATION</TD>
+<TD>  1.0, 0.0</TD></TR></TABLE>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A258C01c59a"></A>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. 
+(See "<!--gl32prgd:--><A HREF="../gl32prgd/powerstation730.html#NITAXIO">Hardware Considerations</A>".)</LI>
+
+<LI><A NAME="A258C01c59b"></A>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911dad"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="s35110marj"></A><I>deftype</I> </TD>
+<TD>  Category in which you want to create a new definition. There are three categories:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Constant</B></TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>DEFMATERIAL</TD>
+
+<TD>DEFMAT</TD>
+
+<TD>Indicates that this routine defines the properties of a material.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>DEFLIGHT</TD>
+
+<TD>DEFLIG</TD>
+
+<TD>Indicates that this routine defines the properties of a light source.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>DEFLMODEL</TD>
+
+<TD>DEFLMO</TD>
+
+<TD>Indicates that this routine defines the properties of a lighting model. </TD></TR></TABLE></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A25511f0marj"></A><I>index</I> </TD>
+<TD>  Specifies the index into the table of stored definitions. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="H55150marj"></A><I>numpoints</I></TD>
+<TD>  Specifies the number of floating-point values contained within the <I>properties</I> array.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="U551390marj"></A><I>properties</I></TD>
+<TD>  Specifies an array that contains the definition to store at the <I>index </I>parameter. A definition is a grouping of properties and values ended by the symbolic constant LMNULL. There is a total of 13 defined symbolic constants (command tokens) that identify the properties of a definition. The valid symbolic constants for the <I>properties</I> parameter are shown in the following table. 
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Constant</B></TD>
+
+<TD><BR></TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>EMISSION</TD>
+
+<TD>EMISSI</TD>
+
+<TD>Assigns an emission color to a material. Following this symbolic constant, enter the red, green, and blue color component values for the desired emission color. Valid color component values range from 0.0 to 1.0 inclusive.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>AMBIENT</TD>
+
+<TD>AMBIEN</TD>
+
+<TD>Can be a property of a material, a light, or a lighting model. Following this symbolic constant, enter the red, green, and blue color values for the desired ambient color. Valid color component values range from 0.0 to 1.0 inclusive. For each definition type, AMBIENT assigns the following:  DEFMATERIAL - The ambient reflectance of the material. DEFLIGHT - The ambient light associated with the light source. DEFLMODEL - The ambient light present in the scene.  The properties of a lighting model apply to an entire scene.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>DIFFUSE</TD>
+
+<TD>DIFFUS</TD>
+
+<TD>Assigns the diffuse reflectance of a material. Following this symbolic constant, enter the red, green, and blue color component values for the desired diffuse reflectance color. Valid color component values range from 0.0 to 1.0 inclusive.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>SPECULAR</TD>
+
+<TD>SPECUL</TD>
+
+<TD>Assigns the specular reflectance of a material. Following this symbolic constant, enter the red, green, and blue color component values for the desired specular reflectance color. Valid color component values range from 0.0 to 1.0 inclusive.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>SHININESS</TD>
+
+<TD>SHININ</TD>
+
+<TD>Assigns the material specular scattering exponent of the material. Following this symbolic constant, enter a number between 0.0 and 128.0 inclusive. The higher the value, the smoother the surface appearance and the more focused the specular highlight.  <B>Note:</B> The 3-D Color Graphics Processor rounds the SHININESS symbolic constant to the nearest whole integer. The POWER Gt4 and POWER Gt4x adapters accept fractional SHININESS values.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>ALPHA</TD>
+
+<TD>ALPHA</TD>
+
+<TD>Assigns the transparency of the material. Following the ALPHA symbolic constant, enter a value between 0.0 and 1.0, inclusive. (Systems without alpha bitplanes cannot use this property.)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LCOLOR</TD>
+
+<TD>LCOLOR</TD>
+
+<TD>Assigns the color of a light source. Following this symbolic constant, enter the red, green, and blue color component values for the desired color of the light. Valid color component values range from 0.0 to 1.0 inclusive.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>POSITION</TD>
+
+<TD>POSITI</TD>
+
+<TD>Assigns the position of a light source. Following this symbolic constant, enter the <I>x, y, z, </I>and <I>w </I>coordinates of the light source. If <I>w </I>is zero, the light source is infinitely distant and the <I>x, y,</I> and <I>z </I>values specify the direction of the light. Locating all light sources at infinity <I>w&nbsp;</I>=&nbsp;0 improves performance.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>SPOTDIRECTION</TD>
+
+<TD>SPOTDI</TD>
+
+<TD>Assigns the direction (axis) in which a spotlight source emits. Following this symbolic constant, enter the <I>x</I>, <I>y</I>, and <I>z</I> components of the direction vector. You can specify any values for <I>x</I>, <I>y</I>, and <I>z</I>; the system normalizes the direction before employing it in the lighting equation. The default direction points down the negative <I>z</I>-axis, direction (0.0,&nbsp;0.0,&nbsp;-1.0).  The direction is transformed by the current modeling/viewing matrix when the light is bound. The direction is ignored unless the light is a spotlight.  <B>Note: </B>This token is not supported on the 3-D Color Graphics Processor.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LOCALVIEWER</TD>
+
+<TD>LOCALV</TD>
+
+<TD>Assigns the local viewer status for a lighting model. If you want the viewer (eye position) to be local, enter 1.0 after this constant, and the lighting calculations assume that the viewer is located at (0,0,0). If you do not want the viewer to be local, then enter 0.0 after this constant, and the lighting calculations assume that the viewer is at positive infinity along the <I>z </I>axis. There is a performance penalty when you request a local viewer.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>ATTENUATION</TD>
+
+<TD>ATTENU</TD>
+
+<TD>Assigns the light attenuation factor for the lighting model (scene). Following this symbolic constant, enter two attenuation factor values to specify:   k-off - Attenuation offset factor. k-rate - Attenuation rate factor.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>COLORINDEXES</TD>
+
+<TD>COLORI</TD>
+
+<TD>Specifies the material properties used when lighting in color map mode. This property is ignored while the current frame buffer is in RGB mode, as are most other material properties when the current frame buffer is in color map mode. (Material property SHININESS is used in color map mode.) It is followed by three floating-point values, assigning the ambient, diffuse, and specular material color indexes.</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A30C010fee"></A>Example</H3>
+<P><A NAME="E1B15F3783ceb"></A>The example C language program <A HREF="cylinder2_c.html#A16C0c87c"><B>cylinder2.c</B></A> uses the <B>lmdef</B> subroutine to define the properties of two materials and two lights, and to define a lighting model. </P>
+
+<H3><A NAME="A62C015ce2"></A>Implementation Specifics</H3>
+<P><A NAME="E1B15F3944ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1B15F4056ceb"></A>On the POWERstation 730 and POWERgraphics GTO, the specular reflection exponent (as set with the SHININESS symbolic constant of the <B>lmdef</B> subroutine <I>properties </I>parameter) is truncated to the nearest power of 2 before computing lighting.  The only valid values for the specular exponent are 1, 2, 4, 8, 16, 32, 64, and 128.</P>
+
+<P><A NAME="E1B15F4165ceb"></A>The POWERstation 730 and POWERgraphics GTO do not support lighting in color index mode.</P>
+
+<P><A NAME="A3CFCBCA490janb"></A>Materials with different material properties on each side are supported on the POWER Gt4 class of graphics adapters.  Support for two-sided lighting is accomplished with the following token:</P>
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFCBCA501janb"></A><B>Type</B></TD>
+<TD>  DEFLMODEL</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFCBCA512janb"></A><B>Property</B></TD>
+<TD>  TWOSIDE</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFCBCA523janb"></A><B>Function</B></TD>
+<TD>  The TWOSIDE token followed by 0.0 disables two-sided lighting; followed by 1.0 enables two-sided lighting.</TD></TR></TABLE>
+
+<P><A NAME="A3CFCBCA535janb"></A>When two-sided lighting is disabled, the direction of the normal vector solely affects how a material is lit.  When the normal vector points towards the viewer, there will typically be a positive contribution to the ambient, diffuse and specular terms of the lighting equation (based, of course, on the material properties, the light positions and colors) When the normal points away from the viewer, there will only be a contribution from the ambient term, and the surface will not appear shiny and reflective (This is because all terms in the lighting equation involving a dot product with the normal vector are clamped to zero, and are not allowed to go negative.  If the normal points away from the user, such dot product terms will be clamped to zero, no mater what the light positions might be.)</P>
+
+<P><A NAME="A3CFCBCA546janb"></A>When two-sided lighting is enabled, the manner in which lighting is performed depends on whether the polygon being lit is front-facing or back-facing.  If the polygon is front-facing (the polygon vertices were specified in counter-clockwise order in screen coordinates), then lighting is performed as usual.  If the polygon is backfacing, then the direction of the normal vector is reversed before it is used in the lighting equation (that is, it is multiplied by -1 before being used.).  Thus, if two-sided lighting is enabled, and if the normal vectors were specified consistently with the handedness of the polygon, then both sides of the polygon will have diffuse and specular contributions,</P>
+
+<P><A NAME="A3CFCBCA557janb"></A>If a material has been bound to the BACKMATERIAL token, then this material will be used when the back-side lighting is being computed. Otherwise, both front and back-facing polygons will be lit with the MATERIAL properties.</P>
+
+<P><A NAME="A3CFCBCA568janb"></A>Two-sided lighting can only be enabled for, and affects only  polygons and triangle strips.  Points, lines and characters are always lit as if two-sided lighting were disabled.</P>
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFCBCA589janb"></A>The default lighting model is:</TD>
+<TD>  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP">AMBIENT 0.2, 0.2, 0.2</TD>
+<TD>  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP">ATTENUATION 1.0, 0.0</TD>
+<TD>  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP">LOCALVIEWER 0.0</TD>
+<TD>  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP">TWOSIDE 0.0</TD>
+<TD>  </TD></TR></TABLE>
+
+<BLOCKQUOTE><A NAME="A3CFCBCA613janb"></A><B>Note: </B>To obtain the desired lighting effect with two-sided lighting, one must be careful that the direction of the normal vector is consistent with the handedness of the polygon.  If the direction of the normal vector is accidentally reversed, then both sides  of the polygon will  appear dark.</BLOCKQUOTE>
+
+
+<H3><A NAME="A75C1161"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A75C1162"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A75C1163"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911dce"></A>Related Information</H3>
+<P><A NAME="E1B15F4488ceb"></A>Setting the current color in RGB mode with the <A HREF="c.html#A143X9262"><B>c</B></A> subroutine.</P>
+
+<P><A NAME="E1B15F4599ceb"></A>Setting the current color as a single packed 32-bit integer with the <A HREF="cpack.html#A143X9284"><B>cpack</B></A> subroutine.</P>
+
+<P><A NAME="E1B15F4705ceb"></A>Making a new material, light, or lighting model definition active with the <A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> subroutine.</P>
+
+<P><A NAME="E1B15F4816ceb"></A>Changing the target of the color commands with the <A HREF="lmcolor.html#ofZ220marj"><B>lmcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B15F4922ceb"></A>Specifying a normal vector with the <A HREF="n3f.html#A139X91ef3"><B>n3f</B></A> subroutine. </P>
+
+<P><A NAME="E1B15F5033ceb"></A>Updating the current normal vector with the <A HREF="normal.html#A142X9b7"><B>normal</B></A> subroutine. </P>
+
+<P><A NAME="E1B15F5143ceb"></A>Setting the current color in RGB mode with the <A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> subroutine. </P>
+
+<P><A NAME="E1B15F5250ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Creating 
+<!--gl32prgd:--><A HREF="../gl32prgd/crlighteff.html#crlighteff.html">Lighting Effects</A>, Setting 
+<!--gl32prgd:--><A HREF="../gl32prgd/setglpipeops.html#setglpipeops.html">Pipeline Options</A>, and Working in 
+<!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="lmcolor.html">Previous</a>  |
+<a href="loadmatrix.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

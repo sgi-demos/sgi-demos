@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>screenspace Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="scale.html">Previous</a>  |
+<a href="scrmask.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A213X911cf1"></A>screenspace Subroutine</H2>
+<A NAME="INDEX1741" REL="I1" TITLE="screenspace subroutine (GL)"></A>
+<A NAME="INDEX1742" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1743" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX1744" REL="I3" TITLE="screenspace"></A>
+<A NAME="INDEX1745" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1746" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX1747" REL="I3" TITLE="absolute screen coordinates"></A>
+
+<H3><A NAME="A213X911cf3"></A>Purpose</H3>
+<P><A NAME="E1D741D184ceb"></A>Makes a program interpret graphics positions as absolute screen coordinates.</P>
+
+<H3><A NAME="A79C1294"></A>Libraries</H3>
+<P><A NAME="E1D741D223ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D741D247ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911cf6"></A>C Syntax</H3>
+<PRE><A NAME="A213X911cf7"></A><B>void screenspace(&nbsp;)</B></PRE>
+
+<H3><A NAME="A213X911cd0"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X911cd3"></A><B>SUBROUTINE SCREEN</B></PRE>
+
+<H3><A NAME="A213X911cfa"></A>Description</H3>
+<P><A NAME="E1D741D356ceb"></A>The <B>screenspace </B>subroutine makes a program interpret graphics positions as absolute 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P017">screen coordinates</A>. This allows pixels and locations outside a program's window to be read. The origin, in screen coordinates, is at the lower left corner of the screen. In window coordinates the origin is at the lower left corner of the user-defined window.</P>
+
+<P><A NAME="E1D741D381ceb"></A>The <B>screenspace </B>subroutine is equivalent to: </P>
+<PRE><A NAME="A213X911cfd"></A>int&nbsp;xmin,&nbsp;ymin;</PRE>
+<PRE><A NAME="A213X911cfe"></A>getorigin(&amp;xmin,&nbsp;&amp;ymin);
+viewport(-xmin,&nbsp;XMAXSCREEN-xmin,-ymin,YMAXSCREEN-ymin);
+ortho2(-0.5,1279.5,-0.5,1023.5);&nbsp;</PRE>
+
+<BLOCKQUOTE><A NAME="A318C9e22"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A62C015d4c"></A>Implementation Specifics</H3>
+<P><A NAME="E1D741D482ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C1297"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1298"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1299"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911d0c"></A>Related Information</H3>
+<P><A NAME="E1D741D578ceb"></A>Returning the position of a window with the <A HREF="getorigin.html#A142X91f76"><B>getorigin</B></A> subroutine.</P>
+
+<P><A NAME="E1D741D607ceb"></A>Defining a 2-D orthographic transformation with the <A HREF="ortho.html#A144X9496"><B>ortho2</B></A> subroutine.</P>
+
+<P><A NAME="E1D741D633ceb"></A>Setting the area of the window used for all drawing with the <A HREF="viewport.html#qrY270marj"><B>viewport</B></A> subroutine.</P>
+
+<P><A NAME="E1D741D659ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Using <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Viewports and Screenmasks</A>, and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="scale.html">Previous</a>  |
+<a href="scrmask.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

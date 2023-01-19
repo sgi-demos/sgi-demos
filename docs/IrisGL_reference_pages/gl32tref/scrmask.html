@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>scrmask Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="screenspace.html">Previous</a>  |
+<a href="setbell.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="fwN250marj"></A>scrmask Subroutine</H2>
+<A NAME="INDEX1748" REL="I1" TITLE="scrmask subroutine (GL)"></A>
+<A NAME="INDEX1749" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1750" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX1751" REL="I3" TITLE="scrmask"></A>
+<A NAME="INDEX1752" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1753" REL="I2" TITLE="screenmask"></A>
+<A NAME="INDEX1754" REL="I3" TITLE="defining 2 rectangular"></A>
+<A NAME="INDEX1755" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1756" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX1757" REL="I3" TITLE="defining 2 rectangular clipping masks"></A>
+
+<H3><A NAME="A213X911c9e"></A>Purpose</H3>
+<P><A NAME="E1D742B674ceb"></A>Defines a a rectangular 2-D clipping mask.</P>
+
+<H3><A NAME="A79C128d"></A>Libraries</H3>
+<P><A NAME="E1D742B713ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D742B737ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911ca1"></A>C Syntax</H3>
+<PRE><A NAME="A213X911ca2"></A><B>void scrmask</B>
+<B>(Screencoord </B><A HREF="scrmask.html#A213X911ca9"><I>left</I></A><B>,</B>
+<B>Screencoord </B><A HREF="scrmask.html#A213X911caa"><I>right</I></A><B>,</B>
+<B>Screencoord </B><A HREF="scrmask.html#A213X911cab"><I>bottom</I></A><B>,</B>
+<B>Screencoord </B><A HREF="scrmask.html#A213X911cac"><I>top</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X911c7b"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X911c7e"></A><B>SUBROUTINE SCRMAS(</B><I>left</I><B>,</B> <I>right</I><B>,</B> <I>bottom</I><B>,</B> <I>top</I><B>)</B>
+<B>INTEGER*4 </B><I>left</I><B>,</B> <I>right</I><B>,</B> <I>bottom</I><B>,</B> <I>top</I></PRE>
+
+<BLOCKQUOTE><A NAME="A79C1290"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911ca5"></A>Description</H3>
+<P><A NAME="E1D742B872ceb"></A>The <B>scrmask</B> subroutine defines a rectangular, two-dimensional 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e0">clipping</A> mask. It is intended to be used primarily for fine character clipping, although it clips all drawing primitives, including <B>clear</B>. </P>
+
+<P><A NAME="E1D742B898ceb"></A>By default, the <A HREF="viewport.html#qrY270marj"><B>viewport</B></A> subroutine sets the same area for both the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A> and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P018">screenmask</A>, which the parameters <A HREF="scrmask.html#A213X911ca9"><I>left</I></A>, <A HREF="scrmask.html#A213X911caa"><I>right</I></A>, <A HREF="scrmask.html#A213X911cab"><I>bottom</I></A>, <A HREF="scrmask.html#A213X911cac"><I>top</I></A> define. Strings that begin outside the viewport are clipped out; this is called 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0613">gross clipping</A>. Strings that begin inside the viewport, but outside the screenmask, are clipped to the pixel boundaries of the screenmask; this is called 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0519">fine clipping</A>. </P>
+
+<P><A NAME="E1D742B924ceb"></A>All drawing routines are also clipped to the viewport, but the <B>scrmask </B>subroutine is useful only for characters. Gross clipping is sufficient for all other primitives.</P>
+
+<H3><A NAME="A213X911ca8"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911ca9"></A><I>left</I></TD>
+<TD>  Specifies the coordinate of the left clipping plane of the screenmask.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911caa"></A><I>right</I></TD>
+<TD>  Specifies the coordinate of the right clipping plane of the screenmask.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911cab"></A><I>bottom</I></TD>
+<TD>  Specifies the coordinate of the bottom clipping plane of the screenmask.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911cac"></A><I>top</I></TD>
+<TD>  Specifies the coordinate of the top clipping plane of the screenmask.</TD></TR></TABLE>
+
+<BLOCKQUOTE><A NAME="A213X911cad"></A><B>Note: </B>The <I>left</I> parameter must not be greater than the <I>right</I> parameter, nor the <I>bottom </I>parameter greater than the <I>top</I> parameter, otherwise no text can appear on the screen.</BLOCKQUOTE>
+
+
+<H3><A NAME="A30C01101c"></A>Example</H3>
+<P><A NAME="E1D742C078ceb"></A>The example C language program <A HREF="prompt_c.html#A16C0c8de"><B>prompt.c</B></A> uses the <B>scrmask</B> subroutine to define a new screenmask.</P>
+
+<H3><A NAME="A62C015d4a"></A>Implementation Specifics</H3>
+<P><A NAME="E1D742C122ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C1291"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1292"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1293"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911cc0"></A>Related Information</H3>
+<P><A NAME="E1D742C219ceb"></A>Returning the current screenmask with the <A HREF="getscrmask.html#A213X911c47"><B>getscrmask</B></A> subroutine.</P>
+
+<P><A NAME="E1D742C244ceb"></A>Setting the area of the window used for all drawing with the <A HREF="viewport.html#qrY270marj"><B>viewport</B></A> subroutine.</P>
+
+<P><A NAME="E1D742C270ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Using <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Viewports and Screenmasks</A>, and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="screenspace.html">Previous</a>  |
+<a href="setbell.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

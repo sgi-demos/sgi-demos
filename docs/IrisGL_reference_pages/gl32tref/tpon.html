@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>tpon Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="tpoff.html">Previous</a>  |
+<a href="translate.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A14k110nita"></A>tpon Subroutine</H2>
+<A NAME="INDEX1927" REL="I1" TITLE="tpon subroutine (GL)"></A>
+<A NAME="INDEX1928" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1929" REL="I2" TITLE="textport"></A>
+<A NAME="INDEX1930" REL="I3" TITLE="tpon"></A>
+<A NAME="INDEX1931" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1932" REL="I2" TITLE="textport"></A>
+<A NAME="INDEX1933" REL="I3" TITLE="turning on"></A>
+
+<H3><A NAME="A213X9125a6"></A>Purpose</H3>
+<P><A NAME="E1D757C791ceb"></A>Turns on the textport.</P>
+
+<H3><A NAME="A79C11f3"></A>Libraries</H3>
+<P><A NAME="E1D757C830ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D757C855ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X9125a9"></A>C Syntax</H3>
+<PRE><A NAME="A213X9125aa"></A><B>void tpon(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010be1"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010be2"></A><B>SUBROUTINE TPON</B></PRE>
+
+<H3><A NAME="A213X9125ad"></A>Description</H3>
+<P><A NAME="E1D757C962ceb"></A>The <B>tpon</B> subroutine brings the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P11506">textport</A>, the window associated with the shell that invoked the graphics program, to the front of any windows that conceal it.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f0a"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A30C01104c"></A>Example</H3>
+<P><A NAME="E1D757D024ceb"></A>The example C language program <A HREF="tpbig_c.html#A16C0c9bd"><B>tpbig.c</B></A> uses the <B>tpon</B> subroutine to enable a textport for drawing character strings into. </P>
+
+<H3><A NAME="A62C015d7e"></A>Implementation Specifics</H3>
+<P><A NAME="E1D757D068ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C11f6"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11f7"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11f8"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X9125b6"></A>Related Information</H3>
+<P><A NAME="E1D757D165ceb"></A>Allocating an area of the screen for the textport with the <A HREF="textport.html#A143X9cb7"><B>textport</B></A> subroutine.</P>
+
+<P><A NAME="E1D757D191ceb"></A>Turning off the textport with the <A HREF="tpoff.html#A143X9c2f"><B>tpoff</B></A> subroutine.</P>
+
+<P><A NAME="E1D757D217ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Working with the <!--gl32prgd:--><A HREF="../gl32prgd/textport.html#textport.html">Textport</A>.</P><hr><center>
+[  <a href="tpoff.html">Previous</a>  |
+<a href="translate.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

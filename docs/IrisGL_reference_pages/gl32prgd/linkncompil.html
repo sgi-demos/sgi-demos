@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/linkncompil.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>Linking and Compiling Using the GL Shared Library
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="multiprocman.html">Previous</a>  |
+<a href="FORTRANnC.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="linkncompil.html"></A>Linking and Compiling Using the GL Shared Library</H2>
+<P><A NAME="A3C0F110692mhay"></A>The GL library <B>libgl.a</B> is a shared library. By default, a GL program linked with the <B>-lgl</B> flag will link to the <B>libgl.a</B> library as a shared library. By using shared libraries, programs minimize the amount of disk space and memory that they use. A shared library is not bound in with the executable; thus the size of the executable is smaller (kilobytes, for small programs, instead of megabytes). Memory usage is decreased, because several programs running at the same time share the .text segment (the segment where the executable code is contained) of the library (a separate .data segment is created for each program).</P>
+
+<BLOCKQUOTE><A NAME="A6D93F6058vbia"></A><B>Attention: </B>The GL library cannot be linked non-shared. Doing so will result in erratic and incorrect behaviour of GL programs. This warning applies to the C version of GL (<B>libgl.a</B> library) as well as the FORTRAN version (<B>libfgl.a</B> library).</BLOCKQUOTE>
+
+<hr><center>
+[  <a href="multiprocman.html">Previous</a>  |
+<a href="FORTRANnC.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/linkncompil.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+
+

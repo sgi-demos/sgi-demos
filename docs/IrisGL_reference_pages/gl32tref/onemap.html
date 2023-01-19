@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>onemap Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="objreplace.html">Previous</a>  |
+<a href="ortho.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A146X95ef"></A>onemap Subroutine</H2>
+<A NAME="INDEX1292" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1293" REL="I2" TITLE="color map and RGB mode"></A>
+<A NAME="INDEX1294" REL="I3" TITLE="onemap"></A>
+<A NAME="INDEX1295" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1296" REL="I2" TITLE="color map"></A>
+<A NAME="INDEX1297" REL="I3" TITLE="organizing as one large map"></A>
+<A NAME="INDEX1298" REL="I1" TITLE="onemap subroutine (GL)"></A>
+
+<H3><A NAME="A146X95f1"></A>Purpose</H3>
+<P><A NAME="E1D708C641ceb"></A>Organizes the color map as one large map.</P>
+
+<H3><A NAME="A78C15a"></A>Libraries</H3>
+<P><A NAME="E1D708C680ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D708C704ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A146X95f4"></A>C Syntax</H3>
+<PRE><A NAME="A146X95f5"></A><B>void onemap(&nbsp;)</B></PRE>
+
+<H3><A NAME="A146X95cd"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A146X95d0"></A><B>SUBROUTINE ONEMAP</B></PRE>
+
+<H3><A NAME="A146X95f8"></A>Description</H3>
+<P><A NAME="E1D708C811ceb"></A>The <B>onemap</B> subroutine reorganizes the color map as a single large color map. On the 24-bit High-Performance 3-D Color Graphics Processor, this map is a 12-bit color map having 4096 entries. On the 8-bit High-Performance 3-D Color Graphics Processor, the map is an 8-bit color map having 256 entries.</P>
+
+<P><A NAME="E1D708C837ceb"></A>The system is initially in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#a3P1390marj">onemap mode</A>. However, if the mode has been changed to multimap and the <B>onemap</B> subroutine is called, the reorganization of the color map into one large map does not take effect until the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine is called. </P>
+
+<OL><LI><A NAME="A258C01c435"></A>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. 
+(See "<!--gl32prgd:--><A HREF="../gl32prgd/undergraphadapt.html#undergraphadapt.html">Understanding the Adapter</A>".) </LI>
+
+<LI><A NAME="A258C01c436"></A>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI>
+
+<LI><A NAME="A3CFCE91141janb"></A>12-bit color index mode is not possible on the gt4 family of adapters.</LI></OL>
+
+<H3><A NAME="A146X95e9"></A>Implementation Specifics</H3>
+<P><A NAME="E1D708C934ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C15d"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C15e"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C15f"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A146X960e"></A>Related Information</H3>
+<P><A NAME="E1D708D030ceb"></A>Configuring the system with the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine.</P>
+
+<P><A NAME="E1D708D056ceb"></A>Returning the organization of the current color map with the <A HREF="getcmmode.html#A146X948e"><B>getcmmode</B></A> subroutine.</P>
+
+<P><A NAME="E1D708D082ceb"></A>Organizing the color map as 16 small maps with the <A HREF="multimap.html#A146X9593"><B>multimap</B></A> subroutine.</P>
+
+<P><A NAME="E1D708D107ceb"></A>Selecting one of 16 small color maps with the <A HREF="setmap.html#A146X9646"><B>setmap</B></A> subroutine.</P>
+
+<P><A NAME="E1D708D133ceb"></A>Working in 
+<!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="objreplace.html">Previous</a>  |
+<a href="ortho.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

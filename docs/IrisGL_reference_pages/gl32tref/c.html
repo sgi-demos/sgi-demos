@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>c Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="blkqread.html">Previous</a>  |
+<a href="callobj.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9262"></A>c Subroutine</H2>
+<A NAME="INDEX179" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX180" REL="I2" TITLE="attribute"></A>
+<A NAME="INDEX181" REL="I3" TITLE="c"></A>
+<A NAME="INDEX182" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX183" REL="I2" TITLE="colors"></A>
+<A NAME="INDEX184" REL="I3" TITLE="current"></A>
+<A NAME="INDEX185" REL="I1" TITLE="c subroutine (GL)"></A>
+<H3><A NAME="A143X9264"></A>Purpose</H3>
+<P><A NAME="E1B05EC242ceb"></A>Sets the current color in RGB mode.</P>
+
+<H3><A NAME="A77C158"></A>Libraries</H3>
+<P><A NAME="E1B05EC389ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B05EC494ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9268"></A>C Syntax</H3>
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>  </B></TD>
+
+<TD><B>3-D</B></TD>
+
+<TD><B>4-D</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Int16</B></TD>
+
+<TD><B>void c3s(Int16 </B><I>vector</I>[3])</TD>
+
+<TD><B>void c4s(Int16 </B><I>vector</I>[4])</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Int32</B></TD>
+
+<TD><B>void c3i(Int32 </B><I>vector</I>[3])</TD>
+
+<TD><B>void c4i(Int32 </B><I>vector</I>[4])</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>float</B></TD>
+
+<TD><B>void c3f(float </B><I>vector</I>[3])</TD>
+
+<TD><B>void c4f(float </B><I>vector</I>[4])</TD></TR></TABLE>
+
+<H3><A NAME="A19C0e0dc"></A>FORTRAN Syntax</H3>
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>  </B></TD>
+
+<TD><B>3-D</B></TD>
+
+<TD><B>4-D</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>INTEGER*2</B></TD>
+
+<TD><B>SUBROUTINE C3S(</B><I>vector</I>) INTEGER*2 <I>vector</I>(3)</TD>
+
+<TD><B>SUBROUTINE C4S(</B><I>vector</I>) INTEGER*2 <I>vector</I>(4)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>INTEGER*4</B></TD>
+
+<TD><B>SUBROUTINE C3I(</B><I>vector</I>) INTEGER*4 <I>vector</I>(3)</TD>
+
+<TD><B>SUBROUTINE C4I(</B><I>vector</I>) INTEGER*4 <I>vector</I>(4)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>FLOAT</B></TD>
+
+<TD><B>SUBROUTINE C3F(</B><I>vector</I>) REAL <I>vector</I>(3)</TD>
+
+<TD><B>SUBROUTINE C4F(</B><I>vector</I>) REAL <I>vector</I>(4)</TD></TR></TABLE>
+
+<H3><A NAME="A143X926a"></A>Description</H3>
+<P><A NAME="E1B05EC855ceb"></A>The <B>c</B> subroutine changes the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0742">RGBA</A>
+ (red, green, blue, alpha) color. Array components 0, 1, 2, and 3 are red, green, blue, and alpha, respectively. In the three-component cases, alpha defaults to 1.0 (float) or 255 (integer).</P>
+
+<P><A NAME="E1B05EC970ceb"></A>Floating-point components range from 0.0 through 1.0. Integer components range from 0 through 255.</P>
+
+<BLOCKQUOTE><A NAME="A139X91ed5"></A><B>Note: </B>This subroutine is available only in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X926c"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X926d"></A><I>vector</I></TD>
+<TD>  Specifies, for the <B>c4</B> subroutines, a four-element array containing RGBA (red, green, blue, and alpha) values. For <B>c3</B> subroutines, a three-element array containing 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A255B9de">RGB values</A>.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X926e"></A></TD>
+<TD>  Array components 0, 1, 2, and 3 are red, green, blue, and alpha respectively.  Floating point 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0742">RGBA values</A> range from 0.0 through 1.0.  Integer RGBA values range from 0 through 255.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9272"></A>Example</H3>
+<P><A NAME="E1B05ED345ceb"></A>The example C language program <A HREF="cylinder1_c.html#Ggi2e0marj"><B>cylinder1.c</B></A> calls the <B>c3f</B> subroutine, with a three element array initialized with all zeros as the <I>vector</I> parameter, to clear the screen to black.</P>
+
+<H3><A NAME="A11C0b4b7"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C15b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C15c"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X927c"></A>Implementation Specifics</H3>
+<P><A NAME="E1B05ED664ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1B05ED771ceb"></A>If your system does not have alpha bitplanes, set the alpha values to zero.</P>
+
+<H3><A NAME="A143X9282"></A>Related Information</H3>
+<P><A NAME="E1B05ED933ceb"></A>Setting the current color in color map mode with the <A HREF="color.html#A146X9429"><B>color</B></A> subroutine.</P>
+
+<P><A NAME="E1B05EE041ceb"></A>Specifying RGBA color with a single packed 32-bit integer using the <A HREF="cpack.html#A143X9284"><B>cpack</B></A> subroutine.</P>
+
+<P><A NAME="E1B05EE148ceb"></A>Returning the current color in RGB mode with the <A HREF="gRGBcolor.html#ESL13a0marj"><B>gRGBcolor</B></A> subroutine.  </P>
+
+<P><A NAME="E1B05EE257ceb"></A>Setting the current color in RGB mode with the <A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B05EE364ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="blkqread.html">Previous</a>  |
+<a href="callobj.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

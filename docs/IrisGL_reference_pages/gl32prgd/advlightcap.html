@@ -1,0 +1,454 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/advlightcap.html Mon, 24 Jan 2022 16:28:08 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Advanced Lighting Capabilities
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="lightbasics.html">Previous</a>  |
+<a href="lightmatrix.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="advlightcap.html"></A>Advanced Lighting Capabilities </H2>
+
+
+<P><A NAME="INDEX518"></A><A NAME="INDEX519"></A><A NAME="INDEX520"></A><A NAME="INDEX521"></A><A NAME="INDEX522"></A><A NAME="INDEX523"></A></P>
+
+
+<P><A NAME="A3C0EA81210mhay"></A>Now that you are familiar with the basic
+lighting capabilities of GL, the following sections discuss some of the
+advanced lighting features. </P>
+
+
+<UL><LI><A NAME="A258C01bfc8"></A><A HREF="advlightcap.html#A342C971d7">Material
+Emission</A></LI>
+
+
+<LI><A NAME="A258C01bfc9"></A><A HREF="advlightcap.html#A342C971e2">More
+on Ambient Light</A></LI>
+
+
+<LI><A NAME="A258C01bfca"></A><A HREF="advlightcap.html#LuK21a0marj">lmcolor
+Subroutine</A></LI>
+
+
+<LI><A NAME="A258C01bfcb"></A><A HREF="advlightcap.html#A342C97201">Local
+Viewer</A></LI>
+
+
+<LI><A NAME="A258C01bfcc"></A><A HREF="advlightcap.html#A342C97209">Local
+Lights</A></LI>
+
+
+<LI><A NAME="A258C01bfcd"></A><A HREF="advlightcap.html#A342C97288">Light
+Attenuation</A> </LI></UL>
+
+
+<H3><A NAME="A342C971d7"></A>Material Emission<A NAME="INDEX524"></A> <A NAME="INDEX525"></A>
+<A NAME="INDEX526"></A> <A NAME="INDEX527"></A> <A NAME="INDEX528"></A>
+<A NAME="INDEX529"></A> </H3>
+
+
+<P><A NAME="A3C0EA81239mhay"></A>One property of surface materials is <I>emissivity</I>,
+the amount of light radiated (not reflected) by the material itself. A
+material can be made self-luminous by adding the identifier EMISSION to
+the property list followed by the red, green, and blue emission components
+(each with a value between 0.0 and 1.0). For example, we could define the
+properties list for a material as the following: </P>
+
+
+<PRE><A NAME="A342C971db"></A>float&nbsp;glowing_material[]&nbsp;=&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMISSION,&nbsp;0.8,&nbsp;0.25,&nbsp;0.0,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AMBIENT,&nbsp;0.0,&nbsp;0.0,&nbsp;0.0,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DIFFUSE,&nbsp;0.0,&nbsp;0.0,&nbsp;0.0,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPECULAR,&nbsp;0.0,&nbsp;0.0,&nbsp;0.0,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LMNULL};</PRE>
+
+
+<P><A NAME="A3C0EA81262mhay"></A>The material would appear to emit orange
+light. The ambient, diffuse, and specular reflectance values are specifically
+assigned to 0.0 so the color of the object is not affected by light sources.
+If the coefficients are not zeroed out, GL uses the default nonzero values.</P>
+
+
+<P><A NAME="A3C0EA81284mhay"></A>Using a material definition such as <TT>glowing_material</TT>
+that has emissive but no reflective properties is useful for simulating
+lights at night. It is important to distinguish between the way the lighting
+facility handles surface materials with emissive properties and the way
+it handles light emitted from light sources. Unlike a light source, emitted
+light from a material does not affect the color of any other object. </P>
+
+
+<H3><A NAME="A342C971e2"></A>More on Ambient Light<A NAME="INDEX530"></A>
+<A NAME="INDEX531"></A> <A NAME="INDEX532"></A> <A NAME="INDEX533"></A>
+<A NAME="INDEX534"></A> <A NAME="INDEX535"></A> </H3>
+
+
+<P><A NAME="A3C0EA81306mhay"></A>In defining the simple lighting calculation,
+the default values for ambient light and ambient reflectance provided by
+GL were used. However, GL allows you to control the amount of ambient light
+displayed in the scene in three different ways: </P>
+
+
+<UL><LI><A NAME="A168C1164"></A>Color</LI>
+
+
+<LI><A NAME="A168C1165"></A>Additional, specific light source</LI>
+
+
+<LI><A NAME="A168C1166"></A>Material reflectance values</LI></UL>
+
+
+<P><A NAME="A3C0EA81330mhay"></A>You can specify the color of ambient light
+present in the entire scene. Because the color of ambient light is the
+same at any point in the scene, the scene ambient light color is a property
+of the lighting model. For example, in defining a lighting calculation
+with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+subroutine using the property list, the lines </P>
+
+
+<PRE><A NAME="A342C971e7"></A>float&nbsp;simple_light_model[]&nbsp;=
+&nbsp;&nbsp;&nbsp;{AMBIENT,&nbsp;0.3,&nbsp;0.3,&nbsp;0.3,&nbsp;LMNULL};</PRE>
+
+
+<P><A NAME="A3C0EA81352mhay"></A>define a lighting model similar to the
+simple lighting calculation except that this example overrides the default
+scene ambient light color with the specified values. </P>
+
+
+<P><A NAME="A3C0EA81373mhay"></A>In addition to the scene 
+<A HREF="specialterms.html#A3C0F2A3015mhay">ambient light</A>
+ color specified in the lighting model, a specific light
+source can contribute to the ambient light in the scene. Consider the following
+modification to the property array <TT>blue_light</TT>: </P>
+
+
+<PRE><A NAME="A342C971eb"></A>float&nbsp;blue_light[]&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{LCOLOR,&nbsp;0.0,&nbsp;0.0,&nbsp;0.6,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AMBIENT,&nbsp;0.0,&nbsp;0.0,&nbsp;0.2,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSITION,&nbsp;0.0,&nbsp;1.0,&nbsp;0.0,&nbsp;0.0,&nbsp;LMNULL};</PRE>
+
+
+<P><A NAME="A3C0EA81395mhay"></A>Now, the ambient light associated with
+<TT>blue_light</TT> is added to the scene ambient light once <TT>blue_light</TT>
+has been defined and bound. Unlike the scene ambient light, the ambient
+contribution from the blue light disappears if you turn the blue light
+off. It is important to note that ambient light associated with a particular
+light source is omnidirectional just like ambient light specified with
+the lighting model. </P>
+
+
+<P><A NAME="A3C0EA81417mhay"></A>The third method of controlling displayed
+ambient color is to alter the ambient light reflectance values of the material.
+You have seen how to specify this property by using <TT><A HREF="advlightcap.html#A342C971db">glowing_material</A></TT>
+(you set it to [0.0,&nbsp;0.0,&nbsp;0.0]). The ambient color displayed
+for a surface is determined by adding the ambient contributions from the
+light model and all of the light sources and multiplying the sum by the
+material's ambient light reflectance values. </P>
+
+
+<H3><A NAME="LuK21a0marj"></A>lmcolor Subroutine </H3>
+
+
+<P><A NAME="A3C0EA81439mhay"></A>You can also use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmcolor.html#ofZ220marj">lmcolor</A></B>
+subroutine to change the lighting components of an object while the program
+is running. </P>
+
+
+<P><A NAME="A3C0EA81460mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmcolor.html#ofZ220marj">lmcolor</A></B>
+subroutine lets you change the properties of the currently bound material.
+It provides a high-performance path to the hardware that would not be otherwise
+available. Normally, to change the properties of the currently bound material,
+one would have to redefine the material with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+subroutine and then rebind it with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmbind.html#XeZ2340marj">lmbind</A></B>
+subroutine. The <B>lmcolor</B> subroutine helps avoid some of the software
+overhead involved in redefinitions and rebindings. </P>
+
+
+<P><A NAME="A3C0EA81481mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmcolor.html#ofZ220marj">lmcolor</A></B>
+subroutine works by redirecting the target of the RGB mode color subroutines
+(<B><!--:libs:gl32tref:--><A HREF="../gl32tref/RGBcolor.html#A143X9394">RGBcolor</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/c.html#A143X9262">c</A></B>, and
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/cpack.html#A143X9284">cpack</A></B>).
+Normally, these subroutines set the current color. If lighting is off,
+the color subroutines can be made to affect material properties instead.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01bfcf"></A>void&nbsp;lmcolor(Int32&nbsp;mode)</PRE>
+
+
+<P><A NAME="A3C0EA81503mhay"></A>This function accepts the following values
+for mode: </P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C971f8"></A><B>LMC_COLOR</B> </TD>
+
+
+<TD>RGB color commands set the current color. If a color is the last thing
+sent before drawing a vertex, the vertex is drawn in that color; if a normal
+is the last thing sent before drawing a vertex, the vertex is lighted (the
+default mode).</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C971f9"></A><B>LMC_EMISSION</B> </TD>
+
+
+<TD>RGB color commands set the emission color property of the currently
+bound material.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C971fa"></A><B>LMC_AMBIENT</B> </TD>
+
+
+<TD>RGB color commands set the ambient color property of the currently
+bound material.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C971fb"></A><B>LMC_DIFFUSE</B> </TD>
+
+
+<TD>LRGB color commands set the diffuse color property of the currently
+bound material.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C971fc"></A><B>LMC_SPECULAR</B> </TD>
+
+
+<TD>RGB color commands set the specular color property of the currently
+bound material.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C971fd"></A><B>LMC_AD</B> </TD>
+
+
+<TD>RGB color commands set the diffuse and ambient color properties of
+the currently bound material. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C971fe"></A><B>LMC_NULL</B> </TD>
+
+
+<TD>RGB color commands are ignored.</TD></TR></TABLE>
+
+
+<P><A NAME="A3C0EA81533mhay"></A>Calls to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+subroutine can change properties of the currently bound material, but because
+it must modify the data structure of the material, this subroutine executes
+relatively slowly. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmcolor.html#ofZ220marj">lmcolor</A></B>
+subroutine provides a fast and efficient way to change properties of the
+currently bound material as maintained in the graphics hardware without
+changing the definition of the material. This means, however, that all
+<B>lmcolor</B> changes are lost when you bind a new material. </P>
+
+
+<P><A NAME="A3C0EA81555mhay"></A>Use the standard RGB-mode color subroutines
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/RGBcolor.html#A143X9394">RGBcolor</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/c.html#A143X9262">c</A></B>, and
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/cpack.html#A143X9284">cpack</A></B>
+to change material properties selected by the <B>lmcolor</B> subroutine.
+When lighting is not active, RGB-mode color commands change the current
+drawing color. The <B>lmcolor</B> subroutine is significant only while
+lighting is on. </P>
+
+
+<H3><A NAME="A342C97201"></A>Local Viewer<A NAME="INDEX536"></A> <A NAME="INDEX537"></A>
+<A NAME="INDEX538"></A> <A NAME="INDEX539"></A> <A NAME="INDEX540"></A>
+<A NAME="INDEX541"></A> </H3>
+
+
+<P><A NAME="A3C0EA81577mhay"></A>As stated in the section on <A HREF="lightbasics.html#A342C970eb">pecularity</A>,
+the intensity and color of the specular highlight seen depends on the view
+direction. The lighting calculations performed by the system take into
+account the view direction, although they can do so in one of two different
+ways. One of the methods, called <I>infinite viewer</I>, involves an approximation,
+but results in significantly improved performance. The other method, <I>local
+viewer</I>, is considerably slower, but more exact. For most applications,
+there is very little difference in the visual appearance between the two
+methods, and therefore the infinite viewer is the default. </P>
+
+
+<P><A NAME="A3C0EA81607mhay"></A>The infinite viewer makes the approximation
+that the eye (as far as the lighting calculations are concerned) is infinitely
+far away. This does not mean that the transformation matrices are somehow
+altered; they are not. The geometry of the scene being drawn is completely
+unaffected; only the colors that come out of the lighting equations are
+affected. </P>
+
+
+<P><A NAME="A3C0EA81628mhay"></A>When this assumption is made, the view
+direction vector remains constant throughout the scene. Using an infinite
+viewer is beneficial to application performance because the system does
+not have to recompute the view direction vector for every vertex in the
+scene (recomputing this vector is computationally expensive because it
+requires a square root operation). </P>
+
+
+<P><A NAME="A3C0EA81649mhay"></A>However, describing the viewer as located
+infinitely far away is not as realistic as placing the viewer at some finite
+position. To define a local viewer, set the local viewer property in the
+property list for the lighting model to true (1.0): </P>
+
+
+<PRE><A NAME="A342C97206"></A>float&nbsp;local_viewer_model[]&nbsp;=&nbsp;{LOCALVIEWER,&nbsp;1.0,&nbsp;LMNULL};</PRE>
+
+
+<BLOCKQUOTE><P><A NAME="A342C97208"></A><B>Note: </B>Because the local view vector
+changes with each vertex, the lighting computation must be performed when
+the vertex subroutine (<B><!--:libs:gl32tref:--><A HREF="../gl32tref/v.html#A144X97a4">v3f</A></B>)
+rather than the normal (<B><!--:libs:gl32tref:--><A HREF="../gl32tref/n3f.html#A139X91ef3">n3f</A></B>
+) subroutine is issued. When performing the lighting calculation at the
+vertex, the graphics hardware uses the normal vector from the most recently
+issued normal subroutine. </P></BLOCKQUOTE>
+
+
+<P><A NAME="A3C0EA81673mhay"></A>The difference between infinite and local
+viewer is significant only when the surface being drawn is extremely close
+to the eye. For normal drawing, the performance improvement of the infinite
+viewer should significantly outweigh the improved appearance of the local
+viewer. </P>
+
+
+<H3><A NAME="A342C97209"></A>Local Lights<A NAME="INDEX542"></A> <A NAME="INDEX543"></A>
+<A NAME="INDEX544"></A> <A NAME="INDEX545"></A> <A NAME="INDEX546"></A>
+<A NAME="INDEX547"></A> </H3>
+
+
+<P><A NAME="A3C0EA81695mhay"></A>Local lights are analogous to a local
+viewer and are available through the lighting facility. To convert the
+blue light from the earlier example to a local light, change the property
+list definition to the following: </P>
+
+
+<PRE><A NAME="A342C9720d"></A>float&nbsp;blue_light[]&nbsp;=&nbsp;{
+&nbsp;&nbsp;&nbsp;LCOLOR,&nbsp;0.0,&nbsp;0.0,&nbsp;0.6,
+&nbsp;&nbsp;&nbsp;POSITION,&nbsp;0.0,&nbsp;5.0,&nbsp;0.0,&nbsp;1.0,&nbsp;LMNULL};</PRE>
+
+
+<P><A NAME="A3C0EA81718mhay"></A>Changing the fourth positional component
+from a 0.0 to a 1.0 tells the system that this light is local and that
+the <I>x</I>, <I>y</I>, and <I>z</I> components specify a light position
+rather than a light direction. This is a significant difference because
+the light direction vector becomes the vector from the current vertex to
+the position of the light. Thus, you must take care not to position the
+light too close to the surface. If you are not careful, you may find that
+you positioned the light source within or below a surface in your scene
+(notice the <I>y</I> component of the position is changed from a 1.0 to
+5.0 in the property list for <TT><A HREF="advlightcap.html#A342C9720d">blue_light</A></TT>).
+Like a local viewer computation, the lighting computation is performed
+when a vertex subroutine is issued when you are using a local light. </P>
+
+
+<P><A NAME="A3C0EA81739mhay"></A>Using a local viewer or local lights,
+or both, makes a significant visual difference when you are displaying
+geometry that contains flat surfaces. The normal vector across a flat surface
+is constant. Thus, if you are using infinite light sources and an infinite
+viewer, the angular relationships between the normal, view, and light vectors
+remain constant, resulting in a constant color across the surface. Using
+a local viewer or lights, or both, causes the view or light vectors, or
+both, and the resultant color to change across the flat surface. (See the
+example program <B><!--:libs:gl32tref:--><A HREF="../gl32tref/platelocal_c.html#sfM70marj">platelocal.c</A></B>
+(in  in<I> GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I> .) </P>
+
+
+<H3><A NAME="A342C97288"></A>Light Attenuation<A NAME="INDEX548"></A> <A NAME="INDEX549"></A>
+<A NAME="INDEX550"></A> <A NAME="INDEX551"></A> <A NAME="INDEX552"></A>
+<A NAME="INDEX553"></A> </H3>
+
+
+<P><A NAME="A3C0EA81762mhay"></A>As you move a light further away from
+an object, the effect of the light on the object diminishes. This is referred
+to as light attenuation. If you are using local lights in your lighting
+model, the lighting facility will attenuate them if desired. The amount
+of attenuation is a function of the distance from the current vertex to
+the light source. Because the attenuation function used is the same for
+all local lights, the attenuation function is a property of the light model
+rather than of a particular light. The attenuation 
+function
+used is as follows: </P>
+
+
+<IMG SRC="figures/gl32p25.jpg">
+<P><A NAME="A3C0EA81784mhay"></A>where Koff equals the constant scene attenuation
+factor, fixed; Krate equals the scene attenuation rate; and Dist equals
+the distance from current vertex to light source. </P>
+
+
+<P><A NAME="A3C0EA81805mhay"></A>The constant scene attenuation factor
+sets the minimum attenuation that a light will undergo. It should be set
+to a value greater than zero. The attenuation rate controls how fast the
+attenuation sets in as a light is moved away. It should not be set to a
+negative value. The resulting attenuation factor computed at a vertex is
+clipped to [0.0, 1.0] and is multiplied with the light source color in
+order to attenuate it. </P>
+
+
+<P><A NAME="A3C0EA81826mhay"></A>To specify attenuation in the light model
+property list, specify the constant attenuation parameter followed by the
+attenuation rate parameter: </P>
+
+
+<PRE><A NAME="A342C97290"></A>float&nbsp;local_light_model[]&nbsp;=&nbsp;{AMBIENT,&nbsp;&nbsp;0.3,&nbsp;0.3,&nbsp;0.3,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOCALVIEWER,&nbsp;1.0,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ATTENUATION,&nbsp;1.0,&nbsp;1.5,&nbsp;LMNULL};</PRE>
+
+
+<P><A NAME="A3C0EA81848mhay"></A>The fixed scene attenuation factor dampens
+the overall attenuation function. By increasing the value of the fixed
+attenuation factor, you lessen the effect of the distance-dependent attenuation.
+It is a good idea to start off with the fixed attenuation factor equal
+to 1.0. That way, when the distance from the vertex to the light is zero,
+there is no attenuation. Furthermore, if you make the attenuation rate
+factor large, the illumination falls off too quickly. </P>
+
+
+<P><A NAME="A3C0EA81869mhay"></A>There are two reasons why the formula
+shown is used for attenuation, rather than some different form (for example,
+an inverse square law): </P>
+
+
+<UL><LI><A NAME="A155C1474"></A>One reason is based on physical principles.
+Although it is true that light from a POINT source falls off as the square
+of the distance, this is not true when one is near an extended light source.</LI>
+
+
+<LI><A NAME="A34C011a6c"></A>The other reason that the inverse linear form
+is preferred has to do with monitor phosphors and the dynamic range of
+typical monitors. No monitor can be as bright as the sun, nor as dark as
+a cave. Their dynamic range does not approach the capabilities of the human
+eye. An inverse square attenuation (or an exponential attenuation) leads
+to very large changes in brightness. Such attenuations normally result
+in a very poor visual appearance on the monitor.</LI></UL>
+
+
+
+<hr><center>
+[  <a href="lightbasics.html">Previous</a>  |
+<a href="lightmatrix.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/advlightcap.html Mon, 24 Jan 2022 16:28:08 GMT -->
+</HTML>
+

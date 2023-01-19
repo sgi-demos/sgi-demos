@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>reshapeviewport Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="rectzoom.html">Previous</a>  |
+<a href="RGBcolor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A7LQ3b0marj"></A>reshapeviewport Subroutine</H2>
+<A NAME="INDEX1637" REL="I1" TITLE="reshapeviewport subroutine (GL)"></A>
+<A NAME="INDEX1638" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1639" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX1640" REL="I3" TITLE="reshapeviewport"></A>
+<A NAME="INDEX1641" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1642" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX1643" REL="I3" TITLE="setting dimensions to window"></A>
+
+<H3><A NAME="A318C9e29"></A>Purpose</H3>
+<P><A NAME="E1D734B936ceb"></A>Sets the viewport to the dimensions of the current window.</P>
+
+<H3><A NAME="A79C1285"></A>Libraries</H3>
+<P><A NAME="E1D734B976ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D734C000ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A318C9e2c"></A>C Syntax</H3>
+<PRE><A NAME="A318C9e2d"></A><B>void reshapeviewport(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010b6e"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010b6f"></A><B>SUBROUTINE RESHAP(&nbsp;)</B></PRE>
+
+<H3><A NAME="A318C9e30"></A>Description</H3>
+<P><A NAME="E1D734C109ceb"></A>The <B>reshapeviewport</B> subroutine sets the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A> to the dimensions of the current window.</P>
+
+<P><A NAME="E1D734C134ceb"></A>The <B>reshapeviewport</B> subroutine is equivalent to:</P>
+<PRE><A NAME="A318C9e33"></A>long xsize, ysize;
+getsize(&amp;xsize, &amp;ysize);
+viewport(0, xsize-1, 0, ysize-1);</PRE>
+
+<P><A NAME="E1D734C179ceb"></A>Use the <B>reshapeviewport</B> subroutine when REDRAW events are received. It is most useful in programs that are independent of the size and shape of the viewport.</P>
+
+<BLOCKQUOTE><A NAME="A318C9e35"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A30C011031"></A>Example</H3>
+<P><A NAME="E1D734C240ceb"></A>The example C language program <A HREF="scrn_rotate_c.html#A16C0c92f"><B>scrn_rotate.c</B></A> uses the <B>reshapeviewport</B> subroutine to reshape the viewport on a REDRAW event. </P>
+
+<H3><A NAME="A62C015d52"></A>Implementation Specifics</H3>
+<P><A NAME="E1D734C283ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C1288"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1289"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C128a"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A318C9e3d"></A>Related Information</H3>
+<P><A NAME="E1D734C380ceb"></A>Clearing the viewport with the <A HREF="clear.html#cEH1160marj"><B>clear</B></A> subroutine.</P>
+
+<P><A NAME="E1D734C405ceb"></A>Returning the position of a window with the <A HREF="getorigin.html#A142X91f76"><B>getorigin</B></A> subroutine.</P>
+
+<P><A NAME="E1D734C431ceb"></A>Returning the size of a window with the <A HREF="getsize.html#X513200marj"><B>getsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D734C457ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Using <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Viewports and Screenmasks</A>.</P><hr><center>
+[  <a href="rectzoom.html">Previous</a>  |
+<a href="RGBcolor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

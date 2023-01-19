@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>setpup Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="setpattern.html">Previous</a>  |
+<a href="setvaluator.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A5um1280marj"></A>setpup Subroutine</H2>
+<A NAME="INDEX1807" REL="I1" TITLE="setpup subroutine (GL)"></A>
+<A NAME="INDEX1808" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1809" REL="I2" TITLE="popp menus"></A>
+<A NAME="INDEX1810" REL="I3" TITLE="enabling or disabling menu entry"></A>
+<A NAME="INDEX1811" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1812" REL="I2" TITLE="popp menu"></A>
+<A NAME="INDEX1813" REL="I3" TITLE="setpup"></A>
+
+<H3><A NAME="A55C014c78"></A>Purpose</H3>
+<P><A NAME="E1D749E634ceb"></A>Enables or disables a given pop-up menu entry.</P>
+
+<H3><A NAME="A79C1132"></A>Libraries</H3>
+<P><A NAME="E1D749E673ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D749E698ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A55C014c7b"></A>C Syntax</H3>
+<PRE><A NAME="A55C014c7c"></A><B>void setpup (Int32 </B><A HREF="setpup.html#umm1180marj"><I>pup</I></A><B>, Int 32 </B><A HREF="setpup.html#A8nm12a0marj"><I>entry</I></A><B>, Int32</B> <A HREF="setpup.html#Pnm120marj"><I>mode</I></A><B>)</B></PRE>
+
+<H3><A NAME="A55C014c7d"></A>FORTRAN Syntax</H3>
+<P><A NAME="E1D749E776ceb"></A><B>SUBROUTINE SETPUP (</B><I>pup</I><B>, </B><I>entry</I><B>, </B><I>mode)</I></P>
+
+<P><B>INTEGER*4</B> <I>pup</I><B>, </B><I>entry</I><B>, </B><I>mode</I></P>
+
+<H3><A NAME="A55C014c7f"></A>Description</H3>
+<P><A NAME="E1D749E819ceb"></A>The <B>setpup </B>subroutine enables or disables a given pop-up menu entry. Disabled pop-up menu entries are greyed out and cannot be chosen or selected. When an entry is disabled, the <A HREF="dopup.html#A142X910e1"><B>dopup</B></A> subroutine does not return the value of the disabled entry. If the <B>setpup</B> subroutine is used properly, submenus associated with the disabled entry are also not accessible.</P>
+
+<P><A NAME="E1D749E843ceb"></A>Enabled entries operate as normal.</P>
+
+<BLOCKQUOTE><A NAME="A55C014c82"></A><B>Note: </B>This subroutine cannot be added to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A55C014c83"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="umm1180marj"></A><I>pup</I></TD>
+<TD>  Specifies the pop-up menu containing the entry to be enabled or disabled.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A8nm12a0marj"></A><I>entry</I></TD>
+<TD>  Specifies the cardinal number of the entry to be disabled (use 1 for the first entry, 2 for the second entry, and so on).</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Pnm120marj"></A><I>mode</I></TD>
+<TD>  Sets the mode for the specified menu entry:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>PUP_NONE</TD>
+
+<TD>PUPNON</TD>
+
+<TD>Enables a menu entry.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>PUP_GREY</TD>
+
+<TD>PUPGRE</TD>
+
+<TD>Disables a menu entry.</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A64C0165cc"></A>Implementation Specifics</H3>
+<P><A NAME="E1D749E996ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1135"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1136"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1137"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A55C014c85"></A>Related Information</H3>
+<P><A NAME="E1D749F096ceb"></A>Adding an item to an existing pop-up menu with the <A HREF="addtopup.html#A142X9109d"><B>addtopup</B></A> subroutine.</P>
+
+<P><A NAME="E1D749F124ceb"></A>Defining a pop-up menu with the <A HREF="defpup.html#A142X910bf"><B>defpup</B></A> subroutine.</P>
+
+<P><A NAME="E1D749F152ceb"></A>Displaying a pop-up menu with the <A HREF="dopup.html#A142X910e1"><B>dopup</B></A> subroutine.</P>
+
+<P><A NAME="E1D749F178ceb"></A>Allocating and initializing a structure for a new pop-up menu with the <A HREF="newpup.html#A142X91125"><B>newpup</B></A> subroutine.</P>
+
+<P><A NAME="E1D749F204ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/popupmenus.html#popupmenus.html">Pop-Up Menus</A>.</P><hr><center>
+[  <a href="setpattern.html">Previous</a>  |
+<a href="setvaluator.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

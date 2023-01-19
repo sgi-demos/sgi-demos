@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>zwritemask Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="zsource.html">Previous</a>  |
+<a href="glexamples.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9817"></A>zwritemask Subroutine</H2>
+<A NAME="INDEX2144" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2145" REL="I2" TITLE="frame buffer update control"></A>
+<A NAME="INDEX2146" REL="I3" TITLE="zwritemask"></A>
+<A NAME="INDEX2147" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2148" REL="I2" TITLE="hidden surface"></A>
+<A NAME="INDEX2149" REL="I3" TITLE="zwritemask"></A>
+<A NAME="INDEX2150" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2151" REL="I2" TITLE="z buffer operation"></A>
+<A NAME="INDEX2152" REL="I3" TITLE="specifying which bits are drawn during"></A>
+<A NAME="INDEX2153" REL="I1" TITLE="zwritemask subroutine (GL)"></A>
+
+<H3><A NAME="A143X9819"></A>Purpose</H3>
+<P><A NAME="E1D772B329ceb"></A>Specifies the z-buffer writemask. </P>
+
+<H3><A NAME="A78C1243"></A>Libraries</H3>
+<P><A NAME="E1D772B369ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D772B393ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X981d"></A>C Syntax</H3>
+<PRE><A NAME="A143X981e"></A><B>void zwritemask(Int32 </B><A HREF="zwritemask.html#A143X9822"><I>mask</I></A><B>)</B></PRE>
+
+<H3><A NAME="A28C010784"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C010785"></A><B>SUBROUTINE ZWRITE(</B><I>mask</I><B>)</B>
+<B>INTEGER*4 </B><I>mask</I></PRE>
+
+<H3><A NAME="A143X981f"></A>Description</H3>
+<P><A NAME="E1D772B505ceb"></A>The <B>zwritemask</B> subroutine specifies a write-enable mask on the z-buffer. If a bit in the mask is set (1), the corresponding bitplane is enabled for reading and writing, and any subroutine that updates the z-buffer can update that bitplane. If a bit in the mask is reset (0), the corresponding bitplane is marked as read-only, and the values stored in that bitplane are not updated.</P>
+
+<H3><A NAME="A143X9821"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9822"></A><I>mask</I> </TD>
+<TD>  Specifies the mask indicating which 
+z-buffer bits
+ are read only and which can be overwritten. The following rules apply: </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91230e"></A></TD>
+<TD>  If a bit of the mask is set to 0, the corresponding bits are read-only.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91230f"></A></TD>
+<TD>  If a bit of the mask is set to 1, the corresponding z-buffer bits can be overwritten. </TD></TR></TABLE>
+
+<H3><A NAME="A64C0165e0"></A>Implementation Specifics</H3>
+<P><A NAME="E1D772B622ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1D772B650ceb"></A>On the 3-D Color Graphics Processor, the z-buffer writemask is ignored when drawing is performed directly into the z-buffer; that is, when the value of the <A HREF="zdraw.html#A143X97f5"><B>zdraw</B></A> subroutine is True. Instead, the color-planes writemask is applied. </P>
+
+<P><A NAME="E1D772B679ceb"></A>The 3-D Color Graphics Processor,
+and 
+the Supergraphics Processor Subsystem, and the POWER GXT1000 adapter
+ support only two values for the z-buffer writemask: 0x000000 and 0xffffff. All other values are ignored.</P>
+
+<P><A NAME="E1D772B705ceb"></A>The POWER Gt4 and POWER Gt4x adapters support a z-buffer writemask in banks of 8 bitplanes. The eight supported values for the writemask are 0x000000, 0x0000ff, 0x00ff00, 0xff0000, 0x00ffff, 0xffff00, 0xff00ff, and 0xffffff. All other values are ignored.</P>
+
+<P><A NAME="E1D772B731ceb"></A>If an unsupported writemask is specified with this subroutine, it is ignored, and the current writemask is not changed.</P>
+
+<H3><A NAME="A78C1246"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1247"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1248"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9837"></A>Related Information</H3>
+<P><A NAME="E1D772B828ceb"></A>Granting write access to a subset of available bitplanes with the <A HREF="RGBwritemask.html#A143X93fa"><B>RGBwritemask</B></A> subroutine.</P>
+
+<P><A NAME="E1D772B856ceb"></A>Enabling drawing to the z-buffer with the <A HREF="zdraw.html#A143X97f5"><B>zdraw</B></A> subroutine.</P>
+
+<P><A NAME="E1D772B881ceb"></A>Specifying an RGBA writemask with a single, packed integer with the <A HREF="wmpack.html#A143X9570"><B>wmpack</B></A> subroutine.</P>
+
+<P><A NAME="E1D772B907ceb"></A>Granting write permission to available bitplanes with the <A HREF="writemask.html#A143X9592"><B>writemask</B></A> subroutine.</P>
+
+<P><A NAME="E1D772B933ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/writemasks.html#writemasks.html">Writemasks and Logical Operations</A>, and Removing <!--gl32prgd:--><A HREF="../gl32prgd/remhidden.html#remhidden.html">Hidden Surfaces</A>.</P><hr><center>
+[  <a href="zsource.html">Previous</a>  |
+<a href="glexamples.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

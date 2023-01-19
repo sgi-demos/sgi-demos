@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/workobjects.html Mon, 24 Jan 2022 16:28:13 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Chapter 10. Working with Objects (Display Lists)
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="clrrstintgl.html">Previous</a>  |
+<a href="listobjects.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H1><A NAME="workobjects.html"></A>Chapter 10. Working with Objects (Display
+Lists) </H1>
+
+
+<P><A NAME="A3C0EC25157mhay"></A>This section discusses the following topics
+on defining, using, and modifying objects in GL: </P>
+
+
+<UL><LI><A NAME="DF748FD100meki"></A><A HREF="listobjects.html#listobjects.html">List
+of GL Object (Display List) Subroutines</A> </LI>
+
+
+<LI><A NAME="A41C01273c"></A><A HREF="defobject.html#defobject.html">Defining
+an Object</A> </LI>
+
+
+<LI><A NAME="A41C01273d"></A><A HREF="useobject.html#useobject.html">Using
+Objects</A> </LI>
+
+
+<LI><A NAME="A41C01273e"></A><A HREF="mapcoords2wrld.html#mapcoords2wrld.html">Mapping
+Screen Coordinates to World Coordinates</A> </LI>
+
+
+<LI><A NAME="A41C01273f"></A><A HREF="objectedit.html#objectedit.html">Object
+Editing</A> </LI></UL>
+
+
+<P><A NAME="A3C0EC25183mhay"></A>It is sometimes convenient to group a
+sequence of drawing routines and give it an identifier. The entire sequence
+can then be repeated with a single reference to the identifier rather than
+by repeating all the drawing routines. In GL, such sequences are called
+graphical objects; on other systems they are sometimes known as display
+lists. </P>
+
+
+<P><A NAME="A3C0EC25203mhay"></A>A graphical object is a list of graphics
+primitives (drawing routines) to display. For example, a drawing of an
+automobile can be viewed as a compilation of smaller drawings of each of
+its parts: windows, doors, wheels, and so forth. Each part might be a graphical
+object: a series of calls to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/move.html#pofmarj">move</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/draw.html#EYf2e0marj">draw</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pdr.html#bqf1c0marj">pdr</A></B>
+subroutines. </P>
+
+
+<P><A NAME="A3C0EC25223mhay"></A>To make the automobile a graphical object,
+first create objects that draw its parts, such as a wheel object, a door
+object, and a body object. The automobile object is a series of calls to
+the part objects, which together with appropriate rotation, translation,
+and scale routines, puts all the parts in their correct places. </P>
+
+
+
+
+<hr><center>
+[  <a href="clrrstintgl.html">Previous</a>  |
+<a href="listobjects.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/workobjects.html Mon, 24 Jan 2022 16:28:13 GMT -->
+</HTML>
+

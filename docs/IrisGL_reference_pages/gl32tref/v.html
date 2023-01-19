@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>v Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="unqdevice.html">Previous</a>  |
+<a href="viewport.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X97a4"></A>v Subroutine</H2>
+<A NAME="INDEX1961" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1962" REL="I2" TITLE="begin-end style"></A>
+<A NAME="INDEX1963" REL="I3" TITLE="v"></A>
+<A NAME="INDEX1964" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1965" REL="I2" TITLE="vertex"></A>
+<A NAME="INDEX1966" REL="I3" TITLE="transferring to graphics pipe"></A>
+<A NAME="INDEX1967" REL="I1" TITLE="v subroutine (GL)"></A>
+<H3><A NAME="A144X97a6"></A>Purpose</H3>
+<P><A NAME="E1D75B7935ceb"></A>Transfers a 2-D, 3-D, or 4-D vertex to the graphics pipe.</P>
+
+<H3><A NAME="A78C125"></A>Libraries</H3>
+<P><A NAME="E1D75B7974ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D75B7999ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X97aa"></A>C Syntax</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="Lln12f0marj"></A><B>void v2s(Int16 </B><A HREF="v.html#fVn1110marj"><I>vector</I></A><B>[2])</B>
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  void v2f(Float32 <A HREF="v.html#fVn1110marj"><I>vector</I></A><B>[2])</B></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="atn1d0marj"></A><B>void v2i(Int32 </B><A HREF="v.html#fVn1110marj"><I>vector</I></A><B>[2])</B>
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  void v2d(Float64 <A HREF="v.html#fVn1110marj"><I>vector</I></A><B>[2])</B></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A9wn12f0marj"></A><B>void v3s(Int16 </B><A HREF="v.html#fVn1110marj"><I>vector</I></A><B>[3])</B>
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  void v3f(Float32 <A HREF="v.html#fVn1110marj"><I>vector</I></A><B>[3])</B></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="Ryn1170marj"></A><B>void v3i(Int32 </B><A HREF="v.html#fVn1110marj"><I>vector</I></A><B>[3])</B>
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  void v3d(Float64 <A HREF="v.html#fVn1110marj"><I>vector</I></A><B>[3])</B></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A9Do12f0marj"></A><B>void v4s(Int16 </B><A HREF="v.html#fVn1110marj"><I>vector</I></A><B>[4])</B>
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  void v4f(Float32 <A HREF="v.html#fVn1110marj"><I>vector</I></A><B>[4])</B></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="nDo1390marj"></A><B>void v4i(Int32 </B><A HREF="v.html#fVn1110marj"><I>vector</I></A><B>[4])</B>
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  void v4d(Float64 <A HREF="v.html#fVn1110marj"><I>vector</I></A><B>[4])</B></TD></TR></TABLE>
+
+<H3><A NAME="A20C0e2ed"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A20C0e2ee"></A><B>SUBROUTINE V2S(</B><I>vector</I><B>)</B>
+<B>INTEGER*2 </B><I>vector</I><B>(2)</B></PRE>
+<PRE><A NAME="A27C010464"></A><B>SUBROUTINE V2I(</B><I>vector</I><B>)</B>
+<B>INTEGER*4 </B><I>vector</I><B>(2)</B></PRE>
+<PRE><A NAME="A27C010465"></A><B>SUBROUTINE V2F(</B><I>vector</I><B>)</B>
+<B>REAL </B><I>vector</I>(<B>2)</B></PRE>
+<PRE><A NAME="A27C010466"></A><B>SUBROUTINE V2D(</B><I>vector</I><B>)</B>
+<B>REAL*8 </B><I>vector</I><B>(2)</B></PRE>
+<PRE><A NAME="A20C0e2ef"></A><B>SUBROUTINE V3S(</B><I>vector</I><B>)</B>
+<B>INTEGER*2 </B><I>vector</I><B>(3)</B></PRE>
+<PRE><A NAME="A27C010467"></A><B>SUBROUTINE V3I(</B><I>vector</I><B>)</B>
+<B>INTEGER*4 </B><I>vector</I><B>(3)</B></PRE>
+<PRE><A NAME="A27C010468"></A><B>SUBROUTINE V3F(</B><I>vector</I><B>)</B>
+<B>REAL </B><I>vector</I><B>(3)</B></PRE>
+<PRE><A NAME="A27C010469"></A><B>SUBROUTINE V3D(</B><I>vector</I><B>)</B>
+<B>REAL*8 </B><I>vector</I><B>(3)</B></PRE>
+<PRE><A NAME="A27C01046a"></A><B>SUBROUTINE V4S(</B><I>vector</I><B>)</B>
+<B>INTEGER*2 </B><I>vector</I><B>(4)</B></PRE>
+<PRE><A NAME="A27C01046b"></A><B>SUBROUTINE V4I(</B><I>vector</I><B>)</B>
+<B>INTEGER*4 </B><I>vector</I><B>(4)</B></PRE>
+<PRE><A NAME="A27C01046c"></A><B>SUBROUTINE V4F(</B><I>vector</I><B>)</B>
+<B>REAL </B><I>vector</I><B>(4)</B></PRE>
+<PRE><A NAME="A27C01046d"></A><B>SUBROUTINE V4D(</B><I>vector</I><B>)</B>
+<B>DOUBLE </B><I>vector</I><B>(4)</B></PRE>
+
+<H3><A NAME="A144X97ac"></A>Description</H3>
+<P><A NAME="E1D75B8424ceb"></A>The <B>v</B> subroutine transfers a single 2-D (<B>v2</B>), 3-D (<B>v3</B>), or 4-D (<B>v4</B>) vertex to the 
+graphics pipeline. The coordinates are passed to <B>v</B> as an array. Separate subroutines are provided for 16-bit integers (<B>s</B>), 32-bit integers limited to a signed 24-bit range (<B>i</B>), 32-bit IEEE single precision floats (<B>f</B>), and 64-bit IEEE double precision floats (<B>d</B>). The <I>z</I> coordinate defaults to 0.0 if not specified. The <I>w</I> coordinate defaults to 1.0. </P>
+
+<P><A NAME="E1D75B8451ceb"></A>The Graphics Library subroutines <A HREF="bgnpoint.html#A144X9650"><B>bgnpoint</B></A>, <A HREF="bgnpoint.html#A144X9650"><B>endpoint</B></A>, <A HREF="bgnline.html#A144X962e"><B>bgnline</B></A>, <A HREF="bgnline.html#A144X962e"><B>endline</B></A>, <A HREF="bgnclosedline.html#A144X960c"><B>bgnclosedline</B></A>, 
+<A HREF="bgnclosedline.html#A144X960c"><B>endclosedline</B></A>, <A HREF="bgnpolygon.html#A144X9672"><B>bgnpolygon</B></A>, <A HREF="bgnpolygon.html#A144X9672"><B>endpolygon</B></A>, <A HREF="bgntmesh.html#A144X9694"><B>bgntmesh</B></A>, and <A HREF="bgntmesh.html#A144X9694"><B>endtmesh</B></A> determine how the vertex is interpreted. 
+For example, vertices specified between the <B>bgnpoint</B> and <B>endpoint</B> subroutines draw single pixels (points) on the screen. Likewise, those specified between the <B>bgnline </B>and <B>endline</B> subroutines draw a sequence of lines (with the line stipple continued through internal vertices). Closed lines return to the first vertex specified, producing the equivalent of an 
+outlined polygon. </P>
+
+<P><A NAME="E1D75B8478ceb"></A>Vertices specified when none of the <A HREF="bgnpoint.html#A144X9650"><B>bgnpoint</B></A>, <A HREF="bgnline.html#A144X962e"><B>bgnline</B></A>, <A HREF="bgnclosedline.html#A144X960c"><B>bgnclosedline</B></A>, <A HREF="bgnpolygon.html#A144X9672"><B>bgnpolygon</B></A>, and <A HREF="bgntmesh.html#A144X9694"><B>bgntmesh</B></A> subroutines are active set the current graphics position. They do not have any effect on the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A270A984a">frame buffer</A> contents. The <A HREF="bgnpoint.html#A144X9650"><B>endpoint</B></A>, <A HREF="bgnline.html#A144X962e"><B>endline</B></A>, <A HREF="bgnclosedline.html#A144X960c"><B>endclosedline</B></A>, <A HREF="bgnpolygon.html#A144X9672"><B>endpolygon</B></A>, and <A HREF="bgntmesh.html#A144X9694"><B>endtmesh</B></A> subroutines have varied effects on the current graphics position.</P>
+
+<H3><A NAME="A144X97ae"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="fVn1110marj"></A><I>vector</I></TD>
+<TD>  Specifies 2-, 3-, or 4-element array, depending on whether you call the <B>v2</B>, <B>v3</B>, or <B>v4</B> version of the routine. The elements of the array are the coordinates of the vertex (point) to transfer to the 
+graphics pipe. Put the <I>x</I> coordinate in element 0, the <I>y</I> coordinate in element 1, the <I>z</I> coordinate in element 2 (for <B>v3</B> and <B>v4</B>), and the <I>w</I> coordinate in element 3 (for <B>v4</B>). </TD></TR></TABLE>
+
+<P><A NAME="E1D75B8549ceb"></A>The nine different forms for the <B>v</B> subroutine are as follows:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><BR></TD>
+
+<TD><B>2-D</B></TD>
+
+<TD><B>3-D</B></TD>
+
+<TD><B>4-D</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int16</TD>
+
+<TD>v2s</TD>
+
+<TD>v3s</TD>
+
+<TD>v4s</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int32</TD>
+
+<TD>v2i</TD>
+
+<TD>v3i</TD>
+
+<TD>v4i</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Float32</TD>
+
+<TD>v2f</TD>
+
+<TD>v3f</TD>
+
+<TD>v4f</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Float64</TD>
+
+<TD>v2d</TD>
+
+<TD>v3d</TD>
+
+<TD>v4d</TD></TR></TABLE>
+
+<P><A NAME="E1D75B8597ceb"></A>The <A HREF="v.html#A144X97aa">syntax</A> for each of the subroutine forms is the same except for the first argument.  They differ only in that<B> vi</B> expects long integer coordinates, <B>vs</B> expects short integer coordinates, <B>vf</B> expects single-precision floating point coordinates, and <B>vd</B> expects double-precision floating point coordinates. In addition, the <B>v2*</B> routines assume a 2-D point, the  <B>v3* </B>routines assume a 3-D point, and the  <B>v4*</B> routines assume a 4-D point 
+(in <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0623">homogeneous coordinates</A>.</P>
+
+<H3><A NAME="A144X97b4"></A>Example</H3>
+<P><A NAME="E1D75B8639ceb"></A>The example C language program <A HREF="cylinder2_c.html#A16C0c87c"><B>cylinder2.c</B></A> calls the <B>v3f</B> subroutine between the <A HREF="bgnpolygon.html#A144X9672"><B>bgnpolygon</B></A> subroutine and the <A HREF="bgnpolygon.html#A144X9672"><B>endpolygon</B></A> subroutine to specify the vertices of a polygon.</P>
+
+<H3><A NAME="A62C015d7a"></A>Implementation Specifics</H3>
+<P><A NAME="E1D75B8682ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C128"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C129"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12a"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X97c4"></A>Related Information</H3>
+<P><A NAME="E1D75B8780ceb"></A>Drawing closed line vertices with the <A HREF="bgnclosedline.html#A144X960c"><B>bgnclosedline</B></A> subroutine.</P>
+
+<P><A NAME="E1D75B8808ceb"></A>Drawing vertex-based lines with the <A HREF="bgnline.html#A144X962e"><B>bgnline</B></A> subroutine.</P>
+
+<P><A NAME="E1D75B8837ceb"></A>Drawing vertex-based points with the <A HREF="bgnpoint.html#A144X9650"><B>bgnpoint</B></A> subroutine.</P>
+
+<P><A NAME="E1D75B8866ceb"></A>Drawing vertex-based polygons with the <A HREF="bgnpolygon.html#A144X9672"><B>bgnpolygon</B></A> subroutine.</P>
+
+<P><A NAME="E1D75B8891ceb"></A>Drawing triangle mesh vertices with the <A HREF="bgntmesh.html#A144X9694"><B>bgntmesh</B></A> subroutine.</P>
+
+<P><A NAME="E1D75B8917ceb"></A>Ending a series of closed line vertices with the <A HREF="bgnclosedline.html#A144X960c"><B>endclosedline</B></A> subroutine.</P>
+
+<P><A NAME="E1D75B8946ceb"></A>Ending a series of vertex-based lines with the <A HREF="bgnline.html#A144X962e"><B>endline</B></A> subroutine.</P>
+
+<P><A NAME="E1D75B8975ceb"></A>Ending a series of vertex-based points with the <A HREF="bgnpoint.html#A144X9650"><B>endpoint</B></A> subroutine.</P>
+
+<P><A NAME="E1D75B9004ceb"></A>Ending a vertex-based polygon with the <A HREF="bgnpoint.html#A144X9650"><B>endpolygon</B></A> subroutine.</P>
+
+<P><A NAME="E1D75B9030ceb"></A>Ending a series of triangle mesh vertices with the <A HREF="bgntmesh.html#A144X9694"><B>endtmesh</B></A> subroutine.</P>
+
+<P><A NAME="E1D75B9056ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing with <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Begin-End Style</A> Subroutines, and Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P><hr><center>
+[  <a href="unqdevice.html">Previous</a>  |
+<a href="viewport.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

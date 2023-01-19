@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>pick Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="perspective.html">Previous</a>  |
+<a href="picksize.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="h632f0nita"></A>pick Subroutine</H2>
+<A NAME="INDEX1365" REL="I1" TITLE="pick subroutine (GL)"></A>
+<A NAME="INDEX1366" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1367" REL="I2" TITLE="picking and selecting"></A>
+<A NAME="INDEX1368" REL="I3" TITLE="placing system in picking mode"></A>
+<A NAME="INDEX1369" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1370" REL="I2" TITLE="picking and selecting"></A>
+<A NAME="INDEX1371" REL="I3" TITLE="pick"></A>
+
+<H3><A NAME="A213X911804"></A>Purpose</H3>
+<P><A NAME="E1D711D300ceb"></A>Places the system in picking mode.</P>
+
+<H3><A NAME="A79C191"></A>Libraries</H3>
+<P><A NAME="E1D711D339ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D711D364ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911807"></A>C Syntax</H3>
+<PRE><A NAME="A213X911808"></A><B>void pick(Int16</B> <A HREF="pick.html#A213X911811"><I>buffer</I></A><B> [&nbsp;], Int32</B> <A HREF="pick.html#weD2270marj"><I>bufferlen</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X9117e1"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X9117e4"></A><B>SUBROUTINE PICK(</B><I>buffer</I><B>, </B><I>bufferlen</I><B>)</B>
+<B>INTEGER*4 </B><I>bufferlen</I>
+<B>INTEGER*2 </B><I>buffer</I><B>(</B><I>bufferlen</I><B>)</B></PRE>
+
+<H3><A NAME="A213X91180b"></A>Description</H3>
+<P><A NAME="E1D711D477ceb"></A>The <B>pick</B> subroutine places the system in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06fa">picking mode</A>. When the system is in picking mode, the extent of all subsequent drawing primitives are compared to a picking volume. The picking volume is defined by the location of the cursor when the <B>pick</B> subroutine was called and by the picking volume size.</P>
+
+<P><A NAME="E1D711D504ceb"></A>If a drawing primitive overlaps or intrudes upon the picking volume, a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P061e">hit</A> has occurred. The hit is recorded only if the name stack has been touched since the last hit. Any of the subroutines <A HREF="loadname.html#A213X9119af"><B>loadname</B></A>, <A HREF="pushname.html#A213X911b48"><B>pushname</B></A>, or <A HREF="popname.html#A213X911af9"><B>popname</B></A> touch the name stack. The first hit after picking begins is always recorded.</P>
+
+<P><A NAME="E1D711D530ceb"></A>A hit is recorded by placing the depth of the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06e3">name stack</A> into the next vacant slot in the buffer, followed by the entire contents of the name stack. The bottom of the name stack is transferred to the buffer first, followed by the second from the bottom entry of the name stack, and so forth. In other words, the data from bottom to top is mapped from left to right.</P>
+
+<P><A NAME="E1D711D556ceb"></A>With one exception, all drawing routines cause hits, including clear, points, lines, polygons, arcs, circles, curves, patches, and NURBS. The <B>charstr</B> subroutine does not cause a hit, although <B>cmov</B> and <B>cmov2</B> do cause hits.</P>
+
+<P><A NAME="E1D711D582ceb"></A>Picking does not work if you issue a new 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A> in picking mode.</P>
+
+<P><A NAME="E1D711D608ceb"></A>Nothing is drawn to the screen when the system is in picking mode. Instead, drawing commands are piped to the picking mechanism and used to determine pick or select region hits. On most systems, nothing is actually placed in the pick buffer until the <A HREF="endpick.html#A213X91185b"><B>endpick</B></A> subroutine is called.</P>
+
+<BLOCKQUOTE><A NAME="A318C9cf1"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911810"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911811"></A><I>buffer</I></TD>
+<TD>  Specifies the array to use for storing names.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="weD2270marj"></A><I>bufferlen</I></TD>
+<TD>  Specifies the length of the array specified in the <I>buffer</I> parameter.</TD></TR></TABLE>
+
+<H3><A NAME="A30C010fec"></A>Example</H3>
+<P><A NAME="E1D711D723ceb"></A>The example C language program <A HREF="pick1_c.html#A13C0bd9f"><B>pick1.c</B></A> calls the <B>pick</B> subroutine to pick objects when the left mouse button is pressed.</P>
+
+<H3><A NAME="A62C015cc8"></A>Implementation Specifics</H3>
+<P><A NAME="E1D711D767ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C194"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C195"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C196"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911825"></A>Related Information</H3>
+<P><A NAME="E1D711D864ceb"></A>Turning off picking mode with the <A HREF="endpick.html#A213X91185b"><B>endpick</B></A> subroutine.</P>
+
+<P><A NAME="E1D711D890ceb"></A>Putting the system in selecting mode with the <A HREF="gselect.html#A213X9118b2"><B>gselect</B></A> subroutine.</P>
+
+<P><A NAME="E1D711D915ceb"></A>Initializing the name stack with the <A HREF="initnames.html#YlD250marj"><B>initnames</B></A> subroutine.</P>
+
+<P><A NAME="E1D711D940ceb"></A>Loading the name on top of the name stack with the <A HREF="loadname.html#A213X9119af"><B>loadname</B></A> subroutine.</P>
+
+<P><A NAME="E1D711D966ceb"></A>Setting the dimensions of the picking region with the <A HREF="picksize.html#A6cv180marj"><B>picksize</B></A> subroutine.</P>
+
+<P><A NAME="E1D711D992ceb"></A>Popping a name off the name stack with the <A HREF="popname.html#A213X911af9"><B>popname</B></A> subroutine.</P>
+
+<P><A NAME="E1D711E017ceb"></A>Pushing a new name onto the name stack with the <A HREF="pushname.html#A213X911b48"><B>pushname</B></A> subroutine.</P>
+
+<P><A NAME="E1D711E043ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/picknselect.html#picknselect.html">Picking and Selecting</A> Overview, and Using <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Viewports and Screenmasks</A>.</P><hr><center>
+[  <a href="perspective.html">Previous</a>  |
+<a href="picksize.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

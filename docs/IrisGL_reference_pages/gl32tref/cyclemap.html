@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>cyclemap Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="curveprecision.html">Previous</a>  |
+<a href="czclear.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X92a6"></A>cyclemap Subroutine</H2>
+<A NAME="INDEX354" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX355" REL="I2" TITLE="animation"></A>
+<A NAME="INDEX356" REL="I3" TITLE="cyclemap"></A>
+<A NAME="INDEX357" REL="I1" TITLE="cyclemap subroutine (GL)"></A>
+<A NAME="INDEX358" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX359" REL="I2" TITLE="color maps"></A>
+<A NAME="INDEX360" REL="I3" TITLE="cycling between"></A>
+
+<H3><A NAME="A143X92a8"></A>Purpose</H3>
+<P><A NAME="E1B08CC667ceb"></A>Cycles through color maps at a specified rate.</P>
+
+<H3><A NAME="A77C1e"></A>Libraries</H3>
+<P><A NAME="E1B08CC818ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B08CC921ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X92ac"></A>C Syntax</H3>
+<PRE><A NAME="A143X92ad"></A><B>void cyclemap(Int16 </B><A HREF="cyclemap.html#A143X92b1"><I>duration</I></A><B>, Int16 </B><A HREF="cyclemap.html#A143X92b2"><I>map</I></A><B>, Int16 </B><A HREF="cyclemap.html#A143X92b3"><I>nextmap</I></A><B>)</B></PRE>
+
+<H3><A NAME="A17C0d9ad"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A17C0d9ae"></A><B>SUBROUTINE CYCLEM(</B><I>duration</I><B>,</B><I> map</I><B>,</B><I> nextmap</I><B>)</B>
+<B>INTEGER*4 </B><I>duration</I><B>,</B><I> map</I><B>,</B><I> nextmap</I></PRE>
+
+<BLOCKQUOTE><A NAME="A77C111"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X92ae"></A>Description</H3>
+<P><A NAME="E1B08CD348ceb"></A>The <B>cyclemap</B> subroutine initiates cycling between two small color maps. The system, when using the current color map <A HREF="cyclemap.html#A143X92b2"><I>map</I></A>, waits the number of 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P031">vertical retraces</A> specified by the <A HREF="cyclemap.html#A143X92b1"><I>duration</I></A> parameter before switching to the next map to be used (<A HREF="cyclemap.html#A143X92b3"><I>nextmap</I></A>).</P>
+
+<P><A NAME="E1B08CD456ceb"></A>You can use the <B>cyclemap</B> subroutine used to chain together several color maps into a loop, thus initiating a cycling or blinking that continues indefinitely. The system loops automatically through the chain until cycling is disabled.</P>
+
+<P><A NAME="E1B08CD562ceb"></A>You can eliminate a cyclemap entry by calling the <B>cyclemap</B> subroutine with the <A HREF="cyclemap.html#A143X92b1"><I>duration</I></A> parameter set to 0.</P>
+
+<P><A NAME="E1B08CD669ceb"></A>This subroutine must be used in multimap mode.</P>
+
+<BLOCKQUOTE><A NAME="A318C9c78"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X92b0"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X92b1"></A><I>duration</I></TD>
+<TD>  Specifies duration for the current map in vertical retraces.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X92b2"></A><I>map</I></TD>
+<TD>  Specifies the number of the current map.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X92b3"></A><I>nextmap</I></TD>
+<TD>  Specifies the number of the next map to use.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015ca7"></A>Implementation Specifics</H3>
+
+<P><A NAME="E1B08CE161ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1B08CE267ceb"></A>The POWER GXT1000 adapter does not support the <B>cyclemap</B> subroutine.</P>
+
+<H3><A NAME="A11C0b49f"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A40C01267a"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C112"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c32f"></A>Related Information</H3>
+<P><A NAME="E1B08CE585ceb"></A>Changing a color map entry at a selectable rate with the <A HREF="blink.html#A146X937c"><B>blink</B></A> subroutine.</P>
+
+<P><A NAME="E1B08CE693ceb"></A>Reconfiguring the system with the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine.</P>
+
+<P><A NAME="E1B08CE799ceb"></A>Organizing the color map as 16 small maps with the <A HREF="multimap.html#A146X9593"><B>multimap</B></A> subroutine.</P>
+
+<P><A NAME="E1B08CE906ceb"></A>Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<P><A NAME="E1B08CF015ceb"></A>Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>, <!--gl32prgd:--><A HREF="../gl32prgd/animatescene.html#animatescene.html">Creating Animated Scenes</A>.</P><hr><center>
+[  <a href="curveprecision.html">Previous</a>  |
+<a href="czclear.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

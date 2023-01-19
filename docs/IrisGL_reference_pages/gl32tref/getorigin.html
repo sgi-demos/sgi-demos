@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getorigin Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getopenobj.html">Previous</a>  |
+<a href="getpattern.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X91f76"></A>getorigin Subroutine</H2>
+<A NAME="INDEX793" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX794" REL="I2" TITLE="window"></A>
+<A NAME="INDEX795" REL="I3" TITLE="getorigin"></A>
+<A NAME="INDEX796" REL="I1" TITLE="getorigin subroutine (GL)"></A>
+<A NAME="INDEX797" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX798" REL="I2" TITLE="windows"></A>
+<A NAME="INDEX799" REL="I3" TITLE="returning position of"></A>
+<A NAME="INDEX800" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX801" REL="I2" TITLE="query"></A>
+<A NAME="INDEX802" REL="I3" TITLE="getorigin"></A>
+<H3><A NAME="A142X91f78"></A>Purpose</H3>
+<P><A NAME="E1B1096893ceb"></A>Returns the position of a window.</P>
+
+<H3><A NAME="A79C12d2"></A>Libraries</H3>
+<P><A NAME="E1B1097043ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1097147ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X91f7c"></A>C Syntax</H3>
+<PRE><A NAME="A213X912b19"></A><B>void getorigin(Int32 *</B><A HREF="getorigin.html#SA23220marj"><I>x</I></A><B>, Int32 *</B><A HREF="getorigin.html#kA23marj"><I>y</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c33"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c34"></A><B>SUBROUTINE GETORI(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>, </B><I>y</I></PRE>
+
+<H3><A NAME="A142X91f7e"></A>Description</H3>
+<P><A NAME="E1B1097512ceb"></A>The <B>getorigin</B> subroutine returns the position (in pixels) of the lower-left corner of the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A>. A window must be open for this subroutine to work.</P>
+
+<P><A NAME="E1B1097619ceb"></A>Call the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine to open a window, or the <A HREF="winset.html#NY1320marj"><B>winset</B></A> subroutine to choose the current window.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f4c"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X91f80"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="SA23220marj"></A><I>x</I></TD>
+<TD>  Specifies a pointer to the location in which to return the <I>x</I> position (in pixels) of the lower left corner of the window. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="kA23marj"></A><I>y</I></TD>
+<TD>  Specifies a pointer to the location in which to return the <I>y</I> position (in pixels) of the lower left corner of the window. </TD></TR></TABLE>
+
+<H3><A NAME="A30C01105a"></A>Example</H3>
+<P><A NAME="E1B1097991ceb"></A>The example C language program <A HREF="paint_c.html#A13C0bd84"><B>paint.c</B></A> uses the <B>getorigin</B> subroutine to determine the origin of the window.</P>
+
+<H3><A NAME="A61C0159e6"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1098154ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C12d5"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12d6"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12d7"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X91f96"></A>Related Information</H3>
+<P><A NAME="E1B1098471ceb"></A>Obtaining the size of the window with the <A HREF="getsize.html#X513200marj"><B>getsize</B></A> subroutine.</P>
+
+<P><A NAME="E1B1098578ceb"></A>Constraining the window position and size with the <A HREF="prefposition.html#A142X9164f"><B>prefposition</B></A> subroutine.</P>
+
+<P><A NAME="E1B1098686ceb"></A>Moving the current <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#A44C012b72">window</A> by its lower left corner with the <A HREF="winmove.html#A142X91527"><B>winmove</B></A> subroutine.</P>
+
+<P><A NAME="E1B1098793ceb"></A>Creating a window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine. </P>
+
+<P><A NAME="E1B1098901ceb"></A>Changing the current location and size of a <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#A44C012b72">window</A> with the <A HREF="winposition.html#A142X9158d"><B>winposition</B></A> subroutine.</P>
+
+<P><A NAME="E1B1099009ceb"></A>Setting the current window with the <A HREF="winset.html#NY1320marj"><B>winset</B></A> subroutine.</P>
+
+<P><A NAME="E1B1099116ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="getopenobj.html">Previous</a>  |
+<a href="getpattern.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getsm Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getsize.html">Previous</a>  |
+<a href="getvaluator.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9a53"></A>getsm Subroutine</H2>
+<A NAME="INDEX840" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX841" REL="I2" TITLE="query"></A>
+<A NAME="INDEX842" REL="I3" TITLE="getsm"></A>
+<A NAME="INDEX843" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX844" REL="I2" TITLE="attribute"></A>
+<A NAME="INDEX845" REL="I3" TITLE="getsm"></A>
+<A NAME="INDEX846" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX847" REL="I2" TITLE="shading model"></A>
+<A NAME="INDEX848" REL="I3" TITLE="returning"></A>
+<A NAME="INDEX849" REL="I1" TITLE="getsm subroutine (GL)"></A>
+
+<H3><A NAME="A143X9a55"></A>Purpose</H3>
+<P><A NAME="E1B1147377ceb"></A>Returns the shading model the system uses to draw filled polygons.</P>
+
+<H3><A NAME="A77C1ee"></A>Libraries</H3>
+<P><A NAME="E1B1147524ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1147629ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9a59"></A>C Syntax</H3>
+<PRE><A NAME="A143X9a5a"></A><B>Int32 getsm(&nbsp;)</B></PRE>
+
+<H3><A NAME="A19C0e0ed"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A19C0e0ee"></A><B>INTEGER*4 GETSM</B></PRE>
+
+<H3><A NAME="A143X9a5b"></A>Description</H3>
+<P><A NAME="E1B1147981ceb"></A>The <B>getsm</B> subroutine returns the shading model that the system uses to draw filled polygons. The returned value of this function indicates which shading model is now active.</P>
+
+<BLOCKQUOTE><A NAME="A81C11f0"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X9a61"></A>Return Values</H3>
+<P><A NAME="E1B1148195ceb"></A>There are two possible return values:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>FLAT</TD>
+
+<TD>FLAT</TD>
+
+<TD>The system draws a filled polygon with a constant color across the entire surface of the polygon.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GOURAUD</TD>
+
+<TD>GOURAU</TD>
+
+<TD>The system draws a filled polygon with a color that varies as a linear interpolation of the colors at the polygon's vertices.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015c81"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1148396ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A11C0b4da"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1f1"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1f2"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9a73"></A>Related Information</H3>
+<P><A NAME="E1B1148717ceb"></A>Selecting the shading model used to draw polygons with the <A HREF="shademodel.html#A143X9ab9"><B>shademodel</B></A> subroutine.</P>
+
+<P><A NAME="E1B1148825ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Drawing with Begin-End Style Subroutines</A>, <!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Drawing with Move-Draw Style Subroutines</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware Used by GL</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</A>.</P><hr><center>
+[  <a href="getsize.html">Previous</a>  |
+<a href="getvaluator.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

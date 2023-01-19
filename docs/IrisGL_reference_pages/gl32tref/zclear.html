@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>zclear Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="zbuffer.html">Previous</a>  |
+<a href="zdraw.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X97d3"></A>zclear Subroutine</H2>
+<A NAME="INDEX2107" REL="I1" TITLE="zclear subroutine (GL)"></A>
+<A NAME="INDEX2108" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2109" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX2110" REL="I3" TITLE="zclear"></A>
+<A NAME="INDEX2111" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2112" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX2113" REL="I3" TITLE="z buffer"></A>
+
+<H3><A NAME="A143X97d5"></A>Purpose</H3>
+<P><A NAME="E1D76E9642ceb"></A>Initializes the z-buffer.</P>
+
+<H3><A NAME="A79C11e3"></A>Libraries</H3>
+<P><A NAME="E1D76E9682ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D76E9706ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X97d9"></A>C Syntax</H3>
+<PRE><A NAME="A143X97da"></A><B>void zclear(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010bc7"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010bc8"></A><B>SUBROUTINE ZCLEAR</B></PRE>
+
+<H3><A NAME="A143X97db"></A>Description</H3>
+<P><A NAME="E1D76E9817ceb"></A>The <B>zclear</B> subroutine loads the z-buffer with the largest possible positive integer. If the default value of the z comparison function is used (set by the <A HREF="zfunction.html#A22f0MARJ"><B>zfunction</B></A> subroutine), the zbuffer, when cleared to the largest possible value, can be used for basic z-buffering.</P>
+
+<P><A NAME="E1D76E9846ceb"></A>Only the z-buffer behind the area inside the current screenmask is cleared. The screenmask cannot be made larger than the window. Note that by default the screenmask is exactly the same size as the window.</P>
+
+<P><A NAME="E1D76E9871ceb"></A>The <A HREF="scrmask.html#fwN250marj"><B>scrmsk</B></A> subroutine can be used to change the size of the screenmask. Note also that the <A HREF="viewport.html#qrY270marj"><B>viewport</B></A> subroutine resets the screenmask to be precisely the same size as the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A>.</P>
+
+<BLOCKQUOTE><A NAME="A258C01c837"></A><B>Note: </B>The operation of this subroutine for the Model 730 
+Supergraphics Processor is modified. (See 
+"<!--gl32prgd:--><A HREF="../gl32prgd/powerstation730.html#NITAXIO">Hardware Considerations</A>".)</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X97e3"></A>Example</H3>
+<P><A NAME="E1D76E9932ceb"></A>The example C language programs <A HREF="zbuffer1_c.html#A16C0ca2c"><B>zbuffer1.c</B></A> and <A HREF="zbuffer2_c.html#MYO10nita"><B>zbuffer2.c</B></A> use the <B>zclear</B> subroutine to initialize the z-buffer.</P>
+
+<H3><A NAME="A64C016600"></A>Implementation Specifics</H3>
+<P><A NAME="E1D76E9976ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C11e6"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11e7"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11e8"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X97f3"></A>Related Information</H3>
+<P><A NAME="E1D76EA076ceb"></A>Clearing the z-buffer and the color bitplanes simultaneously with the <A HREF="czclear.html#A143X92c8"><B>czclear</B></A> subroutine.</P>
+
+<P><A NAME="E1D76EA102ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/remhidden.html#remhidden.html">Removing Hidden Surfaces</A>.
+</P>
+
+<P><A NAME="E1D76EA128ceb"></A>
+<!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware</A> 
+Used by GL, <!--gl32prgd:--><A HREF="../gl32prgd/clrrstintgl.html#clrrstintgl.html">Clearing, Resetting, and 
+Initializing GL</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring 
+the Frame Buffer</A>.
+</P><hr><center>
+[  <a href="zbuffer.html">Previous</a>  |
+<a href="zdraw.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

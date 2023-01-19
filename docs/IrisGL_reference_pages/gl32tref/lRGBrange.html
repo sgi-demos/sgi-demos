@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>lRGBrange Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="lookat.html">Previous</a>  |
+<a href="lsetdepth.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X93d8"></A>lRGBrange Subroutine</H2>
+<A NAME="INDEX1094" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1095" REL="I2" TITLE="depth-cue"></A>
+<A NAME="INDEX1096" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1097" REL="I2" TITLE="depth-cueing"></A>
+<A NAME="INDEX1098" REL="I3" TITLE="in RGB mode"></A>
+<A NAME="INDEX1099" REL="I1" TITLE="lRGBrange subroutine (GL)"></A>
+
+<H3><A NAME="A143X93da"></A>Purpose</H3>
+<P><A NAME="E1B16DA414ceb"></A>Sets the range of colors used for depth-cueing.</P>
+
+<H3><A NAME="A78C1153"></A>Libraries</H3>
+<P><A NAME="E1B16DA567ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B16DA676ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X93de"></A>C Syntax</H3>
+<PRE><A NAME="A143X93df"></A><B>void lRGBrange</B>
+<B>(Int16 </B><A HREF="lRGBrange.html#A143X93e3"><I>rmin</I></A><B>, Int16</B> <A HREF="lRGBrange.html#A143X93e4"><I>gmin</I></A><B>, </B>
+<B>Int16</B> <A HREF="lRGBrange.html#A143X93e5"><I>bmin</I></A><B>, Int16</B> <A HREF="lRGBrange.html#Mp21250marj"><I>rmax</I></A><B>, </B>
+<B>Int16</B> <A HREF="lRGBrange.html#np211d0marj"><I>gmax</I></A><B>, Int16</B> <A HREF="lRGBrange.html#A1q21230marj"><I>bmax</I></A><B>,</B> 
+<B>Int32</B> <A HREF="lRGBrange.html#Lq2170marj"><I>znear</I></A><B>,</B> <B>Int32</B> <A HREF="lRGBrange.html#Zq212f0marj"><I>zfar</I></A><B>)</B></PRE>
+
+<H3><A NAME="A27C0103ae"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A27C0103af"></A><B>SUBROUTINE LRGBRA(</B><I>rmin</I><B>,</B> <I>gmin</I><B>,</B> <I>bmin</I><B>,</B>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>rmax</I><B>, </B><I>gmax</I><B>,</B> <I>bmax</I><B>,</B> <I>znear</I><B>,</B> <I>zfar</I><B>)</B></PRE>
+<PRE><A NAME="A27C0103b0"></A><B>INTEGER*4 </B><I>rmin</I><B>,</B> <I>gmin</I><B>,</B> <I>bmin</I><B>,</B> <I>rmax</I><B>,</B>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>gmax</I><B>,</B> <I>bmax</I><B>,</B><I> znear</I><B>,</B> <I>zfar</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C1156"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X93e0"></A>Description</H3>
+<P><A NAME="E1B16DB182ceb"></A>The <B>lRGBrange</B> subroutine sets the range of colors used in
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A150P19d9">depth-cueing</A> in 
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>. The range is mapped linearly into the 
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A255B9de">RGB color</A> range. Any <I>z</I> values less than the value of the <A HREF="lRGBrange.html#Lq2170marj"><I>znear</I></A> parameter are mapped to <A HREF="lRGBrange.html#Mp21250marj"><I>rmax</I></A>, <A HREF="lRGBrange.html#np211d0marj"><I>gmax</I></A>, and <A HREF="lRGBrange.html#A1q21230marj"><I>bmax</I></A> parameters.  Any <I>z</I> values greater than the value of the <A HREF="lRGBrange.html#Zq212f0marj"><I>zfar</I></A> parameter are mapped to <A HREF="lRGBrange.html#A143X93e3"><I>rmin</I></A>, <A HREF="lRGBrange.html#A143X93e4"><I>gmin</I></A><B>, </B>and <A HREF="lRGBrange.html#A143X93e5"><I>bmin</I></A> parameters. </P>
+
+<P><A NAME="E1B16DB295ceb"></A>The valid range of values for the 
+<A HREF="lRGBrange.html#Lq2170marj"><I>znear</I></A> and 
+<A HREF="lRGBrange.html#Zq212f0marj"><I>zfar</I></A> parameters can be found by using the 
+<B>getgdesc</B> subroutine to query <B>GD_ZMIN</B> and <B>GD_ZMAX</B> attributes. 
+(See the <A HREF="getgdesc.html#t9311e0marj"><B>getgdesc</B></A> subroutine and 
+"<A HREF="Tokens.html#QP3a0nita">Tokens for the getgdesc Subroutine</A>"
+<A HREF="QP3a0nita.html" REL="PAGENUM"></A>.)</P>
+
+<BLOCKQUOTE><A NAME="A258C01c4d6"></A><B>Note: </B>The value for the <I>znear</I> parameter 
+<I>must</I> be less than the value for the <I>zfar</I> parameter.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X93e2"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X93e3"></A><I>rmin</I></TD>
+<TD>  Specifies the minimum value to be stored in the red bitplanes.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X93e4"></A><I>gmin</I></TD>
+<TD>  Specifies the minimum value to be stored in the green bitplanes.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X93e5"></A><I>bmin</I></TD>
+<TD>  Specifies the minimum value to be stored in the blue bitplanes.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Mp21250marj"></A><I>rmax</I></TD>
+<TD>  Specifies the maximum value to be stored in the red bitplanes.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="np211d0marj"></A><I>gmax</I></TD>
+<TD>  Specifies the maximum value to be stored in the green bitplanes.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A1q21230marj"></A><I>bmax</I></TD>
+<TD>  Specifies the maximum value to be stored in the blue bitplanes.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Lq2170marj"></A><I>znear</I></TD>
+<TD>  Specifies the minimum z value to be used as the criterion for linear mapping.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Zq212f0marj"></A><I>zfar</I></TD>
+<TD>  Specifies the maximum z value to be used as the criterion for linear mapping.</TD></TR></TABLE>
+
+<H3><A NAME="A64C0165ae"></A>Implementation Specifics</H3>
+<P><A NAME="E1B16DC036ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C1157"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1158"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1159"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X93f8"></A>Related Information</H3>
+<P><A NAME="E1B16DC384ceb"></A>Turning depth-cueing on and off with the <A HREF="depthcue.html#PNK22d0marj"><B>depthcue</B></A> subroutine.</P>
+
+<P><A NAME="E1B16DC494ceb"></A>Getting information about the currently installed graphics 
+hardware with the <A HREF="getgdesc.html#t9311e0marj"><B>getgdesc</B></A> subroutine.
+</P>
+
+<P><A NAME="E1B16DC606ceb"></A>Setting the viewport depth range with the <A HREF="lsetdepth.html#naR120marj"><B>lsetdepth</B></A> subroutine.</P>
+
+<P><A NAME="E1B16DC715ceb"></A>Setting the range of color indexes used for depth-cueing with the <A HREF="lshaderange.html#fkk1d0marj"><B>lshaderange</B></A> subroutine.</P>
+
+<P><A NAME="E1B16DC854ceb"></A>
+<!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, 
+Performing <!--gl32prgd:--><A HREF="../gl32prgd/depth-cueing.html">Depth-Cueing</A>, and Working 
+in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="lookat.html">Previous</a>  |
+<a href="lsetdepth.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

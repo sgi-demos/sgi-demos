@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/unsupsubs.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>Unsupported Subroutines
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="FORTRANnC.html">Previous</a>  |
+<a href="obsoletesubs.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="unsupsubs.html"></A>Unsupported Subroutines</H2>
+<P><A NAME="A3C0F110935mhay"></A>The following subroutines are not currently supported due to system constraints.</P>
+
+<BLOCKQUOTE><A NAME="A54C0149b1"></A><B>Note: </B>These functions return without performing any function.</BLOCKQUOTE>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Unsupported Subroutines</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>dglopen</B></TD>
+
+<TD><B>getvideo</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>dglclose</B></TD>
+
+<TD><B>setvideo</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>callfunc</B></TD>
+
+<TD><B>getmonitor</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>e_callfunc</B></TD>
+
+<TD><B>setmonitor</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>getresetls</B></TD>
+
+<TD><B>getothermonitor</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>resetls</B></TD>
+
+<TD><BR></TD></TR></TABLE>
+
+<P><A NAME="A3C0F110958mhay"></A>When stippled lines are drawn (by calling the <!--:libs:gl32tref:--><A HREF="../gl32tref/setlinestyle.html#XFM1310marj"><B>setlinestyle</B></A> subroutine with a nontrivial style), the linestyle counter is normally initialized at the beginning of a polyline. As subsequent line segments are drawn, the linestyle counter is <I>not</I> reset, and the line stipple continues around the corner.</P>
+
+<P><A NAME="A3C0F110978mhay"></A>The <B>resetls</B> subroutine, now obsolete, set a flag (mode) that caused the system to reset the line stipple at every vertex. If it is important for your application to reset the linestyle for every line segment, surround each segment with a <B>bgnline</B> and <B>endline</B> subroutine pair. The <!--:libs:gl32tref:--><A HREF="../gl32tref/bgnline.html#A144X962e"><B>bgnline</B></A> subroutine automatically resets the line pattern counter when called.</P>
+
+<P><A NAME="A3C0F110997mhay"></A>On the POWER GXT1000 adapter, the line stipple is reset for every segment within a <B>bgn</B> and <B>end</B> subroutine pair.</P><hr><center>
+[  <a href="FORTRANnC.html">Previous</a>  |
+<a href="obsoletesubs.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/unsupsubs.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+
+

@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>defpattern Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="deflinestyle.html">Previous</a>  |
+<a href="defpup.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9b41"></A>defpattern Subroutine</H2>
+<A NAME="INDEX389" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX390" REL="I2" TITLE="attribute"></A>
+<A NAME="INDEX391" REL="I3" TITLE="defpattern"></A>
+<A NAME="INDEX392" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX393" REL="I2" TITLE="pattern"></A>
+<A NAME="INDEX394" REL="I3" TITLE="defining"></A>
+<A NAME="INDEX395" REL="I1" TITLE="defpattern subroutine (GL)"></A>
+<H3><A NAME="A143X9b43"></A>Purpose</H3>
+<P><A NAME="E1B0975806ceb"></A>Defines patterns used in area fills.</P>
+
+<H3><A NAME="A77C1a1"></A>Libraries</H3>
+<P><A NAME="E1B0975956ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0976060ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9b47"></A>C Syntax</H3>
+<PRE><A NAME="A143X9b48"></A><B>void defpattern</B>
+<B>(Int32 </B><A HREF="defpattern.html#A143X9b4c"><I>index</I></A><B>, Int16 </B><A HREF="defpattern.html#A143X9b4e"><I>size</I></A><B>, Int16 *</B><A HREF="defpattern.html#A143X9b4d"><I>mask</I></A><B>)</B></PRE>
+
+<H3><A NAME="A19C0e0e6"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A19C0e0e7"></A><B>SUBROUTINE DEFPAT(</B><I>index</I><B>,</B> <I>size</I><B>,</B> <I>mask</I><B>)</B>
+<B>INTEGER*4 </B><I>index</I><B>,</B> <I>size</I>
+<B>INTEGER*2 </B><I>mask</I><B>((</B><I>size</I><B>*</B><I>size</I><B>)/16)</B></PRE>
+
+<BLOCKQUOTE><A NAME="A77C1a4"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X9b49"></A>Description</H3>
+<P><A NAME="E1B0976486ceb"></A>The <B>defpattern</B> subroutine defines patterns for filling areas such as <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html#A364C992f5">polygons</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#A7C0a4bd">rectangles</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">curves</A>. By default, pattern 0 is a 16x16-bit solid pattern. Index 0 cannot be changed. The system stores the pattern in a pattern table at <A HREF="defpattern.html#A143X9b4c"><I>index</I></A>. </P>
+
+<P><A NAME="E1B0976596ceb"></A>The pattern is described from left to right and bottom to top, just as characters are described in a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P073b">raster font</A>. The <B>defpattern</B> subroutine allows you to define an arbitrary pattern and assign it an index identifier. You can later reference this pattern with the <A HREF="setpattern.html#WeM11c0marj"><B>setpattern</B></A> subroutine via this identifier. 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791abd">Patterns</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A263A93ae">cursors</A>, and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A270A983b">fonts</A> are available to all windows when using multiple windows.</P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A258C01c387"></A>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. 
+(See "<!--gl32prgd:--><A HREF="../gl32prgd/powerstation730.html#NITAXIO">Hardware Considerations</A>".) </LI>
+
+<LI><A NAME="A258C01c388"></A>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A143X9b4b"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9b4c"></A><I>index</I> </TD>
+<TD>  Specifies the constant to use as an identifier for the pattern described by the 
+<I>mask</I> parameter. This constant is used as an index into a table of patterns. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9b4d"></A><I>mask</I> </TD>
+<TD>  Specifies the array of short integers that form the actual bit pattern. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9b4e"></A><I>size</I> </TD>
+<TD>  Specifies the size of the pattern: for example, 16 specifies a 16x16-bit pattern.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015c79"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0977190ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1B0977316ceb"></A>On the High-Performance 3-D Graphics Processor, there is a performance penalty for non-solid patterns. The High-Performance 3-D Graphics Processor supports only 16x16-bit, 32x32-bit, or 64x64-bit patterns.</P>
+
+<P><A NAME="E1B0977422ceb"></A>The POWER Gt4 and POWER Gt4x adapters support arbitrary-sized patterns, from 1x1 to 64x64 bits.</P>
+
+<P><A NAME="E1B0977529ceb"></A>The Supergraphics Processor Subsystem and the POWER GXT1000 adapter support
+
+The  Supergraphics Processor Subsystem supports
+
+ only 16x16-bit and 32x32-bit patterns.The getgdesc(GD_MAX_PATTERN_SIZE) call can be used to determine the largest supported tile pattern.</P>
+
+<H3><A NAME="A11C0b4cd"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1a5"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1a6"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c389"></A>Related Information</H3>
+<P><A NAME="E1B0977845ceb"></A>Defining a cursor with the <A HREF="defcursor.html#A150X9444"><B>defcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0977951ceb"></A>Defining bitmaps for a raster font with the <A HREF="defrasterfont.html#A143X9d3f"><B>defrasterfont</B></A> subroutine.</P>
+
+<P><A NAME="E1B0978058ceb"></A>Returning the index of the current fill pattern with the <A HREF="getpattern.html#A143X9b63"><B>getpattern</B></A> subroutine.</P>
+
+<P><A NAME="E1B0978166ceb"></A>Selecting a pattern for filling polygons and rectangles with the <A HREF="setpattern.html#WeM11c0marj"><B>setpattern</B></A> subroutine.</P>
+
+<P><A NAME="E1B0978274ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#drawwfcvs.html">Drawing Wire Frame Curves and Surface Patches</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">Drawing NURBS Curves and Surfaces</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Drawing with Begin-End Style Subroutines</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Drawing with Move-Draw Style Subroutines</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware Used by GL</A>, and 
+<!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</A>.</P><hr><center>
+[  <a href="deflinestyle.html">Previous</a>  |
+<a href="defpup.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>backface.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="alias_fore_c.html">Previous</a>  |
+<a href="boxcirc_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c7a2"></A>backface.c Example C Language Program
+</H2>
+<A NAME="INDEX2164" REL="I1" TITLE="backface.c example program (GL)"></A>
+<A NAME="INDEX2165" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2166" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2167" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2168" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2169" REL="I2" TITLE="cube"></A>
+<A NAME="INDEX2170" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2171" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2172" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2173" REL="I3" TITLE="cube"></A>
+<A NAME="INDEX2174" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2175" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2176" REL="I3" TITLE="hidden surface removal"></A>
+<A NAME="INDEX2177" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2178" REL="I2" TITLE="cube"></A>
+<A NAME="INDEX2179" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2180" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2181" REL="I2" TITLE="hidden surface removal"></A>
+<A NAME="INDEX2182" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64E991570ttay"></A>/*
+backface.c:</PRE>
+<PRE><A NAME="A64E991783ttay"></A>Draw a cube that can run with backface() turned on or
+off.  Turn backface() on with the F key.
+Turn backface() off with the B key.  Cube is moved
+when LEFTMOUSE is pressed and mouse itself is moved.
+*/</PRE>
+<PRE><A NAME="A64E991939ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64E992097ttay"></A>#define CUBE_SIZE 200
+#define CUBE_OBJ 1</PRE>
+<PRE><A NAME="A64E992243ttay"></A>main ()
+{</PRE>
+<PRE><A NAME="A64E992407ttay"></A>  Device  dev;
+  int      moveit;
+  short    val, x = 30,y = 30;</PRE>
+<PRE><A NAME="A64E992556ttay"></A>  initialize();</PRE>
+<PRE><A NAME="A64E992704ttay"></A>  while (TRUE) {</PRE>
+<PRE><A NAME="A64E992853ttay"></A>    while (qtest()) {</PRE>
+<PRE><A NAME="A64E993004ttay"></A>      dev = qread(&amp;val);</PRE>
+<PRE><A NAME="A64E993327ttay"></A>      if (dev == ESCKEY) {
+        backface(FALSE);
+        gexit();
+        exit();
+      }
+      else if (dev == REDRAW) {
+        reshapeviewport();
+        drawcube(x,y);
+      }
+      else if (dev == LEFTMOUSE)
+        moveit = val;
+        /* left mouse is down */
+      else if (dev == BKEY) {
+        backface(TRUE);
+        /* turn back facing off */
+        drawcube(x,y);
+      }
+      else if (dev == FKEY) {
+        backface(FALSE);
+        /* turn back facing on */
+        drawcube(x,y);
+      }</PRE>
+<PRE><A NAME="A64E993472ttay"></A>    }</PRE>
+<PRE><A NAME="A64E993651ttay"></A>    if (moveit) {
+      x = getvaluator(MOUSEX);
+      y = getvaluator(MOUSEY);
+      drawcube(x,y);
+    }</PRE>
+<PRE><A NAME="A64E993794ttay"></A>  }</PRE>
+<PRE><A NAME="A64E993937ttay"></A>}</PRE>
+<PRE><A NAME="A64E994085ttay"></A>initialize()
+{</PRE>
+<PRE><A NAME="A64E994232ttay"></A>  int gid;</PRE>
+<PRE><A NAME="A64E994412ttay"></A>  prefposition(XMAXSCREEN/4, XMAXSCREEN*3/4, 
+      YMAXSCREEN/4, YMAXSCREEN*3/4);
+  gid = winopen("backface");</PRE>
+<PRE><A NAME="A64E994572ttay"></A>  doublebuffer();
+  gconfig();
+  shademodel(FLAT);</PRE>
+<PRE><A NAME="A64E994761ttay"></A>  ortho((float)-XMAXSCREEN, (float)XMAXSCREEN,
+      (float)-YMAXSCREEN, (float)YMAXSCREEN,
+      (float)-YMAXSCREEN, (float)YMAXSCREEN);</PRE>
+<PRE><A NAME="A64E994944ttay"></A>  qdevice(ESCKEY);
+  qdevice(REDRAW);
+  qdevice(LEFTMOUSE);
+  qdevice(BKEY);
+  qdevice(FKEY);
+  qenter(REDRAW,gid);</PRE>
+<PRE><A NAME="A64E995107ttay"></A>  backface(TRUE);
+  /* turn on back facing polygon removal */</PRE>
+<PRE><A NAME="A64E995250ttay"></A>}</PRE>
+<PRE><A NAME="A64E995402ttay"></A>/* define a cube */
+cube()
+{ </PRE>
+<PRE><A NAME="A64E995608ttay"></A>  /* front face */
+  pushmatrix();
+  translate(0.0,0.0,CUBE_SIZE);
+  color(RED);
+  rectfi(-CUBE_SIZE,-CUBE_SIZE,CUBE_SIZE,CUBE_SIZE);
+  popmatrix();  /* right face */
+  pushmatrix();</PRE>
+<PRE><A NAME="A64E995810ttay"></A>  translate(CUBE_SIZE, 0.0, 0.0);
+  rotate(900, 'y');
+  color(GREEN);
+  rectfi(-CUBE_SIZE,-CUBE_SIZE,CUBE_SIZE,CUBE_SIZE);
+  popmatrix();  /* back face */
+  pushmatrix();</PRE>
+<PRE><A NAME="A64E996011ttay"></A>  translate(0.0, 0.0, -CUBE_SIZE);
+  rotate(1800, 'y');
+  color(BLUE);
+  rectfi(-CUBE_SIZE,-CUBE_SIZE,CUBE_SIZE,CUBE_SIZE);
+  popmatrix();  /* left face */
+  pushmatrix();</PRE>
+<PRE><A NAME="A64E996213ttay"></A>  translate(-CUBE_SIZE, 0.0, 0.0);
+  rotate(-900, 'y');
+  color(CYAN);
+  rectfi(-CUBE_SIZE,-CUBE_SIZE,CUBE_SIZE,CUBE_SIZE);
+  popmatrix();  /* top face */
+  pushmatrix();</PRE>
+<PRE><A NAME="A64E996415ttay"></A>  translate(0.0, CUBE_SIZE, 0.0);
+  rotate(-900, 'x');
+  color(MAGENTA);
+  rectfi(-CUBE_SIZE,-CUBE_SIZE,CUBE_SIZE,CUBE_SIZE);
+  popmatrix();  /* bottom face */
+  pushmatrix();</PRE>
+<PRE><A NAME="A64E996606ttay"></A>  translate(0.0, -CUBE_SIZE, 0.0);
+  rotate(900, 'x');
+  color(YELLOW);
+  rectfi(-CUBE_SIZE,-CUBE_SIZE,CUBE_SIZE,CUBE_SIZE);
+  popmatrix();</PRE>
+<PRE><A NAME="A64E996749ttay"></A>}</PRE>
+<PRE><A NAME="A64E996900ttay"></A>drawcube(x,y)
+short x,y;
+{</PRE>
+<PRE><A NAME="A64E997087ttay"></A>  pushmatrix();
+  rotate(2*x, 'x');
+  rotate(2*y, 'y');
+  color(BLACK);
+  clear();
+  cube();
+  popmatrix();
+  swapbuffers();</PRE>
+<PRE><A NAME="A64E997255ttay"></A>}
+/*Changes
+&nbsp;&nbsp;&nbsp;-The constant CUBE_SIZE had a .0 append to the end of it
+*/</PRE>
+
+<H3><A NAME="A200C1116"></A>Related Information</H3>
+<P><A NAME="E1D7772699ceb"></A>The <A HREF="backface.html#A143X974b"><B>backface</B></A> subroutine<A HREF="../gl32tref/A143X974b" REL="PAGENUM"></A>, <A HREF="ortho.html#A144X9496"><B>ortho</B></A> or <B>ortho2</B> subroutine<A HREF="../gl32tref/A144X9496" REL="PAGENUM"></A>, <A HREF="popmatrix.html#A144X951e"><B>popmatrix</B></A> subroutine<A HREF="../gl32tref/A144X951e" REL="PAGENUM"></A>, <A HREF="pushmatrix.html#A144X9540"><B>pushmatrix</B></A> subroutine<A HREF="../gl32tref/A144X9540" REL="PAGENUM"></A>, <A HREF="rotate.html#A8g2120marj"><B>rotate</B></A> subroutine<A HREF="../gl32tref/A8g2120marj" REL="PAGENUM"></A>, <A HREF="shademodel.html#A143X9ab9"><B>shademodel</B></A> subroutine<A HREF="../gl32tref/A143X9ab9" REL="PAGENUM"></A>, <A HREF="swapbuffers.html#A145X9302"><B>swapbuffers</B></A> subroutine<A HREF="../gl32tref/A145X9302" REL="PAGENUM"></A>, <A HREF="translate.html#A144X95c8"><B>translate</B></A> subroutine<A HREF="../gl32tref/A144X95c8" REL="PAGENUM"></A>.</P>
+
+<P><A NAME="E1D7772725ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/remhidden.html#remhidden.html">Removing Hidden Surfaces</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<hr><center>
+[  <a href="alias_fore_c.html">Previous</a>  |
+<a href="boxcirc_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

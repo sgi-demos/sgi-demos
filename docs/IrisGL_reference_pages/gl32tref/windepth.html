@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>windepth Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="winconstraints.html">Previous</a>  |
+<a href="window.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X914e3"></A>windepth Subroutine</H2>
+<A NAME="INDEX1989" REL="I1" TITLE="windepth subroutine (GL)"></A>
+<A NAME="INDEX1990" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1991" REL="I2" TITLE="window"></A>
+<A NAME="INDEX1992" REL="I3" TITLE="windepth"></A>
+<A NAME="INDEX1993" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1994" REL="I2" TITLE="windows"></A>
+<A NAME="INDEX1995" REL="I3" TITLE="indicating stack order"></A>
+
+<H3><A NAME="A142X914e5"></A>Purpose</H3>
+<P><A NAME="E1D75F5053ceb"></A>Indicates the stacking order of windows on the screen.</P>
+
+<H3><A NAME="A79C133f"></A>Libraries</H3>
+<P><A NAME="E1D75F5093ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D75F5117ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X914e9"></A>C Syntax</H3>
+<PRE><A NAME="A213X912a9a"></A><B>Int32 windepth(Int32 </B><A HREF="windepth.html#A1D63190marj"><I>windowid</I></A><B>)</B></PRE>
+
+<H3><A NAME="A18C0dcf8"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A18C0dcf9"></A><B>SUBROUTINE WINDEP(</B><I>windowid</I><B>)</B>
+<B>INTEGER*4 </B><I>windowid</I></PRE>
+
+<H3><A NAME="A142X914eb"></A>Description</H3>
+<P><A NAME="E1D75F5229ceb"></A>The <B>windepth </B>subroutine returns a number that can be compared against the same return value for other 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">windows</A> to indicate the stacking order of a program's windows on the screen. </P>
+
+<H3><A NAME="A142X914ed"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A1D63190marj"></A><I>windowid</I></TD>
+<TD>  Specifies which window to test.</TD></TR></TABLE>
+
+<H3><A NAME="A61C0159d6"></A>Implementation Specifics</H3>
+<P><A NAME="E1D75F5308ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1342"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1343"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1344"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X91503"></A>Related Information</H3>
+<P><A NAME="E1D75F5405ceb"></A>Raising the current window on top of all other windows with the <A HREF="winpop.html#A142X9156b"><B>winpop</B></A> subroutine. </P>
+
+<P><A NAME="E1D75F5430ceb"></A>Lowering the current window beneath all other windows with the <A HREF="winpush.html#A4X13320marj"><B>winpush</B></A> subroutine. </P>
+
+<P><A NAME="E1D75F5456ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="winconstraints.html">Previous</a>  |
+<a href="window.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

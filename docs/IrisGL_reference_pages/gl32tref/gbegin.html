@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>gbegin Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="gammaramp.html">Previous</a>  |
+<a href="gconfig.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="JS4380nita"></A>gbegin Subroutine</H2>
+<A NAME="INDEX546" REL="I1" TITLE="gbegin subroutine (GL)"></A>
+<A NAME="INDEX547" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX548" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX549" REL="I3" TITLE="gbegin"></A>
+<A NAME="INDEX550" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX551" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX552" REL="I3" TITLE="graphics system without color map change"></A>
+
+<H3><A NAME="A213X91241e"></A>Purpose</H3>
+<P><A NAME="E1B0C54432ceb"></A>Initializes the graphics system without changing the color map.</P>
+
+<H3><A NAME="A79C11bf"></A>Libraries</H3>
+<P><A NAME="E1B0C54580ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0C54686ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912421"></A>C Syntax</H3>
+<PRE><A NAME="A213X912422"></A><B>void gbegin(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010b95"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010b96"></A><B>SUBROUTINE GBEGIN</B></PRE>
+
+<H3><A NAME="A213X912425"></A>Description</H3>
+<P><A NAME="E1B0C55042ceb"></A>The <B>gbegin</B> subroutine initializes the graphics environment to its default values for global state attributes and creates a window that covers the screen. The <B>gbegin</B> subroutine queues the REDRAW window manager device, but does not change the color map or interfere with other programs that use the current color map.</P>
+
+<P><A NAME="E1B0C55151ceb"></A>This subroutine is not recommended for new application development. The <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine, together with related window management subroutines, provides a more flexible interface for graphics display initialization.</P>
+
+<BLOCKQUOTE><A NAME="A318C9e87"></A><B>Note: </B>This subroutine cannot be used to add to a display list.</BLOCKQUOTE>
+
+
+<H3><A NAME="A64C0165ef"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0C55367ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows3D Feature.</P>
+
+<H3><A NAME="A79C11c2"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11c3"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11c4"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="C7BD30C542bett"></A>Related Information</H3>
+<P><A NAME="E1B0C55690ceb"></A>Enabling drawing outside the current window boundaries with the <A HREF="fullscrn.html#Qga140marj"><B>fullscrn</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C55798ceb"></A>Initializing the graphics system with the <A HREF="ginit.html#LDg21c0marj"><B>ginit</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C55906ceb"></A>Resetting all global state attributes to their initial values with the <A HREF="greset.html#xW42e0nita"><B>greset</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C56017ceb"></A>Creating a new window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine. </P>
+
+<P><A NAME="E1B0C56126ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware</A> Used by GL and <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>.</P>
+
+<P><A NAME="E1B0C56234ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/clrrstintgl.html#clrrstintgl.html">Clearing, Resetting, and Initializing GL</A> and <!--gl32prgd:--><A HREF="../gl32prgd/underwininput.html#underwininput.html">Windows</A> and Input Control Overview.</P><hr><center>
+[  <a href="gammaramp.html">Previous</a>  |
+<a href="gconfig.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

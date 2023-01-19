@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>pushmatrix Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="pushattributes.html">Previous</a>  |
+<a href="pushname.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X9540"></A>pushmatrix Subroutine</H2>
+<A NAME="INDEX1473" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1474" REL="I2" TITLE="coordinate transformation"></A>
+<A NAME="INDEX1475" REL="I3" TITLE="pushmatrix"></A>
+<A NAME="INDEX1476" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1477" REL="I2" TITLE="transformation matrix stack"></A>
+<A NAME="INDEX1478" REL="I3" TITLE="pushing down"></A>
+<A NAME="INDEX1479" REL="I1" TITLE="pushmatrix subroutine (GL)"></A>
+
+<H3><A NAME="A144X9542"></A>Purpose</H3>
+<P><A NAME="E1D721D608ceb"></A>Pushes down the transformation matrix stack.</P>
+
+<H3><A NAME="A78C1a4"></A>Libraries</H3>
+<P><A NAME="E1D721D648ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D721D672ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X9546"></A>C Syntax</H3>
+<PRE><A NAME="A213X9126e3"></A><B>void pushmatrix(&nbsp;)</B></PRE>
+
+<H3><A NAME="A15C0c6f7"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A15C0c6f8"></A><B>SUBROUTINE PUSHMA</B></PRE>
+
+<H3><A NAME="A144X9548"></A>Description</H3>
+<P><A NAME="E1D721D782ceb"></A>The <B>pushmatrix </B>subroutine pushes down the transformation 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06dd">matrix stack</A>, duplicating the current matrix. For example, if the stack contains one matrix, <I>M, </I>after a call to the <B>pushmatrix </B>subroutine, the matrix contains two copies of <I>M. </I>The top copy can be modified. </P>
+
+<P><A NAME="E1D721D808ceb"></A>This subroutine is not valid when the system is in projection matrix mode (<SAMP>mmode(MPROJ);),</SAMP> because the matrix stack is not accessible in this mode.</P>
+
+<H3><A NAME="A144X9550"></A>Example</H3>
+<P><A NAME="E1D721D850ceb"></A>The example C language program <A HREF="backface_c.html#A16C0c7a2"><B>backface.c</B></A> uses the <B>pushmatrix</B> subroutine to save the current transformation matrix before altering it with the <A HREF="translate.html#A144X95c8"><B>translate</B></A> modeling subroutine.</P>
+
+<H3><A NAME="A62C015d38"></A>Implementation Specifics</H3>
+<P><A NAME="E1D721D893ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C1a7"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1a8"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1a9"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X9560"></A>Related Information</H3>
+<P><A NAME="E1D721D991ceb"></A>Changing the matrix mode with the <A HREF="mmode.html#XhZ2370marj"><B>mmode</B></A> subroutine.</P>
+
+<P><A NAME="E1D721E017ceb"></A>Getting a copy of the current transformation matrix with the <A HREF="getmatrix.html#A144X940e"><B>getmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1D721E042ceb"></A>Loading a transformation matrix with the <A HREF="loadmatrix.html#A144X9430"><B>loadmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1D721E068ceb"></A>Premultiplying the current transformation matrix with the <A HREF="multmatrix.html#A144X9474"><B>multmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1D721E094ceb"></A>Popping the transformation matrix stack with the <A HREF="popmatrix.html#A144X951e"><B>popmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1D721E120ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="pushattributes.html">Previous</a>  |
+<a href="pushname.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getfontencoding Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getfont.html">Previous</a>  |
+<a href="getfonttype.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="Az7960nita"></A>getfontencoding Subroutine</H2>
+<H3><A NAME="A140C17c8"></A>Purpose</H3>
+<P><A NAME="E1B0E89709ceb"></A>Indicates the font encoding.</P>
+
+<H3><A NAME="A140C17ca"></A>Libraries</H3>
+<P><A NAME="E1B0E89858ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0E89962ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A140C17cd"></A>C Syntax</H3>
+<PRE><A NAME="A140C17ce"></A><B>void getfontencoding (char *</B><A HREF="getfontencoding.html#A140C17d9"><I>enc</I></A><B>)</B></PRE>
+
+<H3><A NAME="A140C17cf"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A140C17d0"></A><B>SUBROUTINE GETFONTENCODING (</B><I>enc</I><B>)</B>
+<B>CHARACTER *(*)</B> <A HREF="getfontencoding.html#A140C17d9"><I>enc</I></A></PRE>
+
+<H3><A NAME="A140C17d1"></A>Description</H3>
+<P><A NAME="E1B0E8A327ceb"></A>The <B>getfontencoding</B> subroutine returns an ASCII string that indicates the registry and encoding of the currently bound font.</P>
+
+<P><A NAME="E1B0E8A436ceb"></A>The returned string is always NULL for user-defined fonts (defined with the <A HREF="defrasterfont.html#A143X9d3f"><B>defrasterfont</B></A> subroutine). The returned string may or may not be NULL for fonts loaded with the <A HREF="loadXfont.html#vUO390nita"><B>loadXfont</B></A> subroutine. Typically, newer fonts indicate their encoding, older fonts do not.</P>
+
+<P><A NAME="E1B0E8A543ceb"></A>The encoding is determined with the Enhanced X-Windows Logical Font Description (XLFD) mechanism. The actual string returned is a concatenation of the contents of the CharSetRegistry and CharSetEncoding fields of logical font description.</P>
+
+<P><A NAME="E1B0E8A652ceb"></A>Examples of font set registries and encodings are ISO8859-5 or JISX.1983-0. In the first example, ISO8859 is the registry (in this case, the International Standard ISO 8859, Information Processing - 8-bit Single Byte Coded Graphics Character Sets), and 5 is the encoding (in this case, ISO 8859/5, a Russian/Cyrillic encoding).</P>
+
+<P><A NAME="E1B0E8A762ceb"></A>More information about font encodings can be found in 
+"<!--:genprogc:--><A HREF="../genprogc/nls.html#A2919f7">National Language Support Overview</A>". </P>
+
+<H3><A NAME="A140C17d8"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A140C17d9"></A><I>enc</I></TD>
+<TD>  Indicates a pointer to a memory location. The user passes a pointer to a memory area that point to <I>at least</I> 24 bytes that can be overwritten. Upon return, their memory area contains a ASCII string identifying the registry and encoding of the currently bound font.</TD></TR></TABLE>
+
+<H3><A NAME="A140C17de"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0E8B030ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A140C17e0"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A140C17e1"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A140C17e2"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A140C17e7"></A>Related Information</H3>
+<P><A NAME="E1B0E8B355ceb"></A>Determining the font format with the <A HREF="getfonttype.html#Y89340nita"><B>getfonttype</B></A> subroutine.</P>
+
+<P><A NAME="E1B0E8B464ceb"></A>Defining bitmaps for a raster font with the <A HREF="defrasterfont.html#A143X9d3f"><B>defrasterfont</B></A> subroutine.</P>
+
+<P><A NAME="E1B0E8B570ceb"></A>Selecting a raster font with the <A HREF="font.html#A143X9d61"><B>font</B></A> subroutine.</P>
+
+<P><A NAME="E1B0E8B686ceb"></A>Loading an Enhanced X-Windows font into the font table with the <A HREF="loadXfont.html#vUO390nita"><B>loadXfont</B> </A>subroutine.</P>
+
+<P><A NAME="E1B0E8B794ceb"></A><!--:genprogc:--><A HREF="../genprogc/nls.html#A2919f7">National Language Support Overview</A> in<I> AIX General Programming Concepts: Writing and Debugging Programs</I>.</P>
+
+<P><A NAME="E1B0E8C008ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P><hr><center>
+[  <a href="getfont.html">Previous</a>  |
+<a href="getfonttype.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

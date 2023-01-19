@@ -1,0 +1,1344 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/drawbeg-end.html Mon, 24 Jan 2022 16:27:48 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Drawing with Begin-End Style Subroutines
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="drawwithgl.html">Previous</a>  |
+<a href="move-draw.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="drawbeg-end.html"></A>Drawing with Begin-End Style Subroutines</H2>
+
+
+<P><A NAME="INDEX8"></A><A NAME="INDEX9"></A><A NAME="INDEX10"></A><A NAME="INDEX11"></A><A NAME="INDEX12"></A><A NAME="INDEX13"></A></P>
+
+
+<P><A NAME="A3C0E529518mhay"></A>This section on begin-end style drawing
+discusses the following topics: </P>
+
+
+<UL><LI><A NAME="A40C012663"></A><A HREF="drawbeg-end.html#A37C011da4">Begin-End
+Style Introduction</A></LI>
+
+
+<LI><A NAME="A258C01c09e"></A><A HREF="drawbeg-end.html#A364C992cd">Lines,
+Polylines, and Closed Lines</A></LI>
+
+
+<LI><A NAME="A40C012666"></A><A HREF="drawbeg-end.html#A364C992f2">Points</A></LI>
+
+
+<LI><A NAME="A40C012667"></A><A HREF="drawbeg-end.html#A364C992f5">Polygons</A></LI>
+
+
+<LI><A NAME="A40C012668"></A><A HREF="drawbeg-end.html#A364C9930f">Point-Sampled
+Polygons</A></LI>
+
+
+<LI><A NAME="A39C012357"></A><A HREF="drawbeg-end.html#A264X911a">Polygonal
+Shading</A></LI>
+
+
+<LI><A NAME="A40C012669"></A><A HREF="drawbeg-end.html#A364C9931f">Triangular
+Meshes</A></LI></UL>
+
+
+<H3><A NAME="A264X925d"></A>List of GL Begin-End Style Subroutines<A NAME="INDEX14"></A>
+<A NAME="INDEX15"></A> <A NAME="INDEX16"></A> <A NAME="INDEX17"></A> <A NAME="INDEX18"></A>
+<A NAME="INDEX19"></A> </H3>
+
+
+<P><A NAME="A3C0E529549mhay"></A>The following GL begin-end style subroutines
+are found in <I>GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I>. </P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c1e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnclosedline.html#A144X960c">bgnclosedline</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws closed line vertices. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c1f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnline.html#A144X962e">bgnline</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws vertex-based lines. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c20"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpoint.html#A144X9650">bgnpoint</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws vertex-based points. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c21"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpolygon.html#A144X9672">bgnpolygon</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws vertex-based polygons. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c22"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgntmesh.html#A144X9694">bgntmesh</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws triangle mesh vertices. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A78C1448"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/concave.html#HXf320marj">concave</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Allows the system to draw concave polygons.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c23"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnclosedline.html#A144X960c">endclosedline</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Ends a series of closed line vertices. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c24"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnline.html#A144X962e">endline</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Ends a series of vertex-based lines. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c25"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpoint.html#A144X9650">endpoint</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Ends a series of vertex-based points. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c26"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpolygon.html#A144X9672">endpolygon</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Ends a vertex-based polygon. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c27"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgntmesh.html#A144X9694">endtmesh</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Ends a series of triangle mesh vertices. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c28"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/n3f.html#A139X91ef3">n3f</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies a normal vector for lighting calculations. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c29"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/normal.html#A142X9b7">normal</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies a normal vector for lighting calculations (can be used for
+display lists). </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c2a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/swaptmesh.html#A144X9782">swaptmesh</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Toggles the triangle mesh register pointer. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c2b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/v.html#A144X97a4">v</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Transfers a vertex to the graphics pipe. </TD></TR></TABLE>
+
+
+<H3><A NAME="A37C011da4"></A>Begin-End Style Introduction </H3>
+
+
+<P><A NAME="A3C0E529589mhay"></A>Begin-end style drawing subroutines draw
+primitive graphical figures. In these subroutines, all points, lines, and
+polygons are described in terms of vertices (sets of coordinates that identify
+points in space). </P>
+
+
+<UL><LI><A NAME="A364C992ba"></A>A point is described by a single vertex.</LI>
+
+
+<LI><A NAME="A364C992bb"></A>A line segment is described by two vertices
+indicating its end points.</LI>
+
+
+<LI><A NAME="A364C992bc"></A>A polygon is described by a set of three or
+more vertices indicating its corners.</LI></UL>
+
+
+<P><A NAME="A3C0E529615mhay"></A>To draw a graphical figure, use a series
+of vertex subroutines surrounded by a pair of begin and end subroutines,
+which mark the beginning and end of the figure. For example, the code to
+draw a set of five points A, B, C, D and E takes the following form: </P>
+
+
+<PRE><A NAME="A364C992be"></A>&lt;beginning&nbsp;of&nbsp;point&nbsp;vertices&gt;
+&lt;vertex&nbsp;A&gt;
+&lt;vertex&nbsp;B&gt;
+&lt;vertex&nbsp;C&gt;
+&lt;vertex&nbsp;D&gt;
+&lt;vertex&nbsp;E&gt;
+&lt;end&nbsp;of&nbsp;point&nbsp;vertices&gt;.</PRE>
+
+
+<P><A NAME="A3C0E529639mhay"></A>To draw a polygon whose corners are the
+same five points, the code takes the form: </P>
+
+
+<PRE><A NAME="A364C992c6"></A>&lt;beginning&nbsp;of&nbsp;polygon&nbsp;vertices&gt;
+&lt;vertex&nbsp;A&gt;
+&lt;vertex&nbsp;B&gt;
+&lt;vertex&nbsp;C&gt;
+&lt;vertex&nbsp;D&gt;
+&lt;vertex&nbsp;E&gt;
+&lt;end&nbsp;of&nbsp;polygon&nbsp;vertices&gt;.</PRE>
+
+
+<P><A NAME="A3C0E529663mhay"></A>Other styles of drawing you can use are
+described in &quot;<A HREF="move-draw.html">Drawing with Move-Draw
+Style Subroutines</A>&quot; and &quot;<A HREF="drawpoly.html#drawpoly.html">Drawing
+Rectangles, Circles, Arcs, and in Polygons</A>&quot;. </P>
+
+
+<H3><A NAME="A364C992cd"></A>Lines, Polylines, and Closed Lines </H3>
+
+
+<P><A NAME="A3C0E529687mhay"></A>This simple example program, <TT>crisscross</TT>,
+clears a window to white, and then draws a pair of red lines connecting
+its opposite corners. </P>
+
+
+<PRE><A NAME="A65C0167fe"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A65C0167ff"></A>main()
+{
+&nbsp;&nbsp;&nbsp;Int32&nbsp;vert1[2]&nbsp;=&nbsp;{100,&nbsp;100};&nbsp;/*&nbsp;lower&nbsp;left&nbsp;corner&nbsp;*/
+&nbsp;&nbsp;&nbsp;Int32&nbsp;vert2[2]&nbsp;=&nbsp;{100,&nbsp;500};&nbsp;/*&nbsp;upper&nbsp;left&nbsp;corner&nbsp;*/
+&nbsp;&nbsp;&nbsp;Int32&nbsp;vert3[2]&nbsp;=&nbsp;{500,&nbsp;500};&nbsp;/*&nbsp;upper&nbsp;right&nbsp;corner&nbsp;*/
+&nbsp;&nbsp;&nbsp;Int32&nbsp;vert4[2]&nbsp;=&nbsp;{500,&nbsp;100};&nbsp;/*&nbsp;lower&nbsp;right&nbsp;corner&nbsp;*/</PRE>
+
+
+<PRE><A NAME="A65C016800"></A>&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;500,&nbsp;100,&nbsp;500);
+&nbsp;&nbsp;&nbsp;winopen(&quot;crisscross&quot;);
+&nbsp;&nbsp;&nbsp;ortho2(99.5,&nbsp;500.5,&nbsp;99.5,&nbsp;500.5);
+&nbsp;&nbsp;&nbsp;color(WHITE);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;bgnline();
+&nbsp;&nbsp;&nbsp;&nbsp;v2i(vert1);
+&nbsp;&nbsp;&nbsp;&nbsp;v2i(vert3);
+&nbsp;&nbsp;&nbsp;endline();
+&nbsp;&nbsp;&nbsp;bgnline();
+&nbsp;&nbsp;&nbsp;&nbsp;v2i(vert2);
+&nbsp;&nbsp;&nbsp;&nbsp;v2i(vert4);
+&nbsp;&nbsp;&nbsp;endline();
+&nbsp;&nbsp;&nbsp;sleep(3);
+}</PRE>
+
+
+<P><A NAME="A3C0E529717mhay"></A>In this example, four long arrays are
+declared, <TT>vert1</TT>,&nbsp;<TT>vert2</TT>,&nbsp;<TT>vert3</TT>, and
+<TT>vert4</TT>. Values are assigned to all the elements of each array.
+The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/prefposition.html#A142X9164f">prefposition</A></B>
+subroutine defines the next window as a square covering pixels 100 through
+500 in both the <I>x</I> and <I>y</I> directions. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winopen.html#A142X91549">winopen</A></B>
+subroutine then opens the window described by the <B>prefposition</B> subroutine
+and assigns it the name <TT>crisscross</TT>. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496">ortho2</A></B>
+subroutine sets up the default coordinate system so that a point with coordinates
+(x, y) maps exactly to the point on the screen that has the same coordinates.
+The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/color.html#A146X9429">color</A></B>
+subroutine sets the window's color property to white and the call to the
+<B>clear</B> subroutine clears the window to the current value of the window's
+color property, white. </P>
+
+
+<P><A NAME="A3C0E529740mhay"></A>The next four lines of code draw a line
+from (100, 100) to (500, 500)&amp;mdash;the lower-left corner to the upper-right
+corner. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnline.html#A144X962e">bgnline</A></B>
+subroutine tells the system to prepare to draw a line using the following
+vertices. Then the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/v.html#A144X97a4">v2i</A></B>
+subroutine takes an array of coordinates as its parameter and creates a
+vertex at those coordinates. </P>
+
+
+<P><A NAME="A3C0E529763mhay"></A>The first <B>v2i</B> subroutine call after
+the<B> bgnline</B> subroutine creates the first end point of the line segment.
+The second <B>v2i </B>subroutine call after the<B> bgnline</B> subroutine
+creates the end point of the line segment and the system draws a line.
+The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnline.html#A144X962e">endline</A></B>
+subroutine call tells the system that it has all the vertices for the line.
+The next four lines of code draw a line from (100, 500) to (500, 100),
+the lower-right corner to the upper-left corner. </P>
+
+
+<P><A NAME="A3C0E529786mhay"></A>Finally, <TT>sleep(3)</TT> delays the
+program from exiting until three seconds pass; the picture remains on the
+screen for three seconds. </P>
+
+
+<H4><A NAME="A364C992d4"></A>Polylines<A NAME="INDEX20"></A> <A NAME="INDEX21"></A>
+<A NAME="INDEX22"></A> <A NAME="INDEX23"></A> <A NAME="INDEX24"></A> <A NAME="INDEX25"></A></H4>
+
+
+<P><A NAME="A3C0E529812mhay"></A>If more than two points are listed between
+the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnline.html#A144X962e">bgnline</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnline.html#A144X962e">endline</A></B>
+subroutines, each point is connected to the next by a line. The following
+example program, <TT>greensquare</TT>, draws an outlined green square in
+the center of the window: </P>
+
+
+<PRE><A NAME="A65C016801"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A65C016802"></A>main()
+{
+&nbsp;&nbsp;&nbsp;Int32&nbsp;vert1[2]&nbsp;=&nbsp;{200,&nbsp;200};
+&nbsp;&nbsp;&nbsp;Int32&nbsp;vert2[2]&nbsp;=&nbsp;{200,&nbsp;400};
+&nbsp;&nbsp;&nbsp;Int32&nbsp;vert3[2]&nbsp;=&nbsp;{400,&nbsp;400};
+&nbsp;&nbsp;&nbsp;Int32&nbsp;vert4[2]&nbsp;=&nbsp;{400,&nbsp;200};</PRE>
+
+
+<PRE><A NAME="A65C016803"></A>&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;500,&nbsp;100,&nbsp;500);
+&nbsp;&nbsp;&nbsp;winopen(&quot;greensquare&quot;);
+&nbsp;&nbsp;&nbsp;ortho2(99.5,&nbsp;500.5,&nbsp;99.5,&nbsp;500.5);
+&nbsp;&nbsp;&nbsp;color(WHITE);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(GREEN);
+&nbsp;&nbsp;&nbsp;bgnline();
+&nbsp;&nbsp;&nbsp;&nbsp;v2i(vert1);
+&nbsp;&nbsp;&nbsp;&nbsp;v2i(vert2);
+&nbsp;&nbsp;&nbsp;&nbsp;v2i(vert3);
+&nbsp;&nbsp;&nbsp;&nbsp;v2i(vert4);
+&nbsp;&nbsp;&nbsp;&nbsp;v2i(vert1);
+&nbsp;&nbsp;&nbsp;endline();
+&nbsp;&nbsp;&nbsp;sleep(3);
+}</PRE>
+
+
+<BLOCKQUOTE><P><A NAME="A364C992d8"></A><B>Note: </B>The first vertex, <TT>v2i(vert1)</TT>,
+is repeated to close the series of line segments. </P></BLOCKQUOTE>
+
+
+<P><A NAME="A3C0E52A228mhay"></A>A series of connected line segments is
+called a polyline. GL cannot draw polylines with more than 256 vertices.
+Other than the number of vertices, there are no restrictions on a polyline.
+The segments can cross each other, vertices can be reused, and if the vertices
+are defined in terms of three dimensions, you can place them anywhere within
+three-dimensional space. In a three-dimensional space, the vertices need
+not all lie in the same plane. </P>
+
+
+<H4><A NAME="A364C992e7"></A>vertex Subroutine </H4>
+
+
+<P><A NAME="A3C0E52A254mhay"></A>The previously discussed example programs
+<A HREF="#A65C0167fe">crisscross</A>and <A HREF="#A65C016801">greensquare</A> use only
+one form of the vertex subroutine: a two-dimensional version with 32-bit
+integer coordinates. GL contains 12 forms of vertex (<B><!--:libs:gl32tref:--><A HREF="../gl32tref/v.html#A144X97a4">v</A></B>)
+subroutines. The coordinates can be short integers (16 bits), long integers
+(32 bits), single-precision floating-point values (32 bits), and double-precision
+floating-point values (64 bits). For each of these types, there is a two-dimensional
+version, a three-dimensional version, and a version that expects vertices
+expressed in <A HREF="specialterms.html#A26P0623">homogeneous
+coordinates.</A> </P>
+
+
+<P><A NAME="A3C0E52A277mhay"></A>The vertex subroutines are illustrated
+in the following table. </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="4"><B>The Vertex Subroutines</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><BR></TD>
+
+
+<TD><B>2-D</B> </TD>
+
+
+<TD><B>3-D</B> </TD>
+
+
+<TD><B>4-D</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>16-bit integer </TD>
+
+
+<TD><B>v2s</B> </TD>
+
+
+<TD><B>v3s</B> </TD>
+
+
+<TD><B>v4s</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>32-bit integer </TD>
+
+
+<TD><B>v2i</B> </TD>
+
+
+<TD><B>v3i</B> </TD>
+
+
+<TD><B>v4i</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>32-bit floating point </TD>
+
+
+<TD><B>v2f</B> </TD>
+
+
+<TD><B>v3f</B> </TD>
+
+
+<TD><B>v4f</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>64-bit floating point </TD>
+
+
+<TD><B>v2d</B> </TD>
+
+
+<TD><B>v3d</B> </TD>
+
+
+<TD><B>v4d</B> </TD></TR></TABLE>
+
+
+<P><A NAME="A3C0E52A302mhay"></A>All forms of the vertex subroutine begin
+with the letter v. The second character is 2, 3, or 4, indicating the number
+of dimensions, and the final character is <B>s</B> for short integer, <B>i</B>
+for long integer, <B>f</B> for single-precision floating-point, and <B>d</B>
+for double-precision floating-point. For example, the 2-D syntaxes are
+as follows: </P>
+
+
+<PRE><A NAME="A66C016bf5"></A>void&nbsp;v2s(Int16&nbsp;vector[2])</PRE>
+
+
+<PRE><A NAME="A66C016bf6"></A>void&nbsp;v2i(Int32&nbsp;vector[2])</PRE>
+
+
+<PRE><A NAME="A66C016bf7"></A>void&nbsp;v2f(Float32&nbsp;vector[2])</PRE>
+
+
+<PRE><A NAME="A66C016bf8"></A>void&nbsp;v2d(Float64&nbsp;vector[2])</PRE>
+
+
+<P><A NAME="A3C0E52A329mhay"></A>The following example program, <TT>greensquare2</TT>,
+illustrates the use of some of the different vertex subroutines. It draws
+exactly the same picture as the previous example does, but uses different
+versions of the <B>vertex</B> subroutine. </P>
+
+
+<PRE><A NAME="A65C016804"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A65C016805"></A>main()
+{
+&nbsp;&nbsp;&nbsp;Int16&nbsp;vert1[3]&nbsp;=&nbsp;{200,&nbsp;200,&nbsp;0};
+&nbsp;&nbsp;&nbsp;Int32&nbsp;vert2[2]&nbsp;=&nbsp;{200,&nbsp;400};
+&nbsp;&nbsp;&nbsp;Float32&nbsp;vert3[2]&nbsp;=&nbsp;{400.0,&nbsp;400.0};
+&nbsp;&nbsp;&nbsp;Float64&nbsp;vert4[3]&nbsp;=&nbsp;{400.0,&nbsp;200.0,&nbsp;0.0};
+&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;500,&nbsp;100,&nbsp;500);
+&nbsp;&nbsp;&nbsp;winopen(&quot;greensquare2&quot;);
+&nbsp;&nbsp;&nbsp;ortho2(99.5,&nbsp;500.5,&nbsp;99.5,&nbsp;500.5);
+&nbsp;&nbsp;&nbsp;color(WHITE);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(GREEN);
+&nbsp;&nbsp;&nbsp;bgnline();
+&nbsp;&nbsp;&nbsp;&nbsp;v3s(vert1);
+&nbsp;&nbsp;&nbsp;&nbsp;v2i(vert2);
+&nbsp;&nbsp;&nbsp;&nbsp;v2f(vert3);
+&nbsp;&nbsp;&nbsp;&nbsp;v3d(vert4);
+&nbsp;&nbsp;&nbsp;&nbsp;v3s(vert1);
+&nbsp;&nbsp;&nbsp;endline();
+&nbsp;&nbsp;&nbsp;sleep(3);
+}</PRE>
+
+
+<P><A NAME="A3C0E52A357mhay"></A>The previous program illustrates two things:</P>
+
+
+<UL><LI><A NAME="A364C992eb"></A>Within one geometric figure (in this case,
+a polyline), you can mix different kinds of vertices together. In a typical
+application, all the vertices tend to have the same dimension and form.</LI>
+
+
+<LI><A NAME="A364C992ec"></A>GL treats all geometric figures as three-dimensional
+figures. Two-dimensional versions of the vertex subroutines are actually
+shorthand for an equivalent three-dimensional subroutine with the <I>z</I>
+coordinate set to zero.</LI></UL>
+
+
+<H4><A NAME="A364C992ed"></A>Closed Lines<A NAME="INDEX26"></A> <A NAME="INDEX27"></A>
+<A NAME="INDEX28"></A> <A NAME="INDEX29"></A> <A NAME="INDEX30"></A> <A NAME="INDEX31"></A></H4>
+
+
+<P><A NAME="A3C0E52A467mhay"></A>In the previous two examples, the program
+draws a closed polyline&amp;mdash;a line segment connecting the last point
+in the polyline to the first point in the polyline. Because this is a fairly
+common operation, there is a pair of subroutines to do it: the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnclosedline.html#A144X960c">bgnclosedline</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnclosedline.html#A144X960c">endclosedline</A></B>
+subroutines. </P>
+
+
+<P><A NAME="A3C0E52A499mhay"></A>The following program, <TT>n-gon</TT>,
+draws a regular, unfilled polygon centered at the origin. Specify the number
+of sides for the polygon on the command line when you run the program.</P>
+
+
+<PRE><A NAME="A65C016807"></A>#include&nbsp;&lt;gl/gl.h&gt;
+#include&nbsp;&lt;math.h&gt;</PRE>
+
+
+<PRE><A NAME="A65C016808"></A>main(argc,&nbsp;argv)
+int&nbsp;argc;
+char&nbsp;*argv[];
+{
+&nbsp;&nbsp;&nbsp;Int32&nbsp;n,&nbsp;i;
+&nbsp;&nbsp;&nbsp;float&nbsp;vert[2];</PRE>
+
+
+<PRE><A NAME="A65C016809"></A>&nbsp;&nbsp;&nbsp;if&nbsp;(argc&nbsp;!=&nbsp;2)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;usage:&nbsp;%s&nbsp;&lt;number&nbsp;of&nbsp;sides&gt;\n&quot;,&nbsp;argv[0]);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(1);
+&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;n&nbsp;=&nbsp;atoi(argv[1]);
+&nbsp;&nbsp;&nbsp;if&nbsp;(n&nbsp;&gt;&nbsp;256)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;Too&nbsp;many&nbsp;sides\n&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(1);
+&nbsp;&nbsp;&nbsp;}</PRE>
+
+
+<PRE><A NAME="A65C01680a"></A>&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;500,&nbsp;100,&nbsp;500);
+&nbsp;&nbsp;&nbsp;winopen(&quot;n-gon&quot;);
+&nbsp;&nbsp;&nbsp;ortho2(-1.5,&nbsp;1.5,&nbsp;-1.5,&nbsp;1.5);
+&nbsp;&nbsp;&nbsp;color(WHITE);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;bgnclosedline();
+&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;n;&nbsp;i&nbsp;=&nbsp;i+1)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vert[0]&nbsp;=&nbsp;cos(i*2.0*M_PI/n);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vert[1]&nbsp;=&nbsp;sin(i*2.0*M_PI/n);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v2f(vert);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;endclosedline();
+&nbsp;&nbsp;&nbsp;sleep(3);
+}</PRE>
+
+
+<P><A NAME="A3C0E52A530mhay"></A>The four lines that begin with <TT>if&nbsp;(argc&nbsp;!=&nbsp;2)</TT>
+test to determine whether the number of sides was entered on the command
+line. In other words, if the compiled file were called <TT>ngon</TT>, then
+you should run it as: <TT>ngon&nbsp;14</TT>, or <TT>ngon&nbsp;24</TT>.
+The line <TT>n&nbsp;=&nbsp;atoi(argv[1]);</TT> converts the parameter from
+ASCII to integer <TT>n</TT>. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496">ortho2</A></B>
+subroutine sets the default coordinate system up so that the coordinates
+displayed in the window satisfy the conditions: <TT>-1.5 </TT>&amp;le;<TT>x, y </TT>&amp;le;<TT> 1.5</TT>. </P>
+
+
+<P><A NAME="A3C0E52A559mhay"></A>The purpose of the previous example program
+is to draw exactly one <TT>n-gon</TT>, so there is no real penalty for
+computing the coordinates of the vertices between the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnclosedline.html#A144X960c">bgnclosedline</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnclosedline.html#A144X960c">endclosedline</A></B>
+subroutines. If it is necessary to draw the polygon repeatedly, the calculated
+vertices can be saved in an array. </P>
+
+
+
+
+<P><A NAME="A3C0E52A584mhay"></A>Other styles of drawing you can use include
+<A HREF="move-draw.html">Drawing with Move-Draw Style Subroutines</A>
+in GL and <A HREF="drawpoly.html#drawpoly.html">Drawing Rectangles, Circles,
+Arcs, and Polygons</A> in GL. </P>
+
+
+
+
+<H3><A NAME="A364C992f2"></A>Points<A NAME="INDEX32"></A> <A NAME="INDEX33"></A>
+<A NAME="INDEX34"></A> <A NAME="INDEX35"></A> <A NAME="INDEX36"></A> <A NAME="INDEX37"></A>
+<A NAME="INDEX38"></A> <A NAME="INDEX39"></A> <A NAME="INDEX40"></A> </H3>
+
+
+<P><A NAME="A3C0E52A600mhay"></A>To draw a set of unconnected points in
+GL, enter a set of vertices specified between the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpoint.html#A144X9650">bgnpoint</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpoint.html#A144X9650">endpoint</A></B>
+subroutines. The system draws each vertex as a one-pixel point on the screen.
+The following example program draws a set of unconnected points arranged
+in a square pattern. The square is 20 pixels wide by 20 pixels high, and
+the points are spaced 10 pixels apart. </P>
+
+
+<PRE><A NAME="A65C01680b"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A65C01680c"></A>main()
+{
+&nbsp;&nbsp;&nbsp;Int32&nbsp;vert[2];
+&nbsp;&nbsp;&nbsp;int&nbsp;i,&nbsp;j;</PRE>
+
+
+<PRE><A NAME="A65C01680d"></A>&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;500,&nbsp;100,&nbsp;500);
+&nbsp;&nbsp;&nbsp;winopen(&quot;pointpatch&quot;);
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(WHITE);
+&nbsp;&nbsp;&nbsp;for&nbsp;(i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;20;&nbsp;i&nbsp;=&nbsp;i+1)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vert[0]&nbsp;=&nbsp;100&nbsp;+&nbsp;10*i;&nbsp;&nbsp;&nbsp;/*&nbsp;load&nbsp;the&nbsp;x&nbsp;coordinate&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bgnpoint();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(j&nbsp;=&nbsp;0;&nbsp;j&nbsp;&lt;&nbsp;20;&nbsp;j&nbsp;=&nbsp;j+1)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vert[1]&nbsp;=&nbsp;100&nbsp;+&nbsp;10*j;&nbsp;&nbsp;&nbsp;/*&nbsp;load&nbsp;the&nbsp;y&nbsp;coordinate&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v2i(vert);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;draw&nbsp;the&nbsp;point&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endpoint();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sleep(3);
+}</PRE>
+
+
+<P><A NAME="A3C0E52A630mhay"></A>As for the line-drawing subroutines, you
+can have no more than 256 vertices between calls to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpoint.html#A144X9650">bgnpoint</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpoint.html#A144X9650">endpoint</A></B>
+subroutines. Consequently, the example program cannot wrap the <B>bgnpoint</B>
+and <B>endpoint</B> subroutines around the loop that increments the variable
+<TT>i</TT>; if it did, it would include 400 points. The program, as written,
+draws 20 points at a time. </P>
+
+
+<P><A NAME="A3C0E52A656mhay"></A>The points that are drawn by the <B>bgnpoint</B>
+and <B>endpoint</B> subroutines are precisely one pixel in size. This size
+cannot be changed. Although GL does not have any explicit bgnpolymarker
+or endpolymarker subroutines, there are several methods you can use to
+get polypoints that are larger than one pixel. </P>
+
+
+<P><A NAME="A3C0E52A682mhay"></A>If you want polypoints in the shape of
+raster patterns, use the font subroutines. That is, the set of rasters
+to use should be associated with letters of the alphabet with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defrasterfont.html#A143X9d3f">defrasterfont</A></B>
+subroutine. This font is then made current with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/font.html#A143X9d61">font</A></B>
+subroutine. The raster patterns, which do not have to look like letters,
+can be positioned and drawn with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/cmov.html#A143X9d1d">cmov</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/charstr.html#A143X9cfb">charstr</A></B>
+subroutines, respectively. </P>
+
+
+<P><A NAME="A3C0E52A713mhay"></A>Nonraster polymarker primitives can be
+created with display lists. For instance, display list line drawings in
+the shape of boxes, stars, crosses, asterisks, and so forth, can be created
+by using the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/makeobj.html#A142X912d">makeobj</A></B>
+subroutine, followed by the drawing, followed by a <B><!--:libs:gl32tref:--><A HREF="../gl32tref/closeobj.html#A142X915b">closeobj</A></B>
+subroutine. To draw one of these items, position with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/translate.html#A144X95c8">translate</A></B>
+subroutine and draw it with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/callobj.html#A142X91c8">callobj</A></B>
+subroutine. </P>
+
+
+
+
+<P><A NAME="A3C0E52A762mhay"></A>Other aspects of begin-end style drawing
+include <A HREF="drawbeg-end.html#A364C992f2">Points</A>, <A HREF="drawbeg-end.html#A364C992f5">Polygons</A>,
+<A HREF="drawbeg-end.html#A364C9930f">Point-Sampled Polygons</A>, <A HREF="drawbeg-end.html#A264X911a">Polygonal
+Shading</A>, and <A HREF="drawbeg-end.html#A364C9931f">Triangular Meshes</A>.</P>
+
+
+
+
+<H3><A NAME="A364C992f5"></A>Polygons<A NAME="INDEX41"></A> <A NAME="INDEX42"></A>
+<A NAME="INDEX43"></A> <A NAME="INDEX44"></A> <A NAME="INDEX45"></A> <A NAME="INDEX46"></A>
+<A NAME="INDEX47"></A> <A NAME="INDEX48"></A> <A NAME="INDEX49"></A> </H3>
+
+
+<P><A NAME="A3C0E52A778mhay"></A>GL draws a polygon as a filled area on
+the screen. It draws polygons using the same basic syntax it uses for polylines
+and sets of polypoints: a list of vertex subroutines surrounded by the
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpolygon.html#A144X9672">bgnpolygon</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpolygon.html#A144X9672">endpolygon</A></B>
+subroutines. For example, the following program draws a filled hexagon
+on the screen: </P>
+
+
+<PRE><A NAME="A65C01680e"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A65C01680f"></A>float&nbsp;hexdata[6][2]&nbsp;=&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;{20.0,&nbsp;10.0},
+&nbsp;&nbsp;&nbsp;&nbsp;{10.0,&nbsp;30.0},
+&nbsp;&nbsp;&nbsp;&nbsp;{20.0,&nbsp;50.0},
+&nbsp;&nbsp;&nbsp;&nbsp;{40.0,&nbsp;50.0},
+&nbsp;&nbsp;&nbsp;&nbsp;{50.0,&nbsp;30.0},
+&nbsp;&nbsp;&nbsp;&nbsp;{40.0,&nbsp;10.0}
+};</PRE>
+
+
+<PRE><A NAME="A65C016810"></A>main()
+{
+&nbsp;&nbsp;&nbsp;&nbsp;Int32&nbsp;i;</PRE>
+
+
+<PRE><A NAME="A65C016811"></A>&nbsp;&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;500,&nbsp;100,&nbsp;500);
+&nbsp;&nbsp;&nbsp;&nbsp;winopen(&quot;bluehex&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;color(BLACK);&nbsp;&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;&nbsp;color(BLUE);
+&nbsp;&nbsp;&nbsp;&nbsp;bgnpolygon();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;6;&nbsp;i&nbsp;=&nbsp;i+1)&nbsp;v2f(hexdata[i]);
+&nbsp;&nbsp;&nbsp;&nbsp;endpolygon();
+&nbsp;&nbsp;&nbsp;&nbsp;sleep(3);
+}</PRE>
+
+
+<P><A NAME="A3C0E52A856mhay"></A>As with lines and points, polygons must
+have fewer than 256 vertices. As it does with closed lines, the GL software
+connects the first and the last point. You do not need to repeat the first
+point. An informal definition for the procedure for generating a polygon
+is as follows: </P>
+
+
+<OL><LI><A NAME="A364C992f9"></A>Begin with a list of vertices.</LI>
+
+
+<LI><A NAME="A364C992fa"></A>Draw a line segment between each vertex and
+the preceding one.</LI>
+
+
+<LI><A NAME="A364C992fb"></A>On reaching the last vertex in the list, draw
+a line from that vertex to the first vertex in the list.</LI>
+
+
+<LI><A NAME="A364C992fc"></A>Fill the area that this line circumscribes.</LI></OL>
+
+
+<P><A NAME="A3C0E52A888mhay"></A>There are cases when this procedure does
+not generate a true polygon, but it is sufficient for simple enclosed areas.</P>
+
+
+<H4><A NAME="A364C99300"></A>Definition of Polygons </H4>
+
+
+<P><A NAME="A3C0E52A916mhay"></A>In GL, a polygon is specified by a sequence
+of distinct vertices, <TT>v1, v2,...,&nbsp;vn</TT>, that all lie in a plane.
+You can define the boundary of the polygon by connecting <TT>v1</TT> to
+<TT>v2</TT>, <TT>v2</TT> to <TT>v3</TT>, and so on, finally connecting
+<TT>vn</TT> back to <TT>v1</TT>. These connecting segments are called edges.
+The interior of the polygon is the area inside this region bound by line
+segments. A polygon is said to be simple if edges intersect only at their
+common vertices; that is, the edges cannot cross or touch each other. </P>
+
+
+<P><A NAME="A3C0E52A942mhay"></A>A polygon is convex if the line segment
+joining any two points in the figure is completely contained within the
+figure. Nonconvex polygons are concave. Algorithms that render only convex
+polygons are much simpler than those that can render both convex and
+concave polygons.</P>
+
+
+<P><A NAME="A3C0E52A967mhay"></A>GL and the hardware can correctly render
+any polygon if it is simple, or if it consists of exactly four points.
+(Non-simple four-point polygons are often called <I>bowties</I> because
+of their shape.) </P>
+
+
+<P><A NAME="A3C0E52A993mhay"></A>Some versions of the hardware automatically
+check for and draw concave polygons correctly, but others do not. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/concave.html#HXf320marj">concave</A></B>
+subroutine guarantees that the system renders concave polygons correctly.
+On some hardware there is a slight performance penalty when you use concave.
+If you intend to draw concave polygons, use the <B>concave</B> subroutine,
+even if your code is running on a machine that automatically does the correct
+thing. There is no penalty for the call, and it makes the code portable
+to other machines. </P>
+
+
+<P><A NAME="A3C0E52B037mhay"></A>The following figures illustrate some
+examples of polygons. The heavy black dots represent vertices, and the
+lines represent edges:</P>
+
+
+<P><IMG SRC="figures/gl32p45.jpg" HEIGHT="143" WIDTH="201"></P>
+
+
+<P><IMG SRC="figures/gl32p46.jpg" HEIGHT="316" WIDTH="290"></P>
+
+
+<P><A NAME="A149C15dd"></A><IMG SRC="figures/gl32p47.jpg" HEIGHT="543" WIDTH="248"></P>
+
+
+<P><A NAME="A3C0E52B066mhay"></A>Certain distortion problems can arise
+when viewing a polygon. Sometimes these distortions arise from floating-point
+inaccuracies. But viewing distortions can also arise if the vertices of
+the polygon were originally specified in three dimensions, and then were
+transformed and projected to two dimensions (the screen). The only distortion
+possible for a true polygon (that is, a polygon whose vertices lie in a
+single plane) is to view it edge on, in which case it collapses to a line.</P>
+
+
+<P><A NAME="A3C0E52B092mhay"></A>However, if the defining vertices for
+the polygon do not all lie in a plane, the projected polygon on the two-dimensional
+screen might appear to have duplicate vertices, or crossing edges. Various
+applications may create these not-quite-true polygons when they use a mesh
+of polygons to model a curved surface. </P>
+
+
+<P><A NAME="A3C0E52B117mhay"></A>For most of the surface, the polygons
+formed by the mesh will be nearly flat (true) polygons. However, as the
+surface twists, the mesh must twist and the view of the mesh might generate
+bowtie polygons. This effect is most noticeable at silhouette edges where
+the mesh curves around to the back of the depicted object. </P>
+
+
+<P><A NAME="A3C0E52B143mhay"></A>GL can render the bowties that arise from
+surface approximating meshes. In most other circumstances, however, GL
+subroutines for generating polygons generate only true polygons. </P>
+
+
+<H3><A NAME="A364C9930f"></A>Point-Sampled Polygons<A NAME="INDEX50"></A>
+<A NAME="INDEX51"></A> <A NAME="INDEX52"></A> <A NAME="INDEX53"></A> <A NAME="INDEX54"></A>
+<A NAME="INDEX55"></A> <A NAME="INDEX56"></A> <A NAME="INDEX57"></A> <A NAME="INDEX58"></A></H3>
+
+
+<P><A NAME="A3C0E52B170mhay"></A>To represent a polygon on the screen,
+the system must turn on a set of pixels. Given a set of coordinates for
+the vertices of a polygon, there is more than one way to decide which pixels
+ought to be turned on. The begin-end style subroutines draw point-sampled
+polygons, while the move-draw style subroutines (for example, the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/polf.html#Zsf1c0marj">polf</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/rect.html#KAg110marj">rect</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/circ.html#ZJpnita">circ</A></B>
+subroutines) draw outlined point-sampled polygons. The latter type of subroutine
+is described in <A HREF="move-draw.html">&quot;Drawing with Move-Draw
+Style Subroutines&quot;</A>. </P>
+
+
+<P><A NAME="A3C0E52B195mhay"></A>To illustrate the point sampling method
+and the reasons for using it, consider drawing two rectangles: rectangle
+1 has 2 &amp;le; <I>x</I> &amp;le; 5 and 1 &amp;le; <I>y</I> &amp;le; 4;
+rectangle 2 has 2 &amp;le; <I>x</I> &amp;le; 5 and 4 &amp;le; <I>y</I>
+&amp;le; 6. What pixels should the system turn on in both cases? The most
+obvious answer is shown in the figure entitled <A HREF="figures/gl32p48.jpg">Non-Point-Sampled
+Polygons</A>. </P>
+
+
+<P><A NAME="A3C0E52B221mhay"></A>If you draw a figure consisting of the
+two non-point-sampled polygons, you expect them to fit together. Unfortunately,
+if you draw them both, the pixels on the line y = 4 are drawn twice; once
+for each polygon. A similar problem occurs if you abut a polygon to the
+right. Normally, this is not a problem, but if the polygons represent a
+transparent surface, the duplicated edge, being twice as dense, gives the
+entire surface a spiderweb-like appearance. </P>
+
+
+<P><A NAME="A3C0E52B246mhay"></A>Even if the surface is not transparent,
+there can still be undesired visual effects. If you draw a checkerboard
+pattern with edges that overlap by exactly one pixel and then redraw it
+in <A HREF="specialterms.html#A27P01c">single buffer mode</A>,
+the redrawing is visible because the edges of the squares flicker from
+one color to the other, even though the final second image is identical
+to the first. (See <A HREF="animatescene.html#animatescene.html">&quot;Creating
+Animated Scenes&quot;</A> for more about single buffer mode.) </P>
+
+
+<P><A NAME="A3C0E52B274mhay"></A>GL resolves these problems by using <A HREF="figures/gl32p75.jpg">point-sampled
+polygons</A>. The model used assumes this: ideal mathematical lines (no
+thickness) connect the vertices. The system draws any pixel whose center
+lies inside the mathematically precise polygon. It does not draw a pixel
+if its center lies outside the polygon, nor any pixel whose center lies
+exactly on the mathematical line segments or vertices that define the polygon.
+The system draws the pixel only if it lies strictly within the polygon.</P>
+
+
+<P><A NAME="A3C0E52B302mhay"></A>This definition effectively eliminates
+the duplication of pixels from the right and top edges of the polygon,
+but adjacent polygons can fill those pixels. The figure entitled <A HREF="figures/gl32p75.jpg">Point-Sampled
+Polygons</A> shows point-sampled versions of the two rectangles in <A HREF="figures/gl32p48.jpg">Non-Point-Sampled
+Polygons</A>. </P>
+
+
+<P><A NAME="A3C0E52B328mhay"></A>Another advantage of a point-sampled polygon
+without an outline is that the drawn area of the polygon is much closer
+to the actual mathematical area of the polygon. In both the <A HREF="figures/gl32p48.jpg">Non-Point-Sampled
+Polygons</A> and <A HREF="figures/gl32p75.jpg">Point-Sampled Polygons</A>
+figures, the drawn areas correspond exactly to the true areas of the polygons.
+In nonrectangular polygons, the drawn area of the polygon cannot be exact,
+but the drawn area of the no-outline point-sampled polygon is closer to
+the true area of the polygon than the area drawn by the older outlined
+model. </P>
+
+
+<P><A NAME="A3C0E52B344mhay"></A>The following figure, <A HREF="figures/gl32p76.jpg">Another
+Point-Sampled Polygon</A>, illustrates the pixels that are turned on in
+a point-sampled representation of the polygon that connects the vertices
+(1,1) (1,4) (5,6) and (5,1). The darkened pixels are drawn. The pixels
+at (1,4), (3,5), (5,6), (5,5), (5,4), (5,3), (5,2), and (5,1) all lie mathematically
+on the boundary of the polygon but are not drawn because they are on the
+upper or right edge. </P>
+
+
+<P><A NAME="A3C0E52B360mhay"></A>As mathematical entities, lines have no
+thickness. However, to represent a line on the screen, the system assumes
+a thickness of exactly one pixel. When you scale an object composed of
+lines, the lines behave differently from polygons. No matter how much a
+<A HREF="specialterms.html#A27P021">transformation</A> magnifies or reduces
+an object composed of lines, the representation of the line remains one
+pixel thick. Accordingly, there is no corresponding concept of a point
+sampled line. If a line is drawn around a point-sampled polygon, it fills
+in the pixels at the upper- and right-hand edges. For compatibility, the
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/polf.html#Zsf1c0marj">polf</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/rect.html#KAg110marj">rect</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/circ.html#ZJpnita">circ</A></B>
+subroutines draw a line around the point-sampled version. See &quot;<A HREF="move-draw.html">Drawing
+with Move-Draw Style Subroutines</A>&quot; for information about these
+subroutines. </P>
+
+
+<P><A NAME="A3C0E52B386mhay"></A>Anomalies can occur in the display of
+very thinly filled polygons. For example, consider the point-sampled rendition
+of the triangle connecting the points (1,1), (2,3), and (12,7). It is apparently
+riddled with holes, as illustrated in the following figure, <A HREF="figures/gl32p77.jpg">Point-Sampling
+Anomaly</A>. However, if adjacent polygons that share the vertices are
+drawn, all the pixels will eventually be filled. </P>
+
+
+<H3><A NAME="A264X911a"></A>Polygonal Shading<A NAME="INDEX59"></A> <A NAME="INDEX60"></A>
+<A NAME="INDEX61"></A> <A NAME="INDEX62"></A> </H3>
+
+
+<P><A NAME="A3C0E52B414mhay"></A>GL offers two methods of shading polygons:
+flat and Gouraud. Flat-shaded polygons are those that appear flat because
+they are drawn with only one color. Gouraud-shaded polygons are multicolored;
+the interior of the polygon is a smooth blend of the colors at the vertices.
+Usually, the use of Gouraud shading, where appropriate, results in a significantly
+more realistic image. </P>
+
+
+<P><A NAME="A3C0E52B439mhay"></A>Polygonal, or 
+<A HREF="specialterms.html#A26P0611">Gouraud</A>,
+shading is accomplished as follows: the colors at each vertex are linearly
+interpolated along the edges connecting them, and then the interpolated
+colors on the edges are interpolated again across the interior of the polygon.
+The result is a smooth color variation across the entire polygon. </P>
+
+
+<P><A NAME="A3C0E52B464mhay"></A>The interpolation is linear in all three
+components. For example, suppose the edge of a polygon that is 6 pixels
+long is colored with RGB components (0,20,100) at one end and (75,60,50)
+at the other. The six pixels would be colored as follows: (0,20,100), (15,28,90),
+(30,36,80), (45,44,70), (60,52,60), and (75,60,50). </P>
+
+
+<P><A NAME="A3C0E52B492mhay"></A>Notice that each of the color components
+changes smoothly from each pixel to the next. The red component increases
+by 15 for each pixel, the green component increases by 8, and the blue
+component decreases by 10 each time. In this case, the pixel color differences
+work out to whole numbers. Usually this is not the case, but the approximation
+is done as accurately as possible. </P>
+
+
+<P><A NAME="A3C0E52B517mhay"></A>After the colors of the pixels on the
+edges of the polygon are determined, the same process is used to find the
+colors of the pixels on the interior. The figure entitled <A HREF="figures/gl32p3.jpg">Shaded
+Triangle</A> shows the result of shading a triangle whose vertices have
+colors (0,20,100), (75,60,50), and (0,0,0). </P>
+
+
+<P><A NAME="A3C0E52B544mhay"></A>Gouraud shading also works in color map
+mode. In this case, the color indexes, rather than the RGB values, are
+interpolated. Thus, a shaded six-pixel line with endpoints colored 1 (red)
+and 6 (cyan) would have its six pixels colored 1, 2, 3, 4, 5, 6, or red,
+green, yellow, blue, magenta, cyan, assuming that the default color map
+is used. </P>
+
+
+<P><A NAME="A3C0E52B570mhay"></A>Gouraud shading in color map mode is useful
+when false color data is being presented; for example, engineering or geophysical
+data such as pressure and elevation. Of course, an appropriate color ramp
+must be loaded to take full advantage of Gouraud shading in color map mode.
+A color ramp is a smooth progression of colors in the color map. For instance,
+the color ramp 1=red, 2=reddish-orange, 3=orange, 4=orange-yellow, 5=yellow,
+6=lime-yellow would make the previous example of a six-pixel line appear
+smooth shaded. </P>
+
+
+
+
+<P><A NAME="A3C0E52B595mhay"></A>Other aspects of begin-end style drawing
+include <A HREF="drawbeg-end.html#A364C992cd">Lines, Polylines, and Closed
+Lines</A>; <A HREF="drawbeg-end.html#A364C992f5">Polygons</A>; <A HREF="drawbeg-end.html#A364C9930f">Point-Sampled
+Polygons</A>; <A HREF="drawbeg-end.html#A264X911a">Polygonal Shading</A>;
+and <A HREF="drawbeg-end.html#A364C9931f">Triangular Meshes</A>. </P>
+
+
+
+
+<H3><A NAME="A364C9931f"></A>Triangular Meshes<A NAME="INDEX63"></A> <A NAME="INDEX64"></A>
+<A NAME="INDEX65"></A> <A NAME="INDEX66"></A> <A NAME="INDEX67"></A> <A NAME="INDEX68"></A>
+<A NAME="INDEX69"></A> <A NAME="INDEX70"></A> <A NAME="INDEX71"></A> <A NAME="INDEX72"></A>
+<A NAME="INDEX73"></A> <A NAME="INDEX74"></A> </H3>
+
+
+<P><A NAME="A3C0E52B610mhay"></A>Triangular meshes provide a very efficient
+way to specify three-dimensional objects that are composed of triangular
+faces. </P>
+
+
+<P><A NAME="A3C0E52B636mhay"></A>A triangular mesh is a set of triangles
+formed from a series of points. In the <A HREF="figures/gl32p78.jpg">Simple
+Triangle Mesh</A> figure, the seven vertices form five triangles (123,
+324, 345, 546, 567). Points 1 and 7 appear in one triangle; points 2 and
+6 appear in two triangles, and all the rest appear in all three. In a longer
+sequence, a higher percentage of the points are used three times. If the
+mesh in this figure is drawn as five separate triangles, many of the points
+are transformed multiple times (in fact, transformation to screen coordinates
+occurs 15 times, although there are only 7 points). The triangular mesh
+primitive provides a more efficient way to display sequences of triangles.</P>
+
+
+<P><A NAME="A3C0E52B662mhay"></A>The <A HREF="figures/gl32p78.jpg">Simple
+Triangle Mesh</A> figure illustrates the simplest case. It uses the sequence</P>
+
+
+<PRE><A NAME="A6C0a400"></A>{bgntmesh();&nbsp;v(1);&nbsp;v(2);&nbsp;v(3);&nbsp;v(4);&nbsp;v(5);&nbsp;v(6);&nbsp;v(7);&nbsp;
+endtmesh();}
+&nbsp;</PRE>
+
+
+<P><A NAME="A3C0E52B689mhay"></A>where <TT>v(i)</TT> stands for any vertex
+subroutine with the coordinates of the i-th point. As a result, the pipeline
+accepts (and transforms) points 1 and 2. When point 3 arrives, it is transformed
+and the system draws the triangle 123. Then point 3 replaces point 1 (so
+the pipeline now remembers points 2 and 3), and when point 4 arrives, triangle
+324 is drawn, and point 4 replaces point 2. </P>
+
+
+<P><A NAME="A3C0E52B716mhay"></A>This sequence continues. Each time a new
+point is sent, the system draws a triangle containing the new point and
+the two retained points. The oldest retained point is then discarded, and
+is replaced by the new point. The sequence ends with a call to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgntmesh.html#A144X9694">endtmesh</A></B>
+subroutine is sent. </P>
+
+
+<H4><A NAME="DAW4380marj"></A>swaptmesh Subroutine </H4>
+
+
+<P><A NAME="A3C0E52B744mhay"></A>The <A HREF="figures/gl32p79.jpg">Example
+of the swaptmesh Subroutine</A> figure illustrates a more complex situation.
+The first six triangles (123, 234, 345, 456, 567, 678) could be drawn as
+before, but if nothing is done, the arrival of point 9 causes triangle
+789 to be drawn, not triangle 689 as desired. To draw meshes like the one
+in this figure, we must examine more closely the mechanism the geometry
+hardware uses to retain points. </P>
+
+
+<P><A NAME="A3C0E52B771mhay"></A>The pipeline maintains two previous vertices
+together with a pointer that points to one or the other of them while drawing
+a triangle mesh. When a new vertex arrives, a triangle is drawn using all
+three vertices, and then the new vertex replaces the one pointed to by
+the pointer. The pointer is then changed to point to the other retained
+vertex. Thus if nothing special is done, the discarded vertex alternates,
+drawing a picture like the <A HREF="figures/gl32p78.jpg">Simple Triangle
+Mesh</A> figure. </P>
+
+
+<P><A NAME="A3C0E52B796mhay"></A>The following table illustrates what happens
+internally when the simple triangle mesh is drawn: </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Initial&nbsp;state:</B> </TD>
+
+
+<TD><B>After&nbsp;vertex1:</B> </TD>
+
+
+<TD><B>After&nbsp;vertex2:</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>P&nbsp;-&gt;&nbsp;R1&nbsp;=&nbsp;junk1 </TD>
+
+
+<TD>R1&nbsp;=&nbsp;vert1 </TD>
+
+
+<TD>P&nbsp;-&gt;&nbsp;R1&nbsp;=&nbsp;vert1 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>R2&nbsp;=&nbsp;junk2 </TD>
+
+
+<TD>P-&gt;&nbsp;R2&nbsp;=&nbsp;junk2 </TD>
+
+
+<TD>R2&nbsp;=&nbsp;vert2 </TD></TR></TABLE>
+
+
+<P><A NAME="A3C0E52B822mhay"></A>When vertex3 arrives, triangle 123 is
+drawn, and the state is: </P>
+
+
+<P><A NAME="A3C0E52B846mhay"></A>&nbsp;&nbsp;&nbsp;R1&nbsp;=&nbsp;vert3</P>
+
+
+<P>P&nbsp;-&gt;&nbsp;&nbsp;R2&nbsp;=&nbsp;vert2 </P>
+
+
+<P><A NAME="A3C0E52B872mhay"></A>The next few states are: </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>After&nbsp;drawing&nbsp;324:</B> </TD>
+
+
+<TD><B>After&nbsp;345:</B> </TD>
+
+
+<TD><B>After&nbsp;546:</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>P&nbsp;-&gt;&nbsp;R1&nbsp;=&nbsp;vert3&nbsp; </TD>
+
+
+<TD>R1&nbsp;=&nbsp;vert5 </TD>
+
+
+<TD>P&nbsp;-&gt;&nbsp;R1&nbsp;=&nbsp;vert5 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>R2&nbsp;=&nbsp;vert4 </TD>
+
+
+<TD>P&nbsp;-&gt;&nbsp;R2&nbsp;=&nbsp;vert4 </TD>
+
+
+<TD>R2&nbsp;=&nbsp;vert6 </TD></TR></TABLE>
+
+
+<P><A NAME="A3C0E52B901mhay"></A>GL contains a subroutine, <B><!--:libs:gl32tref:--><A HREF="../gl32tref/swaptmesh.html#A144X9782">swaptmesh</A></B>,
+whose only effect is to swap the pointer to the other retained vertex.
+The following sequence draws the mesh in the figure entitled <A HREF="figures/gl32p79.jpg">Example
+of the swaptmesh Subroutine</A>. </P>
+
+
+<PRE><A NAME="A364C99336"></A>bgntmesh();
+&nbsp;&nbsp;&nbsp;v(1);
+&nbsp;&nbsp;&nbsp;v(2);
+&nbsp;&nbsp;&nbsp;v(3);
+&nbsp;&nbsp;&nbsp;v(4);
+&nbsp;&nbsp;&nbsp;v(5);
+&nbsp;&nbsp;&nbsp;v(6);
+&nbsp;&nbsp;&nbsp;v(7);</PRE>
+
+
+<PRE><A NAME="A25C0f6d5"></A>swaptmesh();
+&nbsp;&nbsp;&nbsp;v(8);
+swaptmesh();
+&nbsp;&nbsp;&nbsp;v(9);
+swaptmesh();
+&nbsp;&nbsp;&nbsp;v(10);
+&nbsp;&nbsp;&nbsp;v(4);
+&nbsp;&nbsp;&nbsp;v(11);
+endtmesh();</PRE>
+
+
+<P><A NAME="A3C0E52B928mhay"></A>The following table shows what is happening
+internally: </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>After&nbsp;vertex7:</B> </TD>
+
+
+<TD><B>After&nbsp;swaptmesh:</B> </TD>
+
+
+<TD><B>After&nbsp;vertex8:</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>&nbsp; &nbsp;R1&nbsp;=&nbsp;vert7 </TD>
+
+
+<TD>P&nbsp;-&gt;&nbsp;R1&nbsp;=&nbsp;vert7 </TD>
+
+
+<TD>R1&nbsp;=&nbsp;vert8 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>P&nbsp;-&gt;&nbsp;R2&nbsp;=&nbsp;vert6&nbsp; </TD>
+
+
+<TD>&nbsp;R2&nbsp;=&nbsp;vert6 </TD>
+
+
+<TD>P&nbsp;-&gt;&nbsp;R2&nbsp;=&nbsp;vert6 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>After swaptmesh:</B> </TD>
+
+
+<TD><B>After vertex9:</B> </TD>
+
+
+<TD><B>After swaptmesh:</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>P&nbsp;-&gt;&nbsp;R1&nbsp;=&nbsp;vert8 </TD>
+
+
+<TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; R1&nbsp;=&nbsp;vert9 </TD>
+
+
+<TD>P&nbsp;-&gt;&nbsp;R1&nbsp;=&nbsp;vert9 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; R2&nbsp;=&nbsp;vert6 </TD>
+
+
+<TD>P&nbsp;-&gt;&nbsp;R2&nbsp;=&nbsp;vert6 </TD>
+
+
+<TD>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;R2&nbsp;=&nbsp;vert6 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>After&nbsp;vertex10:</B> </TD>
+
+
+<TD><B>After&nbsp;vertex4:</B> </TD>
+
+
+<TD><B>After&nbsp;vertex11:</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;R1&nbsp;=&nbsp;vert10 </TD>
+
+
+<TD>P&nbsp;-&gt;&nbsp;R1&nbsp;=&nbsp;vert10 </TD>
+
+
+<TD>&nbsp;&nbsp;&nbsp;&nbsp;R1&nbsp;=&nbsp;vert11 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>P&nbsp;-&gt;&nbsp;R2&nbsp;=&nbsp;vert6 </TD>
+
+
+<TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R2&nbsp;=&nbsp;vert4 </TD>
+
+
+<TD>P&nbsp;-&gt;&nbsp;R2&nbsp;=&nbsp;vert4 </TD></TR></TABLE>
+
+
+<P><A NAME="A3C0E52B956mhay"></A>Without going into such detail, here is
+the sequence that draws the figure in <A HREF="figures/gl32p80.jpg">Another
+swaptmesh Example</A>: </P>
+
+
+<PRE><A NAME="A364C99352"></A>bgntmesh();
+&nbsp;&nbsp;&nbsp;v(1);
+&nbsp;&nbsp;&nbsp;v(2);
+&nbsp;&nbsp;&nbsp;v(3);
+&nbsp;&nbsp;&nbsp;v(4);
+&nbsp;&nbsp;&nbsp;v(5);</PRE>
+
+
+<PRE><A NAME="A364C99358"></A>swaptmesh();
+&nbsp;&nbsp;&nbsp;v(6);
+&nbsp;&nbsp;&nbsp;v(7);</PRE>
+
+
+<PRE><A NAME="A25C0f6d7"></A>swaptmesh();
+&nbsp;&nbsp;&nbsp;v(8);
+&nbsp;&nbsp;&nbsp;v(9);
+endtmesh();</PRE>
+
+
+<P><A NAME="A3C0E52B984mhay"></A>At most, a limit of 256 <B><!--:libs:gl32tref:--><A HREF="../gl32tref/v.html#A144X97a4">vertex</A></B>
+subroutines can occur between the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgntmesh.html#A144X9694">bgntmesh</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgntmesh.html#A144X9694">endtmesh</A></B>
+subroutines. </P>
+
+
+<P><A NAME="A3C0E52C009mhay"></A>The program <B><!--:libs:gl32tref:--><A HREF="../gl32tref/octahedron_c.html#B6u1320bria">octahedron.c</A></B>
+(in  in<I> GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I>) draws a 3-D octahedron (8-sided regular polyhedron)
+using the mesh primitive. Because meshes in two dimensions are of little
+use, the example is three-dimensional. This example uses a number of advanced
+concepts and routines that are covered in other sections. These include
+<A HREF="specialterms.html#A3C0F2A4284mhay">3-D rotations</A>, 
+<A HREF="specialterms.html#A26P061d">hidden
+surface removal</A>, smooth (<A HREF="specialterms.html#A26P0474">double
+buffered</A>) motion, and a different color mode. </P>
+
+
+
+
+<hr><center>
+[  <a href="drawwithgl.html">Previous</a>  |
+<a href="move-draw.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/drawbeg-end.html Mon, 24 Jan 2022 16:27:51 GMT -->
+</HTML>
+

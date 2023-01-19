@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>swapbuffers Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="subpixel.html">Previous</a>  |
+<a href="swapinterval.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A145X9302"></A>swapbuffers Subroutine</H2>
+<A NAME="INDEX1869" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1870" REL="I2" TITLE="animation"></A>
+<A NAME="INDEX1871" REL="I3" TITLE="swapbuffers"></A>
+<A NAME="INDEX1872" REL="I1" TITLE="swapbuffers subroutine (GL)"></A>
+<A NAME="INDEX1873" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1874" REL="I2" TITLE="buffers"></A>
+<A NAME="INDEX1875" REL="I3" TITLE="exchanging front and back"></A>
+<A NAME="INDEX1876" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1877" REL="I2" TITLE="frame buffer configuration"></A>
+<A NAME="INDEX1878" REL="I3" TITLE="swapbuffers"></A>
+
+<H3><A NAME="A145X9304"></A>Purpose</H3>
+<P><A NAME="E1D7515246ceb"></A>Exchanges the front and back buffers in double buffer mode.</P>
+
+<H3><A NAME="A77C137"></A>Libraries</H3>
+<P><A NAME="E1D7515285ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7515310ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A145X9307"></A>C Syntax</H3>
+<PRE><A NAME="A145X9308"></A><B>void swapbuffers(&nbsp;)</B></PRE>
+
+<H3><A NAME="A145X92e1"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A145X92e4"></A><B>SUBROUTINE SWAPBU</B></PRE>
+
+<H3><A NAME="A145X930b"></A>Description</H3>
+<P><A NAME="E1D7515419ceb"></A>The <B>swapbuffers</B> subroutine exchanges the front and back buffers in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0474">double buffer mode</A>.  Once an image is fully drawn in the back buffer, the <B>swapbuffers</B> subroutine displays that image.  </P>
+
+<P><A NAME="E1D7515446ceb"></A>The swapping of buffers occurs only during a vertical retrace. A minimum of the number of vertical retraces specified by the <B>swapinterval</B> subroutine must have elapsed since the last call to <B>swapbuffers</B> before the current request is honored. After this call is made, all drawing to the front and back buffers is disabled until the swap occurs.</P>
+
+<P><A NAME="E1D7515471ceb"></A>This subroutine is ignored in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P01c">single buffer mode</A>.</P>
+
+<H3><A NAME="A145X930f"></A>Example</H3>
+<P><A NAME="E1D7515513ceb"></A>The example C language program <A HREF="backface_c.html#A16C0c7a2"><B>backface.c</B></A> uses the <B>swapbuffers</B> subroutine to display a cube after drawing it in the back buffer. </P>
+
+<H3><A NAME="A62C015c99"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7515556ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A145X92fd"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C13a"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C13b"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c356"></A>Related Information</H3>
+<P><A NAME="E1D7515654ceb"></A>Enabling drawing in the back buffer with the <A HREF="backbuffer.html#A145X94a"><B>backbuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1D7515680ceb"></A>Setting the display mode to double buffer mode with the <A HREF="doublebuffer.html#A145X91a7"><B>doublebuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1D7515706ceb"></A>Enabling drawing in the front buffer with the <A HREF="frontbuffer.html#A145X9a0"><B>frontbuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1D7515731ceb"></A>Defining a minimum time between buffer swaps with the <A HREF="swapinterval.html#A145X92af"><B>swapinterval</B></A> subroutine.</P>
+
+<P><A NAME="E1D7515757ceb"></A>Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<P><A NAME="E1D7515783ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>
+ and <!--gl32prgd:--><A HREF="../gl32prgd/animatescene.html#animatescene.html">Creating Animated Scenes</A>.</P><hr><center>
+[  <a href="subpixel.html">Previous</a>  |
+<a href="swapinterval.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

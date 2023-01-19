@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>perspective Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="pdr.html">Previous</a>  |
+<a href="pick.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X94da"></A>perspective Subroutine</H2>
+<A NAME="INDEX1358" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1359" REL="I2" TITLE="coordinate transformation"></A>
+<A NAME="INDEX1360" REL="I3" TITLE="perspective"></A>
+<A NAME="INDEX1361" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1362" REL="I2" TITLE="transformation"></A>
+<A NAME="INDEX1363" REL="I3" TITLE="perspective projection"></A>
+<A NAME="INDEX1364" REL="I1" TITLE="perspective subroutine (GL)"></A>
+
+<H3><A NAME="A144X94dc"></A>Purpose</H3>
+<P><A NAME="E1D710D412ceb"></A>Defines a perspective projection transformation.</P>
+
+<H3><A NAME="A78C191"></A>Libraries</H3>
+<P><A NAME="E1D710D451ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D710D475ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X94e0"></A>C Syntax</H3>
+<PRE><A NAME="A213X9126ca"></A><B>void   perspective</B>
+<B>(Angle </B><A HREF="perspective.html#UB11280marj"><I>fovy</I></A><B>, </B>
+<B>Float32</B> <A HREF="perspective.html#aC1140marj"><I>aspect</I></A><B>, </B>
+<B>Coord</B> <A HREF="perspective.html#A2D11220marj"><I>near</I></A><B>, Coord</B> <A HREF="perspective.html#GD11300marj"><I>far</I></A><B>)</B></PRE>
+
+<H3><A NAME="A139X91ecf"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A15C0c6ef"></A><B>SUBROUTINE PERSPE(</B><I>fovy</I><B>, </B><I>aspect</I><B>,</B> <I>near</I><B>,</B> <I>far</I><B>)</B>
+<B>INTEGER*4 </B><I>fovy</I>
+<B>REAL </B><I>aspect</I><B>, </B><I>near</I><B>,</B> <I>far</I></PRE>
+
+<H3><A NAME="A144X94e2"></A>Description</H3>
+<P><A NAME="E1D710D588ceb"></A>The <B>perspective</B> subroutine defines a perspective <!--gl32prgd:--><A HREF="../gl32prgd/coordtransfrms.html#A264X9141">projection transformation</A> by specifying a viewing pyramid in the eye coordinate system. The pyramid comprises:  </P>
+
+<UL><LI><A NAME="A213X9126ce"></A>The field-of-view angle in the <I>y</I> direction of the eye coordinate system</LI>
+
+<LI><A NAME="A213X9126cf"></A>The aspect ratio that determines the field-of-view in the <I>x</I> direction</LI>
+
+<LI><A NAME="A213X9126d0"></A>The distance to the <I>near</I> and <I>far</I> clipping planes in the <I>z</I> direction.</LI></UL>
+
+
+<P><A NAME="E1D710D678ceb"></A>The field of view is the range of the area that is being viewed. The aspect ratio is the ratio of <I>x</I> (width) to <I>y</I> (height), and should match the aspect ratio of the associated 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A>. For example, <I>Aspect</I> = 2.0 means the viewer's angle of view is twice as wide in <I>x</I> as it is in <I>y</I>.  If the viewport has the same aspect ratio as the frustum, it displays the image without distortion. </P>
+
+<P><A NAME="E1D710D704ceb"></A>The <B>perspective</B> subroutine is very similar to the <A HREF="window.html#A144X95ea"><B>window</B></A> subroutine. The only difference between these two is the manner in which the parameters specify the viewing frustum.</P>
+
+<P><A NAME="E1D710D729ceb"></A>After the <B>perspective </B>subroutine completes, the eye coordinate system is set up so that x is to the right, y is up, and z is towards the viewer (out of the screen).</P>
+
+<P><A NAME="E1D710D755ceb"></A>When the system is in 
+single matrix mode, the <B>perspective </B>subroutine loads a matrix onto the transformation stack, replacing the current top matrix. When the system is in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P036">viewing matrix mode</A> or projection matrix mode, the <B>perspective </B>subroutine replaces the current projection matrix and leaves the matrix stack unchanged.  </P>
+
+<H3><A NAME="A144X94e4"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="UB11280marj"></A><I>fovy</I></TD>
+<TD>  Specifies the field-of-view angle in the <I>y</I> direction. The field of view is the range of the area that is being viewed. It is measured in tenths of a degree. The value of <I>fovy</I> must be &gt;= 2 (two-tenths of one degree) or an error results. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="aC1140marj"></A><I>aspect</I></TD>
+<TD>  Specifies the aspect ratio which determines the field of view  in the <I>x</I> direction. The aspect ratio is the ratio of <I>x</I> (width) to <I>y</I> (height). </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A2D11220marj"></A><I>near</I></TD>
+<TD>  Specifies the distance from the viewer to the closest clipping plane (always positive). </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="GD11300marj"></A><I>far</I></TD>
+<TD>  Specifies the distance from the viewer to the farthest clipping plane (always positive). </TD></TR></TABLE>
+
+<H3><A NAME="A29C010b5e"></A>Example</H3>
+<P><A NAME="E1D710D896ceb"></A>The example C language program <A HREF="zbuffer1_c.html#A16C0ca2c"><B>zbuffer1.c</B></A> uses the <B>perspective</B> subroutine to load a projection transformation as the current transformation matrix. </P>
+
+<H3><A NAME="A62C015d32"></A>Implementation Specifics</H3>
+<P><A NAME="E1D710D939ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C194"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C195"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C196"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X94fa"></A>Related Information</H3>
+<P><A NAME="E1D710E039ceb"></A>Defining a 3-D orthographic transformation with the <A HREF="ortho.html#A144X9496"><B>ortho</B></A> subroutine.</P>
+
+<P><A NAME="E1D710E067ceb"></A>Defining a 2-D orthographic transformation with the <A HREF="ortho.html#A144X9496"><B>ortho2</B></A> subroutine.</P>
+
+<P><A NAME="E1D710E093ceb"></A>Defining a perspective projection transformation in terms of <I>x</I> and <I>y</I> coordinates with the <A HREF="window.html#A144X95ea"><B>window</B></A> subroutine.</P>
+
+<P><A NAME="E1D710E119ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="pdr.html">Previous</a>  |
+<a href="pick.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

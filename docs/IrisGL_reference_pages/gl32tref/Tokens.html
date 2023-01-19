@@ -1,0 +1,344 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>Tokens for the getgdesc Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getgdesc.html">Previous</a>  |
+<a href="getgpos.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="QP3a0nita"></A>Tokens for the getgdesc Subroutine</H2>
+<P><A NAME="E1B0ED1975ceb"></A>The following data is returned when the indicated token is passed to the subroutine:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ALPHABUFFER</TD>
+
+<TD>GDBITA</TD>
+
+<TD>The number of alpha blending bitplanes available on adapter. A value of zero is returned if there are no alpha bitplanes.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_CURSOR</TD>
+
+<TD>GDBITC</TD>
+
+<TD>The number of cursor bitplanes available on adapter.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_LINESTYLE</TD>
+
+<TD>GDBITL</TD>
+
+<TD>The number of independent bits in a linestyle.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_NORM_DBL_CMODE</TD>
+
+<TD>GDDBLC</TD>
+
+<TD>The number of bitplanes in each of the pair of main display buffers when the main display buffer is configured for double-buffered color map mode.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_NORM_DBL_RGB</TD>
+
+<TD>GDDBLR</TD>
+
+<TD>The number of bitplanes in each of the pair of main display buffers when the main display buffer is configured for double-buffered RGB mode.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_NORM_SNG_CMODE</TD>
+
+<TD>GDSNGC</TD>
+
+<TD>The number of bitplanes in the main display buffer when it is configured for single-buffered color map mode.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_NORM_SNG_RGB</TD>
+
+<TD>GDSNGR</TD>
+
+<TD>The number of bitplanes in the main display buffer when it is configured for single-buffered RGB mode.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_OVERLAY</TD>
+
+<TD>GDBITO</TD>
+
+<TD>The maximum number of overlay bitplanes for which the overlay buffer can be configured. Note that some adapters possess auxiliary bitplanes that can be configured as overlay or underlay bitplanes, but not both.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_PLANE_MASK</TD>
+
+<TD>GDBITP</TD>
+
+<TD>The maximum number of plane mask bitplanes available on the adapter.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_UNDERLAY</TD>
+
+<TD>GDBITU</TD>
+
+<TD>The maximum number of underlay bitplanes for which the underlay buffer can be configured. Note that some adapters possess auxiliary bitplanes that can be configured as overlay or underlay bitplanes, but not both.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ZBUFFER</TD>
+
+<TD>GDBITZ</TD>
+
+<TD>The number of bitplanes in the z-buffer. A value of zero is returned if a z-buffer is not installed.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BLEND</TD>
+
+<TD>GDBLEN</TD>
+
+<TD>True if alphablending is supported, False if not. <B>Note:</B> Alphablending does not necessarily require alpha bitplanes.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BUTBOX</TD>
+
+<TD>GDBUTB</TD>
+
+<TD>True if a button box is attached to the system, False if not.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_DIALS</TD>
+
+<TD>GDDIAL</TD>
+
+<TD>True if dials are attached to the system, False if not.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_DITHER</TD>
+
+<TD>GDDITH</TD>
+
+<TD>A bit flag is returned indicating which buffers support dithering. The bit flag is the bitwise OR of the following flags: <B>GD_BF_UNDER</B> - Dithering in the underlay planes is supported. <B>GD_BF_OVER</B> - Dithering in the overlay planes is supported. <B>GD_BF_MAIN</B> - Dithering in the main frame buffer is supported. <B>GD_BF_ALPHA</B> - Dithering in the alpha buffer is supported.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_LARGE_MAP_SIZE</TD>
+
+<TD>GDLMAP</TD>
+
+<TD>The size of the single "large" color map.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_LIGHTING_TWOSIDE</TD>
+
+<TD>GDLIG2</TD>
+
+<TD>True if two-sided lighting is supported, False if not.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_LINESMOOTH_CMODE</TD>
+
+<TD>GDLINC</TD>
+
+<TD>True if smooth lines (antialiased lines) are supported in color index mode.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_LINESMOOTH_RGB</TD>
+
+<TD>GDLINR</TD>
+
+<TD>True if smooth lines (antialiased lines) are supported in RGB mode.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ATTR_STACKDEPTH</TD>
+
+<TD>GDMAST</TD>
+
+<TD>The maximum depth of the attribute stack.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_LSREPEAT</TD>
+
+<TD>GDMLSR</TD>
+
+<TD>The maximum linestyle repeat factor that can be set.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_MATRIX_STACKDEPTH</TD>
+
+<TD>GDMMST</TD>
+
+<TD>The maximum depth of the modeling/viewing matrix stack.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_NURBS_ORDER</TD>
+
+<TD>GDMNOR</TD>
+
+<TD>The maximum supported order of a NURBS surface.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_PATTERN_SIZE</TD>
+
+<TD>GDMPSZ</TD>
+
+<TD>The maximum dimension of a pattern bitmask.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_TRIM_ORDER</TD>
+
+<TD>GDMTOR</TD>
+
+<TD>The maximum supported order of a NURBS trimming curve.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_VERTS</TD>
+
+<TD>GDMVER</TD>
+
+<TD>The maximum number of vertices that can be specified between a <B>bgn...()</B> and <B>end...()</B> subroutine pair.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_VIEWPORT_STACKDEPTH</TD>
+
+<TD>GDMVST</TD>
+
+<TD>The maximum depth of the viewport stack.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_NUM_SMALL_MAPS</TD>
+
+<TD>GDNSM</TD>
+
+<TD>The number of small color maps.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_OVERUNDER_SHARED</TD>
+
+<TD>GDOUSH</TD>
+
+<TD>True if overlay and underlay bitplanes are shared, False if not.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_POINTSMOOTH_CMODE</TD>
+
+<TD>GDPSCM</TD>
+
+<TD>True if smooth points (antialiased, pixel-sized points) are supported in color index mode.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_POINTSMOOTH_RGB</TD>
+
+<TD>GDPSRG</TD>
+
+<TD>True if smooth points (antialiased, pixel-sized points) are supported in RGB mode.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_POLYMODE</TD>
+
+<TD>GDPOLY</TD>
+
+<TD>True if polymode is functional, FALSE if not.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_RGBMODE</TD>
+
+<TD>GDRGBM</TD>
+
+<TD>A bit flag is returned indicating which buffers support an RGB mode (color map mode is always supported in all bitplanes). The bit flag is the bitwise <I>or</I> of the following flags: <B>GD_BF_UNDER</B> - RGB mode in the underlay planes is supported. <B>GD_BF_OVER</B> - RGB mode in the overlay planes is supported. <B>GD_BF_MAIN</B> - RGB mode the main frame buffer is supported.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SHADEBUFFERS</TD>
+
+<TD>GDSHAB</TD>
+
+<TD>A bit flag is returned indicating which buffers support smooth (Gouraud) shading. The bit flag is the bitwise <I>or</I> of the following flags: <B>GD_BF_UNDER</B> - Smooth shading in the underlay planes is supported. <B>GD_BF_OVER</B> - Smooth shading in the overlay planes is supported. <B>GD_BF_MAIN</B> - Smooth shading in the main frame buffer is supported. <B>GD_BF_ALPHA</B> - Smooth shading in the alpha buffer is supported.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SHADEMODEL</TD>
+
+<TD>GDSHAM</TD>
+
+<TD>A bit flag is returned indicating which shading models are supported. The bit flag is the bitwise OR of the following flags: <B>GD_SHADEMODEL_FLAT</B> - Only flat shading is supported. <B>GD_SHADEMODEL_GOURAUD</B> - Gouraud shading (linear interpolation of colors) is supported. <B>GD_SHADEMODEL_PSEUDO_PHONG</B> - Pseudo Phong  shading (adaptive tessellation of lit polygons) is supported. <B>GD_SHADEMODEL_PHONG</B> - Phong  shading (hardware interpolation of normal vectors) is supported. <B>GD_SHADEMODEL_QUADRATIC</B> - Quadratic interpolation of colors and textures maps is supported. </TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SMALL_MAP_SIZE</TD>
+
+<TD>GDSMAP</TD>
+
+<TD>The size of the multiple "small" color maps.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SUBPIXEL_LINE</TD>
+
+<TD>GDSPLI</TD>
+
+<TD>A bit flag is returned indicating which buffers support subpixel-positioned lines. The bit flag is the bitwise <I>or</I> of the following flags: <B>GD_BF_UNDER</B> - Subpixel-positioned lines in the underlay planes are supported. <B>GD_BF_OVER</B> - Subpixel-positioned lines in the overlay planes are supported. <B>GD_BF_MAIN</B> - Subpixel-positioned lines in the main frame buffer are supported. <B>GD_BF_ALPHA</B> - Subpixel-positioned lines in the alpha buffer are supported.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SUBPIXEL_PNT</TD>
+
+<TD>GDSPPN</TD>
+
+<TD>A bit flag is returned indicating which buffers support subpixel-positioned points. The bit flag is the bitwise <I>or</I> of the following flags: <B>GD_BF_UNDER</B> - Subpixel-positioned points in the underlay planes are supported. <B>GD_BF_OVER</B> - Subpixel-positioned points in the overlay planes are supported. <B>GD_BF_MAIN</B> - Subpixel-positioned points in the main frame buffer are supported. <B>GD_BF_ALPHA</B> - Subpixel-positioned points in the alpha buffer are supported.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SUBPIXEL_POLY</TD>
+
+<TD>GDSPPL</TD>
+
+<TD>A bit flag is returned indicating which buffers support subpixel-positioned polygons. The bit flag is the bitwise <I>or</I> of the following flags: <B>GD_BF_UNDER</B> - Subpixel-positioned polygons in the underlay planes are supported. <B>GD_BF_OVER</B> - Subpixel-positioned polygons in the overlay planes are supported. <B>GD_BF_MAIN</B> - Subpixel-positioned polygons in the main frame buffer are supported. <B>GD_BF_ALPHA</B> - Subpixel-positioned polygons in the alpha buffer are supported.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_TEXTPORT</TD>
+
+<TD>GDTXTP</TD>
+
+<TD>True if the textport routines are functional, False if not.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_VERT_RETRACE_FREQ</TD>
+
+<TD>GDVREF</TD>
+
+<TD>The vertical retrace frequency.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_WSYS</TD>
+
+<TD>GDWSYS</TD>
+
+<TD>The type of windowing system running on the processor. Returns one of the following:<B>GD_WSYS_NONE</B> - No window system is running.<B>GD_WSYS_4S</B> - 4Sight Window System (TM) is currently running.<B>GD_WSYS_AIX113</B> - AIXwindows, derived from X Windows System release 11.3, is currently running.<B>GD_WSYS_AIX114</B> - AIXwindows, derived from Enhanced X-Windows System release 11.4, is currently running.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_XMMAX</TD>
+
+<TD>GDXMAX</TD>
+
+<TD>Horizontal size of the screen in millimeters. </TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_YMMAX</TD>
+
+<TD>GDYMAX</TD>
+
+<TD>Vertical size of the screen in millimeters.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_XPMAX</TD>
+
+<TD>GDXPMA</TD>
+
+<TD>Horizontal size of the screen in pixels.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_YPMAX</TD>
+
+<TD>GDYPMA</TD>
+
+<TD>Vertical size of the screen in pixels. </TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ZDRAW_GEOM</TD>
+
+<TD>GDZGEO</TD>
+
+<TD>True if geometrical figures can be drawn into the z-buffer, False if not.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ZDRAW_PIXELS</TD>
+
+<TD>GDZPIX</TD>
+
+<TD>True if pixel block transfers to and from the z-buffer are possible, False if not.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ZMIN</TD>
+
+<TD>GDZMIN</TD>
+
+<TD>The smallest value that can be written into the z-buffer.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ZMAX</TD>
+
+<TD>GDZMAX</TD>
+
+<TD>The largest value that can be written into the z-buffer.</TD></TR></TABLE>
+
+<H3><A NAME="C7D02E6457bett"></A>Related Information</H3>
+<P><A NAME="E1B0ED2869ceb"></A>The <A HREF="getgdesc.html#t9311e0marj"><B>getgdesc</B></A> subroutine.</P><hr><center>
+[  <a href="getgdesc.html">Previous</a>  |
+<a href="getgpos.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

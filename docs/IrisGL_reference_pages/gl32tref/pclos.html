@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>pclos Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="patchprecision.html">Previous</a>  |
+<a href="pdr.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="t2g270marj"></A>pclos Subroutine</H2>
+<A NAME="INDEX1344" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1345" REL="I2" TITLE="moveraw style"></A>
+<A NAME="INDEX1346" REL="I3" TITLE="pclos"></A>
+<A NAME="INDEX1347" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1348" REL="I2" TITLE="polygons"></A>
+<A NAME="INDEX1349" REL="I3" TITLE="filled"></A>
+<A NAME="INDEX1350" REL="I1" TITLE="pclos subroutine (GL)"></A>
+
+<H3><A NAME="A213X912cd7"></A>Purpose</H3>
+<P><A NAME="E1D70EF545ceb"></A>Closes a filled polygon. </P>
+
+<H3><A NAME="A78C12f8"></A>Libraries</H3>
+<P><A NAME="E1D70EF584ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D70EF608ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912cda"></A>C Syntax</H3>
+<PRE><A NAME="A213X912cdb"></A><B>void pclos(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010ac7"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010ac8"></A><B>SUBROUTINE PCLOS</B></PRE>
+
+<H3><A NAME="A213X912cdc"></A>Description</H3>
+<P><A NAME="E1D70EF715ceb"></A>The <B>pclos </B>subroutine closes a filled polygon that has been created by using the <A HREF="pmv.html#A139X91eed"><B>pmv</B></A> subroutine and a sequence of calls to the <A HREF="pdr.html#bqf1c0marj"><B>pdr</B></A>, <A HREF="rpmv.html#lXf370marj"><B>rpmv</B></A>, or <A HREF="rpdr.html#hrfa0marj"><B>rpdr</B></A> subroutines. It is not needed when using the <A HREF="poly.html#avf2c0marj"><B>poly</B></A> or <A HREF="polf.html#Zsf1c0marj"><B>polf</B></A> subroutines because these procedures close the polygon within their own routines.</P>
+
+<P><A NAME="E1D70EF741ceb"></A>The <B>pclos </B>subroutine closes the polygon by connecting the last point with the first. The polygon so defined is filled using the current fill area attributes: 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791abd">pattern</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A3323mhay">current color</A>, and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemask</A>. </P>
+
+<P><A NAME="E1D70EF767ceb"></A>There can be no more than 256 vertices in a polygon. Therefore, there can be no more than 255 calls to the <A HREF="pdr.html#bqf1c0marj"><B>pdr</B></A> subroutine between calls to the <A HREF="pmv.html#A139X91eed"><B>pmv</B></A> and <B>pclos</B> subroutines. </P>
+
+<BLOCKQUOTE><A NAME="A213X912ce1"></A><B>Note: </B>Be careful not to confuse <B>pclos</B> with the AIX subroutine <B>pclose, </B>which closes an AIX pipe, in the <B>libc.a</B> library. </BLOCKQUOTE>
+
+
+<H3><A NAME="A30C010ffe"></A>Example</H3>
+<P><A NAME="E1D70EF827ceb"></A>The example C language program <A HREF="zbuffer1_c.html#A16C0ca2c"><B>zbuffer1.c</B></A> uses the <B>pclos</B> subroutine to specify the end of a filled polygon definition. </P>
+
+<H3><A NAME="A62C015d18"></A>Implementation Specifics</H3>
+<P><A NAME="E1D70EF871ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C12fb"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12fc"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12fd"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912cef"></A>Related Information</H3>
+<P><A NAME="E1D70EF968ceb"></A>Specifying the starting point for a polygon with the <A HREF="pmv.html#A139X91eed"><B>pmv</B></A> subroutine.</P>
+
+<P><A NAME="E1D70EF993ceb"></A>Drawing a filled polygon with the <A HREF="polf.html#Zsf1c0marj"><B>polf</B></A> subroutine.</P>
+
+<P><A NAME="E1D70F0018ceb"></A>Drawing a polygon with the <A HREF="poly.html#avf2c0marj"><B>poly</B></A> subroutine.</P>
+
+<P><A NAME="E1D70F0043ceb"></A>Drawing a relative polygon with the <A HREF="rpdr.html#hrfa0marj"><B>rpdr</B></A> subroutine.</P>
+
+<P><A NAME="E1D70F0069ceb"></A>Moving the current graphics position to a starting point for a filled polygon relative to the current point with the <A HREF="rpmv.html#lXf370marj"><B>rpmv</B></A> subroutine.</P>
+
+<P><A NAME="E1D70F0099ceb"></A>Drawing a shaded filled polygon with the <A HREF="splf.html#A143X9afd"><B>splf</B></A> subroutine.</P>
+
+<P><A NAME="E1D70F0124ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing with <!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Move-Draw Style</A> Subroutines, and <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>.</P><hr><center>
+[  <a href="patchprecision.html">Previous</a>  |
+<a href="pdr.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

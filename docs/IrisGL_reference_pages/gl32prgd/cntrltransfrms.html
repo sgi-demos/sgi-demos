@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/cntrltransfrms.html Mon, 24 Jan 2022 16:28:07 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Controlling the Order of Transformations
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="user-deftrans.html">Previous</a>  |
+<a href="mathdetails.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+<H2><A NAME="cntrltransfrms.html"></A>Controlling the Order of Transformations </H2>
+
+
+<P><A NAME="INDEX431"></A><A NAME="INDEX432"></A><A NAME="INDEX433"></A><A NAME="INDEX434"></A><A NAME="INDEX435"></A><A NAME="INDEX436"></A><A NAME="INDEX437"></A><A NAME="INDEX438"></A><A NAME="INDEX439"></A><A NAME="INDEX440"></A><A NAME="INDEX441"></A><A NAME="INDEX442"></A><A NAME="INDEX443"></A></P>
+
+
+<P><A NAME="A3C0E9A3982mhay"></A>Each time you specify a transformation
+such as <A HREF="specialterms.html#A3C0F2A4284mhay">rotation</A> or
+<A HREF="specialterms.html#A3C0F2A4430mhay">translation</A>, the software
+automatically generates a transformation matrix that specifies the amount
+by which the object's coordinate system is to be premultiplied. This transformation
+matrix is loaded atop a hardware stack in the 
+<A HREF="specialterms.html#A26P0612">graphics
+pipeline</A>. When you specify a series of transformations, the software
+loads each successive transformation matrix onto the stack and modifies
+the current transformation matrix. </P>
+
+
+<P><A NAME="A3C0E9A4002mhay"></A>Because the graphics pipeline maintains
+a stack of matrices, you can save transformation matrices that define a
+particular state by manipulating the matrix stack. </P>
+
+
+<H3><A NAME="A264X9186"></A>Hierarchical Drawing with the Matrix Stack</H3>
+
+
+<P><A NAME="A3C0E9A4025mhay"></A>A drawing is often composed of copies
+of simpler drawings, each of which may itself be composed of still simpler
+drawings. For example, if you were writing a program to draw a picture
+of a bicycle, you might want to have a subroutine that draws a wheel. Calling
+that subroutine twice, appropriately translated, would draw two wheels.
+The wheel itself might be drawn by calling the spoke-drawing subroutine
+36 times, appropriately rotated. In a still more complicated drawing of
+many bicycles, you could call the bicycle-drawing routine many times. </P>
+
+
+<P><A NAME="A3C0E9A4045mhay"></A>Suppose the bicycle is described in a
+coordinate system where the bottom bracket (the hole through which the
+pedal crank's axle runs) is the origin. You would draw the frame relative
+to this origin, but translate forward a few inches before drawing the front
+wheel (defined relative to its axis). You would then remove the forward
+translation to get back to the bicycle's frame of reference, translate
+back, and draw another instance of the wheel. </P>
+
+
+<P><A NAME="A3C0E9A4066mhay"></A>What happens mathematically is this: suppose
+the modeling transformation that describes the bicycle's frame of reference
+is M, and that S and T are transformations (relative to M) to move forward
+for drawing the front wheel and move back for the back wheel, respectively.
+Moreover, suppose you want to draw the wheel using transformation SM for
+the front wheel and transformation TM for the back wheel. </P>
+
+
+<P><A NAME="A3C0E9A4086mhay"></A>This is easily done using the matrix stack.
+At any point in a drawing, there is a current matrix on top of the matrix
+stack, composed of all the transformations thus far. In the bicycle example,
+we call this collection of transformations M. Any vertex is transformed
+by the top matrix, which is just what you want to do for drawing the frame.</P>
+
+
+<P><A NAME="A3C0E9A4107mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pushmatrix.html#A144X9540">pushmatrix</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/popmatrix.html#A144X951e">popmatrix</A></B>
+subroutines push and pop the matrix stack. The <B>pushmatrix</B> subroutine
+pushes the matrix stack down and copies the current matrix to the new top.
+Following a call to the <B>pushmatrix</B> subroutine, there would be two
+copies of M on top. A call to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/translate.html#A144X95c8">translate</A></B>
+subroutine (by a translation matrix S) leaves the stack with SM on top
+and M underneath. The wheel is then drawn once using the SM transformation.
+A call to the <B>popmatrix</B> subroutine then eliminates the SM on top,
+leaving M. A second call to the <B>pushmatrix</B> subroutine makes two
+copies of M. </P>
+
+
+<P><A NAME="A3C0E9A4128mhay"></A>Translating by T puts TM on top, so you
+can now draw the back wheel. After the matrix stack is popped again, M
+is on top, and you can draw the rest of the frame. The code for drawing
+the bicycle would look similar to this: </P>
+
+
+<PRE><A NAME="A264X918e"></A>&nbsp;...&nbsp;/*&nbsp;code&nbsp;to&nbsp;get&nbsp;M&nbsp;on&nbsp;top&nbsp;of&nbsp;the&nbsp;stack&nbsp;*/
+pushmatrix();
+translate(-dist_to_back_wheel,&nbsp;0.0,&nbsp;0.0);
+drawwheel();
+popmatrix();
+pushmatrix();
+translate(dist_to_front_wheel,&nbsp;0.0,&nbsp;0.0);
+drawwheel();
+popmatrix();
+drawframe();</PRE>
+
+
+<P><A NAME="A3C0E9A4148mhay"></A>As shown in the code, the <B>drawwheel</B>
+subroutine can itself push and pop matrices before calling the <B>drawspoke</B>
+subroutine. </P>
+
+
+<H4><A NAME="A264X9198"></A>pushmatrix Subroutine </H4>
+
+
+<P><A NAME="A3C0E9A4170mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pushmatrix.html#A144X9540">pushmatrix</A></B>
+subroutine pushes down the transformation stack, duplicating the current
+matrix. For example, if the transformation stack contains one matrix, M,
+then after a call to the <B>pushmatrix</B> subroutine, it contains two
+copies of M. You can modify only the top copy. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A258C01c186"></A>void&nbsp;pushmatrix()</PRE>
+
+
+<H4><A NAME="A264X919b"></A>popmatrix Subroutine </H4>
+
+
+<P><A NAME="A3C0E9A4192mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/popmatrix.html#A144X951e">popmatrix</A></B>
+subroutine pops the transformation stack. When this subroutine executes,
+the matrix on top of the stack is lost. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c187"></A>void&nbsp;popmatrix()</PRE>
+
+
+
+<hr><center>
+[  <a href="user-deftrans.html">Previous</a>  |
+<a href="mathdetails.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/cntrltransfrms.html Mon, 24 Jan 2022 16:28:07 GMT -->
+</HTML>
+

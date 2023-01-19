@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>vlsi.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="tpbig_c.html">Previous</a>  |
+<a href="worms_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c9fd"></A>vlsi.c Example C Language Program
+</H2>
+<A NAME="INDEX2488" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2489" REL="I2" TITLE="editor"></A>
+<A NAME="INDEX2490" REL="I3" TITLE="vlsi graphical"></A>
+<A NAME="INDEX2491" REL="I1" TITLE="vlsi.c example program (GL)"></A>
+<A NAME="INDEX2492" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2493" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2494" REL="I3" TITLE="pixel"></A>
+<PRE><A NAME="A64EBBD951ttay"></A>/*
+vlsi.c</PRE>
+<PRE><A NAME="A64EBBF463ttay"></A>A simple vlsi graphical editor.  RIGHTMOUSE clears the screen.
+LEFTMOUSE picks the current color from one of 4 in the bottom
+left-hand corner, and draws the rectangles.  To draw, hold down
+LEFTMOUSE on the point where you want one of the four
+corners of the rectangle to be, and then move the mouse to the
+opposite corner of the rectangle you want to specify, BEFORE you
+let go of the LEFTMOUSE.
+*/</PRE>
+<PRE><A NAME="A64EBBF620ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EBBF765ttay"></A>main()
+{</PRE>
+<PRE><A NAME="A64EBBF933ttay"></A>  register i;
+  Device dummy, xend, yend, xstart, ystart, type;
+  short wm;</PRE>
+<PRE><A NAME="A64EBC0619ttay"></A>  prefposition(0, XMAXSCREEN-50, 0, YMAXSCREEN-50);
+  winopen("vlsi");
+  save_cmap();
+  mapcolor(0, 255, 255, 255);    /* WHITE */
+  mapcolor(1, 0, 0, 255);        /* BLUE */
+  mapcolor(2, 0, 255, 0);        /* RED */
+  mapcolor(3, 0, 150, 255);      /* PURPLE */
+  mapcolor(4, 255, 0, 0);        /* GREEN */
+  mapcolor(5, 150, 0, 255);      /* LIGHT BLUE */
+  mapcolor(6, 255, 255, 0);      /* YELLOW */
+  mapcolor(7, 150, 100, 0);      /* BROWN */
+  for (i = 8; i &lt; 24; i++)
+    mapcolor(i, 0, 0, 0);        /* BLACK */
+  for (i = 24; i &lt; 32; i++)
+    mapcolor(i, 255, 255, 255);  /* WHITE */
+  qdevice(LEFTMOUSE);
+  tie(LEFTMOUSE, MOUSEX, MOUSEY);
+  qdevice(MIDDLEMOUSE);
+  tie(MIDDLEMOUSE, MOUSEX, MOUSEY);
+  qdevice(RIGHTMOUSE);
+  qdevice(KEYBD);
+  setcursor(0, 16, 16);
+  restart();
+  while (TRUE)
+    switch (type = qread(&amp;dummy)) {
+    case KEYBD:
+      restore_cmap();
+      greset();
+      gexit();
+      exit(0);
+    case RIGHTMOUSE:
+      qread(&amp;dummy);
+      restart();
+      break;
+    case MIDDLEMOUSE:
+    case LEFTMOUSE:
+      qread(&amp;xstart);
+      qread(&amp;ystart);
+      if (xstart &lt; 60) {
+        if (10 &lt;= xstart &amp;&amp; xstart &lt;= 50) {
+          if (10 &lt;= ystart &amp;&amp; ystart &lt;= 50)
+            wm = 1;
+          else if (60 &lt;= ystart &amp;&amp; ystart &lt;= 100)
+            wm = 2;
+          else if (110 &lt;= ystart &amp;&amp; ystart &lt;= 150)
+            wm = 4;
+          else if (160 &lt;= ystart &amp;&amp; ystart &lt;= 200)
+            wm = 8;
+          writemask(wm);
+          qread(&amp;dummy);
+          qread(&amp;dummy);
+          qread(&amp;dummy);
+        }</PRE>
+<PRE><A NAME="A64EBC0873ttay"></A>      }
+      else {
+        qread(&amp;dummy);
+        qread(&amp;xend);
+        qread(&amp;yend);
+        if (xend > 60) {
+          if (type == LEFTMOUSE)
+            color(31);           /* draw */
+          else
+            color(0);            /* erase */
+          rectfi(xstart, ystart, xend, yend);
+        }
+      }
+    }</PRE>
+<PRE><A NAME="A64EBC1015ttay"></A>}</PRE>
+<PRE><A NAME="A64EBC1162ttay"></A>restart()
+{</PRE>
+<PRE><A NAME="A64EBC1400ttay"></A>  writemask(0xfff);
+  color(0);
+  clear();
+  color(1);
+  rectfi(10, 10, 50, 50);
+  color(2);
+  rectfi(10, 60, 50, 100);
+  color(4);
+  rectfi(10, 110, 50, 150);
+  color(8);
+  rectfi(10, 160, 50, 200);
+  move2i(60, 0);
+  draw2i(60, 767);
+  color(31);
+  writemask(0);</PRE>
+<PRE><A NAME="A64EBC1543ttay"></A>}</PRE>
+<PRE><A NAME="A64EBC1719ttay"></A>/*This saves the colormap*/
+#define lo_end 0
+#define hi_end 255
+short *CarrayR, *CarrayG, *CarrayB;</PRE>
+<PRE><A NAME="A64EBC1916ttay"></A>save_cmap()
+{
+  CarrayR = calloc (lo_end+hi_end,sizeof(short));
+  CarrayG = calloc (lo_end+hi_end,sizeof(short));
+  CarrayB = calloc (lo_end+hi_end,sizeof(short));</PRE>
+<PRE><A NAME="A64EBC2090ttay"></A>  getmcolors ((Int16 const)lo_end,(Int16 const)hi_end,
+     CarrayR, CarrayG, CarrayB);
+}</PRE>
+<PRE><A NAME="A64EBC2301ttay"></A>/*This restores the colormap*/
+restore_cmap()
+{
+  mapcolors ((Int16 const)lo_end,(Int16 const)hi_end,
+     CarrayR, CarrayG, CarrayB);
+}
+/*
+  Changes:
+    -  Added the restoring of the colormap
+*/</PRE>
+
+<H3><A NAME="A201C11ad"></A>Related Information</H3>
+<P><A NAME="E1D790D534ceb"></A>The <A HREF="greset.html#xW42e0nita"><B>greset</B></A> subroutine<A HREF="../gl32tref/xW42e0nita" REL="PAGENUM"></A>, <A HREF="tie.html#A143X9196"><B>tie</B></A> subroutine<A HREF="../gl32tref/A143X9196" REL="PAGENUM"></A>, <A HREF="writemask.html#A143X9592"><B>writemask</B></A> subroutine<A HREF="A143X9592.html" REL="PAGENUM"></A>.</P>
+
+<hr><center>
+[  <a href="tpbig_c.html">Previous</a>  |
+<a href="worms_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

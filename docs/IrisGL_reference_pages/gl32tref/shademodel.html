@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>shademodel Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="setvaluator.html">Previous</a>  |
+<a href="singlebuffer.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9ab9"></A>shademodel Subroutine</H2>
+<A NAME="INDEX1821" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1822" REL="I2" TITLE="attribute"></A>
+<A NAME="INDEX1823" REL="I3" TITLE="shademodel"></A>
+<A NAME="INDEX1824" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1825" REL="I2" TITLE="shading style"></A>
+<A NAME="INDEX1826" REL="I3" TITLE="selecting"></A>
+<A NAME="INDEX1827" REL="I1" TITLE="shademodel subroutine (GL)"></A>
+<H3><A NAME="A143X9abb"></A>Purpose</H3>
+<P><A NAME="E1D74BB467ceb"></A>Selects the shading style used to draw polygons and lines.</P>
+
+<H3><A NAME="A77C1321"></A>Libraries</H3>
+<P><A NAME="E1D74BB507ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D74BB532ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9abf"></A>C Syntax</H3>
+<PRE><A NAME="A143X9ac0"></A><B>void shademodel(Int32 </B><A HREF="shademodel.html#A143X9ac4"><I>mode</I></A><B>)</B></PRE>
+
+<H3><A NAME="A19C0e0ef"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A19C0e0f0"></A><B>SUBROUTINE SHADEM(</B><I>mode</I><B>)</B>
+<B>INTEGER*4 </B><I>mode</I></PRE>
+
+<H3><A NAME="A143X9ac1"></A>Description</H3>
+<P><A NAME="E1D74BB647ceb"></A>The <B>shademodel</B> subroutine determines the shading style that the system uses to render lines and draw filled polygons. When the system uses 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0611">Gouraud shading</A>, the colors along a line segment or in the interior of a polygon are a linear interpolation of the colors at the vertices.  </P>
+
+<P><A NAME="E1D74BB674ceb"></A>The shading model can be either FLAT or GOURAUD. When GOURAUD is specified, the colors along a line segment or the interior of a polygon are smooth shaded; that is, the color of a given pixel is a bi-linear interpolation of the colors at the vertices. When FLAT is specified, the entire primitive is drawn with one color.</P>
+
+<P><A NAME="E1D74BB705ceb"></A>When drawing flat-shaded polylines, each line segment is drawn with the current color. The current color is the color that was most recently specified before the vertex that defines the segment. That is, if a color is specified before the first vertex, and a second color is specified before the second (final) vertex, the line segment is drawn with the second color.</P>
+
+<H3><A NAME="A143X9ac3"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9ac4"></A><I>mode</I> </TD>
+<TD>  Specifies one of two possible flags: 
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>FLAT</TD>
+
+<TD>FLAT</TD>
+
+<TD>Instructs the system to draw polygons and lines in a constant color.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GOURAUD</TD>
+
+<TD>GOURAU</TD>
+
+<TD>Instructs the system to draw polygons and lines with Gouraud shading. (This is the default shading model.)</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A143X9ac9"></A>Example</H3>
+<P><A NAME="E1D74BB798ceb"></A>The example C language program <A HREF="backface_c.html#A16C0c7a2"><B>backface.c</B></A> calls the <B>shademodel</B> subroutine, with the value of the <I>mode</I> parameter set to <B>FLAT, </B>to render the cube faster. This setting of the <I>mode</I> parameter shades each side of the cube in a constant color.</P>
+
+<H3><A NAME="A62C015c83"></A>Implementation Specifics</H3>
+<P><A NAME="E1D74BB842ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1D74BB872ceb"></A>The 3-D Color Graphics Processor does not support Gouraud-shaded lines. That is, the setting of the shademodel attribute is ignored when lines are drawn; all lines are drawn flat-shaded. An approximation can be achieved by drawing a 2-vertex polygon (with the <A HREF="bgnpolygon.html#A144X9672"><B>bgnpolygon</B></A> and <A HREF="bgnpolygon.html#A144X9672"><B>endpolygon</B></A> subroutines); however, 2-vertex polygons ignore the current setting of the linestyle, linewidth, and other line attributes.</P>
+
+<P><A NAME="A3CFD556452janb"></A>When more than one color is specified for a primitive, and flat shading is enabled,  the GXT1000 uses the OpenGL semantics to determine the color of the resulting primitive. For triangle meshes, the color used is the <I>current color</I> or the color most recently specified before the <I>provoking vertex</I> that caused the triangle to be drawn.  For polygons, the polygon is drawn with the color that was current before the first vertex of the polygon was specified.</P>
+
+<H3><A NAME="A77C1324"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1325"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1326"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c3cf"></A>Related Information</H3>
+<P><A NAME="E1D74BB972ceb"></A>Returning the shading model used to draw polygons with the <A HREF="getsm.html#A143X9a53"><B>getsm</B></A> subroutine.</P>
+<P><!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Drawing with Move-Draw Style Subroutines</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Drawing with Begin-End Style Subroutines</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware Used by GL</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</A>.</P><hr><center>
+[  <a href="setvaluator.html">Previous</a>  |
+<a href="singlebuffer.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

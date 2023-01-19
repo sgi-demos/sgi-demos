@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>setdblights Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="setcursor.html">Previous</a>  |
+<a href="set_dither.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A213X911501"></A>setdblights Subroutine</H2>
+<A NAME="INDEX1772" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1773" REL="I2" TITLE="keyboard control"></A>
+<A NAME="INDEX1774" REL="I3" TITLE="setdblights"></A>
+<A NAME="INDEX1775" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1776" REL="I2" TITLE="dial and switch box lights"></A>
+<A NAME="INDEX1777" REL="I3" TITLE="setting"></A>
+<A NAME="INDEX1778" REL="I1" TITLE="setdblights subroutine (GL)"></A>
+<H3><A NAME="A213X911503"></A>Purpose</H3>
+<P><A NAME="E1D7456452ceb"></A>Sets the lights on the dial and switch box.</P>
+
+<H3><A NAME="A78C12bd"></A>Libraries</H3>
+<P><A NAME="E1D7456491ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7456515ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911507"></A>C Syntax</H3>
+<PRE><A NAME="A213X9114e3"></A><B>void setdblights(Int32</B> <A HREF="setdblights.html#A213X9114d8"><I>mask</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X9114e0"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C010790"></A><B>SUBROUTINE SETDBL(</B><I>mask</I><B>)</B>
+<B>INTEGER*4</B> <I>mask</I></PRE>
+
+<H3><A NAME="A213X911509"></A>Description</H3>
+<P><A NAME="E1D7456627ceb"></A>The <B>setdblights </B>subroutine turns on a combination of the lights on the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0470">dial and switch box</A>. Each bit in the mask corresponds to a light. For example, to turn on lights <SAMP>4</SAMP>, <SAMP>7</SAMP>, and <SAMP>22</SAMP> (and leave all the others off), set the mask to (<SAMP>1&lt;&lt;4)&nbsp;|&nbsp;(1&lt;&lt;7</SAMP>)&nbsp;<SAMP>|&nbsp;(1&lt;&lt;22)&nbsp;=&nbsp;0x400090.</SAMP> </P>
+
+<BLOCKQUOTE><A NAME="A318C9e82"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X91150b"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X9114d8"></A><I>mask</I></TD>
+<TD>  Specifies 32 packed bits indicating which lights to turn on. </TD></TR></TABLE>
+
+<H3><A NAME="A62C015d60"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7456738ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C12c0"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFD49E048janb"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFD49E089janb"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c587"></A>Related Information</H3>
+<P><A NAME="E1D7456848ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and <!--gl32prgd:--><A HREF="../gl32prgd/keyboardgl.html#keyboardgl.html">Using the Keyboard</A> in GL in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P><hr><center>
+[  <a href="setcursor.html">Previous</a>  |
+<a href="set_dither.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

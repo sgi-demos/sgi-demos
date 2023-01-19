@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>newpup Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="n3f.html">Previous</a>  |
+<a href="newtag.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X91125"></A>newpup Subroutine</H2>
+<A NAME="INDEX1217" REL="I1" TITLE="newpup subroutine (GL)"></A>
+<A NAME="INDEX1218" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1219" REL="I2" TITLE="popp menus"></A>
+<A NAME="INDEX1220" REL="I3" TITLE="allocating and initializing structure for"></A>
+<A NAME="INDEX1221" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1222" REL="I2" TITLE="popp menu"></A>
+<A NAME="INDEX1223" REL="I3" TITLE="newpup"></A>
+
+<H3><A NAME="A142X91127"></A>Purpose</H3>
+<P><A NAME="E1D6FF0729ceb"></A>Allocates and initializes a structure for a new menu.</P>
+
+<H3><A NAME="A79C112c"></A>Libraries</H3>
+<P><A NAME="E1D6FF0768ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D6FF0792ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9112b"></A>C Syntax</H3>
+<PRE><A NAME="A213X9121a8"></A><B>Int32 newpup(&nbsp;)</B></PRE>
+
+<H3><A NAME="A42C012865"></A>FORTRAN Syntax</H3>
+<P><A NAME="E1D6FF0865ceb"></A><B>INTEGER*4</B> <B>FUNCTION NEWPUP</B></P>
+
+<H3><A NAME="A142X9112d"></A>Description</H3>
+<P><A NAME="E1D6FF0907ceb"></A>The <B>newpup </B>subroutine allocates and initializes a structure for a new menu. The return value is a positive menu identifier. </P>
+
+<P><A NAME="E1D6FF0933ceb"></A>Use this subroutine with the <A HREF="addtopup.html#A142X9109d"><B>addtopup</B></A> subroutine to create pop-up menus. </P>
+
+<BLOCKQUOTE><A NAME="A318C9de6"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A215X987d"></A>Return Value</H3>
+<P><A NAME="E1D6FF0994ceb"></A>An identifier for a new menu.</P>
+
+<H3><A NAME="A64C0165c6"></A>Implementation Specifics</H3>
+<P><A NAME="E1D6FF1038ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C112f"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1130"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1131"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X91145"></A>Related Information</H3>
+<P><A NAME="E1D6FF1139ceb"></A>Adding an item to an existing pop-up menu with the <A HREF="addtopup.html#A142X9109d"><B>addtopup</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FF1168ceb"></A>Defining a pop-up menu with the <A HREF="defpup.html#A142X910bf"><B>defpup</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FF1196ceb"></A>Displaying a pop-up menu with the <A HREF="dopup.html#A142X910e1"><B>dopup</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FF1225ceb"></A>Deallocating a pop-up menu and its data structures with the <A HREF="freepup.html#A142X91103"><B>freepup</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FF1254ceb"></A>Enabling or disabling a given pop-up entry with the <A HREF="setpup.html#A5um1280marj"><B>setpup</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FF1279ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/popupmenus.html#popupmenus.html">Pop-Up Menus</A>.</P><hr><center>
+[  <a href="n3f.html">Previous</a>  |
+<a href="newtag.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getzbuffer Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getwritemask.html">Previous</a>  |
+<a href="gexit.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A9SR350marj"></A>getzbuffer Subroutine</H2>
+<A NAME="INDEX884" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX885" REL="I2" TITLE="frame buffer configuration"></A>
+<A NAME="INDEX886" REL="I3" TITLE="zbuffer"></A>
+<A NAME="INDEX887" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX888" REL="I2" TITLE="hidden surface"></A>
+<A NAME="INDEX889" REL="I3" TITLE="getzbuffer"></A>
+<A NAME="INDEX890" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX891" REL="I2" TITLE="z buffer"></A>
+<A NAME="INDEX892" REL="I3" TITLE="finding out whether off or on"></A>
+<A NAME="INDEX893" REL="I1" TITLE="getzbuffer subroutine (GL)"></A>
+
+<H3><A NAME="A213X912324"></A>Purpose</H3>
+<P><A NAME="E1B11FC813ceb"></A>Determines whether z-buffering is on or off.</P>
+
+<H3><A NAME="A78C1223"></A>Libraries</H3>
+<P><A NAME="E1B11FC961ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B11FD065ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912327"></A>C Syntax</H3>
+<PRE><A NAME="A213X912328"></A><B>Int32 getzbuffer(&nbsp;)</B></PRE>
+
+<H3><A NAME="A28C010788"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C010789"></A><B>INTEGER*4 FUNCTION GETZBU</B></PRE>
+
+<H3><A NAME="A213X91232b"></A>Description</H3>
+<P><A NAME="E1B11FD423ceb"></A>The <B>getzbuffer</B> subroutine returns the status of the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P1160a">z-buffer</A>. The z-buffer option to the High-Performance 3-D Color Graphics Processor must be installed before the z-buffer can be turned on.</P>
+
+<BLOCKQUOTE><A NAME="A318C9e64"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A></BLOCKQUOTE>
+
+
+<H3><A NAME="A213X91232e"></A>Return Values</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91232f"></A>False(0)<B></B></TD>
+<TD>  Z-buffering off (the default value).</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A139X91ec9"></A>True(1)<B></B></TD>
+<TD>  Z-buffering on.</TD></TR></TABLE>
+
+<H3><A NAME="A64C0165e6"></A>Implementation Specifics</H3>
+<P><A NAME="E1B11FD814ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1226"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1227"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1228"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X91233b"></A>Related Information</H3>
+<P><A NAME="E1B11FE141ceb"></A>Clearing the z-buffer with the <A HREF="zclear.html#A143X97d3"><B>zclear</B></A> subroutine.</P>
+
+<P><A NAME="E1B11FE258ceb"></A>Initializing z-buffer mode with the <A HREF="zbuffer.html#A143X97b1"><B>zbuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B11FE366ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>, <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System, and Removing <!--gl32prgd:--><A HREF="../gl32prgd/remhidden.html#remhidden.html">Hidden Surfaces</A>.</P><hr><center>
+[  <a href="getwritemask.html">Previous</a>  |
+<a href="gexit.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

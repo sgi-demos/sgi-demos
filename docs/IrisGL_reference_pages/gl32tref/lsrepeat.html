@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>lsrepeat Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="lshaderange.html">Previous</a>  |
+<a href="makeobj.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="DmN1110marj"></A>lsrepeat Subroutine</H2>
+<A NAME="INDEX1113" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1114" REL="I2" TITLE="attribute"></A>
+<A NAME="INDEX1115" REL="I3" TITLE="lsrepeat"></A>
+<A NAME="INDEX1116" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1117" REL="I2" TITLE="linestyle repeat"></A>
+<A NAME="INDEX1118" REL="I3" TITLE="setting"></A>
+<A NAME="INDEX1119" REL="I1" TITLE="lsrepeat subroutine (GL)"></A>
+<H3><A NAME="A213X9129dc"></A>Purpose</H3>
+<P><A NAME="E1B176D918ceb"></A>Sets the repeat factor for the current linestyle.</P>
+
+<H3><A NAME="A77C110f"></A>Libraries</H3>
+<P><A NAME="E1B176E088ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B176E210ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X9129df"></A>C Syntax</H3>
+<PRE><A NAME="A213X9129e0"></A><B>void lsrepeat(Int32</B> <A HREF="lsrepeat.html#A213X9129e8"><I>factor</I></A><B>)</B></PRE>
+
+<H3><A NAME="A19C0e0ea"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A26C0fdef"></A><B>SUBROUTINE LSREPE(</B><I>factor</I><B>)</B>
+<B>INTEGER*4 </B><I>factor</I></PRE>
+
+<H3><A NAME="A213X9129e3"></A>Description</H3>
+<P><A NAME="E1B176E935ceb"></A>The <B>lsrepeat</B> subroutine sets the repeat factor for the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A172P1436">linestyle</A>.</P>
+
+<P><A NAME="E1B176F065ceb"></A>This subroutine is used to create linestyles that are longer than 16 bits by multiplying each bit in the pattern by the value of the <A HREF="lsrepeat.html#A213X9129e8"><I>factor</I></A> parameter. </P>
+
+<P><A NAME="E1B176F188ceb"></A>Each bit in the pattern is multiplied successively. For example, if the line pattern is <SAMP>0000000111111111&nbsp;</SAMP>and the <I>factor </I>parameter equals <SAMP>3</SAMP>, the resulting linestyle is <SAMP>27</SAMP> bits on followed by <SAMP>21</SAMP> bits off. Line patterns start from the least significant bit.</P>
+
+<P><A NAME="E1B176F323ceb"></A>When a line is drawn, pixels are turned on if there is a 1 (one) in the corresponding position of the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A172P1436">linestyle</A> mask and turned off if there is a 0 (zero) in the corresponding position. The valid range of the repeat factor is from 1 to 255. </P>
+
+<BLOCKQUOTE><A NAME="A258C01c3ad"></A><B>Note: </B>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. (See <!--gl32prgd:--><A HREF="../gl32prgd/powerstation730.html#NITAXIO">"Hardware Considerations"</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.) </BLOCKQUOTE>
+
+
+<H3><A NAME="A213X9129e7"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X9129e8"></A><I>factor</I></TD>
+<TD>  Multiplier of the linestyle pattern.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015c7d"></A>Implementation Specifics</H3>
+<P><A NAME="E1B176F709ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1B176F820ceb"></A>On the POWER Gt4 and POWER Gt4x adapters, the valid range for the repeat factor is from 1 to 64.</P>
+
+<P><A NAME="E1B176F930ceb"></A>On the POWERstation 730 and POWERgraphics GTO, linestyle repeat factors must be a multiple of 4. The valid range is from 4 to 252 in multiples of 4 with a lowest possible repeat factor of 4. </P>
+
+<P><A NAME="E1B1770041ceb"></A>On the Supergraphics Processor Subsystem, the valid range for the repeat factor is 4 to 252 in multiples of 4. Any other value specified is rounded to the nearest multiple of 4.</P>
+
+<P><A NAME="E1B1771192ceb"></A>On the POWER GXT1000, the valid range for the repeat factor is 1 to 255.</P>
+
+<H3><A NAME="A77C1112"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1113"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1114"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X9129f4"></A>Related Information</H3>
+<P><A NAME="E1B1771853ceb"></A>Defining a linestyle with the <A HREF="deflinestyle.html#A143X9b1f"><B>deflinestyle</B></A> subroutine. </P>
+
+<P><A NAME="E1B1771981ceb"></A>Returning the linestyle repeat count with the <A HREF="getlsrepeat.html#A143X9ba7"><B>getlsrepeat</B></A> subroutine.</P>
+
+<P><A NAME="E1B1772097ceb"></A>Selecting a linestyle with the <A HREF="setlinestyle.html#XFM1310marj"><B>setlinestyle</B></A> subroutine.</P>
+
+<P><A NAME="E1B1772209ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Drawing with Begin-End Style Subroutines</A>, <!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Drawing with Move-Draw Style Subroutines</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">Drawing NURBS Curves and Surfaces</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#drawwfcvs.html">Drawing Wire Frame Curves and Surface Patches</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware Used by GL</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</A>.</P><hr><center>
+[  <a href="lshaderange.html">Previous</a>  |
+<a href="makeobj.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

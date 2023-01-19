@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>crvn Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="crv.html">Previous</a>  |
+<a href="curorigin.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="ESS22c0marj"></A>crvn Subroutine</H2>
+<A NAME="INDEX301" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX302" REL="I2" TITLE="wire frame curve and surface patch"></A>
+<A NAME="INDEX303" REL="I3" TITLE="crvn"></A>
+<A NAME="INDEX304" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX305" REL="I2" TITLE="cubic spline curve"></A>
+<A NAME="INDEX306" REL="I3" TITLE="segments"></A>
+<A NAME="INDEX307" REL="I1" TITLE="crvn subroutine (GL)"></A>
+
+<H3><A NAME="A213X910f52"></A>Purpose</H3>
+<P><A NAME="E1B07EF374ceb"></A>Draws a series of curve segments.</P>
+
+<H3><A NAME="A78C1f9"></A>Libraries</H3>
+<P><A NAME="E1B07EF523ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B07EF628ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X910f55"></A>C Syntax</H3>
+<PRE><A NAME="A213X910f56"></A><B>void crvn(Int32 </B><A HREF="crvn.html#Khg2170marj"><I>n</I></A><B>, Coord </B><A HREF="crvn.html#A2hg2350marj"><I>geom</I></A><B> [&nbsp;][3])</B></PRE>
+
+<H3><A NAME="A213X910f32"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X910f35"></A><B>SUBROUTINE CRVN(</B><I>n</I><B>, </B><I>geom</I><B>)</B>
+<B>INTEGER*4</B><I> n</I>
+<B>REAL </B><I>geom</I><B>(3, </B><I>n</I><B>)</B></PRE>
+
+<H3><A NAME="A213X910f59"></A>Description</H3>
+<P><A NAME="E1B07EF993ceb"></A>The <B>crvn </B>subroutine draws a series of 
+cubic spline
+ segments using the current basis and precision. The control points determine the shapes of the curve segments and are used sequentially four at a time. </P>
+
+<P><A NAME="E1B07F0103ceb"></A>For example, if there are six control points, there are three possible sequential selections of four control points. Thus, <B>crvn</B> draws three curve segments: the first using control points 0,1,2,3; the second using control points 1,2,3,4; and the third using control points 2,3,4,5. </P>
+
+<P><A NAME="E1B07F0220ceb"></A>If the current basis is a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A150P1959">B-spline</A>, a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03de">Cardinal spline</A>, or a basis with similar properties, the curve segments are joined end to end and appear as a single curve.  </P>
+
+<H3><A NAME="A213X910f5d"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A2hg2350marj"></A><I>geom</I></TD>
+<TD>  Specifies a matrix of 3-D points.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Khg2170marj"></A><I>n</I></TD>
+<TD>  Number of points in the matrix referenced by <I>geom</I>.</TD></TR></TABLE>
+
+<H3><A NAME="A213X910f5e"></A>Example</H3>
+<P><A NAME="E1B07F0543ceb"></A>The example C language program <A HREF="curve2_c.html#A16C0c7cd"><B>curve2.c</B></A> uses the <B>crvn</B> subroutine to draw a curve with six control points.</P>
+
+<H3><A NAME="A64C016579"></A>Implementation Specifics</H3>
+<P><A NAME="E1B07F0704ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1fc"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1fd"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1fe"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X910f64"></A>Related Information</H3>
+<P><A NAME="E1B07F1022ceb"></A>Drawing a cubic spline curve with the <A HREF="crv.html#ZMS220marj"><B>crv</B></A> subroutine.</P>
+
+<P><A NAME="E1B07F1133ceb"></A>Setting the current cubic spline curve basis matrix with the <A HREF="curvebasis.html#sTS23a0marj"><B>curvebasis</B></A> subroutine.</P>
+
+<P><A NAME="E1B07F1240ceb"></A>Setting the number of line segments that compose a cubic spline curve with the <A HREF="curveprecision.html#aUS2120marj"><B>curveprecision</B></A> subroutine.</P>
+
+<P><A NAME="E1B07F1346ceb"></A>Defining a cubic spline basis matrix with the <A HREF="defbasis.html#A150X930"><B>defbasis</B></A> subroutine.</P>
+
+<P><A NAME="E1B07F1453ceb"></A>Drawing a rational curve with the <A HREF="rcrv.html#WRS2380marj"><B>rcrv</B></A> subroutine.</P>
+
+<P><A NAME="E1B07F1559ceb"></A>Drawing a series of rational curve segments with the <A HREF="rcrvn.html#A1TS2220marj"><B>rcrvn</B></A> subroutine.</P>
+
+<P><A NAME="E1B07F1667ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">NURBS Curves and Surfaces</A>, and Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#drawwfcvs.html">Wire Frame Curves and Surface Patches</A>.</P><hr><center>
+[  <a href="crv.html">Previous</a>  |
+<a href="curorigin.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

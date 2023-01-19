@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>readsource Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="readRGB.html">Previous</a>  |
+<a href="rect.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9cc0"></A>readsource Subroutine</H2>
+<A NAME="INDEX1580" REL="I1" TITLE="readsource subroutine (GL)"></A>
+<A NAME="INDEX1581" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1582" REL="I2" TITLE="pixel block transfer"></A>
+<A NAME="INDEX1583" REL="I3" TITLE="specifying source for pixel read"></A>
+<A NAME="INDEX1584" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1585" REL="I2" TITLE="pixel block transfer"></A>
+<A NAME="INDEX1586" REL="I3" TITLE="readsource"></A>
+<H3><A NAME="A142X9cc2"></A>Purpose</H3>
+<P><A NAME="E1D72E4667ceb"></A>Specifies the source for pixels to be read by various subroutines.</P>
+
+<H3><A NAME="A74C1e4"></A>Libraries</H3>
+<P><A NAME="E1D72E4706ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D72E4730ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9cc6"></A>C Syntax</H3>
+<PRE><A NAME="A142X9cc7"></A><B>void readsource(Int32 </B><A HREF="readsource.html#A142X9ccb"><I>source</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010b1e"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010b1f"></A><B>SUBROUTINE READSO(</B><I>source</I><B>)</B>
+<B>INTEGER*4 </B><I>source</I></PRE>
+
+<H3><A NAME="A142X9cc8"></A>Description</H3>
+<P><A NAME="E1D72E4842ceb"></A>The <B>readsource</B> subroutine specifies the exact pixel source 
+(<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P051c">front buffer, back buffer</A>, or 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P1160a">z-buffer</A>) that the <A HREF="rectcopy.html#A142X9d04"><B>rectcopy</B></A>, <A HREF="readpixels.html#A142X91059"><B>readpixels</B></A>, <A HREF="readRGB.html#A142X9107b"><B>readRGB</B></A>, and <A HREF="rectread.html#A142X9c7c"><B>rectread</B></A> subroutines use.</P>
+
+<BLOCKQUOTE><A NAME="A318C9dc2"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X9cca"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X9ccb"></A><I>source</I></TD>
+<TD>  The defined values for this parameter are listed in the following table:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="3"><B>Values for the source Parameter</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Function</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>SRC_AUTO </TD>
+
+<TD>SRCAUT </TD>
+
+<TD>Selects the front buffer in single buffer mode and the back buffer in double buffer mode.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>SRC_FRONT</TD>
+
+<TD>SRCFRO</TD>
+
+<TD>Front color buffer. Valid for both single and double buffer operation.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>SRC_BACK </TD>
+
+<TD>SRCBAC </TD>
+
+<TD>Back color buffer. Valid during double buffer operation only.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>SRC_ZBUFFER </TD>
+
+<TD>SRCZBU </TD>
+
+<TD>Z-buffer. Valid during both single and double buffer operation.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>SRC_OVER</TD>
+
+<TD>SRCOVE</TD>
+
+<TD>Overlay planes.</TD></TR></TABLE>
+
+
+
+
+<BLOCKQUOTE><A NAME="A213X912074"></A><B>Note: </B>The 3-D Color Graphics Processor does not support SRC_OVER.   </BLOCKQUOTE>
+
+</TD></TR></TABLE>
+
+<H3><A NAME="A61C0159b8"></A>Implementation Specifics</H3>
+<P><A NAME="E1D72E4992ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="A3CFD27E332janb"></A>BLITs to and from the z-buffer are currently inoperational on the POWER GXT1000 adapter.</P>
+
+<P><A NAME="A3CFD27E343janb"></A>When performing BLITs to and from the overlay planes on the GXT1000, the transparent pixel value on the GXT1000 is 255, not 0. </P>
+
+<H3><A NAME="A74C1e7"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A74C1e8"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A74C1e9"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c665"></A>Related Information</H3>
+<P><A NAME="E1D72E5089ceb"></A>Copying a rectangle of pixels with an optional zoom with the <A HREF="rectcopy.html#A142X9d04"><B>rectcopy</B></A> subroutine.</P>
+
+<P><A NAME="E1D72E5114ceb"></A>Reading a rectangular array of pixels into host memory with the <A HREF="rectread.html#A142X9c7c"><B>rectread</B></A> subroutine.</P>
+
+<P><A NAME="E1D72E5140ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Reading and Writing <!--gl32prgd:--><A HREF="../gl32prgd/rwpixels.html#rwpixels.html">Pixels</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>.</P><hr><center>
+[  <a href="readRGB.html">Previous</a>  |
+<a href="rect.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

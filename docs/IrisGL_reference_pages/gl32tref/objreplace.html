@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>objreplace Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="objinsert.html">Previous</a>  |
+<a href="onemap.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9b50"></A>objreplace Subroutine</H2>
+<A NAME="INDEX1285" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1286" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX1287" REL="I3" TITLE="objreplace"></A>
+<A NAME="INDEX1288" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1289" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX1290" REL="I3" TITLE="replacing existing with new"></A>
+<A NAME="INDEX1291" REL="I1" TITLE="objreplace subroutine (Gl)"></A>
+
+<H3><A NAME="A213X911fd6"></A>Purpose</H3>
+<P><A NAME="E1D707F072ceb"></A>Replaces existing display list routines with new ones.</P>
+
+<H3><A NAME="A79C17e"></A>Libraries</H3>
+<P><A NAME="E1D707F111ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D707F135ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911fd9"></A>C Syntax</H3>
+<PRE><A NAME="A213X911fda"></A><B>void objreplace(Int32 </B><A HREF="objreplace.html#kaD3130marj"><I>tag</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010a9d"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010a9e"></A><B>SUBROUTINE OBJREP(</B><I>tag</I><B>)</B>
+<B>INTEGER*4 </B><I>tag</I></PRE>
+
+<H3><A NAME="A213X911fdd"></A>Description</H3>
+<P><A NAME="E1D707F245ceb"></A>The <B>objreplace</B> subroutine positions the editing pointer at the location specified by the <A HREF="objreplace.html#kaD3130marj"><I>tag</I></A> parameter. All subsequent graphics primitives overwrite the display list at the current location of the editing pointer. </P>
+
+<P><A NAME="E1D707F272ceb"></A>Each graphics primitive increments the editing pointer to point immediately after the most recently inserted subroutine (in the same way that the cursor advances in an ordinary text editing facility as letters are typed).</P>
+
+<P><A NAME="E1D707F298ceb"></A>The <B>objreplace</B> subroutine requires that the new subroutine and the subroutine being overwritten are the same length; otherwise, this or other subroutines in the display list may be partially overwritten, resulting in unpredictable drawing when the object is executed. In general, no two dissimilar GL subroutines are the same length. </P>
+
+<P><A NAME="E1D707F323ceb"></A>The <B>objreplace </B>subroutine is best used for changing the parameter values of a subroutine that has already been compiled into a display list. Use the <A HREF="objdelete.html#A142X9afd"><B>objdelete</B></A> and <A HREF="objinsert.html#A142X9adb"><B>objinsert</B></A> subroutines for more general replacement.</P>
+
+<P><A NAME="E1D707F349ceb"></A>Use the <A HREF="closeobj.html#A142X915b"><B>closeobj</B></A> subroutine to terminate editing and close up the current display list, or one of the positioning subroutines (<A HREF="objdelete.html#A142X9afd"><B>objdelete</B></A>, <A HREF="objinsert.html#A142X9adb"><B>objinsert</B></A>, or <A HREF="objreplace.html#A142X9b50"><B>objreplace</B></A>) to reposition the editing pointer.as a quick method of creating a new version of a routine.</P>
+
+<BLOCKQUOTE><A NAME="A318C9d9f"></A><B>Note: </B>This editing subroutine itself cannot be added to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911fe2"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="kaD3130marj"></A><I>tag</I></TD>
+<TD>  Specifies a tag within the object definition to be edited.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015d0a"></A>Implementation Specifics</H3>
+<P><A NAME="E1D707F446ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C181"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C182"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C183"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911fed"></A>Related Information</H3>
+<P><A NAME="E1D707F543ceb"></A>Closing an object with the <A HREF="closeobj.html#A142X915b"><B>closeobj</B></A> subroutine.</P>
+
+<P><A NAME="E1D707F568ceb"></A>Opening an object for editing with the <A HREF="editobj.html#A142X9360"><B>editobj</B></A> subroutine.</P>
+
+<P><A NAME="E1D707F594ceb"></A>Marking a location in the display list with the <A HREF="maketag.html#A142X942c"><B>maketag</B></A> subroutine.</P>
+
+<P><A NAME="E1D707F619ceb"></A>Deleting a routine from an object with the <A HREF="objdelete.html#A142X9afd"><B>objdelete</B></A> subroutine.</P>
+
+<P><A NAME="E1D707F644ceb"></A>Inserting a routine into an object with the <A HREF="objinsert.html#A142X9adb"><B>objinsert</B></A> subroutine.</P>
+
+<P><A NAME="E1D707F670ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating <!--gl32prgd:--><A HREF="../gl32prgd/workobjects.html#workobjects.html">Objects (Display Lists)</A>.</P><hr><center>
+[  <a href="objinsert.html">Previous</a>  |
+<a href="onemap.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

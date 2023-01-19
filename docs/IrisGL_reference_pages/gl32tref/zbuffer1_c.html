@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>zbuffer1.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="xfonts_c.html">Previous</a>  |
+<a href="zbuffer2_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0ca2c"></A>zbuffer1.c Example C Language Program
+</H2>
+<A NAME="INDEX2518" REL="I1" TITLE="zbuffer1.c example program (GL)"></A>
+<A NAME="INDEX2519" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2520" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2521" REL="I3" TITLE="frame buffer"></A>
+<A NAME="INDEX2522" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2523" REL="I2" TITLE="frame buffer"></A>
+<A NAME="INDEX2524" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64EBE3145ttay"></A>/*
+zbuffer1.c:</PRE>
+<PRE><A NAME="A64EBE3309ttay"></A>A zbuffer() demo program that draws two intersecting planes.</PRE>
+<PRE><A NAME="A64EBE3467ttay"></A>This program requires the z-buffer option.
+*/</PRE>
+<PRE><A NAME="A64EBE3624ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EBE3840ttay"></A>main()
+{
+&nbsp;&nbsp;&nbsp;Device dev;
+&nbsp;&nbsp;&nbsp;short val;
+&nbsp;&nbsp;&nbsp;initialize();
+&nbsp;&nbsp;&nbsp;while (TRUE)
+&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (qtest())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dev = qread(&amp;val);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (dev == ESCKEY)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zbuffer(FALSE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gexit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EBE4013ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (dev == REDRAW)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reshapeviewport();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawpolys();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EBE4159ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EBE4303ttay"></A>&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EBE4445ttay"></A>}</PRE>
+<PRE><A NAME="A64EBE4593ttay"></A>initialize()
+{</PRE>
+<PRE><A NAME="A64EBE4746ttay"></A>&nbsp;&nbsp;&nbsp;int gid;
+&nbsp;&nbsp;&nbsp;float xmax,ymax;   </PRE>
+<PRE><A NAME="A64EBE5015ttay"></A>&nbsp;&nbsp;&nbsp;prefposition(XMAXSCREEN/4, XMAXSCREEN*3/4, YMAXSCREEN/4, 
+&nbsp;&nbsp;&nbsp;    YMAXSCREEN*3/4);
+&nbsp;&nbsp;&nbsp;gid = winopen("zbuffer1");
+&nbsp;&nbsp;&nbsp;winset(gid);
+&nbsp;&nbsp;&nbsp;winconstraints();   
+&nbsp;&nbsp;&nbsp;perspective(900, 1.34, 1.01, 500.0);
+&nbsp;&nbsp;&nbsp;lookat(-150.0, 90.0, 250.0, 50.0, 50.0, 0.0, 0);   
+&nbsp;&nbsp;&nbsp;lsetdepth(0xC00000,0x3FFFFF);   
+&nbsp;&nbsp;&nbsp;qdevice(ESCKEY);
+&nbsp;&nbsp;&nbsp;qdevice(REDRAW);
+&nbsp;&nbsp;&nbsp;qenter(REDRAW,gid);   
+&nbsp;&nbsp;&nbsp;zbuffer(TRUE);
+}</PRE>
+<PRE><A NAME="A64EBE5163ttay"></A>drawpolys()
+{</PRE>
+<PRE><A NAME="A64EBE5413ttay"></A>&nbsp;&nbsp;&nbsp;zclear();
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();   
+&nbsp;&nbsp;&nbsp;color(YELLOW);
+&nbsp;&nbsp;&nbsp;pmv(0.0, 0.0, 100.0);
+&nbsp;&nbsp;&nbsp;pdr(100.0, 0.0, 100.0);
+&nbsp;&nbsp;&nbsp;pdr(100.0, 100.0, 100.0);
+&nbsp;&nbsp;&nbsp;pdr(0.0, 100.0, 100.0);
+&nbsp;&nbsp;&nbsp;pclos();   
+&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;pmv(0.0, 0.0, 50.0);
+&nbsp;&nbsp;&nbsp;pdr(100.0, 0.0, 50.0);
+&nbsp;&nbsp;&nbsp;pdr(100.0, 100.0, 200.0);
+&nbsp;&nbsp;&nbsp;pdr(0.0, 100.0, 200.0);
+&nbsp;&nbsp;&nbsp;pclos();</PRE>
+<PRE><A NAME="A64EBE5557ttay"></A>}</PRE>
+
+<H3><A NAME="A201C11b3"></A>Related Information</H3>
+<P><A NAME="E1D7935081ceb"></A>The <A HREF="lookat.html#A144X9452"><B>lookat</B></A> subroutine<A HREF="../gl32tref/A144X9452" REL="PAGENUM"></A>, <A HREF="pclos.html#t2g270marj"><B>pclos</B></A> subroutine<A HREF="../gl32tref/t2g270marj" REL="PAGENUM"></A>, <A HREF="pdr.html#bqf1c0marj"><B>pdr</B></A> subroutine<A HREF="../gl32tref/bqf1c0marj" REL="PAGENUM"></A>, <A HREF="perspective.html#A144X94da"><B>perspective</B></A> subroutine<A HREF="../gl32tref/A144X94da" REL="PAGENUM"></A>, <A HREF="pmv.html#A139X91eed"><B>pmv</B></A> subroutine<A HREF="../gl32tref/A139X91eed" REL="PAGENUM"></A>, <A HREF="zbuffer.html#A143X97b1"><B>zbuffer</B></A> subroutine<A HREF="A143X97b1.html" REL="PAGENUM"></A>, <A HREF="zclear.html#A143X97d3"><B>zclear</B></A> subroutine<A HREF="A143X97d3.html" REL="PAGENUM"></A>.</P>
+
+<hr><center>
+[  <a href="xfonts_c.html">Previous</a>  |
+<a href="zbuffer2_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

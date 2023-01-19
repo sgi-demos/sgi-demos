@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>glcompat Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="ginit.html">Previous</a>  |
+<a href="greset.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A3CFC9E2687janb"></A>glcompat Subroutine</H2>
+<A NAME="INDEX908" REL="I1" TITLE="glcompat subroutine (GL)"></A>
+<H3><A NAME="A3CFC9E2698janb"></A>Purpose</H3>
+<P><A NAME="A3CFC9E2708janb"></A>Controls backwards compatibility modes.</P>
+
+<H3><A NAME="A3CFC9E2719janb"></A>C Syntax</H3>
+<PRE><A NAME="A3CFC9E2729janb"></A><B>void glcompat (Int32</B> <I>mode</I>, <B>Int32</B> <I>value</I>)</PRE>
+
+<H3><A NAME="A3CFC9E2740janb"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A3CFC9E2751janb"></A><B>SUBROUTINE GLCOMPAT</B> (<I>mode, value</I>)
+<B>INTEGER*4</B> <I>mode, value</I></PRE>
+
+<H3><A NAME="A3CFC9E2761janb"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2772janb"></A><I>mode</I></TD>
+<TD>  Token representing the compatibility mode to be changed.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2783janb"></A><I>value</I></TD>
+<TD>  The value that the compatibility mode should have.</TD></TR></TABLE>
+
+<H3><A NAME="A3CFC9E2794janb"></A>Functional Description</H3>
+<P><A NAME="A3CFC9E2805janb"></A>This subroutine governs various compatibility modes for the GL subsystem. Applications should use this subroutine judiciously to minimize porting headaches while maximizing useful function. The following <B>glcompat</B> modes can also be set with environment variables with the same corresponding names.  </P>
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2815janb"></A><B>Mode</B></TD>
+<TD>  GLC_CREATE_OVERLAY</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2826janb"></A><B>Default</B></TD>
+<TD>  FALSE</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2838janb"></A><B>Function</B></TD>
+<TD>  On the POWERgraphics GXT1000 adapter, this mode controls whether the <B>winX</B> subroutine will automatically create an overlay window. When this mode is set to TRUE, and the XID passed to <B>winX</B> is not an overlay window, then the <B>winX</B> routine will create an overlay window and make it a child of the indicted X window. Although the overlay window will be a distinct X11 window, internally, it will be used to emulate overlay plane functions. It can be accessed via the <B>drawmode</B> subroutine and can be drawn into with the usual GL functions.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2849janb"></A></TD>
+<TD>  When this mode is set to FALSE, the <B>winX</B> routine will simply accept the indicated X Window, and create and attach a GL context to that window. The <B>drawmode</B> subroutine should not be used with windows created by <B>winX</B> when this mode is FALSE.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2859janb"></A></TD>
+<TD>  This mode has no effect on graphics adapters other than the  POWERgraphics GXT1000.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2870janb"></A><B>Mode</B></TD>
+<TD>  GLC_ISSUE_OVERDRAW</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2881janb"></A><B>Default</B></TD>
+<TD>  FALSE</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2892janb"></A><B>Function</B></TD>
+<TD>  On the POWERgraphics GXT1000 adapter, this mode controls how exposure events for the overlay planes are handled. When the mode is TRUE, the REDRAW_OVERLAY event will be issued whenever the overlay planes are uncovered and need redrawing. The REDRAW event will not be issued if the main frame buffer window has not been damaged.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2903janb"></A></TD>
+<TD>  When the mode is FALSE, damage to the overlay planes will be reported with the REDRAW event. Note that if the main frame buffer has also been damaged, it may happen that two REDRAW events are reported for the window.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2914janb"></A></TD>
+<TD>  Set this mode to FALSE if your application does not handle REDRAW_OVERLAY events, but needs to find out when the overlays need to be redrawn.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2924janb"></A></TD>
+<TD>  This mode has no effect on graphics adapters other than the POWERgraphics GXT1000.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2935janb"></A><B>Mode</B></TD>
+<TD>  GLC_FB_FULLSCREEN</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2946janb"></A><B>Default</B></TD>
+<TD>  FALSE</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2956janb"></A><B>Function</B></TD>
+<TD>  On the POWERgraphics GXT1000 adapter, this mode enables the <B>fullscrn</B> routine to affect the main frame buffer. By default, the <B>fullscrn</B> subroutine applies only to the overlay bit-planes. </TD></TR></TABLE>
+
+<H3><A NAME="A3CFC9E2967janb"></A>Implementation Specifics</H3>
+<P><A NAME="A3CFC9E2978janb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A3CFC9E2988janb"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E2999janb"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFC9E3010janb"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE><hr><center>
+[  <a href="ginit.html">Previous</a>  |
+<a href="greset.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

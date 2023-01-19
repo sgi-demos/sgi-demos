@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getbackface Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="gentag.html">Previous</a>  |
+<a href="getbuffer.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X976d"></A>getbackface Subroutine</H2>
+<A NAME="INDEX574" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX575" REL="I2" TITLE="hidden surface"></A>
+<A NAME="INDEX576" REL="I3" TITLE="getbackface"></A>
+<A NAME="INDEX577" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX578" REL="I2" TITLE="backfacing polygons"></A>
+<A NAME="INDEX579" REL="I3" TITLE="display"></A>
+<A NAME="INDEX580" REL="I1" TITLE="getbackface subroutine (GL)"></A>
+
+<H3><A NAME="A143X976f"></A>Purpose</H3>
+<P><A NAME="E1B0CD4639ceb"></A>Returns the state of backfacing filled polygon removal. </P>
+
+<H3><A NAME="A78C121c"></A>Libraries</H3>
+<P><A NAME="E1B0CD4786ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0CD4890ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9773"></A>C Syntax</H3>
+<PRE><A NAME="A143X9774"></A><B>Int32 getbackface(&nbsp;)</B></PRE>
+
+<H3><A NAME="A28C01078c"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C01078d"></A><B>INTEGER*4  GETBAC</B></PRE>
+
+<H3><A NAME="A143X9775"></A>Description</H3>
+<P><A NAME="E1B0CD5247ceb"></A>The <B>getbackface</B> subroutine returns the state of 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03bd">backfacing filled polygon</A> removal. If backface removal is on, the system draws only those polygons that face the viewer.</P>
+
+<BLOCKQUOTE><A NAME="A318C9e6d"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X977b"></A>Return Values</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X977c"></A>0</TD>
+<TD>  Removal enabled.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X96c2"></A>1 </TD>
+<TD>  Removal disabled.</TD></TR></TABLE>
+
+<H3><A NAME="A64C0165ec"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0CD5612ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C121f"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1220"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1221"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X978d"></A>Related Information</H3>
+<P><A NAME="E1B0CD5965ceb"></A>Allowing or suppressing the display of backfacing polygons with the <A HREF="backface.html#A143X974b"><B>backface</B></A> subroutine.</P>
+
+<P><A NAME="E1B0CD6073ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System, and Removing <!--gl32prgd:--><A HREF="../gl32prgd/remhidden.html#remhidden.html">Hidden Surfaces</A>.</P><hr><center>
+[  <a href="gentag.html">Previous</a>  |
+<a href="getbuffer.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

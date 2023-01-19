@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getdescender Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getdcm.html">Previous</a>  |
+<a href="getdev.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X9386"></A>getdescender Subroutine</H2>
+<A NAME="INDEX641" REL="I1" TITLE="getdescender subroutine (GL)"></A>
+<A NAME="INDEX642" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX643" REL="I2" TITLE="query"></A>
+<A NAME="INDEX644" REL="I3" TITLE="returning"></A>
+<A NAME="INDEX645" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX646" REL="I2" TITLE="text"></A>
+<A NAME="INDEX647" REL="I3" TITLE="getdescender"></A>
+<A NAME="INDEX648" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX649" REL="I2" TITLE="text"></A>
+<A NAME="INDEX650" REL="I3" TITLE="returning"></A>
+
+<H3><A NAME="A144X9388"></A>Purpose</H3>
+<P><A NAME="E1B0DE7382ceb"></A>Returns the baseline extent of the longest character descender.</P>
+
+<H3><A NAME="A79C1230"></A>Libraries</H3>
+<P><A NAME="E1B0DE7530ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0DE7634ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X938c"></A>C Syntax</H3>
+<PRE><A NAME="A144X938d"></A><B>Int32 getdescender(&nbsp;);</B></PRE>
+
+<H3><A NAME="A29C010bfd"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010bfe"></A><B>INTEGER*4 FUNCTION GETDES</B></PRE>
+
+<H3><A NAME="A144X938e"></A>Description</H3>
+<P><A NAME="E1B0DE7991ceb"></A>The <B>getdescender </B>subroutine returns the maximum distance (in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06fd">pixels</A>) between the baseline of a character and the bottom of the bitmap for that character. </P>
+
+<P><A NAME="E1B0DE8099ceb"></A>Each character in a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A270A983b">font</A> is defined using a bitmap that is displayed relative to the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e9">current character position</A>. Vertical placement of each character is done using the current character position as the baseline or the line on the page. </P>
+
+<P><A NAME="E1B0DE8209ceb"></A>The portion of a character that extends below the baseline is called a descender. The lowercase characters g and p typically have descenders. The returned value of this function is the length (in pixels) of the longest descender in the current font.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f1c"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A144X9394"></A>Return Value</H3>
+<P><A NAME="E1B0DE8423ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A62C015d8d"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0DE8583ceb"></A>This subroutine is part of GL in the AIXwindows environment.</P>
+
+<H3><A NAME="A79C1233"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1234"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1235"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X93a6"></A>Related Information</H3>
+<P><A NAME="E1B0DE8905ceb"></A>Returning the current raster font number with the <A HREF="getfont.html#A144X93a8"><B>getfont</B></A> subroutine.</P>
+
+<P><A NAME="E1B0DE9012ceb"></A>Returning the maximum character height in the current raster font with the <A HREF="getheight.html#A144X93ca"><B>getheight</B></A> subroutine.</P>
+
+<P><A NAME="E1B0DE9120ceb"></A>Returning the width of the specified text string with the <A HREF="strwidth.html#A144X93ec"><B>strwidth</B></A> subroutine.</P>
+
+<P><A NAME="E1B0DE9229ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Creating <!--gl32prgd:--><A HREF="../gl32prgd/textchars.html#textchars.html">Text Characters</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System.</P><hr><center>
+[  <a href="getdcm.html">Previous</a>  |
+<a href="getdev.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

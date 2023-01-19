@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getmatrix Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getmap.html">Previous</a>  |
+<a href="getmcolor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X940e"></A>getmatrix Subroutine</H2>
+<A NAME="INDEX745" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX746" REL="I2" TITLE="coordinate transformation"></A>
+<A NAME="INDEX747" REL="I3" TITLE="getmatrix"></A>
+<A NAME="INDEX748" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX749" REL="I2" TITLE="matrix"></A>
+<A NAME="INDEX750" REL="I3" TITLE="transformation"></A>
+<A NAME="INDEX751" REL="I1" TITLE="getmatrix subroutine (GL)"></A>
+
+<H3><A NAME="A144X9410"></A>Purpose</H3>
+<P><A NAME="E1B0FB2429ceb"></A>Returns the current transformation matrix. </P>
+
+<H3><A NAME="A78C16d"></A>Libraries</H3>
+<P><A NAME="E1B0FB2577ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0FB2682ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X9414"></A>C Syntax</H3>
+<PRE><A NAME="A213X9126c1"></A><B>void getmatrix(Matrix </B><A HREF="getmatrix.html#Lyi1f0marj"><I>matrix</I></A><B>)</B></PRE>
+
+<H3><A NAME="A13C0bdc3"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A13C0bdc4"></A><B>SUBROUTINE GETMAT(</B><I>matrix</I><B>)</B>
+<B>REAL </B><I>matrix</I><B>(4,4)</B></PRE>
+
+<H3><A NAME="A144X9416"></A>Description</H3>
+<P><A NAME="E1B0FB3047ceb"></A>The <B>getmatrix </B>subroutine copies the matrix from the top of the stack to a user-specified array. This routine does not alter the matrix stack. When the system is in projection matrix mode, the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06dd">matrix stack</A> is not accessible. In projection mode, the <A HREF="getmatrix.html#Lyi1f0marj"><I>matrix</I></A> array receives a copy of the projection matrix instead.  </P>
+
+<BLOCKQUOTE><A NAME="A318C9df1"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A144X9418"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Lyi1f0marj"></A><I>matrix</I></TD>
+<TD>  Specifies an array into which to copy a matrix.</TD></TR></TABLE>
+
+<H3><A NAME="A144X941e"></A>Example</H3>
+<P><A NAME="E1B0FB3364ceb"></A>The example C language program <A HREF="scrn_rotate_c.html#A16C0c92f"><B>scrn_rotate.c</B></A> uses the <B>getmatrix</B> subroutine to get the current transformation matrix after manipulating it.</P>
+
+<H3><A NAME="A62C015d30"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0FB3526ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C170"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C171"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C172"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X942e"></A>Related Information</H3>
+<P><A NAME="E1B0FB3846ceb"></A>Loading a transformation matrix with the <A HREF="loadmatrix.html#A144X9430"><B>loadmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1B0FB3952ceb"></A>Setting the current matrix mode with the <A HREF="mmode.html#XhZ2370marj"><B>mmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B0FB4060ceb"></A>Premultiplying the current transformation matrix with the <A HREF="multmatrix.html#A144X9474"><B>multmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1B0FB4169ceb"></A>Popping the transformation matrix stack with the <A HREF="popmatrix.html#A144X951e"><B>popmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1B0FB4278ceb"></A>Pushing down the transformation matrix stack with the <A HREF="pushmatrix.html#A144X9540"><B>pushmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1B0FB4386ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System, and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="getmap.html">Previous</a>  |
+<a href="getmcolor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

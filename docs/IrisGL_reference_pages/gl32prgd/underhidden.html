@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/underhidden.html Mon, 24 Jan 2022 16:28:07 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>Understanding Hidden Surface Removal
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="listhidden.html">Previous</a>  |
+<a href="backfacepoly.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="underhidden.html"></A>Understanding Hidden Surface Removal</H2>
+<P><A NAME="A3C0EA33905mhay"></A>By default, GL does no hidden surface removal: figures are rendered on the screen in the order that they are drawn. For most 3-D drawings, it is important to draw only those surfaces that are nearest the eye, at least for opaque objects. All other surfaces are obscured by those nearer the eye. The time it takes to draw surfaces that are not visible in the final scene can cause a noticeable degradation of performance in complex scenes where drawing speed is important.</P>
+
+<P><A NAME="A3C0EA33925mhay"></A>There are many ways to do hidden surface removal, depending on the types of figures being rendered. The primary method used by GL is a z-buffer, which works by calculating the distance to the eye from the surfaces covering each pixel and drawing only the closest surface. The calculation has to be done on a per-pixel basis because it is possible to have a set consisting of as few as three polygons, each of which is overlapped by another in the set, 
+as in the following figure:</P>
+
+
+<IMG SRC="figures/gl32p15.jpg">
+<BLOCKQUOTE><A NAME="A32C01163d"></A><B>Note: </B>Z-buffer hardware is optional on the High Performance 8-Bit 3-D Color Graphics Processor and the High Performance 24-Bit 3-D Color Graphics Processor. Be sure that you have a z-buffer installed on your system before using z-buffer features. Z-buffering does not work unless the z-buffer option is installed.</BLOCKQUOTE>
+
+<hr><center>
+[  <a href="listhidden.html">Previous</a>  |
+<a href="backfacepoly.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/underhidden.html Mon, 24 Jan 2022 16:28:07 GMT -->
+</HTML>
+
+

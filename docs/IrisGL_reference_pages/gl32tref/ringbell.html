@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>ringbell Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="RGBwritemask.html">Previous</a>  |
+<a href="rmv.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A213X911463"></A>ringbell Subroutine</H2>
+<A NAME="INDEX1671" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1672" REL="I2" TITLE="keyboard control"></A>
+<A NAME="INDEX1673" REL="I3" TITLE="ringbell"></A>
+<A NAME="INDEX1674" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1675" REL="I2" TITLE="keyboard bell"></A>
+<A NAME="INDEX1676" REL="I3" TITLE="ringing"></A>
+<A NAME="INDEX1677" REL="I1" TITLE="ringbell subroutine (GL)"></A>
+
+<H3><A NAME="A213X911465"></A>Purpose</H3>
+<P><A NAME="E1D7387067ceb"></A>Rings the keyboard bell.</P>
+
+<H3><A NAME="A78C12b1"></A>Libraries</H3>
+<P><A NAME="E1D7387107ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7387131ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911468"></A>C Syntax</H3>
+<PRE><A NAME="A213X911469"></A><B>void ringbell(&nbsp;)</B></PRE>
+
+<H3><A NAME="A213X911442"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X911445"></A><B>SUBROUTINE RINGBE</B></PRE>
+
+<H3><A NAME="A213X91146c"></A>Description</H3>
+<P><A NAME="E1D7387239ceb"></A>The <B>ringbell</B> subroutine rings the 
+keyboard
+ bell for the length of time set by the <B>setbell</B> subroutine.</P>
+
+<BLOCKQUOTE><A NAME="A318C9e7c"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A30C01103c"></A>Example</H3>
+<P><A NAME="E1D7387299ceb"></A>The example C language program <A HREF="overlay_c.html#A11C0b47c"><B>ovrlay.c</B></A> uses the <B>ringbell</B> subroutine to ring the bell as a ball moves. </P>
+
+<H3><A NAME="A62C015d5c"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7387343ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C12b4"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12b5"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12b6"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X91147b"></A>Related Information</H3>
+<P><A NAME="E1D7387439ceb"></A>Turning off the keyboard click with the <A HREF="clkoff.html#A213X9112de"><B>clkoff</B></A> subroutine.</P>
+
+<P><A NAME="E1D7387465ceb"></A>Turning on the keyboard click with the <A HREF="clkoff.html#A213X9112de"><B>clkon</B></A> subroutine.</P>
+
+<P><A NAME="E1D7387490ceb"></A>Turning on the keyboard display lights with the <A HREF="lampoff.html#A213X9113bc"><B>lampon</B></A> subroutine.</P>
+
+<P><A NAME="E1D7387516ceb"></A>Setting the duration of the keyboard bell sound with the <A HREF="setbell.html#A213X9114ae"><B>setbell</B></A> subroutine.</P>
+
+<P><A NAME="E1D7387542ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and <!--gl32prgd:--><A HREF="../gl32prgd/keyboardgl.html#keyboardgl.html">Using the Keyboard</A>.</P><hr><center>
+[  <a href="RGBwritemask.html">Previous</a>  |
+<a href="rmv.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

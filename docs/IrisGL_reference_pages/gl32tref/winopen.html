@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>winopen Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="winmove.html">Previous</a>  |
+<a href="winpop.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X91549"></A>winopen Subroutine</H2>
+<A NAME="INDEX2020" REL="I1" TITLE="winopen subroutine (GL)"></A>
+<A NAME="INDEX2021" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2022" REL="I2" TITLE="window"></A>
+<A NAME="INDEX2023" REL="I3" TITLE="winopen"></A>
+<A NAME="INDEX2024" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2025" REL="I2" TITLE="windows"></A>
+<A NAME="INDEX2026" REL="I3" TITLE="creating"></A>
+
+<H3><A NAME="A142X9154b"></A>Purpose</H3>
+<P><A NAME="E1D762F824ceb"></A>Creates a window.</P>
+
+<H3><A NAME="A79C1351"></A>Libraries</H3>
+<P><A NAME="E1D762F863ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D762F888ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9154f"></A>C Syntax</H3>
+<PRE><A NAME="A213X912ab1"></A><B>Int32 winopen(Char8 *</B><A HREF="winopen.html#EPP380marj"><I>name</I></A><B>)</B></PRE>
+
+<H3><A NAME="A18C0dcfa"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A18C0dcfb"></A><B>INTEGER*4 FUNCTION WINOPE(</B><A HREF="winopen.html#EPP380marj"><I>name</I></A><B>,</B> <A HREF="winopen.html#qPP32a0marj"><I>length</I></A><B>)</B>
+<B>CHARACTER*(*) </B><I>name</I>
+<B>INTEGER*4 </B><I>length</I></PRE>
+
+<H3><A NAME="A142X91551"></A>Description</H3>
+<P><A NAME="E1D7630000ceb"></A>The <B>winopen </B>subroutine creates a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A> as defined by the current values of the window constraints. This new window becomes the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A60P0189">current window</A>. If this is the first time that a program has called the <B>winopen</B> subroutine, the system also initializes the graphics system.</P>
+
+<P><A NAME="E1D7630026ceb"></A>The returned value for this function is the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A> identifier (gwid) for the window just created. Use this value to identify the window to other graphics functions. If no additional windows are available, this function returns -1 (negative one). </P>
+
+<P><A NAME="E1D7630052ceb"></A>If called before the <B>winopen</B> subroutine, the following subroutines change the default window constraints:</P>
+
+<UL><LI><A NAME="A213X912ab8"></A><A HREF="fudge.html#A142X917a6"><B>fudge</B></A></LI>
+
+<LI><A NAME="A213X912ab9"></A><A HREF="iconsize.html#LA13e0marj"><B>iconsize</B></A> </LI>
+
+<LI><A NAME="A213X912abb"></A><A HREF="keepaspect.html#A142X91896"><B>keepaspect</B></A> </LI>
+
+<LI><A NAME="A213X912abc"></A><A HREF="maxsize.html#A142X916d6"><B>maxsize</B></A></LI>
+
+<LI><A NAME="A213X912abd"></A><A HREF="minsize.html#MJ13260marj"><B>minsize</B></A></LI>
+
+<LI><A NAME="A213X912abe"></A><A HREF="noborder.html#A142X91d7a"><B>noborder</B></A> </LI>
+
+<LI><A NAME="A213X912abf"></A><A HREF="noport.html#ZN13170marj"><B>noport</B></A></LI>
+
+<LI><A NAME="A213X912ac0"></A><A HREF="prefposition.html#A142X9164f"><B>prefposition</B></A></LI>
+
+<LI><A NAME="A213X912ac1"></A><A HREF="prefsize.html#A142X91671"><B>prefsize</B></A></LI>
+
+<LI><A NAME="A213X912ac2"></A><A HREF="stepunit.html#A142X91bd2"><B>stepunit</B></A> </LI></UL>
+
+
+<P><A NAME="E1D7630235ceb"></A>If a window's size and location are left unconstrained, the system allows the user to place and size the window. </P>
+
+<P><A NAME="E1D7630262ceb"></A>All drawing (lines, polygons, and NURBS) is done in the current window. Lighting, depth-cueing, and z-buffering all apply to the current window. Every window has an independent set of stacks: matrix stack, name stack, attribute stack, and viewport stack, and all stack manipulation routines such as matrix multiplies are directed at the current window. </P>
+
+<P><A NAME="E1D7630288ceb"></A>The only attributes that are shared across windows are those defined with the <A HREF="defcursor.html#A150X9444"><B>defcursor</B></A>, <A HREF="deflinestyle.html#A143X9b1f"><B>deflinestyle</B></A>, <A HREF="defpattern.html#A143X9b41"><B>defpattern</B></A>, <A HREF="defrasterfont.html#A143X9d3f"><B>defrasterfont</B></A>, <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A>, <A HREF="loadXfont.html#vUO390nita"><B>loadXfont</B></A>, and <A HREF="makeobj.html#A142X912d"><B>makeobj</B></A> subroutines. </P>
+
+<P><A NAME="E1D7630314ceb"></A>The <B>winopen</B> subroutine examines the environment variable DISPLAY to determine to which AIXwindows server to make a connection. The default DISPLAY value is <SAMP>unix:0</SAMP>. Only local sessions are currently supported. A GL session can only run on an AIXwindows server that has extensions to support GL. Not all AIXwindows servers support GL.</P>
+
+<P><A NAME="E1D7630340ceb"></A>The<B> winopen </B>subroutine queues the 
+INPUTCHANGE
+ and 
+REDRAW
+ pseudo devices. </P>
+
+<BLOCKQUOTE><A NAME="A318C9f3e"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X91553"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="EPP380marj"></A><I>name</I></TD>
+<TD>  Specifies the window title displayed on the left hand side of the title bar. A zero-length string displays no title. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="qPP32a0marj"></A><I>length</I></TD>
+<TD>  Specifies the length of the string in the <I>name</I> parameter. </TD></TR></TABLE>
+
+<H3><A NAME="A142X91559"></A>Example</H3>
+<P><A NAME="E1D7630455ceb"></A>The example C language program <A HREF="colored_c.html"><B>colored.c</B></A> uses the <B>winopen</B> subroutine to create a window with characteristics previously defined in the program.</P>
+
+<H3><A NAME="A61C0159dc"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7630498ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1354"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1355"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1356"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X91569"></A>Related Information</H3>
+<P><A NAME="E1D7630595ceb"></A>Specifying pixel values to be added to a window with the <A HREF="fudge.html#A142X917a6"><B>fudge</B></A> subroutine.</P>
+
+<P><A NAME="E1D7630621ceb"></A>Giving a program the entire screen as a window with the <A HREF="fullscrn.html#Qga140marj"><B>fullscrn</B></A> subroutine.</P>
+
+<P><A NAME="E1D7630646ceb"></A>Obtaining the position of a window with the <A HREF="getorigin.html#A142X91f76"><B>getorigin</B></A> subroutine.</P>
+
+<P><A NAME="E1D7630672ceb"></A>Obtaining the size of the window with the <A HREF="getsize.html#X513200marj"><B>getsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D7630698ceb"></A>Specifying the size of a window icon with the <A HREF="iconsize.html#LA13e0marj"><B>iconsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D7630723ceb"></A>Specifying the title of a window icon with the <A HREF="icontitle.html#sH13240marj"><B>icontitle</B></A> subroutine.</P>
+
+<P><A NAME="E1D7630748ceb"></A>Specifying the aspect ratio of a window with the <A HREF="keepaspect.html#A142X91896"><B>keepaspect</B></A> subroutine.</P>
+
+<P><A NAME="E1D7630774ceb"></A>Specifying the maximum size of a window with the <A HREF="maxsize.html#A142X916d6"><B>maxsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D7630799ceb"></A>Specifying the minimum size of a window with the <A HREF="minsize.html#MJ13260marj"><B>minsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D7630825ceb"></A>Removing the border from a window with the <A HREF="noborder.html#A142X91d7a"><B>noborder</B></A> subroutine.</P>
+
+<P><A NAME="E1D7630850ceb"></A>Specifying that a program does not require a window with the <A HREF="noport.html#ZN13170marj"><B>noport</B></A> subroutine.</P>
+
+<P><A NAME="E1D7630876ceb"></A>Constraining the window position and size with the <A HREF="prefposition.html#A142X9164f"><B>prefposition</B></A> subroutine.</P>
+
+<P><A NAME="E1D7630901ceb"></A>Constraining the size of a window with the <A HREF="prefsize.html#A142X91671"><B>prefsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D7630927ceb"></A>Specifying a window size change in discrete steps with the <A HREF="stepunit.html#A142X91bd2"><B>stepunit</B></A> subroutine.</P>
+
+<P><A NAME="E1D7630952ceb"></A>Creating a restricted subwindow with the <A HREF="swinopen.html#A2T741b0nita"><B>swinopen</B></A> subroutines.</P>
+
+<P><A NAME="E1D7630978ceb"></A>Closing the identified window with the <A HREF="winclose.html#A142X91418"><B>winclose</B></A> subroutine. </P>
+
+<P><A NAME="E1D7631004ceb"></A>Binding window constraints to the current window with the <A HREF="winconstraints.html#A142X914c1"><B>winconstraints</B></A> subroutine.</P>
+
+<P><A NAME="E1D7631029ceb"></A>Adding a title bar to the current window with the <A HREF="wintitle.html#A142X915f3"><B>wintitle</B></A> subroutine.</P>
+
+<P><A NAME="E1D7631055ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="winmove.html">Previous</a>  |
+<a href="winpop.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

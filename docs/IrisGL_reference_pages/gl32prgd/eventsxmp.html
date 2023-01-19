@@ -1,0 +1,221 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/eventsxmp.html Mon, 24 Jan 2022 16:27:48 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Events Example Program
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="animatexmp.html">Previous</a>  |
+<a href="drawwithgl.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="eventsxmp.html"></A>Events Example Program </H2>
+
+
+<P><A NAME="A3C0DE53472mhay"></A>The first two programs demonstrated how
+to draw and create animated scenes, respectively. The next program demonstrates
+how to obtain input and illustrates the concept of an <I>event loop</I>.</P>
+
+
+<P><A NAME="A3C0DE53491mhay"></A>The event loop is critical to writing
+applications for a windowing system. An event loop allows a program to
+respond to events occurring in the system that are beyond the control of
+the application program: for example, when a user picks up a window and
+moves it, has a window obscured and then unobscured by other windows, or
+resizes a window. </P>
+
+
+<P><A NAME="A3C0DE53511mhay"></A>At this point, return to the <A HREF="helloexmp.html#helloexmp.html">first
+program</A>, change the sleep time to 50 seconds, then recompile and rerun
+the program. While it is running, pick up another window (for instance,
+the xclock), drop it on the <TT>HI&nbsp;THERE</TT> window, pick it up again,
+and remove it. Notice that the original <TT>Hello,&nbsp;World!</TT> display
+was destroyed. This occurred because the other window overwrote the pixel
+data in the <TT>HI&nbsp;THERE</TT> window, and the overwritten data was
+not saved (GL does not support backing store or save-under). </P>
+
+
+<P><A NAME="A3C0DE53531mhay"></A>When the contents of a window are destroyed
+in this fashion, the application itself must redraw the window. GL provides
+an event that indicates that a window may have to be redrawn. The application
+must test for this event, and redraw the window whenever the event is received.
+The discussion after the following program explains how the testing and
+redrawing is done. </P>
+
+
+<PRE><A NAME="A109C1517"></A>#include&nbsp;&lt;gl/gl.h&gt;
+#include&nbsp;&lt;gl/device.h&gt;</PRE>
+
+
+<PRE><A NAME="A109C1518"></A>/*&nbsp;This&nbsp;subroutine&nbsp;draws&nbsp;stuff&nbsp;*/
+drawstuff&nbsp;(int&nbsp;xxx,&nbsp;int&nbsp;yyy)
+{
+&nbsp;&nbsp;&nbsp;color&nbsp;(BLACK);
+&nbsp;&nbsp;&nbsp;clear&nbsp;();
+&nbsp;&nbsp;&nbsp;color&nbsp;(GREEN);
+&nbsp;&nbsp;&nbsp;cmov2i&nbsp;(xxx,&nbsp;yyy);
+&nbsp;&nbsp;&nbsp;charstr&nbsp;(&quot;Hello,&nbsp;World!&quot;);
+&nbsp;&nbsp;&nbsp;swapbuffers&nbsp;();
+}</PRE>
+
+
+<PRE><A NAME="A109C1519"></A>main&nbsp;()
+{
+&nbsp;&nbsp;&nbsp;int&nbsp;ox,&nbsp;oy;
+&nbsp;&nbsp;&nbsp;int&nbsp;ix&nbsp;=&nbsp;150,&nbsp;iy&nbsp;=&nbsp;200;
+&nbsp;&nbsp;&nbsp;int&nbsp;update&nbsp;=&nbsp;TRUE;</PRE>
+
+
+<PRE><A NAME="A109C151a"></A>&nbsp;&nbsp;&nbsp;/*&nbsp;Create&nbsp;and&nbsp;configure&nbsp;window&nbsp;*/
+&nbsp;&nbsp;&nbsp;prefsize&nbsp;(400,&nbsp;400);
+&nbsp;&nbsp;&nbsp;winopen&nbsp;(&quot;HI&nbsp;THERE&quot;);
+&nbsp;&nbsp;&nbsp;doublebuffer&nbsp;();
+&nbsp;&nbsp;&nbsp;gconfig&nbsp;();</PRE>
+
+
+<PRE><A NAME="A109C151b"></A>&nbsp;&nbsp;&nbsp;/*&nbsp;get&nbsp;window&nbsp;origin&nbsp;*/
+&nbsp;&nbsp;&nbsp;getorigin&nbsp;(&amp;ox,&nbsp;&amp;oy);</PRE>
+
+
+<PRE><A NAME="A109C151c"></A>&nbsp;&nbsp;&nbsp;/*&nbsp;queue&nbsp;up&nbsp;input&nbsp;devices&nbsp;*/
+&nbsp;&nbsp;&nbsp;qdevice&nbsp;(REDRAW);&nbsp;&nbsp;/*&nbsp;window&nbsp;needs&nbsp;to&nbsp;be&nbsp;redrawn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+&nbsp;&nbsp;&nbsp;qdevice&nbsp;(WINQUIT);&nbsp;/*&nbsp;user&nbsp;selected&nbsp;&quot;close&quot;&nbsp;from&nbsp;window&nbsp;menu&nbsp;*/
+&nbsp;&nbsp;&nbsp;qdevice&nbsp;(MOUSEX);&nbsp;&nbsp;/*&nbsp;mouse&nbsp;x&nbsp;position,&nbsp;in&nbsp;pixels&nbsp;*/
+&nbsp;&nbsp;&nbsp;qdevice&nbsp;(MOUSEY);&nbsp;&nbsp;/*&nbsp;mouse&nbsp;y&nbsp;position,&nbsp;in&nbsp;pixels&nbsp;*/
+&nbsp;&nbsp;&nbsp;qdevice&nbsp;(ESCKEY);&nbsp;&nbsp;/*&nbsp;user&nbsp;pressed&nbsp;escape&nbsp;key&nbsp;&nbsp;&nbsp;&nbsp;*/
+&nbsp;&nbsp;&nbsp;qdevice&nbsp;(RIGHTMOUSE);/*&nbsp;user&nbsp;pressed&nbsp;right&nbsp;mouse&nbsp;button&nbsp;*/</PRE>
+
+
+<PRE><A NAME="A109C151d"></A>&nbsp;&nbsp;&nbsp;/*&nbsp;enter&nbsp;event&nbsp;loop&nbsp;*/
+&nbsp;&nbsp;&nbsp;while&nbsp;(TRUE)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;long&nbsp;dev;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;short&nbsp;value;</PRE>
+
+
+<PRE><A NAME="A109C151e"></A>&nbsp;&nbsp;&nbsp;/*&nbsp;if&nbsp;there&nbsp;aren't&nbsp;any&nbsp;events,&nbsp;and&nbsp;data&nbsp;has&nbsp;changed,&nbsp;redraw&nbsp;*/
+&nbsp;&nbsp;&nbsp;if&nbsp;(!qtest()&nbsp;&amp;&nbsp;update)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawstuff&nbsp;(ix,&nbsp;iy);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;update&nbsp;=&nbsp;FALSE;
+&nbsp;&nbsp;&nbsp;}</PRE>
+
+
+<PRE><A NAME="A109C151f"></A>&nbsp;&nbsp;&nbsp;/*&nbsp;get&nbsp;the&nbsp;next&nbsp;event&nbsp;*/
+&nbsp;&nbsp;&nbsp;dev&nbsp;=&nbsp;qread&nbsp;(&amp;value);</PRE>
+
+
+<PRE><A NAME="A109C1520"></A>&nbsp;&nbsp;&nbsp;/*&nbsp;dispatch&nbsp;the&nbsp;next&nbsp;event&nbsp;*/
+&nbsp;&nbsp;&nbsp;switch&nbsp;(dev)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;MOUSEX:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ix&nbsp;=&nbsp;value&nbsp;-&nbsp;ox;&nbsp;/*&nbsp;update&nbsp;x&nbsp;location&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;update&nbsp;=&nbsp;TRUE;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;MOUSEY:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iy&nbsp;=&nbsp;value&nbsp;-&nbsp;oy;&nbsp;&nbsp;/*&nbsp;update&nbsp;y&nbsp;location&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;update&nbsp;=&nbsp;TRUE;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;REDRAW:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;redraw&nbsp;it&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getorigin&nbsp;(&amp;ox,&nbsp;&amp;oy);&nbsp;/*&nbsp;get&nbsp;window&nbsp;origin&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;update&nbsp;=&nbsp;TRUE;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;ESCKEY:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;if&nbsp;user&nbsp;presses&nbsp;escape&nbsp;key,&nbsp;quit&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;RIGHTMOUSE:&nbsp;/*&nbsp;if&nbsp;user&nbsp;presses&nbsp;right&nbsp;mouse&nbsp;button,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;quit&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;WINQUIT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;if&nbsp;&quot;close&quot;&nbsp;selected&nbsp;from&nbsp;window&nbsp;menu&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;}
+}</PRE>
+
+
+<P><A NAME="A3C0DE53562mhay"></A>When you run this program, you will find
+that the character string <TT>Hello,&nbsp;World!</TT> follows the cursor
+around. You can can pick up the window, move it, obscure it, and uncover
+it, but it will always appear correctly. The following discussion examines
+the operation of this complicated program in detail. </P>
+
+
+<P><A NAME="A3C0DE53582mhay"></A>First, this program includes a new header
+file: <B>gl/device.h</B>. This file contains definitions and type definitions
+(typedefs) pertaining to GL devices. To make the program easier to read,
+the drawing section has been put into its own subroutine, <TT>drawstuff</TT>,
+which contains a set of GL subroutines. When you want the program to draw,
+call this subroutine. </P>
+
+
+<P><A NAME="A3C0DE53602mhay"></A>The program begins as before: the first
+step opens a window. Next, the program obtains the window origin with the
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/getorigin.html#A142X91f76">getorigin</A></B>
+subroutine, which will be needed later. Then, a number of devices are queued
+up. These devices, the REDRAW device, the MOUSEX device, and so on, generate
+events and place them on a queue. The program reads events from the bottom
+of the queue and processes them according to what came in. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/qdevice.html#A143X967">qdevice</A></B>
+subroutine itself does not generate or process events, but only initializes
+these devices and readies them for use. </P>
+
+
+<P><A NAME="A3C0DE53621mhay"></A>Next, the program enters the event loop.
+Although this looks like an infinite loop, if the user presses either the
+escape key or the right mouse button, or else chooses the <B>Close</B>
+option from the window menu, the program ends. </P>
+
+
+<P><A NAME="A3C0DE53641mhay"></A>In the loop, the program tests to see
+if there are any events on the event queue. If the queue is empty and the
+picture needs to be redrawn, the program begins to draw at this time. If
+the queue is not empty, then the program reads the next event and processes
+it. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/qread.html#A143X989">qread</A></B>
+subroutine returns the device that generated the event and a value associated
+with that event. </P>
+
+
+<P><A NAME="A3C0DE53661mhay"></A>Depending on the device, the switch statement
+branches to the correct code to handle the event. If, for instance, the
+event is a mouse-motion event, the new <I>x</I> or <I>y</I> coordinate
+(or both) is recorded. If the event is an Escape key press, then the program
+is ended. After a nonterminating event is processed, the program returns
+to the beginning of the event loop and processes the next event. </P>
+
+
+<P><A NAME="A3C0DE53680mhay"></A>If the user moves the window, a REDRAW
+event is generated. In this case, the window origin is obtained, so that
+the character string can be drawn in the right place later. </P>
+
+
+<P><A NAME="A3C0DE53700mhay"></A>To learn more about devices and events,
+see <A HREF="cntrlques.html#cntrlques.html">&quot;Controlling Queues and Devices&quot;</A>.</P>
+
+
+
+
+<hr><center>
+[  <a href="animatexmp.html">Previous</a>  |
+<a href="drawwithgl.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/eventsxmp.html Mon, 24 Jan 2022 16:27:48 GMT -->
+</HTML>
+

@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>doublebuffer Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="dopup.html">Previous</a>  |
+<a href="draw.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A145X91a7"></A>doublebuffer Subroutine</H2>
+<A NAME="INDEX437" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX438" REL="I2" TITLE="animation"></A>
+<A NAME="INDEX439" REL="I3" TITLE="doublebuffer"></A>
+<A NAME="INDEX440" REL="I1" TITLE="doublebuffer subroutine (GL)"></A>
+<A NAME="INDEX441" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX442" REL="I2" TITLE="display mode"></A>
+<A NAME="INDEX443" REL="I3" TITLE="setting to double buffer mode"></A>
+<A NAME="INDEX444" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX445" REL="I2" TITLE="frame buffer configuration"></A>
+<A NAME="INDEX446" REL="I3" TITLE="doublebuffer"></A>
+<H3><A NAME="A145X91a9"></A>Purpose</H3>
+<P><A NAME="E1B0A5E021ceb"></A>Sets the display mode to double buffer mode. </P>
+
+<H3><A NAME="A77C114"></A>Libraries</H3>
+<P><A NAME="E1B0A5E170ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0A5E276ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A145X91ac"></A>C Syntax</H3>
+<PRE><A NAME="A145X91ad"></A><B>void doublebuffer(&nbsp;)</B></PRE>
+
+<H3><A NAME="A145X9185"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A145X9188"></A><B>SUBROUTINE DOUBLEBUFFER</B></PRE>
+
+<BLOCKQUOTE><A NAME="A145X91a3"></A><B>Note: </B>In using FORTRAN syntax, it is necessary to spell out DOUBLEBUFFER because the word <I>double</I> is a reserved word.</BLOCKQUOTE>
+
+
+<H3><A NAME="A145X91b0"></A>Description</H3>
+<P><A NAME="E1B0A5E690ceb"></A>The <B>doublebuffer </B>subroutine reorganizes the frame buffer 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A3129mhay">bitplanes</A>
+ into a pair of frame buffers, the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P051c">front buffer and the back buffer</A>. In 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0474">double buffer mode</A>, only the front buffer is displayed. Drawing routines normally update only the back bitplanes; the <A HREF="frontbuffer.html#A145X9a0"><B>frontbuffer</B></A> and <A HREF="backbuffer.html#A145X94a"><B>backbuffer</B></A> subroutines can override the default. </P>
+
+<P><A NAME="E1B0A5E798ceb"></A>The actual repartitioning of the frame buffer into double buffer mode does not occur until the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine is called. The <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine sets <B>frontbuffer</B> = False and <B>backbuffer</B> = True in double buffer mode.</P>
+
+<P><A NAME="E1B0A5E905ceb"></A>To determine the number of bitplanes available in each buffer, use the <A HREF="getgdesc.html#t9311e0marj"><B>getgdesc</B></A> subroutine.</P>
+
+<BLOCKQUOTE><A NAME="A318C9c5f"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A145X91b6"></A>Example</H3>
+<P><A NAME="E1B0A5F119ceb"></A>The example C language program <A HREF="doublebuff_c.html#A16C0c8ee"><B>doublebuff.c</B></A> sets the display mode for double buffering with the <B>doublebuffer</B> subroutine to allow smooth motion when moving and redrawing a cube. </P>
+
+<H3><A NAME="A62C015c95"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0A5F280ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A145X91a1"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C117"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C118"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c338"></A>Related Information</H3>
+<P><A NAME="E1B0A5F599ceb"></A>Enabling updating in the back buffer with the <A HREF="backbuffer.html#A145X94a"><B>backbuffer</B></A> subroutine. </P>
+
+<P><A NAME="E1B0A5F706ceb"></A>Reconfiguring the system with the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine.<B>    </B></P>
+
+<P><A NAME="E1B0A5F813ceb"></A>Finding out which buffers are enabled for writing with the <A HREF="getbuffer.html#A145X9f6"><B>getbuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A5F920ceb"></A>Returning the current display mode with the <A HREF="getdisplaymode.html#A145X9206"><B>getdisplaymode</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A60028ceb"></A>Returning the number of bitplanes available in each buffer with the <A HREF="getgdesc.html#t9311e0marj"><B>getgdesc</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A60136ceb"></A>Enabling updating in the front buffer with the <A HREF="frontbuffer.html#A145X9a0"><B>frontbuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A60243ceb"></A>Writing to and displaying all bitplanes with the <A HREF="singlebuffer.html#A145X9259"><B>singlebuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A60350ceb"></A>Exchanging the font and back buffers with the <A HREF="swapbuffers.html#A145X9302"><B>swapbuffers</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A60458ceb"></A>Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<P><A NAME="E1B0A60565ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>, <!--gl32prgd:--><A HREF="../gl32prgd/animatescene.html#animatescene.html">Creating Animated Scenes</A>.</P><hr><center>
+[  <a href="dopup.html">Previous</a>  |
+<a href="draw.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

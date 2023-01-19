@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>setnurbsproperty Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="setmap.html">Previous</a>  |
+<a href="setpattern.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A257X911b"></A>setnurbsproperty Subroutine</H2>
+<A NAME="INDEX1793" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1794" REL="I2" TITLE="NURBS curves and surfaces"></A>
+<A NAME="INDEX1795" REL="I3" TITLE="setnurbsproperty"></A>
+<A NAME="INDEX1796" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1797" REL="I2" TITLE="surface (NURBS)"></A>
+<A NAME="INDEX1798" REL="I3" TITLE="setting property for display of"></A>
+<A NAME="INDEX1799" REL="I1" TITLE="setnurbsproperty subroutine (GL)"></A>
+
+<H3><A NAME="A257X911d"></A>Purpose</H3>
+<P><A NAME="E1D7481582ceb"></A>Sets a property for the display of trimmed NURBS surfaces.</P>
+
+<H3><A NAME="A78C1355"></A>Libraries</H3>
+<P><A NAME="E1D7481621ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7481645ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A257X9121"></A>C Syntax</H3>
+<PRE><A NAME="A257X9122"></A><B>void setnurbsproperty(Int32</B> <A HREF="setnurbsproperty.html#A257X912a"><I>Property</I></A><B>, Float32</B> <A HREF="setnurbsproperty.html#A257X912b"><I>Value</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c23"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c24"></A><B>SUBROUTINE SETNUR(</B><I>property</I><B>,</B><I> value</I><B>)</B>
+<B>INTEGER*4</B> <I>property</I>
+<B>REAL</B> <I>value</I></PRE>
+
+<H3><A NAME="A257X9125"></A>Description</H3>
+<P><A NAME="E1D7481759ceb"></A>The <B>setnurbsproperty</B> subroutine sets a property for the display of a trimmed Non-Uniform Rational B-Spline (NURBS) surfaces. The display of NURBS surfaces can be controlled in different ways. The following is a list of the display properties that can be affected.</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>N_ERRORCHECKING</TD>
+
+<TD>NERROR</TD>
+
+<TD>If value is 1.0, some error checking is enabled. If error checking is disabled, the system runs slightly faster. The default value is 0.0.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>N_PIXEL_TOLERANCE</TD>
+
+<TD>NPIXEL</TD>
+
+<TD>The value is the maximum length, in pixels, of edges of polygons on the screen used to render trimmed NURBS surfaces. The default value is 50.0 pixels.</TD></TR></TABLE>
+
+<H3><A NAME="A257X9129"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A257X912a"></A><I>property</I></TD>
+<TD>  Specifies the name of the property to be set.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A257X912b"></A><I>value</I></TD>
+<TD>  Specifies the value to which the named property is to be set.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015da4"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7481870ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1358"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1359"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C135a"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A257X9130"></A>Related Information</H3>
+<P><A NAME="E1D7481968ceb"></A>Marking the beginning and end of a NURBS surface definition with the <A HREF="bgnsurface.html#A251X9d7"><B>bgnsurface </B>and <B>endsurface</B></A> subroutines. </P>
+
+<P><A NAME="E1D7481993ceb"></A>Marking the beginning and end of a NURBS surface trimming loop with the <A HREF="bgntrim.html#A251X98d"><B>bgntrim</B> and <B>endtrim</B></A> subroutines. </P>
+
+<P><A NAME="E1D7482019ceb"></A>Returning the current value of a trimmed NURBS surfaces display property with the <A HREF="getnurbsproperty.html#A252X986e"><B>getnurbsproperty</B></A> subroutine. </P>
+
+<P><A NAME="E1D7482044ceb"></A>Controlling the shape of a NURBS trimming curve with the <A HREF="nurbscurve.html#A255X93ca"><B>nurbscurve</B></A> subroutine. </P>
+
+<P><A NAME="E1D7482070ceb"></A>Controlling the shape of a NURBS surface with the <A HREF="nurbssurface.html#A252X98b9"><B>nurbssurface</B></A> subroutine. </P>
+
+<P><A NAME="E1D7482096ceb"></A>Describing a piecewise linear trimming curve for NURBS surfaces with the <A HREF="pwlcurve.html#A257X9fc"><B>pwlcurve</B></A> subroutine. </P>
+
+<P><A NAME="E1D7482121ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">NURBS Curves and Surfaces</A>.</P><hr><center>
+[  <a href="setmap.html">Previous</a>  |
+<a href="setpattern.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

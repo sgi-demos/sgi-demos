@@ -1,0 +1,979 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/specialterms.html Mon, 24 Jan 2022 16:28:21 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Special Terms Used in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="SGIperformance.html">Previous</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H1><A NAME="specialterms.html"></A>Special Terms Used in GL </H1>
+
+
+<P><A NAME="A3C0F2A3015mhay"></A><B>ambient light. </B>Light that reflects
+off of one or more surfaces in the scene before arriving at the target
+surface. Ambient light is assumed to be non-directional, and is reflected
+uniformly in all directions by the reflecting surface. In the GL, ambient
+light is mocked up by use of ambient terms in the lighting equation, rather
+than actually computing the reflections. </P>
+
+
+<P><A NAME="A78P0547"></A><B>aspect ratio</B>. The ratio of the
+height of a primitive to its width. A rectangle of width ten inches and
+height five inches has an <B>aspect ratio</B> of 10/5 or 2. </P>
+
+
+<P><A NAME="A3C0F2A3040mhay"></A><B>asynchronous</B>. Not synchronized
+in time. For example, input events occur at the choosing of the user--the
+program may read them later. </P>
+
+
+<P><A NAME="A78P0561"></A><B>attribute</B>. A parameter that can
+affect the appearance of a drawing primitive. For instance, color is an
+attribute. If the color is set to &quot;RED&quot;, it will remain red until
+changed, and everything that is drawn will be drawn in red. Other attributes
+include linestyle, linewidth, pattern, and font. For a list of attributes
+and pipeline options, see the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/greset.html#xW42e0nita">greset</A></B>
+subroutine. See also <I><A HREF="#A3C0F2A4046mhay">pipeline options</A></I><B>.</B></P>
+
+
+<P><A NAME="A3C0F2A3065mhay"></A><B>azimuthal angle</B>. If a primitive
+is sitting on the ground, with its <I>z</I> coordinate straight up, the
+azimuthal viewing angle is the angle the observer makes with the <I>y</I>
+axis in the <I>x</I>-<I>y</I> plane. If the observer walks in a circle
+with the primitive at the center, the azimuthal angle is the only thing
+that varies. </P>
+
+
+<P><A NAME="A150P1959"></A><B>B-spline cubic curve</B>. A cubic spline
+approximation to a set of four control points having the property that
+slope and curvature are continuous across sets of control points. See also
+<I><A HREF="#A3C0F2A3949mhay">parametric cubic curve</A></I>. </P>
+
+
+<P><A NAME="A25P03bd"></A><B>backfacing polygon</B>. A polygon whose
+vertices appear in clockwise order in screen space. If backface culling
+is enabled, such polygons are not drawn. </P>
+
+
+<P><A NAME="A25P03be"></A><B>basis</B>. In the GL, a curve or patch
+basis is a 4x4 matrix that controls the relationship between control points
+and the approximating spline. B-splines, Bezier curves, and Cardinal splines
+all differ in that they have different bases. </P>
+
+
+<P><A NAME="A25P03bf"></A><B>Bezier cubic curve</B>. A cubic spline
+approximation to a set of four control points that passes through the first
+and fourth control points, and has a continuous slope where two spline
+segments meet. See also <I><A HREF="#A3C0F2A3949mhay">parametric cubic
+curve</A></I>. </P>
+ 
+
+<P><A NAME="A3C0F2A3129mhay"></A><B>bitplane</B>. A <B>bitplane </B>supplies
+one bit of color information per pixel on the display. Thus, an eight bitplane
+system allows 2 to the eighth power different colors to be displayed at
+each pixel. </P>
+
+
+<P><A NAME="A60P0184"></A><B>blit</B>. Bit block transfer. </P>
+
+
+<P><A NAME="A3C0F2A3152mhay"></A><B>Boolean</B>. A value of TRUE or FALSE,
+where TRUE=1 AND FALSE=0 </P>
+
+
+<P><A NAME="A255B966"></A><B>bounding box</B>. A rectangle (2D)
+that bounds a primitive. A bounding box can be used to determine whether
+the primitive lies inside a clipping region. See 
+<I><A HREF="#A25P03e0">clipping.</A></I></P>
+
+
+<P><A NAME="A1819349"></A><B>button</B>. Buttons include those on
+the keyboard, mouse, light pen, or buttons on the dial and button box.</P>
+
+
+<P><A NAME="A25P03de"></A><B>Cardinal cubic spline curve</B>. A
+cubic spline whose endpoints are the second and third of four control points.
+A series of cardinal splines will have a continuous slope, and will pass
+through all but the first and last control points. See also <I><A HREF="#A3C0F2A3949mhay">parametric
+cubic curve</A></I>. </P>
+
+
+<P><A NAME="A25P03e0"></A><B>clipping</B>. If a primitive overlaps
+the boundaries of a window, it is <I>clipped</I>. The part of a primitive
+that appears in the window is displayed and the rest is ignored. There
+are several types of clipping that occur in the system. Three-D drawing
+primitives are clipped to the boundaries of a frustum (for perspective
+transformations) or to a rhombohedron (for orthographic projections). This
+3-D clipping applies as well to the origin of character strings, but not
+to the characters themselves. A 2-D clipping is also performed, where all
+drawing is clipped to the boundaries of AIXwindows. The area
+of 2-D clipping can be controlled with the screenmask. See <I>clipping
+planes</I>, <I><A HREF="#A26P0519">fine clipping</A></I>, 
+<I><A HREF="#A26P0613">gross
+clipping</A></I>, <I><A HREF="#A27P018">screenmask</A></I>, 
+<I><A HREF="#A27P021">transformation</A></I>,
+<I><A HREF="#A13791dc4">window</A></I>. </P>
+
+
+<P><A NAME="A25P03e1"></A><B>clipping planes</B>. Before clipping
+occurs, primitive space is mapped to normalized device coordinates. The
+clipping planes <I>x</I>= +-<I>w</I>; <I>y</I>= +-<I>w</I>; or
+<I>z</I>= +-<I>w</I> correspond to the left, right, top, bottom, near,
+and far planes bounding the viewing frustum. See 
+<A HREF="#A26P051d">frustum</A>.</P>
+
+
+<P><A NAME="A31996bc"></A><B>color map</B>. A lookup table that
+translates color indexes into RGB triplets. The lookup table is sandwiched
+between the frame buffer and the digital-to-analog converters (DACs) and
+serves to translate the color index value stored in the frame buffer into
+the red, green, and blue values required by the DACs. On most hardware
+configurations, the color map is either 8 or 12 bits deep, allowing the
+simultaneous display of 256 or 4096 colors. On most hardware configurations,
+the DACs have an 8-bit per color accuracy, allowing the user to choose
+among 16,777,216 colors. </P>
+
+
+<P><A NAME="A25P03e3"></A><B>color map mode</B>. A configuration
+of the hardware that passes the values stored in the frame buffer through
+a color lookup table (color map), from which the red, green, and blue values
+are obtained for display. Entries in the color map are referred to as color
+indexes. In color map mode, the values stored in the frame buffer are treated
+as color map indexes. See <I><A HREF="#A26P0743">RGB mode</A></I>.</P>
+
+
+<P><A NAME="A3C0F2A3251mhay"></A><B>color ramp.</B> A progression of colors
+in a color map. Most color ramps are smooth, and have only a small number,
+if any, of discontinuities. For instance, if the full set of colors of
+the rainbow were loaded into the color map, that would constitute a color
+ramp. </P>
+
+
+<P><A NAME="A3C0F2A3263mhay"></A><B>concatenation</B>. In the GL, concatenation
+refers to combining a series of geometric transformations--rotations, translations,
+and scaling. Concatenation of transformations corresponds to matrix multiplication.</P>
+
+
+<P><A NAME="A60P0188"></A><B>concave and convex polygons. </B>A
+polygon is convex if the line segment joining any two points in the figure
+is completely contained within the figure. Non-convex polygons are sometimes
+called concave. Algorithms that render only convex polygons are much simpler
+than those that can render both convex and concave polygons. </P>
+
+
+<P><A NAME="A25P03e7"></A><B>control points</B>. Points in real
+space that control the shape of a spline curve. The system provides hardware
+support for wire frame rational cubic splines, and for NURBS surfaces,
+the specifications of which require four control points. </P>
+
+
+<P><A NAME="A25P03e8"></A><B>culling</B>. If a primitive is smaller
+than the minimum size specified in the command, it is <I>culled</I>: no
+further commands in the primitive are interpreted. See <I><A HREF="#A25P03e0">clipping</A></I>,
+<I><A HREF="#A26P0706">pruning</A></I>. </P>
+
+
+<P><A NAME="A25P03e9"></A><B>current character position</B>. The
+two-dimensional screen coordinates where the next character string or pixel
+read/write will occur. </P>
+
+
+<P><A NAME="A3C0F2A3323mhay"></A><B>current color</B>. The color that is
+employed to color all subsequent drawing primitives. All drawing primitives
+are drawn with this color until it is changed. </P>
+
+
+<P><A NAME="A25P03eb"></A><B>current graphics position</B>. The
+homogeneous three-dimensional point form which geometric drawing commands
+will draw. The current graphics position is not necessarily visible. </P>
+
+
+
+
+<P><A NAME="A25P03ed"></A><B>current transformation matrix</B>.
+The transformation matrix on top of the matrix stack. All points passed
+through the graphics pipeline are multiplied by the current transformation
+matrix before being passed on. The current transformation matrix is a concatenation
+of the current modeling and viewing matrices. See <I><A HREF="#A27P021">transformation</A></I>.</P>
+
+
+<P><A NAME="A60P0189"></A><B>current window</B>. The window to which
+the system directs the output from graphics routines. See also <I><A HREF="#A13791dc4">window</A></I>.</P>
+
+
+<P><A NAME="A263A93ae"></A><B>cursor</B>. A primitive such as an
+arrowhead which can be moved about the screen by means of an input device
+(typically a mouse). </P>
+
+
+<P><A NAME="A25P03ee"></A><B>cursor glyph</B>. A 16x16 or 32x32
+raster pattern (bitmap that determines the shape of the cursor. A GL cursor
+glyph can be one or two bits deep; thus, a GL cursor can use up to three
+colors. Color 0 is always transparent. </P>
+
+
+<P><A NAME="A150P19d9"></A><B>depth-cueing</B>. Varying the intensity
+of a line with z-depth. Typically, the points on the line further from
+the eye are darker, so the line seems to fade into the distance. </P>
+
+
+<P><A NAME="A1379161d"></A><B>device</B>. A valuator, button, or
+the keyboard. Buttons have values 0 or 1 (up or down); valuators (mouse,
+dials) return values in a range, and the keyboard returns ASCII values.</P>
+
+
+<P><A NAME="A26P0470"></A><B>dial and switch box</B>. An I/O device
+with 8 dials (valuators) and 32 switches. The switch box is also called
+a <I>button box</I> or the <I>lighted programmable function keys</I> (LPFKs).</P>
+
+
+<P><A NAME="A3C0F2A3431mhay"></A><B>digital-to-analog converter (DAC).</B>
+A highly specialized chip that converts the digital values coming out of
+the frame buffer into the rapidly varying analog voltage levels that are
+required by the monitor. </P>
+
+
+<P><A NAME="A26P0473"></A><B>display list (object)</B>. Also called
+an object. It is a sequence of drawing commands that have been compiled
+into a unit. Conceptually, a display list is like a macro: it can be invoked
+multiple times simply by referring to its name. The object can be instantiated
+at different locations, sizes, and orientations by appropriate use of the
+transformation matrices. For instance, series of polygons arranged in the
+shape of a bolt can be compiled into an object. The bolt can then be drawn
+multiple times by invoking its display list. </P>
+
+
+<P><A NAME="A137915eb"></A><B>dithering</B>. A technique of interleaving
+dark and light pixels so that the resulting image looks smoothly shaded
+when viewed from a distance. </P>
+
+
+<P><A NAME="A26P0474"></A><B>double buffer mode</B>. A mode in which
+two buffers are alternately displayed and updated. A new image can be drawn
+into the back buffer while the front buffer (containing the previous image)
+is displayed. See 
+<I><A HREF="#A27P01c">single
+buffer mode</A></I>.</P>
+
+
+<P><A NAME="A26P0484"></A><B>event queue</B>. A queue that records
+changes in input devices--buttons, valuators, and the keyboard. The event
+queue provides a time-ordered list of input events. </P>
+
+
+<P><A NAME="A237X9485e"></A><B>eye coordinates, eye space</B>. The
+coordinate system in which the viewer's eye is located at the origin, and
+thus all distances are measured with respect to the eye. Viewing transformations
+map from world coordinates into eye coordinates, and projection transformations
+map from eye coordinates to normalized device coordinates. Also called
+viewing coordinates or viewer coordinates. See 
+<I><A HREF="#A26P06el">modeling coordinates</A></I>,
+<I><A HREF="#A27P03d">world coordinates</A></I>, 
+<I><A HREF="#A27P017">screen coordinates</A></I>,
+<I><A HREF="#A27P021">transformation</A></I>. </P>
+
+
+<P><A NAME="A3C0F2A3504mhay"></A><B>field of view</B>. The extent of the
+area which is under view. The field of view is defined by the <B><A HREF="#A27P036">viewing
+matrix</A></B>
+in use. </P>
+
+
+<P><A NAME="A26P0519"></A><B>fine clipping</B>. Fine clipping masks
+all drawing commands to a rectangular region of the screen. It would be
+unnecessary except for the case of character strings. The origin of a character
+string after transformation may be clipped out by gross, or 3-D, clipping,
+and the string would not be drawn. By doing gross clipping with the viewport
+and fine clipping with the screen masks, strings can be moved smoothly
+off the screen to the left or bottom. See <I><A HREF="#A26P0613">gross
+clipping</A></I>.</P>
+
+
+<P><A NAME="A270A983b"></A><B>font</B>. A set of characters in a
+particular style. See <I><A HREF="#A26P073b">raster
+font</A></I>,
+<I><A HREF="#A237X9486c">primitive
+font</A></I>.</P>
+
+
+<P><A NAME="A26P051b"></A><B>forward difference matrix</B>. A 4x4
+matrix that is iterated by adding each row to the next and the bottom row
+is output as the next point. Points so generated generally fall on a rational
+cubic curve. </P>
+
+
+<P><A NAME="A270A984a"></A><B>frame buffer</B>. A quantity of video
+RAM (VRAM) that is used to store the image displayed on the monitor. </P>
+
+
+<P><A NAME="A3C0F2A3565mhay"></A>The frame buffer is the electronic canvas
+on which every drawing primitive is drawn. It is one of the last stops
+in the graphics pipeline, where the final image resides in the form of
+digitally coded intensities and brightnesses. These are converted into
+analog voltage signals 60 times a second and sent to the electron guns
+of the monitor. </P>
+
+
+<P><A NAME="A3C0F2A3578mhay"></A>The dimensions of the frame buffer can
+be changed with GL. Typically, the main frame buffer might be 1024 pixels
+vertical by 1280 pixels horizontal by 8 color bits. The overlay planes
+might by 1024x1280x2. The z-buffer is considered a frame buffer, although
+it is not directly visible from the monitor. (There is no direct means
+of displaying the contents of the z-buffer, although this can be done indirectly.)
+The size of the z-buffer is typically 1024x1280x24. The cursor is a very
+specialized form of a frame buffer; one which can move around. The typical
+cursor is 32x32x2 in size. </P>
+
+
+<P><A NAME="A26P051c"></A><B>front and back buffers</B>. In double
+buffer mode, the main frame buffer bitplanes are separated into two sets--the
+front and back buffers. Bits in the front buffer planes are visible and
+those in the back buffer are not. Typically, an application draws into
+the back buffer and views the front buffer for dynamic graphics. </P>
+
+
+<P><A NAME="A26P051d"></A><B>frustum</B>. A truncated, four-sided
+pyramid; that is, a pyramid with the point cut off. In a perspective projection,
+the shape of the clipping volume is a frustum. The bottom of the frustum
+is referred to the far clipping plane, the top of the frustum is the near
+clipping plane, and the sides are respectively the top, left, bottom, and
+right clipping planes. In an orthographic projection, the clipping volume
+is a parallelepiped. </P>
+
+
+<P><A NAME="A26P060f"></A><B>gamma correction</B>. A logarithmic
+assignment of intensities to lookup table entries for shading applications.
+This is required since the human eye perceives intensities logarithmically
+rather than linearly. </P>
+
+
+<P><A NAME="A26P0610"></A><B>gamma ramp</B>. A set of three lookup
+tables, one for each of the colors red, green, and blue, attached to the
+electron guns of the monitor. Entries in the gamma lookup table can be
+set to adjust for variations in the phosphor quality between different
+brands of monitors. Usually, a logarithmic curve is loaded into the gamma
+lookup tables. (See <I><A HREF="#A26P060f">gamma
+correction</A></I>.)
+The gamma lookup tables are not a subset of the color map tables, but a
+separate entity. </P>
+
+
+<P><A NAME="A26P0611"></A><B>Gouraud shading</B>. A method of shading
+polygons smoothly based on the intensities at their vertices. The color
+is uniformly interpolated along each edge, and then the edge values are
+uniformly interpolated along each scan line. For realistic shading, colors
+should be gamma corrected. </P>
+
+
+<P><A NAME="A26P0612"></A><B>graphics pipeline</B>. The sequence
+of steps that a graphics primitive goes through before it becomes visible
+on the screen: </P>
+
+
+<UL><LI><A NAME="A25C0f70b"></A>Transformation from model coordinates to <A HREF="#A92250jess">NDC</A>
+ coordinates</LI>
+
+
+<LI><A NAME="A25C0f70c"></A>3-D clipping (if out of bounds)</LI>
+
+
+<LI><A NAME="A57C015136"></A>Perspective division</LI>
+
+
+<LI><A NAME="A25C0f70d"></A>Determination of color through lighting equations
+or depth-cueing</LI>
+
+
+<LI><A NAME="A57C015137"></A>Transformation of 
+<A HREF="#A92250jess">NDC</A>
+ coordinates to screen coordinates</LI>
+
+
+<LI><A NAME="A57C015138"></A>2-D clipping (by the screenmask)</LI>
+
+
+<LI><A NAME="A25C0f70f"></A>Rasterization (drawing into the frame buffer)</LI>
+
+
+<LI><A NAME="A25C0f710"></A>Display of frame buffer.</LI></UL>
+
+
+<P><A NAME="A26P0613"></A><B>gross clipping</B>. Also known as 3-D
+clipping this is the clipping that occurs in normalized device coordinates,
+against the sides of the perspective frustum. All 3-D primitives undergo
+this clipping; in particular, the origin of text strings (but not individual
+letters) are clipped in this way. See <I><A HREF="#A25P03e1">clipping
+planes</A></I>,
+<I><A HREF="#A26P0519">fine clipping</A></I>. </P>
+
+
+<P><A NAME="A26P061d"></A><B>hidden surface</B>. A surface of a
+geometric primitive that is not visible because it is obscured by other
+surfaces. See <I><A HREF="#A154P1160a">z-buffering</A></I>. </P>
+
+
+<P><A NAME="A26P061e"></A><B>hit</B>. Also called <B>pick hit</B>
+or <B>select hit.</B> A hit occurs whenever a drawing primitive draws within
+the picking or selecting region. A hit is reported back to the user only
+if the name stack has changed since the last hit. In other words, multiple
+hits may occur although only one pick/select even is reported. See 
+<I><A HREF="#A26P06e3">name stack</A></I>,
+<I><A HREF="#A26P06fa">picking</A></I>, <I><A HREF="#A27P019">selecting</A></I>. </P>
+
+
+<P><A NAME="A26P0623"></A><B>homogeneous coordinates</B>. A four-dimensional
+method of representing three-dimensional space. A point (<I>x</I>, <I>y</I>,
+<I>z</I>, <I>w</I>) in homogeneous coordinates is used to represent a point
+(<I>X</I>, <I>Y</I>, <I>Z</I>) in three-dimensional space by taking <I>X</I>=<I>x</I>/<I>w</I>,
+<I>Y</I>=<I>y</I>/<I>w</I>, <I>Z</I>=<I>z</I>/<I>w</I>. </P>
+
+
+<P><A NAME="A3C0F2A3720mhay"></A><B>immediate mode</B>. In this mode, graphics
+commands are executed immediately rather than being compiled into a display
+list. </P>
+
+
+<P><A NAME="A237X94864"></A><B>instantiate</B>. To make an instance
+of. To replicate. </P>
+
+
+<P><A NAME="A3C0F2A3744mhay"></A><B>linear interpolation</B>. A method
+of approximating data values by assuming that they lie along a straight
+line. Typically, the two end data points are known. For example, if A is
+the value at a, and B is the value at b, and a&lt;t&lt;b, then the value
+C at t is (from the two-point formula):
+<IMG SRC="figures/gl32p28.jpg"></P>
+
+
+<P><A NAME="A172P1436"></A><B>linestyle</B>. The pattern used to
+draw a line. A linestyle might be solid or broken into a pattern of dashes.</P>
+
+
+<P><A NAME="A172P1437"></A><B>linewidth</B>. The width of a line
+in pixels. </P>
+
+
+<P><A NAME="A26P06dd"></A><B>matrix stack</B>. A stack of matrices
+with hardware and software support. The top matrix on the stack is the
+current transformation matrix, and all points passed through the graphics
+pipeline are multiplied by that matrix. It is a concatenation of the current
+modeling and viewing transformations. See 
+<I><A HREF="#A25P03ed">current
+transformation matrix</A></I>.</P>
+
+
+<P><A NAME="A3C0F2A3792mhay"></A><B>mirroring</B>. The creation of a mirror
+image of a primitive. </P>
+
+
+<P><A NAME="A26P06el"></A><B>modeling coordinates, modeling space</B>.
+The coordinate system in which all drawing primitives do their drawing.
+The user can select the position and orientation of the modeling space
+with regard to the world space by means of translations, rotations, scales,
+or generalized transformations. The relation between modeling coordinates
+and world coordinates is determined by the modeling matrix. Modeling coordinates
+are a useful conceptual device when drawing complex or repetitive scenes.
+For instance, a paper clip can be defined once in modeling coordinates,
+and then drawn hundreds of times by moving the modeling coordinates around
+in world space. See <I><A HREF="#A237X9485e">eye
+coordinates</A></I>,
+<I><A HREF="#A27P017">screen
+coordinates</A></I>,
+<I><A HREF="#A27P03d">world coordinates</A></I>, <I><A HREF="#A27P021">transformation</A></I>. </P>
+
+
+<P><A NAME="A26P06e3"></A><B>name stack</B>. A stack of 16-bit integers,
+controllable by the user, used to establish what drawing primitive caused
+a pick or select event. The name stack is written into the pick/select
+event buffer every time a pick or select event occurs. The entire event
+buffer is returned to the user at the end of the pick/select episode. </P>
+
+
+<P><A NAME="A92250jess"></A><B>normalized device coordinates (NDC)</B>.
+Coordinates in the range from -1 to 1. All primitives that draw within
+the unit cube are visible on the screen (unless masked by the screenmask).
+See <I><A HREF="#A27P021">transformation</A></I>, <I><A HREF="#WFu110nita">unit
+cube</A></I>.</P>
+
+
+<P><A NAME="A3C0F2A3841mhay"></A><B>NTSC</B>. A video display and timing
+format that is the American broadcast standard. Most video tape recorders
+record and play back NTSC signals. Specialized hardware is required to
+convert from RGB monitor outputs to an NTSC signal. </P>
+
+
+<P><A NAME="A3C0F2A3852mhay"></A><B>null-terminated</B>. Having a zero
+byte at the end. In the C language, character strings are stored this way
+internally. </P>
+
+
+<P><A NAME="A272X92203"></A><B>NURBS</B>. (Non-Uniform Rational B-spline).
+A parametric surface that can be trimmed with non-uniform rational B-spline
+curves and piecewise linear curves. </P>
+
+
+<P><A NAME="A255B9bc"></A><B>object</B>. Also called a display list.
+It is a sequence of drawing commands that have been compiled into a unit.
+Conceptually, a display list is like a macro: it can be invoked multiple
+times simply by referring to its name. The object can be <A HREF="#A237X94864">instantiated</A> at different locations, sizes, and orientations
+by appropriate use of the transformation matrices. For instance, series
+of polygons arranged in the shape of a bolt can be compiled into an object.
+The bolt can then be drawn multiple times by invoking its display list.</P>
+
+
+<P><A NAME="A3C0F2A3889mhay"></A><B>object space</B>. The space in which
+a graphics object is defined. A convenient point is chosen as the origin
+and the object is defined relative to this point. When an object is rendered
+by a call to the <B>callobj</B> subroutine, it is rendered in modeling
+coordinates, and the object space becomes (for that moment) the same as
+the modeling space. </P>
+
+
+<P><A NAME="A237X9486d"></A><B>orthographic projection</B>. A representation
+in which the lines of a projection are parallel. Orthographic projections
+lack <I>perspective foreshortening</I> and its accompanying sense of depth
+realism. Because they are simple to draw, orthographic projections are
+often used by draftsmen. See <I><A HREF="#A237X9486f">perspective
+projection</A></I>.</P>
+
+
+<P><A NAME="A3C0F2A3912mhay"></A><B>parametric bicubic surface. </B>A surface
+defined by three equations. The <I>x</I> equation is:
+ 
+<IMG SRC="figures/gl32p29.jpg"></P>
+
+
+<P><A NAME="A3C0F2A3925mhay"></A>The equations for <I>y</I> and <I>z</I>
+are similar. </P>
+
+
+<P><A NAME="A3C0F2A3937mhay"></A>The points on a bicubic patch are defined
+by varying the parameters <I>u</I> and <I>v</I> from 0 to 1. If one parameter
+is held constant and the other is varied from 0 to 1, the result is a cubic
+curve. If <I>w</I>(<I>u</I>,<I>v</I>)=1 for all <I>u</I>,<I>v</I>, the
+bicubic surface is called &quot;ordinary,&quot; but if <I>w</I>(<I>u</I>,<I>v</I>)
+varies as a function of <I>u</I>,<I>v</I>, then the surface is called &quot;rational.&quot;
+See also <I><A HREF="#A26P0623">homogeneous
+coordinates</A></I>.</P>
+
+
+<P><A NAME="A3C0F2A3949mhay"></A><B>parametric cubic curve</B>. A curve
+defined by the equation: 
+
+<IMG SRC="figures/gl32p30.jpg"></P>
+
+
+<P><A NAME="A3C0F2A3962mhay"></A>where<I> x, y, z,</I> and <I>w</I> are
+cubic polynomials. The parameter <I>t</I> typically varies between 0 and
+1. Such a curve is considered rational only if a(w), b(w), or c(w) is not
+equal to 0; otherwise, it is simply an ordinary parametric curve. </P>
+
+
+<P><A NAME="A26P06f7"></A><B>patch</B>. A parametric bicubic surface.</P>
+
+
+<P><A NAME="A13791abd"></A><B>pattern</B>. A 16x16, 32x32, or 64x64
+array of bits defining the texturing of polygons on the system display.</P>
+
+
+<P><A NAME="A237X9486f"></A><B>perspective projection</B>. Perspective
+projection is a technique used to achieve realism when drawing primitives.
+In a perspective projection, the lines of projection meet at the viewpoint;
+thus the size of a primitive varies inversely with its distance from the
+source projection. The farther a primitive or part of a primitive is from
+the viewer, the smaller it will be drawn. This effect, known as <I>perspective
+foreshortening</I>, is similar to the effect achieved by photography and
+by the human visual system. See <I><A HREF="#A237X9486d">orthographic
+projection</A></I>.
+
+<P><A NAME="A26P06fa"></A><B>picking</B>. A method for finding out
+what primitives are being drawn near the cursor on the display screen.
+See <I><A HREF="#A26P06fb">picking
+region</A></I>,
+<I><A HREF="#A27P019">selecting</A></I>, <I><A HREF="#A27P01a">selecting
+region</A></I>,
+<I><A HREF="#A26P06e3">name stack</A></I>. </P>
+
+
+<P><A NAME="A26P06fb"></A><B>picking region</B>. A rectangular volume
+around the cursor that is sensitive to picking events. If a drawing primitive
+draws within this volume, a pick event is reported. The width and height
+of the region can be set by the user. If the z-buffer is enabled, the depth
+of the region is the entire z-buffer. See <I><A HREF="#A26P061e">hit</A></I>, 
+<I><A HREF="#A26P06fa">picking</A></I>, <I><A HREF="#A27P01a">selecting
+region</A></I>.</P>
+
+
+<P><A NAME="rEf3b0nita"></A><B>piecewise linear curve</B>. A list
+of coordinate pairs in the parameter space for the non-uniform rational
+B-spline (NURBS) surface. These points are connected with straight lines
+to form a path. </P>
+
+
+<P><A NAME="A3C0F2A4046mhay"></A><B>pipeline options</B>. Variables that
+control the flow of processing in the graphics pipeline. For instance,
+lighting is a pipeline option: if lighting is turned on, the color of a
+primitive is obtained by evaluating the lighting equations, and if lighting
+is turned off, the last color specified is used. Other pipeline options
+are the backfacing flag, the shademodel flag, the depth-cueing flag, the
+picking flag, the color mode (color index or RGB) flag, the z-buffer flag
+(enables or disables drawing to the z-buffer), and so on. See also <I><A HREF="#A78P0561">attributes</A></I>. </P>
+
+
+<P><A NAME="A26P06fd"></A><B>pixel</B>. A rectangular picture element.
+A display screen is composed of an array of pixels. In a black-and-white
+system, pixels are turned on and off to form images. In a color system,
+each pixel has three components: red, green, and blue. The intensity of
+each component can be controlled. </P>
+
+
+<P><A NAME="A13791ae7"></A><B>pixmap</B>. A rectangular array of
+pixels. The rectangle may be of any size. The format of a pixel is arbitrary
+and may be an RGB triplet or a color index. </P>
+
+
+<P><A NAME="A26P06ff"></A><B>polar coordinates</B>. A coordinate
+system in which positions are measured as a distance from the origin and
+an angle from some reference direction (usually, counterclockwise from
+the <I>x</I>-axis). </P>
+
+
+<P><A NAME="A3C0F2A4095mhay"></A><B>polled I/O devices</B>. Devices (keyboard,
+mouse, button, dials) whose current values are read by the user process.</P>
+
+
+<P><A NAME="A3C0F2A4107mhay"></A><B>pre-multiplication</B>. Matrix multiplication
+on the left. If a matrix M is pre-multiplied by a matrix T, the result
+is TM. </P>
+
+
+<P><A NAME="A13791b03"></A><B>precision</B>. The number of straight
+line segments used to approximate one segment of a spline. </P>
+
+
+<P><A NAME="A26P0702"></A><B>primitive</B>. A drawing command, such
+as <B>arc</B>, <B>line</B>, <B>circle</B>, <B>polygon</B>, or <B>charstr</B>.
+Such commands are called primitives because they are not made up of smaller
+parts, and because they are they basic pieces out of which more complex
+scenes can be composed. Also used to describe the figures created by drawing
+commands. </P>
+
+
+<P><A NAME="A237X9486c"></A><B>primitive font</B>. A font in which
+characters are defined as primitives. Like all other primitives, primitive
+font characters can be scaled and rotated. See <I><A HREF="#A26P073b">raster
+font</A></I>.</P>
+
+
+<P><A NAME="A26P0706"></A><B>pruning</B>. Eliminating the drawing
+of parts of the display list because a bounding box test shows that they
+are not visible. </P>
+
+
+<P><A NAME="A3C0F2A4167mhay"></A><B>queued I/O devices</B>. Devices (keyboard,
+mouse, button, dials) whose changes are recorded in the event queue. </P>
+
+
+<P><A NAME="A26P073b"></A><B>raster font</B>. A font in which the
+characters are defined directly by the raster bit map. See <I><A HREF="#A270A983b">font</A></I>, <I><A HREF="#A237X9486c">primitive
+font</A></I>.</P>
+
+
+<P><A NAME="A3C0F2A4190mhay"></A><B>raster subsystem.</B> That part of
+the subsystem concerned with an image after it has been transformed and
+scaled to screen coordinates. It includes scan conversion and display.</P>
+
+
+<P><A NAME="A237X94876"></A><B>refresh rate</B>. The rate at which
+the monitor is refreshed. A 60 Hz monitor is redrawn 60 times per second.</P>
+
+
+<P><A NAME="A3C0F2A4214mhay"></A><B>relative drawing commands</B>. Commands
+that draw relative to the current graphics position as opposed to being
+drawn at absolute locations. </P>
+
+
+<P><A NAME="A26P0741"></A><B>repeat factor</B>. The magnification
+with which the linestyle pattern is used. </P>
+
+
+<P><A NAME="A26P0743"></A><B>RGB mode</B>. A configuration of the
+hardware which allows values stored in the frame buffer to be interpreted
+as packed RGB values. The values found in the frame buffer are passed directly
+to the red, green, and blue guns of the display monitor. The values are
+not passed through the color map first. (However, each color is sent individually
+through the gamma ramp to make a final correction to its intensity.) See
+<I><A HREF="#A25P03e3">color map
+mode</A></I>.</P>
+
+
+<P><A NAME="A255B9de"></A><B>RGB value</B>. The set of red, green,
+and blue intensities that compose a color is that color's RGB value. </P>
+
+
+<P><A NAME="A26P0742"></A><B>RGBA value</B>. The set of red, green,
+blue, and alpha intensities that compose a color is that color's RGBA value.
+Alpha values are available only on machines having alpha bitplanes. </P>
+
+
+<P><A NAME="A154P11365"></A><B>right-hand rule</B>. If the right hand
+is wrapped around the axis of rotation, the fingers curl in the same direction
+as positive rotation, and the thumb points in the same direction as the
+axis of rotation. A right-handed rotation is counter-clockwise. </P>
+
+
+<P><A NAME="A3C0F2A4284mhay"></A><B>rotation</B>. The transformation of
+a primitive by rotating it about an axis. See <I><A HREF="#A27P021">transformation</A></I>. </P>
+
+
+<P><A NAME="A3C0F2A4296mhay"></A><B>scaling</B>. Uniform stretching of
+a primitive along an axis. </P>
+
+
+<P><A NAME="A27P017"></A><B>screen coordinates, screen space</B>.
+The coordinate system that defines the display screen. Distances are measured
+in units of pixels, and the origin is in the lower left-hand corner. On
+most systems the screen size is 1024 pixels high by 1280 pixels wide. The
+viewport defines the mapping from normalized device coordinates to screen
+coordinates. See <I><A HREF="#A237X9485e">eye
+coordinates</A></I>,
+<I><A HREF="#A26P06el">modeling
+coordinates</A></I>,
+<I><A HREF="#A27P03d">world coordinates</A></I>, <I><A HREF="#A27P021">transformation</A></I>. </P>
+
+
+<P><A NAME="A27P018"></A><B>screenmask</B>. A rectangular area
+of the screen to which all drawing operations are clipped. It is normally
+set equal to the viewport and to the window. A screenmask is useful for
+character clipping. </P>
+
+
+<P><A NAME="A27P019"></A><B>selecting</B>. A method for finding
+what primitives are being drawn in a given volume in 3-D space. See 
+<I><A HREF="#A26P06fa">picking</A></I>, 
+<I><A HREF="#A26P06fb">picking region</A></I>,
+<I><A HREF="#A26P06e3">name stack</A></I>, 
+<I><A HREF="#A27P01a">selecting
+region</A></I>.</P>
+
+
+<P><A NAME="A27P01a"></A><B>selecting region</B>. A rhomboid-shaped
+volume in world coordinates that is sensitive to selecting events. If a
+drawing primitive draws within this region, a select event is reported.
+See <I><A HREF="#A26P061e">hit</A></I>, 
+<I><A HREF="#A26P06fb">picking
+region</A></I>,
+<I><A HREF="#A27P019">selecting</A></I>, <I><A HREF="#A27P021">transformation</A></I>. </P>
+
+
+<P><A NAME="A27P01c"></A><B>single buffer mode</B>. A mode in which
+the frame buffer bitplanes are organized into a single large frame buffer.
+This frame buffer is the one currently displayed and is also the one in
+which all drawing occurs. See <I><A HREF="#A26P0474">double
+buffer mode</A></I>.</P>
+
+
+<P><A NAME="A3C0F2A4368mhay"></A><B>swap interval</B>. The amount of elapsed
+time between frame buffer swaps. The system waits at least the amount of
+time specified by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/swapinterval.html#A145X92af">swapinterval</A></B>
+subroutine before honoring a request to exchange the front and back buffers.
+The swap interval is measured in units of vertical retraces, which occur
+every 30th of a second on most systems. The swap interval is useful in
+achieving smooth-flowing animation. </P>
+
+
+<P><A NAME="A3C0F2A4379mhay"></A><B>tag</B>. A marker in the display list
+used as the location for display list editing. </P>
+
+
+<P><A NAME="A154P11506"></A><B>textport</B>. A region on the display
+screen used to present textual output from graphical or non-graphical programs.</P>
+
+
+<P><A NAME="A27P020"></A><B>texture</B>. A pattern used to fill
+rectangles, convex polygons, arcs, and circles. </P>
+
+
+<P><A NAME="A27P021"></A><B>transformation</B>. A four-by-four
+matrix that helps determine the location where 3D drawing will occur, the
+position of the viewpoint (the viewer's eye), and the amount of the scene
+encompassed and visible. Transformations occur at four points within the
+graphics pipeline: </P>
+
+
+<UL><LI><A NAME="A27P022"></A>Modeling transformation, which maps modeling
+coordinates into world coordinates. All drawing primitives specify positions
+that are presumed to be positions in modeling coordinates. Modeling transformation
+can be used to move the thing being drawn.</LI>
+
+
+<LI><A NAME="A27P023"></A>Viewing transformation, which maps from world
+coordinates to viewer coordinates. The origin of the viewer coordinate
+system can be thought of as the location of the viewer's &quot;eye,&quot;
+and viewing transformations can be used to move the eye around in world
+coordinates.</LI>
+
+
+<LI><A NAME="A27P024"></A>Projection transformation, which defines the
+boundaries of the clipping region. A projection transformation maps viewer
+coordinates to normalized device coordinates, and the clipping plane boundaries
+are at <I>x</I> =  +-<I>w</I>, <I>y</I> =  +-<I>w</I>, <I>z</I>
+=  +-<I>w</I>. Projection transformations are used to define what
+region of the world is visible on the screen.</LI>
+
+
+<LI><A NAME="A27P025"></A>Viewport, or NDC to DC transformation. The viewport
+transformation is not a full-fledged four-by-four transformation matrix;
+only three of the diagonal elements in the matrix can be changed. The viewport
+determines the mapping from normalized device coordinates to screen (device)
+coordinates. By default viewports are the same size as the window, although
+this can be adjusted.</LI></UL>
+
+
+<P><A NAME="A3C0F2A4430mhay"></A><B>translation</B>. The moving of a display
+image in a straight line from one location to another. See <B><A HREF="#A27P021">transformation</A></B>. </P>
+
+
+<P><A NAME="A154P11542"></A><B>trimming loops. </B>A set of oriented
+closed curves used to set the boundaries of a NURBS surface. See <I><A HREF="#A272X92203">NURBS</A></I>. </P>
+
+
+<P><A NAME="A3C0F2A4454mhay"></A><B>twist</B>. A rotation around the line
+of sight. </P>
+
+
+<P><A NAME="WFu110nita"></A><B>unit cube</B>. A volume defined by
+the following intersecting planes: <I>x</I> = -1, <I>x</I> = 1, <I>y</I>
+= -1, <I>y</I> = 1, <I>z</I> = -1, <I>z</I> = 1. See <I><A HREF="#A92250jess">normalized
+device coordinates</A></I>. </P>
+
+
+<P><A NAME="A79P07a"></A><B>valuator</B>. An input/output device
+that returns a value in a range. For example, a mouse is logically two
+valuators: the <I>x</I> position and the <I>y</I> position. </P>
+
+
+<P><A NAME="A3C0F2A4489mhay"></A><B>vector product</B>. Another term for
+the vector cross product. If a=(a1, a2, a3) and b=(b1, b2, b3) are two
+3D vectors, the vector product a times b = (a2b3-b2a3, a3b1-b3a1, a1b2-b1a2).</P>
+
+
+<P><A NAME="A27P031"></A><B>vertical retrace</B>. The rate at which
+the monitor is refreshed. A 60 Hz monitor is redrawn 60 times per second.
+Same as <I><A HREF="#A237X94876">refresh
+rate</A></I>.</P>
+
+
+<P><A NAME="A3C0F2A4512mhay"></A><B>vertical retrace period</B>. The amount
+of elapsed time between retraces of the screen. All video monitors use
+an electron beam to sweep the phosphors at the face of the monitor. Because
+the phosphors glow for only a brief period of time, the entire screen must
+be reswept periodically by the electron beam. On most monitors, this is
+done 30 times per second (30 Hz). Thus, the vertical retrace period is
+1/30 second. </P>
+
+
+<P><A NAME="A27P036"></A><B>viewing matrix</B>. A matrix used to
+describe the location of the viewer (the virtual eye looking upon a scene)
+in relation to the world. See <I><A HREF="#A27P021">transformation</A></I>, <I><A HREF="#A27P03d">world
+coordinates</A></I>.</P>
+
+
+<P><A NAME="A27P039"></A><B>viewport</B>. The mapping from normalized
+device coordinates to device coordinates. The viewport maps the unit cube
+<I>x</I>/<I>w</I> =  +-1, <I>y</I>/<I>w</I> =  +-1, <I>z</I>/<I>w</I>
+=  +-1 to the screen space, as measured in pixels. The viewport is
+the last transformation in the graphics pipeline. The viewport can be smaller
+or larger than the window and smaller or larger than the screenmask, although
+in most applications, it is the same size. </P>
+
+
+<P><A NAME="A13791dc4"></A><B>window</B>. An AIXwindow. A rectangular
+area of the screen that can be moved about or placed on top of or pulled
+under other windows, or iconized by the user. All drawing inside the window
+is done by the GL process that created that window, and is totally under
+the control of that process. The drawing of the window borders, however,
+together with the window placement/iconization, is under the control of
+the window manager, for example, the AIXwindows window manager.</P>
+
+
+<P><A NAME="A3C0F2A4560mhay"></A>For most simple GL programs, the viewport
+and screenmask are set to the same size as the window. Do not confuse an
+AIXwindow with the GL window subroutine, which defines a <A HREF="#A26P051d">frustum</A> in <A HREF="#A27P03d">world
+space</A>.</P>
+
+
+<P><A NAME="A3C0F2A4572mhay"></A><B>wire frame</B>. A graphics surface-drawing
+technique in which the edges and contours of a primitive are represented
+by simple lines. </P>
+
+
+<P><A NAME="A27P03d"></A><B>world coordinates, world space</B>.
+The user-defined coordinate system in which an image is described. Modeling
+commands are used to position primitives in world space. Viewing and projection
+transformations define the mapping of the world space to screen space.
+See <I><A HREF="#A26P06el">modeling
+coordinates</A></I>,
+<I><A HREF="#A27P017">screen
+space</A></I>,
+<I><A HREF="#A27P021">transformations</A></I>. </P>
+
+
+<P><A NAME="A3C0F2A4599mhay"></A><B>writemask</B>. A set of 8 or 12 bits
+(depending on the frame buffer configuration), one bit for each bitplane
+of the frame buffer. During any drawing operation, only those planes enabled
+by a 1 (one) in the bit mask can be altered. Planes set to 0 (zero) are
+marked read only. </P>
+
+
+<P><A NAME="A154P1160a"></A><B>z-buffer, z-buffering</B>. Applies
+both to the device and the techniques commonly used as an aid in removing
+hidden lines and hidden surfaces. If z-buffering is enabled, each pixel
+will store a depth value as well as a color value. In simple terms, the
+depth can be thought of as the distance from the viewer's eye to the pixel.
+Whenever a drawing routine tries to update a pixel, it will first check
+the current pixel's &quot;depth&quot; or &quot;z-value&quot; and will only
+update that pixel with new values if the new pixel is closer than the current
+pixel. The region of memory that stores the z-values is also referred to
+as the z-buffer. </P>
+
+
+<P><A NAME="A27P040"></A><B>zoom factor</B>. A multiplier to determine
+the amount of enlargement of a specified screen rectangle. The <I>x</I>
+zoom factor determines the enlargement in the <I>x</I> direction; the <I>y</I>
+zoom factor, in the <I>y </I>direction. </P>
+
+
+
+
+</P><hr><center>
+[  <a href="SGIperformance.html">Previous</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/specialterms.html Mon, 24 Jan 2022 16:28:21 GMT -->
+</HTML>
+

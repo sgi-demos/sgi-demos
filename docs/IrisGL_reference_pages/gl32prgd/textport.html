@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/textport.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Working with the Textport in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="popupmenus.html">Previous</a>  |
+<a href="exhwindcalls.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+<H2><A NAME="textport.html"></A>Working with the Textport</H2>
+
+
+<P><A NAME="INDEX914"></A><A NAME="INDEX915"></A><A NAME="INDEX916"></A><A NAME="INDEX917"></A></P>
+
+
+<P><A NAME="A3C0ED5A947mhay"></A>GL provides subroutines both to set up
+a textport, a window associated with a graphics application shell, and
+to turn it on and off. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/textport.html#A143X9cb7">textport</A></B>
+subroutine allocates an area of the screen for a textport, and the parameters
+specify the screen coordinates for the textport. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A258C01c061"></A>void&nbsp;textport(Screencoord&nbsp;left,&nbsp;Screencoord&nbsp;right,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Screencoord&nbsp;bottom,&nbsp;Screencoord&nbsp;top</PRE>
+
+
+<P><A NAME="A3C0ED5A969mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/tpon.html#A14k110nita">tpon</A></B>
+subroutine brings the textport to the front of any windows that conceal
+it so that character strings can be drawn into it. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/tpoff.html#A143X9c2f">tpoff</A></B>
+subroutine pushes the textport behind all other windows. When the textport
+is off, it is not visible on the screen, and character strings cannot be
+written into it. The syntax for the <B>tpon</B> and <B>tpoff</B> subroutines
+is as follows: </P>
+
+
+<PRE><A NAME="A258C01c063"></A>void&nbsp;tpon()</PRE>
+
+
+<PRE><A NAME="A258C01c064"></A>void&nbsp;tpoff()</PRE>
+
+
+<H3><A NAME="A319C92603"></A>List of GL Textport Subroutines<A NAME="INDEX918"></A>
+<A NAME="INDEX919"></A> <A NAME="INDEX920"></A> <A NAME="INDEX921"></A>
+<A NAME="INDEX922"></A> <A NAME="INDEX923"></A> </H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A319C92604"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/textport.html#A143X9cb7">textport</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Allocates an area of the screen for a textport. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A319C92605"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/tpoff.html#A143X9c2f">tpoff</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Turns off the textport. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A319C92606"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/tpon.html#A14k110nita">tpon</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Turns on the textport.</TD></TR></TABLE>
+
+
+<hr><center>
+[  <a href="popupmenus.html">Previous</a>  |
+<a href="exhwindcalls.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/textport.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+

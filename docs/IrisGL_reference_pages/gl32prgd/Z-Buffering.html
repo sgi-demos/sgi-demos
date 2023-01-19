@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/Z-Buffering.html Mon, 24 Jan 2022 16:28:07 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>Z-Buffering
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="backfacepoly.html">Previous</a>  |
+<a href="contrzvals.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="Z-Buffering.html"></A>Z-Buffering</H2>
+<A NAME="INDEX466" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX467" REL="I2" TITLE="z buffering"></A>
+<A NAME="INDEX468" REL="I1" TITLE="z buffering"></A>
+<A NAME="INDEX469" REL="I2" TITLE="GL"></A>
+<P><A NAME="A3C0EA34074mhay"></A>The z-buffer determines which of the things being drawn (polygons, lines, or text) is closest to the viewer. The distance to the figure being drawn is compared to the distance of the shapes already drawn in the scene. If the current figure is more distant (and therefore hidden), it is not drawn. </P>
+
+<P><A NAME="A3C0EA34095mhay"></A>The z-buffer is a set of 24-bit integers, one associated with each pixel of the screen. You start by clearing the z-buffer: that is, by setting the <I>z</I> value of each pixel to the most distant (most positive) value possible. Then as each polygon, line, point, or character is rendered, its <I>x</I> and <I>y</I> screen coordinates are calculated in the usual way. Before the pixel is colored, however, the <I>z</I> coordinate is also calculated. The <I>z</I> coordinate is effectively the distance to the eye. </P>
+
+<P><A NAME="A3C0EA34115mhay"></A>This incoming <I>z</I> value is compared to the z-buffer value already stored for that pixel. If the <I>z</I> value is smaller than the value in the z-buffer, the pixel is colored, and the pixel's z-buffer value is set to the new <I>z</I> value. At any point in the drawing, the values in the z-buffer represent the distance to the item that is currently closest to the eye. The color value stored in the bitplanes represents the color of that item. The <I>z</I> comparison is unsigned.</P>
+
+<P><A NAME="A3C0EA34135mhay"></A>Near and far values in the call to perspective have a profound effect on the resolution of the z-buffer's comparison facility. The z-buffer contains a fixed and finite number of integer values that can be used to compare against the <I>z</I> value of the object in the scene. With this capability, you can control the resolution of the z-buffer by setting the near and far values. The more closely you bracket the objects between the near and far clipping planes, the better <I>z</I> compare resolution you achieve.</P>
+
+<P><A NAME="A3C0EA34156mhay"></A>The <!--:libs:gl32tref:--><A HREF="../gl32tref/zbuffer2_c.html#MYO10nita"><B>zbuffer2.c</B></A> example program draws three cubical objects (they are all originally perfect cubes, but scale stretches them along their axes). The objects tumble through each other and the whole scene is also rotating. While the left mouse button is up, the scene is drawn without z-buffering. When it is down, z-buffering is enabled. If the program is called with an argument, there is a short delay between drawing each of the polygons. In this mode, the left mouse button still controls the z-buffering.</P>
+
+<P><A NAME="A3C0EA34176mhay"></A>The key part of the program that turns on the z-buffering is the pair of subroutines:</P>
+<PRE><A NAME="A258C01bf9d"></A>zbuffer(TRUE);</PRE>
+<PRE><A NAME="A258C01bf9e"></A>zclear();</PRE>
+
+<P><A NAME="A3C0EA34198mhay"></A>The first subroutine enables z-buffer comparisons to be made before each write, and the second sets all the <I>z</I> values to the largest possible value for pixels in the viewport. In this example, <SAMP>zbuffer(TRUE)</SAMP> is called for every frame, but this is not necessary. The <SAMP>zbuffer(TRUE)</SAMP> call in a typical program is called only at the beginning. In the <!--:libs:gl32tref:--><A HREF="../gl32tref/zbuffer2_c.html#MYO10nita"><B>zbuffer2.c</B></A> example program, the code is written as it is because the left mouse button can come up at any time, in which case z-buffering should be turned off.</P>
+
+<P><A NAME="A3C0EA34217mhay"></A>The <B>getzbuffer</B> subroutine returns True or False, depending on whether z-buffering is enabled or not. By default, z-buffering is turned off; most applications that require 3-D hidden surface removal should probably turn on z-buffering.</P><hr><center>
+[  <a href="backfacepoly.html">Previous</a>  |
+<a href="contrzvals.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/Z-Buffering.html Mon, 24 Jan 2022 16:28:07 GMT -->
+</HTML>
+
+

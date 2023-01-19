@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>tie Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="textport.html">Previous</a>  |
+<a href="tpoff.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9196"></A>tie Subroutine</H2>
+<A NAME="INDEX1913" REL="I1" TITLE="tie subroutine (GL)"></A>
+<A NAME="INDEX1914" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1915" REL="I2" TITLE="device"></A>
+<A NAME="INDEX1916" REL="I3" TITLE="tying two valuators to a button"></A>
+<A NAME="INDEX1917" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1918" REL="I2" TITLE="queue and device"></A>
+<A NAME="INDEX1919" REL="I3" TITLE="tie"></A>
+
+<H3><A NAME="A143X9198"></A>Purpose</H3>
+<P><A NAME="E1D755F970ceb"></A>Ties two valuators to a button.</P>
+
+<H3><A NAME="A79C118d"></A>Libraries</H3>
+<P><A NAME="E1D7560010ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7560034ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X919c"></A>C Syntax</H3>
+<PRE><A NAME="A143X919d"></A><B>void tie(Device</B> <A HREF="tie.html#A143X91a1"><I>button</I></A><B>, Device </B><A HREF="tie.html#A143X91a2"><I>val1</I></A><B>, Device</B> <A HREF="tie.html#A143X91a3"><I>val2</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c7f"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c80"></A><B>SUBROUTINE TIE(</B><I>button</I><B>, </B><I>val1</I><B>, </B><I>val2</I><B>)</B>
+<B>INTEGER*4 </B><I>button</I><B>, </B><I>val1</I><B>, </B><I>val2</I></PRE>
+
+<H3><A NAME="A143X919e"></A>Description</H3>
+<P><A NAME="E1D7560149ceb"></A>The <B>tie</B> subroutine requires a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A1819349">button</A> and two 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A79P07a">valuators</A>, specified by the <A HREF="tie.html#A143X91a2"><I>val1</I></A> and <A HREF="tie.html#A143X91a3"><I>val2</I></A> parameters. When a queued button changes state, three entries are made in the queue: one records the current state of the button, and two record the current positions of each valuator. </P>
+
+<P><A NAME="E1D7560174ceb"></A>Tie one valuator to a button by making the <I>val2</I> parameter = 0. Untie a button by making both the <I>val1</I> and <I>val2 </I>parameters = 0. The <A HREF="tie.html#A143X91a1"><I>button</I></A> parameter precedes both the <I>val1</I> and <I>val2</I> parameters in the
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0484">event queue</A>. The <I>val1 </I>parameter appears before the <I>val2</I> parameter. </P>
+
+<BLOCKQUOTE><A NAME="A318C9f8d"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X91a0"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X91a1"></A><I>button</I> </TD>
+<TD>  Specifies the current state of a button.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X91a2"></A><I>val1</I> </TD>
+<TD>  Specifies the current position of the first valuator.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X91a3"></A><I>val2</I></TD>
+<TD>  Specifies the current position of the second valuator.</TD></TR></TABLE>
+
+<H3><A NAME="A30C01106c"></A>Example</H3>
+<P><A NAME="E1D7560308ceb"></A>The example C language program <A HREF="vlsi_c.html#A16C0c9fd"><B>vlsi.c</B></A> uses the <B>tie</B> subroutine to enter the current mouse coordinates into the event queue whenever the left or middle mouse buttons are pressed.</P>
+
+<H3><A NAME="A64C016626"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7560352ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A143X91b2"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1190"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1191"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1192"></A><B>/usr/include/gl/device.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1193"></A><B>/usr/include/gl/fdevice.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X91b6"></A>Related Information</H3>
+<P><A NAME="E1D7560487ceb"></A>Returning the current state of a button with the <A HREF="getbutton.html#A143X91"><B>getbutton</B></A> subroutine.</P>
+
+<P><A NAME="E1D7560513ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/keyboardgl.html#keyboardgl.html">Using the Keyboard</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/cntrlques.html#cntrlques.html">Controlling Queues and Devices</A>.</P><hr><center>
+[  <a href="textport.html">Previous</a>  |
+<a href="tpoff.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

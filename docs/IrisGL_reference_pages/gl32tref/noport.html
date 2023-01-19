@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>noport Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="noise.html">Previous</a>  |
+<a href="normal.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="ZN13170marj"></A>noport Subroutine</H2>
+<A NAME="INDEX1245" REL="I1" TITLE="noport subroutine (GL)"></A>
+<A NAME="INDEX1246" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1247" REL="I2" TITLE="window"></A>
+<A NAME="INDEX1248" REL="I3" TITLE="noport subroutine"></A>
+<A NAME="INDEX1249" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1250" REL="I2" TITLE="windows"></A>
+<A NAME="INDEX1251" REL="I3" TITLE="specifying"></A>
+
+<H3><A NAME="A213X912ba8"></A>Purpose</H3>
+<P><A NAME="E1D702A292ceb"></A>Specifies that a program does not require a window.</P>
+
+<H3><A NAME="A79C1314"></A>Libraries</H3>
+<P><A NAME="E1D702A331ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D702A355ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912bab"></A>C Syntax</H3>
+<PRE><A NAME="A213X912bac"></A><B>void noport(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010c4b"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c4c"></A><B>SUBROUTINE NOPORT</B></PRE>
+
+<H3><A NAME="A213X912baf"></A>Description</H3>
+<P><A NAME="E1D702A464ceb"></A>The <B>noport </B>subroutine specifies that a graphics program does not need screen space, and therefore does not require a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A>. This is useful for programs that only read or write the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A31996bc">color map</A>. Call this subroutine at the beginning of a graphics program, then call the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine to initialize graphics.</P>
+
+<P><A NAME="E1D702A489ceb"></A>The <B>noport </B>subroutine is ignored without a call to the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f6e"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A61C0159fe"></A>Implementation Specifics</H3>
+<P><A NAME="E1D702A551ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1317"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1318"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1319"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912bb8"></A>Related Information</H3>
+<P><A NAME="E1D702A648ceb"></A>Binding window constraints to the current window with the <A HREF="winconstraints.html#A142X914c1"><B>winconstraints</B></A> subroutine.</P>
+
+<P><A NAME="E1D702A674ceb"></A>Creating a window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine. </P>
+
+<P><A NAME="E1D702A699ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="noise.html">Previous</a>  |
+<a href="normal.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

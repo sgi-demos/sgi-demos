@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>clear Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="circf.html">Previous</a>  |
+<a href="clkoff.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="cEH1160marj"></A>clear Subroutine</H2>
+<A NAME="INDEX221" REL="I1" TITLE="clear subroutine (GL)"></A>
+<A NAME="INDEX222" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX223" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX224" REL="I3" TITLE="clear"></A>
+<A NAME="INDEX225" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX226" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX227" REL="I3" TITLE="clearing the screenmask"></A>
+<A NAME="INDEX228" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX229" REL="I2" TITLE="screenmask"></A>
+<A NAME="INDEX230" REL="I3" TITLE="clearing"></A>
+
+<H3><A NAME="A213X912438"></A>Purpose</H3>
+<P><A NAME="E1B06AA342ceb"></A>Clears to the screenmask.</P>
+
+<H3><A NAME="A79C11ab"></A>Libraries</H3>
+<P><A NAME="E1B06AA489ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B06AA592ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X91243b"></A>C Syntax</H3>
+<PRE><A NAME="A213X91243c"></A><B>void clear(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010bd4"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010bd5"></A><B>SUBROUTINE CLEAR</B></PRE>
+
+<H3><A NAME="A213X91243f"></A>Description</H3>
+<P><A NAME="E1B06AA942ceb"></A>The <B>clear </B>subroutine sets the screen area inside the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P018">screenmask</A> to the current color, using the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemask</A> and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791abd">pattern</A>. Only the portion of the current screenmask that is inside the current window is actually cleared.</P>
+
+<P><A NAME="E1B06AB051ceb"></A>By default, the screenmask is exactly the same size as the window. Use the <A HREF="scrmask.html#fwN250marj"><B>scrmsk</B></A> subroutine to change the size of the screenmask.</P>
+
+<BLOCKQUOTE><A NAME="A79C11ae"></A><B>Note: </B>The <A HREF="viewport.html#qrY270marj"><B>viewport</B></A> subroutine resets the screenmask to be precisely the same size as the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912441"></A>Example</H3>
+<P><A NAME="E1B06AB263ceb"></A>The example C language program <A HREF="boxcirc_c.html#A16C0c7bb"><B>boxcirc.c</B></A> uses the <B>clear</B> subroutine to clear the viewport before drawing a box and a circle.</P>
+
+<H3><A NAME="A64C016607"></A>Implementation Specifics</H3>
+<P><A NAME="E1B06AB423ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C11af"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11b0"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11b1"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X91244c"></A>Related Information</H3>
+<P><A NAME="E1B06AB751ceb"></A>Clearing the color bitplanes and the z-buffer simultaneously with the <A HREF="czclear.html#A143X92c8"><B>czclear</B></A> subroutine.</P>
+
+<P><A NAME="E1B06AB868ceb"></A>Drawing a filled screen-aligned rectangle with the <A HREF="sboxf.html#Jte1190marj"><B>sboxf</B></A> subroutine.</P>
+
+<P><A NAME="E1B06AB983ceb"></A>Clearing the z-buffer with the <A HREF="zclear.html#A143X97d3"><B>zclear</B></A> subroutine.</P>
+
+<P><A NAME="E1B06AC092ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware</A> Used by GL in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<P><A NAME="E1B06AC199ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/clrrstintgl.html#clrrstintgl.html">Clearing, Resetting, and Initializing GL</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, and Using <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Viewports and Screenmasks</A>.</P><hr><center>
+[  <a href="circf.html">Previous</a>  |
+<a href="clkoff.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

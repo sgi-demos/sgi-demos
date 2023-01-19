@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/lightexec.html Mon, 24 Jan 2022 16:28:09 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>Lighting Execution Time and Performance
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="lightsubs.html">Previous</a>  |
+<a href="lightformula.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="lightexec.html"></A>Lighting Execution Time and Performance</H2>
+<A NAME="INDEX571" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX572" REL="I2" TITLE="lighting effects"></A>
+<A NAME="INDEX573" REL="I3" TITLE="execution time"></A>
+<A NAME="INDEX574" REL="I1" TITLE="lighting effects"></A>
+<A NAME="INDEX575" REL="I2" TITLE="GL"></A>
+<A NAME="INDEX576" REL="I3" TITLE="execution time"></A>
+<A NAME="INDEX577" REL="I1" TITLE="lighting effects"></A>
+<A NAME="INDEX578" REL="I2" TITLE="GL"></A>
+<A NAME="INDEX579" REL="I3" TITLE="performance"></A>
+<P><A NAME="A3C0EA83138mhay"></A>The lighting equation is evaluated whenever the normal or the graphics position changes, depending on whether the viewer and light sources are local. If the viewer is local, or any of the light sources are local, then the lighting calculation is performed when the graphics position changes (for example, when a <!--:libs:gl32tref:--><A HREF="../gl32tref/v.html#A144X97a4"><B>v3f</B></A> command is issued).</P>
+
+<P><A NAME="A3C0EA83159mhay"></A>When the viewer is local, the vector from the vertex to the eye is different for each vertex and has to be calculated for each point. If the viewer is at infinity, then view vector is constant for all vertices and the calculation time is less. When a light source is local, the vector from the vertex to the light source is different for each vertex and has to be calculated for each vertex. If a light is at infinity, then light direction vector is constant for all vertices and the calculation time is less.</P>
+
+<P><A NAME="A3C0EA83179mhay"></A>Performance is highest when an infinite viewer and a single infinite light source are used in the lighting calculation. Execution time increases slightly for each infinite light source added to the computation. However, the addition of local light sources increases the execution time noticeably.</P>
+
+<P><A NAME="A3C0EA83200mhay"></A>After a normal is transformed by the inverse transpose of the modeling/viewing matrix, it must be renormalized if the transforming matrix is not orthonormal. This renormalization takes additional time and results in lower performance.</P>
+
+<P><A NAME="A3C0EA83220mhay"></A>A matrix is orthonormal if each of its row vectors is of unit length and orthogonal to the others. Rotations and translations are always orthonormal. Shear transformations are never orthonormal. Because GL does not have any built-in shear transformations, the only transformations that might generate a nonorthonormal modeling/viewing matrix are the <!--:libs:gl32tref:--><A HREF="../gl32tref/multmatrix.html#A144X9474"><B>multmatrix</B></A> and <!--:libs:gl32tref:--><A HREF="../gl32tref/loadmatrix.html#A144X9430"><B>loadmatrix</B></A> subroutines, and the <!--:libs:gl32tref:--><A HREF="../gl32tref/scale.html#A144X95a6"><B>scale</B></A> subroutine when the <I>x</I>, <I>y</I>, and <I>z</I> scale factors are not equal. </P>
+
+<BLOCKQUOTE><A NAME="A33C0117e9"></A><B>Note: </B>If the transformation has been made nonorthonormal by introducing a shear or other nonorthonormal transformation, the system is automatically renormalizing normal vectors. In such a case, you do not need to feed normalized normal vectors to the system because they are renormalized anyway. Note, however, this should not be used as a trick to avoid explicit normalization by the user application.</BLOCKQUOTE>
+
+<hr><center>
+[  <a href="lightsubs.html">Previous</a>  |
+<a href="lightformula.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/lightexec.html Mon, 24 Jan 2022 16:28:09 GMT -->
+</HTML>
+
+

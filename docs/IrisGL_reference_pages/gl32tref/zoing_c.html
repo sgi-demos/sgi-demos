@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>zoing.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="zbuffer2_c.html">Previous</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0ca3f"></A>zoing.c Example C Language Program
+</H2>
+<A NAME="INDEX2532" REL="I1" TITLE="zoing.c example program (GL)"></A>
+<A NAME="INDEX2533" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2534" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2535" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2536" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2537" REL="I2" TITLE="circles"></A>
+<A NAME="INDEX2538" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2539" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2540" REL="I2" TITLE="spiral"></A>
+<A NAME="INDEX2541" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2542" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2543" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2544" REL="I3" TITLE="circle"></A>
+<A NAME="INDEX2545" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2546" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2547" REL="I3" TITLE="spiral"></A>
+<PRE><A NAME="A64EBFE292ttay"></A>/*
+zoing.c
+Make a spiral out of circles.</PRE>
+<PRE><A NAME="A64EBFE443ttay"></A>Paul Haeberli - 1984
+*/</PRE>
+<PRE><A NAME="A64EBFE600ttay"></A>#include &lt;gl/device.h>
+#include &lt;gl/gl.h></PRE>
+<PRE><A NAME="A64EBFE745ttay"></A>main()
+{</PRE>
+<PRE><A NAME="A64EBFE893ttay"></A>&nbsp;&nbsp;&nbsp;short dev,val;    </PRE>
+<PRE><A NAME="A64EBFF134ttay"></A>&nbsp;&nbsp;&nbsp;keepaspect(1,1);
+&nbsp;&nbsp;&nbsp;prefposition(XMAXSCREEN/4,XMAXSCREEN*3/4,YMAXSCREEN/4,
+&nbsp;&nbsp;&nbsp;    YMAXSCREEN*3/4);
+&nbsp;&nbsp;&nbsp;winopen("zoing");
+&nbsp;&nbsp;&nbsp;qdevice(ESCKEY);
+&nbsp;&nbsp;&nbsp;drawit();
+&nbsp;&nbsp;&nbsp;while(1) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if((dev = qread(&amp;val)) == REDRAW)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (dev == ESCKEY) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gexit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EBFF276ttay"></A>}</PRE>
+<PRE><A NAME="A64EBFF422ttay"></A>drawit()
+{</PRE>
+<PRE><A NAME="A64EBFF571ttay"></A>&nbsp;&nbsp;&nbsp;register int i;    </PRE>
+<PRE><A NAME="A64EBFF818ttay"></A>&nbsp;&nbsp;&nbsp;reshapeviewport();
+&nbsp;&nbsp;&nbsp;color(7);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;ortho2(-1.0,1.0,-1.0,1.0);
+&nbsp;&nbsp;&nbsp;color(0);
+&nbsp;&nbsp;&nbsp;translate(-0.1,0.0,0.0);
+&nbsp;&nbsp;&nbsp;pushmatrix();
+&nbsp;&nbsp;&nbsp;for(i=0; i&lt;200; i++)  {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(170,'z');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scale(0.96,0.96,0.0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pushmatrix();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translate(0.10,0.0,0.0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circ(0.0,0.0,1.0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;popmatrix();
+&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;popmatrix();</PRE>
+<PRE><A NAME="A64EBFF961ttay"></A>}</PRE>
+
+<H3><A NAME="A201C11b9"></A>Related Information</H3><hr><center>
+[  <a href="zbuffer2_c.html">Previous</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

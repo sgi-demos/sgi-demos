@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/contrzvals.html Mon, 24 Jan 2022 16:28:07 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Control of Z Values
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="Z-Buffering.html">Previous</a>  |
+<a href="addzvals.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="contrzvals.html"></A>Control of Z Values </H2>
+
+
+<P><A NAME="INDEX470"></A><A NAME="INDEX471"></A><A NAME="INDEX472"></A><A NAME="INDEX473"></A></P>
+
+
+<P><A NAME="A3C0EA34239mhay"></A>When coordinate data is transformed to
+screen coordinates by the <A HREF="specialterms.html#A26P0612">graphics
+pipeline</A>, the transformation is done in two steps. First, the data
+is multiplied by a transformation matrix that transforms all visible vertices
+so that they lie in the 3-D cube -1.0 &amp;le; <I>x</I>, <I>y</I>, <I>z</I>
+&amp;le; 1.0. The clipping hardware eliminates all data outside this cube.
+The second stage of the transformation scales the coordinate values (now
+transformed to lie between -1.0 and 1.0) to screen coordinates. </P>
+
+
+<P><A NAME="A3C0EA34258mhay"></A>The <I>x</I> and <I>y</I> coordinates
+undergo scaling to the viewport coordinates before they are drawn, and
+the <I>z</I> coordinates undergo the same transformation. The <I>x</I>,
+<I>y</I> scaling is controlled by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/viewport.html#qrY270marj">viewport</A></B>
+subroutine, and the <I>z</I> scaling by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lsetdepth.html#naR120marj">lsetdepth</A></B>
+subroutine. </P>
+
+
+<P><A NAME="A3C0EA34278mhay"></A>In the default mode with z-buffering turned
+off, the scaled <I>z</I> coordinates are ignored, and the drawing depends
+only on the <I>x</I> and <I>y</I> coordinates. When z-buffering is turned
+on, the <I>z</I> values are compared to determine whether to draw each
+pixel. The <I>z</I> values for these comparisons are based on the scaled
+<I>z</I> values. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A5FA0A1840ttay"></A><B>Note: </B>The preferred programming
+practice to determine the minimum and maximum z values that a given hardware
+platform supports is to use the <B>getgdesc</B> subroutine with the GD_ZMIN
+and GD_ZMAX tokens. </P></BLOCKQUOTE>
+
+
+<H3><A NAME="A332C94c71"></A>lsetdepth Subroutine </H3>
+
+
+<P><A NAME="A3C0EA34302mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lsetdepth.html#naR120marj">lsetdepth</A></B>
+subroutine controls the scaling of the <I>z</I> coordinates, just as the
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/viewport.html#qrY270marj">viewport</A></B>
+subroutine controls the scaling of the <I>x</I> and <I>y</I> coordinates.
+The <B>lsetdepth</B> subroutine takes two parameters of type Int32, corresponding
+to the near and far planes. By default, the near parameter is set to the
+minimum value that can be stored in the z-buffer and the far parameter
+is set to the maximum value. The minimum value is -0x800000, the maximum
+value is +0x7fffff, the largest and smallest values that can be written
+into a 24-bit z-buffer. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01bfa7"></A>void&nbsp;lsetdepth(Int32&nbsp;near,&nbsp;Int32&nbsp;far)</PRE>
+
+
+<H3><A NAME="A332C94c79"></A>czclear Subroutine </H3>
+
+
+<P><A NAME="A3C0EA34323mhay"></A>A very common code sequence in programs
+that do z-buffering is the following: </P>
+
+
+<PRE><A NAME="A332C94c7b"></A>color(0);
+clear();
+zclear();</PRE>
+
+
+<P><A NAME="A3C0EA34344mhay"></A>This sequence clears the color bitplanes
+to zero and clears the z-buffer bitplanes to the maximum value. Execution
+of the sequence takes time because the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/clear.html#cEH1160marj">clear</A></B>
+subroutine touches each pixel, and then the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/zclear.html#A143X97d3">zclear</A></B>
+subroutine touches each pixel. Some hardware implementations can, in certain
+cases, simultaneously clear the color planes and the z-buffer planes. The
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/czclear.html#A143X92c8">czclear</A></B>
+subroutine allows you to do this. </P>
+
+
+<P><A NAME="A3C0EA34364mhay"></A>The <B>czclear </B>subroutine clears the
+bitplanes to color and the z-buffer to the value of the <I>zval</I> parameter
+simultaneously. This subroutine is available only in immediate mode. </P>
+
+
+<P><A NAME="A3C0EA34384mhay"></A>To speed up the <B>czclear</B> subroutine
+by as much as a factor of four for common values of the <I>zval</I> parameter,
+call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/zfunction.html#A22f0MARJ">zfunction</A></B>
+subroutine in conjunction with it. One of the following conditions must
+be met: </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Conditions</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>zval</B> </TD>
+
+
+<TD><B>zfunction</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>-0x800000</B> </TD>
+
+
+<TD><B>ZF_GREATER or ZF_GEQUAL</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>+0x7FFFFF</B> </TD>
+
+
+<TD><B>ZF_LESS or ZF_LEQUAL</B> </TD></TR></TABLE>
+
+
+<P><A NAME="A3C0EA34404mhay"></A>The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01bfa8"></A>void&nbsp;czclear(Int32&nbsp;cval,&nbsp;Int32&nbsp;zval)</PRE>
+
+
+
+<hr><center>
+[  <a href="Z-Buffering.html">Previous</a>  |
+<a href="addzvals.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/contrzvals.html Mon, 24 Jan 2022 16:28:07 GMT -->
+</HTML>
+

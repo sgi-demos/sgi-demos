@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>window  Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="windepth.html">Previous</a>  |
+<a href="winget.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X95ea"></A>window  Subroutine</H2>
+<A NAME="INDEX1996" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1997" REL="I2" TITLE="coordinate transformation"></A>
+<A NAME="INDEX1998" REL="I3" TITLE="window"></A>
+<A NAME="INDEX1999" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2000" REL="I2" TITLE="transformation"></A>
+<A NAME="INDEX2001" REL="I3" TITLE="perspective projection"></A>
+<A NAME="INDEX2002" REL="I1" TITLE="window subroutine (GL)"></A>
+
+<H3><A NAME="A144X95ec"></A>Purpose</H3>
+<P><A NAME="E1D7603847ceb"></A>Defines a perspective projection transformation in terms of x and y coordinates.</P>
+
+<H3><A NAME="A78C173"></A>Libraries</H3>
+<P><A NAME="E1D7603887ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7603911ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X95f0"></A>C Syntax</H3>
+<PRE><A NAME="A213X91272c"></A><B>void window</B>
+<B>(Coord </B><A HREF="window.html#a7P1340marj"><I>left</I></A><B>, Coord</B> <A HREF="window.html#t7P1300marj"><I>right</I></A><B>,</B>
+<B>Coord</B> <A HREF="window.html#A68P1280marj"><I>bottom</I></A><B>, Coord</B> <A HREF="window.html#I8P1c0marj"><I>top</I></A><B>,</B>
+<B>Coord</B> <A HREF="window.html#V8P1marj"><I>near</I></A><B>, Coord</B> <A HREF="window.html#i8P12e0marj"><I>far</I></A><B>)</B></PRE>
+
+<H3><A NAME="A15C0c706"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A15C0c707"></A><B>SUBROUTINE WINDOW(</B><I>left</I><B>, </B><I>right</I><B>, </B><I>bottom</I><B>, </B><I>top</I><B>, </B><I>near</I><B>, </B><I>far</I><B>)</B>
+<B>REAL </B><I>left</I><B>, </B><I>right</I><B>, </B><I>bottom</I><B>, </B><I>top</I><B>, </B><I>near</I><B>, </B><I>far</I></PRE>
+
+<H3><A NAME="A144X95f2"></A>Description</H3>
+<P><A NAME="E1D7604025ceb"></A>The <B>window </B>subroutine set the current projection transformation to be a perspective transformation. With a perspective transformation, figures do not get smaller as they recede in relation to the viewer. </P>
+
+<P><A NAME="E1D7604051ceb"></A>The <B>window </B>subroutine defines a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P051d">frustum</A> in eye coordinates. All figures outside this frustum are clipped and not drawn on the screen. All objects contained within this frustum are drawn on the screen in perspective. </P>
+
+<P><A NAME="E1D7604079ceb"></A>The front and back of the frustum are the near and far clipping planes, respectively, located at <I>near</I> and <I>far</I><B>.</B> The sides of the frustum are the projection of a rectangle in the near clipping plane. That is, given a rectangle in the near clipping plane, the sides of the frustum are given by extending from the eye (the origin) through the near clipping plane to the far clipping plane. The sides of the frustum are the left, right, bottom, and top clipping planes. The size of the rectangle on the near clipping plane is given by the parameters <I>left</I><B>, </B><I>right</I><B>, </B><I>bottom</I><B>,</B> and <I>top</I>.</P>
+
+<P><A NAME="E1D7604105ceb"></A>The <B>window</B> subroutine is very similar to the <A HREF="perspective.html#A144X94da"><B>perspective</B></A> subroutine. The only difference between these two is the manner in which the arguments specify the viewing frustum.</P>
+
+<P><A NAME="E1D7604130ceb"></A>After the <B>window </B>subroutine completes, the eye coordinate system is set up so that x is to the right, y is up, and z is towards the viewer (out of the screen).</P>
+
+<P><A NAME="E1D7604156ceb"></A>In 
+single matrix mode, the <B>window </B>subroutine loads a matrix onto the matrix stack, replacing the current top matrix. In 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P036">viewing matrix mode</A> and projection matrix mode, the system replaces the current projection matrix.  </P>
+
+<BLOCKQUOTE><A NAME="A41C012756"></A><B>Note: </B>Do not confuse the <B>window </B>subroutine and its functions with the GL windowing subroutines, and the Enhanced X-Windows subroutines, which control the placement and size of rectangular windows on the screen.</BLOCKQUOTE>
+
+
+<H3><A NAME="A144X95f4"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="a7P1340marj"></A><I>left</I></TD>
+<TD>  Specifies the <I>x</I> coordinate of left side of frustum.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="t7P1300marj"></A><I>right</I></TD>
+<TD>  Specifies the <I>x</I> coordinate of right side of frustum.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A68P1280marj"></A><I>bottom</I></TD>
+<TD>  Specifies the <I>y</I> coordinate of bottom of frustum.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="I8P1c0marj"></A><I>top</I></TD>
+<TD>  Specifies the <I>y</I> coordinate of top of frustum.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="V8P1marj"></A><I>near</I></TD>
+<TD>  Specifies the <I>z</I> coordinate of the near clipping plane.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="i8P12e0marj"></A><I>far</I></TD>
+<TD>  Specifies the <I>z</I> coordinate of the far clipping plane.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015d42"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7604350ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C176"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C177"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C178"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X960a"></A>Related Information</H3>
+<P><A NAME="E1D7604450ceb"></A>Defining a 3-D orthographic transformation with the <A HREF="ortho.html#A144X9496"><B>ortho</B></A> subroutine.</P>
+
+<P><A NAME="E1D7604476ceb"></A>Defining a perspective projection transformation in terms of a field of view with the <A HREF="perspective.html#A144X94da"><B>perspective</B></A> subroutine.</P>
+
+<P><A NAME="E1D7604501ceb"></A>Setting the area of the window used for all drawing with the <A HREF="viewport.html#qrY270marj"><B>viewport</B></A> subroutine.</P>
+
+<P><A NAME="E1D7604527ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="windepth.html">Previous</a>  |
+<a href="winget.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

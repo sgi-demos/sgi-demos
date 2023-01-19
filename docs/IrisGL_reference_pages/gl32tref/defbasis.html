@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>defbasis Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="czclear.html">Previous</a>  |
+<a href="defcursor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A150X930"></A>defbasis Subroutine</H2>
+<A NAME="INDEX368" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX369" REL="I2" TITLE="wire frame curve and surface patch"></A>
+<A NAME="INDEX370" REL="I3" TITLE="defbasis"></A>
+<A NAME="INDEX371" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX372" REL="I2" TITLE="cubic spline basis matrix"></A>
+<A NAME="INDEX373" REL="I3" TITLE="defining"></A>
+<A NAME="INDEX374" REL="I1" TITLE="defbasis subroutine (GL)"></A>
+
+<H3><A NAME="A150X932"></A>Purpose</H3>
+<P><A NAME="E1B0911814ceb"></A>Defines a cubic spline basis matrix.</P>
+
+<H3><A NAME="A78C1110"></A>Libraries</H3>
+<P><A NAME="E1B0911963ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0912067ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A150X935"></A>C Syntax</H3>
+<PRE><A NAME="A150X936"></A><B>void defbasis(Int32 </B><A HREF="defbasis.html#A150X93e"><I>id</I></A><B>, Matrix </B><A HREF="defbasis.html#A150X93f"><I>mat</I></A><B>)</B></PRE>
+
+<H3><A NAME="A150X9d"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A150X910"></A><B>SUBROUTINE DEFBAS(</B><I>id</I><B>,</B><I> mat</I><B>)</B>
+<B>INTEGER*4 </B><I>id</I>
+<B>REAL </B><I>mat</I><B>(4,4)</B></PRE>
+
+<H3><A NAME="A150X939"></A>Description</H3>
+<P><A NAME="E1B0912437ceb"></A>The <B>defbasis</B> subroutine assigns a basis matrix identifier for use by subroutines that generate curves and patches. Use the basis matrix identifier in subsequent calls to the <A HREF="curvebasis.html#sTS23a0marj"><B>curvebasis</B></A> and <A HREF="patchbasis.html#A143X95d6"><B>patchbasis</B></A> subroutines. </P>
+
+<BLOCKQUOTE><A NAME="A318C9ce1"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A150X93d"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A150X93e"></A><I>id</I>  </TD>
+<TD>  Specifies the basis identifier to assign to the matrix. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A150X93f"></A><I>mat</I>  </TD>
+<TD>  Specifies the matrix to which to assign the basis identifier.</TD></TR></TABLE>
+
+<H3><A NAME="A150X942"></A>Example</H3>
+<P><A NAME="E1B0912812ceb"></A>The example C language program <A HREF="curve1_c.html#A16C0c804"><B>curve1.c</B></A> uses the <B>defbasis</B> subroutine to define three basis matrices for drawing curves.</P>
+
+<H3><A NAME="A64C01658a"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0912973ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1113"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1114"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1115"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="C41DC93930nqui"></A>Related Information</H3>
+<P><A NAME="E1B0913292ceb"></A>Drawing a cubic spline curve with the <A HREF="crv.html#ZMS220marj"><B>crv</B></A> subroutine.</P>
+
+<P><A NAME="E1B0913399ceb"></A>Drawing a series of curve segments with the <A HREF="crvn.html#ESS22c0marj"><B>crvn</B></A> subroutine.</P>
+
+<P><A NAME="E1B0913506ceb"></A>Setting the current cubic spline curve basis matrix with the <A HREF="curvebasis.html#sTS23a0marj"><B>curvebasis</B></A> subroutine.</P>
+
+<P><A NAME="E1B0913613ceb"></A>Setting the number of line segments that draw a curve segment with the <A HREF="curveprecision.html#aUS2120marj"><B>curveprecision</B></A> subroutine.</P>
+
+<P><A NAME="E1B0913720ceb"></A>Drawing surface patches with the <A HREF="patch.html#A143X95b4"><B>patch</B></A> subroutine.</P>
+
+<P><A NAME="E1B0913827ceb"></A>Setting the current spline surface basis matrices with the <A HREF="patchbasis.html#A143X95d6"><B>patchbasis</B></A> subroutine.</P>
+
+<P><A NAME="E1B0913936ceb"></A>Setting the number of curves used to represent a patch with the <A HREF="patchcurves.html#A143X95f8"><B>patchcurves</B></A> subroutine.</P>
+
+<P><A NAME="E1B0914043ceb"></A>Setting the precision at which curves are drawn with the <A HREF="patchprecision.html#A143X961a"><B>patchprecision</B></A> subroutine.</P>
+
+<P><A NAME="E1B0914152ceb"></A>Drawing a rational curve with the <A HREF="rcrv.html#WRS2380marj"><B>rcrv</B></A> subroutine.</P>
+
+<P><A NAME="E1B0914259ceb"></A>Drawing a series of rational curve segments with the <A HREF="rcrvn.html#A1TS2220marj"><B>rcrvn</B></A> subroutine.</P>
+
+<P><A NAME="E1B0914367ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">NURBS Curves and Surfaces</A>, and Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#drawwfcvs.html">Wire Frame Curves and Surface Patches</A>.</P><hr><center>
+[  <a href="czclear.html">Previous</a>  |
+<a href="defcursor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

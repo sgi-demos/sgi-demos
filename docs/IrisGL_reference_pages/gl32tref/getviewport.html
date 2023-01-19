@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getviewport Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getvaluator.html">Previous</a>  |
+<a href="getXdpy.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9107"></A>getviewport Subroutine</H2>
+<A NAME="INDEX860" REL="I1" TITLE="getviewport subroutine (GL)"></A>
+<A NAME="INDEX861" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX862" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX863" REL="I3" TITLE="getviewport"></A>
+<A NAME="INDEX864" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX865" REL="I2" TITLE="query"></A>
+<A NAME="INDEX866" REL="I3" TITLE="getviewport"></A>
+<A NAME="INDEX867" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX868" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX869" REL="I3" TITLE="returning dimensions"></A>
+
+<H3><A NAME="A142X9109"></A>Purpose</H3>
+<P><A NAME="E1B1191848ceb"></A>Returns the dimensions of the current viewport.</P>
+
+<H3><A NAME="A79C125e"></A>Libraries</H3>
+<P><A NAME="E1B1191997ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1192101ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X910d"></A>C Syntax</H3>
+<P><A NAME="E1B1192257ceb"></A><B>void getviewport(Screencoord *</B><A HREF="getviewport.html#A142X9112"><I>left</I></A><B>, Screencoord *</B><A HREF="getviewport.html#A142X9113"><I>right</I></A><B>, </B></P>
+
+<P><B>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Screencoord *</B><A HREF="getviewport.html#A142X9114"><I>bottom</I></A><B>, Screencoord *</B><A HREF="getviewport.html#A142X9fd"><I>top</I></A><B>)</B></P>
+
+<H3><A NAME="A142X9f8"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A142X9f9"></A><B>SUBROUTINE GETVIE(</B><I>left</I><B>,</B> <I>right</I><B>,</B> <I>bottom</I><B>,</B> <I>top</I><B>)</B>
+<B>INTEGER*2 </B><I>left</I><B>,</B> <I>right</I><B>,</B> <I>bottom</I><B>,</B> <I>top</I> </PRE>
+
+<H3><A NAME="A142X910f"></A>Description</H3>
+<P><A NAME="E1B1192523ceb"></A>The <B>getviewport</B> subroutine returns the dimensions of the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A>
+ (the top of the viewport stack) and copies these dimensions to the location variables specified as parameters. The <A HREF="getviewport.html#A142X9112"><I>left</I></A>, <A HREF="getviewport.html#A142X9113"><I>right</I></A>, <A HREF="getviewport.html#A142X9114"><I>bottom</I></A>, and <A HREF="getviewport.html#A142X9fd"><I>top</I></A> parameters are the addresses of four memory locations assigned the left, right bottom, and top coordinates of the viewport.</P>
+
+<BLOCKQUOTE><A NAME="A319C92609"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X9111"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X9112"></A><I>left</I></TD>
+<TD>  Specifies the memory location in which to return the <I>x</I> coordinate (in pixels) of the left side of the viewport.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X9113"></A> <I>right</I></TD>
+<TD>  Specifies the memory location in which to return the <I>x </I>coordinate (in pixels) of the right side of the viewport.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X9114"></A> <I>bottom</I></TD>
+<TD>  Specifies the memory location in which to return the <I>y </I>coordinate (in pixels) of the bottom side of the viewport.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X9fd"></A> <I>top</I></TD>
+<TD>  Specifies the memory location in which to return the <I>y </I>coordinate (in pixels) of the top side of the viewport.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015d56"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1193017ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C1261"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1262"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1263"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X9127"></A>Related Information</H3>
+<P><A NAME="E1B1193339ceb"></A>Popping the viewport stack with the <A HREF="popviewport.html#A213X911d3c"><B>popviewport</B></A> subroutine.</P>
+
+<P><A NAME="E1B1193447ceb"></A>Pushing the viewport onto the viewport stack with the <A HREF="pushviewport.html#A213X911bee"><B>pushviewport</B></A> subroutine.</P>
+
+<P><A NAME="E1B1193555ceb"></A>Setting the viewport to the dimensions of the current window with the <A HREF="reshapeviewport.html#A7LQ3b0marj"><B>reshapeviewport</B></A> subroutine.</P>
+
+<P><A NAME="E1B1193662ceb"></A>Setting the area of the window used for all drawing with the <A HREF="viewport.html#qrY270marj"><B>viewport</B></A> subroutine.</P>
+
+<P><A NAME="E1B1193769ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System, 
+and Using <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Viewports and Screenmasks</A>.</P><hr><center>
+[  <a href="getvaluator.html">Previous</a>  |
+<a href="getXdpy.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

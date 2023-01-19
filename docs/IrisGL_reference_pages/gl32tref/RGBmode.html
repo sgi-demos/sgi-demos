@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>RGBmode Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="RGBcolor.html">Previous</a>  |
+<a href="RGBwritemask.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X93b6"></A>RGBmode Subroutine</H2>
+<A NAME="INDEX1651" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1652" REL="I2" TITLE="color map and RGB mode"></A>
+<A NAME="INDEX1653" REL="I3" TITLE="RGBmode"></A>
+<A NAME="INDEX1654" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1655" REL="I2" TITLE="display mode"></A>
+<A NAME="INDEX1656" REL="I3" TITLE="setting to RGB mode"></A>
+<A NAME="INDEX1657" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1658" REL="I2" TITLE="RGB mode"></A>
+<A NAME="INDEX1659" REL="I3" TITLE="setting display mode to"></A>
+<A NAME="INDEX1660" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1661" REL="I2" TITLE="color map"></A>
+<A NAME="INDEX1662" REL="I3" TITLE="setting display mode to bypass"></A>
+<A NAME="INDEX1663" REL="I1" TITLE="RGBmode subroutine (GL)"></A>
+
+<H3><A NAME="A143X93b8"></A>Purpose</H3>
+<P><A NAME="E1D7369986ceb"></A>Sets a display mode that bypasses the color map.</P>
+
+<H3><A NAME="A78C160"></A>Libraries</H3>
+<P><A NAME="E1D736A025ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D736A049ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X93bc"></A>C Syntax</H3>
+<PRE><A NAME="A143X93bd"></A><B>void RGBmode(&nbsp;)</B></PRE>
+
+<H3><A NAME="A18C0dcf2"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A18C0dcf3"></A><B>SUBROUTINE RGBMOD</B></PRE>
+
+<H3><A NAME="A143X93be"></A>Description</H3>
+<P><A NAME="E1D736A157ceb"></A>The <B>RGBmode</B> subroutine makes the system interpret the contents of the main frame buffer as 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A255B9de">RGB values</A>. All drawing subroutines write values of red, green, and blue directly into the bitplanes; the contents of the frame buffer, in turn, directly control the intensity of the color displayed on the monitor.  </P>
+
+<P><A NAME="E1D736A183ceb"></A>When the frame buffer is 24 bits deep, 8 bits each of red, green, and blue are stored. When the frame buffer is 12 bits deep, the 4 most significant bits of each of the red, green, and blue are stored. When the frame buffer is 8 bits deep, the 3 most significant bits of each of the red and green, and the 2 most significant bits of blue are stored. To improve the visual quality of the displayed image, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A137915eb">dithering</A> is automatically turned on whenever the frame buffer is 8 bits deep.</P>
+
+<P><A NAME="E1D736A209ceb"></A>The depth of the frame buffer depends on the installed adapter, and on how it has been configured. In particular, the <A HREF="doublebuffer.html#A145X91a7"><B>doublebuffer</B></A> and <A HREF="singlebuffer.html#A145X9259"><B>singlebuffer</B></A> subroutines affect the configuration of the main frame buffer.</P>
+
+<P><A NAME="E1D736A234ceb"></A>The system will not enter into RGB mode until the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine is called.</P>
+
+<BLOCKQUOTE><A NAME="A318C9ca8"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X93d0"></A>Implementation Specifics</H3>
+<P><A NAME="E1D736A296ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<P><A NAME="E1D736A322ceb"></A>The <B>RGBmode</B> subroutine is useful for monitors with 12 or more bitplanes.</P>
+
+<P><A NAME="A3CFD333938janb"></A>The POWERgraphics GXT1000 will ignore the<B> RGBmode</B> subroutine when applied to windows created with the <B>winX</B> subroutine. The <B>RGBmode</B> subroutine can be used with windows created with the <B>winopen</B> subroutine.</P>
+
+<H3><A NAME="A30C010fd0"></A>Example</H3>
+<P><A NAME="E1D736A363ceb"></A>The example C language program <A HREF="localatten_c.html#A10C0abc5"><B>localatten.c</B></A> puts the system in RGB mode with the <B>RGBmode</B> subroutine to perform lighting calculations. This lets the system calculate the correct colors for realistic shading.</P>
+
+<H3><A NAME="A78C163"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C164"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C165"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c43f"></A>Related Information</H3>
+<P><A NAME="E1D736A461ceb"></A>Setting color map mode as the current mode with the <A HREF="cmode.html#A146X93d6"><B>cmode</B></A> subroutine.</P>
+
+<P><A NAME="E1D736A486ceb"></A>Reconfiguring the system with the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine.</P>
+
+<P><A NAME="E1D736A512ceb"></A>Returning the current display mode with the <A HREF="getdisplaymode.html#A145X9206"><B>getdisplaymode</B></A> subroutine.</P>
+
+<P><A NAME="E1D736A537ceb"></A>Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="RGBcolor.html">Previous</a>  |
+<a href="RGBwritemask.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>setlinestyle Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="set_dither.html">Previous</a>  |
+<a href="setmap.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="XFM1310marj"></A>setlinestyle Subroutine</H2>
+<A NAME="INDEX1779" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1780" REL="I2" TITLE="attribute"></A>
+<A NAME="INDEX1781" REL="I3" TITLE="setlinestyle"></A>
+<A NAME="INDEX1782" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1783" REL="I2" TITLE="linestyle"></A>
+<A NAME="INDEX1784" REL="I3" TITLE="selecting"></A>
+<A NAME="INDEX1785" REL="I1" TITLE="setlinestyle subroutine (GL)"></A>
+
+<H3><A NAME="A213X9129b8"></A>Purpose</H3>
+<P><A NAME="E1D7464827ceb"></A>Selects a linestyle.</P>
+
+<H3><A NAME="A77C130f"></A>Libraries</H3>
+<P><A NAME="E1D7464866ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7464890ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X9129bb"></A>C Syntax</H3>
+<PRE><A NAME="A213X9129bc"></A><B>void setlinestyle(Int32 </B><A HREF="setlinestyle.html#A213X9129c3"><I>index</I></A><B>)</B></PRE>
+
+<H3><A NAME="A19C0e0eb"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A19C0e0ec"></A><B>SUBROUTINE SETLIN(</B><I>index</I><B>)</B>
+<B>INTEGER*4 </B><I>index</I></PRE>
+
+<H3><A NAME="A213X9129bf"></A>Description</H3>
+<P><A NAME="E1D7465002ceb"></A>The <B>setlinestyle</B> subroutine selects a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A172P1436">linestyle</A>. The linestyle, a line attribute, is used whenever a line-drawing primitive is invoked. These include lines, curves, rectangles, polygons, circles, and arcs. </P>
+
+<P><A NAME="E1D7465027ceb"></A>The default linestyle is 0 (zero), which is a solid line. It cannot be redefined.</P>
+
+<BLOCKQUOTE><A NAME="A258C01c3bf"></A><B>Note: </B>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. (See "<!--gl32prgd:--><A HREF="../gl32prgd/powerstation730.html#NITAXIO">Hardware Considerations</A>".) </BLOCKQUOTE>
+
+
+<H3><A NAME="A213X9129c2"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X9129c3"></A><I>index</I></TD>
+<TD>  Specifies an index into the table of 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A172P1436">linestyles</A> built by the <A HREF="deflinestyle.html#A143X9b1f"><B>deflinestyle</B></A> subroutine</TD></TR></TABLE>
+
+<H3><A NAME="A213X9129c6"></A>Example</H3>
+<P><A NAME="E1D7465124ceb"></A>The example C language program <A HREF="colored_c.html"><B>colored.c</B></A> uses the <B>setlinestyle</B> subroutine to use a linestyle previously defined by the <A HREF="deflinestyle.html#A143X9b1f"><B>deflinestyle</B></A> subroutine.</P>
+
+<H3><A NAME="A62C015c7f"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7465167ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A77C1312"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1313"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1314"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c3c4"></A>Related Information</H3>
+<P><A NAME="E1D7465264ceb"></A>Defining a linestyle with the <A HREF="deflinestyle.html#A143X9b1f"><B>deflinestyle</B></A> subroutine.</P>
+
+<P><A NAME="E1D7465289ceb"></A>Returning the current linestyle with the <A HREF="getlstyle.html#A143X9bc9"><B>getlstyle</B></A> subroutine.</P>
+
+<P><A NAME="E1D7465315ceb"></A>Specifying the linewidth with the <A HREF="linewidth.html#A3mM11b0marj"><B>linewidth</B></A> subroutine.</P>
+
+<P><A NAME="E1D7465341ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#drawwfcvs.html">Drawing Wire Frame Curves and Surface Patches</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">Drawing NURBS Curves and Surfaces</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Drawing with Move-Draw Style Subroutines</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Drawing with Begin-End Style Subroutines</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware Used by GL</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</A>.</P><hr><center>
+[  <a href="set_dither.html">Previous</a>  |
+<a href="setmap.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

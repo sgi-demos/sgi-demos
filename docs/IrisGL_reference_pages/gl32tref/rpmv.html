@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>rpmv Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="rpdr.html">Previous</a>  |
+<a href="sbox.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="lXf370marj"></A>rpmv Subroutine</H2>
+<A NAME="INDEX1713" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1714" REL="I2" TITLE="moveraw style"></A>
+<A NAME="INDEX1715" REL="I3" TITLE="rpmv"></A>
+<A NAME="INDEX1716" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1717" REL="I2" TITLE="polygons"></A>
+<A NAME="INDEX1718" REL="I3" TITLE="filled"></A>
+<A NAME="INDEX1719" REL="I1" TITLE="rpmv subroutine (GL)"></A>
+<H3><A NAME="A213X912e97"></A>Purpose</H3>
+<P><A NAME="E1D73E2306ceb"></A>Performs a relative move to the starting point of a filled polygon.</P>
+
+<H3><A NAME="A78C1328"></A>Libraries</H3>
+<P><A NAME="E1D73E2345ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D73E2369ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912e9a"></A>C Syntax</H3>
+<PRE><A NAME="A213X912e9b"></A><B>void rpmv</B>
+<B>(Coord </B><A HREF="rpmv.html#A213X912ead"><I>dx</I></A><B>, Coord</B> <A HREF="rpmv.html#A213X912eae"><I>dy</I></A><B>, Coord</B> <A HREF="rpmv.html#A213X912eaf"><I>dz</I></A><B>)</B></PRE>
+<PRE><A NAME="Azlf390marj"></A><B>void rpmvi</B>
+<B>(Icoord </B><A HREF="rpmv.html#A213X912ead"><I>dx</I></A><B>, Icoord</B> <A HREF="rpmv.html#A213X912eae"><I>dy</I></A><B>, Icoord</B> <A HREF="rpmv.html#A213X912eaf"><I>dz</I></A><B>)</B></PRE>
+<PRE><A NAME="Dmf390marj"></A><B>void rpmvs</B>
+<B>(Scoord </B><A HREF="rpmv.html#A213X912ead"><I>dx</I></A><B>, Scoord</B> <A HREF="rpmv.html#A213X912eae"><I>dy</I></A><B>, Scoord</B> <A HREF="rpmv.html#A213X912eaf"><I>dz</I></A><B>)</B></PRE>
+<PRE><A NAME="Tmf2d0marj"></A><B>void rpmv2</B>
+<B>(Coord </B><A HREF="rpmv.html#A213X912ead"><I>dx</I></A><B>, Coord</B> <A HREF="rpmv.html#A213X912eae"><I>dy</I></A><B>)</B></PRE>
+<PRE><A NAME="emf330marj"></A><B>void rpmv2i</B>
+<B>(Icoord </B><A HREF="rpmv.html#A213X912ead"><I>dx</I></A><B>, Icoord</B> <A HREF="rpmv.html#A213X912eae"><I>dy</I></A><B>)</B></PRE>
+<PRE><A NAME="Azmf110marj"></A><B>void rpmv2s</B>
+<B>(Scoord </B><A HREF="rpmv.html#A213X912ead"><I>dx</I></A><B>, Scoord</B> <A HREF="rpmv.html#A213X912eae"><I>dy</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010b03"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010b04"></A><B>SUBROUTINE RPMV(</B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I><B>)</B>
+<B>REAL </B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I></PRE>
+<PRE><A NAME="A29C010b05"></A><B>SUBROUTINE RPMVI(</B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I><B>)</B>
+<B>INTEGER*4 </B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I></PRE>
+<PRE><A NAME="A29C010b06"></A><B>SUBROUTINE RPMVS(</B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I><B>)</B>
+<B>INTEGER*2 </B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I></PRE>
+<PRE><A NAME="A29C010b07"></A><B>SUBROUTINE RPMV2(</B><I>dx</I><B>, </B><I>dy</I><B>)</B>
+<B>REAL </B><I>dx</I><B>, </B><I>dy</I></PRE>
+<PRE><A NAME="A29C010b08"></A><B>SUBROUTINE RPMV2I(</B><I>dx</I><B>, </B><I>dy</I><B>)</B>
+<B>INTEGER*4 </B><I>dx</I><B>, </B><I>dy</I></PRE>
+<PRE><A NAME="A29C010b09"></A><B>SUBROUTINE RPMV2S(</B><I>dx</I><B>, </B><I>dy</I><B>)</B>
+<B>INTEGER*2 </B><I>dx</I><B>, </B><I>dy</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C132b"></A><B>Note: </B>For FORTRAN users, the INTEGER*2 versions of this subroutine, <B>RPMVS</B> and <B>RPMV2S</B>, should not be called with integer constant parameters. For example, 2 is an integer constant; JJ is an integer variable. The XL FORTRAN compiler, invoked by the <B>xlf</B> command, stores all integer constants as long integers (INTEGER*4), not as short integers (INTEGER*2). Invoking one of the short versions of this subroutine with an integer constant will result in unexpected behavior.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912e9e"></A>Description</H3>
+<P><A NAME="E1D73E2693ceb"></A>The <B>rpmv</B> subroutine is the relative version of the <A HREF="pmv.html#A139X91eed"><B>pmv</B></A> subroutine. It specifies a relative move to the starting point in a 
+filled polygon, using the <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03eb">current graphics position</A> as the origin. The <B>rpmv</B> subroutine updates the current graphics position to the new point.</P>
+
+<P><A NAME="E1D73E2719ceb"></A>Between calls to the <B>rpmv</B> and <A HREF="pclos.html#t2g270marj"><B>pclos</B></A> subroutines, you can issue calls to the following Graphics Library subroutines only: </P>
+
+<UL><LI><A NAME="A217X9466"></A><A HREF="c.html#A143X9262"><B>c</B></A></LI>
+
+<LI><A NAME="A217X9467"></A><A HREF="color.html#A146X9429"><B>color</B></A></LI>
+
+<LI><A NAME="A217X9468"></A><A HREF="cpack.html#A143X9284"><B>cpack</B></A></LI>
+
+<LI><A NAME="A217X9469"></A><A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> </LI>
+
+<LI><A NAME="A249X955"></A><A HREF="lmcolor.html#ofZ220marj"><B>lmcolor</B></A></LI>
+
+<LI><A NAME="A217X946a"></A><A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A></LI>
+
+<LI><A NAME="A217X946b"></A><A HREF="n3f.html#A139X91ef3"><B>n3f</B></A></LI>
+
+<LI><A NAME="A217X946c"></A><A HREF="normal.html#A142X9b7"><B>normal</B></A> </LI>
+
+<LI><A NAME="A217X946d"></A><A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> </LI>
+
+<LI><A NAME="A217X946e"></A><A HREF="v.html#A144X97a4"><B>v</B></A> </LI></UL>
+
+
+<P><A NAME="E1D73E2899ceb"></A>Use the <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> and <A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> subroutines to respecify only materials and their properties. </P>
+
+<P><A NAME="E1D73E2924ceb"></A>The six different forms for the <B>rpmv</B> subroutine are as follows:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><BR></TD>
+
+<TD><B>2-D</B></TD>
+
+<TD><B>3-D</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int16</TD>
+
+<TD>rpmv2s</TD>
+
+<TD>rpmvs</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int32</TD>
+
+<TD>rpmv2i</TD>
+
+<TD>rpmvi</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>float</TD>
+
+<TD>rpmv2</TD>
+
+<TD>rpmv</TD></TR></TABLE>
+
+<P><A NAME="E1D73E2967ceb"></A>The syntax for each of the subroutine forms is the same except for the parameter type. They differ only in that <A HREF="rpmv.html#A213X912e9b"><B>rpmv</B></A> expects real coordinates, <A HREF="rpmv.html#Azlf390marj"><B>rpmvi</B></A> expects integer coordinates, and <A HREF="rpmv.html#Dmf390marj"><B>rpmvs</B></A> expects short integer coordinates. In addition, the <A HREF="rpmv.html#Tmf2d0marj"><B>rpmv2</B></A> routines assume a 2-D point instead of a 3-D point.</P>
+
+<H3><A NAME="A213X912eac"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912ead"></A><I>dx</I></TD>
+<TD>  Specifies the distance from the <I>x </I>coordinate of the current graphics position to the <I>x</I> coordinate of the first corner of the polygon.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912eae"></A><I>dy</I></TD>
+<TD>  Specifies the distance from the <I>y</I> coordinate of the current graphics position to the <I>y</I> coordinate of the first corner of the polygon.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912eaf"></A><I>dz</I></TD>
+<TD>  Specifies the distance from the <I>z</I> coordinate of the current graphics position to the <I>z</I> coordinate of the first corner of the polygon.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015d24"></A>Implementation Specifics</H3>
+<P><A NAME="E1D73E3085ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C132c"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C132d"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C132e"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912ebd"></A>Related Information</H3>
+<P><A NAME="E1D73E3181ceb"></A>Allowing the system to draw concave polygons with the <A HREF="concave.html#HXf320marj"><B>concave</B></A> subroutine.</P>
+
+<P><A NAME="E1D73E3207ceb"></A>Closing a filled polygon with the <A HREF="pclos.html#t2g270marj"><B>pclos</B></A> subroutine.</P>
+
+<P><A NAME="E1D73E3232ceb"></A>Specifying the next point in a polygon with the <A HREF="pdr.html#bqf1c0marj"><B>pdr</B></A> subroutine.</P>
+
+<P><A NAME="E1D73E3258ceb"></A>Specifying the starting point for a polygon with the <A HREF="pmv.html#A139X91eed"><B>pmv</B></A> subroutine.</P>
+
+<P><A NAME="E1D73E3283ceb"></A>Drawing a relative polygon with the <A HREF="rpdr.html#hrfa0marj"><B>rpdr</B></A> subroutine.</P>
+
+<P><A NAME="E1D73E3309ceb"></A>Selecting the shading model used to draw a polygon with the <A HREF="shademodel.html#A143X9ab9"><B>shademodel</B></A> subroutine.</P>
+
+<P><A NAME="E1D73E3335ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing with <!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Move-Draw Style</A> Subroutines, and <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>.</P><hr><center>
+[  <a href="rpdr.html">Previous</a>  |
+<a href="sbox.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

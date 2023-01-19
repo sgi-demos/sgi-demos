@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/SGIperformance.html Mon, 24 Jan 2022 16:28:21 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>SGI GL Performance and System Environment Considerations
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="SGIfiletrans.html">Previous</a>  |
+<a href="specialterms.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="SGIperformance.html"></A>SGI GL Performance and System Environment Considerations</H2>
+<A NAME="INDEX982" REL="I1" TITLE="GL environment"></A>
+<A NAME="INDEX983" REL="I2" TITLE="SGI GL performance and system environ. consid."></A>
+<P><A NAME="A3C0F27A749mhay"></A><B>Your display subsystem architecture is designed to support a wide range of application programming interfaces (API), such as graPHIGS, X11, and </B>GL. Your GL subsystem is implemented in two pieces: GL windowing, input, and event queue functions are implemented as a module on top of <B>Xlib</B>; and GL drawing commands are sent directly to the graphics hardware. The internals of the 3D drawing subsystem are implemented in a high-performance, object-directed fashion, allowing GL applications to run transparently on different 3D graphics hardware without requiring recompilation or relinking. Additional information about your graphics subsystem architecture can be found in the Xhibition '91 Conference Proceedings (published by Integrated Computer Solutions, Inc. 201 Broadway, Cambridge MA 02139, xhibit@ics.com).</P>
+
+<P><A NAME="A3C0F27A769mhay"></A>Performance characteristics of your GL implementation differs from the characteristics of the SGI GL implementation. Three system environments affect performance: the "raw" speed of the hardware, the software interface to the hardware, and the structure of application programs. Because some of your GL functions are supported by AIXwindows, these functions operate significantly slower in your GL, such as:</P>
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C8DA4441chuc"></A><B>mapcolor</B></TD>
+<TD>  <B>getmcolor</B></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C8DA4628chuc"></A><B>viewport</B></TD>
+<TD>  <B>scrnmask</B></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C8DA4842chuc"></A><B>curson</B></TD>
+<TD>  <B>cursoff</B></TD></TR></TABLE>
+
+<P><A NAME="A3C0F27A792mhay"></A>To avoid using the above functions excessively, use the following substitutions to improve the performance of your GL implementation:</P>
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C1C8DA5135chuc"></A><B>mapcolors</B></TD>
+<TD>  <B>getmcolors</B></TD></TR></TABLE>
+
+<P><A NAME="A3C0F27A813mhay"></A>Certain functions behave differently because of the operating system. The return of gversion is AIX GL Version 3.2 on your platform while it is GL4DPI-3.2 or GL4DPI2-3.2 on the SGI platform.</P>
+
+<P><A NAME="A3C0F27A833mhay"></A>The drawmode (PUPDRAW) call redirects the <B>mapcolor</B> and <B>getcolor</B> subroutines to affect the pop-up menus. In AIX Version 3.1, GL pop-up menus were implemented as separate X11 windows, on top of <B>Xlib</B>. This design caused the pop-ups to generate excessive REDRAW events to GL applications. To solve this problem, GL pop-up menus were redesigned in AIX Version 3.2 to operate in the overlay planes, using GL rendering calls.</P>
+
+<P><A NAME="A3C0F27A853mhay"></A>In Color Map Mode, the value stored in the standard bit planes is interpreted as an index into a color map. With GL (AIXwindows environment), the order of the lowest 8 values was modified to be more compatible with X11: black was placed in slot 0 and white in slot 1. To be portable, these colors should be accessed with the #define'd token names found in <SAMP>&lt;gl/gl.h></SAMP> and never directly through their numeric value. The following table shows the color map's color values:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>R</B></TD>
+
+<TD><B>G</B></TD>
+
+<TD><B>B</B></TD>
+
+<TD><B>Color</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0
+</TD>
+
+<TD>0
+</TD>
+
+<TD>0
+</TD>
+
+<TD>Black
+</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>255
+</TD>
+
+<TD>0
+</TD>
+
+<TD>0
+</TD>
+
+<TD>Red
+</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0
+</TD>
+
+<TD>255
+</TD>
+
+<TD>0
+</TD>
+
+<TD>Green
+</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>255
+</TD>
+
+<TD>255
+</TD>
+
+<TD>0
+</TD>
+
+<TD>Yellow
+</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0
+</TD>
+
+<TD>0
+</TD>
+
+<TD>255
+</TD>
+
+<TD>Blue
+</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>255
+</TD>
+
+<TD>0
+</TD>
+
+<TD>255
+</TD>
+
+<TD>Magenta
+</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0
+</TD>
+
+<TD>255
+</TD>
+
+<TD>255
+</TD>
+
+<TD>Cyan
+</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>255
+</TD>
+
+<TD>255
+</TD>
+
+<TD>255
+</TD>
+
+<TD>White
+</TD></TR></TABLE>
+
+<P><A NAME="A3C0F27A875mhay"></A>With the SGI GL, the lowest 8 values in the default color map are loaded in a different order. </P>
+
+<P><A NAME="A3C0F27A895mhay"></A>The font management facilities provided by SGI as part of the operating system are not part of your GL. The SGI FontManager library provides a font management system that allows scaling and rotating of annotation text fonts. The default font for the Personal IRIS has not been licensed by your supplier. Programs must choose fonts from those provided by AIX and AIXwindows. To set default GL fonts for any programs inheriting the environment from a shell, execute the following: </P>
+<PRE><A NAME="C1C8DA6991chuc"></A>GLFONT0=Rom10; export GLFONT0; glprog</PRE>
+
+<P><A NAME="A3C0F27A917mhay"></A>All AIXwindows fonts are available for use in GL programs. Use the <B>XListFonts</B> call for an array of available font names, and then use <B>loadXfont</B> to load the specified font and return the font ID. Example programs demonstrating this usage can be found in <B>/usr/lpp/GL/examples</B>. With AIXwindows fonts available to your GL, most functions that are provided by SGI FontManager are satisfied.</P>
+
+<P><A NAME="A3C0F27A937mhay"></A>In AIX Version 3.2, <B>Xlib</B> calls can be mixed with GL calls in the same application. The guidelines for doing this, and the routines that enable this, can be found in <A HREF="exhwindcalls.html#exhwindcalls.html">Using Enhanced X-Windows Calls with GL Subroutines</A><A HREF="exhwindcalls.html" REL="PAGENUM"></A>. Example programs demonstrating integration can be found in <B>/usr/lpp/GL/examples</B>.</P><hr><center>
+[  <a href="SGIfiletrans.html">Previous</a>  |
+<a href="specialterms.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/SGIperformance.html Mon, 24 Jan 2022 16:28:21 GMT -->
+</HTML>
+
+

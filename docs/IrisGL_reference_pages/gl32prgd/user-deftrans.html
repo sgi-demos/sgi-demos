@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/user-deftrans.html Mon, 24 Jan 2022 16:28:06 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>User-Defined Transformations
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="coordtransfrms.html">Previous</a>  |
+<a href="cntrltransfrms.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="user-deftrans.html"></A>User-Defined Transformations</H2>
+<A NAME="INDEX427" REL="I1" TITLE="user-defined transformations"></A>
+<A NAME="INDEX428" REL="I2" TITLE="GL"></A>
+<A NAME="INDEX429" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX430" REL="I2" TITLE="user-defined transformations"></A>
+<P><A NAME="A3C0E9A3606mhay"></A>A transformation changes the size and 
+orientation of an object by modifying either the object itself or the 
+position of the viewpoint. A transformation is expressed as a 4x4 
+floating-point matrix. You can build complex transformations by linking a 
+series of primitive transformation subroutines, such as 
+<!--:libs:gl32tref:--><A HREF="../gl32tref/rotate.html#A8g2120marj"><B>rotate</B></A>, 
+<!--:libs:gl32tref:--><A HREF="../gl32tref/rot.html#A144X9562"><B>rot</B></A>, 
+<!--:libs:gl32tref:--><A HREF="../gl32tref/translate.html#A144X95c8"><B>translate</B></A>, 
+or <!--:libs:gl32tref:--><A HREF="../gl32tref/scale.html#A144X95a6"><B>scale</B></A>. 
+If M,V, and P are <A HREF="specialterms.html#A27P021">modeling</A>, 
+<A HREF="specialterms.html#A27P021">viewing</A>, and 
+<A HREF="specialterms.html#A27P021">projection</A> transformations, you can 
+formulate transformation S, which maps model space into normalized device 
+coordinates (NDC), as in the following equation:</P>
+
+
+<IMG SRC="figures/gl32p12.jpg">
+<P><A NAME="A3C0E9A3626mhay"></A>The clipping boundaries are:</P>
+
+
+<IMG SRC="figures/gl32p13.jpg">
+<P><A NAME="A3C0E9A3647mhay"></A>The resulting NDC coordinates:</P>
+
+
+<IMG SRC="figures/gl32p14.jpg">
+<P><A NAME="A3C0E9A3668mhay"></A>are then scaled to the current viewport with the current viewport mapping.</P>
+
+<P><A NAME="A3C0E9A3688mhay"></A>The graphics pipeline maintains a stack that holds up to 32 transformation matrices. The system applies the matrix on top of the stack (the current transformation matrix) to all coordinate data.</P>
+
+<P><A NAME="A3C0E9A3708mhay"></A>The graphics pipeline forms a complex transformation matrix by premultiplying the current matrix by each primitive transformation. The pipeline forms transformation S by executing coordinate transformation subroutines in reverse order: first, <A HREF="coordtransfrms.html#A264X9141">projection subroutines</A>; second, <A HREF="coordtransfrms.html#A264X915f">viewing subroutines</A>; and third, <A HREF="coordtransfrms.html#A264X916c">modeling subroutines</A>.</P>
+
+<BLOCKQUOTE><A NAME="C41D30B428nqui"></A><B>Note: </B>In MSINGLE matrix mode, the graphics pipeline loads the P transformation onto the matrix stack, while both the V and M transformations premultiply the current matrix. For additional information on matrix manipulation and the graphics pipeline, refer to <A HREF="lightmatrix.html#lightmatrix.html">"Lighting in Matrix Mode"</A><A HREF="lightmatrix.html" REL="PAGENUM"></A>. </BLOCKQUOTE>
+
+
+<P><A NAME="A3C0E9A3730mhay"></A>The projection, viewing, and modeling subroutines provide a high-level interface that manages the transformation matrix stack. Additional subroutines allow direct control over the stack. These subroutines load or multiply user-defined transformation matrices, push and pop the transformation stack, and retrieve the matrix on the top of the stack.</P>
+
+<H3><A NAME="A264X91bb"></A>loadmatrix Subroutine</H3>
+<P><A NAME="A3C0E9A3751mhay"></A>The 
+<!--:libs:gl32tref:--><A HREF="../gl32tref/loadmatrix.html#A144X9430"><B>loadmatrix</B></A> 
+subroutine loads a 4x4 floating-point matrix onto the stack, replacing the 
+current top of the stack. The syntax is as follows:
+
+</P>
+
+<PRE><A NAME="A258C01c17c"></A>void&nbsp;loadmatrix(Matrix&nbsp;matrix)</PRE>
+
+
+
+<H3><A NAME="A264X91bf"></A>multmatrix Subroutine</H3>
+<P><A NAME="A3C0E9A3773mhay"></A>The 
+<!--:libs:gl32tref:--><A HREF="../gl32tref/multmatrix.html#A144X9474"><B>multmatrix</B></A> 
+subroutine premultiplies the current top of the transformation stack by the 
+given matrix. That is, if T is the current matrix, <B>multmatrix</B>(M) 
+replaces T with MT. The syntax is as follows:
+
+</P>
+
+<PRE><A NAME="A258C01c17d"></A>void&nbsp;multmatrix(Matrix&nbsp;matrix)</PRE>
+
+
+
+<H3><A NAME="A264X91c3"></A>getmatrix Subroutine</H3>
+<P><A NAME="A3C0E9A3795mhay"></A>The 
+<!--:libs:gl32tref:--><A HREF="../gl32tref/getmatrix.html#A144X940e"><B>getmatrix</B></A> 
+subroutine copies the transformation matrix from the top of the transformation 
+stack to an array provided by the user. The stack does not change. If lighting 
+is not being used (the default case), the product MVP of the modeling, 
+viewing, and projection matrices is kept on the stack. The syntax is as 
+follows:
+
+</P>
+
+<PRE><A NAME="A258C01c17e"></A>void&nbsp;getmatrix(Matrix&nbsp;matrix)</PRE>
+
+
+
+<P><A NAME="A3C0E9A3816mhay"></A>When lighting is being used, the projection matrix P is kept separately, and only the product of the modeling and viewing matrices, MV, is kept on the stack. A special mechanism, the matrix mode, is provided for accessing P and MV separately. Otherwise, the matrix subroutines work as previously described.</P>
+
+<H3><A NAME="A38C01205b"></A>Establishing a One-to-One Mapping Between Screen Space and World Space</H3>
+<P><A NAME="A3C0E9A3837mhay"></A>Specifying or defining the <B>ortho2</B> subroutine parameters brings up the issue of creating a window that has a one-to-one mapping between screen space (viewport) and world space (in this case, <B>ortho2</B>). Consider the following example.</P>
+
+<P><A NAME="A3C0E9A3857mhay"></A>Assume a window that is four pixels wide by six pixels high. This window runs from coordinates 0 to 3 on the X-axis and from 0 to 5 on the Y-axis. In order to set up a mapping between world space (floating-point coordinates) and screen space (integer coordinates) that makes pixel (1,2) centered exactly at the point (1.0, 2.0) in the <!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496"><B>ortho2</B></A> world space, you must call the following subroutines:</P>
+<PRE><A NAME="A38C01205e"></A>viewport(0,&nbsp;3,&nbsp;0,&nbsp;5);
+ortho2(-0.5,&nbsp;3.5,&nbsp;-0.5,&nbsp;5.5);</PRE>
+
+<P><A NAME="A3C0E9A3879mhay"></A>To understand why these values are correct, consider the X component. The width in X of this window is 4 pixels, which are integer values; it makes no sense to talk about pixel 1.3. In world coordinates, however, an X location of 1.3 is valid. The mapping from world to screen coordinates attempts to convert the X world coordinate 1.3 to the nearest whole-number pixel box it can find. Rounding off 1.3 points GL at pixel 1. </P>
+
+<P><A NAME="A3C0E9A3899mhay"></A>The call to the <B>ortho2</B> subroutine runs between <I>x</I> values of 0.5 and 3.5 in order to let the rounding operation center the four <I>x</I> world-space whole-number values of 0.0, 1.0, 2.0, and 3.0 in the middle of each pixel in the X dimension.</P>
+
+<P><A NAME="A3C0E9A3919mhay"></A>In this scheme, -0.5 can be thought of as the extreme left-hand edge of the window, while 3.5 is the extreme right-hand edge, 1.5 is the boundary between pixel 1 and pixel 2, and so on. This lets you define the <I>x</I> range in the <B>ortho2</B> subroutine so that, in effect, the world coordinates straddle the discrete whole number boundaries and center the whole numbers (0.0, 1.0, 2.0, 3.0) in the middle of each pixel (0, 1, 2, 3).</P>
+
+<P><A NAME="A3C0E9A3939mhay"></A>Extrapolate from this and assume a situation where the window has been resized and you need to redefine a current <B>ortho2</B> subroutine based on the new size. To do this, use the following three statements:</P>
+<PRE><A NAME="A38C012061"></A>getsize(&amp;xsize,&nbsp;&amp;ysize);
+viewport(0,&nbsp;xsize&nbsp;-&nbsp;1,&nbsp;0,&nbsp;ysize&nbsp;-&nbsp;1);
+ortho2&nbsp;&nbsp;(-0.5,(float)(xsize-0.5),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-0.5,(float)(ysize-0.5);</PRE>
+
+<P><A NAME="A3C0E9A3960mhay"></A>In the call to the <!--:libs:gl32tref:--><A HREF="../gl32tref/viewport.html#qrY270marj"><B>viewport</B></A> subroutine, you must subtract 1 from the value of <SAMP>xsize</SAMP> and <SAMP>ysize</SAMP> because they start at zero, not one. Likewise, in the call to the <!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496"><B>ortho2</B></A> subroutine, you need to start at 0.5; therefore, you need to subtract 0.5 from <SAMP>xsize</SAMP> and <SAMP>ysize</SAMP> to create the straddling effect described previously.</P><hr><center>
+[  <a href="coordtransfrms.html">Previous</a>  |
+<a href="cntrltransfrms.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/user-deftrans.html Mon, 24 Jan 2022 16:28:07 GMT -->
+</HTML>
+
+

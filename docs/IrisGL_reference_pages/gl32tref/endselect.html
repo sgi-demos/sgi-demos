@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>endselect Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="endpick.html">Previous</a>  |
+<a href="finish.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A213X91190c"></A>endselect Subroutine</H2>
+<A NAME="INDEX484" REL="I1" TITLE="endselect subroutine (GL)"></A>
+<A NAME="INDEX485" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX486" REL="I2" TITLE="picking and selecting"></A>
+<A NAME="INDEX487" REL="I3" TITLE="turning off selecting mode"></A>
+<A NAME="INDEX488" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX489" REL="I2" TITLE="picking and selecting"></A>
+<A NAME="INDEX490" REL="I3" TITLE="endselect"></A>
+
+<H3><A NAME="A213X91190e"></A>Purpose</H3>
+<P><A NAME="E1B0B2A416ceb"></A>Turns off selecting mode.</P>
+
+<H3><A NAME="A79C18a"></A>Libraries</H3>
+<P><A NAME="E1B0B2A564ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0B2A674ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911911"></A>C Syntax</H3>
+<PRE><A NAME="A213X911912"></A><B>Int32 endselect(Int16 </B><A HREF="endselect.html#A213X91191c"><I>buffer</I></A><B>[&nbsp;])</B></PRE>
+
+<H3><A NAME="A213X9118ea"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X9118ed"></A><B>INTEGER*4 FUNCTION ENDSEL(</B><I>buffer</I><B>)</B>
+<B>INTEGER*2 </B><I>buffer</I><B>(1)</B></PRE>
+
+<H3><A NAME="A213X911915"></A>Description</H3>
+<P><A NAME="E1B0B2B039ceb"></A>The <B>endselect</B> subroutine turns off 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P019">selecting mode</A> and returns the number of 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P061e">hits</A>.</P>
+
+<P><A NAME="E1B0B2B151ceb"></A>When the system is in selecting mode, and a subroutine draws in the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P01a">selecting region</A>, the contents of the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06e3">name stack</A> are stored in a buffer, along with the number of names in the stack. </P>
+
+<P><A NAME="E1B0B2B261ceb"></A>If a drawing primitive overlaps or intrudes upon the selecting volume, a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P061e">hit</A> has occurred. The hit is recorded only if the name stack has been touched since the last hit. Any of the subroutines <A HREF="loadname.html#A213X9119af"><B>loadname</B></A>, <A HREF="pushname.html#A213X911b48"><B>pushname</B></A>, or <A HREF="popname.html#A213X911af9"><B>popname</B></A> touch the name stack. The first hit after selecting begins is always recorded.</P>
+
+<P><A NAME="E1B0B2B370ceb"></A>A hit is recorded by placing the depth of the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06e3">name stack</A> into the next vacant slot in the buffer, followed by the entire contents of the name stack. The bottom of the name stack is transferred to the buffer first, followed by the second from the bottom entry of the name stack, and so forth. In other words, from bottom to top is mapped to from left to right.</P>
+
+<BLOCKQUOTE><A NAME="A318C9cfb"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X91191b"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91191c"></A><I>buffer</I></TD>
+<TD>  Specifies a buffer in which to write the number of 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P061e">hits</A>.</TD></TR></TABLE>
+
+<H3><A NAME="A213X91191f"></A>Return Value</H3>
+<P><A NAME="E1B0B2B690ceb"></A>The number of times the name stack was recorded into the buffer. If the returned function value is negative, then the buffer was too small to contain all the readings from the name stack. The absolute value is the number of stacks actually recorded.</P>
+
+<H3><A NAME="A30C010fe4"></A>Example</H3>
+<P><A NAME="E1B0B2B847ceb"></A>The example C language program <A HREF="select1_c.html#A16C0c970"><B>select1.c</B></A> uses the <B>endselect</B> subroutine to turn off selecting mode. </P>
+
+<H3><A NAME="A62C015cb8"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0B2C007ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C18d"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C18e"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C18f"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911931"></A>Related Information</H3>
+<P><A NAME="E1B0B2C331ceb"></A>Turning off picking mode with the <A HREF="endpick.html#A213X91185b"><B>endpick</B></A> subroutine.</P>
+
+<P><A NAME="E1B0B2C438ceb"></A>Putting the system in selecting mode with the <A HREF="gselect.html#A213X9118b2"><B>gselect</B></A> subroutine.</P>
+
+<P><A NAME="E1B0B2C545ceb"></A>Initializing the name stack with the <A HREF="initnames.html#YlD250marj"><B>initnames</B></A> subroutine. </P>
+
+<P><A NAME="E1B0B2C652ceb"></A>Loading the name on top of the name stack with the <A HREF="loadname.html#A213X9119af"><B>loadname</B></A> subroutine.</P>
+
+<P><A NAME="E1B0B2C761ceb"></A>Putting the system in picking mode with the <A HREF="pick.html#h632f0nita"><B>pick</B></A> subroutine.</P>
+
+<P><A NAME="E1B0B2C870ceb"></A>Popping a name off the name stack with the <A HREF="popname.html#A213X911af9"><B>popname</B></A> subroutine.</P>
+
+<P><A NAME="E1B0B2C978ceb"></A>Pushing a new name onto the name stack with the <A HREF="pushname.html#A213X911b48"><B>pushname</B></A> subroutine.</P>
+
+<P><A NAME="E1B0B2D086ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and <!--gl32prgd:--><A HREF="../gl32prgd/picknselect.html#picknselect.html">Picking and Selecting</A> Overview.</P><hr><center>
+[  <a href="endpick.html">Previous</a>  |
+<a href="finish.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

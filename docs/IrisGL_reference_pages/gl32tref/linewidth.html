@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>linewidth Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="linesmooth.html">Previous</a>  |
+<a href="lmbind.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A3mM11b0marj"></A>linewidth Subroutine</H2>
+<A NAME="INDEX1031" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1032" REL="I2" TITLE="attribute"></A>
+<A NAME="INDEX1033" REL="I3" TITLE="linewidth"></A>
+<A NAME="INDEX1034" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1035" REL="I2" TITLE="linewidth"></A>
+<A NAME="INDEX1036" REL="I3" TITLE="specifying"></A>
+<A NAME="INDEX1037" REL="I1" TITLE="linewidth subroutine (GL)"></A>
+<H3><A NAME="A213X912981"></A>Purpose</H3>
+<P><A NAME="E1B156F355ceb"></A>Specifies the linewidth.</P>
+
+<H3><A NAME="A77C1108"></A>Libraries</H3>
+<P><A NAME="E1B156F507ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B156F626ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912984"></A>C Syntax</H3>
+<PRE><A NAME="A213X912985"></A><B>void linewidth(Int16 </B><A HREF="linewidth.html#A213X91298c"><I>number</I></A><B>)</B></PRE>
+
+<H3><A NAME="A19C0e0e8"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A19C0e0e9"></A><B>SUBROUTINE LINEWI(</B><I>number</I><B>)</B>
+<B>INTEGER*4 </B><I>number</I></PRE>
+
+<BLOCKQUOTE><A NAME="A77C110b"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912988"></A>Description</H3>
+<P><A NAME="E1B1570091ceb"></A>The <B>linewidth</B> subroutine specifies the width of a line. The default width is one 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06fd">pixel</A>. Wide lines are centered as nearly as possible on the infinitely thin mathematical line.</P>
+
+<BLOCKQUOTE><A NAME="A318C9d26"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X91298b"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91298c"></A><I>number</I></TD>
+<TD>  Width of the line in pixels.</TD></TR></TABLE>
+
+<H3><A NAME="A213X91298f"></A>Example</H3>
+<P><A NAME="E1B1570446ceb"></A>The example C language program <A HREF="prompt_c.html#A16C0c8de"><B>prompt.c</B></A> uses the <B>linewidth</B> subroutine to draw a two-pixel thick border around a prompt string.</P>
+
+<H3><A NAME="A62C015c7b"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1570641ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="A3CFCB4C307janb"></A>The POWERgraphics GXT1000 supports line widths from 1 to 255.</P>
+
+<H3><A NAME="A77C110c"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C110d"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C110e"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912998"></A>Related Information</H3>
+<P><A NAME="E1B1571011ceb"></A>Defining a linestyle with the <A HREF="deflinestyle.html#A143X9b1f"><B>deflinestyle</B></A> subroutine.</P>
+
+<P><A NAME="E1B1571138ceb"></A>Returning the current linewidth with the <A HREF="getlwidth.html#A213X91299c"><B>getlwidth</B></A> subroutine.</P>
+
+<P><A NAME="E1B1571266ceb"></A>Selecting a linestyle with the <A HREF="setlinestyle.html#XFM1310marj"><B>setlinestyle</B></A> subroutine.</P>
+
+<P><A NAME="E1B1571380ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Drawing with Begin-End Style Subroutines</A>, <!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Drawing with Move-Draw Style Subroutines</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">Drawing NURBS Curves and Surfaces</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#drawwfcvs.html">Drawing Wire Frame Curves and Surface Patches</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware Used by GL</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</A>.</P><hr><center>
+[  <a href="linesmooth.html">Previous</a>  |
+<a href="lmbind.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

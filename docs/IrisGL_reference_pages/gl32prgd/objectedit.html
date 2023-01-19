@@ -1,0 +1,393 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/objectedit.html Mon, 24 Jan 2022 16:28:19 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Object Editing 
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="mapcoords2wrld.html">Previous</a>  |
+<a href="picknselect.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="objectedit.html"></A>Object Editing</H2>
+
+
+<P><A NAME="INDEX724"></A><A NAME="INDEX725"></A><A NAME="INDEX726"></A><A NAME="INDEX727"></A><A NAME="INDEX728"></A><A NAME="INDEX729"></A><A NAME="INDEX730"></A></P>
+
+
+<P><A NAME="A3C0EC25854mhay"></A>This section discusses the following topics</P>
+
+
+<UL><LI><A NAME="A258C01c0dc"></A><A HREF="objectedit.html#A13C0bd28">Identifying
+Display List Items with Tags</A></LI>
+
+
+<LI><A NAME="A258C01c0dd"></A><A HREF="objectedit.html#A13C0bd3e">Inserting,
+Deleting, and Replacing Within Objects</A></LI>
+
+
+<LI><A NAME="A258C01c0de"></A><A HREF="objectedit.html#A65C0167ec">Object
+Editing Examples</A></LI>
+
+
+<LI><A NAME="A258C01c0df"></A><A HREF="objectedit.html#A13C0bd75">Object
+Memory Management</A></LI></UL>
+
+
+<P><A NAME="A3C0EC25879mhay"></A>You can change an object by editing it.
+Editing requires you to identify and locate the drawing routines that you
+want to change. You use two types of routines when you edit an object:</P>
+
+
+<UL><LI><A NAME="A13C0bd1d"></A>Editing subroutines, which add, remove, or
+replace drawing routines.</LI>
+
+
+<LI><A NAME="A13C0bd1e"></A>Tag subroutines, which identify locations of
+drawing routines within an object.</LI></UL>
+
+
+<H3><A NAME="A13C0bd20"></A>editobj Subroutine </H3>
+
+
+<P><A NAME="A3C0EC25902mhay"></A>To open an object for editing, use the
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/editobj.html#A142X9360">editobj</A></B>
+subroutine. A pointer acts as a cursor that appends new routines. The pointer
+is initially set to the end of the object. The system appends graphics
+routines to the object until either a <B><!--:libs:gl32tref:--><A HREF="../gl32tref/closeobj.html#A142X915b">closeobj</A></B>
+subroutine or a pointer positioning routine (the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/objdelete.html#A142X9afd">objdelete</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/objinsert.html#A142X9adb">objinsert</A></B>,
+or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/objreplace.html#A142X9b50">objreplace</A></B>
+subroutines) executes. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C015395"></A>void&nbsp;editobj(Int32&nbsp;object)</PRE>
+
+
+<P><A NAME="A3C0EC25923mhay"></A>The system interprets the editing routines
+following the <B>editobj</B> subroutine call. Use the <B>closeobj</B> subroutine
+to terminate your editing session. If you specify an undefined object,
+an error message appears. </P>
+
+
+<H3><A NAME="A13C0bd25"></A>getopenobj Subroutine </H3>
+
+
+<P><A NAME="A3C0EC25944mhay"></A>To determine if an object is open for
+editing, use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getopenobj.html#A142X9382">getopenobj</A></B>
+subroutine. If an object is open, it returns the object's numeric identifier.
+If no object is open, it returns -1. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C015396"></A>Int32&nbsp;getopenobj()</PRE>
+
+
+<H3><A NAME="A13C0bd28"></A>Identifying Display List Items with Tags </H3>
+
+
+<P><A NAME="A3C0EC25966mhay"></A>Tags locate display list items you want
+to edit. Editing routines require tag names as parameters. The STARTTAG
+value is a predefined tag that goes before the very first item to mark
+the beginning of the list. The STARTTAG value does not have any effect
+on drawing or modifying the object; use it only to return to (find) the
+beginning of the list. </P>
+
+
+<P><A NAME="A3C0EC25986mhay"></A>The ENDTAG value is a predefined tag that
+is positioned after the last item to mark the end of the list. Like STARTTAG,
+ENDTAG does not have any effect on drawing or modifying the object; use
+it to find the end of the graphical object. When you call the <B>makeobj</B>
+subroutine to create a list, STARTTAG and ENDTAG automatically appear.
+You cannot delete these tags. When an object is opened for editing, a pointer
+appears at ENDTAG, after the last routine in the object. To perform edits
+on other items, refer to them by their tags. </P>
+
+
+<H3><A NAME="A13C0bd2a"></A>maketag Subroutine </H3>
+
+
+<P><A NAME="A3C0EC26007mhay"></A>Use tags to mark display list items you
+may want to change. You explicitly tag routines with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/maketag.html#A142X942c">maketag</A></B>
+subroutine. You specify a signed 32-bit numeric identifier and the system
+places a marker between two list items. You can use the same tag name in
+different objects. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C015397"></A>void&nbsp;maketag(Int32&nbsp;tag)</PRE>
+
+
+<H3><A NAME="A13C0bd2e"></A>newtag Subroutine </H3>
+
+
+<P><A NAME="A3C0EC26029mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/newtag.html#A142X93a4">newtag</A></B>
+subroutine also adds tags to an object, but uses an existing tag to determine
+its relative position within the object. The <B>newtag</B> subroutine creates
+a new tag that is offset beyond the other tag by the number of lines given
+in its parameter offset. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C015398"></A>void&nbsp;newtag(Int32&nbsp;newt,&nbsp;Int32&nbsp;oldtag,&nbsp;Int32&nbsp;offset)</PRE>
+
+
+<H3><A NAME="A13C0bd33"></A>istag Subroutine </H3>
+
+
+<P><A NAME="A3C0EC26052mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/istag.html#JXw220marj">istag</A></B>
+subroutine tells whether a given tag is in use within the current open
+object. The subroutine returns TRUE if the tag is in use, and FALSE if
+it is not. The result is undefined if there is no currently open object.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C015399"></A>Int32&nbsp;istag(Int32&nbsp;tag)</PRE>
+
+
+<H3><A NAME="A13C0bd37"></A>gentag Subroutine </H3>
+
+
+<P><A NAME="A3C0EC26074mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gentag.html#A48x2120marj">gentag</A></B>
+subroutine generates a unique integer to use as a tag within the current
+open object. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C01539a"></A>Int32&nbsp;gentag()</PRE>
+
+
+<H3><A NAME="A13C0bd3a"></A>deltag Subroutine </H3>
+
+
+<P><A NAME="A3C0EC26096mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/deltag.html#A1N61210marj">deltag</A></B>
+subroutine deletes tags from the object currently open for editing. Remember,
+you cannot delete the special STARTTAG and ENDTAG tags. The syntax is as
+follows: </P>
+
+
+<PRE><A NAME="A58C01539b"></A>void&nbsp;deltag(Int32&nbsp;tag)</PRE>
+
+
+<H3><A NAME="A13C0bd3e"></A>Inserting, Deleting, and Replacing within Objects</H3>
+
+
+<P><A NAME="A3C0EC26118mhay"></A>The following subroutines allow you to
+edit an object by moving the subroutines inside the object using tags as
+markers for inserting or deleting. </P>
+
+
+<H3><A NAME="A13C0bd3f"></A>objinsert Subroutine </H3>
+
+
+<P><A NAME="A3C0EC26139mhay"></A>Use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/objinsert.html#A142X9adb">objinsert</A></B>
+subroutine to add routines to an object at the location specified in the
+<I>tag </I>parameter. The <B>objinsert</B> subroutine positions an editing
+pointer on the tag specified in the <I>tag </I>parameter. The system inserts
+graphics routines immediately after the tag. To terminate the insertion,
+use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/closeobj.html#A142X915b">closeobj</A></B>
+subroutine or the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/objdelete.html#A142X9afd">objdelete</A></B>
+or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/objreplace.html#A142X9b50">objreplace</A></B>
+editing subroutines. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C01539c"></A>void&nbsp;objinsert(Int32&nbsp;tag)</PRE>
+
+
+<H3><A NAME="A13C0bd43"></A>objdelete Subroutine </H3>
+
+
+<P><A NAME="A3C0EC26161mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/objdelete.html#A142X9afd">objdelete</A></B>
+subroutine removes routines from the current open object. It removes everything
+between the <I>tag1</I> and <I>tag2</I> parameters, including routines
+and other tag names. For example, <TT>objdelete(STARTTAG,&nbsp;ENDTAG)</TT>
+would delete every routine. The system ignores the <B>objdelete</B> subroutine
+if no object is open for editing. This routine leaves the pointer at the
+<I>tag1</I> parameter location after it executes. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A58C01539d"></A>void&nbsp;objdelete(Int32&nbsp;tag1,&nbsp;Int32&nbsp;tag2)</PRE>
+
+
+<H3><A NAME="A13C0bd47"></A>objreplace Subroutine </H3>
+
+
+<P><A NAME="A3C0EC26183mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/objreplace.html#A142X9b50">objreplace</A></B>
+subroutine combines the functions of the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/objdelete.html#A142X9afd">objdelete</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/objinsert.html#A142X9adb">objinsert</A></B>
+subroutines. It provides a quick way to replace one routine with another
+that occupies the same amount of display list space. Its <I>tag</I> parameter
+is a single tag. Graphics routines that follow the <B>objreplace</B> subroutine
+overwrite existing routines until an occurrence of the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/closeobj.html#A142X915b">closeobj</A></B>
+or an editing subroutine (<B>objinsert</B> or <B>objdelete</B>) terminates
+the replacement. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A13C0bd49"></A><B>Note: </B>The <B>objreplace</B> subroutine
+requires that the new routine to be exactly the same length in bytes as
+the previous one. If it is not, there is a danger that the display list
+will be scrambled. Use the <B>objdelete</B> and <B>objinsert</B> subroutines
+for more general replacement. </P></BLOCKQUOTE>
+
+
+<P><A NAME="A3C0EC26204mhay"></A>The syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C01539e"></A>void&nbsp;objreplace(Int32&nbsp;tag)</PRE>
+
+
+<H3><A NAME="A65C0167ec"></A>Object Editing Examples </H3>
+
+
+<P><A NAME="A3C0EC26225mhay"></A>The following is an example of object
+editing. The object <TT>star</TT> is defined. </P>
+
+
+<PRE><A NAME="A65C0167ee"></A>makeobj(star);
+&nbsp;&nbsp;&nbsp;color(GREEN);
+&nbsp;&nbsp;&nbsp;maketag(BOX);
+&nbsp;&nbsp;&nbsp;recti(1,&nbsp;1,&nbsp;9,&nbsp;9);
+&nbsp;&nbsp;&nbsp;maketag(INNER);
+&nbsp;&nbsp;&nbsp;color(BLUE);
+&nbsp;&nbsp;&nbsp;poly2i(8,&nbsp;Inner);
+&nbsp;&nbsp;&nbsp;maketag(OUTER);
+&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;poly2i(8,&nbsp;Outer);
+&nbsp;&nbsp;&nbsp;maketag(CENTER);
+&nbsp;&nbsp;&nbsp;color(YELLOW);
+&nbsp;&nbsp;&nbsp;pnt2i(5,&nbsp;5);
+closeobj();</PRE>
+
+
+<P><A NAME="A3C0EC26247mhay"></A>This object is then edited with the following
+routine to produce a modified object: </P>
+
+
+<PRE><A NAME="A65C0167f0"></A>editobj(star);
+&nbsp;&nbsp;&nbsp;circi(1,&nbsp;5,&nbsp;5);
+&nbsp;&nbsp;&nbsp;objinsert(BOX);
+&nbsp;&nbsp;&nbsp;recti(0,&nbsp;0,&nbsp;10,&nbsp;10);
+&nbsp;&nbsp;&nbsp;objreplace(INNER);
+&nbsp;&nbsp;&nbsp;color(GREEN);
+closeobj();</PRE>
+
+
+<P><A NAME="A3C0EC26268mhay"></A>The object resulting from the editing
+session is equivalent to an object created by the following code. </P>
+
+
+<PRE><A NAME="A65C0167f2"></A>makeobj(star);
+&nbsp;&nbsp;&nbsp;color(GREEN);
+&nbsp;&nbsp;&nbsp;maketag(BOX);
+&nbsp;&nbsp;&nbsp;recti(0,&nbsp;0,&nbsp;10,&nbsp;10);
+&nbsp;&nbsp;&nbsp;recti(1,&nbsp;1,&nbsp;9,&nbsp;9);
+&nbsp;&nbsp;&nbsp;maketag(INNER);
+&nbsp;&nbsp;&nbsp;color(GREEN);
+&nbsp;&nbsp;&nbsp;poly2i(8,&nbsp;Inner);
+&nbsp;&nbsp;&nbsp;maketag(OUTER);
+&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;poly2i(8,&nbsp;Outer);
+&nbsp;&nbsp;&nbsp;maketag(CENTER);
+&nbsp;&nbsp;&nbsp;color(YELLOW);
+&nbsp;&nbsp;&nbsp;pnt2i(5,&nbsp;5);
+&nbsp;&nbsp;&nbsp;circi(1,&nbsp;5,&nbsp;5);
+closeobj();</PRE>
+
+
+<H3><A NAME="A13C0bd75"></A>Object Memory Management </H3>
+
+
+<P><A NAME="A3C0EC26289mhay"></A>Editing can require large amounts of memory.
+The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/compactify.html#A142X9c5a">compactify</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/chunksize.html#A142X9c38">chunksize</A></B>
+subroutines perform memory management tasks. </P>
+
+
+<H3><A NAME="A13C0bd78"></A>compactify Subroutine </H3>
+
+
+<P><A NAME="A3C0EC26310mhay"></A>As memory is modified by the various editing
+routines, an open object can become fragmented and stored inefficiently.
+When the amount of wasted space becomes large, the system automatically
+calls the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/compactify.html#A142X9c5a">compactify</A></B>
+subroutine during the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/closeobj.html#A142X915b">closeobj</A></B>
+operation. The routine allows you to perform the compaction explicitly.
+Unless new routines are inserted in the middle of an object, compaction
+is not necessary. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A13C0bd7a"></A><B>Note: </B>The <B>compactify</B> subroutine
+uses a significant amount of computing time. Do not call it unless the
+amount of available storage space is critical; use it sparingly when performance
+is a consideration. </P></BLOCKQUOTE>
+
+
+<P><A NAME="A3C0EC26331mhay"></A>The syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C01539f"></A>void&nbsp;compactify(Int32&nbsp;object)</PRE>
+
+
+<H3><A NAME="A38C012071"></A>chunksize Subroutine </H3>
+
+
+<P><A NAME="A3C0EC26353mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/chunksize.html#A142X9c38">chunksize</A></B>
+subroutine specifies the minimum chunk of memory necessary to accommodate
+the largest GL command call. Normally, this is a call to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/poly.html#avf2c0marj">poly</A></B>
+or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/polf.html#Zsf1c0marj">polf</A></B>
+subroutine with a very large number of vertices. If there is a memory shortage,
+use the <B>chunksize</B> subroutine to allocate memory differently to an
+object. </P>
+
+
+<P><A NAME="A3C0EC26373mhay"></A>The <B>chunksize</B> subroutine specifies
+the minimum amount of memory that the system allocates to an object. The
+default chunk is 1020 bytes. When a chunk is specified, its size varies
+according to the needs of the application. As the object grows, more memory
+is allocated in units of the size specified in the <I>chunk</I> parameter.
+The <B>chunksize</B> subroutine is called once after the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/ginit.html#LDg21c0marj">ginit</A></B>
+or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winopen.html#A142X91549">winopen</A></B>
+subroutine, and once before the first <B><!--:libs:gl32tref:--><A HREF="../gl32tref/makeobj.html#A142X912d">makeobj</A></B>
+subroutine. </P>
+
+
+<P><A NAME="A3C0EC26392mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/chunksize.html#A142X9c38">chunksize</A></B>
+subroutine helps use memory economically. For example, when graphical objects
+require very little memory, the system can be used more efficiently by
+specifying smaller chunks of memory. There are drawbacks to the use of
+the <B>chunksize</B> subroutine. There is both memory and execution time
+overhead associated with each chunk. Many small chunks can be inefficient
+in both ways. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A68C017192"></A>void&nbsp;chunksize(Int32&nbsp;chunk)</PRE>
+
+
+
+
+<hr><center>
+[  <a href="mapcoords2wrld.html">Previous</a>  |
+<a href="picknselect.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/objectedit.html Mon, 24 Jan 2022 16:28:19 GMT -->
+</HTML>
+

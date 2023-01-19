@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>curve1.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="colored_c.html">Previous</a>  |
+<a href="curve2_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c804"></A>curve1.c Example C Language Program
+</H2>
+<A NAME="INDEX2201" REL="I1" TITLE="curve1.c example program (GL)"></A>
+<A NAME="INDEX2202" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2203" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2204" REL="I3" TITLE="curve segments"></A>
+<A NAME="INDEX2205" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2206" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2207" REL="I3" TITLE="curve segments"></A>
+<A NAME="INDEX2208" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2209" REL="I2" TITLE="curve segments"></A>
+<A NAME="INDEX2210" REL="I3" TITLE="drawing"></A>
+<PRE><A NAME="A64E9ED386ttay"></A>/* Example C Language Program curve1.c */</PRE>
+<PRE><A NAME="A64E9ED623ttay"></A>/*
+This program draws 3 curve segments. The "horizontal" one is drawn
+with a Bezier basis matrix, the "vertical" one with a Cardinal
+basis matrix, and the "diagonal" one with a B-spline basis matrix.
+All use the same set of 4 control points, contained in the array
+geom1.</PRE>
+<PRE><A NAME="A64E9ED792ttay"></A>Before crv (rcrv) is called, a basis and precision matrix must be
+defined.
+*/</PRE>
+<PRE><A NAME="A64E9ED948ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64E9EE109ttay"></A>#define BEZIER 1
+#define CARDINAL 2
+#define BSPLINE 3</PRE>
+<PRE><A NAME="A64E9EE289ttay"></A>Matrix beziermatrix = { 
+  { -1, 3 ,-3, 1 },
+  {  3,-6 , 3, 0 },
+  { -3, 3 , 0, 0 },
+  {  1, 0 , 0, 0 }
+};</PRE>
+<PRE><A NAME="A64E9EE482ttay"></A>Matrix cardinalmatrix = { 
+  { -0.5,  1.5, -1.5,  0.5 },
+  {  1.0, -2.5,  2.0, -0.5 },
+  { -0.5,  0.0,  0.5,  0.0 },
+  {  0.0,  1.0,  0.0,  0.0 }
+};</PRE>
+<PRE><A NAME="A64E9EE696ttay"></A>Matrix bsplinematrix = { 
+  { -1.0/6.0,  3.0/6.0, -3.0/6.0, 1.0/6.0 },
+  {  3.0/6.0, -6.0/6.0,  3.0/6.0, 0.0     },
+  { -3.0/6.0,  0.0    ,  3.0/6.0, 0.0     },
+  {  1.0/6.0,  4.0/6.0,  1.0/6.0, 0.0     }
+};</PRE>
+<PRE><A NAME="A64E9EE879ttay"></A>Coord geom1[4][3] = {
+  { 100.0, 200.0, 0.0},
+  { 200.0, 300.0, 0.0},
+  { 200.0, 100.0, 0.0},
+  { 300.0, 200.0, 0.0}
+};</PRE>
+<PRE><A NAME="A64E9EF033ttay"></A>main()
+{    
+  int dev,val;    </PRE>
+<PRE><A NAME="A64E9EF182ttay"></A>  initialize();    </PRE>
+<PRE><A NAME="A64E9EF417ttay"></A>  while (TRUE) {        
+    if (qtest()) {            
+      dev = qread(&amp;val);            
+      if (dev == ESCKEY) {
+        gexit();
+        exit(1);
+      }
+      else if (dev == REDRAW) {
+        reshapeviewport();
+        drawcurve();
+      }
+    }
+  }
+}</PRE>
+<PRE><A NAME="A64E9EF571ttay"></A>initialize()
+{    
+  int gid;    </PRE>
+<PRE><A NAME="A64E9EF758ttay"></A>  prefposition(200, 600, 100, 500);
+  gid = winopen("curve1");    
+  qdevice(ESCKEY);
+  qdevice(REDRAW);
+  qenter(REDRAW,gid);
+}</PRE>
+<PRE><A NAME="A64E9EF913ttay"></A>drawcurve()
+{    
+  int i,xx,yy,x,y;</PRE>
+<PRE><A NAME="A64E9F0064ttay"></A>  color(BLACK);
+  clear();</PRE>
+<PRE><A NAME="A64E9F0334ttay"></A>  defbasis(BEZIER,beziermatrix);
+    /* define a basis matrix called BEZIER */
+  curvebasis(BEZIER);
+    /* identify the BEZIER matrix as the current basis matrix */
+  curveprecision(20);
+    /* set the current precisionto 20 (the curve segment will be
+    drawn using 20 line segments) */
+  color(RED);
+  crv(geom1);
+    /* a new curve segment is drawn */</PRE>
+<PRE><A NAME="A64E9F0599ttay"></A>  defbasis(CARDINAL,cardinalmatrix);
+    /* a new basis is defined */
+  curvebasis(CARDINAL);
+    /* the current basis is reset.  note that the curveprecision
+    does not have to be restated unless it is to be changed */
+  color(BLUE);
+  crv(geom1);
+    /* a new curve segment is drawn */</PRE>
+<PRE><A NAME="A64E9F0811ttay"></A>  defbasis(BSPLINE,bsplinematrix);
+    /* a new basis is defined */
+  curvebasis(BSPLINE);
+    /* the current basis is reset */
+  color(GREEN);
+  crv(geom1);
+    /* a new curve segment is drawn */</PRE>
+<PRE><A NAME="A64E9F1040ttay"></A>    /* show the control points */
+&nbsp;&nbsp;&nbsp;color(WHITE);
+  for ( i = 0 ; i &lt; 4 ; i++ )  {
+    for ( xx = -2 ; xx &lt; 2 ; xx++) {
+      for ( yy = -2 ; yy &lt; 2 ; yy++) {
+        pnt2( geom1[i][0] + (Coord) xx , geom1[i][1] + (Coord) yy);
+      }
+    }
+  }
+}</PRE>
+<PRE><A NAME="A64E9F1344ttay"></A>/*Changes:
+  - showing the control points (added variables i,xx,yy)
+  - the size of the window with
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from prefposition (200,500,100,400); to
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prefposition(200, 600, 100, 500);
+&nbsp;&nbsp;&nbsp;- remove the translate(150.0, 150.0, 0.0); because when the
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window redraws it successively moves the curves away
+&nbsp;&nbsp;&nbsp;- change the colors of the curves from all red to each
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of the primary colors of light
+&nbsp;&nbsp;&nbsp;- added 100.0 to each of the y components of the curve's geomerty
+*/</PRE>
+
+<H3><A NAME="A200C114a"></A>Related Information</H3>
+<P><A NAME="E1D77A1323ceb"></A>The <A HREF="crv.html#ZMS220marj"><B>crv</B></A> subroutine<A HREF="../gl32tref/ZMS220marj" REL="PAGENUM"></A>, <A HREF="curvebasis.html#sTS23a0marj"><B>curvebasis</B></A> subroutine<A HREF="../gl32tref/sTS23a0marj" REL="PAGENUM"></A>, <A HREF="curveprecision.html#aUS2120marj"><B>curveprecision</B></A> subroutine<A HREF="../gl32tref/aUS2120marj" REL="PAGENUM"></A>, <A HREF="defbasis.html#A150X930"><B>defbasis</B></A> subroutine<A HREF="../gl32tref/A150X930" REL="PAGENUM"></A>.</P>
+
+<P><A NAME="E1D77A1349ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#DB213a0marj">Drawing Curves</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<hr><center>
+[  <a href="colored_c.html">Previous</a>  |
+<a href="curve2_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

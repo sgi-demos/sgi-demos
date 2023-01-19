@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/glintro.html Mon, 24 Jan 2022 16:27:48 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Introducing AIX Graphics Library
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="gloverview.html">Previous</a>  |
+<a href="glsubcats.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="glintro.html"></A>Introducing AIX Graphics Library</H2>
+
+
+<P><A NAME="A3C0DE38579mhay"></A>The AIX GL is
+a set of graphics and utility subroutines that provide high- and low-level
+support for graphics. If you are using this library for the first time,
+read the following sections first. </P>
+
+
+<H3><A NAME="A300X9bcf"></A>GL Structure and Function </H3>
+
+
+<P><A NAME="A3C0DE38600mhay"></A>Graphics primitives are expressed in 2-D
+or 3-D user-defined coordinates. These primitives go through the 
+<A HREF="specialterms.html#A26P0612">graphics
+pipeline</A>, which performs matrix 
+<A HREF="specialterms.html#A27P021">transformations</A>
+on the coordinates, clips the coordinates to normalized coordinates, and
+scales the transformed, clipped coordinates to screen or window coordinates.
+The output of the graphics pipeline is then sent to the raster subsystem.</P>
+
+
+<P><A NAME="A3C0DE38620mhay"></A>The 
+<A HREF="specialterms.html#A3C0F2A4190mhay">raster
+subsystem</A> fills in the pixels between the endpoints of the lines and
+the interiors of polygons; draws bit-mapped characters; and performs <A HREF="drawbeg-end.html#A264X911a">shading</A>,
+<A HREF="depth-cueing.html">depth-cueing</A>, and <A HREF="remhidden.html#remhidden.html">hidden
+surface removal</A>. A color value for each pixel is stored in the bitplanes.
+The system uses the values contained in the bitplanes to display an image
+on the monitor. </P>
+
+
+<H3><A NAME="A8G44310marj"></A>Understanding the Hardware Used by GL</H3>
+
+
+<P><A NAME="A3C0DE38641mhay"></A>AIX GL runs
+on high-resolution color workstations. GL provides a set of
+graphics primitives in a combination of customized, very large scale integrated
+(VLSI) circuits and conventional hardware, firmware, and software. </P>
+
+
+<P><A NAME="A3C0DE38661mhay"></A>The heart of the system is the 
+<A HREF="specialterms.html#A26P0612">graphics
+pipeline</A>. This pipeline accepts points, vectors, polygons, characters,
+and curves in user-defined coordinate systems and transforms them to screen
+coordinates. It also provides hardware support for rotation, clipping,
+and scaling. </P>
+
+
+<P><A NAME="A3C0DE38680mhay"></A>In addition to the graphics pipeline,
+the system consists of one or more general-purpose microprocessors, a raster
+subsystem, a high-resolution color monitor, a keyboard, and graphics input
+devices. </P>
+
+
+<P><A NAME="A3C0DE38700mhay"></A>GL windowing subroutines
+are implemented on top of Enhanced X-Windows. (For more information
+on starting Enhanced X-Windows, see the 
+<B><!--:cmds:aixcmds6:--><A HREF="aixcmds6/xinit.html#A773C66779jcat">xinit</A></B> command.) The GL drawing subroutines
+are implemented by means of direct adapter access. GL applications
+and other XClients can run simultaneously on the same X server. GL
+works with any X-based window manager, including the AIXwindows
+window manager. </P>
+
+
+>
+
+<P><A NAME="A3C0DE38720mhay"></A>On the POWER GXT1000, the multibuffer,
+ancillary buffer, and overlay extensions for X must be loaded to run GL.</P>
+
+
+
+
+<H3><A NAME="A9o61d0nita"></A>Hardware and Software Prerequisites for GL</H3>
+
+
+<P><A NAME="A3C0DE38750mhay"></A>There are both hardware and software prerequisites
+for running the GL application programming interface (API).</P>
+
+
+<P><A NAME="A3C0DE38763mhay"></A>Of the following hardware, GL
+must have one as a prerequisite: </P>
+
+
+<UL><LI><A NAME="A112C1fa"></A>A <A HREF="3dclrproc.html">3-D
+Color Graphics Processor</A> adapter must be installed, with or without
+the 24-bit color option, and with or without the 24-bit z-buffer option.</LI>
+
+
+<LI><A NAME="A112C1fb"></A><A HREF="powerGt4.html#powerGt4.html">POWER Gt4
+class machines</A>, such as the POWER Gt4, POWER Gt4x,
+and POWER Gt4e adapters, must be installed.</LI>
+
+
+<LI><A NAME="A112C1fd"></A>A 7235 POWERgraphics GTO must be installed.</LI>
+
+
+<LI><A NAME="A112C1fe"></A>The system must be a <A HREF="powerstation730.html#powerstation730.html">POWERstation
+730 with the Supergraphics Processor Subsystem</A>.</LI>
+
+
+
+<LI><A NAME="C44705A808lpas"></A>The <A HREF="PGXT1000.html#PGXT1000.html">POWER GXT1000</A>
+must be installed.</LI>
+
+
+</UL>
+
+
+<P><A NAME="A3C0DE38784mhay"></A>GL has the following software
+prerequisites: </P>
+
+
+<UL><LI><A NAME="A112C1100"></A>AIX/6000 must be installed.</LI>
+
+
+<LI><A NAME="A112C1101"></A>AIXwindows Environment/6000 must
+be installed.</LI>
+
+
+<LI><A NAME="A112C1102"></A>AIXwindows Environment/6000 3-D
+Feature must be installed.</LI></UL>
+
+
+<H3><A NAME="A6C852E599vbia"></A>Language Bindings </H3>
+
+
+<P><A NAME="A3C0DE38799mhay"></A>GL is available with C, FORTRAN,
+and Ada language bindings. </P>
+
+
+<H3><A NAME="A6C6EFF633vbia"></A>New Features, Documentation, and Programs</H3>
+
+
+<P><A NAME="A3C0DE38820mhay"></A>This release of GL includes
+the following new or enhanced functions: </P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3C0DE38839mhay"></A><B>lmdef()</B> </TD>
+
+
+<TD>Support for two-sided lighting is now available on the POWER Gt4 family
+of graphics adapters.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3C0DE38851mhay"></A><B>set_dither()</B> </TD>
+
+
+<TD>Suport for enabling/disabling dither on the POWER Gt4 family of graphics
+adapters is now provided.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3C0DE38862mhay"></A><B>glcompat()</B> </TD>
+
+
+<TD>Controls backwards compatibility modes for the overlay planes and fullscreen
+function on the GXT1000.</TD></TR></TABLE>
+
+
+<P><A NAME="A3C0DE38874mhay"></A>The GL documentation has
+been updated. In particular, note that Chapter15 contains important information
+about using GL with the system <B>fork()</B> and <B>exec()</B> routines
+and about compiling and linking GL programs. </P>
+
+
+<P><A NAME="A3C0DE38885mhay"></A>Several new example programs can be found
+in<B> /usr/lpp/GL/examples</B>, including: </P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3C0DE38897mhay"></A><B>rqenter.c</B> </TD>
+
+
+<TD>Example showing how to write re-entrant queueing code. The example
+creates a pipe and then checks for input on both the pipe and on the GL
+queue. USR1 signals caught by the process result in input being placed
+on the pipe. (The shell script <B>gen_sig.sh</B> can be used to generate
+signals.)</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3C0DE38909mhay"></A><B>xinput.c</B> </TD>
+
+
+<TD>Example of X/GL integration. Shows how to simultaneously manipulate
+both the GL and the X11 event queues within the same process. The example
+can be extended to simultaneously read other (pipe, socket, or file-based)
+event sources.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3C0DE38921mhay"></A><B>Xcolormap.c</B> </TD>
+
+
+<TD>Example of X/GL integration. Shows how X11 can be used to manipulate
+the colormap associated with a GL window.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3C0DE38932mhay"></A><B>fork_examp.c</B> </TD>
+
+
+<TD>A very simple example involving GL and the system <B>fork()</B> subroutine.
+Shows how the GL subsystem must be shut down before using the system <B>fork()</B>
+routine.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3C0DE38944mhay"></A><B>fork_examp2.c</B> </TD>
+
+
+<TD>&nbsp;&nbsp;&nbsp;A more sophisticated <B>fork()</B> example.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3C0DE38956mhay"></A><B>GLexec.c</B> </TD>
+
+
+<TD>A very simple example involving GL and the system <B>exec()</B> routine.
+Shows how the GL subsystem must be shut down before using any of the system
+<B>exec()</B> routines.</TD></TR></TABLE>
+
+
+
+
+<hr><center>
+[  <a href="gloverview.html">Previous</a>  |
+<a href="glsubcats.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/glintro.html Mon, 24 Jan 2022 16:27:48 GMT -->
+</HTML>
+

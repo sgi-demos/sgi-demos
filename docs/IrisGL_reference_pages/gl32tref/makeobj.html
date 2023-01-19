@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>makeobj Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="lsrepeat.html">Previous</a>  |
+<a href="maketag.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X912d"></A>makeobj Subroutine</H2>
+<A NAME="INDEX1120" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1121" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX1122" REL="I3" TITLE="makeobj"></A>
+<A NAME="INDEX1123" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1124" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX1125" REL="I3" TITLE="creating"></A>
+<A NAME="INDEX1126" REL="I1" TITLE="makeobj subroutine (GL)"></A>
+
+<H3><A NAME="A142X912f"></A>Purpose</H3>
+<P><A NAME="E1D6F26498ceb"></A>Creates an object (display list).</P>
+
+<H3><A NAME="A79C151"></A>Libraries</H3>
+<P><A NAME="E1D6F26537ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D6F26561ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9133"></A>C Syntax</H3>
+<PRE><A NAME="A142X9134"></A><B>void makeobj(Int32 </B><A HREF="makeobj.html#A142X9138"><I>object</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010a5a"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010a5b"></A><B>SUBROUTINE MAKEOB(</B><I>object</I><B>)</B>
+<B>INTEGER*4 </B><I>object</I></PRE>
+
+<H3><A NAME="A142X9135"></A>Description</H3>
+<P><A NAME="E1D6F26674ceb"></A>The <B>makeobj</B> subroutine creates and names a new 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A> (object). If the <A HREF="makeobj.html#A142X9138"><I>object</I></A> parameter is the number of an existing object, the contents of that object are deleted. </P>
+
+<P><A NAME="E1D6F26700ceb"></A>When the <B>makeobj</B> subroutine executes, the object number is entered into a symbol table and memory is allocated for a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>. Subsequent graphics routines are then compiled into the display list instead of executing. Compilation continues until the <A HREF="closeobj.html#A142X915b"><B>closeobj</B></A> subroutine is called.</P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A55C014c4d"></A>This editing subroutine itself cannot be added to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>. </LI>
+
+<LI><A NAME="A139X91ed6"></A>The <B>makeobj</B> subroutine cannot be called within an object; that is, an existing object cannot be used to create a new object.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A142X9137"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X9138"></A><I>object</I> </TD>
+<TD>  Specifies the numeric identifier for the object being defined.</TD></TR></TABLE>
+
+<H3><A NAME="A30C010ff4"></A>Example</H3>
+<P><A NAME="E1D6F26832ceb"></A>The example C language program <A HREF="depthcue_c.html#A16C0c8ff"><B>depthcue.c</B></A> uses the <B>makeobj</B> subroutine to specify the beginning of a display list defining a graphical object. </P>
+
+<H3><A NAME="A62C015cec"></A>Implementation Specifics</H3>
+<P><A NAME="E1D6F26875ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C154"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C155"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C156"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X914d"></A>Related Information</H3>
+<P><A NAME="E1D6F26972ceb"></A>Drawing an instance of an object with the <A HREF="callobj.html#A142X91c8"><B>callobj</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F26999ceb"></A>Specifying the amount of memory allocated for an object with the <A HREF="chunksize.html#A142X9c38"><B>chunksize</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F27024ceb"></A>Closing an object with the <A HREF="closeobj.html#A142X915b"><B>closeobj</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F27050ceb"></A>Opening an object for editing with the <A HREF="editobj.html#A142X9360"><B>editobj</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F27075ceb"></A>Returning a unique integer for use as an object identifier with the <A HREF="genobj.html#A142X91ea"><B>genobj</B></A> subroutine. </P>
+
+<P><A NAME="E1D6F27101ceb"></A>Establishing the uniqueness of an object number with the <A HREF="isobj.html#A142X920c"><B>isobj</B></A> subroutine. </P>
+
+<P><A NAME="E1D6F27127ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating <!--gl32prgd:--><A HREF="../gl32prgd/workobjects.html#workobjects.html">Objects (Display Lists)</A>.</P><hr><center>
+[  <a href="lsrepeat.html">Previous</a>  |
+<a href="maketag.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

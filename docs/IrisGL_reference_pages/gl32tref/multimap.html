@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>multimap Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="move.html">Previous</a>  |
+<a href="multmatrix.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A146X9593"></A>multimap Subroutine</H2>
+<A NAME="INDEX1196" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1197" REL="I2" TITLE="color map and RGB mode"></A>
+<A NAME="INDEX1198" REL="I3" TITLE="multimap"></A>
+<A NAME="INDEX1199" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1200" REL="I2" TITLE="color map"></A>
+<A NAME="INDEX1201" REL="I3" TITLE="organizing as 16 small maps"></A>
+<A NAME="INDEX1202" REL="I1" TITLE="multimap subroutine (GL)"></A>
+<H3><A NAME="A146X9595"></A>Purpose</H3>
+<P><A NAME="E1D6FBD425ceb"></A>Organizes the color map as 16 small maps.</P>
+
+<H3><A NAME="A78C154"></A>Libraries</H3>
+<P><A NAME="E1D6FBD466ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D6FBD494ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A146X9598"></A>C Syntax</H3>
+<PRE><A NAME="A146X9599"></A><B>void multimap(&nbsp;)</B></PRE>
+
+<H3><A NAME="A146X9570"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A146X9573"></A><B>SUBROUTINE MULTIM</B></PRE>
+
+<H3><A NAME="A146X959c"></A>Description</H3>
+<P><A NAME="E1D6FBD621ceb"></A>The <B>multimap</B> subroutine reorganizes the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A31996bc">color map</A> as 16 small independent maps. Only one of these small maps can be active, or current, at a time, and only the least significant bits in the frame buffer are passed through the current map. </P>
+
+<P><A NAME="E1D6FBD657ceb"></A>On the 24-bit High-Performance 3-D Color Graphics Processor, these small maps are each 8-bit color maps having 256 entries. On the 8-bit High-Performance 3-D Color Graphics Processor, the maps are each 4-bit color maps having 16 entries.</P>
+
+<P><A NAME="E1D6FBD691ceb"></A>After the <B>multimap</B> subroutine is called, the reorganization into multiple independent maps does not take effect until the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine is called.</P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A258C01c42e"></A>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. (See 
+"<!--gl32prgd:--><A HREF="../gl32prgd/undergraphadapt.html#undergraphadapt.html">Understanding the Adapter</A>".) </LI>
+
+<LI><A NAME="A258C01c42f"></A>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A146X958d"></A>Implementation Specifics</H3>
+<P><A NAME="E1D6FBD792ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+
+<P><A NAME="E1D6FBD820ceb"></A>The POWER GXT1000 adapter does not support the <B>multimap</B> subroutine.</P>
+
+
+
+<H3><A NAME="A78C157"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C158"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C159"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A146X95b6"></A>Related Information</H3>
+<P><A NAME="E1D6FBD923ceb"></A>Configuring the system with the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FBD956ceb"></A>Returning the organization of the current color map with the <A HREF="getcmmode.html#A146X948e"><B>getcmmode</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FBD987ceb"></A>Returning the number of the current color map with the <A HREF="getmap.html#A146X94e2"><B>getmap</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FBE012ceb"></A>Organizing the color map as one large map with the <A HREF="onemap.html#A146X95ef"><B>onemap</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FBE045ceb"></A>Selecting one of 16 small color maps with the <A HREF="setmap.html#A146X9646"><B>setmap</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FBE070ceb"></A>Working in 
+<!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="move.html">Previous</a>  |
+<a href="multmatrix.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

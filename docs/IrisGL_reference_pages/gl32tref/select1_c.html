@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>select1.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="scrn_rotate_c.html">Previous</a>  |
+<a href="../gl32tref/setshade_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c970"></A>select1.c Example C Language Program
+</H2>
+<A NAME="INDEX2429" REL="I1" TITLE="select1.c example program (GL)"></A>
+<A NAME="INDEX2430" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2431" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2432" REL="I3" TITLE="picking and selecting"></A>
+<A NAME="INDEX2433" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2434" REL="I2" TITLE="picking and selecting"></A>
+<A NAME="INDEX2435" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64EB6F268ttay"></A>/*
+select1.c:</PRE>
+<PRE><A NAME="A64EB6F464ttay"></A>Select demo program.  the "ship" is the blue rectangle.  The
+"planet" is the red circle. move the ship so it intersects the
+planet and the ship will crash.
+*/</PRE>
+<PRE><A NAME="A64EB6F621ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EB6F768ttay"></A>#define PLANET 1</PRE>
+<PRE><A NAME="A64EB6F943ttay"></A>main()
+{
+  short type, val;
+  register short buffer[50], cnt, i;
+  float shipx, shipy, shipz;</PRE>
+<PRE><A NAME="A64EB71775ttay"></A>  for (i = 0; i &lt; 50; i++)
+    buffer[i] = 0;
+  initialize();
+  while (TRUE) {
+    type = qread(&amp;val);
+    if (val==0)
+      continue;
+    switch (type) {
+    case REDRAW:
+      reshapeviewport();
+      drawplanet();
+      break;
+    case ESCKEY:
+      gexit();
+      exit();
+    case LEFTMOUSE:
+      /* set ship location to cursor location */
+      shipz=0;
+      shipx=getvaluator(MOUSEX);
+      shipy=getvaluator(MOUSEY);
+      /* draw the ship */
+      color(BLUE);
+      rect(shipx, shipy, shipx+20, shipy+10);
+      /* specify the selecting region to be a box 
+         surrounding the ship */
+      pushmatrix();
+      ortho(shipx, shipx+.05, shipy, shipy+.05, 
+          shipz-0.5, shipz+.05);
+      /* clear the name stack */
+      initnames();
+      gselect(buffer, 50);  /* enter selecting mode */
+      /* put "1" on the name stack to be saved if 
+         PLANET draws into the selecting region */
+      loadname(1);
+      pushname(2);                /* draw the planet */
+      callobj(PLANET);            /* exit selecting mode */
+      cnt = endselect(buffer);
+      popmatrix();                /* check to see if PLANET was selected */
+      printf("cnt = %d\n",cnt);
+      for (i = 0;i&lt;4;i++)
+        printf("buffer[%d] = %d\n",i,buffer[i]);
+      if (buffer[1]==1) {
+        printf("CRASH\n");
+        gexit();
+        exit();
+      }</PRE>
+<PRE><A NAME="A64EB71933ttay"></A>      break;
+    default:
+      break;
+    }</PRE>
+<PRE><A NAME="A64EB72076ttay"></A>  }</PRE>
+<PRE><A NAME="A64EB72218ttay"></A>}</PRE>
+<PRE><A NAME="A64EB72376ttay"></A>initialize()
+{
+  int gid;
+  float xmax,ymax;</PRE>
+<PRE><A NAME="A64EB72653ttay"></A>  prefposition(XMAXSCREEN/4, XMAXSCREEN*3/4, YMAXSCREEN/4, 
+      YMAXSCREEN*3/4);
+  keepaspect(1,1);
+  gid = winopen("select1");
+  qdevice(ESCKEY);
+  qdevice(REDRAW);
+  qdevice(LEFTMOUSE);
+  qenter(REDRAW,gid);
+  xmax = .5 + (float) XMAXSCREEN;
+  ymax = .5 + (float) YMAXSCREEN;
+  ortho(xmax/4.0, xmax*3.0/4.0, ymax/4.0, ymax*3.0/4.0, 0.0,
+      -xmax/2.0);
+  createplanet(PLANET);
+}</PRE>
+<PRE><A NAME="A64EB72833ttay"></A>drawplanet()
+{
+  color(BLACK);
+  clear();
+  color(RED);
+  /* create the planet object */
+  callobj(PLANET);
+}</PRE>
+<PRE><A NAME="A64EB72000ttay"></A>createplanet(x)
+{
+  makeobj(x);
+  circfi(600,600,20);
+  closeobj();
+}</PRE>
+
+<H3><A NAME="A201C119e"></A>Related Information</H3>
+<P><A NAME="E1D78D6465ceb"></A>The <A HREF="endselect.html#A213X91190c"><B>endselect</B></A> subroutine<A HREF="../gl32tref/A213X91190c" REL="PAGENUM"></A>, <A HREF="getvaluator.html#A143X945"><B>getvaluator</B></A> subroutine<A HREF="../gl32tref/A143X945" REL="PAGENUM"></A>, <A HREF="gselect.html#A213X9118b2"><B>gselect</B></A> subroutine<A HREF="../gl32tref/A213X9118b2" REL="PAGENUM"></A>.</P>
+
+<hr><center>
+[  <a href="scrn_rotate_c.html">Previous</a>  |
+<a href="../gl32tref/setshade_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

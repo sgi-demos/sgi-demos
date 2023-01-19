@@ -1,0 +1,477 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/animatescene.html Mon, 24 Jan 2022 16:28:12 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Creating Animated Scenes in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="workcolor.html">Previous</a>  |
+<a href="underovermodes.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="animatescene.html"></A>Creating Animated Scenes</H2>
+
+
+<P><A NAME="INDEX629"></A><A NAME="INDEX630"></A><A NAME="INDEX631"></A><A NAME="INDEX632"></A><A NAME="INDEX633"></A><A NAME="INDEX634"></A><A NAME="INDEX635"></A></P>
+
+
+<P><A NAME="A3C0EB47261mhay"></A>This section outlines the techniques for
+creating animated scenes within the following topics: </P>
+
+
+<UL><LI><A NAME="A78C13fe"></A><A HREF="animatescene.html#A300X9c17">Double and
+Single Buffering</A></LI>
+
+
+<LI><A NAME="A78C13ff"></A><A HREF="animatescene.html#A47C013579">Animation
+Subroutines</A></LI></UL>
+
+
+<H3><A NAME="A264X9218"></A>List of GL Animation Subroutines<A NAME="INDEX636"></A>
+<A NAME="INDEX637"></A> <A NAME="INDEX638"></A> <A NAME="INDEX639"></A>
+<A NAME="INDEX640"></A> <A NAME="INDEX641"></A> </H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A264X9219"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/backbuffer.html#A145X94a">backbuffer</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Enables drawing in the back buffer. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A264X921c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/blink.html#A146X937c">blink</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Changes the color map entry at a selectable rate. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A264X921d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/cyclemap.html#A143X92a6">cyclemap</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Cycles between color maps at a specified rate. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A264X921e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/doublebuffer.html#A145X91a7">doublebuffer</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the display mode to double buffer mode.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A264X921f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/frontbuffer.html#A145X9a0">frontbuffer</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Enables drawing in the front buffer.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A264X9221"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getbuffer.html#A145X9f6">getbuffer</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Finds out which buffers are enabled for drawing.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A264X9220"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getdisplaymode.html#A145X9206">getdisplaymode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the current display mode.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A320C93078"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/gsync.html#A4h41120marj">gsync</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Waits for the next vertical retrace period.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A264X9222"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/singlebuffer.html#A145X9259">singlebuffer</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the display mode to single buffer mode.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A264X9223"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/swapbuffers.html#A145X9302">swapbuffers</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Exchanges the front and back buffers.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A264X9224"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/swapinterval.html#A145X92af">swapinterval</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Defines the minimum time between buffer swaps. </TD></TR></TABLE>
+
+
+<P> </P>
+
+
+<H3><A NAME="A300X9c17"></A>Double and Single Buffering<A NAME="INDEX642"></A>
+<A NAME="INDEX643"></A> <A NAME="INDEX644"></A> <A NAME="INDEX645"></A></H3>
+
+
+<P><A NAME="A3C0EB47298mhay"></A>Animated objects on the screen are created
+by using a technique called double buffering. </P>
+
+
+<P><A NAME="A3C0EB47319mhay"></A>For smooth motion, the system displays
+a completely drawn image for a certain time (for instance, a few 60ths
+of a second), then presents the next frame, also completely drawn, during
+the next time period, and so on. </P>
+
+
+<P><A NAME="A3C0EB47340mhay"></A>Double buffering provides this capability.
+The system's standard bitplanes are divided into two halves, only one of
+which is displayed. Drawing is typically done into the other, invisible
+half. When the drawing is complete, the buffers are swapped. The previously
+invisible buffer (now containing the next frame) becomes visible, and the
+previously visible buffer becomes invisible and available for drawing the
+following frame. </P>
+
+
+<P><A NAME="A3C0EB47361mhay"></A>The currently visible buffer is the <I>front
+buffer</I> and the invisible, drawing buffer is the <I>back buffer</I>.
+Double buffering works in either RGB mode or color map mode. </P>
+
+
+<P><A NAME="A3C0EB47382mhay"></A>In double buffer mode, your program addresses
+frame buffer memory as if it were two buffers, only one of which is available
+for drawing or for display at a time. </P>
+
+
+<P><A NAME="A3C0EB47404mhay"></A>In single buffer mode, a program addresses
+frame buffer memory as a single buffer whose pixels are always visible.
+By default, the system is in single buffer mode. Whatever you draw into
+the bitplanes is immediately visible on the screen. For static drawings,
+this is acceptable, but it does not provide smooth animated motion. If
+you try to animate a drawing in single buffer mode, you can see a visible
+flicker in all but the simplest drawing operations. </P>
+
+
+<H3><A NAME="A47C013579"></A>Animation Subroutines<A NAME="INDEX646"></A>
+<A NAME="INDEX647"></A> <A NAME="INDEX648"></A> <A NAME="INDEX649"></A>
+<A NAME="INDEX650"></A> <A NAME="INDEX651"></A> </H3>
+
+
+<P><A NAME="A3C0EB47426mhay"></A>The following subroutines enable you to
+create animated scenes. </P>
+
+
+<H4><A NAME="kjx4360marj"></A>doublebuffer Subroutine </H4>
+
+
+<P><A NAME="A3C0EB47450mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/doublebuffer.html#A145X91a7">doublebuffer</A></B>
+subroutine sets the display mode to double buffer mode. It does not take
+effect until you call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gconfig.html#hS4260nita">gconfig</A></B>
+subroutine. In double buffer mode, the bitplanes are partitioned into two
+groups, the front bitplanes and the back bitplanes. Double buffer mode
+displays only the front bitplanes. Drawing routines normally update only
+the back bitplanes; the <B>frontbuffer</B> and <B>backbuffer</B> subroutines
+can override the default. The <B>gconfig</B> subroutine sets the value
+for the <B>frontbuffer</B> subroutine to False and the <B>backbuffer</B>
+subroutine to True in double buffer mode. The syntax follows: </P>
+
+
+<PRE><A NAME="A57C0150e6"></A>void&nbsp;doublebuffer()</PRE>
+
+
+<H4><A NAME="dvx480marj"></A>swapbuffers Subroutine </H4>
+
+
+<P><A NAME="A3C0EB47474mhay"></A>No matter what you are doing, the display
+hardware in the system constantly reads the contents of the visible buffer
+(the front buffer in double buffer mode), and displays those results on
+the screen. On a standard monitor, the electron guns sweep from the top
+of the screen to the bottom, refreshing all pixels, 60 times each second.
+If the graphics hardware changes the contents of the visible frame buffer,
+the next time the refresh hardware reads a changed pixel, the new value
+is drawn instead of the old one. </P>
+
+
+<P><A NAME="A3C0EB47496mhay"></A>After sweeping out the entire frame, the
+guns are reset to the top of the screen again, and this takes a short period
+of time. This time period is called the vertical retrace, and during this
+period (much shorter than 60th of a second), nothing can change on the
+screen. The <B>swapbuffers</B> subroutine exchanges the front and back
+buffers in double buffer mode during the next vertical retrace. The system
+waits for the vertical retrace so that the currently displayed buffer is
+completely drawn. </P>
+
+
+<P><A NAME="A3C0EB47518mhay"></A>If it did not wait for the vertical retrace,
+a frame would be drawn partly from one buffer, and partly from another,
+causing a serious visual disturbance. Because vertical retraces occur every
+60th of a second on the standard monitor, the <B>swapbuffers</B> subroutine
+can block the running process for up to that long. (The default monitor
+is refreshed 60 times per second. Other options can have other retrace
+periods.) </P>
+
+
+<P><A NAME="A3C0EB47539mhay"></A>Once an image is fully drawn in the back
+buffer, the <B>swapbuffers</B> subroutine displays it. This subroutine
+is ignored in single buffer mode. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A47C01357e"></A><B>Note: </B>A caution is in order for double
+buffered programs. Suppose you are writing a flight simulator that draws
+each frame, and then swaps the buffers. Suppose it runs at a certain rate
+(say 60 frames per second). As you modify the program to increase the complexity
+of the scene, eventually you reach a point where the drawing cannot be
+completed in a 60th of a second. </P></BLOCKQUOTE>
+
+
+<P><A NAME="A53C01447f"></A>At this point, because the <B>swapbuffers</B>
+subroutine must wait for a vertical retrace, the frame rate suddenly drops
+to 30 per second; that is, adding the last polygon cuts the performance
+in half. There is no smooth degradation. Similarly, as more geometry is
+added, the rate drops to 20 per second, 15 per second, and so on. Properly
+tuning such a program can be tricky if smooth motion is required. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/swapinterval.html#A145X92af">swapinterval</A></B>
+subroutine helps adjust the timing between buffer swaps. Read the <A HREF="animatescene.html#Qwx4260marj">discussion</A>
+on the <B>swapinterval</B> subroutine for further information. </P>
+
+
+<P><A NAME="A3C0EB47562mhay"></A>The syntax follows: </P>
+
+
+<PRE><A NAME="A57C0150e7"></A>void&nbsp;swapbuffers()</PRE>
+
+
+<H4><A NAME="A47C01357f"></A>gconfig Subroutine </H4>
+
+
+<P><A NAME="A3C0EB47586mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gconfig.html#hS4260nita">gconfig</A></B>
+subroutine sets the modes that you have requested. You must call the <B>gconfig</B>
+subroutine for the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/doublebuffer.html#A145X91a7">doublebuffer</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/multimap.html#A146X9593">multimap</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/overlay.html#A143X950a">overlay</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/underlay.html#Az5O370nita">underlay</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/onemap.html#A146X95ef">onemap</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/RGBmode.html#A143X93b6">RGBmode</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/cmode.html#A146X93d6">cmode</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/singlebuffer.html#A145X9259">singlebuffer</A></B>
+subroutines to take effect. </P>
+
+
+<P><A NAME="A3C0EB47607mhay"></A>After a call to the <B>gconfig</B> subroutine,
+the writemask and color attributes are no longer defined. The contents
+of the color map do not change. The syntax follows: </P>
+
+
+<PRE><A NAME="A57C0150e8"></A>void&nbsp;gconfig()</PRE>
+
+
+<H4><A NAME="Oux4360marj"></A>singlebuffer Subroutine </H4>
+
+
+<P><A NAME="A3C0EB47631mhay"></A>In single buffer mode, the system simultaneously
+updates and displays the image data in the active bitplanes; consequently,
+incomplete or changing pictures can appear on the screen. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/singlebuffer.html#A145X9259">singlebuffer</A></B>
+subroutine does not take effect until the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gconfig.html#hS4260nita">gconfig</A></B>
+subroutine is called. Single buffer mode is the default. The syntax follows:</P>
+
+
+<PRE><A NAME="A57C0150e9"></A>void&nbsp;singlebuffer()</PRE>
+
+
+<H4><A NAME="flx4320marj"></A>frontbuffer Subroutine </H4>
+
+
+<P><A NAME="A3C0EB47656mhay"></A>Sometimes in double buffer mode, it is
+useful to be able to write the same thing into both buffers at once. For
+example, suppose an animated image has both a fixed part and a changing
+part. The fixed part needs to be drawn only once, but into both buffers.
+It is most easily done by enabling the front buffer (as well as the back
+buffer) for writing, drawing the image, and then disabling the front buffer.
+The animation then proceeds by drawing the changing part of the image using
+the usual double buffering techniques. </P>
+
+
+<P><A NAME="A3C0EB47677mhay"></A>A <B><!--:libs:gl32tref:--><A HREF="../gl32tref/frontbuffer.html#A145X9a0">frontbuffer</A></B>
+subroutine setting of True enables simultaneous updating of (or writing
+into) the front while the rear buffer is being updated. Its parameter is
+a 32-bit integer value. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gconfig.html#hS4260nita">gconfig</A></B>
+subroutine sets the value of the <B>frontbuffer</B> subroutine to False.
+This subroutine is useful only in double buffer mode. The syntax follows:</P>
+
+
+<PRE><A NAME="A57C0150ea"></A>void&nbsp;frontbuffer(Int32&nbsp;bool)</PRE>
+
+
+<H4><A NAME="shx4240marj"></A>backbuffer Subroutine </H4>
+
+
+<P><A NAME="A3C0EB47701mhay"></A>It is sometimes convenient to update both
+the front and the back buffers, or to update the front buffer instead of
+the back. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/backbuffer.html#A145X94a">backbuffer</A></B>
+subroutine enables updating in the back buffer. Its parameter is a 32-bit
+integer value. When the value of the parameter is True, the default, the
+back buffer is enabled for writing. When the value of the parameter is
+False, the back buffer is not enabled for writing. </P>
+
+
+<P><A NAME="A3C0EB47722mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gconfig.html#hS4260nita">gconfig</A></B>
+subroutine sets the value of the <B>backbuffer</B> subroutine to True.
+The syntax follows: </P>
+
+
+<PRE><A NAME="A57C0150eb"></A>void&nbsp;backbuffer(Int32&nbsp;bool)</PRE>
+
+
+<H4><A NAME="kYx4120marj"></A>getbuffer Subroutine </H4>
+
+
+<P><A NAME="A3C0EB47746mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getbuffer.html#A145X9f6">getbuffer</A></B>
+subroutine indicates which buffer or buffers are enabled for writing in
+double buffer mode. The values returned can be compared to the values of
+MSINGLE, MPROJECTION, and MVIEWING to determine the current mode. The back
+buffer is enabled by default. Other returned values indicate that the front
+buffer or both buffers are enabled. The <B>getbuffer</B> subroutine returns
+zero if neither buffer is enabled or if the system is not in double buffer
+mode. The syntax follows: </P>
+
+
+<PRE><A NAME="A57C0150ec"></A>Int32&nbsp;getbuffer()</PRE>
+
+
+<H4><A NAME="Qwx4260marj"></A>swapinterval Subroutine </H4>
+
+
+<P><A NAME="A3C0EB47770mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/swapinterval.html#A145X92af">swapinterval</A></B>
+subroutine defines a minimum time between buffer swaps. For example, a
+swap interval of 5 refreshes the screen at least five times between execution
+of successive calls to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/swapbuffers.html#A145X9302">swapbuffers</A></B>
+subroutine. </P>
+
+
+<P><A NAME="A3C0EB47791mhay"></A>The <B>swapinterval</B> subroutine is
+typically used when you want to show frames at a constant rate, but the
+images vary in complexity. To achieve a constant rate, the swap interval
+is set to be long enough that even the most complex frame can be drawn
+in that time. If a simple frame is drawn, the user's process simply blocks
+and waits until the swap interval is used up. The default interval is 1.</P>
+
+
+<P><A NAME="A3C0EB47812mhay"></A>The <B>swapinterval</B> subroutine is
+valid only in double buffer mode. The syntax follows: </P>
+
+
+<PRE><A NAME="A57C0150ed"></A>void&nbsp;swapinterval(Int16&nbsp;interval)</PRE>
+
+
+<H4><A NAME="Hsx4c0marj"></A>getdisplaymode Subroutine </H4>
+
+
+<P><A NAME="A3C0EB47835mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getdisplaymode.html#A145X9206">getdisplaymode</A></B>
+subroutine returns the current display mode. The values returned can be
+compared to the values of MSINGLE, MPROJECTION, and MVIEWING to determine
+the current mode. The syntax follows: </P>
+
+
+<PRE><A NAME="A57C0150ee"></A>Int32&nbsp;getdisplaymode()</PRE>
+
+
+<P><A NAME="A3C0EB47857mhay"></A>Values returned are: </P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A35C2ccb"></A><B>DMRGB</B> </TD>
+
+
+<TD>Indicates RGB single buffer mode.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A35C2cce"></A><B>DMRGBDOUBLE</B> </TD>
+
+
+<TD>Indicates RGB double buffer mode.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A35C2ccc"></A><B>DMSINGLE</B> </TD>
+
+
+<TD>Indicates color map single buffer mode.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A35C2ccd"></A><B>DMDOUBLE</B> </TD>
+
+
+<TD>Indicates color map double buffer mode.</TD></TR></TABLE>
+
+
+<H4><A NAME="psx4c0marj"></A>gsync Subroutine </H4>
+
+
+<P><A NAME="A3C0EB47884mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gsync.html#A4h41120marj">gsync</A></B>
+subroutine waits for the next <A HREF="specialterms.html#A27P031">vertical
+retrace</A>. Because this subroutine does not return until vertical retrace
+begins, the calling process is effectively blocked until that time. </P>
+
+
+<P><A NAME="A3C0EB47905mhay"></A>This subroutine is useful for pacing the
+drawing when in single buffer mode. If the amount of drawing to be done
+is small, this subroutine can be used to achieve a limited amount of smooth
+animation in single buffer mode. For high-quality, smooth animation, double
+buffer mode together with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/swapbuffers.html#A145X9302">swapbuffers</A></B>
+subroutine should be used. The syntax follows: </P>
+
+
+<PRE><A NAME="A57C0150ef"></A>void&nbsp;gsync()</PRE>
+
+
+<hr><center>
+[  <a href="workcolor.html">Previous</a>  |
+<a href="underovermodes.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/animatescene.html Mon, 24 Jan 2022 16:28:12 GMT -->
+</HTML>
+

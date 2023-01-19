@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>bgnpoint or endpoint Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="bgnline.html">Previous</a>  |
+<a href="bgnpolygon.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X9650"></A>bgnpoint or endpoint Subroutine</H2>
+<A NAME="INDEX84" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX85" REL="I2" TITLE="begin-end style"></A>
+<A NAME="INDEX86" REL="I3" TITLE="bgnpoint"></A>
+<A NAME="INDEX87" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX88" REL="I2" TITLE="points"></A>
+<A NAME="INDEX89" REL="I3" TITLE="vertex-based"></A>
+<A NAME="INDEX90" REL="I1" TITLE="bgnpoint subroutine (GL)"></A>
+<A NAME="INDEX91" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX92" REL="I2" TITLE="begin-end style"></A>
+<A NAME="INDEX93" REL="I3" TITLE="endpoint"></A>
+<A NAME="INDEX94" REL="I1" TITLE="endpoint subroutine (GL)"></A>
+<H3><A NAME="A144X9652"></A>Purpose</H3>
+<P><A NAME="E1B049F983ceb"></A>Begins or ends interpretation of vertex subroutines as points.</P>
+
+<H3><A NAME="A77C135e"></A>Libraries</H3>
+<P><A NAME="E1B04A0131ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B04A0234ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X9656"></A>C Syntax</H3>
+<PRE><A NAME="A213X912804"></A><B>void bgnpoint(&nbsp;)</B></PRE>
+<PRE><A NAME="A107C126d"></A><B>void endpoint( )</B></PRE>
+
+<H3><A NAME="A20C0e2dc"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A77C1361"></A><B>SUBROUTINE BGNPOI</B></PRE>
+<PRE><A NAME="A107C126e"></A><B>SUBROUTINE ENDPOI</B></PRE>
+
+<H3><A NAME="A144X9658"></A>Description</H3>
+<P><A NAME="E1B04A0684ceb"></A>The <B>bgnpoint </B>subroutine marks the beginning of a list of vertex <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html#A264X925d">(begin-end style)</A> subroutines to interpret as points. Use the <B>endpoint</B> subroutine to mark the end of the list. For each vertex, the system draws a one-pixel point into the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A270A984a">frame buffer</A>. After the <B>endpoint</B> subroutine completes, the current graphics position is undefined. Use the <A HREF="v.html#A144X97a4"><B>v</B></A> subroutine to specify a vertex.</P>
+
+<P><A NAME="E1B04A0792ceb"></A>Between the <B>bgnpoint</B> and <B>endpoint</B> subroutines, you can issue only the following Graphics Library subroutines:</P>
+
+<UL><LI><A NAME="A228C124d"></A><A HREF="c.html#A143X9262"><B>c</B></A></LI>
+
+<LI><A NAME="A228C124e"></A><A HREF="color.html#A146X9429"><B>color</B></A></LI>
+
+<LI><A NAME="A228C124f"></A><A HREF="cpack.html#A143X9284"><B>cpack</B> </A></LI>
+
+<LI><A NAME="A228C1250"></A><A HREF="lmbind.html#XeZ2340marj"><B>lmbind </B></A></LI>
+
+<LI><A NAME="A228C1251"></A><A HREF="lmcolor.html#ofZ220marj"><B>lmcolor</B></A></LI>
+
+<LI><A NAME="A228C1252"></A><A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A></LI>
+
+<LI><A NAME="A228C1253"></A><A HREF="n3f.html#A139X91ef3"><B>n3f</B></A></LI>
+
+<LI><A NAME="A228C1254"></A><A HREF="normal.html#A142X9b7"><B>normal</B></A> </LI>
+
+<LI><A NAME="A228C1255"></A><A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> </LI>
+
+<LI><A NAME="A228C1256"></A><A HREF="v.html#A144X97a4"><B>v</B></A> </LI></UL>
+
+
+<P><A NAME="E1B04A1361ceb"></A>Use the <A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> and <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> subroutines to respecify only materials and their properties.</P>
+
+<H3><A NAME="A62C015d66"></A>Implementation Specifics</H3>
+<P><A NAME="E1B04A1579ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1B04A1687ceb"></A>The POWER Gt4 and POWER Gt4xThe POWER Gt4, POWER Gt4x, and POWER GXT1000 adapters support an arbitrary number of vertices between the <B>bgnpoint</B> and <B>endpoint</B> subroutines.</P>
+
+<P><A NAME="E1B04A1794ceb"></A>The POWERgraphics GTO and the 3D Color Graphics Processor support a maximum of 255 vertices between the <B>bgnpoint</B> and <B>endpoint</B> subroutines.</P>
+
+<H3><A NAME="A77C1362"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1363"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1364"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c3e0"></A>Related Information</H3>
+<P><A NAME="E1B04A2112ceb"></A>Setting the current color in RGB mode with the <A HREF="c.html#A143X9262"><B>c</B></A> subroutine.</P>
+
+<P><A NAME="E1B04A2219ceb"></A>Transferring a vertex to the graphics pipe with the <A HREF="v.html#A144X97a4"><B>v</B></A> subroutine.</P>
+
+<P><A NAME="E1B04A2326ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing with <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Begin-End Style</A> Subroutines, Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="bgnline.html">Previous</a>  |
+<a href="bgnpolygon.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

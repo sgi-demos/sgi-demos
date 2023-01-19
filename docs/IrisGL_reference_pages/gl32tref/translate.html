@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>translate Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="tpon.html">Previous</a>  |
+<a href="underlay.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X95c8"></A>translate Subroutine</H2>
+<A NAME="INDEX1934" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1935" REL="I2" TITLE="coordinate transformation"></A>
+<A NAME="INDEX1936" REL="I3" TITLE="translate"></A>
+<A NAME="INDEX1937" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1938" REL="I2" TITLE="graphical primitives"></A>
+<A NAME="INDEX1939" REL="I3" TITLE="translating"></A>
+<A NAME="INDEX1940" REL="I1" TITLE="translate subroutine (GL)"></A>
+
+<H3><A NAME="A144X95ca"></A>Purpose</H3>
+<P><A NAME="E1D758B741ceb"></A>Translates graphical primitives.</P>
+
+<H3><A NAME="A78C1bd"></A>Libraries</H3>
+<P><A NAME="E1D758B781ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D758B805ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X95ce"></A>C Syntax</H3>
+<PRE><A NAME="A144X95cf"></A><B>void translate(Coord </B><A HREF="translate.html#A5QO11a0marj"><I>x</I></A><B>, Coord </B><A HREF="translate.html#WQO1120marj"><I>y</I></A><B>, Coord </B><A HREF="translate.html#QQO1260marj"><I>z</I></A><B>)</B></PRE>
+
+<H3><A NAME="A15C0c703"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A15C0c704"></A><B>SUBROUTINE TRANSL(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I><B>)</B>
+<B>REAL </B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I></PRE>
+
+<H3><A NAME="A144X95d0"></A>Description</H3>
+<P><A NAME="E1D758B920ceb"></A>The<B> translate </B>subroutine moves the modeling space origin to a new point relative to the current origin. The point (x, y, z) specified by the parameters becomes the new modeling space origin. Because all drawing 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0702">primitives</A> draw relative to the origin of the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06el">modeling coordinate</A> system, all primitives called after this subroutine will appear to have been translated. </P>
+
+<P><A NAME="E1D758B946ceb"></A>The <B>translate </B>subroutine is a modeling routine that changes the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P021">transformation matrix</A>. All primitives drawn after this subroutine executes are translated. Use the <A HREF="pushmatrix.html#A144X9540"><B>pushmatrix</B></A> and <A HREF="popmatrix.html#A144X951e"><B>popmatrix</B></A> subroutines to preserve an untranslated modeling space.</P>
+
+<H3><A NAME="A144X95d2"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A5QO11a0marj"></A><I>x</I></TD>
+<TD>  Specifies the <I>x</I> coordinate of a point in modeling coordinates.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="WQO1120marj"></A><I>y</I></TD>
+<TD>  Specifies the <I>y</I> coordinate of a point in modeling coordinates.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="QQO1260marj"></A><I>z</I></TD>
+<TD>  Specifies the <I>z</I> coordinate of a point in modeling coordinates.</TD></TR></TABLE>
+
+<H3><A NAME="A144X95d8"></A>Example</H3>
+<P><A NAME="E1D758C061ceb"></A>The example C language program <A HREF="backface_c.html#A16C0c7a2"><B>backface.c</B></A> uses the <B>translate</B> modeling subroutine and alters the current transformation matrix to model the sides of a cube using a square. </P>
+
+<H3><A NAME="A62C015d40"></A>Implementation Specifics</H3>
+<P><A NAME="E1D758C105ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C1c0"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1c1"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1c2"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X95e8"></A>Related Information</H3>
+<P><A NAME="E1D758C201ceb"></A>Popping the transformation matrix stack with the <A HREF="popmatrix.html#A144X951e"><B>popmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1D758C227ceb"></A>Pushing down the transformation matrix stack with the <A HREF="pushmatrix.html#A144X9540"><B>pushmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1D758C252ceb"></A>Rotating a graphical primitive (floating-point version) with the <A HREF="rot.html#A144X9562"><B>rot</B></A> subroutine.</P>
+
+<P><A NAME="E1D758C281ceb"></A>Rotating a graphical primitive (fixed-point version) with the <A HREF="rotate.html#A8g2120marj"><B>rotate</B></A> subroutine.</P>
+
+<P><A NAME="E1D758C306ceb"></A>Scaling and mirroring objects with the <A HREF="scale.html#A144X95a6"><B>scale</B></A> subroutine.</P>
+
+<P><A NAME="E1D758C332ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="tpon.html">Previous</a>  |
+<a href="underlay.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

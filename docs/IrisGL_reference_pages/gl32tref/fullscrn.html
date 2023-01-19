@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>fullscrn Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="fudge.html">Previous</a>  |
+<a href="gammaramp.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="Qga140marj"></A>fullscrn Subroutine</H2>
+<A NAME="INDEX532" REL="I1" TITLE="fullscrn subroutine (GL)"></A>
+<A NAME="INDEX533" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX534" REL="I2" TITLE="window"></A>
+<A NAME="INDEX535" REL="I3" TITLE="fullscrn"></A>
+<A NAME="INDEX536" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX537" REL="I2" TITLE="fullcreen mode"></A>
+<A NAME="INDEX538" REL="I3" TITLE="beginning"></A>
+<H3><A NAME="A318C9ea1"></A>Purpose</H3>
+<P><A NAME="E1B0C13998ceb"></A>Enables drawing outside current window boundaries.</P>
+
+<H3><A NAME="A79C12c8"></A>Libraries</H3>
+<P><A NAME="E1B0C14147ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0C14250ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A318C9ea4"></A>C Syntax</H3>
+<PRE><A NAME="A318C9ea5"></A><B>void fullscrn(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010c51"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c52"></A><B>SUBROUTINE FULLSC</B></PRE>
+
+<H3><A NAME="A318C9ea8"></A>Description</H3>
+<P><A NAME="E1B0C14604ceb"></A>The <B>fullscrn</B> subroutine allows drawing outside of the current window boundaries. It does so by disabling window clipping.</P>
+
+<BLOCKQUOTE><A NAME="A79C12cb"></A><B>Note: </B>When full-screen drawing is enabled, the user can draw all over other windows and other clients; therefore, this subroutine should be used with caution.</BLOCKQUOTE>
+
+
+<P><A NAME="E1B0C14780ceb"></A>Normally, the <B>fullscrn</B> subroutine is used to draw user interface graphics into the overlay planes by calling <SAMP>drawmode(OVERDRAW)</SAMP>.</P>
+
+<P><A NAME="E1B0C14888ceb"></A>This subroutine calls <SAMP>viewport(0,XMAXSCREEN,0,YMAXSCREEN)</SAMP>. To draw outside the window boundaries, but in an area smaller than the full screen, use the <A HREF="viewport.html#qrY270marj"><B>viewport</B></A> subroutine and/or the <A HREF="scrmask.html#fwN250marj"><B>scrmask</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C14996ceb"></A>In addition to enabling drawing into the overlays, the fullscreen mode enables drawing into the main frame buffer--but this is strongly discouraged. It is recommended that you use the fullscreen mode only for rendering into the overlays--not for drawing into the principal frame buffer. The reason for this is that when fullscreen mode is exited, no GL REDRAW or X Exposure events are generated.</P>
+
+<P><A NAME="E1B0C15105ceb"></A>When fullscreen mode is exited, the overlay planes are not cleared. Therefore, if the overlay planes have been rendered into, they should be cleared as a matter of courtesy before the call to the <B>endfullscrn</B> subroutine.</P>
+
+<P><A NAME="E1B0C15264ceb"></A>If a window belonging to a process has overlays that have been explicitly disabled with the <B>overlay</B> and <B>gconfig</B> subroutines, the <B>fullscrn</B> subroutine call canot reenable overlays for that window. Therefore, when rendering into overlay planes while in fullscreen mode, the results of the rendering may not be visible if the drawing occurred over a window that has disabled overlays.</P>
+
+<P><A NAME="E1B0C15373ceb"></A>In the current implementation, all mouse motion and mouse button press events are redirected to the process that called the <B>fullscrn</B> subroutine. The redirection continues until the <B>endfullscrn</B> subroutine call is made. This redirection of input overrides the window manager focus policy.</P>
+
+<P><A NAME="E1B0C15480ceb"></A>If a second process enters fullscreen mode when another process is already in this mode, pointer motion and mouse button press events will not be grabbed for the second process.</P>
+
+<P><A NAME="E1B0C15588ceb"></A>If keyboard events are needed, use the <B>XGrabKey</B> and <B>XGrabKeyboard</B> subroutines.</P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="BD45BF3156vbia"></A>Using the <B>fullscrn</B> subroutine in an application makes that application not compliant with the <I>Inter-Client Communication Conventions Manual</I> (ICCCM). Compliance to ICCCM, although encouraged, is optional. For more information on ICCCM, refer to the AIXwindows documentation.</LI>
+
+<LI><A NAME="A318C9ead"></A>The <B>fullscrn</B> subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI>
+
+<LI><A NAME="A3CFC6AC953janb"></A>When the GLC_FB_FULLSCREEN mode is enabled, and <B>fullscrn</B> is used,  the colors in the main frame buffer will be temporarily become completely black. The colors are restored when <B>endfullscrn</B> is called.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A61C015a04"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0C15908ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C12ce"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12cf"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12d0"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A318C9eb6"></A>Related Information</H3>
+<P><A NAME="E1B0C16228ceb"></A>Initializing the graphics system without changing the color map with the <A HREF="gbegin.html#JS4380nita"><B>gbegin</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C16335ceb"></A>Ending fullscreen mode with the <A HREF="endfullscrn.html#laa350marj"><B>endfullscrn</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C16442ceb"></A>Reconfiguring the system with the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C16560ceb"></A>Setting the number of user-defined bitplanes used for overlay drawing with the <A HREF="overlay.html#A143X950a"><B>overlay</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C16668ceb"></A>Creating a window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine.</P>
+
+<P><A NAME="E1B0C16775ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="fudge.html">Previous</a>  |
+<a href="gammaramp.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

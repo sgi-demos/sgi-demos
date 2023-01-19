@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>czclear Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="cyclemap.html">Previous</a>  |
+<a href="defbasis.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X92c8"></A>czclear Subroutine</H2>
+<A NAME="INDEX361" REL="I1" TITLE="czclear subroutine (GL)"></A>
+<A NAME="INDEX362" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX363" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX364" REL="I3" TITLE="czclear"></A>
+<A NAME="INDEX365" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX366" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX367" REL="I3" TITLE="clearing color bitplanes and z buffer"></A>
+<H3><A NAME="A143X92ca"></A>Purpose</H3>
+<P><A NAME="E1B08EC330ceb"></A>Clears the color bitplanes and the z-buffer simultaneously.</P>
+
+<H3><A NAME="A79C11b3"></A>Libraries</H3>
+<P><A NAME="E1B08EC477ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B08EC581ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X92ce"></A>C Syntax</H3>
+<PRE><A NAME="A143X92cf"></A><B>void czclear(Int32 </B><A HREF="czclear.html#A143X92d3"><I>cval</I></A><B>, Int32 </B><A HREF="czclear.html#F2F11e0marj"><I>zval</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010b9c"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010b9d"></A><B>SUBROUTINE CZCLEA(</B><I>cval</I><B>,</B> <I>zval</I><B>)</B>
+<B>INTEGER*4 </B><I>cval</I><B>,</B><I> zval</I></PRE>
+
+<H3><A NAME="A143X92d0"></A>Description</H3>
+<P><A NAME="E1B08EC951ceb"></A>The <B>czclear</B> subroutine simultaneously clears the color bitplanes to the value of the <A HREF="czclear.html#A143X92d3"><I>cval</I></A> parameter and the 
+z-buffer
+ to the value of the <A HREF="czclear.html#F2F11e0marj"><I>zval</I></A> parameter. The <B>czclear </B>subroutine clears all active color bits (8 or 12 in 
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e3">color map mode</A>, 24 in 
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>), and all 24 z-buffer bits. Pattern 0 (zero) is always used, regardless of the current pattern specification. The system ignores the current 
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemask</A>.</P>
+
+<P><A NAME="E1B08ED060ceb"></A>Only the screen area inside the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P018">screenmask</A> is cleared. The screenmask cannot be made larger than the window. By default, the screenmask is exactly the same size as the window. Use the <A HREF="scrmask.html#fwN250marj"><B>scrmsk</B></A> subroutine to change the size of the screenmask.</P>
+
+<BLOCKQUOTE><A NAME="A79C11b6"></A><B>Note: </B>The <A HREF="viewport.html#qrY270marj"><B>viewport</B></A> subroutine resets the screenmask to be precisely the same size as the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A>.</BLOCKQUOTE>
+
+
+<P><A NAME="E1B08ED227ceb"></A>In RGB mode, the <A HREF="czclear.html#A143X92d3"><I>cval</I></A> parameter requires a packed integer of the same format used by the <A HREF="cpack.html#A143X9284"><B>cpack</B></A> subroutine, 0x<I>aaggbbrr</I>, where <I>rr</I> is the red value, <I>gg</I> is the green value, <I>bb</I> is the blue value, and <I>aa</I> is the alpha value. In color map mode, the <I>cval </I>parameter requires an index into the current color map, so that only the bottom 8 or 12 bits are significant.</P>
+
+<P><A NAME="E1B08ED336ceb"></A>Whenever you need to clear both the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P1160a">z-buffer</A> and the color bitplanes to constant values at the same time, use the <B>czclear</B> subroutine. The <B>czclear</B> subroutine executes as fast as, or faster than, the <A HREF="clear.html#cEH1160marj"><B>clear</B></A> and <A HREF="zclear.html#A143X97d3"><B>zclear</B></A> subroutines called sequentially.</P>
+
+<P><A NAME="E1B08ED443ceb"></A>The <B>czclear</B> subroutine can be called whether z-buffer mode is on or off. The current color does not change.</P>
+
+<BLOCKQUOTE><A NAME="A258C01c816"></A><B>Note: </B>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. (See <!--gl32prgd:--><A HREF="../gl32prgd/powerstation730.html#NITAXIO">"Hardware Considerations"</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.)</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X92d2"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X92d3"></A><I>cval</I> </TD>
+<TD>  Specifies the color to which to clear the color bitplanes.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="F2F11e0marj"></A><I>zval</I> </TD>
+<TD>  Specifies the depth to which to clear the 
+z-buffer. The <I>zval</I> parameter has the following values:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Values for the zval parameter</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Min</B></TD>
+
+<TD><B>Max</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>-0x800000</TD>
+
+<TD>0x7FFFFF</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A64C0165f2"></A>Implementation Specifics</H3>
+<P><A NAME="E1B08ED865ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C11b7"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11b8"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11b9"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X92e8"></A>Related Information</H3>
+<P><A NAME="E1B08EE232ceb"></A>Clearing to the screenmask with the <A HREF="clear.html#cEH1160marj"><B>clear</B></A> subroutine.</P>
+
+<P><A NAME="E1B08EE345ceb"></A>Setting the current color as a packed 32-bit integer using the <A HREF="cpack.html#A143X9284"><B>cpack</B></A> subroutine.</P>
+
+<P><A NAME="E1B08EE462ceb"></A>Enabling and disabling the z-buffer for storing depth information with the <A HREF="zbuffer.html#A143X97b1"><B>zbuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B08EE580ceb"></A>Clearing the z-buffer with the <A HREF="zclear.html#A143X97d3"><B>zclear</B></A> subroutine.</P>
+
+<P><A NAME="E1B08EE687ceb"></A>Specifying the function used for depth comparison with the <A HREF="zfunction.html#A22f0MARJ"><B>zfunction</B></A> subroutine.</P>
+
+<P><A NAME="E1B08EE795ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware</A> Used by GL, <!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P>
+
+<P><A NAME="E1B08EE903ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/clrrstintgl.html#clrrstintgl.html">Clearing, Resetting, and Initiliazing GL</A>, <!--gl32prgd:--><A HREF="../gl32prgd/writemasks.html#writemasks.html">Writemasks and Logical Operations</A>.</P><hr><center>
+[  <a href="cyclemap.html">Previous</a>  |
+<a href="defbasis.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

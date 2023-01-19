@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>font Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="finish.html">Previous</a>  |
+<a href="freepup.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9d61"></A>font Subroutine</H2>
+<A NAME="INDEX491" REL="I1" TITLE="font subroutine (GL)"></A>
+<A NAME="INDEX492" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX493" REL="I2" TITLE="text"></A>
+<A NAME="INDEX494" REL="I3" TITLE="font"></A>
+<A NAME="INDEX495" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX496" REL="I2" TITLE="text"></A>
+<A NAME="INDEX497" REL="I3" TITLE="selecting a raster font"></A>
+<H3><A NAME="A143X9d63"></A>Purpose</H3>
+<P><A NAME="E1B0B75980ceb"></A>Selects a raster font for drawing text strings.</P>
+
+<H3><A NAME="A79C1224"></A>Libraries</H3>
+<P><A NAME="E1B0B76128ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0B76232ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9d67"></A>C Syntax</H3>
+<PRE><A NAME="A213X912629"></A><B>void font(Int32 </B><A HREF="font.html#A213X91262d"><I>fontnum</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c13"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c14"></A><B>SUBROUTINE FONT(</B><I>fontnum</I><B>)</B>
+<B>INTEGER*4 </B><I>fontnum</I></PRE>
+
+<H3><A NAME="A143X9d69"></A>Description</H3>
+<P><A NAME="E1B0B76595ceb"></A>The <B>font </B>subroutine selects the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P073b">raster font</A> that the <A HREF="charstr.html#A143X9cfb"><B>charstr</B></A> subroutine uses when it draws a text string. This font remains in effect until you call the <B>font</B> subroutine again. Font <SAMP>0</SAMP> (zero) is the default. </P>
+
+<H3><A NAME="A143X9d6b"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91262d"></A><I>fontnum</I></TD>
+<TD>  Specifies a font identifier, an index into the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A270A983b">font</A> table built by the <A HREF="defrasterfont.html#A143X9d3f"><B>defrasterfont</B></A> subroutine. If you specify a font number that is not defined, the system selects font <SAMP>0</SAMP> (zero). </TD></TR></TABLE>
+
+<H3><A NAME="A30C011058"></A>Example</H3>
+<P><A NAME="E1B0B76859ceb"></A>The example C language programs <A HREF="curved_c.html#A16C0c830"><B>curved.c</B></A> and <A HREF="font3_c.html#A149C18a9"><B>font3.c</B></A> use the <B>font</B> subroutine to select a raster font defined with the <A HREF="defrasterfont.html#A143X9d3f"><B>defrasterfont</B></A> subroutine.</P>
+
+<H3><A NAME="A62C015d95"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0B77018ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1227"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1228"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1229"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9d81"></A>Related Information</H3>
+<P><A NAME="E1B0B77337ceb"></A>Drawing a string of raster characters on the screen with the <A HREF="charstr.html#A143X9cfb"><B>charstr</B></A> subroutine.</P>
+
+<P><A NAME="E1B0B77444ceb"></A>Defining bitmaps for a raster font with the <A HREF="defrasterfont.html#A143X9d3f"><B>defrasterfont</B></A> subroutine.</P>
+
+<P><A NAME="E1B0B77552ceb"></A>Returning the baseline extent of the longest character descender with the <A HREF="getdescender.html#A144X9386"><B>getdescender</B></A> subroutine.</P>
+
+<P><A NAME="E1B0B77658ceb"></A>Returning the current raster font number with the <A HREF="getfont.html#A144X93a8"><B>getfont</B></A> subroutine.</P>
+
+<P><A NAME="E1B0B77766ceb"></A>Returning the maximum character height in the current raster font with the <A HREF="getheight.html#A144X93ca"><B>getheight</B></A> subroutine.</P>
+
+<P><A NAME="E1B0B77873ceb"></A>Returning the width of the specified text string with the <A HREF="strwidth.html#A144X93ec"><B>strwidth</B></A> subroutine.</P>
+
+<P><A NAME="E1B0B77981ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating <!--gl32prgd:--><A HREF="../gl32prgd/textchars.html#textchars.html">Text Characters</A>.</P><hr><center>
+[  <a href="finish.html">Previous</a>  |
+<a href="freepup.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

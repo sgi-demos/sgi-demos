@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>mapcolor Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="maketag.html">Previous</a>  |
+<a href="mapcolors.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A146X9535"></A>mapcolor Subroutine</H2>
+<A NAME="INDEX1134" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1135" REL="I2" TITLE="color map and RGB mode"></A>
+<A NAME="INDEX1136" REL="I3" TITLE="mapcolor"></A>
+<A NAME="INDEX1137" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1138" REL="I2" TITLE="color map entry"></A>
+<A NAME="INDEX1139" REL="I3" TITLE="changing to RGB value"></A>
+<A NAME="INDEX1140" REL="I1" TITLE="mapcolor subroutine (GL)"></A>
+
+<H3><A NAME="A146X9537"></A>Purpose</H3>
+<P><A NAME="E1D6F42470ceb"></A>Changes a color map entry to a specified RGB value.</P>
+
+<H3><A NAME="A78C14d"></A>Libraries</H3>
+<P><A NAME="E1D6F42509ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D6F42534ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A146X953a"></A>C Syntax</H3>
+<PRE><A NAME="A146X953b"></A><B>void mapcolor</B>
+<B>(Colorindex </B><A HREF="mapcolor.html#A146X9546"><I>index</I></A><B>,</B>
+<B>Int16</B> <A HREF="mapcolor.html#A146X9547"><I>red</I></A><B>, Int16</B> <A HREF="mapcolor.html#A146X9548"><I>green</I></A><B>, Int16</B> <A HREF="mapcolor.html#A146X9549"><I>blue</I></A><B>)</B></PRE>
+
+<H3><A NAME="A146X9512"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A146X9515"></A><B>SUBROUTINE MAPCOL (</B><I>index</I><B>,</B> <I>red</I><B>,</B> <I>green</I><B>,</B> <I>blue</I><B>)</B>
+<B>INTEGER*4 </B><I>index</I><B>, </B><I>red</I><B>, </B><I>green</I><B>, </B><I>blue</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C150"></A><B>Note: </B>For FORTRAN users: this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A146X953e"></A>Description</H3>
+<P><A NAME="E1D6F42672ceb"></A>The <B>mapcolor</B> subroutine changes a single color map entry for the current drawing mode to a specified 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A255B9de">RGB value</A>. The <A HREF="mapcolor.html#A146X9546"><I>index</I></A> parameter loads the color map entry that corresponds with the specified RGB intensities. The valid range for the <I>index</I> parameter depends on the drawing mode:</P>
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A146X950a"></A>NORMALDRAW</TD>
+<TD>  0 to 4095, or 0 to 255 if the system has only eight color bitplanes or is in multimap mode. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X910d91"></A>OVERDRAW</TD>
+<TD>  1 to 3 if the <B>overlay(2) </B>subroutine has been called, or 1 to 15 if the  <B>overlay(4) </B>subroutine has been called. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X910d92"></A>UNDERDRAW</TD>
+<TD>  0 to 3 if the <B>underlay(2) </B>subroutine has been called, or 0 to 15 if the <B>underlay(4) </B>subroutine has been called. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X910d93"></A>PUPDRAW</TD>
+<TD>  1 to 3.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X910d94"></A>CURSORDRAW</TD>
+<TD>  1 to 3.  </TD></TR></TABLE>
+
+<P><A NAME="E1D6F42789ceb"></A>In <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#a3P1390marj">multimap mode</A>, the <B>mapcolor </B>subroutine updates only the small color map currently selected by the <A HREF="setmap.html#A146X9646"><B>setmap</B></A> subroutine. The system ignores invalid indexes.</P>
+
+<P><A NAME="E1D6F42815ceb"></A>On most systems, this subroutine does not set the current drawing color, and so should not be used for this purpose. To set the current drawing color, use the  <A HREF="c.html#A143X9262"><B>c</B></A>, <A HREF="color.html#A146X9429"><B>color</B></A>, <A HREF="cpack.html#A143X9284"><B>cpack</B></A>, or <A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F42845ceb"></A>Instead of the <B>mapcolor</B> subroutine, it is suggested that you use the <B>mapcolors</B> subroutine for new development, because of its significantly improved performance.</P>
+
+<BLOCKQUOTE><A NAME="A318C9cbd"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A146X9545"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A146X9546"></A><I>index</I></TD>
+<TD>  Specifies the index into the color map.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A146X9547"></A><I>red</I></TD>
+<TD>  Specifies the intensity of red associated with the index.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A146X9548"></A><I>green</I></TD>
+<TD>  Specifies the intensity of green associated with the index.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A146X9549"></A><I>blue</I></TD>
+<TD>  Specifies the intensity of blue associated with the index.</TD></TR></TABLE>
+
+<H3><A NAME="A146X954c"></A>Example</H3>
+<P><A NAME="E1D6F43004ceb"></A>The example C language program <A HREF="colored_c.html"><B>colored.c</B></A> uses the <B>mapcolor</B> subroutine to edit the color map.</P>
+
+<H3><A NAME="A64C016560"></A>Implementation Specifics</H3>
+<P><A NAME="E1D6F43048ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<P><A NAME="A3CFCCE1600janb"></A>The POWERgraphics GXT1000 supports a 12-bit colorindex frame buffer.</P>
+
+<H3><A NAME="A78C151"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C152"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C153"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A146X955c"></A>Related Information</H3>
+<P><A NAME="E1D6F43149ceb"></A>Choosing a set of bitplanes for drawing with the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F43175ceb"></A>Defining a color map ramp for gamma correction with the <A HREF="gammaramp.html#Kz4nita"><B>gammaramp</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F43200ceb"></A>Getting a copy of the RGB values for a color map entry with the <A HREF="getmcolor.html#nXI1100marj"><B>getmcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F43226ceb"></A>Organizing the color map as one large map with the <A HREF="onemap.html#A146X95ef"><B>onemap</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F43252ceb"></A>Organizing the color map as 16 small maps with the <A HREF="multimap.html#A146X9593"><B>multimap</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F43278ceb"></A>Setting the number of bitplanes used for overlay colors with the <A HREF="overlay.html#A143X950a"><B>overlay</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F43303ceb"></A>Selecting one of 16 small color maps with the <A HREF="setmap.html#A146X9646"><B>setmap</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F43329ceb"></A>Setting the number of bitplanes used for underlay colors with the <A HREF="underlay.html#Az5O370nita"><B>underlay</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F43354ceb"></A>Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="maketag.html">Previous</a>  |
+<a href="mapcolors.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

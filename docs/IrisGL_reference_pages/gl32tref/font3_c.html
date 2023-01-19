@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>font3.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="draw_c.html">Previous</a>  |
+<a href="gamma_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A149C18a9"></A>font3.c Example C Language Program
+</H2>
+<A NAME="INDEX2298" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2299" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2300" REL="I3" TITLE="text"></A>
+<A NAME="INDEX2301" REL="I1" TITLE="font3.c example program (GL)"></A>
+<A NAME="INDEX2302" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2303" REL="I2" TITLE="text"></A>
+<A NAME="INDEX2304" REL="I3" TITLE="example program"></A>
+<A NAME="INDEX2305" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2306" REL="I2" TITLE="fonts"></A>
+<A NAME="INDEX2307" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64EA94666ttay"></A>/* Examples: font3.c*/</PRE>
+<PRE><A NAME="A64EA94885ttay"></A>/* Define a font with three characters -- a lower-case j,
+ * an arrow, and a Greek sigma. Use ASCII values 1 and 2
+ * (\001 and \002) for the arrow and sigma. Use the
+ * ASCII value of j (= \152) for the j character.
+ */</PRE>
+<PRE><A NAME="A64EA95033ttay"></A>#include &lt;gl/gl.h></PRE>
+<PRE><A NAME="A64EA95204ttay"></A>#define EXAMPLEFONT        1
+#define efont_ht        16
+#define efont_nc        127</PRE>
+<PRE><A NAME="A64EA95488ttay"></A>unsigned short efont_bits[] = {
+&nbsp;&nbsp;&nbsp;/* lower-case j */
+&nbsp;&nbsp;&nbsp;0x7000, 0xd800, 0x8c00, 0x0c00, 0x0c00, 0x0c00, 0x0c00,
+&nbsp;&nbsp;&nbsp;0x0c00, 0x0c00, 0x1c00, 0x0000, 0x0000, 0x0c00, 0x0c00,
+  /* arrow */
+&nbsp;&nbsp;&nbsp;0x0200, 0x0300, 0x0380, 0xafc0, 0xafe0, 0xaff0, 0xafe0,
+&nbsp;&nbsp;&nbsp;0xafc0, 0x0380, 0x0300, 0x0200,
+  /* sigma */
+&nbsp;&nbsp;&nbsp;0xffc0, 0xc0c0, 0x6000, 0x3000, 0x1800, 0x0c00, 0x0600,
+&nbsp;&nbsp;&nbsp;0x0c00, 0x1800, 0x3000, 0x6000, 0xc180, 0xff80,
+  };</PRE>
+<PRE><A NAME="A64EA95736ttay"></A>#define efont_nr (sizeof efont_bits)
+#define ASSIGN(fontch, of, wi, he, xof, yof, wid) \
+                fontch.offset = of; \
+                fontch.w = wi; \
+                fontch.h = he; \
+                fontch.xoff = xof; \
+                fontch.yoff = yof; \
+                fontch.width = wid</PRE>
+<PRE><A NAME="A64EA95886ttay"></A>Fontchar efont_chars[127];</PRE>
+<PRE><A NAME="A64EA96035ttay"></A>main ()
+{        </PRE>
+<PRE><A NAME="A64EA96344ttay"></A>&nbsp;&nbsp;&nbsp;ASSIGN(efont_chars['j'],        0, 6, 14, 0, -2,  8);
+&nbsp;&nbsp;&nbsp;ASSIGN(efont_chars['\001'],14, 12, 11, 0,  0, 14);
+&nbsp;&nbsp;&nbsp;ASSIGN(efont_chars['\002'],25, 10, 13, 0,  0, 12);
+&nbsp;&nbsp;&nbsp;prefsize (200,200);
+&nbsp;&nbsp;&nbsp;winopen("font");
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;defrasterfont (EXAMPLEFONT, efont_ht, efont_nc, efont_chars,
+&nbsp;&nbsp;&nbsp;    efont_nr, efont_bits);
+&nbsp;&nbsp;&nbsp;font (EXAMPLEFONT);
+&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;cmov2i(100, 100);
+&nbsp;&nbsp;&nbsp;charstr ("j\001\002\001jj\002");
+&nbsp;&nbsp;&nbsp;cmov2i(100, 84);
+&nbsp;&nbsp;&nbsp;charstr("ajb\001c\002d");
+&nbsp;&nbsp;&nbsp;sleep(10);</PRE>
+<PRE><A NAME="A64EA96487ttay"></A>}</PRE>
+
+<H3><A NAME="A200C1174"></A>Related Information</H3>
+<P><A NAME="E1D7829614ceb"></A>The <A HREF="charstr.html#A143X9cfb"><B>charstr</B></A> subroutine<A HREF="A143X9cfb.html" REL="PAGENUM"></A>, <A HREF="defrasterfont.html#A143X9d3f"><B>defrasterfont</B></A> subroutine<A HREF="A143X9d3f.html" REL="PAGENUM"></A>, <A HREF="font.html#A143X9d61"><B>font</B></A> subroutine<A HREF="A143X9d61.html" REL="PAGENUM"></A>.</P>
+
+<P><A NAME="E1D7829640ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/textchars.html#Qi62180nita">Fonts</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I> describes font assignment in GL, and discusses relevant subroutines.</P>
+
+<hr><center>
+[  <a href="draw_c.html">Previous</a>  |
+<a href="gamma_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

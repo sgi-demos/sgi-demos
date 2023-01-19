@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>RGBwritemask Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="RGBmode.html">Previous</a>  |
+<a href="ringbell.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X93fa"></A>RGBwritemask Subroutine</H2>
+<A NAME="INDEX1664" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1665" REL="I2" TITLE="frame buffer update control"></A>
+<A NAME="INDEX1666" REL="I3" TITLE="RGBwritemask"></A>
+<A NAME="INDEX1667" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1668" REL="I2" TITLE="bitplanes"></A>
+<A NAME="INDEX1669" REL="I3" TITLE="granting write permission to in RGB mode"></A>
+<A NAME="INDEX1670" REL="I1" TITLE="RGBwritemask subroutine (GL)"></A>
+<H3><A NAME="A143X93fc"></A>Purpose</H3>
+<P><A NAME="E1D7378285ceb"></A>Grants write access to a subset of available bitplanes.</P>
+
+<H3><A NAME="A78C11fc"></A>Libraries</H3>
+<P><A NAME="E1D7378325ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7378349ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9400"></A>C Syntax</H3>
+<PRE><A NAME="A143X9401"></A><B>void RGBwritemask</B>
+<B>(Int16 </B><A HREF="RGBwritemask.html#A143X9405"><I>red</I></A><B>,</B>
+<B>Int16 </B><A HREF="RGBwritemask.html#A143X9406"><I>green</I></A><B>,</B>
+<B>Int16 </B><A HREF="RGBwritemask.html#A143X9407"><I>blue</I></A><B>)</B></PRE>
+
+<H3><A NAME="A28C010777"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C010778"></A><B>SUBROUTINE RGBWRI(</B><I>red</I><B>, </B><I>green</I><B>, </B><I>blue</I><B>)</B>
+<B>INTEGER*4 </B><I>red</I><B>, </B><I>green</I><B>, </B><I>blue</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C11ff"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X9402"></A>Description</H3>
+<P><A NAME="E1D7378482ceb"></A>The <B>RGBwritemask</B> subroutine sets the bitplane writemask in RGB mode. Writemasks are used to shield portions of the frame buffer from being written into. A writemask is a small set of bits (3 masks of 8 bits each in RGB mode), one bit for each bitplane of the frame buffer. </P>
+
+<P><A NAME="E1D7378508ceb"></A>If a bit is set (1), the corresponding bitplane is enabled for writing, and any routine that draws into the frame buffer will be able to write into that bitplane. If a bit is reset (0), the corresponding bitplane is marked as read only, and the values stored in that bitplane are not changed.</P>
+
+<P><A NAME="E1D7378534ceb"></A>Note that the writemask protects planes in the color frame buffer. Thus, writemasks essentially prevent certain colors from being written into the frame buffer. Colors that are drawn while a writemask is enabled appear different, depending on the color, the writemask, and the color value currently stored in the frame buffer (at a given pixel).</P>
+
+<P><A NAME="E1D7378560ceb"></A>Writemasks are useful for emulating overlay/underlay planes.</P>
+
+<P><A NAME="E1D7378586ceb"></A>The <B>RGBwritemask</B> subroutine is intended for use in RGB mode only. To set the writemask in color map mode, use the <A HREF="writemask.html#A143X9592"><B>writemask</B></A> or <A HREF="wmpack.html#A143X9570"><B>wmpack</B></A> subroutine.</P>
+
+<H3><A NAME="A143X9404"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9405"></A><I>red</I></TD>
+<TD>  Specifies the mask for the corresponding red bitplanes.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9406"></A><I>green</I></TD>
+<TD>  Specifies the mask for the corresponding green bitplanes.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9407"></A><I>blue</I> </TD>
+<TD>  Specifies the mask for the corresponding blue bitplanes.</TD></TR></TABLE>
+
+<H3><A NAME="A64C0165d5"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7378703ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1D7378728ceb"></A>The POWER GXT1000 adapter supports only on/off control of individual R, G, and B bitplanes. Individual bits cannot be masked in the color planes.</P>
+
+
+<H3><A NAME="A78C1200"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1201"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1202"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c4fd"></A>Related Information</H3>
+<P><A NAME="E1D7378825ceb"></A>Returning the current RGB value with the <A HREF="gRGBcolor.html#ESL13a0marj"><B>gRGBcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1D7378850ceb"></A>Returning the current RGB writemask with the <A HREF="gRGBmask.html#A143X94e8"><B>gRGBmask</B></A> subroutine.</P>
+
+<P><A NAME="E1D7378875ceb"></A>Specifying the RGBA writemask with a single packed integer with the <A HREF="wmpack.html#A143X9570"><B>wmpack</B></A> subroutine. </P>
+
+<P><A NAME="E1D7378901ceb"></A>Granting write permission to available bitplanes with the <A HREF="writemask.html#A143X9592"><B>writemask</B></A> subroutine.</P>
+
+<P><A NAME="E1D7378927ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>.</P>
+
+<P><A NAME="E1D7378952ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/writemasks.html#writemasks.html">Writemasks and Logical Operations</A>
+ and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="RGBmode.html">Previous</a>  |
+<a href="ringbell.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

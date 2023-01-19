@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getplanes Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getpattern.html">Previous</a>  |
+<a href="getscrmask.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X94a4"></A>getplanes Subroutine</H2>
+<A NAME="INDEX813" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX814" REL="I2" TITLE="frame buffer configuration"></A>
+<A NAME="INDEX815" REL="I3" TITLE="getplanes"></A>
+<A NAME="INDEX816" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX817" REL="I2" TITLE="bitplanes"></A>
+<A NAME="INDEX818" REL="I3" TITLE="returning the number of available"></A>
+<A NAME="INDEX819" REL="I1" TITLE="getplanes subroutine (GL)"></A>
+<H3><A NAME="A143X94a6"></A>Purpose</H3>
+<P><A NAME="E1B10DB622ceb"></A>Returns the number of available bitplanes.</P>
+
+<H3><A NAME="A78C11c6"></A>Libraries</H3>
+<P><A NAME="E1B10DB770ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B10DB874ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X94aa"></A>C Syntax</H3>
+<PRE><A NAME="A143X94ab"></A><B>Int32 getplanes(&nbsp;)</B></PRE>
+
+<H3><A NAME="A28C010713"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C010714"></A><B>INTEGER*4 GETPLA</B></PRE>
+
+<H3><A NAME="A143X94ac"></A>Description</H3>
+<P><A NAME="E1B10DC230ceb"></A>The <B>getplanes</B> subroutine returns the number of active bitplanes that are currently being used for drawing. The number returned depends on how the frame buffer has been configured. In particular, the returned value depends on the most recent setting of the  <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine, whether the system is in single or double buffer mode, whether it is in color map or RGB mode, and finally, on the capabilities of the installed adapter.</P>
+
+<BLOCKQUOTE><A NAME="A318C9c97"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X94b2"></A>Return Value</H3>
+<P><A NAME="E1B10DC442ceb"></A>The number of bitplanes available under the current drawmode.</P>
+
+<H3><A NAME="A30C010fcc"></A>Example</H3>
+<P><A NAME="E1B10DC597ceb"></A>The example C language program <A HREF="scrn_rotate_c.html#A16C0c92f"><B>scrn_rotate.c</B></A> uses the <B>getplanes</B> subroutine to get the number of bitplanes available. </P>
+
+<H3><A NAME="A64C016552"></A>Implementation Specifics</H3>
+<P><A NAME="E1B10DC761ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C11c9"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11ca"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11cb"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X94c4"></A>Related Information</H3>
+<P><A NAME="E1B10DD080ceb"></A>Setting color map mode as the current mode with the <A HREF="cmode.html#A146X93d6"><B>cmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B10DD187ceb"></A>Setting the display mode to double buffer mode with the <A HREF="doublebuffer.html#A145X91a7"><B>doublebuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B10DD294ceb"></A>Choosing a set of bitplanes for drawing with the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B10DD401ceb"></A>Organizing the color map as 16 small maps with the <A HREF="multimap.html#A146X9593"><B>multimap</B></A> subroutine.</P>
+
+<P><A NAME="E1B10DD508ceb"></A>Organizing the color map as one large map with the <A HREF="onemap.html#A146X95ef"><B>onemap</B></A> subroutine.</P>
+
+<P><A NAME="E1B10DD617ceb"></A>Setting a display mode that bypasses the color map with the <A HREF="RGBmode.html#A143X93b6"><B>RGBmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B10DD723ceb"></A>Setting the display mode to single buffer mode with the <A HREF="singlebuffer.html#A145X9259"><B>singlebuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B10DD831ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>, <!--gl32prgd:--><A HREF="../gl32prgd/writemasks.html#writemasks.html">Writemasks and Logical Operations</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System.</P><hr><center>
+[  <a href="getpattern.html">Previous</a>  |
+<a href="getscrmask.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

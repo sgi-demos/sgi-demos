@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>defpup Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="defpattern.html">Previous</a>  |
+<a href="defrasterfont.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X910bf"></A>defpup Subroutine</H2>
+<A NAME="INDEX396" REL="I1" TITLE="defpup subroutine (GL)"></A>
+<A NAME="INDEX397" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX398" REL="I2" TITLE="popp menus"></A>
+<A NAME="INDEX399" REL="I3" TITLE="defining"></A>
+<A NAME="INDEX400" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX401" REL="I2" TITLE="popp menu"></A>
+<A NAME="INDEX402" REL="I3" TITLE="defpup"></A>
+
+<H3><A NAME="A142X910c1"></A>Purpose</H3>
+<P><A NAME="E1B0996365ceb"></A>Defines a pop-up menu.</P>
+
+<H3><A NAME="A79C1116"></A>Libraries</H3>
+<P><A NAME="E1B0996514ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0996618ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X910c5"></A>C Syntax</H3>
+<PRE><A NAME="A213X912170"></A><B>Int32 defpup(Char8</B> <B>*</B><A HREF="defpup.html#A213X912175"><I>string</I></A> [<B>, Int32</B> <A HREF="defpup.html#A213X91217d"><I>arguments</I></A> ...] <B>)</B></PRE>
+
+<H3><A NAME="A29C010b52"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010b53"></A>None: available only in C.</PRE>
+
+<H3><A NAME="A142X910c7"></A>Description</H3>
+<P><A NAME="E1B0996991ceb"></A>The <B>defpup </B>subroutine defines a pop-up menu and returns a menu identifier. </P>
+
+<BLOCKQUOTE><A NAME="A318C9ddd"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X910c9"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912175"></A><I>string</I></TD>
+<TD>  Specifies the pointer to the text to add as a menu item. There are seven menu item type flags 
+for optional pairing with each menu item: 
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912176"></A><B>%t </B></TD>
+<TD>  Marks item text as the menu title string. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912177"></A><B>%F </B></TD>
+<TD>  Invokes a routine for every selection from this menu except those marked with a <B>%n</B> flag. You must specify the invoked routine in the <A HREF="defpup.html#A213X91217d"><I>arguments</I></A> parameter. The value of the menu item is used as a parameter of the executed routine. Thus, if you select the third menu item, the system passes 3 as a parameter to the function specified by the <B>%F</B> flag. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912178"></A><B>%f </B></TD>
+<TD>  Invokes a routine when this particular menu item is selected. You must specify the invoked routine in the <A HREF="defpup.html#A213X91217d"><I>arguments</I></A> parameter. The value of the menu item is passed as a parameter of the routine. Thus, if you select the third menu item, the system passes 3 as a parameter to the routine specified by the <B>%f</B> flag. If you have also used the<B> %F</B> flag within this menu, then the result of the <B>%f </B>flag is passed as a parameter of the <B>%F</B> flag.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912179"></A><B>%l </B></TD>
+<TD>  Adds a line under the current entry. This is useful in providing visual clues for grouping like entries together. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91217a"></A><B>%m </B></TD>
+<TD>  Pops up a menu whenever this menu item is selected. You must provide the menu identifier of the new menu in the <A HREF="defpup.html#A213X91217d"><I>arguments</I></A> parameter.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91217b"></A><B>%n </B></TD>
+<TD>  Like the <B>%f</B> flag, this flag invokes a routine when the user selects this menu item. However, the <B>%n</B> flag differs from the <B>%f</B> flag in that it ignores the routine (if any) specified by the <B>%F</B> flag. The value of the menu item is passed as a parameter of the executed routine. Thus, if you select the third menu item, the system passes 3 as a parameter to the function specified by the <B>%f</B> flag. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91217c"></A><B>%x</B><I>n </I></TD>
+<TD>  Assigns a numeric value to this menu item. This value overrides the default position-based value assigned to this menu item (third item=3). You must enter the numeric value as the part of the text string specified by the <I>n</I> parameter. Do not use the <A HREF="defpup.html#A213X91217d"><I>arguments</I></A> parameter to specify the numeric value.</TD></TR></TABLE></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91217d"></A><I>arguments </I></TD>
+<TD>  Specifies an optional set of arguments. Each argument expects the command or submenu to be assigned to this menu item. The <I>arguments</I> parameter can be used as many times as necessary. </TD></TR></TABLE>
+
+<H3><A NAME="A142X910cd"></A>Return Value</H3>
+<P><A NAME="E1B0997826ceb"></A>The menu identifier of the menu just defined.</P>
+
+<H3><A NAME="A30C011008"></A>Example</H3>
+<P><A NAME="E1B0997980ceb"></A>The example C language program <A HREF="curved_c.html#A16C0c830"><B>curved.c</B></A> uses the <B>defpup</B> subroutine to define a pop-up menu. </P>
+
+<H3><A NAME="A64C0165bb"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0998141ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1119"></A>File</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C111a"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X910df"></A>Related Information</H3>
+<P><A NAME="E1B0998417ceb"></A>Adding an item to an existing pop-up menu with the <A HREF="addtopup.html#A142X9109d"><B>addtopup</B></A> subroutine.</P>
+
+<P><A NAME="E1B0998533ceb"></A>Displaying a pop-up menu with the <A HREF="dopup.html#A142X910e1"><B>dopup</B></A> subroutine.</P>
+
+<P><A NAME="E1B0998649ceb"></A>Deallocating a pop-up menu and its data structures with the <A HREF="freepup.html#A142X91103"><B>freepup</B></A> subroutine.</P>
+
+<P><A NAME="E1B0998756ceb"></A>Allocating and initializing a structure for a new pop-up menu with the <A HREF="newpup.html#A142X91125"><B>newpup</B></A> subroutine.</P>
+
+<P><A NAME="E1B0998873ceb"></A>Enabling or disabling a given pop-up entry with the <A HREF="setpup.html#A5um1280marj"><B>setpup</B></A> subroutine.</P>
+
+<P><A NAME="E1B0998979ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/popupmenus.html#popupmenus.html">Pop-Up Menus</A>.</P><hr><center>
+[  <a href="defpattern.html">Previous</a>  |
+<a href="defrasterfont.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

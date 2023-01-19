@@ -1,0 +1,291 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/3dclrproc.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>3-D Color Graphics Processor
+</TITLE>
+   
+</HEAD>
+
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="undergraphadapt.html">Previous</a>  |
+<a href="powerstation730.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+
+<H2><A NAME="3dclrproc.html"></A>3-D Color Graphics Processor </H2>
+
+
+<P><A NAME="A3C0F166122mhay"></A>The 3-D Color Graphics Processor is available
+in four configurations: </P>
+
+
+<UL><LI><A NAME="A258C01c11a"></A><A HREF="3dclrproc.html#lZ4110nita">24-bit
+main color buffer with z-buffer</A></LI>
+
+
+<LI><A NAME="A258C01c11b"></A><A HREF="3dclrproc.html#xZX42f0nita">24-bit
+main color buffer without z-buffer</A></LI>
+
+
+<LI><A NAME="A258C01c11c"></A><A HREF="3dclrproc.html#A54C0149cd">8-bit
+main color buffer with z-buffer</A></LI>
+
+
+<LI><A NAME="A258C01c11d"></A><A HREF="3dclrproc.html#A54C0149d7">8-bit
+main color buffer without z-buffer</A></LI></UL>
+
+
+<H3><A NAME="lZ4110nita"></A>24-Bit High-Performance 3-D Color Graphics
+Processor with Z-Buffer Option<A NAME="INDEX938"></A> <A NAME="INDEX939"></A>
+<A NAME="INDEX940"></A> </H3>
+
+
+<P><A NAME="A3C0F166147mhay"></A>This adapter contains a 24-bit deep main
+frame buffer, 4 auxiliary planes dynamically configurable as overlay/underlay
+planes, and a 24-bit deep z-buffer. It contains a 4096-entry output color
+map (color lookup table) in onemap mode and sixteen 256-entry color maps
+in multimap mode. </P>
+
+
+<P><A NAME="A3C0F166168mhay"></A>In double buffer mode, the 24 main bitplanes
+are divided into a pair of buffers of 12 bits each. In RGB mode, these
+12 bits are treated as 444 RGB, that is, as 4 bitplanes for storing red
+values, 4 bitplanes for storing green values, and 4 bitplanes for storing
+blue values. To maintain greater color fidelity and prevent color aliasing,
+dithering is automatically enabled, thus giving a greater perceived dynamic
+range (that is, more than 4 bits of accuracy for each band). The truncation
+of the nonleading bits and their convolution with the dithering matrix
+is performed automatically, and there is no modification of any of the
+drawing subroutines. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectwrite.html#A142X9c9e">lrectwrite</A></B>
+subroutine should be used for bit block transfers in RGB modes; it always
+assumes 888 RGB, and the appropriate bit-shifting to 444 is performed internally
+and automatically. </P>
+
+
+<P><A NAME="A3C0F166188mhay"></A>In double-buffered color map mode, all
+12 bits of each buffer access the color map directly. Use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c">rectread</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectwrite.html#A142X9c9e">rectwrite</A></B>
+subroutines for bit block transfers. </P>
+
+
+<P><A NAME="A3C0F166208mhay"></A>The 4 auxiliary bitplanes can be dynamically
+configured as 4 overlay planes, as 2 overlay and 2 underlay planes, or
+as 4 underlay planes. </P>
+
+
+<P><A NAME="A3C0F166229mhay"></A>Because this adapter does not have an
+alpha-blending buffer, the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/blendfunction.html#A143X9240">blendfunction</A></B>
+subroutine returns without performing any action. Depth comparisons cannot
+be performed against the color buffer, therefore, the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/zsource.html#A143X96d6">zsource</A></B>
+subroutine returns without performing any action. The only valid value
+for the <B>zsource</B> subroutine is ZSRC_DEPTH. </P>
+
+
+<H3><A NAME="xZX42f0nita"></A>24-Bit High-Performance 3-D Color Graphics
+Processor without Z-Buffer Option<A NAME="INDEX941"></A> <A NAME="INDEX942"></A>
+<A NAME="INDEX943"></A> </H3>
+
+
+<P><A NAME="A3C0F166250mhay"></A>This adapter contains a 24-bit deep main
+frame buffer and 4 auxiliary planes dynamically configurable as overlay/underlay
+planes. There is no z-buffer. It contains a 4096-entry output color map
+(color lookup table) in onemap mode and sixteen 256-entry color maps in
+multimap mode. The color maps are usable by the main frame buffer. </P>
+
+
+<P><A NAME="A3C0F166270mhay"></A>The main overlay/underlay and RGB/color
+map control functions operate identically as on the 24-bit processor with
+z-buffer option. The only difference between this adapter and the previously
+described adapter is that there is no z-buffer with this adapter. Therefore,
+none of the functions that control the z-buffer are operable; all return
+without performing any operation. These subroutines are as follows: </P>
+
+
+<UL><LI><A NAME="A258C01c125"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zbuffer.html#A143X97b1">zbuffer</A></B></LI>
+
+
+<LI><A NAME="A258C01c126"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zclear.html#A143X97d3">zclear</A></B></LI>
+
+
+<LI><A NAME="A258C01c127"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zdraw.html#A143X97f5">zdraw</A></B></LI>
+
+
+<LI><A NAME="A258C01c128"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zfunction.html#A22f0MARJ">zfunction</A></B></LI>
+
+
+<LI><A NAME="A258C01c129"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zsource.html#A143X96d6">zsource</A></B></LI>
+
+
+<LI><A NAME="A258C01c12a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zwritemask.html#A143X9817">zwritemask</A></B></LI></UL>
+
+
+<P><A NAME="A3C0F166296mhay"></A>The action of the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/czclear.html#A143X92c8">czclear</A></B>
+subroutine is modified because this adapter does not have a z-buffer. </P>
+
+
+<H3><A NAME="A54C0149cd"></A>8-Bit High-Performance 3-D Color Graphics
+Processor with Z-Buffer Option<A NAME="INDEX944"></A> <A NAME="INDEX945"></A>
+<A NAME="INDEX946"></A> </H3>
+
+
+<P><A NAME="A3C0F166317mhay"></A>This adapter contains an 8-bit deep main
+frame buffer, 2 auxiliary planes dynamically configurable as overlay/underlay
+planes, and a 24-bit deep z-buffer. It contains a 256-entry output color
+map (color lookup table) in onemap mode and sixteen 16-entry color maps
+in multimap mode. The color maps are usable by the main frame buffer. </P>
+
+
+<OL><LI><A NAME="A76C7CE036bett"></A>The 8-bit, high-performance 3-D Color
+Graphics Processor is limited in its ability to display multiple visible
+windows on the screen in conjunction with one or more GL double-buffered
+windows. It is possible for the user to establish enough visible windows
+on the screen so that it is impossible to display all the visible windows
+correctly and simultaneously. This limitation can manifest itself by displaying
+the wrong buffer, displaying a blank window, or displaying the window using
+the wrong colors. If the user needs to display multiple visible windows
+on the screen in conjunction with one or more GL double-buffered windows,
+the 24-bit High-Performance 3-D Color Graphics Processor should be used
+instead.</LI>
+
+
+<LI><A NAME="A76C7CE341bett"></A>To avoid displaying windows improperly
+on the 8-bit adapter, the user should avoid running more than one GL window
+at the same time. If the user needs to run more than one GL window, the
+user should ensure that the window arrangement is rectangular, (for example,
+do not overlap windows in such a way that their boundaries cannot be described
+as a rectangle). Keeping windows rectangular also provides the user with
+faster window updates.</LI></OL>
+
+
+<P><A NAME="A3C0F166341mhay"></A>This adapter contains only 8 bits of main
+color buffer. It can be placed into RGB mode and into color map mode, and
+the operation of the subroutines that do this are unmodified. </P>
+
+
+<P><A NAME="A3C0F166362mhay"></A>In single-buffered RGB mode, pixels are
+written in 332 RGB: that is, with 3 bits of red, 3 bits of green, and 2
+bits of blue. Dithering is always enabled. Because dithering uses the lesser
+significant bits to determine the color written into the frame buffer,
+the perceived accuracy of information stored in the frame buffer exceeds
+8 bits and approaches 11 or 12 bits (as perceived by the human eye). (For
+more information on dithering, see &quot;Working in <A HREF="workcolor.html#workcolor.html">Color
+Map and RGB Modes</A>&quot;.) </P>
+
+
+<P><A NAME="A3C0F166382mhay"></A>In single-buffered color map mode, all
+8 bits are used to address the color map. In onemap mode, the color map
+is accessed as a single map of 256 entries. In multimap mode, it is accessed
+as 16 maps of 16 entries each. </P>
+
+
+<P><A NAME="A3C0F166402mhay"></A>This adapter supports double buffering
+only in color map mode. In this case, the main color buffer is divided
+into a pair of buffers of 4 bits each. In onemap mode, only the lowest
+16 entries in the color map are addressed. When double buffered, this adapter
+should be operated in multimap mode. Double buffering in RGB mode is not
+available. </P>
+
+
+<P><A NAME="A3C0F166422mhay"></A>This adapter has 2 auxiliary planes, which
+can be configured as 2 overlay planes or 2 underlay planes. </P>
+
+
+<P><A NAME="A3C0F166442mhay"></A>This adapter does not have gamma ramps.
+The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gammaramp.html#Kz4nita">gammaramp</A></B>
+subroutine is not emulated and returns without performing any function.</P>
+
+
+<P><A NAME="A3C0F166461mhay"></A>Because the sizes of the color maps supported
+on this adapter differ from those on the 24-bit adapter, the actions of
+the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/onemap.html#A146X95ef">onemap</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/multimap.html#A146X9593">multimap</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/setmap.html#A146X9646">setmap</A></B>
+subroutines are modified. </P>
+
+
+<P><A NAME="A3C0F166482mhay"></A>Because this adapter does not have an
+alpha blending buffer, the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/blendfunction.html#A143X9240">blendfunction</A></B>
+subroutine returns without performing any action. Depth comparisons cannot
+be performed against the color buffer; therefore, the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/zsource.html#A143X96d6">zsource</A></B>
+subroutine returns without performing any action. The only valid value
+for the <B>zsource</B> subroutine is ZSRC_DEPTH. </P>
+
+
+<H3><A NAME="A54C0149d7"></A>8-Bit High-Performance 3-D Color Graphics
+Processor without Z-buffer Option<A NAME="INDEX947"></A> <A NAME="INDEX948"></A>
+<A NAME="INDEX949"></A> </H3>
+
+
+<P><A NAME="A3C0F166503mhay"></A>This adapter contains an 8-bit deep main
+frame buffer, 2 auxiliary planes dynamically configurable as overlay/underlay
+planes. There is no z-buffer. It contains a 256-entry output color map
+(color lookup table) in onemap mode and sixteen 16-entry color maps in
+multimap mode. The color maps are usable by the main frame buffer. </P>
+
+
+<P><A NAME="A3C0F166524mhay"></A>The main, overlay/underlay, and RGB/color
+map control functions operate almost identically as those on the 8-bit
+with z-buffer option. The only difference between this adapter and the
+one previously described is that there is no z-buffer. Because there is
+no z-buffer, none of the functions that control the z-buffer are operable;
+all return without performing any action. The affected functions are as
+follows: </P>
+
+
+<UL><LI><A NAME="A258C01c135"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zbuffer.html#A143X97b1">zbuffer</A></B></LI>
+
+
+<LI><A NAME="A258C01c136"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zclear.html#A143X97d3">zclear</A></B></LI>
+
+
+<LI><A NAME="A258C01c137"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zdraw.html#A143X97f5">zdraw</A></B></LI>
+
+
+<LI><A NAME="A258C01c138"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zfunction.html#A22f0MARJ">zfunction</A></B></LI>
+
+
+<LI><A NAME="A258C01c139"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zsource.html#A143X96d6">zsource</A></B></LI>
+
+
+<LI><A NAME="A258C01c13a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/zwritemask.html#A143X9817">zwritemask</A></B></LI></UL>
+
+
+<P><A NAME="A3C0F166550mhay"></A>The action of the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/czclear.html#A143X92c8">czclear</A></B>
+subroutine is modified because this adapter does not have a z-buffer. </P>
+
+
+<P><A NAME="A3C0F166569mhay"></A>Because this adapter has no alpha blending
+buffer, the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/blendfunction.html#A143X9240">blendfunction</A></B>
+subroutine returns without performing any action. </P>
+
+
+
+<hr><center>
+[  <a href="undergraphadapt.html">Previous</a>  |
+<a href="powerstation730.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/3dclrproc.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+

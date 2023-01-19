@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/animatexmp.html Mon, 24 Jan 2022 16:27:48 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Animation Example Program
+
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="helloexmp.html">Previous</a>  |
+<a href="eventsxmp.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="animatexmp.html"></A>Animation Example Program </H2>
+
+
+<P><A NAME="A3C0DE53260mhay"></A>The previous program demonstrated some
+basic concepts of GL: how to open a window, how to set attributes, and
+how to draw. The following example program demonstrates how to create an
+animated scene. When this example program executes, the <TT>Hello,&nbsp;World!</TT>
+text moves around in a circle. This is done by clearing and redrawing the
+text again and again, each time at a new location. </P>
+
+
+<P><A NAME="A3C0DE53280mhay"></A>This action is complicated by image flicker,
+which occurs because the system draws each image quickly, but perceptibly;
+that is, you do not see each individual character being drawn, only an
+irregular flashing and flickering. The flashing can be mild to severe,
+depending on what else is happening in the system or on the screen at that
+time. </P>
+
+
+<P><A NAME="A3C0DE53300mhay"></A>To avoid this flashing, <I>double-buffering</I>
+is used. The frame buffer is partitioned into two pieces, front and back.
+The front buffer contains data for the pixels that are visible. The back
+buffer, which also contains pixel data, is invisible, but identical to
+the front buffer in other respects. To get smooth animation, never draw
+to the front buffer; instead, limit all drawing to the back buffer. When
+drawing is complete, the front and back buffers are swapped, and what was
+previously hidden is now visible. The result is smooth, flicker-free animation.
+The actual, step-by-step drawing process is not visible, only the final
+result. The following example shows how to create an animated scene by
+using double-buffering: </P>
+
+
+<PRE><A NAME="A109C1503"></A>#include&nbsp;&lt;math.h&gt;
+#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A109C1504"></A>main&nbsp;()
+{
+&nbsp;&nbsp;&nbsp;int&nbsp;i,&nbsp;ix,&nbsp;iy;
+&nbsp;&nbsp;&nbsp;prefsize&nbsp;(200,&nbsp;100);
+&nbsp;&nbsp;&nbsp;winopen&nbsp;(&quot;HI&nbsp;THERE&quot;);
+&nbsp;&nbsp;&nbsp;doublebuffer&nbsp;();
+&nbsp;&nbsp;&nbsp;gconfig&nbsp;();</PRE>
+
+
+<PRE><A NAME="A109C1505"></A>&nbsp;&nbsp;for&nbsp;(i=1;&nbsp;i&lt;1800;&nbsp;i++)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color&nbsp;(BLACK);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear&nbsp;();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color&nbsp;(GREEN);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ix&nbsp;=&nbsp;(int)&nbsp;40.0&nbsp;*&nbsp;cos&nbsp;(((double)&nbsp;i)&nbsp;/&nbsp;20.0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iy&nbsp;=&nbsp;(int)&nbsp;40.0&nbsp;*&nbsp;sin&nbsp;(((double)&nbsp;i)&nbsp;/&nbsp;20.0); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmov2&nbsp;(50+ix,&nbsp;50+iy);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charstr&nbsp;(&quot;Hello,&nbsp;World!&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;swapbuffers&nbsp;();
+&nbsp;&nbsp;&nbsp;}
+}</PRE>
+
+
+<P><A NAME="A3C0DE53323mhay"></A>To compile this program, enter the following
+at the command line prompt: </P>
+
+
+<PRE><A NAME="A109C1507"></A>cc&nbsp;hello2.c&nbsp;-o&nbsp;hello2&nbsp;-lgl&nbsp;-lm</PRE>
+
+
+<P><A NAME="A3C0DE53343mhay"></A>The <B>-lm</B> flag option on the <B>cc</B>
+command tells the linker to link to the math library, where the <B><!--:libs:basetrf2:--><A HREF="../basetrf2/sin.html#A66F0689">sin</A></B>
+and <B>cos</B> functions are located. </P>
+
+
+<P><A NAME="A3C0DE53363mhay"></A>The operation of this program is as follows:
+First, a window is created exactly as before. Next, the system is told
+to convert this window into a double-buffered window. The program does
+this in two steps: </P>
+
+
+<OL><LI><A NAME="A112C1103"></A>Alerts the system with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/doublebuffer.html#A145X91a7">doublebuffer</A></B>
+subroutine.</LI>
+
+
+<LI><A NAME="A112C1104"></A>Sets double-buffering into operation with the
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/gconfig.html#hS4260nita">gconfig</A></B>
+subroutine.</LI></OL>
+
+
+<P><A NAME="A3C0DE53384mhay"></A>The process requires two steps because
+there are, in fact, a number of configurations into which a window can
+be placed. To learn more about configuring the frame buffer, an advanced
+topic, see <A HREF="underframebuf.html#underframebuf.html">&quot;Understanding the Frame
+Buffer&quot;</A> . </P>
+
+
+<P><A NAME="A3C0DE53404mhay"></A>Next, the program goes into a loop that
+is repeated 1800 times. Inside this loop, we clear the screen and draw
+the text as before. The <B><!--:libs:basetrf2:--><A HREF="../basetrf2/sin.html#A66F0689">sin</A></B>
+and <B>cos</B> subroutines are AIX system calls that return
+the sine and cosine of an angle. They are useful for drawing circular primitives.
+The program uses the loop counter as an angle, and moves the current character
+position accordingly. </P>
+
+
+<P><A NAME="A3C0DE53424mhay"></A>Finally, when drawing is complete, the
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/swapbuffers.html#A145X9302">swapbuffers</A></B>
+subroutine exchanges the front and the back buffers. After looping 1800
+times, the program exits and the window disappears. </P>
+
+
+<P><A NAME="A3C0DE53443mhay"></A>To learn more about creating animated
+scenes, see <A HREF="animatescene.html#animatescene.html">&quot;Creating Animated
+Scenes&quot;</A>. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A109C150d"></A><B>Note: </B>Not all adapters support double
+buffering. You must have one of the following: </P></BLOCKQUOTE>
+
+
+<UL><LI><A NAME="A109C150e"></A>3-D Color Graphics Processor adapter installed,
+with or without the 24-bit color option, with or without the 24-bit z-buffer
+option.</LI>
+
+
+<LI><A NAME="A109C150f"></A>POWER Gt4 or POWER Gt4x
+adapter installed, with or without the 48-bit option.</LI>
+
+
+<LI><A NAME="A109C1510"></A>7235 POWERgraphics GTO adapter installed.</LI>
+
+
+
+
+<LI><A NAME="C45931F593lpas"></A>POWER GXT1000 adapter installed.</LI>
+
+
+
+
+<LI><A NAME="A109C1511"></A>System must be a POWERstation
+730 with the Supergraphics Processor Subsystem.</LI></UL>
+
+
+
+<hr><center>
+[  <a href="helloexmp.html">Previous</a>  |
+<a href="eventsxmp.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/animatexmp.html Mon, 24 Jan 2022 16:27:48 GMT -->
+</HTML>
+

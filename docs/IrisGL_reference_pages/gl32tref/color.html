@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>color or colorf Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="cmov.html">Previous</a>  |
+<a href="compactify.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A146X9429"></A>color or colorf Subroutine</H2>
+<A NAME="INDEX263" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX264" REL="I2" TITLE="attribute"></A>
+<A NAME="INDEX265" REL="I3" TITLE="color"></A>
+<A NAME="INDEX266" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX267" REL="I2" TITLE="colors"></A>
+<A NAME="INDEX268" REL="I3" TITLE="current"></A>
+<A NAME="INDEX269" REL="I1" TITLE="color subroutine (GL)"></A>
+
+<H3><A NAME="A146X942b"></A>Purpose</H3>
+<P><A NAME="E1B074C899ceb"></A>Sets the current color in color map mode.</P>
+
+<H3><A NAME="A77C15d"></A>Libraries</H3>
+<P><A NAME="E1B074D050ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B074D156ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A146X942e"></A>C Syntax</H3>
+<PRE><A NAME="A146X942f"></A><B>void  color(Colorindex </B><A HREF="color.html#A146X9438"><I>color</I></A><B>)</B></PRE>
+<PRE><A NAME="A213X910d88"></A><B>void  colorf(Float32 </B><A HREF="color.html#A146X9438"><I>color</I></A><B>)</B></PRE>
+
+<H3><A NAME="A146X9407"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A146X940a"></A><B>SUBROUTINE COLOR(</B><I>color</I><B>)</B>
+<B>INTEGER*4 </B><I>color</I></PRE>
+<PRE><A NAME="A213X910d89"></A><B>SUBROUTINE COLORF(</B><I>color</I><B>)</B>
+<B>REAL </B><I>color</I></PRE>
+
+<H3><A NAME="A146X9432"></A>Description</H3>
+<P><A NAME="E1B074D628ceb"></A>The <B>color</B> subroutine selects a color from the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A31996bc">color map</A>, and sets that color as the default in the current drawing mode. For example, if the drawing mode is <A HREF="drawmode.html#A143X946b">NORMALDRAW</A> (the default), the color index is written to the standard bitplanes during all drawing routines.  </P>
+
+<P><A NAME="E1B074D736ceb"></A>In NORMALDRAW mode, the <A HREF="color.html#A146X9438"><I>color</I></A> parameter allows you to access up to 12 bitplanes in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#a3P1390marj">onemap mode</A> and up to 8 bitplanes in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#a3P1390marj">multimap mode</A>. However, since the 8-bit High-Performance 3-D Color Graphics Processor has only one 8-bit main frame buffer, the 12-bit onemap mode is not available on this machine.</P>
+
+<P><A NAME="E1B074D844ceb"></A>In <A HREF="drawmode.html#A143X946b">OVERDRAW and UNDERDRAW</A> modes, 0, 2, or 4 bitplanes are accessible.</P>
+
+<P><A NAME="E1B074D951ceb"></A>In alternate drawing modes such as OVERDRAW the <B>color</B> subroutine serves the same function as in NORMALDRAW, except that different bitplanes are used, and a separate, smaller map is indexed.</P>
+
+<P><A NAME="E1B074E062ceb"></A>The <B>colorf </B>subroutine is identical to the <B>color </B>subroutine, except that it expects a floating point color index. Before the color is written into display memory, it is rounded to the nearest integer value. When drawing with the GOURAUD shading model, machines that iterate color indexes with fractional precision yield more precise shading results using the <B>colorf </B>subroutine than with the <B>color</B> subroutine. The results of these subroutines are indistinguishable when drawing with FLAT shading. </P>
+
+<P><A NAME="E1B074E170ceb"></A>The <B>color</B> and <B>colorf </B>subroutines serve no purpose in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A> because the RGB components of the color are written directly to the bitplanes.</P>
+
+<H3><A NAME="A146X9437"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A146X9438"></A><I>color</I></TD>
+<TD>  Specifies a color index (0 to 4095 in onemap mode, 0 to 255 in multimap mode).</TD></TR></TABLE>
+
+<H3><A NAME="A146X943b"></A>Example</H3>
+<P><A NAME="E1B074E428ceb"></A>The example C language program <A HREF="boxcirc_c.html#A16C0c7bb"><B>boxcirc.c</B></A> uses the <B>color</B> subroutine to set the color for subsequent drawing routines. </P>
+
+<H3><A NAME="A62C015c6d"></A>Implementation Specifics</H3>
+<P><A NAME="E1B074E589ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A146X9424"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C160"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C161"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A146X944b"></A>Related Information</H3>
+<P><A NAME="E1B074E904ceb"></A>Choosing a set of bitplanes for drawing with the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B074F011ceb"></A>Returning the current color with the <A HREF="getcolor.html#A146X924b"><B>getcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B074F119ceb"></A>Getting a copy of the RGB values for a color map entry with the <A HREF="getmcolor.html#nXI1100marj"><B>getmcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B074F227ceb"></A>Changing a color map entry with the <A HREF="mapcolor.html#A146X9535"><B>mapcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B074F333ceb"></A>Setting  the current color in RGB mode with the <A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B074F440ceb"></A>Setting a display mode that bypasses the color map with the <A HREF="RGBmode.html#A143X93b6"><B>RGBmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B074F546ceb"></A>Gaining write access to a subset of available bitplanes with the <A HREF="RGBwritemask.html#A143X93fa"><B>RGBwritemask</B></A> subroutine.</P>
+
+<P><A NAME="E1B074F653ceb"></A>Gaining write access to the available bitplanes with the <A HREF="writemask.html#A143X9592"><B>writemask</B></A> subroutine.</P>
+
+<P><A NAME="E1B074F761ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="cmov.html">Previous</a>  |
+<a href="compactify.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

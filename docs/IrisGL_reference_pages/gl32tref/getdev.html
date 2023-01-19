@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getdev Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getdescender.html">Previous</a>  |
+<a href="getdisplaymode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X923"></A>getdev Subroutine</H2>
+<A NAME="INDEX651" REL="I1" TITLE="getdev (GL)"></A>
+<A NAME="INDEX652" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX653" REL="I2" TITLE="query"></A>
+<A NAME="INDEX654" REL="I3" TITLE="getdev"></A>
+<A NAME="INDEX655" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX656" REL="I2" TITLE="device"></A>
+<A NAME="INDEX657" REL="I3" TITLE="returning valuator list"></A>
+<A NAME="INDEX658" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX659" REL="I2" TITLE="queue and device"></A>
+<A NAME="INDEX660" REL="I3" TITLE="getdev"></A>
+
+<H3><A NAME="A143X925"></A>Purpose</H3>
+<P><A NAME="E1B0E08114ceb"></A>Reads a list of valuators.</P>
+
+<H3><A NAME="A79C1148"></A>Libraries</H3>
+<P><A NAME="E1B0E08263ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0E08367ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X929"></A>C Syntax</H3>
+<PRE><A NAME="A143X92a"></A><B>void getdev</B>
+<B>(Int32</B> <A HREF="getdev.html#A143X92e"><I>number</I></A><B>, </B>
+<B>Device *</B><A HREF="getdev.html#A143X92f"><I>devices</I></A><B>, </B>
+<B>Int16 *</B><A HREF="getdev.html#A143X930"><I>values</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c59"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c5a"></A><B>SUBROUTINE GETDEV(</B><I>number</I><B>, </B><I>devices</I><B>, </B><I>values</I><B>)</B>
+<B>INTEGER*4 </B><I>number</I>
+<B>INTEGER*2</B> <I>devices</I><B>(</B><I>number</I><B>), </B><I>values</I><B>(</B><I>number</I><B>)</B></PRE>
+
+<H3><A NAME="A143X92b"></A>Description</H3>
+<P><A NAME="E1B0E08735ceb"></A>The <B>getdev</B> subroutine allows you to read as many as 128 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A79P07a">valuators</A> and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A1819349">buttons</A> (input devices) at one time. </P>
+
+<BLOCKQUOTE><A NAME="A81C11f3"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X92d"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X92e"></A><I>number</I></TD>
+<TD>  Specifies the number of devices pointed to by the <I>devices </I>parameter (no more than 128).</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X92f"></A><I>devices</I></TD>
+<TD>  Specifies an array containing the identifiers (device number constants, such as MOUSEX, BPADX, and LEFTMOUSE) of the devices to read. The array pointed to by the <A HREF="getdev.html#A143X92f"><I>devices</I></A> parameter can contain up to 128 devices.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X930"></A><I>values</I></TD>
+<TD>  Specifies the array into which the system is to write the values read from the devices listed in the <I>devices </I>array. Each member in the <A HREF="getdev.html#A143X930"><I>values</I></A> array corresponds to a member of the <I>devices </I>array and returns the state of each device in the corresponding location.</TD></TR></TABLE>
+
+<H3><A NAME="A64C016610"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0E09170ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A143X93f"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C114b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C114c"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C114d"></A><B>/usr/include/gl/device.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C114e"></A><B>/usr/include/gl/fdevice.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X943"></A>Related Information</H3>
+<P><A NAME="E1B0E09601ceb"></A>Returning the current state of a valuator with the <A HREF="getvaluator.html#A143X945"><B>getvaluator</B></A> subroutine.</P>
+
+<P><A NAME="E1B0E09709ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/cntrlques.html#cntrlques.html">Controlling Queues and Devices</A>, <!--gl32prgd:--><A HREF="../gl32prgd/keyboardgl.html#keyboardgl.html">Using the Keyboard</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying the System</A>.</P><hr><center>
+[  <a href="getdescender.html">Previous</a>  |
+<a href="getdisplaymode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

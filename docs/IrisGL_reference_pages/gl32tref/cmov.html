@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>cmov Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="cmode.html">Previous</a>  |
+<a href="color.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9d1d"></A>cmov Subroutine</H2>
+<A NAME="INDEX256" REL="I1" TITLE="cmov subroutine (GL)"></A>
+<A NAME="INDEX257" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX258" REL="I2" TITLE="text"></A>
+<A NAME="INDEX259" REL="I3" TITLE="cmov"></A>
+<A NAME="INDEX260" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX261" REL="I2" TITLE="text"></A>
+<A NAME="INDEX262" REL="I3" TITLE="updating text character position"></A>
+<H3><A NAME="A143X9d1f"></A>Purpose</H3>
+<P><A NAME="E1B072C742ceb"></A>Updates the current text character position.</P>
+
+<H3><A NAME="A79C1213"></A>Libraries</H3>
+<P><A NAME="E1B072C891ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B072C995ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9d23"></A>C Syntax</H3>
+<PRE><A NAME="A143X9d24"></A><B>void cmov(Coord </B><A HREF="cmov.html#A143X9d28"><I>x</I></A><B>, Coord</B> <A HREF="cmov.html#A143X9d29"><I>y</I></A><B>, Coord</B> <A HREF="cmov.html#A143X9d2a"><I>z</I></A><B>)</B></PRE>
+<PRE><A NAME="A213X9125f6"></A><B>void cmovi(Icoord </B><A HREF="cmov.html#A143X9d28"><I>x</I></A><B>, Icoord</B> <A HREF="cmov.html#A143X9d29"><I>y</I></A><B>, Icoord</B> <A HREF="cmov.html#A143X9d2a"><I>z</I></A><B>)</B></PRE>
+
+<PRE><A NAME="A213X9125f7"></A><B>void cmovs(Scoord </B><A HREF="cmov.html#A143X9d28"><I>x</I></A><B>, Scoord</B> <A HREF="cmov.html#A143X9d29"><I>y</I></A><B>, Scoord</B> <A HREF="cmov.html#A143X9d2a"><I>z</I></A><B>)</B></PRE>
+<PRE><A NAME="A213X9125f8"></A><B>void cmov2(Coord </B><A HREF="cmov.html#A143X9d28"><I>x</I></A><B>, Coord</B> <A HREF="cmov.html#A143X9d29"><I>y</I></A><B>)</B></PRE>
+
+<PRE><A NAME="A213X9125f9"></A><B>void cmov2i(Icoord </B><A HREF="cmov.html#A143X9d28"><I>x</I></A><B>, Icoord</B> <A HREF="cmov.html#A143X9d29"><I>y</I></A><B>)</B></PRE>
+<PRE><A NAME="A213X9125fa"></A><B>void cmov2s(Scoord </B><A HREF="cmov.html#A143X9d28"><I>x</I></A><B>, Scoord</B> <A HREF="cmov.html#A143X9d29"><I>y</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010be9"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010bea"></A><B>SUBROUTINE CMOV(</B><I>x</I><B>,</B> <I>y</I><B>,</B> <I>z</I><B>)</B>
+<B>REAL </B><I>x</I><B>,</B> <I>y</I><B>,</B> <I>z</I></PRE>
+<PRE><A NAME="A29C010beb"></A><B>SUBROUTINE CMOVI(</B><I>x</I><B>,</B> <I>y</I><B>,</B> <I>z</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>,</B> <I>y</I><B>,</B> <I>z</I></PRE>
+<PRE><A NAME="A29C010bec"></A><B>SUBROUTINE CMOVS(</B><I>x</I><B>,</B> <I>y</I><B>,</B> <I>z</I><B>)</B>
+<B>INTEGER*2 </B><I>x</I><B>,</B> <I>y</I><B>,</B> <I>z</I></PRE>
+<PRE><A NAME="A29C010bed"></A><B>SUBROUTINE CMOV2(</B><I>x</I><B>,</B> <I>y</I><B>)</B>
+<B>REAL </B><I>x</I><B>,</B> <I>y</I></PRE>
+<PRE><A NAME="A29C010bee"></A><B>SUBROUTINE CMOV2I(</B><I>x</I><B>,</B> <I>y</I><B>,</B> <I>z</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>,</B> <I>y</I></PRE>
+<PRE><A NAME="A29C010bef"></A><B>SUBROUTINE CMOV2S(</B><I>x</I><B>,</B> <I>y</I><B>,</B> <I>z</I><B>)</B>
+<B>INTEGER*2 </B><I>x</I><B>,</B> <I>y</I></PRE>
+
+<BLOCKQUOTE><A NAME="A79C1216"></A><B>Note: </B>For FORTRAN users, the INTEGER*2 versions of this subroutine, <B>CMOVS</B> and <B>CMOV2S</B>, should not be called with integer constant parameters. For example, 2 is an integer constant; JJ is an integer variable. The XL FORTRAN compiler, invoked by the <B>xlf</B> command, stores all integer constants as long integers (INTEGER*4), not as short integers (INTEGER*2). Invoking one of the short versions of this subroutine with an integer constant will result in unexpected behavior.</BLOCKQUOTE>
+
+
+<P><A NAME="E1B072D921ceb"></A>All of the functions are essentially the same except for the type declarations of the parameters. In addition, the <B>cmov2*</B> routines assume a 2-D point instead of a 3-D point.</P>
+
+<H3><A NAME="A143X9d25"></A>Description</H3>
+<P><A NAME="E1B072E081ceb"></A>The <B>cmov </B>subroutine moves the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e9">current character position</A> to a specified point (just as the <A HREF="move.html#pofmarj"><B>move</B></A> subroutine sets the current graphics position). The <B>cmov</B> subroutine transforms the specified 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P03d">modeling coordinates</A> into 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P017">screen coordinates</A>, which become the new character position. If the transformed point is outside the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A>, the character position is undefined. </P>
+
+<P><A NAME="E1B072E188ceb"></A>The <B>cmov</B> subroutine does not affect the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03eb">current graphics position</A>.</P>
+
+<H3><A NAME="A143X9d27"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9d28"></A><I>x</I></TD>
+<TD>  Specifies the <I>x </I>location of the point (in modeling coordinates) to which to move the current character position.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9d29"></A><I>y</I></TD>
+<TD>  Specifies the <I>y </I>location of the point (in modeling coordinates) to which to move the current character position. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9d2a"></A><I>z</I> </TD>
+<TD>  Specifies the <I>z </I>location of the point (in modeling coordinates) to which to move the current character position. (This parameter is not used by the 2-D subroutines.)</TD></TR></TABLE>
+
+<H3><A NAME="A30C011052"></A>Example</H3>
+<P><A NAME="E1B072E571ceb"></A>The example C language program <A HREF="curved_c.html#A16C0c830"><B>curved.c</B></A> uses the <B>cmov2</B> subroutine to move the character position to a specific location before drawing text. </P>
+
+<H3><A NAME="A62C015d84"></A>Implementation Specifics</H3>
+<P><A NAME="E1B072E731ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C1217"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1218"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1219"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9d3d"></A>Related Information</H3>
+<P><A NAME="E1B072F049ceb"></A>Drawing a string of raster characters on the screen with the <A HREF="charstr.html#A143X9cfb"><B>charstr</B></A> subroutine.</P>
+
+<P><A NAME="E1B072F160ceb"></A>Moving the current graphics position with the <A HREF="move.html#pofmarj"><B>move</B></A> subroutine.</P>
+
+<P><A NAME="E1B072F268ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/textchars.html#textchars.html">Creating Text Characters</A>, <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Using Viewports and Screenmasks</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Working with Coordinate Systems</A>.</P><hr><center>
+[  <a href="cmode.html">Previous</a>  |
+<a href="color.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

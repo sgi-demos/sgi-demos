@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>fudge Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="frontface.html">Previous</a>  |
+<a href="fullscrn.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X917a6"></A>fudge Subroutine</H2>
+<A NAME="INDEX525" REL="I1" TITLE="fudge subroutine (GL)"></A>
+<A NAME="INDEX526" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX527" REL="I2" TITLE="window"></A>
+<A NAME="INDEX528" REL="I3" TITLE="fudge"></A>
+<A NAME="INDEX529" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX530" REL="I2" TITLE="window sizes"></A>
+<A NAME="INDEX531" REL="I3" TITLE="specifying added pixel values"></A>
+<H3><A NAME="A142X917a8"></A>Purpose</H3>
+<P><A NAME="E1B0BF4171ceb"></A>Specifies pixel values that are added to a window.</P>
+
+<H3><A NAME="A79C12c1"></A>Libraries</H3>
+<P><A NAME="E1B0BF4320ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0BF4428ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X917ac"></A>C Syntax</H3>
+<PRE><A NAME="A213X912af9"></A><B>void fudge(Int32 </B><A HREF="fudge.html#gr13180marj"><I>xfudge</I></A><B>,</B> <B>Int32 </B><A HREF="fudge.html#As1360marj"><I>yfudge</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c4d"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c4e"></A><B>SUBROUTINE FUDGE(</B><I>xfudge</I><B>, </B><I>yfudge</I><B>)</B>
+<B>INTEGER*4 </B><I>xfudge</I><B>, </B><I>yfudge</I></PRE>
+
+<H3><A NAME="A142X917ae"></A>Description</H3>
+<P><A NAME="E1B0BF4794ceb"></A>The <B>fudge </B>subroutine specifies pixel values that are added to the dimensions of a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A> when it is sized. Typically, this subroutine is used to create interior window borders. Call the <B>fudge</B> subroutine before calling the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine. </P>
+
+<P><A NAME="E1B0BF4901ceb"></A>The <B>fudge </B>subroutine is useful in conjunction with the <A HREF="stepunit.html#A142X91bd2"><B>stepunit</B></A> and <A HREF="keepaspect.html#A142X91896"><B>keepaspect</B></A> subroutines. With the <B>stepunit </B>subroutine, the window size for integers <I>m </I>and <I>n </I>is: </P>
+<PRE><A NAME="A213X912afe"></A><I>width</I> = <I>xunit</I> * <I>m</I> + <A HREF="fudge.html#gr13180marj"><I>xfudge</I></A>
+<I>height</I> = <I>yunit</I> * <I>n</I> + <A HREF="fudge.html#As1360marj"><I>yfudge</I></A></PRE>
+
+<P><A NAME="E1B0BF5063ceb"></A>With the <B>keepaspect </B>subroutine the window size is (<I>width</I>, <I>height</I>), where:</P>
+<PRE><A NAME="A213X912b00"></A>(<I>width</I> - <I>xfudge</I>) * <I>yaspect</I> = (<I>height</I> - <I>yfudge</I>) * <I>xaspect</I></PRE>
+
+<BLOCKQUOTE><A NAME="A319C92611"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X917b0"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="gr13180marj"></A><I>xfudge</I></TD>
+<TD>  Specifies the number of pixels added in the <I>x</I> direction.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="As1360marj"></A><I>yfudge</I></TD>
+<TD>  Specifies the number of pixels added in the <I>y</I> direction.</TD></TR></TABLE>
+
+<H3><A NAME="A61C015a00"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0BF5514ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C12c4"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12c5"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12c6"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X917c6"></A>Related Information</H3>
+<P><A NAME="E1B0BF5834ceb"></A>Obtaining the size of the window with the <A HREF="getsize.html#X513200marj"><B>getsize</B></A> subroutine.</P>
+
+<P><A NAME="E1B0BF5941ceb"></A>Removing the border from a window with the <A HREF="noborder.html#A142X91d7a"><B>noborder</B></A> subroutine.</P>
+
+<P><A NAME="E1B0BF6047ceb"></A>Specifying a window size change in discrete steps with the <A HREF="stepunit.html#A142X91bd2"><B>stepunit</B></A> subroutine.</P>
+
+<P><A NAME="E1B0BF6156ceb"></A>Creating a window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine. </P>
+
+<P><A NAME="E1B0BF6262ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="frontface.html">Previous</a>  |
+<a href="fullscrn.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getdrawmode Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getdisplaymode.html">Previous</a>  |
+<a href="getfont.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9482"></A>getdrawmode Subroutine</H2>
+<A NAME="INDEX671" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX672" REL="I2" TITLE="frame buffer configuration"></A>
+<A NAME="INDEX673" REL="I3" TITLE="getdrawmode"></A>
+<A NAME="INDEX674" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX675" REL="I2" TITLE="drawing mode"></A>
+<A NAME="INDEX676" REL="I3" TITLE="returning the current"></A>
+<A NAME="INDEX677" REL="I1" TITLE="getdrawmode subroutine (GL)"></A>
+
+<H3><A NAME="A143X9484"></A>Purpose</H3>
+<P><A NAME="E1B0E49357ceb"></A>Returns the current drawing mode.</P>
+
+<H3><A NAME="A78C11be"></A>Libraries</H3>
+<P><A NAME="E1B0E49506ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0E49611ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9488"></A>C Syntax</H3>
+<PRE><A NAME="A143X9489"></A><B>Int32 getdrawmode(&nbsp;)</B></PRE>
+
+<H3><A NAME="A28C01070b"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C01070c"></A><B>INTEGER*4 FUNCTION GETDRA</B></PRE>
+
+<H3><A NAME="A143X948a"></A>Description</H3>
+<P><A NAME="E1B0E49967ceb"></A>The <B>getdrawmode</B> subroutine returns the current drawing mode specified by the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine.  </P>
+
+<BLOCKQUOTE><A NAME="A318C9c93"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X9490"></A>Return Values</H3>
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Symbolic Name</B></TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Draw mode</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>UNDERDRAW</TD>
+
+<TD>UNDRDR</TD>
+
+<TD>Underlay (background) bitplanes</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>NORMALDRAW</TD>
+
+<TD>NORMDR</TD>
+
+<TD>Main frame buffer bitplanes</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>OVERDRAW</TD>
+
+<TD>OVRDRW</TD>
+
+<TD>Overlay (foreground) bitplanes</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>PUPDRAW</TD>
+
+<TD>PUPDRW</TD>
+
+<TD>Pop-up menus</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>CURSORDRAW</TD>
+
+<TD>CURSDR</TD>
+
+<TD>Cursor mode</TD></TR></TABLE>
+
+<H3><A NAME="A30C010fca"></A>Example</H3>
+<P><A NAME="E1B0E4A322ceb"></A>The example C language program <A HREF="prompt_c.html#A16C0c8de"><B>prompt.c</B></A> uses the <B>getdrawmode</B> subroutine to get the current drawing mode so that it can be restored later.</P>
+
+<H3><A NAME="A64C016550"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0E4A484ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C11c1"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11c2"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11c3"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X94a2"></A>Related Information</H3>
+<P><A NAME="E1B0E4A801ceb"></A>Choosing a set of bitplanes for drawing with the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B0E4A908ceb"></A>Returning the current display mode with the <A HREF="getdisplaymode.html#A145X9206"><B>getdisplaymode</B></A> subroutine.</P>
+
+<P><A NAME="E1B0E4B015ceb"></A>Popping the viewport stack with the <A HREF="popviewport.html#A213X911d3c"><B>popviewport</B></A> subroutine.</P>
+
+<P><A NAME="E1B0E4B124ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/cursorgl.html#cursorgl.html">Creating a Cursor</A>, Removing <!--gl32prgd:--><A HREF="../gl32prgd/remhidden.html#remhidden.html">Hidden Surfaces</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P>
+
+<P><A NAME="E1B0E4B232ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>, <!--gl32prgd:--><A HREF="../gl32prgd/writemasks.html#writemasks.html">Writemasks and Logical Operation</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System.</P><hr><center>
+[  <a href="getdisplaymode.html">Previous</a>  |
+<a href="getfont.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

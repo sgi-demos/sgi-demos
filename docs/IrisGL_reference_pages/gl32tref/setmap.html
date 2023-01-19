@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>setmap Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="setlinestyle.html">Previous</a>  |
+<a href="setnurbsproperty.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A146X9646"></A>setmap Subroutine</H2>
+<A NAME="INDEX1786" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1787" REL="I2" TITLE="color map and RGB mode"></A>
+<A NAME="INDEX1788" REL="I3" TITLE="setmap"></A>
+<A NAME="INDEX1789" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1790" REL="I2" TITLE="color maps"></A>
+<A NAME="INDEX1791" REL="I3" TITLE="selecting one of 16 small"></A>
+<A NAME="INDEX1792" REL="I1" TITLE="setmap subroutine (GL)"></A>
+<H3><A NAME="A146X9648"></A>Purpose</H3>
+<P><A NAME="E1D7472905ceb"></A>Selects one of 16 small color maps in multimap mode.</P>
+
+<H3><A NAME="A78C166"></A>Libraries</H3>
+<P><A NAME="E1D7472944ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7472969ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A146X964b"></A>C Syntax</H3>
+<PRE><A NAME="A146X964c"></A><B>void setmap(Int16 </B><A HREF="setmap.html#A146X9653"><I>mapnum</I></A><B>)</B></PRE>
+
+<H3><A NAME="A146X9623"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A146X9626"></A><B>SUBROUTINE SETMAP(</B><I>mapnum</I><B>)</B>
+<B>INTEGER*4 </B><I>mapnum</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C169"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A146X964f"></A>Description</H3>
+<P><A NAME="E1D7473101ceb"></A>The <B>setmap</B> subroutine selects one of the 16 small independent maps to be the current color map. Whenever the system is in color map mode, the contents of the frame buffer is interpreted throught a color map to arrive at the color displayed on the screen. When the system is in multimap mode, there are 16 small independent color maps; this subroutine chooses which of these is to be active. Only the least significant bits in the frame buffer are used to look up entries in the current color map.</P>
+
+<P><A NAME="E1D7473126ceb"></A>The 16 small color maps are numbered 0 to 15.</P>
+
+<P><A NAME="E1D7473152ceb"></A>This subroutine is valid only in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#a3P1390marj">multimap mode</A>, and is ignored in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#a3P1390marj">onemap mode</A>. It will not function in RGB mode.</P>
+
+<BLOCKQUOTE><A NAME="A318C9cb1"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A146X9652"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A146X9653"></A><I>mapnum</I></TD>
+<TD>  Number of the color map selected, 0 to 15.</TD></TR></TABLE>
+
+<H3><A NAME="A146X9640"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7473249ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1D7473275ceb"></A>The POWER GXT1000 adapter does not support the <B>setmap</B> subroutine.</P>
+
+<H3><A NAME="A78C16a"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C16b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C16c"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A146X9666"></A>Related Information</H3>
+<P><A NAME="E1D7473372ceb"></A>Returning the number of the current color map with the <A HREF="getmap.html#A146X94e2"><B>getmap</B></A> subroutine.</P>
+
+<P><A NAME="E1D7473397ceb"></A>Organizing the color map as 16 small maps with the <A HREF="multimap.html#A146X9593"><B>multimap</B></A> subroutine.</P>
+
+<P><A NAME="E1D7473423ceb"></A>Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="setlinestyle.html">Previous</a>  |
+<a href="setnurbsproperty.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>rectzoom Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="rectwrite.html">Previous</a>  |
+<a href="reshapeviewport.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9d26"></A>rectzoom Subroutine</H2>
+<A NAME="INDEX1630" REL="I1" TITLE="rectzoom subroutine (GL)"></A>
+<A NAME="INDEX1631" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1632" REL="I2" TITLE="pixel block transfer"></A>
+<A NAME="INDEX1633" REL="I3" TITLE="specifying zoom factor for rectangular copies"></A>
+<A NAME="INDEX1634" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1635" REL="I2" TITLE="pixel block transfer"></A>
+<A NAME="INDEX1636" REL="I3" TITLE="rectzoom"></A>
+
+<H3><A NAME="A142X9d28"></A>Purpose</H3>
+<P><A NAME="E1D733D306ceb"></A>Specifies a zoom factor for rectangle copies and writes.</P>
+
+<H3><A NAME="A79C1ef"></A>Libraries</H3>
+<P><A NAME="E1D733D345ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D733D370ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9d2c"></A>C Syntax</H3>
+<PRE><A NAME="A142X9d2d"></A><B>void rectzoom(Float32 </B><A HREF="rectzoom.html#A142X9d31"><I>xfactor</I></A><B>, Float32</B> <A HREF="rectzoom.html#A142X9d32"><I>yfactor</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010b35"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010b36"></A><B>SUBROUTINE RECTZO(</B><I>xfactor</I><B>,</B> <I>yfactor</I><B>)</B>
+<B>REAL </B><I>xfactor</I><B>, </B><I>yfactor</I></PRE>
+
+<H3><A NAME="A142X9d2e"></A>Description</H3>
+<P><A NAME="E1D733D483ceb"></A>The <B>rectzoom</B> subroutine specifies independent x and y 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P040"><I>zoom factors</I></A> that the <A HREF="rectcopy.html#A142X9d04"><B>rectcopy</B></A> and <A HREF="rectwrite.html#A142X9c9e"><B>rectwrite</B></A> subroutines use. Float values are rounded to the nearest integer.</P>
+
+<P><A NAME="E1D733D509ceb"></A>The default value for the <I>xfactor</I> and <I>yfactor</I> parameters is 1.0.</P>
+
+<BLOCKQUOTE><A NAME="A318C9dce"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X9d30"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X9d31"></A><I>xfactor</I></TD>
+<TD>  Specifies the multiplier of the rectangle in the x direction.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X9d32"></A><I>yfactor</I> </TD>
+<TD>  Specifies the multiplier of the rectangle in the y direction.</TD></TR></TABLE>
+
+<H3><A NAME="A61C0159c5"></A>Implementation Specifics</H3>
+<P><A NAME="E1D733D626ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C1f2"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1f3"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1f4"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X9d46"></A>Related Information</H3>
+<P><A NAME="E1D733D723ceb"></A>Copying a rectangle of pixels with an optional zoom with the <A HREF="rectcopy.html#A142X9d04"><B>rectcopy</B></A> subroutine.</P>
+
+<P><A NAME="E1D733D748ceb"></A>Drawing a rectangular array of pixels into the frame buffer with the <A HREF="rectwrite.html#A142X9c9e"><B>rectwrite</B></A> subroutine.</P>
+
+<P><A NAME="E1D733D774ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Reading and Writing <!--gl32prgd:--><A HREF="../gl32prgd/rwpixels.html#rwpixels.html">Pixels</A>.</P><hr><center>
+[  <a href="rectwrite.html">Previous</a>  |
+<a href="reshapeviewport.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

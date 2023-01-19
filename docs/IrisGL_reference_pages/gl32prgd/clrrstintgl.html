@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/clrrstintgl.html Mon, 24 Jan 2022 16:28:13 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>Clearing, Resetting, and Initializing GL
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="writemasks.html">Previous</a>  |
+<a href="workobjects.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="clrrstintgl.html"></A>Clearing, Resetting, and Initializing GL</H2>
+<A NAME="INDEX695" REL="I1" TITLE="Graphics Library"></A>
+<A NAME="INDEX696" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX697" REL="I1" TITLE="initializing"></A>
+<A NAME="INDEX698" REL="I2" TITLE="Graphics Library"></A>
+<P><A NAME="A3C0EB49494mhay"></A>GL contains a number of subroutines that perform startup functions or reconfigure the system to accommodate a requested mode of operation. For example, the <!--:libs:gl32tref:--><A HREF="../gl32tref/overlay.html#A143X950a"><B>overlay</B></A>, <!--:libs:gl32tref:--><A HREF="../gl32tref/underlay.html#Az5O370nita"><B>underlay</B></A>, <!--:libs:gl32tref:--><A HREF="../gl32tref/doublebuffer.html#A145X91a7"><B>doublebuffer</B></A>, <!--:libs:gl32tref:--><A HREF="../gl32tref/singlebuffer.html#A145X9259"><B>singlebuffer</B></A>, <!--:libs:gl32tref:--><A HREF="../gl32tref/multimap.html#A146X9593"><B>multimap</B></A>, <!--:libs:gl32tref:--><A HREF="../gl32tref/onemap.html#A146X95ef"><B>onemap</B></A>, <!--:libs:gl32tref:--><A HREF="../gl32tref/RGBmode.html#A143X93b6"><B>RGBmode</B></A>, and <!--:libs:gl32tref:--><A HREF="../gl32tref/cmode.html#A146X93d6"><B>cmode</B></A> subroutines do not take effect until the <!--:libs:gl32tref:--><A HREF="../gl32tref/gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine is called. </P>
+
+<P><A NAME="A3C0EB49515mhay"></A>Other subroutines initialize or terminate programs (<!--:libs:gl32tref:--><A HREF="../gl32tref/ginit.html#LDg21c0marj"><B>ginit</B></A> and <!--:libs:gl32tref:--><A HREF="../gl32tref/gexit.html#xT41a0nita"><B>gexit</B></A>); clear the viewport, color bitplanes, and z-buffer (<!--:libs:gl32tref:--><A HREF="../gl32tref/clear.html#cEH1160marj"><B>clear</B></A>, 
+<!--:libs:gl32tref:--><A HREF="../gl32tref/zclear.html#A143X97d3"><B>zclear</B></A>, and <!--:libs:gl32tref:--><A HREF="../gl32tref/czclear.html#A143X92c8"><B>czclear</B></A>); or turn on or off full-screen mode (<!--:libs:gl32tref:--><A HREF="../gl32tref/fullscrn.html#Qga140marj"><B>fullscrn</B></A> and <!--:libs:gl32tref:--><A HREF="../gl32tref/endfullscrn.html#laa350marj"><B>endfullscrn</B></A>). The <!--:libs:gl32tref:--><A HREF="../gl32tref/greset.html#xW42e0nita"><B>greset</B></A> subroutine resets all global state attributes to initial values. 
+The <!--:libs:gl32tref:--><A HREF="../gl32tref/gbegin.html#JS4380nita"><B>gbegin</B></A> subroutine initializes the graphics system without changing the color map. The <!--:libs:gl32tref:--><A HREF="../gl32tref/gversion.html#A237X9480e"><B>gversion</B></A> subroutine returns the version of GL being used. The <!--:libs:gl32tref:--><A HREF="../gl32tref/getgdesc.html#t9311e0marj"><B>getgdesc</B></A> subroutine returns information about the currently installed graphics hardware.</P>
+
+<P><A NAME="A3C0EB49535mhay"></A>GL runs on top of Enhanced X-Windows and initializes with a default font. GL also has access to X fonts through the X server.</P>
+
+<H3><A NAME="A264X9359"></A>List of GL Clearing, Resetting, and Initializing Subroutines<A NAME="INDEX699" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX700" REL="I2" TITLE="subroutines"></A>
+<A NAME="INDEX701" REL="I3" TITLE="initialization"></A>
+<A NAME="INDEX702" REL="I1" TITLE="initialization"></A>
+<A NAME="INDEX703" REL="I2" TITLE="GL"></A>
+<A NAME="INDEX704" REL="I3" TITLE="subroutines"></A>
+</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b56"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/clear.html#cEH1160marj"><B>clear</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Clears to the screenmask. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b57"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/czclear.html#A143X92c8"><B>czclear</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Clears the color bitplanes and the z-buffer simultaneously.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b58"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/endfullscrn.html#laa350marj"><B>endfullscrn</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Ends full screen mode.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b5a"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/fullscrn.html#Qga140marj"><B>fullscrn</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Enables drawing outside current window boundaries.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b5b"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/gbegin.html#JS4380nita"><B>gbegin</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Initializes the graphics system without changing the color map. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b5c"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/gconfig.html#hS4260nita"><B>gconfig</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Reconfigures the system. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b5d"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/gexit.html#xT41a0nita"><B>gexit</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Terminates a graphics program. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b5e"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/ginit.html#LDg21c0marj"><B>ginit</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Initializes the graphics system. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b5f"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/greset.html#xW42e0nita"><B>greset</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Resets all global state attributes to initial values. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A52C0142cb"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/gversion.html#A237X9480e"><B>gversion</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the version of GL being used.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b61"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/zclear.html#A143X97d3"><B>zclear</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Initializes the z-buffer.</TD></TR></TABLE><hr><center>
+[  <a href="writemasks.html">Previous</a>  |
+<a href="workobjects.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/clrrstintgl.html Mon, 24 Jan 2022 16:28:13 GMT -->
+</HTML>
+
+

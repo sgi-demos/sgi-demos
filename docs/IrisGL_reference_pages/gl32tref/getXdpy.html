@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getXdpy or getXwid Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getviewport.html">Previous</a>  |
+<a href="getwritemask.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A114C13c"></A>getXdpy or getXwid Subroutine</H2>
+<A NAME="INDEX870" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX871" REL="I2" TITLE="Windows"></A>
+<A NAME="INDEX872" REL="I3" TITLE="getXdpy"></A>
+<A NAME="INDEX873" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX874" REL="I2" TITLE="Windows"></A>
+<A NAME="INDEX875" REL="I3" TITLE="getXwid"></A>
+<A NAME="INDEX876" REL="I1" TITLE="getXdpy subroutine (GL)"></A>
+<H3><A NAME="A114C13d"></A>Purpose</H3>
+<P><A NAME="E1B11B6854ceb"></A>Returns the Enhanced X-Windows connection for the given GL session, or the window ID of the current GL window.</P>
+
+<H3><A NAME="A114C13f"></A>Library</H3>
+<P><A NAME="E1B11B7004ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B11B7110ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A114C142"></A>C Syntax</H3>
+
+<PRE><A NAME="A114C143"></A><B>Display *getXdpy()</B></PRE>
+<PRE><A NAME="A114C144"></A><B>Window getXwid()</B></PRE>
+
+<H3><A NAME="A114C145"></A>FORTRAN Syntax</H3>
+
+<PRE><A NAME="A114C146"></A><B>INTEGER *4 FUNCTION GETXDPY()</B></PRE>
+<PRE><A NAME="A114C147"></A><B>INTEGER *4 FUNCTION GETXWID()</B></PRE>
+
+<H3><A NAME="A114C148"></A>Description</H3>
+
+<P><A NAME="E1B11B7576ceb"></A>The <B>getXdpy</B> subroutine returns a pointer to a data structure that 
+describes the Enhanced X-Windows connection being used by the GL library to communicate with the X server.</P>
+
+<P><A NAME="E1B11B7682ceb"></A>The <B>getXwid</B> subroutine returns the Enhanced X-Windows window ID of the 
+current GL <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A>.</P>
+
+<P><A NAME="E1B11B7799ceb"></A>The Enhanced X-Windows display connection, with the Enhanced X-Windows window ID, enables applications programs to use Enhanced X-Windows routines to modify a GL window. With this ability, application programs can do several things, including the following:</P>
+
+<UL><LI><A NAME="A161C1294"></A><!--:libs:x11tr:--><A HREF="../x11tr/pdf/XReparWin.pdf.html">Reparent a window</A></LI>
+
+<LI><A NAME="A161C1295"></A>Manipulate properties</LI>
+
+<LI><A NAME="A3CFC99F307janb"></A>Work with resources</LI>
+
+<LI><A NAME="A3CFC99F325janb"></A>Process events</LI>
+
+<LI><A NAME="A3CFC99F344janb"></A>Develop widgets.</LI></UL>
+
+
+<P><A NAME="E1B11B8168ceb"></A>Not all possible combinations of GL and Enhanced X-Windows calls result in defined behavior, however. In particular, avoid the following usages:</P>
+
+<UL><LI><A NAME="A144C1c9e"></A>Do not use Enhanced X-Windows drawing routines to draw into a GL window. The screen results are undefined. Use Enhanced X-Windows drawing routines to draw into Enhanced X-Windows only.</LI>
+
+<LI><A NAME="A144C1ca0"></A>Use only the GL <A HREF="loadXfont.html#vUO390nita"><B>loadXfont</B></A> subroutine to load X fonts for use with the GL <A HREF="charstr.html#A143X9cfb"><B>charstr</B></A> subroutine. Use the <!--:libs:x11tr:--><A HREF="../x11tr/pdf/XLoadFont.pdf.html"><B>XLoadFont</B></A> or <!--:libs:x11tr:--><A HREF="../x11tr/pdf/XLoadFont.pdf.html"><B>XLoadQueryFont</B></A> subroutine only if you plan to use X text-rendering routines to draw into an Enhanced X-Windows window.</LI>
+
+<LI><A NAME="A144C1ca1"></A>Do not change, modify, or delete GL internal properties associated with GL windows. Doing so causes unpredictable behavior.</LI>
+
+<LI><A NAME="A144C1ca2"></A>Do not grab or ungrab pointers, keyboards, or the server while in GL fullscreen mode. Doing so causes unpredictable behavior.</LI>
+
+<LI><A NAME="A144C1ca3"></A>Events associated with GL windows can be obtained through the Enhanced X-Windows event queue. However, if you choose to obtain events in this manner, do not also use the GL event queue. Doing so causes unpredictable results. An application can use both the GL and Enhanced X-Windows event queues within the same executable if the GL queue is used only for GL events and the Enhanced X-Windows event queue is used only for Enhanced X-Windows events.</LI></UL>
+
+
+<P><A NAME="E1B11B8641ceb"></A>The previous brief restrictions are explained more fully in <!--gl32prgd:--><A HREF="../gl32prgd/exhwindcalls.html#exhwindcalls.html">"Using Enhanced X-Windows Calls with GL Subroutines"</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<P><A NAME="E1B11B8749ceb"></A>All GL windows opened by a client normally share one Enhanced X-Windows connection. GL rendering can be performed only locally; that is, a GL application must execute on the same physical machine as that which contains the display adapter. GL does not support a client-server model of network graphics programming.</P>
+
+<H3><A NAME="A114C155"></A>Return Values</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A114C156"></A><B>getXdpy</B></TD>
+<TD>  Returns a pointer to the Enhanced X-Windows Display structure.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A114C157"></A><B>getXwid</B></TD>
+<TD>  Returns the Enhanced X-Windows window ID.</TD></TR></TABLE>
+
+<H3><A NAME="BD9BB84952vbia"></A>Example</H3>
+<P><A NAME="E1B11B9078ceb"></A>Example programs showing the usage of the <B>getXdpy</B> and <B>getXwid</B> subroutines can be found in the <B>/usr/lpp/GL/examples</B> directory.</P>
+
+<H3><A NAME="A114C158"></A>Implementation Specifics</H3>
+<P><A NAME="E1B11B9240ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<P><A NAME="A3CFC99F380janb"></A>The POWERgraphics GXT1000 supports RGB and color index modes by creating separate separate X11 windows--one window is permanently in RGB mode, and the other is permanently in color index mode. Both of these windows are wrapped in a single parent window. The <B>getXwid</B> subroutine returns the X11 window handle of that parent window.  Standard X11 interfaces can be used to determine the child windows of the parent.</P>
+
+<H3><A NAME="A114C15a"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A114C15b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A114C15c"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A114C15d"></A><B>/usr/include/X11/Xlib.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for version X11 of Enhanced X-Windows.</TD></TR></TABLE>
+
+<H3><A NAME="A114C161"></A>Related Information</H3>
+<P><A NAME="E1B11B9619ceb"></A>The <A HREF="loadXfont.html#vUO390nita"><B>loadXfont</B></A> subroutine, <A HREF="charstr.html#A143X9cfb"><B>charstr</B></A> subroutine, <!--:libs:x11tr:--><A HREF="../x11tr/pdf/XReparWin.pdf.html"><B>XReparentWindow</B></A> subroutine.</P>
+
+<P><A NAME="E1B11BA178ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/exhwindcalls.html#exhwindcalls.html">Using Enhanced X-Windows Calls with GL Subroutines</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P><hr><center>
+[  <a href="getviewport.html">Previous</a>  |
+<a href="getwritemask.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

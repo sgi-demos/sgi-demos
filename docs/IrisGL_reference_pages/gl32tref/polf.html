@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>polf  Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="polarview.html">Previous</a>  |
+<a href="poly.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="Zsf1c0marj"></A>polf  Subroutine</H2>
+<A NAME="INDEX1407" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1408" REL="I2" TITLE="high-level drawing"></A>
+<A NAME="INDEX1409" REL="I3" TITLE="polf"></A>
+<A NAME="INDEX1410" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1411" REL="I2" TITLE="polygons"></A>
+<A NAME="INDEX1412" REL="I3" TITLE="filled"></A>
+<A NAME="INDEX1413" REL="I1" TITLE="polf subroutine (GL)"></A>
+
+<H3><A NAME="A213X912d9a"></A>Purpose</H3>
+<P><A NAME="E1D7183068ceb"></A>Draws a filled polygon.</P>
+
+<H3><A NAME="A78C1276"></A>Libraries</H3>
+<P><A NAME="E1D7183107ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7183132ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912d9d"></A>C Syntax</H3>
+<PRE><A NAME="A213X912d9e"></A><B>void polf(Int32 </B><A HREF="polf.html#A213X912db2"><I>n</I></A><B>, Coord </B><A HREF="polf.html#A213X912db3"><I>parray</I></A><B>[&nbsp;][3])</B></PRE>
+<PRE><A NAME="uDe350marj"></A><B>void polfi(Int32 </B><A HREF="polf.html#A213X912db2"><I>n</I></A><B>, Icoord </B><A HREF="polf.html#A213X912db3"><I>parray</I></A><B>[&nbsp;][3])</B></PRE>
+
+<PRE><A NAME="CEe170marj"></A><B>void polfs(Int32 </B><A HREF="polf.html#A213X912db2"><I>n</I></A><B>, Scoord </B><A HREF="polf.html#A213X912db3"><I>parray</I></A><B>[&nbsp;][3])</B></PRE>
+<PRE><A NAME="bEe170marj"></A><B>void polf2(Int32 </B><A HREF="polf.html#A213X912db2"><I>n</I></A><B>, Coord </B><A HREF="polf.html#A213X912db3"><I>parray</I></A><B>[&nbsp;][2])</B></PRE>
+
+<PRE><A NAME="tEe2d0marj"></A><B>void polf2i(Int32 </B><A HREF="polf.html#A213X912db2"><I>n</I></A><B>, Icoord </B><A HREF="polf.html#A213X912db3"><I>parray</I></A><B>[&nbsp;][2])</B></PRE>
+<PRE><A NAME="A5Fe210marj"></A><B>void polf2s(Int32 </B><A HREF="polf.html#A213X912db2"><I>n</I></A><B>, Scoord </B><A HREF="polf.html#A213X912db3"><I>parray</I></A><B>[&nbsp;][2])</B></PRE>
+
+<H3><A NAME="A28C01074d"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C01074e"></A><B>SUBROUTINE POLF(</B><I>n</I><B>, </B><I>parray</I><B>)</B>
+<B>INTEGER*4 </B><I>n</I>
+<B>REAL </B><I>parray</I><B>(3,</B><I>n</I><B>)</B></PRE>
+<PRE><A NAME="A28C01074f"></A><B>SUBROUTINE POLFI(</B><I>n</I><B>, </B><I>parray</I><B>)</B>
+<B>INTEGER*4 </B><I>n</I>
+<B>INTEGER*4 </B><I>parray</I><B>(3,</B><I>n</I><B>)</B></PRE>
+<PRE><A NAME="A28C010750"></A><B>SUBROUTINE POLFS(</B><I>n</I><B>, </B><I>parray</I><B>)</B>
+<B>INTEGER*4 </B><I>n</I>
+<B>INTEGER*2 </B><I>parray</I><B>(3,</B><I>n</I><B>)</B></PRE>
+<PRE><A NAME="A28C010751"></A><B>SUBROUTINE POLF2(</B><I>n</I><B>, </B><I>parray</I><B>)</B>
+<B>INTEGER*4 </B><I>n</I>
+<B>REAL </B><I>parray</I><B>(2,</B><I>n</I><B>)</B></PRE>
+<PRE><A NAME="A28C010752"></A><B>SUBROUTINE POLF2I(</B><I>n</I><B>, </B><I>parray</I><B>)</B>
+<B>INTEGER*4 </B><I>n</I>
+<B>INTEGER*4 </B><I>parray</I><B>(2,</B><I>n</I><B>)</B></PRE>
+<PRE><A NAME="A28C010753"></A><B>SUBROUTINE POLF2S(</B><I>n</I><B>, </B><I>parray</I><B>)</B>
+<B>INTEGER*4 </B><I>n</I>
+<B>INTEGER*2 </B><I>parray</I><B>(2,</B><I>n</I><B>)</B></PRE>
+
+<H3><A NAME="A213X912dab"></A>Description</H3>
+<P><A NAME="E1D7183435ceb"></A>The <B>polf</B> subroutine draws 
+filled polygons
+ using the current area attributes: <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791abd">pattern</A>, 
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A31996bc">color</A>,  and 
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemask</A>. Polygons are represented as arrays of points. The first and last points automatically connect to close a polygon. After the polygon is filled, the 
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03eb">current graphics position</A> is set to the first point in the array. </P>
+
+<P><A NAME="E1D7183463ceb"></A>Polygons in 2-D are drawn with <I>z </I>= 0.</P>
+
+<P><A NAME="E1D7183488ceb"></A>The six different forms for the <B>polf</B> subroutine are as follows:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><BR></TD>
+
+<TD><B>2-D</B></TD>
+
+<TD><B>3-D</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int16</TD>
+
+<TD>polf2s</TD>
+
+<TD>polfs</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int32</TD>
+
+<TD>polf2i</TD>
+
+<TD>polfi</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>float</TD>
+
+<TD>polf2</TD>
+
+<TD>polf</TD></TR></TABLE>
+
+<P><A NAME="E1D7183531ceb"></A>The syntax for each of the subroutine forms is the same except for the first argument.  They differ only in that <A HREF="polf.html#A213X912d9e"><B>polf</B></A> expects real coordinates, <A HREF="polf.html#uDe350marj"><B>polfi</B></A> expects integer coordinates, and <A HREF="polf.html#CEe170marj"><B>polfs</B></A> expects short integer coordinates. In addition, the <A HREF="polf.html#bEe170marj"><B>polf2</B></A> routines assume a 2-D point instead of a 3-D point.</P>
+
+<P><A NAME="E1D7183559ceb"></A>There can be no more than 256 vertices in a polygon. In addition, the <B>polf</B> subroutine cannot correctly draw polygons that intersect themselves.  </P>
+
+<H3><A NAME="A213X912db1"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912db2"></A><I>n</I> </TD>
+<TD>  Specifies the number of points in the polygon.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912db3"></A><I>parray </I></TD>
+<TD>  Specifies an array containing the vertices of the polygon.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912db6"></A>Example</H3>
+<P><A NAME="E1D7183655ceb"></A>The example C language program <A HREF="tpbig_c.html#A16C0c9bd"><B>tpbig.c</B></A> uses the <B>polf2i</B> subroutine to draw an ice cream cone. </P>
+
+<H3><A NAME="A62C015cda"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7183698ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C1279"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C127a"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C127b"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912dc1"></A>Related Information</H3>
+<P><A NAME="E1D7183795ceb"></A>Allowing the system to draw concave polygons with the <A HREF="concave.html#HXf320marj"><B>concave</B></A> subroutine.</P>
+
+<P><A NAME="E1D7183821ceb"></A>Specifying the next point in a polygon with the <A HREF="pdr.html#bqf1c0marj"><B>pdr</B></A> subroutine.</P>
+
+<P><A NAME="E1D7183846ceb"></A>Specifying the starting point for a polygon with the <A HREF="pmv.html#A139X91eed"><B>pmv</B></A> subroutine.</P>
+
+<P><A NAME="E1D7183871ceb"></A>Drawing a polygon with the <A HREF="poly.html#avf2c0marj"><B>poly</B></A> subroutine.</P>
+
+<P><A NAME="E1D7183897ceb"></A>Drawing a filled rectangle with the <A HREF="rectf.html#Q5g330marj"><B>rectf</B></A> subroutine.</P>
+
+<P><A NAME="E1D7183922ceb"></A>Drawing a rectangle with the <A HREF="rect.html#KAg110marj"><B>rect</B></A> subroutine.</P>
+
+<P><A NAME="E1D7183948ceb"></A>Drawing a relative polygon with the <A HREF="rpdr.html#hrfa0marj"><B>rpdr</B></A> subroutine.</P>
+
+<P><A NAME="E1D7183973ceb"></A>Moving the current graphics position to a starting point for a filled polygon relative to the current point with the <A HREF="rpmv.html#lXf370marj"><B>rpmv</B></A> subroutine.</P>
+
+<P><A NAME="E1D7183999ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</A>.</P><hr><center>
+[  <a href="polarview.html">Previous</a>  |
+<a href="poly.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

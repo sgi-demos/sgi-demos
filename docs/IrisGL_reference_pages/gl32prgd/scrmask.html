@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/scrmask.html Mon, 24 Jan 2022 16:28:07 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>scrmask Subroutine
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getviewport.html">Previous</a>  |
+<a href="getscrmask.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="scrmask.html"></A>scrmask Subroutine </H2>
+
+
+<P><A NAME="A3C0E9FE592mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/scrmask.html#fwN250marj">scrmask</A></B>
+subroutine specifies a two-dimensional rectangular clipping mask. The 
+<A HREF="specialterms.html#A27P018">screenmask</A>
+is specified in window coordinates. Every drawing primitive is clipped
+to this area: that is, no drawing primitive can draw outside the screenmask.
+The clipping performed by the screenmask is separate from and independent
+of the 3-D clipping performed by the system. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A258C01c197"></A>void&nbsp;scrmask(Screencoord&nbsp;*left,&nbsp;Screencoord&nbsp;*right,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Screencoord&nbsp;*bottom,&nbsp;Screencoord&nbsp;*top)</PRE>
+
+
+<P><A NAME="A3C0E9FE613mhay"></A>Normally, the screenmask is precisely
+the same size as the window. The screenmask cannot be made larger than
+the window. When the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/viewport.html#qrY270marj">viewport</A></B>
+subroutine is called, it resets the screenmask to be the same size as the
+<A HREF="specialterms.html#A27P039">viewport</A>. </P>
+
+
+<P><A NAME="A3C0E9FE633mhay"></A>Although the <B>scrmask</B> subroutine
+clips all primitives, it is not useful except for performing character
+clipping. The 3-D clipping performed by the system is sufficient for all
+other clipping. However, in reference to character strings, the 3-D clipping
+mechanism only clips the origin of the character string. That is, if the
+origin of the character string is inside the viewport, the entire string
+would be drawn if the screenmask was not in effect. If the origin is outside
+the viewport, none of the character string would be drawn, even if, logically,
+some of the string ought to be visible. </P>
+
+
+<P><A NAME="A3C0E9FE653mhay"></A>This type of clipping is called 
+<A HREF="specialterms.html#A26P0613">gross
+clipping</A>. The screenmask is provided for 
+<A HREF="specialterms.html#A26P0519">fine
+clipping</A>, clipping down to a subcharacter level. To use it, set the
+screenmask to be smaller than the viewport. Strings that begin inside the
+viewport are drawn, but only starting at the character (or fraction of
+the character) that lies inside the screenmask. Please refer to &quot;<A HREF="textchars.html#textchars.html">Creating
+Text Characters</A>&quot; for more information. </P>
+
+
+
+
+<hr><center>
+[  <a href="getviewport.html">Previous</a>  |
+<a href="getscrmask.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/scrmask.html Mon, 24 Jan 2022 16:28:07 GMT -->
+</HTML>
+

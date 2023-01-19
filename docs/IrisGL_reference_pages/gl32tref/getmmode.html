@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getmmode Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getmcolors.html">Previous</a>  |
+<a href="getnurbsproperty.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="idZ2e0marj"></A>getmmode Subroutine</H2>
+<A NAME="INDEX766" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX767" REL="I2" TITLE="query"></A>
+<A NAME="INDEX768" REL="I3" TITLE="getmmode"></A>
+<A NAME="INDEX769" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX770" REL="I2" TITLE="lighting"></A>
+<A NAME="INDEX771" REL="I3" TITLE="getmmode"></A>
+<A NAME="INDEX772" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX773" REL="I2" TITLE="matrix mode"></A>
+<A NAME="INDEX774" REL="I3" TITLE="returning current"></A>
+<A NAME="INDEX775" REL="I1" TITLE="getmmode subroutine (GL)"></A>
+
+<H3><A NAME="A213X911ecf"></A>Purpose</H3>
+<P><A NAME="E1B101D352ceb"></A>Returns the current matrix mode.</P>
+
+<H3><A NAME="A78C12c3"></A>Libraries</H3>
+<P><A NAME="E1B101D501ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B101D604ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911ed2"></A>C Syntax</H3>
+<PRE><A NAME="A213X911ed3"></A><B>Int32 getmmode( )</B></PRE>
+
+<H3><A NAME="A213X911eaf"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X911eb2"></A><B>INTEGER*4 FUNCTION GETMMO</B></PRE>
+
+<H3><A NAME="A213X911ed6"></A>Description</H3>
+<P><A NAME="E1B101D957ceb"></A>The <B>getmmode</B> subroutine returns the current matrix mode.</P>
+
+<BLOCKQUOTE><A NAME="A318C9d6e"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911ed9"></A>Return Values</H3>
+<P><A NAME="E1B101E169ceb"></A>There are three possible return values for this function:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Mode</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>MSINGLE</TD>
+
+<TD>MSINGL</TD>
+
+<TD>Single matrix</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>MPROJECTION</TD>
+
+<TD>MPROJE</TD>
+
+<TD>Projection matrix</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>MVIEWING</TD>
+
+<TD>MVIEWI</TD>
+
+<TD>Viewing matrix</TD></TR></TABLE>
+
+<H3><A NAME="A62C015ce8"></A>Implementation Specifics</H3>
+<P><A NAME="E1B101E385ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C12c6"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12c7"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12c8"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911ee4"></A>Related Information</H3>
+<P><A NAME="E1B101E704ceb"></A>Making a material, light, or lighting model definition active with the <A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> subroutine.</P>
+
+<P><A NAME="E1B101E811ceb"></A>Defining a new material, light, or lighting model with the <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> subroutine.<B>  </B></P>
+
+<P><A NAME="E1B101E917ceb"></A>Setting the current matrix mode with the <A HREF="mmode.html#XhZ2370marj"><B>mmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B101F026ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Creating <!--gl32prgd:--><A HREF="../gl32prgd/crlighteff.html#crlighteff.html">Lighting Effects</A>, <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System, and Setting <!--gl32prgd:--><A HREF="../gl32prgd/setglpipeops.html#setglpipeops.html">Pipeline Options</A>.</P><hr><center>
+[  <a href="getmcolors.html">Previous</a>  |
+<a href="getnurbsproperty.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

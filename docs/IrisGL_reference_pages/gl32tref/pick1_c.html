@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>pick1.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="patch1_c.html">Previous</a>  |
+<a href="platelocal_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A13C0bd9f"></A>pick1.c Example C Language Program
+</H2>
+<A NAME="INDEX2382" REL="I1" TITLE="pick1.c example program (GL)"></A>
+<A NAME="INDEX2383" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2384" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2385" REL="I3" TITLE="picking and selecting"></A>
+<A NAME="INDEX2386" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2387" REL="I2" TITLE="picking and selecting"></A>
+<A NAME="INDEX2388" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64EB12799ttay"></A>/*
+ *  pick1.c:
+ *
+ *A sample picking program. Use LEFTMOUSE to "pick" the
+ *background, a circle, or the square.
+ */</PRE>
+<PRE><A NAME="A64EB12955ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EB13103ttay"></A>#define PICKS 1</PRE>
+<PRE><A NAME="A64EB13248ttay"></A>main()
+{</PRE>
+<PRE><A NAME="A64EB13419ttay"></A>&nbsp;&nbsp;&nbsp;short namebuffer[50];
+&nbsp;&nbsp;&nbsp;long numpicked;
+&nbsp;&nbsp;&nbsp;short val, i, j, k;
+&nbsp;&nbsp;&nbsp;Device dev;    </PRE>
+<PRE><A NAME="A64EB13806ttay"></A>&nbsp;&nbsp;&nbsp;initialize();    
+&nbsp;&nbsp;&nbsp;while (TRUE) {        
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dev = qread(&amp;val);        
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (val == 0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch (dev) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case ESCKEY:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gexit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case REDRAW:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reshapeviewport();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callobj(PICKS);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;            
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case LEFTMOUSE:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pick(namebuffer, 50);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ortho2(-0.5, XMAXSCREEN + 0.5, -0.5, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    YMAXSCREEN + 0.5);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callobj(PICKS);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numpicked = endpick(namebuffer);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf("hits: %d; ",numpicked);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;j = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i = 0; i &lt; numpicked; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(" ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k = namebuffer[j++];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf("%d ", k);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (;k; k--)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf("%d ", namebuffer[j++]);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf("|");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB13969ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf("\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB14112ttay"></A>&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB14255ttay"></A>}</PRE>
+<PRE><A NAME="A64EB14407ttay"></A>initialize()
+{
+&nbsp;&nbsp;&nbsp;int gid;    </PRE>
+<PRE><A NAME="A64EB14731ttay"></A>&nbsp;&nbsp;&nbsp;prefposition(XMAXSCREEN/4,XMAXSCREEN*3/4,
+&nbsp;&nbsp;&nbsp;    YMAXSCREEN/4,YMAXSCREEN*3/4);
+&nbsp;&nbsp;&nbsp;gid = winopen("pick1");    
+&nbsp;&nbsp;&nbsp;ortho2(-0.5, XMAXSCREEN + 0.5, -0.5, YMAXSCREEN + 0.5);    
+&nbsp;&nbsp;&nbsp;qdevice(ESCKEY);
+&nbsp;&nbsp;&nbsp;qdevice(REDRAW);
+&nbsp;&nbsp;&nbsp;qdevice(LEFTMOUSE);
+&nbsp;&nbsp;&nbsp;qdevice(MIDDLEMOUSE);
+&nbsp;&nbsp;&nbsp;qenter(REDRAW,gid);    
+&nbsp;&nbsp;&nbsp;initnames();
+&nbsp;&nbsp;&nbsp;makeobj(PICKS);
+&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;loadname(1);
+&nbsp;&nbsp;&nbsp;rectfi(20,20,100,100);
+&nbsp;&nbsp;&nbsp;loadname(2);
+&nbsp;&nbsp;&nbsp;pushname(3);
+&nbsp;&nbsp;&nbsp;circi(50,500,50);
+&nbsp;&nbsp;&nbsp;loadname(4);
+&nbsp;&nbsp;&nbsp;circi(50,530,60);
+&nbsp;&nbsp;&nbsp;loadname(5);
+&nbsp;&nbsp;&nbsp;move2i(30,30);
+&nbsp;&nbsp;&nbsp;draw2i(32,32);
+&nbsp;&nbsp;&nbsp;closeobj();
+}</PRE>
+
+<H3><A NAME="A201C118c"></A>Related Information</H3>
+<P><A NAME="E1D7893257ceb"></A>The <A HREF="endpick.html#A213X91185b"><B>endpick</B></A> subroutine<A HREF="../gl32tref/A213X91185b" REL="PAGENUM"></A>, <A HREF="initnames.html#YlD250marj"><B>initnames</B></A> subroutine<A HREF="../gl32tref/YlD250marj" REL="PAGENUM"></A>, <A HREF="loadname.html#A213X9119af"><B>loadname</B></A> subroutine<A HREF="../gl32tref/A213X9119af" REL="PAGENUM"></A>, <A HREF="pick.html#h632f0nita"><B>pick</B></A> subroutine<A HREF="../gl32tref/h632f0nita" REL="PAGENUM"></A>, <A HREF="pushname.html#A213X911b48"><B>pushname</B></A> subroutine<A HREF="../gl32tref/A213X911b48" REL="PAGENUM"></A>.</P>
+
+<hr><center>
+[  <a href="patch1_c.html">Previous</a>  |
+<a href="platelocal_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

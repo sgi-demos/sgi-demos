@@ -1,0 +1,336 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/keyboardgl.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Using the Keyboard in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="cursorgl.html">Previous</a>  |
+<a href="cntrlques.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="keyboardgl.html"></A>Using the Keyboard</H2>
+
+
+<P><A NAME="A3C0ED57927mhay"></A>The keyboard class of special devices
+reports character values when keys, or a combination of keys, are pressed.
+The following section discusses both international keyboard input and controlling
+keyboard characteristics and behavior. </P>
+
+
+<H3><A NAME="A264X92d5"></A>List of GL Keyboard Subroutines<A NAME="INDEX820"></A>
+<A NAME="INDEX821"></A> <A NAME="INDEX822"></A> <A NAME="INDEX823"></A>
+<A NAME="INDEX824"></A> <A NAME="INDEX825"></A> </H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bae"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/clkoff.html#A213X9112de"><B>clkon,</B>
+<B>clkoff</B></A> </TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Turns keyboard click on and off. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bb0"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/lampoff.html#A213X9113bc"><B>lampon,</B>
+<B>lampoff</B></A> </TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Turns the keyboard display lights on and off. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bac"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/ringbell.html#A213X911463">ringbell</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Rings the keyboard bell. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bad"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setbell.html#A213X9114ae">setbell</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the duration of the keyboard bell sound. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bb2"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setdblights.html#A213X911501">setdblights</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the lights on the dial and switch box. </TD></TR></TABLE>
+
+
+<H3><A NAME="A135C1329"></A>International Keyboard Input<A NAME="INDEX826"></A>
+<A NAME="INDEX827"></A> <A NAME="INDEX828"></A> <A NAME="INDEX829"></A>
+<A NAME="INDEX830"></A> <A NAME="INDEX831"></A> </H3>
+
+
+<P><A NAME="A3C0ED57957mhay"></A>The KEYBD device returns code points that
+correspond to the keys typed on the keyboard. The manner in which keystrokes
+are matched with the returned value depends on the <I>locale</I>, a language,
+territory, and code set combination used to identify a set of language
+conventions. For example, in United States-English installation, the value
+returned is the ASCII value that corresponds to the key pressed, taking
+into account the Shift and Ctrl keys. In other language keyboard installations,
+encodings from the ISO8859 family of code sets are returned. For further
+information on code sets, see <!--:genprogc:--><A HREF="genprogc/codeset_over.html#A163C116e3">Code
+Sets Overview</A> in  in<I> AIX General Programming Concepts: Writing and Debugging Programs</I>.. </P>
+
+
+<H4><A NAME="A190C1e1"></A>Input Method </H4>
+
+
+<P><A NAME="A3C0ED57982mhay"></A>The method used for matching up keystrokes
+to returned values is called the <I>input method</I>. The locale, which
+determines the key mapping, is determined from the default setting when
+the system was configured, or from the $LANG environment variable, or from
+the most recent invocation of the <B><!--:libs:basetrf2:--><A HREF="../basetrf2/setlocale.html#A15096ab">setlocale</A></B>
+subroutine. The input method helps correct for different key placements
+on different keyboards; for instance, the letter Z on the French keyboard
+appears in the same location as the letter W on the US English keyboard.
+For further information on input method, see <!--:genprogc:--><A HREF="genprogc/input_method.html#A8F046">Input
+Method Overview</A> in  in<I> AIX General Programming Concepts: Writing and Debugging Programs</I>. </P>
+
+
+<P><A NAME="A3C0ED58005mhay"></A>The input method also automatically takes
+into account cases where multiple keystrokes are needed to specify one
+unique letter. The value returned may be a single-byte value (in the case
+of languages with single-byte code sets), or double-byte value (for languages
+supporting double-byte code sets). For further information on National
+Language Support, refer to the <!--:genprogc:--><A HREF="genprogc/nls.html#A2919f7">National
+Language Support Overview for Programming</A> in  in<I> AIX General Programming Concepts: Writing and Debugging Programs</I>.</P>
+
+
+<P><A NAME="A3C0ED58028mhay"></A>In the example of the United States-English
+keyboard device, events are reported only on a key downstroke. The value
+returned takes into account the state of the modifier key (the Ctrl, Shift,
+and Shift-lock keys). Pressing the lowercase letter a on the keyboard returns
+the ASCII value 0x61, while pressing Shift-A returns the ASCII value 0x41.
+Similarly, pressing the Ctrl-G key sequence returns BEL (hex value 0x07),
+the Ctrl-D key sequence returns ETX (hex value 0x03) and so on, proceeding
+with the standard ASCII mapping. </P>
+
+
+<P><A NAME="A3C0ED58050mhay"></A>It is important to understand the difference
+between the device and the values it returns when you queue the keyboard.
+If your program contains the following instruction: </P>
+
+
+<PRE><A NAME="A16C0ca4e"></A>qdevice(KEYBD);</PRE>
+
+
+<P><A NAME="A3C0ED58074mhay"></A>then the statement: </P>
+
+
+<PRE><A NAME="A16C0ca50"></A>dev&nbsp;=&nbsp;qread(&amp;val);</PRE>
+
+
+<P><A NAME="A3C0ED58096mhay"></A>returns the following: </P>
+
+
+<PRE><A NAME="A16C0ca52"></A>dev&nbsp;==&nbsp;KEYBD
+val&nbsp;==&nbsp;the&nbsp;ISO8859&nbsp;code&nbsp;set&nbsp;encoding&nbsp;of&nbsp;the&nbsp;character&nbsp;pressed.</PRE>
+
+
+<P><A NAME="A3C0ED58119mhay"></A>In United States-English keyboard installations,
+you can test for individual keystrokes by using instructions with the following
+format: </P>
+
+
+<PRE><A NAME="A16C0ca55"></A>qdevice(AKEY);</PRE>
+
+
+<P><A NAME="A3C0ED58143mhay"></A>This returns the AKEY device when the
+uppercase A or lowercase a key is pressed. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A163C11728"></A><B>Note: </B>Currently, the keyboard mapping
+for KEY devices is guaranteed to be correct only in United States-English
+installations. </P></BLOCKQUOTE>
+
+
+<H4><A NAME="A190C1e2"></A>Keyboard Mapping </H4>
+
+
+<P><A NAME="A3C0ED58167mhay"></A>The actual keyboard mapping used by the
+KEYBD device is contained in an <B>imkeymap</B> file. The following locations
+are searched, in the order indicated, for this file: </P>
+
+
+<OL><LI><A NAME="A190C1e4"></A><B>$XDIR/imkeymap</B></LI>
+
+
+<LI><A NAME="A190C1e5"></A><B>$HOME/imkeymap</B></LI>
+
+
+<LI><A NAME="A190C1e6"></A><B>/usr/lib/nls/loc/$LANG</B></LI></OL>
+
+
+<P><A NAME="A3C0ED58193mhay"></A>If none of these files are found, the
+mapping defaults to the ISO8859 (Latin-1) keyboard mapping. An input method
+determines the mapping. By default, the input method used is IMSimpleMap.
+For most country and language combinations, two different encodings are
+supplied: the ISO8859 encoding and the IBM-850 encoding. For example, $LANG
+= Fr_CH is used to indicate the IBM-850 encoding for Swiss French, while
+$LANG = fr_FR indicates that the ISO8859-1 encoding should be used. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A190C1e8"></A><B>Note: </B>Changing the locale after initialization
+has no effect. Keyboard initialization occurs at the time the X server
+is brought up. Therefore, the locale (or $LANG variable) should be set
+before the X server is started. </P></BLOCKQUOTE>
+
+
+<P><A NAME="A3C0ED58217mhay"></A>For applications developed for use in
+countries and languages with more complex input-composing requirements,
+such as in the Asian/Pacific Rim regions, it is strongly suggested that
+the AIXwindows input widget be used. Use of AIXwindows
+for input requires knowledge of the X display connection and the X Window
+identifier of a GL window for a GL session. This information can be obtained
+with the GL <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getXdpy.html#A114C13c">getXdpy</A></B>
+or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getXdpy.html#A114C13c">getXwid</A></B>
+subroutines. For a review of limitations, see <A HREF="exhwindcalls.html#exhwindcalls.html">&quot;Using
+Enhanced X-Windows Calls with GL Subroutines&quot;</A>. Example usages
+can be found in the <B>/usr/lpp/GL/examples</B> directory. </P>
+
+
+<H4><A NAME="A6DA669273vbia"></A>Alt PF Key Keystroke Sequences </H4>
+
+
+<P><A NAME="A3C0ED58242mhay"></A>In the normal course of operations, the
+window manager interprets some key sequences as having special meaning.
+These key sequences typically involve pressing a PF key while holding down
+the Alt key, and are used to modify a window by moving, resizing, raising,
+lowering it, and so on. The window manager removes these events from the
+event queue, and a GL application requesting these key events does not
+receive them. The actual keystrokes that are grabbed are under control
+of the <B>.mwmrc</B> file, and are known as <I>accelerators</I>. Although
+the default accelerators shipped with the system are Alt-PF key sequences,
+the user can change or eliminate the key sequences used as menu accelerators
+by editing the <B>$HOME/.mwmrc</B> file. Note, however, that changes made
+to the <B>$HOME/.mwmrc</B> file affect all applications. Currently, there
+is no selective means of disabling the key grabbing for some, but not all,
+applications. </P>
+
+
+<H3><A NAME="A163C11729"></A>Controlling the Keyboard <A NAME="INDEX832"></A><A NAME="INDEX833"></A>
+<A NAME="INDEX834"></A> <A NAME="INDEX835"></A> <A NAME="INDEX836"></A>
+<A NAME="INDEX837"></A> <A NAME="INDEX838"></A> </H3>
+
+
+<P><A NAME="A3C0ED58265mhay"></A>In addition to routines that poll and
+queue input devices, there are subroutines that control the characteristics
+and behavior of the GL peripheral input and output devices. For example,
+some of these subroutines turn the keyboard click on and off (the <B>clkon</B>
+and <B>clkoff</B> subroutines, respectively) or set the keyboard bell.
+You set these controls to your preference or needs. </P>
+
+
+<H4><A NAME="A16C0ca58"></A>clkon and clkoff Subroutines </H4>
+
+
+<P><A NAME="A3C0ED58289mhay"></A>The <!--:libs:gl32tref:--><A HREF="../gl32tref/clkoff.html#A213X9112de"><B>clkon</B>
+and <B>clkoff</B></A> subroutines turn the keyboard click on and off. The
+syntax for the <B>clkon</B> and <B>clkoff</B> subroutines is as follows:</P>
+
+
+<PRE><A NAME="A66C016c09"></A>void&nbsp;clkon()</PRE>
+
+
+<PRE><A NAME="A66C016c0a"></A>void&nbsp;clkoff()</PRE>
+
+
+<H4><A NAME="A16C0ca5c"></A>lampon and lampoff Subroutines </H4>
+
+
+<P><A NAME="A3C0ED58316mhay"></A>The <!--:libs:gl32tref:--><A HREF="../gl32tref/lampoff.html#A213X9113bc"><B>lampon</B>
+and <B>lampoff</B></A> subroutines control the four lamps on the keyboard.
+Each 1 (as opposed to 0) in the four lower-order bits of the <I>lamps</I>
+parameter to the <B>lampon</B> subroutine causes the corresponding keyboard
+lamp to be on or off, depending on the subroutine called. The syntax for
+the <B>lampon</B> and <B>lampoff</B> subroutines is as follows: </P>
+
+
+<PRE><A NAME="A66C016c0b"></A>void&nbsp;lampon(Int8&nbsp;lamps)</PRE>
+
+
+<PRE><A NAME="A66C016c0c"></A>void&nbsp;lampoff(Int8&nbsp;lamps)</PRE>
+
+
+<H4><A NAME="A16C0ca62"></A>ringbell Subroutine </H4>
+
+
+<P><A NAME="A3C0ED58342mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/ringbell.html#A213X911463">ringbell</A></B>
+subroutine rings the keyboard bell. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A66C016c0d"></A>void&nbsp;ringbell()</PRE>
+
+
+<H4><A NAME="A16C0ca65"></A>setbell Subroutine </H4>
+
+
+<P><A NAME="A3C0ED58367mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/setbell.html#A213X9114ae">setbell</A></B>
+subroutine sets the duration of the keyboard bell. A value of 0 in the
+<I>durat</I> parameter is off, 1 is a short beep, and 2 is a long beep.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A66C016c0e"></A>void&nbsp;setbell(Char8&nbsp;durat)</PRE>
+
+
+<H4><A NAME="A16C0ca69"></A>setdblights Subroutine </H4>
+
+
+<P><A NAME="A3C0ED58392mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/setdblights.html#A213X911501">setdblights</A></B>
+subroutine controls the 32 lighted switches on a dial and switch box. For
+example, to turn on switches 3 and 7, the third and seventh bits of the
+mask must be set to <TT>1&nbsp;(1&lt;&lt;3)|(1&lt;&lt;7)=0x88</TT>. The
+syntax is as follows: </P>
+
+
+<PRE><A NAME="A66C016c0f"></A>void&nbsp;setdblights(Int32&nbsp;mask)</PRE>
+
+
+
+
+<hr><center>
+[  <a href="cursorgl.html">Previous</a>  |
+<a href="cntrlques.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/keyboardgl.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+

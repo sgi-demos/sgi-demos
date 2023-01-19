@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>RGBcolor Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="reshapeviewport.html">Previous</a>  |
+<a href="RGBmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9394"></A>RGBcolor Subroutine</H2>
+<A NAME="INDEX1644" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1645" REL="I2" TITLE="attribute"></A>
+<A NAME="INDEX1646" REL="I3" TITLE="RGBcolor"></A>
+<A NAME="INDEX1647" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1648" REL="I2" TITLE="color"></A>
+<A NAME="INDEX1649" REL="I3" TITLE="current"></A>
+<A NAME="INDEX1650" REL="I1" TITLE="RGBcolor subroutine (GL)"></A>
+
+<H3><A NAME="A143X9396"></A>Purpose</H3>
+<P><A NAME="E1D7359831ceb"></A>Sets the current color in RGB mode.</P>
+
+<H3><A NAME="A77C1309"></A>Libraries</H3>
+<P><A NAME="E1D7359870ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7359895ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X939a"></A>C Syntax</H3>
+<PRE><A NAME="A143X939b"></A><B>RGBcolor</B>
+<B>(short </B><A HREF="RGBcolor.html#A143X939f"><I>red</I></A><B>,</B> <B>short </B><A HREF="RGBcolor.html#A143X93a0"><I>green</I></A><B>,</B> <B>short </B><A HREF="RGBcolor.html#A143X93a1"><I>blue</I></A><B>)</B></PRE>
+
+<H3><A NAME="A19C0e0e2"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A19C0e0e3"></A><B>SUBROUTINE RGBCOL(</B><I>red</I><B>,</B> <I>green</I><B>,</B> <I>blue</I><B>)</B>
+<B>INTEGER*4 </B><I>red</I><B>,</B> <I>green</I><B>,</B> <I>blue</I></PRE>
+
+<H3><A NAME="A143X939c"></A>Description</H3>
+<P><A NAME="E1D735A008ceb"></A>The <B>RGBcolor</B> subroutine sets the current color when the system is in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>. The lower-order 8 bits of the three arguments control the intensity of red, green, and blue colors displayed on the screen. The system writes these numbers directly into the bitplanes whenever it draws a pixel. </P>
+
+<BLOCKQUOTE><A NAME="A213X91221a"></A><B>Note: </B>This subroutine is available only in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X939e"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X939f"></A><I>red</I>  </TD>
+<TD>  Specifies a value indicating the intensity of the color red to be displayed on the screen. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X93a0"></A><I>green</I>  </TD>
+<TD>  Specifies a value indicating the intensity of the color green to be displayed on the screen.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X93a1"></A><I>blue</I> </TD>
+<TD>  Specifies a value indicating the intensity of the color blue to be displayed on the screen.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015c73"></A>Implementation Specifics</H3>
+<P><A NAME="E1D735A145ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A77C130c"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C130d"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C130e"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c3be"></A>Related Information</H3>
+<P><A NAME="E1D735A243ceb"></A>Setting the current color in RGB mode with the <A HREF="c.html#A143X9262"><B>c</B></A> subroutine. </P>
+
+<P><A NAME="E1D735A268ceb"></A>Setting the current color in color map mode with the <A HREF="color.html#A146X9429"><B>color</B></A> subroutine.</P>
+
+<P><A NAME="E1D735A294ceb"></A>Setting the current color as a packed 32-bit integer with the <A HREF="cpack.html#A143X9284"><B>cpack</B></A> subroutine.</P>
+
+<P><A NAME="E1D735A319ceb"></A>Returning the current RGB value with the <A HREF="gRGBcolor.html#ESL13a0marj"><B>gRGBcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1D735A345ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A>,Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="reshapeviewport.html">Previous</a>  |
+<a href="RGBmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>pnt Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="pmv.html">Previous</a>  |
+<a href="pntsmooth.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="Ptf3a0marj"></A>pnt Subroutine</H2>
+<A NAME="INDEX1386" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1387" REL="I2" TITLE="moveraw style"></A>
+<A NAME="INDEX1388" REL="I3" TITLE="pnt"></A>
+<A NAME="INDEX1389" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1390" REL="I2" TITLE="points"></A>
+<A NAME="INDEX1391" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX1392" REL="I1" TITLE="pnt subroutine (GL)"></A>
+<H3><A NAME="A213X912d79"></A>Purpose</H3>
+<P><A NAME="E1D7157946ceb"></A>Draws a point in modeling coordinates.</P>
+
+<H3><A NAME="A78C130e"></A>Libraries</H3>
+<P><A NAME="E1D7157985ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7158010ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912d7c"></A>C Syntax</H3>
+<PRE><A NAME="A213X912d7d"></A><B>void pnt</B>
+<B>(Coord </B><A HREF="pnt.html#A213X912d85"><I>x</I></A><B>, Coord</B> <A HREF="pnt.html#A213X912d86"><I>y</I></A><B>, Coord</B> <A HREF="pnt.html#A213X912d87"><I>z</I></A><B>)</B></PRE>
+<PRE><A NAME="b1e330marj"></A><B>void pnti</B>
+<B>(Icoord </B><A HREF="pnt.html#A213X912d85"><I>x</I></A><B>, Icoord</B> <A HREF="pnt.html#A213X912d86"><I>y</I></A><B>, Icoord</B> <A HREF="pnt.html#A213X912d87"><I>z</I></A><B>)</B></PRE>
+<PRE><A NAME="s1e150marj"></A><B>void pnts</B>
+<B>(Scoord </B><A HREF="pnt.html#A213X912d85"><I>x</I></A><B>, Scoord</B> <A HREF="pnt.html#A213X912d86"><I>y</I></A><B>, Scoord</B> <A HREF="pnt.html#A213X912d87"><I>z</I></A><B>)</B></PRE>
+<PRE><A NAME="A32e330marj"></A><B>void pnt2</B>
+<B>(Coord </B><A HREF="pnt.html#A213X912d85"><I>x</I></A><B>, Coord</B> <A HREF="pnt.html#A213X912d86"><I>y</I></A><B>)</B></PRE>
+<PRE><A NAME="g2e210marj"></A><B>void pnt2i</B>
+<B>(Icoord </B><A HREF="pnt.html#A213X912d85"><I>x</I></A><B>, Icoord</B> <A HREF="pnt.html#A213X912d86"><I>y</I></A><B>)</B></PRE>
+<PRE><A NAME="s2e210marj"></A><B>void pnt2s</B>
+<B>(Scoord </B><A HREF="pnt.html#A213X912d85"><I>x</I></A><B>, Scoord</B> <A HREF="pnt.html#A213X912d86"><I>y</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010ae2"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010ae3"></A><B>SUBROUTINE PNT(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I><B>)</B>
+<B>REAL </B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I></PRE>
+<PRE><A NAME="A29C010ae4"></A><B>SUBROUTINE PNTI(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I></PRE>
+<PRE><A NAME="A29C010ae5"></A><B>SUBROUTINE PNTS(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I><B>)</B>
+<B>INTEGER*2 </B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I></PRE>
+<PRE><A NAME="A29C010ae6"></A><B>SUBROUTINE PNT2(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>REAL </B><I>x</I><B>, </B><I>y</I></PRE>
+<PRE><A NAME="A29C010ae7"></A><B>SUBROUTINE PNT2I(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>, </B><I>y</I></PRE>
+<PRE><A NAME="A29C010ae8"></A><B>SUBROUTINE PNT2S(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>INTEGER*2 </B><I>x</I><B>, </B><I>y</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C1311"></A><B>Note: </B>For FORTRAN users, the INTEGER*2 versions of this subroutine, <B>PNTS</B> and <B>PNT2S</B>, should not be called with integer constant parameters. For example, 2 is an integer constant; JJ is an integer variable. The XL FORTRAN compiler, invoked by the <B>xlf</B> command, stores all integer constants as long integers (INTEGER*4), not as short integers (INTEGER*2). Invoking one of the short versions of this subroutine with an integer constant will result in unexpected behavior.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912d80"></A>Description</H3>
+<P><A NAME="E1D7158330ceb"></A>The <B>pnt </B>subroutine draws a point in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06el">modeling coordinates</A>. If the point is visible in the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">current viewport</A>, it is shown as one pixel. The pixel is drawn in the current point attributes: color (if in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A150P19d9">depth-cue mode</A>, the depth-cued color is used) and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemask</A>. The <B>pnt</B> subroutine updates the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03eb">current graphics position</A> after it executes. A drawing routine immediately following the <B>pnt</B> subroutine will start drawing from the point specified. </P>
+
+<P><A NAME="E1D7158355ceb"></A>The six different forms for the <B>pnt</B> subroutine are as follows:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><BR></TD>
+
+<TD><B>2-D</B></TD>
+
+<TD><B>3-D</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int16</TD>
+
+<TD>pnt2s</TD>
+
+<TD>pnts</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int32</TD>
+
+<TD>pnt2i</TD>
+
+<TD>pnti</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>float</TD>
+
+<TD>pnt2</TD>
+
+<TD>pnt</TD></TR></TABLE>
+
+<P><A NAME="E1D7158398ceb"></A>The syntax for each of the subroutine forms is the same except for the parameter type. They differ only in that <A HREF="pnt.html#A213X912d7d"><B>pnt</B></A> expects real coordinates, <A HREF="pnt.html#b1e330marj"><B>pnti</B></A> expects integer coordinates, and <A HREF="pnt.html#s1e150marj"><B>pnts</B></A> expects short integer coordinates. In addition, the <A HREF="pnt.html#A32e330marj"><B>pnt2</B></A> routines assume a 2-D point instead of a 3-D point.</P>
+
+<H3><A NAME="A213X912d84"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912d85"></A><I>x</I></TD>
+<TD>  Specifies the <I>x</I> coordinate of the point.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912d86"></A><I>y</I></TD>
+<TD>  Specifies the <I>y</I> coordinate of the point.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912d87"></A><I>z</I></TD>
+<TD>  Specifies the <I>z</I> coordinate of the point.</TD></TR></TABLE>
+
+<H3><A NAME="A30C011004"></A>Example</H3>
+<P><A NAME="E1D7158513ceb"></A>The example C language program <A HREF="depthcue_c.html#A16C0c8ff"><B>depthcue.c</B></A> uses the <B>pnt</B> subroutine to draw random points. </P>
+
+<H3><A NAME="A62C015d1e"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7158556ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1312"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1313"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1314"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912d95"></A>Related Information</H3>
+<P><A NAME="E1D7158653ceb"></A>Drawing a line with the <A HREF="draw.html#EYf2e0marj"><B>draw</B></A> subroutine.</P>
+
+<P><A NAME="E1D7158678ceb"></A>Moving the current graphics position to a specified point with the <A HREF="move.html#pofmarj"><B>move</B></A> subroutine.</P>
+
+<P><A NAME="E1D7158704ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing with <!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Move-Draw Style</A> Subroutines, Performing <!--gl32prgd:--><A HREF="../gl32prgd/depth-cueing.html">Depth-Cueing</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, 
+and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="pmv.html">Previous</a>  |
+<a href="pntsmooth.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

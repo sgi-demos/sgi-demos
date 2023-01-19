@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getmap Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getlwidth.html">Previous</a>  |
+<a href="getmatrix.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A146X94e2"></A>getmap Subroutine</H2>
+<A NAME="INDEX738" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX739" REL="I2" TITLE="color map and RGB mode"></A>
+<A NAME="INDEX740" REL="I3" TITLE="getmap"></A>
+<A NAME="INDEX741" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX742" REL="I2" TITLE="color map"></A>
+<A NAME="INDEX743" REL="I3" TITLE="returning number of current"></A>
+<A NAME="INDEX744" REL="I1" TITLE="getmap (GL)"></A>
+
+<H3><A NAME="A146X94e4"></A>Purpose</H3>
+<P><A NAME="E1B0F91210ceb"></A>Returns the number of the current color map.</P>
+
+<H3><A NAME="A78C137"></A>Libraries</H3>
+<P><A NAME="E1B0F91360ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0F91465ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A146X94e7"></A>C Syntax</H3>
+<PRE><A NAME="A146X94e8"></A><B>Int32 getmap(&nbsp;)</B></PRE>
+
+<H3><A NAME="A146X94c0"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A146X94c3"></A><B>INTEGER*4 FUNCTION GETMAP</B></PRE>
+
+<H3><A NAME="A146X94eb"></A>Description</H3>
+<P><A NAME="E1B0F91823ceb"></A>The <B>getmap</B> subroutine returns the identification number of the current color map. In <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#a3P1390marj">multimap mode</A>, there are 16 small, independent color maps; therefore, the <B>getmap</B> subroutine returns a value in the range 0 to 15. In <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#a3P1390marj">onemap mode</A>, the <B>getmap</B> subroutine returns 0 (zero).</P>
+
+<BLOCKQUOTE><A NAME="A318C9cba"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A146X94ee"></A>Return Value</H3>
+<P><A NAME="E1B0F92036ceb"></A>The number of the current color map, a value from 0 to 15.</P>
+
+<H3><A NAME="A64C01655e"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0F92200ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C13a"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C13b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C13c"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A146X9500"></A>Related Information</H3>
+<P><A NAME="E1B0F92520ceb"></A>Returning the organization of the current color map with the <A HREF="getcmmode.html#A146X948e"><B>getcmmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B0F92627ceb"></A>Organizing the color map as 16 small maps with the <A HREF="multimap.html#A146X9593"><B>multimap</B></A> subroutine.</P>
+
+<P><A NAME="E1B0F92741ceb"></A>Organizing the color map as one large map with the <A HREF="onemap.html#A146X95ef"><B>onemap</B></A> subroutine.</P>
+
+<P><A NAME="E1B0F92852ceb"></A>Selecting one of 16 small color maps with the <A HREF="setmap.html#A146X9646"><B>setmap</B></A> subroutine.</P>
+
+<P><A NAME="E1B0F92960ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System.</P>
+
+<P><A NAME="E1B0F93068ceb"></A>Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="getlwidth.html">Previous</a>  |
+<a href="getmatrix.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

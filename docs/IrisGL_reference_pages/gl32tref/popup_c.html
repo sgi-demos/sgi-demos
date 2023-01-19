@@ -1,0 +1,246 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>popup.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="platelocal_c.html">Previous</a>  |
+<a href="prompt_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c8c0"></A>popup.c Example C Language Program
+</H2>
+<A NAME="INDEX2396" REL="I1" TITLE="popup.c example program (GL)"></A>
+<A NAME="INDEX2397" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2398" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2399" REL="I3" TITLE="popp menu"></A>
+<A NAME="INDEX2400" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2401" REL="I2" TITLE="pop-up menus"></A>
+<A NAME="INDEX2402" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64EB1E826ttay"></A>/*
+popup.c:
+Demonstrates "how to write your own popup menu" routine
+s.
+Use LEFTMOUSE instead of RIGHTMOUSE to pop up the me
+nus.
+*/</PRE>
+<PRE><A NAME="A64EB1E983ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EB1F131ttay"></A>#define LINE 1</PRE>
+<PRE><A NAME="A64EB1F279ttay"></A>#define POINTS 2</PRE>
+<PRE><A NAME="A64EB1F427ttay"></A>#define CIRCLE 3</PRE>
+<PRE><A NAME="A64EB1F574ttay"></A>#define RECT 4</PRE>
+<PRE><A NAME="A64EB1F721ttay"></A>#define RECTF 5</PRE>
+<PRE><A NAME="A64EB1F868ttay"></A>#define QUIT 6</PRE>
+<PRE><A NAME="A64EB20042ttay"></A>typedef struct {
+  short type;
+  char *text;
+} popupentry;</PRE>
+<PRE><A NAME="A64EB20260ttay"></A>popupentry mainmenu[] = {
+  {LINE, "Line"},
+  {POINTS, "100 points"},
+  {CIRCLE, "Filled circle"},
+  {RECT, "Outlined rectangle"},
+  {RECTF, "Filled rectangle"},
+  {QUIT, "Quit"},
+  {0, 0}
+};
+/* mark end of menu */</PRE>
+<PRE><A NAME="A64EB20418ttay"></A>main()
+{
+  long win;
+  short val, command;</PRE>
+<PRE><A NAME="A64EB20604ttay"></A>  prefposition(0,XMAXSCREEN,0,YMAXSCREEN);
+  win = winopen("popup");
+  ortho2(-1.0, 1.0, -1.0, 1.0);
+  overlay(2);
+  gconfig();</PRE>
+<PRE><A NAME="A64EB20854ttay"></A>  drawmode(OVERDRAW);
+  mapcolor(0, 0, 0, 0);        /* background only */
+  mapcolor(1, 120, 120, 120);  /* popup background */
+  mapcolor(2, 255, 255, 255);  /* popup text only */
+  drawmode(NORMALDRAW);
+  qdevice(RIGHTMOUSE);
+  qdevice(LEFTMOUSE);
+  tie(LEFTMOUSE, MOUSEX, MOUSEY);
+  color(0);
+  clear();</PRE>
+<PRE><A NAME="A64EB21074ttay"></A>  while (TRUE) {
+    switch(qread(&amp;val)) {
+    case REDRAW:
+      reshapeviewport();
+      drawstuff(command);
+      break;
+    case LEFTMOUSE:
+      drawstuff(command = popup(mainmenu));
+    default:
+      break;
+    }
+  }</PRE>
+<PRE><A NAME="A64EB21218ttay"></A>}</PRE>
+<PRE><A NAME="A64EB21379ttay"></A>drawstuff(command)
+short command;
+{
+  register i, j;</PRE>
+<PRE><A NAME="A64EB21695ttay"></A>  color(0);
+  clear();
+  color(GREEN);
+  switch(command) {
+  case LINE:
+    move2(-1.0, -1.0);
+    draw2(1.0, 1.0);
+    break;
+  case POINTS:
+    for (i =  0; i &lt; 10; i++)
+      for (j = 0; j &lt; 10; j++)
+        pnt2(i/20.0, j/20.0);
+    break;
+  case CIRCLE:
+    circf(0.0, 0.0, 0.5);
+    break;
+  case RECT:
+    rect(-0.5, -0.5, 0.5, 0.5);
+    break;
+  case RECTF:
+    rectf(-0.5, -0.5, 0.5, 0.5);
+    break;
+  case QUIT:
+    greset();
+    gexit();
+    exit(0);
+  default:
+    break;
+  }</PRE>
+<PRE><A NAME="A64EB21837ttay"></A>}</PRE>
+<PRE><A NAME="A64EB22160ttay"></A>popup(names)
+popupentry names[];
+{
+  register short i, menucount;
+  short menutop, menubottom, menuleft, menuright;
+  short lasthighlight = -1, highlight;
+  short dummy, x, y;
+  menucount = 0;
+  qread(&amp;x);
+  qread(&amp;y);
+  pushmatrix();
+  drawmode(OVERDRAW);
+  ortho2(-0.5, 1279.5, -0.5, 1023.5);
+  while (names[menucount].type)
+    menucount++;
+  menutop = y + menucount*8;
+  menubottom = y - menucount*8;
+  if (menutop > YMAXSCREEN) {
+    menutop = YMAXSCREEN;
+    menubottom = menutop - menucount*16;
+  }</PRE>
+<PRE><A NAME="A64EB22332ttay"></A>  if (menubottom &lt; 0) {
+    menubottom = 0;
+    menutop = menubottom + menucount*16;
+  }</PRE>
+<PRE><A NAME="A64EB22517ttay"></A>  menuleft = x - 100;
+  menuright = x + 100;
+  if (menuleft &lt; 0) {
+    menuleft = 0;
+    menuright = menuleft + 200;
+  }</PRE>
+<PRE><A NAME="A64EB22700ttay"></A>  if (menuright > XMAXSCREEN) {
+    menuright = XMAXSCREEN;
+    menuleft = menuright - 200;
+  }
+  color(0);
+  clear();</PRE>
+<PRE><A NAME="A64EB22876ttay"></A>  color(1);                /* menu background */
+  rectfi(menuleft, menubottom, menuright, menutop);</PRE>
+<PRE><A NAME="A64EB23076ttay"></A>  color(2);                /* menu text */
+  move2i(menuleft, menubottom);
+  draw2i(menuleft, menutop);
+  draw2i(menuright, menutop);
+  draw2i(menuright, menubottom);</PRE>
+<PRE><A NAME="A64EB23288ttay"></A>  for (i = 0; i &lt; menucount; i++) {
+    move2i(menuleft, menutop - (i+1)*16);
+    draw2i(menuright, menutop - (i+1)*16);
+    cmov2i(menuleft + 10, menutop - 14 - i*16);
+    charstr(names[i].text);
+  }</PRE>
+<PRE><A NAME="A64EB23629ttay"></A>  while (!qtest()) {
+    x = getvaluator(MOUSEX);
+    y = getvaluator(MOUSEY);
+    if (menuleft &lt; x &amp;&amp; x &lt; menuright &amp;&amp; 
+        menubottom &lt; y &amp;&amp; y &lt; menutop)
+    {
+      highlight = (menutop - y)/16;
+      if (lasthighlight != -1 &amp;&amp; lasthighlight != highlight) {
+        color(1);
+        rectfi(menuleft+1, 
+            menutop - lasthighlight*16 - 15,
+            menuright-1, menutop - lasthighlight*16 - 1);
+        color(2);
+        cmov2i(menuleft + 10, 
+            menutop - 14 - lasthighlight*16);
+        charstr(names[lasthighlight].text);
+      }</PRE>
+<PRE><A NAME="A64EB23880ttay"></A>      if (lasthighlight != highlight) {
+        color(2);
+        rectfi(menuleft+1, menutop - highlight*16 - 15,
+            menuright-1, menutop - highlight*16 - 1);
+        color(1);
+        cmov2i(menuleft + 10, 
+            menutop - 14 - highlight*16);
+        charstr(names[highlight].text);
+      }</PRE>
+<PRE><A NAME="A64EB24036ttay"></A>      lasthighlight = highlight;
+    }</PRE>
+<PRE><A NAME="A64EB24327ttay"></A>    else /* the cursor is outside the menu */ 
+    {
+      if (lasthighlight != -1)
+      {
+        color(1);
+        rectfi(menuleft+1, 
+            menutop - lasthighlight*16 - 15,
+            menuright-1, menutop - lasthighlight*16 - 1);
+        color(2);
+        cmov2i(menuleft + 10, 
+            menutop - 14 - lasthighlight*16);
+        charstr(names[lasthighlight].text);
+        lasthighlight = -1;
+      }</PRE>
+<PRE><A NAME="A64EB24471ttay"></A>    }</PRE>
+<PRE><A NAME="A64EB24614ttay"></A>  }</PRE>
+<PRE><A NAME="A64EB24856ttay"></A>  qread(&amp;dummy);
+  qread(&amp;x);
+  qread(&amp;y);
+  color(0);
+  rectfi(menuleft, menubottom, menuright, menutop);
+  if (menuleft&lt;x &amp;&amp; x&lt;menuright &amp;&amp; menubottom&lt;y &amp;&amp; y&lt;menutop)
+    x = (menutop - y)/16;
+  else
+    x = 0;
+  drawmode(NORMALDRAW);
+  popmatrix();
+  return names[x].type;
+}</PRE>
+
+<H3><A NAME="A201C118f"></A>Related Information</H3><hr><center>
+[  <a href="platelocal_c.html">Previous</a>  |
+<a href="prompt_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

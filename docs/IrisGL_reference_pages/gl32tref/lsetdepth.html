@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>lsetdepth Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="lRGBrange.html">Previous</a>  |
+<a href="lshaderange.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="naR120marj"></A>lsetdepth Subroutine</H2>
+<A NAME="INDEX1100" REL="I1" TITLE="lsetdepth subroutine (GL)"></A>
+<A NAME="INDEX1101" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1102" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX1103" REL="I3" TITLE="lsetdepth"></A>
+<A NAME="INDEX1104" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1105" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX1106" REL="I3" TITLE="setting 3"></A>
+<H3><A NAME="A213X9111a9"></A>Purpose</H3>
+<P><A NAME="E1B1703721ceb"></A>Sets up a 3-D viewport.</P>
+
+<H3><A NAME="A79C1270"></A>Libraries</H3>
+<P><A NAME="E1B1703876ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1704013ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X9111ac"></A>C Syntax</H3>
+<PRE><A NAME="A213X9111ad"></A><B>void lsetdepth(Int32 </B><A HREF="lsetdepth.html#KG31f0marj"><I>near</I></A><B>, Int32 </B><A HREF="lsetdepth.html#TG31350marj"><I>far</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X911189"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X91118c"></A><B>SUBROUTINE LSETDE(</B><I>near</I><B>,</B><I> far</I><B>)</B>
+<B>INTEGER*4 </B><I>near</I><B>,</B><I> far</I></PRE>
+
+<H3><A NAME="A213X9111b0"></A>Description</H3>
+<P><A NAME="E1B1704458ceb"></A>The <B>lsetdepth</B> subroutine takes the mapping furnished by the <A HREF="viewport.html#qrY270marj"><B>viewport</B></A> subroutine and completes this mapping for 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0623">homogeneous coordinates</A>. The <B>viewport</B> subroutine specifies the mapping of the left, right, bottom, and top 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e1">clipping planes</A> into screen coordinates. The <B>lsetdepth</B> subroutine then specifies the mapping of the near and far clipping planes into values stored in the z-buffer. This subroutine is used in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P1160a">z-buffering</A> and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A150P19d9">depth-cueing</A>. </P>
+
+<P><A NAME="E1B1704567ceb"></A>Acceptable mappings include all those where the values of the <A HREF="lsetdepth.html#KG31f0marj"><I>near</I></A> and <A HREF="lsetdepth.html#TG31350marj"><I>far</I></A> parameters are within the supported range, including mappings where <I>near </I>> <I>far</I>.</P>
+
+<OL><LI><A NAME="A258C01c885"></A>Error accumulation in the iteration of the <I>z</I> coordinate can cause wrapping when the full-depth range supported by the graphics hardware is used. (An iteration wraps when it accidentally converts a large positive value into a negative value or vice versa.) The effects of wrapping, although typically not observed, can be eliminated by reducing the depth range by a small percentage.</LI>
+
+<LI><A NAME="A258C01c886"></A>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. (See "<!--gl32prgd:--><A HREF="../gl32prgd/powerstation730.html#NITAXIO">Hardware Considerations</A>";.) </LI></OL>
+
+<P><A NAME="E1B1704797ceb"></A>The valid range of values for the <B>lsetdepth</B> subroutine can be found by querying with the <A HREF="getgdesc.html#t9311e0marj"><B>getgdesc</B></A> subroutine with the <B>GD_ZMIN</B> and <B>GD_ZMAX</B> tokens.</P>
+
+<BLOCKQUOTE><A NAME="A478903882bett"></A><B>Note: </B>The POWER Gt4x adapter supports a full 24-bit z range, from 0x0 to 0xFFFFFF. It does not support negative-signed integer values.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X9111b4"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="KG31f0marj"></A><I>near</I> </TD>
+<TD>  Specifies the screen coordinate of the near clipping plane.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="TG31350marj"></A><I>far</I></TD>
+<TD>  Specifies the screen coordinate of the far clipping plane.</TD></TR></TABLE>
+
+<H3><A NAME="A30C01102a"></A>Example</H3>
+<P><A NAME="E1B1705234ceb"></A>The example C language program <A HREF="depthcue_c.html#A16C0c8ff"><B>depthcue.c</B></A> uses the <B>lsetdepth</B> subroutine to set the range of z-axis values to store in the bitplanes. </P>
+
+<H3><A NAME="A62C015d50"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1705445ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<P><A NAME="A3CFCC84349janb"></A>The POWERgraphics GXT1000 supports a repeat factor from 1 to 255. Query the maximum supported repeat factor with getgdesc(GD_MAX_LSREPEAT).</P>
+
+<H3><A NAME="A79C1273"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1274"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1275"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X9111c0"></A>Related Information</H3>
+<P><A NAME="E1B1705837ceb"></A>Turning depth-cueing on and off with the <A HREF="depthcue.html#PNK22d0marj"><B>depthcue</B></A> subroutine.</P>
+
+<P><A NAME="E1B1705981ceb"></A>Get information about the installed graphics hardware with the <A HREF="getgdesc.html#t9311e0marj"><B>getgdesc</B></A> subroutine.</P>
+
+<P><A NAME="E1B1706109ceb"></A>Setting the viewport depth range with the <A HREF="lsetdepth.html#naR120marj"><B>lsetdepth</B></A> subroutine.</P>
+
+<P><A NAME="E1B1706226ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>, Performing <!--gl32prgd:--><A HREF="../gl32prgd/depth-cueing.html">Depth-Cueing</A>, 
+Using <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Viewports and Screenmasks</A>, and Working with Coordinate Systems.</P><hr><center>
+[  <a href="lRGBrange.html">Previous</a>  |
+<a href="lshaderange.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

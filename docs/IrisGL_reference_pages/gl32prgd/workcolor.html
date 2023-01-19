@@ -1,0 +1,703 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/workcolor.html Mon, 24 Jan 2022 16:28:12 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Working in Color Map and RGB Modes in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="underframebuf.html">Previous</a>  |
+<a href="animatescene.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+<H2><A NAME="workcolor.html"></A>Working in Color Map and RGB Modes</H2>
+
+
+<P><A NAME="INDEX596"></A><A NAME="INDEX597"></A><A NAME="INDEX598"></A><A NAME="INDEX599"></A><A NAME="INDEX600"></A><A NAME="INDEX601"></A><A NAME="INDEX602"></A><A NAME="INDEX603"></A><A NAME="INDEX604"></A></P>
+
+
+<P><A NAME="A3C0EB46315mhay"></A>This section contains discussions on the
+following topics: </P>
+
+
+<UL><LI><A NAME="A39C012355"></A><A HREF="workcolor.html#A264X910d">Color Display</A>,
+including RGB mode and color map mode</LI>
+
+
+<LI><A NAME="A39C012356"></A><A HREF="workcolor.html#a3P1390marj">Onemap
+and Multimap Mode</A></LI>
+
+
+<LI><A NAME="A39C012358"></A><A HREF="workcolor.html#A264X9122">Gamma Correction</A></LI></UL>
+
+
+<P><A NAME="A3C0EB46339mhay"></A>The creation of graphics includes two
+basic steps: first, the drawing subroutines write data into the bitplanes,
+and second, the display hardware interprets that data as colors on the
+screen. The GL subroutines control both the patterns of zeros and ones
+that are written into the bitplanes of each pixel and the interpretation
+of those patterns as colors on the screen. </P>
+
+
+<H3><A NAME="A264X9a6"></A>List of GL Color Map and RGB Mode Subroutines<A NAME="INDEX605"></A>
+<A NAME="INDEX606"></A> <A NAME="INDEX607"></A> <A NAME="INDEX608"></A>
+<A NAME="INDEX609"></A> <A NAME="INDEX610"></A> <A NAME="INDEX611"></A>
+<A NAME="INDEX612"></A> <A NAME="INDEX613"></A> <A NAME="INDEX614"></A>
+<A NAME="INDEX615"></A> <A NAME="INDEX616"></A> </H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A301X9100a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/cmode.html#A146X93d6">cmode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets color map mode as the current mode.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A301X91002"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/gammaramp.html#Kz4nita">gammaramp</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Defines a color map ramp for gamma correction.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A301X91006"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getcmmode.html#A146X948e">getcmmode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the organization of the current color map.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A301X91007"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmap.html#A146X94e2">getmap</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the number of the current color map.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A301X91003"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmcolor.html#nXI1100marj">getmcolor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Gets a copy of the RGB values for a color map entry.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A59C01547b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmcolors.html#UI2f0marj">getmcolors</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns a range of color map RGB values.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A59C01547c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapcolor.html#A146X9535">mapcolor</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Changes a color map entry to a specified RGB value.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A59C01547d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapcolors.html#cv2170marj">mapcolors</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Loads a range of color map entries. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A301X91005"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/multimap.html#A146X9593">multimap</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Organizes the color map as 16 small maps.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A301X91004"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/onemap.html#A146X95ef">onemap</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Organizes the color map as one large map.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A301X91009"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/RGBmode.html#A143X93b6">RGBmode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets a display mode that bypasses the color map.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A301X91008"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setmap.html#A146X9646">setmap</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Selects one of 16 small color maps.</TD></TR></TABLE>
+
+
+<P> </P>
+
+
+<H3><A NAME="A264X910d"></A>Color Display </H3>
+
+
+<P><A NAME="A3C0EB46376mhay"></A>If you have a standard monitor, it has
+three color guns that sweep the entire screen area 60 times per second.
+During this sweep, each gun points directly at each of the pixels for a
+very short time. The color guns shoot out electrons that strike the screen
+and cause it to glow. </P>
+
+
+<P><A NAME="A3C0EB46398mhay"></A>Each pixel on the screen is composed of
+three different phosphors that glow red, green, or blue. One color gun
+activates only the red phosphors, one only the green, and the other only
+the blue. As each color gun sweeps across the pixels, the number of electrons
+shot out (the intensity) is modified on a pixel-to-pixel basis. </P>
+
+
+<P><A NAME="A3C0EB46419mhay"></A>Consider just the red color gun. If no
+electrons are fired at a pixel, its phosphors do not glow at all, and it
+appears black. If the gun is turned on to its highest intensity, the phosphor
+glows bright red. At intermediate intensities, the colors vary between
+black to bright red. </P>
+
+
+<P><A NAME="A3C0EB46441mhay"></A>The same is true for the other guns, except
+that the colors vary from black to bright green, or from black to bright
+blue. The color your eye perceives for a pixel is the combination of all
+three colors. Different combinations of intensity settings of the guns
+cause a wide variety of colors to appear. </P>
+
+
+<P><A NAME="A3C0EB46463mhay"></A>Each color gun can be set to 256 different
+intensity levels, ranging from completely off to completely on. Setting
+0 is completely off and setting 255 is completely on. The intensities of
+the red, green, and blue guns at the pixel determine its color. This is
+expressed as an RGB triple: three numbers between 0 and 255 indicating
+the red, green, and blue intensity, in that order. </P>
+
+
+<P><A NAME="A3C0EB46485mhay"></A>For example, black is represented by (0,0,0),
+bright red by (255,0,0), and bright green by (0,255,0). Other examples
+include: (255,255,0) = yellow, (0,255,255) = cyan, (255,0,255) = magenta,
+(255,255,255) = white. The colors represented by black = (0,0,0), (1,1,1),
+(2,2,2), and so on through (255,255,255) = white are different shades of
+gray ranging from black to white. Because each gun has 256 different settings,
+there are 16777216 (256x256x256) different colors available. </P>
+
+
+<H4><A NAME="A264X9112"></A>RGB Mode </H4>
+
+
+<P><A NAME="A3C0EB46508mhay"></A>The simplest way to interpret pixel data
+is to provide 8 bits each (255 values) for red, green, and blue, then display
+exactly those values of red, green, and blue on the screen. This is called
+RGB mode and requires 24 bits of data per pixel. </P>
+
+
+<P><A NAME="A3C0EB46530mhay"></A>Hardware for RGB mode can be built easily
+if there are 24 bitplanes available. Each one of the three groups of eight
+bitplanes can be used to store one of the RGB components. Each component
+is then fed via the digital-to-analog converters (DAC) to the electron
+guns of the monitor. </P>
+
+
+<P><A NAME="A3C0EB46552mhay"></A>Through a technique called dithering,
+RGB mode is also available on adapters with fewer than 24 bitplanes; in
+particular, the 8-bitplane systems. Because the 256 colors available on
+a 8-bitplane system are not enough to create full-color images if employed
+in the most straightforward fashion, another technique, such as dithering,
+is required to achieve full color realism. </P>
+
+
+<P><A NAME="A3C0EB46574mhay"></A>Dithering is similar to the process used
+by magazines to print full-color photographs with a base of only four colors.
+To replicate a color that is not in the palette of 256, alternating pixels
+in the frame buffer are set to either one of the two or more nearest available
+colors. This creates a faint and very fine checkerboard pattern that, when
+viewed from a distance, appears to be the desired color. The success of
+this technique depends on the fact that the pixels are imperceptible at
+normal viewing distances. </P>
+
+
+<H4><A NAME="A264X9115"></A>Color Map Mode </H4>
+
+
+<P><A NAME="A3C0EB46597mhay"></A>Another way to write and interpret the
+data in the bitplanes is color map mode. Many applications are better suited
+to color map mode than to <A HREF="workcolor.html#A264X9112">RGB mode</A>.
+Many of the principles of color maps are used in the overlay, underlay,
+and pop-up menu modes. </P>
+
+
+<P><A NAME="A3C0EB46619mhay"></A>Color map mode is useful for representing
+scalar false color data, such as temperatures, pressures, viscosities,
+strains, elevations, and material compositions. It also provides a convenient
+way to achieve blinking or other simple animation. This technique, called
+color map animation, makes predrawn images appear to move by simply changing
+the color map. </P>
+
+
+<P><A NAME="A3C0EB46641mhay"></A>Color map mode provides a level of indirection
+between the values stored in the bitplanes and the RGB values displayed
+on the screen. The value stored in the standard bitplanes (up to 12 bits)
+is interpreted as an index into a color map. Each entry in the color map
+consists of a full 8 bits each of red, green, and blue intensity. To specify
+a color for a pixel on the screen, set the corresponding bit in each of
+the 12 bitplanes to represent a number between 0 and 4095. This number
+specifies an index into the color map that indicates the red, green, and
+blue value for that pixel. </P>
+
+
+<P><A NAME="A3C0EB46663mhay"></A>Because the system is in color map mode
+by default, the lowest 8 values in the color map are loaded as follows:</P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="4"><B>The Lowest 8 Color Map Values</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Red</B> </TD>
+
+
+<TD><B>Green</B> </TD>
+
+
+<TD><B>Blue</B> </TD>
+
+
+<TD><B>Color</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>BLACK </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>255 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>RED </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>GREEN </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>255 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>YELLOW </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>BLUE </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>255 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>MAGENTA </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>CYAN </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>255 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>WHITE </TD></TR></TABLE>
+
+
+<P><A NAME="A3C0EB46688mhay"></A>In the default color map mode, therefore,
+an index value of 0 for a given pixel causes that pixel to be displayed
+as black. </P>
+
+
+<H4><A NAME="A5CB0CD642vbia"></A>Virtualization of Colormaps </H4>
+
+
+<P><A NAME="A3C0EB46712mhay"></A>The X server treats colormaps as a shared
+resource, that is, colormaps are <I>virtualized</I> by the X server. Every
+X client can, but does not have to, request a colormap that is unique to
+itself and is different from those of the other clients. Under certain
+circumstances (usually when the client has &quot;focus&quot;), the colormap
+for that client is loaded into the physical hardware colormap. In such
+a case, the colors for the given window for the given client appear correct;
+the colors of the other windows (possibly including the root window) may
+appear incorrect, if the colormaps of the other windows are different than
+the currently loaded colormap. The X server does not set the policy for
+when a given colormap is loaded; this is done by the window manager. Additional
+information about colormaps and colormap focus policies can be found in
+the X and Motif documentation. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A5CB0CF107vbia"></A><B>Note: </B>Some graphics adapters have
+more physical hardware colormaps than others. In particular, the 24-bit
+POWERgraphics GTO, POWER Gt4 and POWER Gt4x
+adapters have five hardware colormaps each. The X server, in concert with
+the window manager, is able to manage all five colormaps. If all the clients
+running on the screen request more than five different colormaps, at least
+some of the clients will have the incorrect colormap installed. This affects
+the management of colormaps. </P></BLOCKQUOTE>
+
+
+<H4><A NAME="A5CB0CF820vbia"></A>GL Colormaps </H4>
+
+
+<P><A NAME="A3C0EB46738mhay"></A>The GL paradigm for colormaps is that
+of a single, hardware colormap. Historically, the GL applications programming
+interface (API) did not virtualize colormaps; it simply provided access
+to a single hardware colormap. In the integration of GL with X windows,
+this behavior is emulated with special code. Thus, the <B>mapcolor</B>
+and <B>mapcolors</B> subroutines set a single colormap kept within the
+X server. A change to this colormap by one GL application affects not only
+all windows of that application, but all GL applications. Thus, GL applications
+must cooperate in the sharing of this colormap to obtain high quality visual
+results. </P>
+
+
+<H4><A NAME="A3C0EB46760mhay"></A>Using X11 Colormaps with GL </H4>
+
+
+<P><A NAME="A3C0EB46772mhay"></A>GL supports the use of X11 colormap management
+subroutines to set and change the colormap(s) associated with a GL window.
+If the X11 colormap routines are not used, GL creates a single instance
+of a colormap and associates it with each GL window that is created. This
+single colormap is accessed with the <B>mapcolor</B> and <B>mapcolors</B>
+subroutines. Use of this default colormap can be side-stepped by using
+the X Window System to create a separate colormap, and associate it to
+a GL window. </P>
+
+
+<P><A NAME="A3C0EB46785mhay"></A>If X11 is used to manage the colormaps
+for GL windows, then X11 must also be used to allocate the entries in the
+colormap. The <B>mapcolor</B> and <B>mapcolors</B> subroutines can be used
+to change the colors only in the default, private GL map and not in any
+separately created colormaps. </P>
+
+
+<P><A NAME="A3C0EB46798mhay"></A>An example showing how X11 colormap facilities
+can be used with GL is found in <B>/usr/lpp/GL/examples/Xcolormap.c.</B></P>
+
+
+<BLOCKQUOTE><P><A NAME="A3C0EB46810mhay"></A><B>Note: </B>On the POWERgraphics GXT1000,
+be sure that the correct X11 window ID has been obtained. Note the GXT1000-specific
+information in the <B>getXdpy</B> subroutine. </P></BLOCKQUOTE>
+
+
+<H3><A NAME="a3P1390marj"></A>Onemap and Multimap Modes<A NAME="INDEX617"></A>
+<A NAME="INDEX618"></A> <A NAME="INDEX619"></A> <A NAME="INDEX620"></A>
+<A NAME="INDEX621"></A> <A NAME="INDEX622"></A> <A NAME="INDEX623"></A>
+<A NAME="INDEX624"></A> </H3>
+
+
+<P><A NAME="A3C0EB46825mhay"></A>When you are in color map mode and in
+the default onemap mode, the value of the color bitplanes is used as an
+index into the color map to determine the color displayed on the screen.
+In onemap mode, the lowest order 12 bits in the frame buffer are used to
+index into a 4096-entry color map. </P>
+
+
+<P><A NAME="A3C0EB46846mhay"></A>In multimap mode, the <A HREF="workcolor.html#FgL4310nita"><B>setmap</B>
+subroutine</A> makes one of the 16 small color maps current. All display
+is done using the current small map, and the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapcolor.html#A146X9535">mapcolor</A></B>
+subroutine affects that map. </P>
+
+
+<P><A NAME="A3C0EB46867mhay"></A>Call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gconfig.html#hS4260nita">gconfig</A></B>
+subroutine to activate the onemap or multimap settings. </P>
+
+
+<P><A NAME="A3C0EB46889mhay"></A>Subroutines you use with the <A HREF="workcolor.html#DWL42e0nita"><B>onemap</B>
+subroutine</A> and <A HREF="workcolor.html#xTL43a0nita"><B>multimap</B>
+subroutine</A> are: the <A HREF="workcolor.html#fhL4190nita"><B>getcmmode</B>
+subroutine</A>, which returns the organization of the current color map;
+the <A HREF="workcolor.html#FgL4310nita"><B>setmap</B> subroutine</A>,
+which selects which of the small maps the system uses in multimap mode;
+the <B><A HREF="workcolor.html#A3iL4370nita">getmap</A></B> subroutine,
+which returns the number of the current color map; and the <B><A HREF="workcolor.html#pFM4e0nita">cyclemap</A></B>
+subroutine, which cycles through the color maps at a selected rate. </P>
+
+
+<H4><A NAME="xTL43a0nita"></A>multimap Subroutine </H4>
+
+
+<P><A NAME="A3C0EB46913mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/multimap.html#A146X9593">multimap</A></B>
+subroutine organizes the color map as 16 small maps, each with a maximum
+of 256 RGB entries. The <B>multimap</B> subroutine does not take effect
+until the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gconfig.html#hS4260nita">gconfig</A></B>
+subroutine is called. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A57C0150f0"></A>void&nbsp;multimap()</PRE>
+
+
+<H4><A NAME="DWL42e0nita"></A>onemap Subroutine </H4>
+
+
+<P><A NAME="A3C0EB46937mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/onemap.html#A146X95ef">onemap</A></B>
+subroutine organizes the color map as a single map with 4096 entries. You
+must call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gconfig.html#hS4260nita">gconfig</A></B>
+subroutine for the <B>onemap</B> subroutine to take effect. Onemap is the
+default mode. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A57C0150f1"></A>void&nbsp;onemap()</PRE>
+
+
+<H4><A NAME="fhL4190nita"></A>getcmmode Subroutine </H4>
+
+
+<P><A NAME="A3C0EB46961mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getcmmode.html#A146X948e">getcmmode</A></B>
+subroutine returns the organization of the current color map. A return
+value of FALSE indicates multimap mode, and TRUE indicates onemap mode.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A57C0150f2"></A>Int32&nbsp;getcmmode()</PRE>
+
+
+<H4><A NAME="FgL4310nita"></A>setmap Subroutine </H4>
+
+
+<P><A NAME="A3C0EB46986mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/setmap.html#A146X9646">setmap</A></B>
+subroutine selects which of the small maps (0 through 15) the system uses
+in <A HREF="workcolor.html#a3P1390marj">multimap mode</A>. This selection
+is ignored in onemap mode. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A57C0150f3"></A>void&nbsp;setmap(Int16&nbsp;mapnum)</PRE>
+
+
+<H4><A NAME="A3iL4370nita"></A>getmap Subroutine </H4>
+
+
+<P><A NAME="A3C0EB47010mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmap.html#A146X94e2">getmap</A></B>
+subroutine returns the number (from 0 to 15) of the current color map.
+In onemap mode, this subroutine always returns 0. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A57C0150f4"></A>Int32&nbsp;getmap()</PRE>
+
+
+<H4><A NAME="pFM4e0nita"></A>cyclemap Subroutine </H4>
+
+
+<P><A NAME="A3C0EB47035mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/cyclemap.html#A143X92a6">cyclemap</A></B>
+subroutine cycles through color maps at a specified rate. It defines a
+duration (in <A HREF="specialterms.html#A27P031">vertical
+retraces</A>,
+the current map, and the map that follows when the duration lapses. For
+example, the following routines set up multimap mode and cycle between
+two maps, leaving map 1 on for 10 vertical retraces and map 3 on for 5
+retraces: </P>
+
+
+<PRE><A NAME="A24C0f335"></A>multimap();
+gconfig();
+cyclemap(10,&nbsp;1,&nbsp;3);
+cyclemap(5,&nbsp;3,&nbsp;1);</PRE>
+
+
+<P><A NAME="A3C0EB47057mhay"></A>When you kill a window or attach to a
+new window, the maps stop cycling. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A57C0150f5"></A>void&nbsp;cyclemap(Int16&nbsp;duration,&nbsp;Int16&nbsp;map,&nbsp;Int16&nbsp;nextmap)</PRE>
+
+
+<H3><A NAME="A264X9122"></A>Gamma Correction<A NAME="INDEX625"></A> <A NAME="INDEX626"></A>
+<A NAME="INDEX627"></A> <A NAME="INDEX628"></A> </H3>
+
+
+<P><A NAME="A3C0EB47082mhay"></A>The light output of any video display
+is controlled by the input voltage to the monitor. The relationship between
+input voltage and the brightness of the display, however, is not linear.
+For instance, assume that 100% of a monitor's input voltage produces 100%
+brightness. If you reduce the voltage to 50% of its initial value, the
+monitor might display only 19% of its initial brightness. </P>
+
+
+<P><A NAME="A3C0EB47103mhay"></A>To achieve a linear response from the
+monitor, the system must vary the input voltage by some exponent. The exponent
+is called the monitor's gamma. Linear response is achieved on standard
+monitors with a gamma of 2.4. The system uses a hardware lookup table to
+compensate for nonlinear response. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A5CB0CF511vbia"></A><B>Note: </B>Some graphics adapters have
+more physical hardware colormaps than others. In particular, the 24-bit
+POWERgraphics GTO, POWER Gt4 and POWER Gt4x
+adapters have five hardware colormaps each. The X server, in concert with
+the window manager, is able to manage all five. Note that if all the clients
+running on the screen request more than five different colormaps, at least
+some of the clients will have the incorrect colormap installed. This affects
+the management of gamma ramps. </P></BLOCKQUOTE>
+
+
+<H4><A NAME="A5CB0D0854vbia"></A>GL Gamma Ramps </H4>
+
+
+<P><A NAME="A3C0EB47128mhay"></A>The historical GL paradigm for gamma ramps
+has been that of a single, hardware gamma ramp that affected the entire
+screen. The <B>gammaramp</B> subroutine can be used to load that lookup
+table. This is the case on the 3D Color Graphics Processor adapter; the
+X server is ignorant of this particular lookup table and does not manage
+it. </P>
+
+
+<P><A NAME="A3C0EB47150mhay"></A>With the newer adapters, the POWERgraphics GTO,
+the POWER Gt4 and the POWER Gt4x, this paradigm
+has been modified. When in RGB mode, the gamma ramp for any particular
+window can be set independently of any other window. Note that the gamma
+ramps for these adapters are realized as X colormaps. Thus, the X server
+engages in the management of the RGB mode gamma ramps, and all of the usual
+rules and behaviors with regard to X colormap management apply. Note, in
+particular, that a GL RGB window may appear incorrect if the X server hasn't
+installed a linear ramp. Note also that if more than five different gamma
+ramps are created, not all can be installed simultaneously, and some RGB
+windows may appear with incorrect colors. </P>
+
+
+<H4><A NAME="A57C0150f6"></A>gammaramp Subroutine </H4>
+
+
+<P><A NAME="A3C0EB47174mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gammaramp.html#Kz4nita">gammaramp</A></B>
+subroutine supplies another level of indirection for all color map and
+RGB values. It affects only the display of color, not the values that are
+written in the bitplanes. Use the <B>gammaramp</B> subroutine to provide
+gamma correction, to equalize monitors with different color characteristics,
+or to modify the color warmth of the monitor. </P>
+
+
+<P><A NAME="A3C0EB47195mhay"></A>The <B>gammaramp</B> subroutine affects
+the entire screen and all running processes. It stays in effect until another
+call to the same subroutine is made or until the graphics hardware is reset.
+The default setting has <TT>r[i]=g[i]=b[i]=i</TT> (no modification). </P>
+
+
+<P><A NAME="A3C0EB47216mhay"></A>When objects are drawn on the screen in
+RGB mode, red, green, and blue are stored in the bitplanes, displayed as
+(<I>red</I>, <I>green</I>, <I>blue</I>), and are the arrays last specified
+by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gammaramp.html#Kz4nita">gammaramp</A></B>
+subroutine. Similarly, in color map mode if color <TT>i</TT> is mapped
+to red, green, blue, objects written in color <I>i</I> are displayed as
+(<I>red</I>, <I>green</I>, <I>blue</I>). The syntax is as follows: </P>
+
+
+<PRE><A NAME="A57C0150f7"></A>void&nbsp;gammaramp(Int16&nbsp;red[256],&nbsp;Int16&nbsp;green[256],&nbsp;Int16&nbsp;blue[256])</PRE>
+
+
+
+
+<P><A NAME="A3C0EB47239mhay"></A>You may want to read how the different
+color modes are used in <A HREF="animatescene.html#animatescene.html">&quot;Creating
+Animated Scenes&quot;</A>, &quot;Creating <A HREF="crlighteff.html#crlighteff.html">Lighting
+Effects&quot;</A>, &quot;Performing <A HREF="depth-cueing.html">Depth-Cueing&quot;</A>,
+and &quot;Removing <A HREF="remhidden.html#remhidden.html">Hidden Surfaces&quot;</A>.</P>
+
+
+ 
+<hr><center>
+[  <a href="underframebuf.html">Previous</a>  |
+<a href="animatescene.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/workcolor.html Mon, 24 Jan 2022 16:28:12 GMT -->
+</HTML>
+

@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>depthcue Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="deltag.html">Previous</a>  |
+<a href="dopup.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="PNK22d0marj"></A>depthcue Subroutine</H2>
+<A NAME="INDEX424" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX425" REL="I2" TITLE="depth-cue"></A>
+<A NAME="INDEX426" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX427" REL="I2" TITLE="depth-cueing"></A>
+<A NAME="INDEX428" REL="I3" TITLE="turning on and off"></A>
+<A NAME="INDEX429" REL="I1" TITLE="depthcue subroutine (GL)"></A>
+
+<H3><A NAME="A60C015778"></A>Purpose</H3>
+<P><A NAME="E1B0A1D071ceb"></A>Turns depth-cueing on and off.</P>
+
+<H3><A NAME="A78C1147"></A>Libraries</H3>
+<P><A NAME="E1B0A1D221ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0A1D326ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A60C01577c"></A>C Syntax</H3>
+<PRE><A NAME="A60C01577d"></A><B>void depthcue(Int32 </B><A HREF="depthcue.html#T2K2marj"><I>mode</I></A><B>)</B></PRE>
+
+<H3><A NAME="A60C01577e"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A60C01577f"></A><B>SUBROUTINE DEPTHC(</B><I>mode</I><B>)</B>
+<B>LOGICAL </B><I>mode</I><B>;</B></PRE>
+
+<H3><A NAME="A60C015780"></A>Description</H3>
+<P><A NAME="E1B0A1D691ceb"></A>The <B>depthcue</B> subroutine turns 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A150P19d9">depth-cueing</A> on or off. If the value of the <A HREF="depthcue.html#T2K2marj"><I>mode</I></A> parameter is TRUE, depth-cueing is enabled, and all lines, points, characters, and polygons drawn by the system are depth-cued. This means that the color of the lines, points, characters, or polygons are determined by the <I>z</I> values and the range of color indexes specified by the <A HREF="lshaderange.html#fkk1d0marj"><B>lshaderange</B></A> or <A HREF="lRGBrange.html#A143X93d8"><B>lRGBrange</B></A> subroutine determines the color of the lines, points, characters, or polygons. </P>
+
+<P><A NAME="E1B0A1D799ceb"></A>The <I>z</I> values, whose range is set by the <A HREF="lsetdepth.html#naR120marj"><B>lsetdepth</B></A> subroutine, are mapped linearly into the range of color indexes. In this mode, lines that vary greatly in <I>z</I> value span the range of colors specified by the <B>lshaderange</B> subroutine.</P>
+
+<P><A NAME="E1B0A1D917ceb"></A>For depth-cueing to work properly, the color map locations specified by the <A HREF="lshaderange.html#fkk1d0marj"><B>lshaderange</B></A> subroutine must be loaded with a series of colors that gradually increase or decrease in intensity. </P>
+
+<H3><A NAME="A60C015784"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="T2K2marj"></A><I>mode</I></TD>
+<TD>  Specifies a value indicating OFF or ON state of depth-cueing. Values for the <I>mode</I> parameter are as follows:</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A60C015785"></A></TD>
+<TD>  1 = True (ON)</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A60C015786"></A></TD>
+<TD>  0 = False (OFF)</TD></TR></TABLE>
+
+<H3><A NAME="A60C015787"></A>Example</H3>
+<P><A NAME="E1B0A1E274ceb"></A>The example C language program <A HREF="depthcue_c.html#A16C0c8ff"><B>depthcue.c</B></A> uses the <B>depthcue</B> subroutine to turn on depth-cueing. </P>
+
+<H3><A NAME="A64C0165aa"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0A1E437ceb"></A>This subroutine is part of GL in the  AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C114a"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C114b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C114c"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A60C01578b"></A>Related Information</H3>
+<P><A NAME="E1B0A1E764ceb"></A>Indicating whether depth-cue mode is on or off with the <A HREF="getdcm.html#A5OK230marj"><B>getdcm</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A1E871ceb"></A>Setting the range of RGB colors used for depth-cueing with the <A HREF="lRGBrange.html#A143X93d8"><B>lRGBrange</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A1E978ceb"></A>Setting the viewport depth range with the <A HREF="lsetdepth.html#naR120marj"><B>lsetdepth</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A1F086ceb"></A>Setting the range of color indexes used for depth-cueing with the <A HREF="lshaderange.html#fkk1d0marj"><B>lshaderange</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A1F194ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Performing <!--gl32prgd:--><A HREF="../gl32prgd/depth-cueing.html">Depth-Cueing</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="deltag.html">Previous</a>  |
+<a href="dopup.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

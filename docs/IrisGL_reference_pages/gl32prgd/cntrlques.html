@@ -1,0 +1,1093 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/cntrlques.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Controlling Queues and Devices in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="keyboardgl.html">Previous</a>  |
+<a href="querysys.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="cntrlques.html"></A>Controlling Queues and Devices</H2>
+
+
+<P><A NAME="INDEX839"></A><A NAME="INDEX840"></A><A NAME="INDEX841"></A><A NAME="INDEX842"></A><A NAME="INDEX843"></A><A NAME="INDEX844"></A></P>
+
+
+<P><A NAME="A3C0ED58416mhay"></A>This section discusses the following areas:</P>
+
+
+<UL><LI><A NAME="A53C014487"></A><A HREF="cntrlques.html#A29C0109c6">Polling
+and Queuing</A> </LI>
+
+
+<LI><A NAME="A53C014488"></A><A HREF="cntrlques.html#A29C0109d3">Polling
+a Device</A></LI>
+
+
+<LI><A NAME="A53C014489"></A><A HREF="cntrlques.html#A29C0109de">Event
+Queue</A></LI>
+
+
+<LI><A NAME="A258C01c000"></A><A HREF="cntrlques.html#EZ121e0nita">Input
+Focus</A></LI>
+
+
+<LI><A NAME="A53C01448a"></A><A HREF="cntrlques.html#A17C0d936">Special
+Devices</A></LI>
+
+
+<LI><A NAME="A53C01448b"></A><A HREF="cntrlques.html#A17C0d94b">Controlling
+Peripheral Input/Output Devices</A></LI></UL>
+
+
+<P><A NAME="A3C0ED58443mhay"></A>GL supports three classes of input devices:</P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A29C0109c3"></A><B>valuators</B> </TD>
+
+
+<TD>Return an integer value. For example, a dial on a 
+<A HREF="specialterms.html#A26P0470">dial
+and button box</A> is a valuator.
+A mouse is a pair of valuators: one reports horizontal position and the
+other reports vertical position.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A29C0109c4"></A><B>buttons</B> </TD>
+
+
+<TD>Return a Boolean value: FALSE when they are not pressed (open) and
+TRUE when they are pressed (closed). Examples of buttons are keys on an
+unencoded keyboard, buttons on a mouse, and the switches on a dial and
+button box.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A29C0109c5"></A><B>other devices</B> </TD>
+
+
+<TD>Return information about other system events. For example, the keyboard
+returns ASCII characters. Most of these special devices register events.
+The keyboard device reports character values when keys (or combinations
+of keys) are pressed. If you press the A key, an ASCII a is reported; if
+you press the Shift key, nothing is reported. If you hold down the Shift
+key and then press the A key, an ASCII A is reported.</TD></TR></TABLE>
+
+
+<H3><A NAME="A5u2110marj"></A>List of GL Queue and Device Control Subroutines<A NAME="INDEX845"></A>
+<A NAME="INDEX846"></A> <A NAME="INDEX847"></A> <A NAME="INDEX848"></A>
+<A NAME="INDEX849"></A> <A NAME="INDEX850"></A> <A NAME="INDEX851"></A>
+<A NAME="INDEX852"></A> <A NAME="INDEX853"></A> <A NAME="INDEX854"></A>
+<A NAME="INDEX855"></A> <A NAME="INDEX856"></A> </H3>
+
+
+<TABLE><CAPTION></CAPTION>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bbe"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/blkqread.html#A143X91fc">blkqread</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Reads multiple entries from the event queue. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bbf"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getbutton.html#A143X91">getbutton</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the current state of a button. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bc0"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getdev.html#A143X923">getdev</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Reads a list of valuators. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bc1"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getvaluator.html#A143X945">getvaluator</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the current state of a valuator.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bc2"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/isqueued.html#A143X91da">isqueued</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Indicates whether a specified device is enabled for event queuing.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bc3"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/noise.html#A143X9174">noise</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Filters valuator motion. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bc4"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/qdevice.html#A143X967">qdevice</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Enables an input device for event queuing. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bc5"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/qenter.html#A143X9152">qenter</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Creates an event queue entry.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bc8"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/qread.html#A143X989">qread</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Reads the first entry in the event queue. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bc6"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/qreset.html#A143X9ab">qreset</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Empties the event queue. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bc7"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/qtest.html#A143X9cd">qtest</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Checks the contents of the event queue. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bc9"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setvaluator.html#A143X921e">setvaluator</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Assigns an initial value to a valuator.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bca"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/tie.html#A143X9196">tie</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Ties two valuators to a button. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bcb"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/unqdevice.html#A143X91b8">unqdevice</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Disables an input device for event queuing. </TD></TR></TABLE>
+
+
+
+
+<P><A NAME="A3C0ED58485mhay"></A><A HREF="underwininput.html#underwininput.html">Understanding
+Windows and Input Control</A> in GL introduces window and input control
+categories. </P>
+
+
+
+
+<H3><A NAME="A29C0109c6"></A>Polling and Queuing </H3>
+
+
+<P><A NAME="A3C0ED58499mhay"></A>Most input devices have an associated
+current value. If the input device is a button, the value is either 1 (pressed)
+or 0 (not pressed). If the device is a valuator, such as a dial or the
+<I>x</I> position of the mouse, its value is an integer that indicates
+the position of the device. Some special devices do not have an associated
+current value. </P>
+
+
+<P><A NAME="A3C0ED58521mhay"></A>A program can get the value from input
+devices by either polling or queuing: </P>
+
+
+<UL><LI><A NAME="A29C0109c9"></A>Polling immediately returns the value of a
+device that is a button or valuator. For example, a <TT>getbutton(LEFTMOUSE)</TT>
+subroutine call returns 1 if the left button of the mouse is down, and
+returns 0 if it is up.</LI>
+
+
+<LI><A NAME="A29C0109ca"></A>Queuing uses an event queue to save changes
+in device values and other input events so the program can read them later.</LI></UL>
+
+
+<H4><A NAME="A258C01c008"></A>Input Queue versus Polling </H4>
+
+
+<P><A NAME="A3C0ED58547mhay"></A>In most cases, using the input queue is
+better than polling. For example, if you press and release a mouse button
+in an instant, a program that uses polling can miss the event (that the
+button was down) if it happened between two calls to <TT>getbutton(LEFTMOUSE)</TT>.</P>
+
+
+<P><A NAME="A3C0ED58569mhay"></A>For example, in a drawing program where
+you may want to indicate a series of vertices quickly and the system's
+calculations cannot keep up, queuing saves all the state changes so nothing
+is missed. This is so even if the program is doing something else when
+the event happens. </P>
+
+
+<P><A NAME="A3C0ED58591mhay"></A>Devices that are queued act as asynchronous
+devices, independent of the user process. Whenever a device that is queued
+changes state, an entry is made in the event queue. If a program reads
+the queue in a timely fashion, no events are lost. </P>
+
+
+<P><A NAME="A3C0ED58612mhay"></A>You can decide which devices, if any,
+to queue and establish some rules about what constitutes a state change,
+or event, for those devices. By default, no devices are queued. </P>
+
+
+<P><A NAME="A3C0ED58634mhay"></A>Another difference between polling and
+queuing is that as long as a 
+<A HREF="specialterms.html#A3C0F2A4095mhay">polled
+I/O device</A> is active, it
+continues to send its value to the program that polls it. For instance,
+a call to <TT>getbutton(LEFTMOUSE)</TT> continues returning a value as
+long as you hold down the mouse button. In contrast, if the left mouse
+button had been queued, you could hold it down for any length of time and
+only one event is added to the queue. A second event is added to the queue
+only when the button is released and pressed a second time. </P>
+
+
+<P><A NAME="A3C0ED58657mhay"></A>In addition to input subroutines, other
+subroutines control the characteristics of the peripheral input/output
+devices (see &quot;<A HREF="keyboardgl.html#keyboardgl.html">Using the Keyboard</A>&quot;).
+These subroutines turn the <A HREF="keyboardgl.html#A16C0ca58">keyboard
+click</A> and the <A HREF="keyboardgl.html#A16C0ca5c">keyboard lights</A>
+on and off; ring the <A HREF="keyboardgl.html#A16C0ca62">keyboard bell</A>;
+and control the lights on the dial and button box. </P>
+
+
+<H4><A NAME="A258C01c009"></A>Device Descriptions </H4>
+
+
+<P><A NAME="A3C0ED58680mhay"></A>See the Input Buttons, Input Valuators,
+and Special Devices tables for listings of specific devices and their descriptions.
+Special devices, such as window manager, cursor, and ghost devices, are
+discussed in &quot;<A HREF="cntrlques.html#A17C0d936">Special Devices</A>&quot;.</P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Input Buttons</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Devices</B> </TD>
+
+
+<TD><B>Description</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>MOUSE1 </TD>
+
+
+<TD>Right mouse button </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>MOUSE2 </TD>
+
+
+<TD>Middle mouse button </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>MOUSE3 </TD>
+
+
+<TD>Left mouse button </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>RIGHTMOUSE </TD>
+
+
+<TD>Right mouse button </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>MIDDLEMOUSE </TD>
+
+
+<TD>Middle mouse button </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LEFTMOUSE </TD>
+
+
+<TD>Left mouse button </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>SW0...SW31 </TD>
+
+
+<TD>32 buttons on dial and button box </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>AKEY...PADENTER, BKEY...PADENTER </TD>
+
+
+<TD>All the keys on the keyboard </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BPAD0 </TD>
+
+
+<TD>Pen stylus or button for digitizer tablet </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BPAD1 </TD>
+
+
+<TD>Button for digitizer tablet </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BPAD2 </TD>
+
+
+<TD>Button for digitizer tablet </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BPAD3 </TD>
+
+
+<TD>Button for digitizer tablet </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>MENUBUTTON </TD>
+
+
+<TD>Menu button </TD></TR></TABLE>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Input Valuators</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Devices</B> </TD>
+
+
+<TD><B>Description</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>MOUSEX </TD>
+
+
+<TD><I>x</I> valuator on mouse </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>MOUSEY </TD>
+
+
+<TD><I>y</I> valuator on mouse </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>DIAL0...DIAL7 </TD>
+
+
+<TD>Dials on dial and button box </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BPADX </TD>
+
+
+<TD><I>x</I> valuator on digitizer tablet </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BPADY </TD>
+
+
+<TD><I>y</I> valuator on digitizer tablet </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>CURSORX </TD>
+
+
+<TD><I>x</I> valuator attached to cursor (usually MOUSEX) </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>CURSORY </TD>
+
+
+<TD><I>y</I> valuator attached to cursor (usually MOUSEY) </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GHOST X </TD>
+
+
+<TD><I>x</I> ghost valuator </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GHOST Y </TD>
+
+
+<TD><I>y</I> ghost valuator </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>TIMER0...TIMER3 </TD>
+
+
+<TD>Timer devices </TD></TR></TABLE>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Special Devices</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Device</B> </TD>
+
+
+<TD><B>Description</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>QFULL </TD>
+
+
+<TD>Creates event when device queue overflows </TD></TR></TABLE>
+
+
+<H3><A NAME="A29C0109d3"></A>Polling a Device </H3>
+
+
+<P><A NAME="A3C0ED58713mhay"></A>You can poll a device to determine its
+current state. </P>
+
+
+<H4><A NAME="A29C0109d8"></A>getbutton Subroutine </H4>
+
+
+<P><A NAME="A3C0ED58737mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getbutton.html#A143X91">getbutton</A></B>
+subroutine polls a button and returns its current state. The <I>number</I>
+parameter specifies the number of the device you want to poll. The <B>getbutton</B>
+subroutine returns either TRUE or FALSE. TRUE indicates the button is pressed.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C0153a5"></A>Int32&nbsp;getbutton(Device&nbsp;number)</PRE>
+
+
+<H4><A NAME="A29C0109db"></A>getdev Subroutine </H4>
+
+
+<P><A NAME="A3C0ED58762mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getdev.html#A143X923">getdev</A></B>
+subroutine polls up to 128 valuators and buttons at one time. You specify
+the number of devices you want to poll and an array of devices. (See the
+Input Buttons and Input Valuators tables for listings of devices.) The
+<I>values</I> parameter returns the state of each device in the corresponding
+array location. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c012"></A>void&nbsp;getdev(Int32&nbsp;number,&nbsp;Device&nbsp;*devices,&nbsp;Int16&nbsp;*values)</PRE>
+
+
+<H4><A NAME="A29C0109d5"></A>getvaluator Subroutine </H4>
+
+
+<P><A NAME="A3C0ED58787mhay"></A>To determine the values of valuators,
+use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getvaluator.html#A143X945">getvaluator</A></B>
+subroutine. You can poll any valuator, whether it is queued or not. The
+<I>device</I> parameter specifies a valuator device number, whose value
+reflects the current state of the device. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c011"></A>Int32&nbsp;getvaluator(Device&nbsp;device)</PRE>
+
+
+<H3><A NAME="A29C0109de"></A>Event Queue<A NAME="INDEX857"></A> <A NAME="INDEX858"></A>
+<A NAME="INDEX859"></A> <A NAME="INDEX860"></A> <A NAME="INDEX861"></A>
+<A NAME="INDEX862"></A> </H3>
+
+
+<P><A NAME="A3C0ED58811mhay"></A>Input devices can make entries in the
+event queue. Each entry includes the device number and a device value.
+The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/qdevice.html#A143X967">qdevice</A></B>
+subroutine enables queuing of events from an input device. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/unqdevice.html#A143X91b8">unqdevice</A></B>
+subroutine indicates that a device is no longer queued. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/isqueued.html#A143X91da">isqueued</A></B>
+subroutine tells you if a specific device is queued. The three subroutines
+most commonly used for queuing are <B>qdevice</B>, <B><!--:libs:gl32tref:--><A HREF="../gl32tref/qread.html#A143X989">qread</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/qtest.html#A143X9cd">qtest</A></B>.</P>
+
+
+<P><A NAME="A3C0ED58833mhay"></A>The input queue can contain up to 101
+events at a time. To check for overflow, you can queue the QFULL device.
+This inserts a QFULL event in the graphics input queue of a GL program
+at the point where queue overflow occurred. This event is returned by the
+<B>qread</B> subroutine at the point in the input queue at which data was
+lost. </P>
+
+
+<H4><A NAME="A29C0109e1"></A>qdevice Subroutine </H4>
+
+
+<P><A NAME="A3C0ED58856mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/qdevice.html#A143X967">qdevice</A></B>
+subroutine queues the specified device (a keyboard, button, or valuator).
+The<I> device </I>parameter specifies a device name. Each time the device
+changes state, an entry is made in the <A HREF="cntrlques.html#A29C0109de">event
+queue</A>. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c019"></A>void&nbsp;qdevice(Device&nbsp;device)</PRE>
+
+
+<H4><A NAME="A29C0109e4"></A>qtest Subroutine </H4>
+
+
+<P><A NAME="A3C0ED58881mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/qtest.html#A143X9cd">qtest</A></B>
+subroutine returns the device number of the first entry in the <A HREF="cntrlques.html#A29C0109de">event
+queue</A>; if the queue is empty, the subroutine returns zero. The <B>qtest</B>
+subroutine always returns immediately to the caller and makes no changes
+to the queue. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c01a"></A>Int32&nbsp;qtest()</PRE>
+
+
+<H4><A NAME="A29C0109e7"></A>qread Subroutine </H4>
+
+
+<P><A NAME="A3C0ED58905mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/qread.html#A143X989">qread</A></B>
+subroutine, like the <B>qtest</B> subroutine, returns the device number
+of the first entry in the <A HREF="cntrlques.html#A29C0109de">event queue</A>.
+However, if the queue is empty, the subroutine waits until an event is
+added to the queue. The <B>qread</B> subroutine returns the device number,
+writes the data part of the entry into data, and removes the entry from
+the queue. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c01b"></A>Int32&nbsp;qread(Int16&nbsp;data)</PRE>
+
+
+<H4><A NAME="A29C0109ea"></A>qreset Subroutine </H4>
+
+
+<P><A NAME="A3C0ED58930mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/qreset.html#A143X9ab">qreset</A></B>
+subroutine removes all entries from the <A HREF="cntrlques.html#A29C0109de">event
+queue</A> and discards them. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c01c"></A>void&nbsp;qreset()</PRE>
+
+
+<H4><A NAME="A258C01c01d"></A>Polling and Queuing Example Program </H4>
+
+
+<P><A NAME="A3C0ED58955mhay"></A>The following C language code uses both
+polling and queuing to control a simple paint program. To determine the
+color, the program reads characters typed from the keyboard. To determine
+the drawing location, the program polls the LEFTMOUSE device and draws
+a 5-pixel-wide circle if the value for the device is TRUE. </P>
+
+
+<PRE><A NAME="A17C0d981"></A>&nbsp;while&nbsp;(TRUE)&nbsp;{
+&nbsp;&nbsp;while&nbsp;(qtest()&nbsp;||&nbsp;!attached)&nbsp;{
+&nbsp;&nbsp;&nbsp;dev=qread(&amp;value);
+&nbsp;&nbsp;&nbsp;if&nbsp;(dev&nbsp;==&nbsp;ESCKEY)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;exit(0);
+&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;else&nbsp;if&nbsp;(dev&nbsp;==&nbsp;REDRAW)&nbsp;{&nbsp;
+&nbsp;&nbsp;&nbsp;/*&nbsp;if&nbsp;first&nbsp;in&nbsp;queue&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;reshapeviewport();
+&nbsp;&nbsp;&nbsp;&nbsp;color&nbsp;(BLUE);
+&nbsp;&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;else&nbsp;if&nbsp;(dev&nbsp;==&nbsp;RKEY)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;else&nbsp;if&nbsp;(dev&nbsp;==&nbsp;GKEY)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;color(GREEN);
+&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;else&nbsp;if&nbsp;(dev&nbsp;==&nbsp;BKEY)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;color&nbsp;(BLUE);
+&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;else&nbsp;if&nbsp;(dev&nbsp;==&nbsp;INPUTCHANGE)&nbsp;attached&nbsp;=&nbsp;value;&nbsp;
+&nbsp;&nbsp;}&nbsp;&nbsp;/*end&nbsp;of&nbsp;while&nbsp;qtest&nbsp;or&nbsp;not&nbsp;attached&nbsp;*/
+&nbsp;&nbsp;mdraw();
+&nbsp;}&nbsp;/*&nbsp;end&nbsp;of&nbsp;while&nbsp;(TRUE)&nbsp;*/
+}&nbsp;/*&nbsp;end&nbsp;of&nbsp;main()&nbsp;*/
+mdraw()&nbsp;{</PRE>
+
+
+<PRE><A NAME="A17C0d9a4"></A>&nbsp;int&nbsp;ix;
+&nbsp;int&nbsp;iy;
+&nbsp;if&nbsp;(getbutton(LEFTMOUSE))&nbsp;{</PRE>
+
+
+<PRE><A NAME="A17C0d9a8"></A>&nbsp;&nbsp;ix=getvaluator(MOUSEX);
+&nbsp;&nbsp;iy=getvaluator(MOUSEY);
+&nbsp;&nbsp;circfi&nbsp;(ix,&nbsp;iy,&nbsp;5);
+&nbsp;}
+}</PRE>
+
+
+<P><A NAME="A3C0ED58980mhay"></A>This example assumes that you have initialized
+the program appropriately, especially regarding the use of the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/qdevice.html#A143X967">qdevice</A></B>
+subroutine to enable the R, G, and B keys for queuing. </P>
+
+
+<H4><A NAME="A29C0109ef"></A>tie Subroutine </H4>
+
+
+<P><A NAME="A3C0ED59003mhay"></A>You can tie a queued button to one or
+two valuators so that whenever the button changes state, the system records
+the button change and the current valuator position in the <A HREF="cntrlques.html#A29C0109de">event
+queue</A>. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/tie.html#A143X9196">tie</A></B>
+subroutine takes three parameters: <I>button</I> and two valuators, <I>val1</I>
+and <I>val2</I>. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c01e"></A>void&nbsp;tie(Device&nbsp;button,&nbsp;Device&nbsp;val1,&nbsp;Device&nbsp;val2)</PRE>
+
+
+<P><A NAME="A3C0ED59026mhay"></A>Whenever the button changes state, three
+entries are made in the queue that record the current state of the button
+and the current position of each valuator. You can tie one valuator to
+a button by making the <I>val2</I> parameter equal to zero. You can untie
+a button from valuators by making both the <I>val1</I> and <I>val2</I>
+parameters equal to zero. </P>
+
+
+<H4><A NAME="A29C0109f2"></A>noise Subroutine </H4>
+
+
+<P><A NAME="A3C0ED59050mhay"></A>Some valuators are noisy; that is, they
+report small fluctuations in value, indicating movement when no event has
+occurred. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/noise.html#A143X9174">noise</A></B>
+subroutine allows you to set a lower limit on what constitutes a move.
+The value of a noisy valuator must change by at least the value set in
+the <I>delta</I> parameter before the motion is significant. The <B>noise</B>
+subroutine determines how often a queued valuator makes entries in the
+<A HREF="cntrlques.html#A29C0109de">event queue</A>. For example, <TT>noise(v,5)</TT>
+means that the valuator specified in the <I>valuator</I> parameter must
+move at least five units before a new queue entry is made. The syntax is
+as follows: </P>
+
+
+<PRE><A NAME="A258C01c020"></A>void&nbsp;noise(Device&nbsp;valuator,&nbsp;Int16&nbsp;delta)</PRE>
+
+
+<H4><A NAME="A29C0109f5"></A>qenter Subroutine </H4>
+
+
+<P><A NAME="A3C0ED59075mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/qenter.html#A143X9152">qenter</A></B>
+subroutine creates event queue entries. It places entries directly into
+the event queue. The <B>qenter</B> subroutine takes two 16-bit integers,
+given in the <I>qtype</I> and <I>value</I> parameters, and enters them
+into the <A HREF="cntrlques.html#A29C0109de">event queue</A>. The syntax
+is as follows: </P>
+
+
+<PRE><A NAME="A258C01c021"></A>void&nbsp;qenter(Int16&nbsp;qtype,&nbsp;Int16&nbsp;value)</PRE>
+
+
+<H4><A NAME="A29C0109f8"></A>unqdevice Subroutine </H4>
+
+
+<P><A NAME="A3C0ED59100mhay"></A>Use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/unqdevice.html#A143X91b8">unqdevice</A></B>
+subroutine to disable the queuing of events from a device. If the device
+has recorded events in the queue that have not been read, those events
+remain in the queue. (You can use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/qreset.html#A143X9ab">qreset</A></B>
+subroutine to flush the <A HREF="cntrlques.html#A29C0109de">event queue</A>.)
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c022"></A>void&nbsp;unqdevice(Device&nbsp;dev)</PRE>
+
+
+<H4><A NAME="A29C0109fb"></A>isqueued Subroutine </H4>
+
+
+<P><A NAME="A3C0ED59124mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/isqueued.html#A143X91da">isqueued</A></B>
+subroutine indicates whether a specific device is queued. It returns a
+Boolean value. A value of TRUE indicates that the device is enabled for
+<A HREF="cntrlques.html#A29C0109de">queuing</A>; FALSE indicates that the
+device is not queued. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A58C0153a6"></A>Int32&nbsp;isqueued(Int16&nbsp;device)</PRE>
+
+
+<H4><A NAME="A29C0109fe"></A>blkqread Subroutine </H4>
+
+
+<P><A NAME="A3C0ED59150mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/blkqread.html#A143X91fc">blkqread</A></B>
+subroutine returns multiple queue entries. Its first parameter, <I>data</I>,
+specifies an array of short integers, and its second parameter, <I>number</I>,
+specifies the size of the array data. The <B>blkqread</B> subroutine returns
+the number of 16-bit integers stored in the array specified in the <I>data</I>
+parameter. The array is filled alternately with device numbers and device
+values. Because each queue entry consists of two 16-bit words, the number
+of entries read is twice the number of queue entries and cannot be more
+than the value of the <I>number</I> parameter. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A258C01c023"></A>Int32&nbsp;blkqread(Int16&nbsp;*data,&nbsp;Int16&nbsp;number)</PRE>
+
+
+<P><A NAME="A3C0ED59172mhay"></A>You can also use this subroutine when
+only the last entry in the <A HREF="cntrlques.html#A29C0109de">event queue</A>
+is of interest; for example, when a user-defined cursor is being dragged
+across the screen and only its final position is significant. </P>
+
+
+<H3><A NAME="EZ121e0nita"></A>Input Focus </H3>
+
+
+<P><A NAME="A3C0ED59195mhay"></A>Keyboard, mouse, and valuator events are
+added to the event queue only when the application window has input focus.
+Input focus is controlled by the window manager. Windows with focus are
+usually highlighted in some fashion (typically by changing the border color
+of the window). </P>
+
+
+<BLOCKQUOTE><P><A NAME="A200C1105"></A><B>Note: </B>In a multiwindow application, only
+one of the application windows can have input focus at a time. </P></BLOCKQUOTE>
+
+
+<P><A NAME="A3C0ED59217mhay"></A>The default window manager for your system
+is the AIXwindows window manager. The behavior of this window
+manager can be controlled by appropriately editing the <B>./.Xdefaults</B>
+file in the user's home directory. The focus policy is controlled by the
+<B>keyboardFocusPolicy </B>resource. If the following line is added to
+the <B>.Xdefaults</B> file: </P>
+
+
+<PRE><A NAME="A258C01c02c"></A>Mwm*keyboardFocusPolicy:&nbsp;pointer</PRE>
+
+
+<P><A NAME="A3C0ED59239mhay"></A>the window with the cursor in it has input
+focus. Alternatively, if the following line is added to the <B>.Xdefaults</B>
+file: </P>
+
+
+<PRE><A NAME="A258C01c02e"></A>Mwm*keyboardFocusPolicy:&nbsp;explicit</PRE>
+
+
+<P><A NAME="A3C0ED59262mhay"></A>the user must click with the left mouse
+button inside a window to give that window input focus. </P>
+
+
+<BLOCKQUOTE><P><B>Notes: </B> </P>
+
+
+<OL><LI><A NAME="A258C01c030"></A>The window focus affects how the MOUSEX and
+MOUSEY events are reported. In particular, if <TT>pointer</TT> focus is
+selected, mouse events are reported only when the cursor is inside one
+of the application's windows. If <TT>explicit</TT> focus is selected, mouse
+events may be reported, depending on which window has the focus, even if
+the cursor is outside any of the application's windows.</LI>
+
+
+<LI><A NAME="A258C01c031"></A>The focus policy determines how INPUTCHANGE
+events are queued. An INPUTCHANGE event is queued when an application's
+window receives or loses input focus. If <TT>pointer</TT> focus is selected,
+an INPUTCHANGE event is queued when the cursor enters or leaves an application
+window. If <TT>explicit</TT> focus is selected, the INPUTCHANGE token is
+generated only when the user makes a focus change by clicking the mouse
+elsewhere.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A17C0d936"></A>Special Devices<A NAME="INDEX863"></A> <A NAME="INDEX864"></A>
+<A NAME="INDEX865"></A> <A NAME="INDEX866"></A> <A NAME="INDEX867"></A>
+<A NAME="INDEX868"></A> </H3>
+
+
+<P><A NAME="A3C0ED59287mhay"></A>This section discusses the five types
+of special devices: </P>
+
+
+<UL><LI><A NAME="A200C1107"></A><A HREF="cntrlques.html#A17C0d938">Keyboard</A></LI>
+
+
+<LI><A NAME="A200C1108"></A><A HREF="cntrlques.html#A17C0d93a">Timer</A></LI>
+
+
+<LI><A NAME="A200C1109"></A><A HREF="cntrlques.html#A17C0d93e">Cursor</A></LI>
+
+
+<LI><A NAME="A200C110a"></A><A HREF="cntrlques.html#A17C0d940">Ghost</A></LI>
+
+
+<LI><A NAME="A200C110b"></A><A HREF="cntrlques.html#A17C0d942">Window manager</A></LI></UL>
+
+
+<H4><A NAME="A17C0d938"></A>Keyboard Devices </H4>
+
+
+<P><A NAME="A3C0ED59315mhay"></A>(See <A HREF="keyboardgl.html#keyboardgl.html">&quot;Using
+the Keyboard</A>&quot;.) </P>
+
+
+<H4><A NAME="A17C0d93a"></A>Timer Devices </H4>
+
+
+<P><A NAME="A3C0ED59338mhay"></A>The timer devices record an event every
+60th of a second. You can use a timer device to synchronize a graphics
+program with a real clock. To record events less frequently, use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/noise.html#A143X9174">noise</A></B>
+subroutine. For example, if you call: </P>
+
+
+<PRE><A NAME="A17C0d93c"></A>noise&nbsp;(TIMER0,&nbsp;30)</PRE>
+
+
+<P><A NAME="A3C0ED59361mhay"></A>only every 30th event is recorded, so
+an event queue entry is made each half second. </P>
+
+
+<H4><A NAME="A17C0d93e"></A>Cursor Devices </H4>
+
+
+<P><A NAME="A3C0ED59384mhay"></A>The cursor devices are pseudo-devices
+that are equivalent to the valuators currently attached to the cursor.
+(See <A HREF="cursorgl.html#cursorgl.html">&quot;Creating a Cursor</A>&quot;
+for more information.) </P>
+
+
+<H4><A NAME="A17C0d940"></A>Ghost Devices </H4>
+
+
+<P><A NAME="A3C0ED59407mhay"></A>Ghost devices, GHOSTX and GHOSTY, do not
+correspond to any physical devices, although they can be used to change
+a device under program control. For example, to drive the cursor from software,
+use <TT>attachcursor(GHOSTX,GHOSTY)</TT> to make the cursor position depend
+on the ghost devices. Then use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/setvaluator.html#A143X921e">setvaluator</A></B>
+subroutine on GHOSTX and GHOSTY to move the cursor. </P>
+
+
+<H4><A NAME="A17C0d942"></A>Window Manager Devices </H4>
+
+
+<P><A NAME="A3C0ED59430mhay"></A>The following devices can be queued by
+the user application to obtain window manager events. Some of these devices
+are queued automatically when a window is opened. Some have to be queued
+explicitly. All of these devices return the window ID of the window associated
+with the event. See <A HREF="managewinds.html#managewinds.html">&quot;Creating and
+Managing Windows</A>&quot; for more information. </P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A258C01c039"></A>REDRAW </TD>
+
+
+<TD>The window manager inserts a redraw token each time a window becomes
+exposed and needs to be redrawn. The REDRAW device is queued automatically
+when a window is opened.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A7050D8941csol"></A></TD>
+
+
+<TD>REDRAW events are generated for a window whenever the following events
+occur: 
+
+
+
+<OL>
+<LI><A NAME="A7050D9238csol"></A>the window is uncovered because another
+window has been moved away or pushed below it.</LI>
+
+
+<LI><A NAME="A7050D9529csol"></A>the window has been resized smaller or
+larger by the user.</LI>
+
+
+<LI><A NAME="A7050D9799csol"></A>whenever the window is moved. </LI></OL></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A7050DA327csol"></A></TD>
+
+
+<TD>In the current implementation, the contents of the z-buffer are not
+copied to the new location on a window move; therefore, a REDRAW event
+is generated out of necessity. In the current implementation, REDRAW events
+are <I>not</I> generated if the overlay portion of a window has been drawn
+into or otherwise affected by other windows, other GL applications, or
+the use of the <B>fullscrn</B>, <B>endfullscrn</B> subroutines. Currently,
+the REDRAWOVERLAY pseudodevice is not supported. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A17C0d945"></A>REDRAWICONIC </TD>
+
+
+<TD>The window manager sends this token when a window needs to be redrawn
+as an icon. The REDRAWICONIC device is queued automatically when the 
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/iconsize.html#LA13e0marj">iconsize</A></B>
+subroutine is called.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A17C0d946"></A>DEPTHCHANGE </TD>
+
+
+<TD>When queued, this device indicates an open window has been pushed or
+popped. The value of the token is the <TT>gid</TT> of the window that has
+changed. Use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/windepth.html#A142X914e3">windepth</A></B>
+subroutine to determine the stacking order. 
+<BLOCKQUOTE><P> </P>
+
+
+<P> </P>
+
+
+<P><A NAME="A65E54E019csol"></A><B>Note: </B>The DEPTHCHANGE device is
+currently tied to the INPUTCHANGE device; DEPTHCHANGE events are only generated
+when INPUTCHANGE events are. DEPTHCHANGE events are reocrded only relative
+to the current process; changes of window stacking order involving other
+GL applications and/or X clients are not recorded. </P></BLOCKQUOTE></TD></TR>
+
+
+<TR VALIGN="TOP">
+<TD NOWRAP="NOWRAP"><A NAME="A17C0d947"></A>WINSHUT </TD>
+
+
+<TD>When queued, the window manager sends this token when the <TT>Close</TT>
+item is selected from the window manager's title bar option menu. If the
+WINSHUT device is not queued, the <TT>Close</TT> item on the program's
+window menu appears grayed-out and has no effect if selected. Do not confuse
+the WINSHUT with the WINQUIT device. The WINSHUT device is used by the
+applications program to shut a window; the WINQUIT device is used to quit
+and exit the program. 
+<BLOCKQUOTE><P> </P>
+
+
+<P> </P>
+
+
+<P><A NAME="A66010D705csol"></A><B>Note: </B>The WINSHUT device is not
+currently supported. </P></BLOCKQUOTE></TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A17C0d948"></A>WINQUIT </TD>
+
+
+<TD>When queued, the window manager sends this token rather than killing
+a process when the <TT>Quit</TT> item is selected from the window manager's
+title bar option menu. If this device is not quit, the window manager issues
+a <TT>kill&nbsp;-15</TT> command to the process ID of the process owning
+the window.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A17C0d949"></A>WINFREEZE </TD>
+
+
+<TD>If queued, the window manager sends this token when a window is stowed
+to icons, rather than blocking the processes of the stowed windows. This
+device should be queued if the program is designed to draw an icon (see
+the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/iconsize.html#LA13e0marj">iconsize</A></B>
+subroutine) or is a multiwindow application. In other words, if one window
+of a multiwindow application is stowed, this device allows the owner process
+to continue.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A59C015479"></A>WINTHAW </TD>
+
+
+<TD>If queued, the window manager sends this token when a window is unstowed.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A17C0d94a"></A>INPUTCHANGE </TD>
+
+
+<TD>The window manager inserts an INPUTCHANGE token when a window is given
+input focus. The value inserted with the token is the window ID of the
+window receiving focus. A value of 0 (zero) is returned if the window given
+focus belongs to another application. The INPUTCHANGE device is queued
+automatically when a window is opened.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A59C01547a"></A>PIECECHANGE </TD>
+
+
+<TD>If queued, this device indicates that a window has been exposed because
+another window has been moved away. This token is <I>not</I> sent if the
+window has been unstowed from an icon, or has been exposed due to a depth
+change.</TD></TR></TABLE>
+
+
+<H3><A NAME="A17C0d94b"></A>Controlling Peripheral Input/Output Devices<A NAME="INDEX869"></A>
+<A NAME="INDEX870"></A> <A NAME="INDEX871"></A> <A NAME="INDEX872"></A>
+<A NAME="INDEX873"></A> <A NAME="INDEX874"></A> </H3>
+
+
+<P><A NAME="A3C0ED59471mhay"></A>The application programmer can set the
+initial value of a valuator device with the <B>setvaluator</B> subroutine.</P>
+
+
+<H4><A NAME="A17C0d94c"></A>setvaluator Subroutine </H4>
+
+
+<P><A NAME="A3C0ED59495mhay"></A>Valuators are single-value input devices:
+for example, the horizontal and vertical motion of mouse, or the turning
+of a dial. The value is a 16-bit integer. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/setvaluator.html#A143X921e">setvaluator</A></B>
+subroutine assigns an initial value (the <I>init</I> parameter) to a valuator.
+The <I>min</I> and <I>max</I> parameters specify the minimum and maximum
+values the device can assume. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c041"></A>void&nbsp;setvaluator(Device<B>&nbsp;</B>val,&nbsp;Int16&nbsp;init,&nbsp;Int16&nbsp;min,&nbsp;Int16&nbsp;max)</PRE>
+
+
+<P><A NAME="A3C0ED59517mhay"></A>In addition to subroutines that poll and
+queue input devices, there are those that control the characteristics and
+behavior of the GL peripheral input/output devices. See <A HREF="keyboardgl.html#keyboardgl.html">&quot;Using
+the Keyboard</A>&quot; for this information. </P>
+
+
+
+<hr><center>
+[  <a href="keyboardgl.html">Previous</a>  |
+<a href="querysys.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/cntrlques.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+

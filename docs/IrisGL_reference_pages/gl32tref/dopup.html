@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>dopup Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="depthcue.html">Previous</a>  |
+<a href="doublebuffer.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X910e1"></A>dopup Subroutine</H2>
+<A NAME="INDEX430" REL="I1" TITLE="dopup subroutine (GL)"></A>
+<A NAME="INDEX431" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX432" REL="I2" TITLE="popp menus"></A>
+<A NAME="INDEX433" REL="I3" TITLE="displaying"></A>
+<A NAME="INDEX434" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX435" REL="I2" TITLE="popp menu"></A>
+<A NAME="INDEX436" REL="I3" TITLE="dopup"></A>
+
+<H3><A NAME="A142X910e3"></A>Purpose</H3>
+<P><A NAME="E1B0A3E355ceb"></A>Displays the specified pop-up menu.</P>
+
+<H3><A NAME="A79C111d"></A>Libraries</H3>
+<P><A NAME="E1B0A3E502ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0A3E607ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X910e7"></A>C Syntax</H3>
+<PRE><A NAME="A213X91218e"></A><B>Int32 dopup(Int32</B> <A HREF="dopup.html#A213X912194"><I>popup</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010b56"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010b57"></A><B>INTEGER*4 FUNCTION DOPUP(</B><I>popup</I><B>)</B>
+<B>INTEGER*4</B> <I>popup</I></PRE>
+
+<H3><A NAME="A142X910e9"></A>Description</H3>
+<P><A NAME="E1B0A3E969ceb"></A>The <B>dopup </B>subroutine displays the specified pop-up menu until the user makes a selection. If the calling program has the input focus, the specified menu is displayed and the system returns the value resulting from the item selection.</P>
+
+<P><A NAME="E1B0A3F076ceb"></A>The value can be returned by a submenu, a function, or a number bound directly to an item. If no selection is made, the <B>dopup </B>subroutine returns a value of -1 (negative one).</P>
+
+<P><A NAME="E1B0A3F187ceb"></A>The <B>dopup</B> subroutine manipulates events in the event queue. If the <B>dopup</B> subroutine is called as a result of a left mouse or middle mouse button press event, the menu remains posted until the right mouse button is pressed to make a selection. The <B>dopup</B> subroutine removes a pair of right mouse press and release events from the event queue (if the right mouse was queued), and also removes the left mouse or middle mouse button release event.</P>
+
+<P><A NAME="E1B0A3F295ceb"></A>If the <B>dopup</B> subroutine is called as a result of a right mouse button press event, the menu remains posted until the right mouse button is released. The menu entry selected is the entry that was highlighted when the right mouse button was released. The <B>dopup</B> subroutine removes the right mouse button release event from the event queue.</P>
+
+<P><A NAME="E1B0A3F402ceb"></A>If no selection is made (that is, if the user releases the right mouse button off the pop-up menu) no menu entry selection is made, and the <B>dopup</B> subroutine returns a value of -1. The right mouse button release event is removed from the queue.</P>
+
+<P><A NAME="E1B0A3F510ceb"></A>In more complicated event sequences, all mouse button-up events up to and including the first right mouse button-up event are removed. If the user accidently presses other mouse buttons before making a pop-up menu selection, <I>orphaned</I> button down events (button down events without matching button up events) may remain in the event queue.</P>
+
+<P><A NAME="E1B0A3F617ceb"></A>When the menu is defined, the <A HREF="defpup.html#A142X910bf"><B>defpup</B></A> or <A HREF="addtopup.html#A142X9109d"><B>addtopup</B></A> subroutine specifies the list of menu entries and their corresponding actions.</P>
+
+<BLOCKQUOTE><A NAME="A318C9de0"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X910eb"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912194"></A><I>popup</I></TD>
+<TD>  Specifies which pop-up menu to display.</TD></TR></TABLE>
+
+<H3><A NAME="A30C01100a"></A>Example</H3>
+<P><A NAME="E1B0A3F942ceb"></A>The example C language program <A HREF="curved_c.html#A16C0c830"><B>curved.c</B></A> uses the <B>dopup</B> subroutine to display a pop-up menu.</P>
+
+<H3><A NAME="A64C0165bf"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0A40101ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1120"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1121"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1122"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X91101"></A>Related Information</H3>
+<P><A NAME="E1B0A40428ceb"></A>Adding an item to an existing pop-up menu with the <A HREF="addtopup.html#A142X9109d"><B>addtopup</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A40544ceb"></A>Defining a pop-up menu with the <A HREF="defpup.html#A142X910bf"><B>defpup</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A40660ceb"></A>Deallocating a pop-up menu and its data structures with the <A HREF="freepup.html#A142X91103"><B>freepup</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A40768ceb"></A>Allocating and initializing a structure for a new pop-up menu with the <A HREF="newpup.html#A142X91125"><B>newpup</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A40883ceb"></A>Enabling or disabling a given pop-up entry with the <A HREF="setpup.html#A5um1280marj"><B>setpup</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A40991ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/popupmenus.html#popupmenus.html">Pop-Up Menus</A>.</P><hr><center>
+[  <a href="depthcue.html">Previous</a>  |
+<a href="doublebuffer.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

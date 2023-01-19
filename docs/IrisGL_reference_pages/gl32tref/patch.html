@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>patch Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="overlay.html">Previous</a>  |
+<a href="patchbasis.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X95b4"></A>patch Subroutine</H2>
+<A NAME="INDEX1316" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1317" REL="I2" TITLE="wire frame curve and surface patch"></A>
+<A NAME="INDEX1318" REL="I3" TITLE="patch"></A>
+<A NAME="INDEX1319" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1320" REL="I2" TITLE="surface patch, wire frame"></A>
+<A NAME="INDEX1321" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX1322" REL="I1" TITLE="patch subroutine (GL)"></A>
+
+<H3><A NAME="A143X95b6"></A>Purpose</H3>
+<P><A NAME="E1D70B6279ceb"></A>Draws a surface patch.</P>
+
+<H3><A NAME="A78C1118"></A>Libraries</H3>
+<P><A NAME="E1D70B6318ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D70B6342ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X95ba"></A>C Syntax</H3>
+<PRE><A NAME="A143X95bb"></A><B>void patch(Matrix </B><A HREF="patch.html#A143X95bf"><I>geomx</I></A><B>, Matrix</B> <A HREF="patch.html#A143X95c0"><I>geomy</I></A><B>, Matrix</B> <A HREF="patch.html#A143X95c1"><I>geomz</I></A><B>)</B></PRE>
+
+<H3><A NAME="A26C0fded"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A26C0fdee"></A><B>SUBROUTINE PATCH(</B><I>geomx</I>, <I>geomy</I>, <I>geomz</I><B>)</B>
+<B>REAL </B><I>geomx</I><B>(4,4), </B><I>geomy</I><B>(4,4), </B><I>geomz</I><B>(4,4)</B></PRE>
+
+<H3><A NAME="A143X95bc"></A>Description</H3>
+<P><A NAME="E1D70B6455ceb"></A>The <B>patch</B> subroutine draws a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06f7">surface patch</A> using the current settings from the <A HREF="patchbasis.html#A143X95d6"><B>patchbasis</B></A>, <A HREF="patchprecision.html#A143X961a"><B>patchprecision</B></A>, and <A HREF="patchcurves.html#A143X95f8"><B>patchcurves</B></A> subroutines. The
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e7">control points</A> <A HREF="patch.html#A143X95bf"><I>geomx</I></A>, <A HREF="patch.html#A143X95c0"><I>geomy</I></A>, and <A HREF="patch.html#A143X95c1"><I>geomz</I></A> determine the shape of the patch. The <A HREF="rpatch.html#O5k2marj"><B>rpatch</B></A> subroutine is essentially the same except that it draws a rational surface patch. </P>
+
+<H3><A NAME="A143X95be"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X95bf"></A><I>geomx</I>  </TD>
+<TD>  Specifies a 4x4 matrix containing the <I>x</I> coordinates of the 16 control points of the patch.   </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X95c0"></A><I>geomy</I> </TD>
+<TD>  Specifies a 4x4 matrix containing the <I>y</I> coordinates of the 16 control points of the patch.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X95c1"></A><I>geomz</I> </TD>
+<TD>  Specifies a 4x4 matrix containing the <I>z</I> coordinates of the 16 control points of the patch.</TD></TR></TABLE>
+
+<H3><A NAME="A30C010fda"></A>Example</H3>
+<P><A NAME="E1D70B6570ceb"></A>The example C language program 
+<A HREF="patch1_c.html#A17C0daf"><B>patch1.c</B></A> uses the <B>patch</B> subroutine to draw three surface patches after defining the settings for each patch.</P>
+
+<H3><A NAME="A64C0165a6"></A>Implementation Specifics</H3>
+<P><A NAME="E1D70B6613ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C111b"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C111c"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C111d"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X95d4"></A>Related Information</H3>
+<P><A NAME="E1D70B6710ceb"></A>Defining a cubic spline basis matrix with the <A HREF="defbasis.html#A150X930"><B>defbasis</B></A> subroutine.</P>
+
+<P><A NAME="E1D70B6735ceb"></A>Setting the current spline surface basis matrices with the <A HREF="patchbasis.html#A143X95d6"><B>patchbasis</B></A> subroutine.</P>
+
+<P><A NAME="E1D70B6761ceb"></A>Setting the number of curves used to represent a patch with the <A HREF="patchcurves.html#A143X95f8"><B>patchcurves</B></A> subroutine.</P>
+
+<P><A NAME="E1D70B6786ceb"></A>Setting the precision at which curves are drawn with the <A HREF="patchprecision.html#A143X961a"><B>patchprecision</B></A> subroutine.</P>
+
+<P><A NAME="E1D70B6811ceb"></A>Drawing a rational surface patch with the <A HREF="rpatch.html#O5k2marj"><B>rpatch</B></A> subroutine.</P>
+
+<P><A NAME="E1D70B6837ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">NURBS Curves and Surfaces</A>, and Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#drawwfcvs.html">Wire Frame Curves and Surface Patches</A>.</P><hr><center>
+[  <a href="overlay.html">Previous</a>  |
+<a href="patchbasis.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

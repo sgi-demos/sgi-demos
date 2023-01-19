@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>prefsize Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="prefposition.html">Previous</a>  |
+<a href="pushattributes.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X91671"></A>prefsize Subroutine</H2>
+<A NAME="INDEX1459" REL="I1" TITLE="prefsize subroutine (GL)"></A>
+<A NAME="INDEX1460" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1461" REL="I2" TITLE="window"></A>
+<A NAME="INDEX1462" REL="I3" TITLE="prefsize"></A>
+<A NAME="INDEX1463" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1464" REL="I2" TITLE="window sizes"></A>
+<A NAME="INDEX1465" REL="I3" TITLE="constraining"></A>
+
+<H3><A NAME="A142X91673"></A>Purpose</H3>
+<P><A NAME="E1D71F9375ceb"></A>Constrains the size of a window.</P>
+
+<H3><A NAME="A79C1320"></A>Libraries</H3>
+<P><A NAME="E1D71F9415ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D71F9440ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X91677"></A>C Syntax</H3>
+<PRE><A NAME="A213X912b59"></A><B>void prefsize(Int32 </B><A HREF="prefsize.html#yM5310marj"><I>x</I></A><B>, Int32 </B><A HREF="prefsize.html#A6N5370marj"><I>y</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c3d"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c3e"></A><B>SUBROUTINE PREFSI(</B><I>x,</I> <I>y</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>, </B><I>y</I></PRE>
+
+<H3><A NAME="A142X91679"></A>Description</H3>
+<P><A NAME="E1D71F9557ceb"></A>The <B>prefsize </B>subroutine constrains the size, in pixels, of a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A>. With the <B>prefsize</B> subroutine, the applications programmer can prevent the user from resizing a window.</P>
+
+<P><A NAME="E1D71F9584ceb"></A>To remove constraints from a window, call the <A HREF="winconstraints.html#A142X914c1"><B>winconstraints</B></A> subroutine immediately after calling the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine. Calling <B>winconstraints</B> twice in a row also removes constraints from the window. Note that doing this nullifies all constraints, not just that of size.</P>
+
+<P><A NAME="E1D71F9611ceb"></A>If the <B>prefsize </B>subroutine call is followed by a call to the <B>winopen</B> subroutine, the window manager displays a window outline of the suggested size, allowing the user to position the window with the cursor.</P>
+
+<P><A NAME="E1D71F9638ceb"></A>If the <B>prefsize </B>subroutine call is followed by a call to the <B>winconstraints</B> subroutine, the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A60P0189">current window</A> is resized. The resizing occurs at the time of the <B>winconstraints</B> call; the <B>prefsize </B>subroutine has no effect on the current window until that time.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f5b"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X9167b"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="yM5310marj"></A><I>x</I></TD>
+<TD>  Specifies the width of the window in pixels.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A6N5370marj"></A><I>y</I></TD>
+<TD>  Specifies the height of the window in pixels.</TD></TR></TABLE>
+
+<H3><A NAME="A61C0159f0"></A>Implementation Specifics</H3>
+<P><A NAME="E1D71F9759ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1323"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1324"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1325"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X91691"></A>Related Information</H3>
+<P><A NAME="E1D71F9859ceb"></A>Specifying pixel values to be added to a window with the <A HREF="fudge.html#A142X917a6"><B>fudge</B></A> subroutine.</P>
+
+<P><A NAME="E1D71F9886ceb"></A>Obtaining the size of the window with the <A HREF="getsize.html#X513200marj"><B>getsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D71F9912ceb"></A>Specifying the maximum size of a window with the <A HREF="maxsize.html#A142X916d6"><B>maxsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D71F9939ceb"></A>Specifying the minimum size of a window with the <A HREF="minsize.html#MJ13260marj"><B>minsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D71F9966ceb"></A>Constraining the window position and size with the <A HREF="prefposition.html#A142X9164f"><B>prefposition</B></A> subroutine.</P>
+
+<P><A NAME="E1D71F9993ceb"></A>Specifying a window size change in discrete steps with the <A HREF="stepunit.html#A142X91bd2"><B>stepunit</B></A> subroutine.</P>
+
+<P><A NAME="E1D71FA019ceb"></A>Binding window constraints to the current window with the <A HREF="winconstraints.html#A142X914c1"><B>winconstraints</B></A> subroutine.</P>
+
+<P><A NAME="E1D71FA046ceb"></A>Creating a window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine.</P>
+
+<P><A NAME="E1D71FA073ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="prefposition.html">Previous</a>  |
+<a href="pushattributes.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

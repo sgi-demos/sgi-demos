@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>bgnpolygon or endpolygon Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="bgnpoint.html">Previous</a>  |
+<a href="bgnsurface.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X9672"></A>bgnpolygon or endpolygon Subroutine</H2>
+<A NAME="INDEX95" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX96" REL="I2" TITLE="begin-end style"></A>
+<A NAME="INDEX97" REL="I3" TITLE="bgnpolygon"></A>
+<A NAME="INDEX98" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX99" REL="I2" TITLE="polygons"></A>
+<A NAME="INDEX100" REL="I3" TITLE="vertex-based"></A>
+<A NAME="INDEX101" REL="I1" TITLE="bgnpolygon subroutine (GL)"></A>
+<A NAME="INDEX102" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX103" REL="I2" TITLE="begin-end style"></A>
+<A NAME="INDEX104" REL="I3" TITLE="endpolygon"></A>
+<A NAME="INDEX105" REL="I1" TITLE="endpolygon subroutine (GL)"></A>
+
+<H3><A NAME="A144X9674"></A>Purpose</H3>
+<P><A NAME="E1B04BF950ceb"></A>Begins or ends interpretation of vertex subroutines as polygon vertices.</P>
+
+<H3><A NAME="A77C1359"></A>Libraries</H3>
+<P><A NAME="E1B04C0098ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B04C0201ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X9678"></A>C Syntax</H3>
+<PRE><A NAME="A213X91281b"></A><B>void bgnpolygon(&nbsp;)</B></PRE>
+<PRE><A NAME="A107C1294"></A><B>void endpolygon(&nbsp;)</B></PRE>
+
+<H3><A NAME="A20C0e2dd"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A20C0e2de"></A><B>SUBROUTINE BGNPOL</B></PRE>
+<PRE><A NAME="A107C1295"></A><B>SUBROUTINE ENDPOL</B></PRE>
+
+<H3><A NAME="A144X967a"></A>Description</H3>
+<P><A NAME="E1B04C0654ceb"></A>The <B>bgnpolygon</B> subroutine begins the interpretation of vertex <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html#A264X925d">(begin-end style)</A> subroutines as polygon vertices. Vertices specified after the <B>bgnpolygon</B> subroutine and before the <B>endpolygon</B> subroutine form a single polygon. </P>
+
+<P><A NAME="E1B04C0770ceb"></A>Self-intersecting polygons (other than four-point bowties) may render incorrectly. To force the system to render concave polygons correctly, call the <A HREF="concave.html#HXf320marj"><B>concave</B></A> subroutine with the parameter set to True.</P>
+
+<P><A NAME="E1B04C0918ceb"></A>Between the <B>bgnpolygon</B> and <B>endpolygon</B> subroutines, you can issue only the following Graphics Library subroutines:</P>
+
+<UL><LI><A NAME="A228C1243"></A><A HREF="c.html#A143X9262"><B>c</B></A></LI>
+
+<LI><A NAME="A228C1244"></A><A HREF="color.html#A146X9429"><B>color</B></A></LI>
+
+<LI><A NAME="A228C1245"></A><A HREF="cpack.html#A143X9284"><B>cpack</B> </A></LI>
+
+<LI><A NAME="A228C1246"></A><A HREF="lmbind.html#XeZ2340marj"><B>lmbind </B></A></LI>
+
+<LI><A NAME="A228C1247"></A><A HREF="lmcolor.html#ofZ220marj"><B>lmcolor</B></A></LI>
+
+<LI><A NAME="A228C1248"></A><A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A></LI>
+
+<LI><A NAME="A228C1249"></A><A HREF="n3f.html#A139X91ef3"><B>n3f</B></A></LI>
+
+<LI><A NAME="A228C124a"></A><A HREF="normal.html#A142X9b7"><B>normal</B></A> </LI>
+
+<LI><A NAME="A228C124b"></A><A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> </LI>
+
+<LI><A NAME="A228C124c"></A><A HREF="v.html#A144X97a4"><B>v</B></A> </LI></UL>
+
+
+<P><A NAME="E1B04C1486ceb"></A>After the <B>endpolygon</B> subroutine completes, the current graphics position is undefined. </P>
+
+<P><A NAME="E1B04C1594ceb"></A>Use the <A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> and <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> subroutines to respecify only materials and their properties.</P>
+
+<P><A NAME="E1B04C1704ceb"></A>Use the <B>v</B> subroutine to specify a vertex.</P>
+
+<P><A NAME="E1B04C1811ceb"></A>Use the <A HREF="backface.html#A143X974b"><B>backface</B></A> subroutine to eliminate backfacing polygons. Polygons with vertices specified in clockwise order are not drawn.</P>
+
+<BLOCKQUOTE><A NAME="A237X94785"></A><B>Attention: </B>Calling <B>concave(TRUE)</B> guarantees that all polygons are drawn correctly, but may cause degradation of performance. Do not set <B>concave(TRUE)</B> if you plan to draw only convex polygons.</BLOCKQUOTE>
+
+
+<H3><A NAME="A144X9682"></A>Example</H3>
+<P><A NAME="E1B04C2027ceb"></A>The example C language program <A HREF="cylinder2_c.html#A16C0c87c"><B>cylinder2.c</B></A> uses the <B>bgnpolygon</B> subroutine to define the beginning of a description of a polygon.</P>
+
+<H3><A NAME="A62C015d68"></A>Implementation Specifics</H3>
+<P><A NAME="E1B04C2187ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1B04C2299ceb"></A>The POWER Gt4 and POWER Gt4x adapters support only a limited number of vertices between the <B>bgnpolygon</B> and <B>endpolygon</B> subroutines. The actual limit can vary from less than 200 vertices to more than 400 vertices, depending on whether or not colors, normals, or material properties are specified between the begin and end pair. If only vertices are specified between a begin and end pair, then at least 255 vertices are supported. Specifying normals, colors, or material properties decreases the overall maximum number of vertices.</P>
+
+<P><A NAME="E1B04C2407ceb"></A>The POWERgraphics GTO and the 3D Color Graphics Processor support a maximum of 255 vertices between the <B>bgnpolygon</B> and <B>endpolygon</B> subroutines.</P>
+
+<P><A NAME="A3CBCCCE103bolt"></A>The POWERgraphics GXT1000 supports an arbitrary number of vertices between the <B>bgnpolygon</B> and <B>endpolygon</B> subroutines, if the concave flag has been set to FALSE. If concave polygon checking is enabled, then a maximum of 255 vertices is supported. </P>
+
+<H3><A NAME="A12C0b7e0"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C135c"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C135d"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c3dc"></A>Related Information</H3>
+<P><A NAME="E1B04C2728ceb"></A>Allowing the system to draw concave polygons with the <A HREF="concave.html#HXf320marj"><B>concave</B></A> subroutine.</P>
+
+<P><A NAME="E1B04C2876ceb"></A>Transferring a vertex to the graphics pipe with the <A HREF="v.html#A144X97a4"><B>v</B></A> subroutine.</P>
+
+<P><A NAME="E1B04C2989ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing with <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Begin-End Style</A> Subroutines, Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="bgnpoint.html">Previous</a>  |
+<a href="bgnsurface.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/backfacepoly.html Mon, 24 Jan 2022 16:28:07 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Backfacing Polygon Removal
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="underhidden.html">Previous</a>  |
+<a href="Z-Buffering.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="backfacepoly.html"></A>Backfacing Polygon Removal </H2>
+
+
+<P><A NAME="INDEX462"></A><A NAME="INDEX463"></A><A NAME="INDEX464"></A><A NAME="INDEX465"></A></P>
+
+
+<P><A NAME="A3C0EA33949mhay"></A>Another method of hidden surface removal
+supported by GL is backfacing polygon removal. For many objects, including
+all convex polygonal 3-D figures, if each polygonal face is drawn in counterclockwise
+order when viewed from outside the object, then after transformation, the
+faces on the front are in counterclockwise order and those on the back
+in clockwise order. The system can be put in a mode where only counterclockwise
+polygons are drawn. For cases such as this, the 3-D figures are correctly
+rendered with hidden surfaces removed. </P>
+
+
+<P><A NAME="A3C0EA33969mhay"></A>A backfacing polygon is defined as a polygon
+whose vertices appear in clockwise order in screen space. When backfacing
+polygon removal is turned on, the only polygons displayed are those in
+which the vertices appear in counterclockwise order, that is, polygons
+that point toward you. Therefore, all polygon vertices should be specified
+in counterclockwise order. </P>
+
+
+<H3><A NAME="A332C94d0e"></A>backface Subroutine </H3>
+
+
+<P><A NAME="A3C0EA33989mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/backface.html#A143X974b">backface</A></B>
+subroutine initiates or terminates backfacing polygon removal. It is used
+to improve the performance of programs that represent solid shapes as collections
+of polygons. The vertices of the polygons on the far side of the solid
+are in clockwise order and are not drawn. </P>
+
+
+<P><A NAME="A3C0EA34009mhay"></A>The <B>backface</B> subroutine takes a
+single parameter. A value of True enables backfacing polygon elimination
+and False (the default) disables it. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01bf89"></A>void&nbsp;backface(Int32&nbsp;bool)</PRE>
+
+
+<H3><A NAME="A332C94d14"></A>getbackface Subroutine </H3>
+
+
+<P><A NAME="A3C0EA34031mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getbackface.html#A143X976d">getbackface</A></B>
+subroutine returns the state of backfacing filled polygon removal: 1 if
+removal is enabled, 0 if disabled. </P>
+
+
+<P><A NAME="A3C0EA34052mhay"></A>The backfacing polygon removal is not
+as general as z-buffering. However, it can be useful for drawing polygons
+whose front side is drawn with a different color and pattern than the back
+side. (The polygon would have to be drawn twice, with the vertices in reversed
+order the second time.) The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01bf8a"></A>Int32&nbsp;getbackface()</PRE>
+
+
+
+<hr><center>
+[  <a href="underhidden.html">Previous</a>  |
+<a href="Z-Buffering.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/backfacepoly.html Mon, 24 Jan 2022 16:28:07 GMT -->
+</HTML>
+

@@ -1,0 +1,246 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>alias_fore.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="alias_back_c.html">Previous</a>  |
+<a href="backface_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A114C19e6"></A>alias_fore.c Example C Language Program</H2>
+<PRE><A NAME="A64E96F573ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h>
+#include &lt;stdlib.h>
+#include &lt;math.h></PRE>
+<PRE><A NAME="A64E970084ttay"></A>/* 
+ * This program illustrates the drawing of antialiased lines, of 
+ * a single (foreground) color,  on an arbitrary multicolored
+ * background.
+ * 
+ * Note that this style of drawing is limited to precisely one
+ * foreground color.
+ * The number of background colors is also limited; the maximum 
+ * number of background colors is one-sixteenth of the total
+ * number of colormap entries.
+ *
+ * The basic idea behind the algorithm is to divide the available
+ * bitplanes into two groups: those containing the background
+ * image, and those containing the anti-aliasing coverage
+ * information.  A color-ramp is loaded in the color map ranges
+ * corresponding to the coverage information.  The background
+ * image colors can be arbitrary.
+ *
+ * Note that proper gamma correction is absolutely vital to
+ * getting antialiased lines that look truly smooth to the user.
+ * The gamma exponent depends on the monitor (specifically, on the 
+ * type of phosphors) and therefore needs to be tuned to the model
+ * of the monitor.
+ */</PRE>
+<PRE><A NAME="A64E970240ttay"></A>draw_fan()
+{
+  int i;   /* draw fan */</PRE>
+<PRE><A NAME="A64E970435ttay"></A>  for (i=0; i&lt;= 90; i+=10) {
+    pushmatrix();
+    rot (-(float) i, 'z');
+    move (0.0, 0.0, 0.0);
+    draw (0.0, 300.0, 0.0);
+    popmatrix();
+  }</PRE>
+<PRE><A NAME="A64E970577ttay"></A>}</PRE>
+<PRE><A NAME="A64E970753ttay"></A>#define AABLACK  0
+#define AAGREEN  16
+#define AARED    32
+#define AAPURPLE 48
+#define AAWHITE  64</PRE>
+<PRE><A NAME="A64E970917ttay"></A>/* experimentally determined gamma factor */
+double gammy = 2.4;</PRE>
+<PRE><A NAME="A64E973271ttay"></A>/* a utility macro used to build the color ramp */
+#define ADD_TO_RAMP(COL)                                                 \ 
+{                                                                        \ 
+   for (j=0; j&lt;16; j++) {                                                \ 
+      col_idx = COL + j;                                                 \ 
+      rramp[col_idx] = (j*foreground_r + (16-j)*background_r) / 16;      \ 
+      gramp[col_idx] = (j*foreground_g + (16-j)*background_g) / 16;      \ 
+      bramp[col_idx] = (j*foreground_b + (16-j)*background_b) / 16;      \ 
+      rramp[col_idx] = (int)                                             \ 
+         (255.0 * pow (((double) rramp[col_idx])/255.0 , 1.0 / gammy));  \ 
+      gramp[col_idx] = (int)                                             \ 
+         (255.0 * pow (((double) gramp[col_idx])/255.0 , 1.0 / gammy));  \ 
+      bramp[col_idx] = (int)                                             \ 
+         (255.0 * pow (((double) bramp[col_idx])/255.0 , 1.0 / gammy));  \ 
+   }                                                                     \ 
+}</PRE>
+<PRE><A NAME="A64E973505ttay"></A>/* this routine creates an "random" color ramp and loads it */
+void load_foreground_cmap (short foreground_r,
+short foreground_g,
+short foreground_b)
+{
+  int i, j, col_idx;
+  int background_r, background_g, background_b;
+  short rramp[256], gramp[256], bramp[256];</PRE>
+<PRE><A NAME="A64E973687ttay"></A>    /* update gamma correction factor */
+  if (getbutton (WKEY)) gammy +=0.02;
+  if (getbutton (SKEY)) gammy -=0.02;</PRE>
+<PRE><A NAME="A64E974077ttay"></A>    /* create color ramp */
+  /* AABLACK */
+  background_r = 0;
+  background_g = 0;
+  background_b = 0;
+  ADD_TO_RAMP (AABLACK);   /* AAGREEN */
+  background_r = 0;
+  background_g = 255;
+  background_b = 0;
+  ADD_TO_RAMP (AAGREEN);   /* AARED */
+  background_r = 255;
+  background_g = 127;
+  background_b = 0;
+  ADD_TO_RAMP (AARED);   /* AAPURPLE */
+  background_r = 150;
+  background_g = 25;
+  background_b = 120;
+  ADD_TO_RAMP (AAPURPLE);   /* AAWHITE */
+  background_r = 225;
+  background_g = 235;
+  background_b = 255;
+  ADD_TO_RAMP (AAWHITE);
+  mapcolors (0, 127, rramp, gramp, bramp);
+}</PRE>
+<PRE><A NAME="A64E974236ttay"></A>#define RRRANDO ( (float) (400*rand()/32767));</PRE>
+<PRE><A NAME="A64E974449ttay"></A>/* This routine draws a background of random polygons. 
+ * One of five colors are selected randomly.  */
+void draw_background() {
+  float vv[2];
+  int i, j;
+  srand (234515);
+  color (AABLACK);
+  clear();</PRE>
+<PRE><A NAME="A64E974693ttay"></A>    /* the writemask guarentees that drawing is occuring only
+     * into the "background" bitplanes */
+  writemask (0xf0);
+  for (j=0; j&lt;12; j++) {
+    color (16*(5*rand()/32767));
+    bgnpolygon();
+    for (i=0; i&lt;6; i++) {
+      vv[0] = RRRANDO;
+      vv[1] = RRRANDO;
+      v2f (vv);
+    }</PRE>
+<PRE><A NAME="A64E974843ttay"></A>    endpolygon();
+  }</PRE>
+<PRE><A NAME="A64E974985ttay"></A>}</PRE>
+<PRE><A NAME="A64E975144ttay"></A>main ()
+{
+  int i, j, k, iinc=1, jinc=3, kinc=7;</PRE>
+<PRE><A NAME="A64E975322ttay"></A>  prefsize (400.0, 400.0);
+  winopen ("antialiased lines");
+  cmode();
+  doublebuffer();
+  gconfig();</PRE>
+<PRE><A NAME="A64E975540ttay"></A>  save_cmap();
+  /* create the color ramp --- the foreground color will be white */
+  load_foreground_cmap (255, 255, 255);
+    /* draw the random background */
+  draw_background();
+  swapbuffers ();
+  draw_background();</PRE>
+<PRE><A NAME="A64E975850ttay"></A>    /* the writemask write-protects the background while the lines 
+     * are being drawn */
+  writemask (0x0f);
+    /* loop until the right mouse button is depressed */
+  while (!getbutton(RIGHTMOUSE) &amp;&amp; !getbutton(ESCKEY)) {
+    color (0);
+    clear ();
+    pushmatrix();
+      /* draw normal, jaggy lines */
+    linesmooth(FALSE);
+    color (15);
+    pushmatrix();
+    translate (10.0, 10.0, 0.0);
+    rotate( 500-getvaluator (MOUSEY), 'z');
+    draw_fan();
+    popmatrix();</PRE>
+<PRE><A NAME="A64E976137ttay"></A>      /* draw smooth, anti-aliased lines */
+    linesmooth(TRUE);
+    pushmatrix();
+    translate (390.0, 30.0, 0.0);
+    rotate( getvaluator (MOUSEY) + 400, 'z');
+    draw_fan();
+    popmatrix();
+    popmatrix();
+    swapbuffers();
+      /* cycle through a random set of foreground colors */
+    i+=iinc;
+    j+=jinc;
+    k+=kinc;
+    if ((i+iinc>5*255) || (i+iinc&lt;0)) {
+      iinc = -iinc;
+      i+=iinc;
+    }</PRE>
+<PRE><A NAME="A64E976307ttay"></A>    if ((j+jinc>5*255) || (j+jinc&lt;0)) {
+      jinc = -jinc;
+      j+=jinc;
+    }</PRE>
+<PRE><A NAME="A64E976478ttay"></A>    if ((k+kinc>5*255) || (k+kinc&lt;0)) {
+      kinc = -kinc;
+      k+=kinc;
+    }</PRE>
+<PRE><A NAME="A64E976659ttay"></A>    if ( i%5 == 0) {
+      load_foreground_cmap ( (i/5)%255, (j/5)%255,  (k/5)%255);
+    }
+  }
+  restore_cmap();</PRE>
+<PRE><A NAME="A64E976801ttay"></A>}</PRE>
+<PRE><A NAME="A64E976977ttay"></A>/*This saves the colormap*/
+#define lo_end 0
+#define hi_end 255
+short *CarrayR, *CarrayG, *CarrayB;</PRE>
+<PRE><A NAME="A64E977175ttay"></A>save_cmap()
+{
+  CarrayR = calloc (lo_end+hi_end,sizeof(short));
+  CarrayG = calloc (lo_end+hi_end,sizeof(short));
+  CarrayB = calloc (lo_end+hi_end,sizeof(short));</PRE>
+<PRE><A NAME="A64E977349ttay"></A>  getmcolors ((Int16 const)lo_end,(Int16 const)hi_end,
+     CarrayR, CarrayG, CarrayB);
+}</PRE>
+<PRE><A NAME="A64E977578ttay"></A>/*This restores the colormap*/
+restore_cmap()
+{
+  mapcolors ((Int16 const)lo_end,(Int16 const)hi_end,
+     CarrayR, CarrayG, CarrayB);
+}
+/*
+  Changes:
+    -  Added the restoring of the colormap
+    -  Added escape key and right mouse for clean exit
+*/</PRE>
+
+<H3><A NAME="A200C1110"></A>Related Information</H3>
+<P><A NAME="E1D7762577ceb"></A>The <A HREF="linesmooth.html#Ew1f0marj"><B>linesmooth</B></A> subroutine<A HREF="Ew1f0marj.html" REL="PAGENUM"></A>.</P>
+
+<P><A NAME="E1D7762603ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/smjaglines.html#A4rO1220nita">Pixel Coverage</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<hr><center>
+[  <a href="alias_back_c.html">Previous</a>  |
+<a href="backface_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

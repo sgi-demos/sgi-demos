@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>mmode Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="minsize.html">Previous</a>  |
+<a href="move.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="XhZ2370marj"></A>mmode Subroutine</H2>
+<A NAME="INDEX1182" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1183" REL="I2" TITLE="pipeline optionetting"></A>
+<A NAME="INDEX1184" REL="I3" TITLE="mmode"></A>
+<A NAME="INDEX1185" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1186" REL="I2" TITLE="matrix mode"></A>
+<A NAME="INDEX1187" REL="I3" TITLE="setting current"></A>
+<A NAME="INDEX1188" REL="I1" TITLE="mmode subroutine (GL)"></A>
+<H3><A NAME="A213X911e4a"></A>Purpose</H3>
+<P><A NAME="E1D6F9B559ceb"></A>Sets the current matrix mode.</P>
+
+<H3><A NAME="A78C12da"></A>Libraries</H3>
+<P><A NAME="E1D6F9B603ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D6F9B629ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911e4d"></A>C Syntax</H3>
+<PRE><A NAME="A213X911e4e"></A><B>void mmode(Int16 </B><A HREF="mmode.html#Ysc2260marj"><I>mode</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X911e29"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X911e2c"></A><B>SUBROUTINE MMODE(</B><I>mode</I><B>)</B>
+<B>INTEGER*4 </B><I>mode</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C12dd"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when started from a FORTRAN program, although it accepts short integers when started from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911e51"></A>Description</H3>
+<P><A NAME="E1D6F9B771ceb"></A>The <B>mmode</B> subroutine sets the current matrix mode.</P>
+
+<P><A NAME="E1D6F9B802ceb"></A>The system is in single matrix mode after a call to the <A HREF="winopen.html#A142X91549"><B>winopen</B></A>, <A HREF="ginit.html#LDg21c0marj"><B>ginit</B></A>, or <A HREF="gbegin.html#JS4380nita"><B>gbegin</B></A> subroutines. This mode is sufficient except for lighting calculations; when performing those, use viewing matrix mode.</P>
+
+<P><A NAME="E1D6F9B828ceb"></A>Because the projection matrix is not stored on the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06dd">matrix stack</A>, the projection matrix is not normally accessible. However, if you want to define your own projection matrix, put the system into projection matrix mode. You can then use the standard matrix manipulation commands to alter the projection matrix. When you are in projection matrix mode, do not use the <A HREF="pushmatrix.html#A144X9540"><B>pushmatrix</B></A> and <A HREF="popmatrix.html#A144X951e"><B>popmatrix</B></A> subroutines.</P>
+
+<P><A NAME="E1D6F9B858ceb"></A>When you have finished modifying the projection matrix, return to viewing matrix mode and load a 4 by 4 identity matrix onto the matrix stack. (The standard transformation subroutines, <A HREF="rotate.html#A8g2120marj"><B>rotate</B></A>, <A HREF="rot.html#A144X9562"><B>rot</B></A>, <A HREF="translate.html#A144X95c8"><B>translate</B></A>, <A HREF="scale.html#A144X95a6"><B>scale</B></A>, <A HREF="lookat.html#A144X9452"><B>lookat</B></A>, and <A HREF="polarview.html#A144X94fc"><B>polarview</B></A>, all use matrix multiplication. Loading the identity matrix onto the matrix stack is a safe way to make sure that there is a matrix by which to multiply.)  </P>
+
+<H3><A NAME="A213X911e57"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Ysc2260marj"></A><I>mode</I></TD>
+<TD>  Specifies the current matrix mode to be set.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911e58"></A></TD>
+<TD>  There are three possible values for this function:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Mode</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>MSINGLE</TD>
+
+<TD>MSINGL</TD>
+
+<TD>Single matrix</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>MPROJECTION</TD>
+
+<TD>MPROJE</TD>
+
+<TD>Projection matrix</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>MVIEWING</TD>
+
+<TD>MVIEWI</TD>
+
+<TD>Viewing matrix</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A30C010ff2"></A>Example</H3>
+<P><A NAME="E1D6F9C018ceb"></A>The example C language program <A HREF="cylinder1_c.html#Ggi2e0marj"><B>cylinder1.c</B></A> uses the <B>mmode</B> subroutine, with MVIEWING as the value of the <I>mode</I> parameter, to specify that matrix operations manipulate only the modeling and viewing matrix (not the projection matrix). </P>
+
+<H3><A NAME="A62C015ce6"></A>Implementation Specifics</H3>
+<P><A NAME="E1D6F9C090ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C12de"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12df"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12e0"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911e67"></A>Related Information</H3>
+<P><A NAME="E1D6F9C278ceb"></A>Making a new material, light, or lighting model definition active with the <A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F9C307ceb"></A>Defining a new material, light, or lighting model with the <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> subroutine.<B>  </B></P>
+
+<P><A NAME="E1D6F9C352ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Creating <!--gl32prgd:--><A HREF="../gl32prgd/crlighteff.html#crlighteff.html">Lighting Effects</A>, Setting <!--gl32prgd:--><A HREF="../gl32prgd/setglpipeops.html#setglpipeops.html">Pipeline Options</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="minsize.html">Previous</a>  |
+<a href="move.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

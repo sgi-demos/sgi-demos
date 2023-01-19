@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/setglpipeops.html Mon, 24 Jan 2022 16:27:51 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Setting Pipeline Options in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="setglattrib.html">Previous</a>  |
+<a href="drawpoly.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+<H2><A NAME="setglpipeops.html"></A>Setting Pipeline Options </H2>
+
+
+<P><A NAME="INDEX155"></A><A NAME="INDEX156"></A><A NAME="INDEX157"></A><A NAME="INDEX158"></A></P>
+
+
+<P><A NAME="A3C0E52C911mhay"></A>Setting pipeline options is accomplished
+by a group of subroutines that allows a programmer to turn off and on optional
+tasks provided by the graphics pipeline. Turning off these tasks when they
+are not needed speeds the rendering process. </P>
+
+
+<P><A NAME="A3C0E52C936mhay"></A>You may want to read about the various
+pipeline options in &quot;Creating <A HREF="crlighteff.html#crlighteff.html">Lighting
+Effects</A>&quot;, &quot;Removing <A HREF="remhidden.html#remhidden.html">Hidden
+Surfaces</A>&quot;, &quot;<A HREF="setglattrib.html#setglattrib.html">Setting Drawing
+Attributes</A>&quot;, &quot;Working with <A HREF="workcoords.html#workcoords.html">Coordinate
+Systems</A>&quot;, and &quot;Performing <A HREF="depth-cueing.html">Depth-Cueing</A>&quot;.</P>
+
+
+<P><A NAME="A3C0E52C960mhay"></A>Various pipeline options are explained
+in Creating <A HREF="crlighteff.html#crlighteff.html">Lighting Effects</A> in
+GL, Performing <A HREF="depth-cueing.html">Depth-Cueing</A> in GL,
+Removing <A HREF="remhidden.html#remhidden.html">Hidden Surfaces</A> in GL,
+<A HREF="setglattrib.html#setglattrib.html">Setting Drawing Attributes</A> in GL,
+and Working with <A HREF="workcoords.html#workcoords.html">Coordinate Systems</A>
+in GL. </P>
+
+
+<H3><A NAME="A264X931d"></A>List of GL Pipeline Option-Setting Subroutines<A NAME="INDEX159"></A>
+<A NAME="INDEX160"></A> <A NAME="INDEX161"></A> <A NAME="INDEX162"></A>
+<A NAME="INDEX163"></A> <A NAME="INDEX164"></A> </H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b4e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/backface.html#A143X974b">backface</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Allows or suppresses the display of backfacing polygons.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b4f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/concave.html#HXf320marj">concave</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Allows the system to draw concave polygons.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A17C0d96c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/depthcue.html#PNK22d0marj">depthcue</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Turns depth-cueing on or off.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b50"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getbackface.html#A143X976d">getbackface</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Indicates whether backfacing polygon removal is on or off.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b51"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmmode.html#idZ2e0marj">getmmode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the current matrix mode.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b52"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getsm.html#A143X9a53">getsm</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the shading style used to draw filled polygons.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b53"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/mmode.html#XhZ2370marj">mmode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the current matrix mode. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b54"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/shademodel.html#A143X9ab9">shademodel</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Selects the shading style used to draw filled polygons.</TD></TR></TABLE>
+
+<hr><center>
+[  <a href="setglattrib.html">Previous</a>  |
+<a href="drawpoly.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/setglpipeops.html Mon, 24 Jan 2022 16:27:51 GMT -->
+</HTML>
+

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getopenobj Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getnurbsproperty.html">Previous</a>  |
+<a href="getorigin.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9382"></A>getopenobj Subroutine</H2>
+<A NAME="INDEX786" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX787" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX788" REL="I3" TITLE="getopenobj"></A>
+<A NAME="INDEX789" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX790" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX791" REL="I3" TITLE="returning current"></A>
+<A NAME="INDEX792" REL="I1" TITLE="getopenobj subroutine (GL)"></A>
+
+<H3><A NAME="A142X9384"></A>Purpose</H3>
+<P><A NAME="E1B1074657ceb"></A>Returns the current open object.</P>
+
+<H3><A NAME="A79C13d"></A>Libraries</H3>
+<P><A NAME="E1B1074805ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1074912ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9388"></A>C Syntax</H3>
+<PRE><A NAME="A142X9389"></A><B>Int32 getopenobj(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010a80"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010a81"></A><B>INTEGER*4 FUNCTION GETOPE</B></PRE>
+
+<H3><A NAME="A142X938a"></A>Description</H3>
+<P><A NAME="E1B1075272ceb"></A>The <B>getopenobj</B> subroutine returns the identifier of the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A255B9bc">object</A> that is currently open for editing. If no object is open, the subroutine returns -1.</P>
+
+<BLOCKQUOTE><A NAME="A318C9d8a"></A><B>Note: </B>This editing subroutine itself cannot be added to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X9390"></A>Return Value</H3>
+<P><A NAME="E1B1075486ceb"></A>The number of the object currently open for editing.</P>
+
+<H3><A NAME="A62C015cfc"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1075647ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C140"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C141"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C142"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X93a2"></A>Related Information</H3>
+<P><A NAME="E1B1075964ceb"></A>Closing an object with the <A HREF="closeobj.html#A142X915b"><B>closeobj</B></A> subroutine.</P>
+
+<P><A NAME="E1B1076072ceb"></A>Opening an object for editing with the <A HREF="editobj.html#A142X9360"><B>editobj</B></A> subroutine.</P>
+
+<P><A NAME="E1B1076179ceb"></A>Creating an object with the <A HREF="makeobj.html#A142X912d"><B>makeobj</B></A> subroutine.</P>
+
+<P><A NAME="E1B1076289ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Creating <!--gl32prgd:--><A HREF="../gl32prgd/workobjects.html#workobjects.html">Objects (Display Lists)</A>, 
+and <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System.</P><hr><center>
+[  <a href="getnurbsproperty.html">Previous</a>  |
+<a href="getorigin.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

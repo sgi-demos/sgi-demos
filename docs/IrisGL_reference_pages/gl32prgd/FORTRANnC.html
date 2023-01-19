@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/FORTRANnC.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Linking FORTRAN and C Modules
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="linkncompil.html">Previous</a>  |
+<a href="unsupsubs.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+
+
+<H2><A NAME="FORTRANnC.html"></A>Linking FORTRAN and C Modules </H2>
+
+
+<P><A NAME="A3C0F110714mhay"></A>In general FORTRAN compilers append an
+underscore character ('_') to each user defined symbol. In this way name
+space conflicts can be avoided between C and FORTRAN. However, the xlf
+(f77) compiler does not add the trailing underscore to user defined symbols
+by default. </P>
+
+
+<P><A NAME="A3C0F110733mhay"></A>The FORTRAN GL library supports both naming
+conventions by exporting symbols with and without appended underscores.
+Because of a potential name space clash between the FORTRAN and C libraries,
+some care must be taken when linking together modules that use both the
+C and FORTRAN bindings for GL subroutines. </P>
+
+
+<P><A NAME="A3C0F110752mhay"></A>Programs written in FORTRAN and using
+GL fall into one of four categories. The following gives an example from
+each category, showing how FORTRAN GL applications can be linked. </P>
+
+
+<P><A NAME="A3C0F110772mhay"></A>To link FORTRAN-only source code, enter
+the following: </P>
+
+
+<PRE><A NAME="BC7B539020vbia"></A>xlf -U foof.f -lfgl -lm</PRE>
+
+
+<P><A NAME="A3C0F110792mhay"></A>This binds the FORTRAN application with
+the FORTRAN GL library and the Math Library. </P>
+
+
+<P><A NAME="A3C0F110811mhay"></A>To link C and FORTRAN source where GL
+is referenced <I>only</I> through the FORTRAN interface, enter the following:</P>
+
+
+<PRE><A NAME="BC7B539511vbia"></A>xlc -c fooc.c
+xlf -U foof.f fooc.o -lfgl -lc -lm</PRE>
+
+
+<P><A NAME="A3C0F110832mhay"></A>This binds the MIXED application with
+the FORTRAN GL library, the C library, and the Math Library. The C Library
+is used to resolve externals from the module compiled by the <B>xlc</B>
+command. </P>
+
+
+<P><A NAME="A3C0F110851mhay"></A>To link C and FORTRAN source where GL
+is referenced only through the C interface, enter the following </P>
+
+
+<PRE><A NAME="BC7B53A013vbia"></A>xlf -U -c foof.f
+xlc fooc.c foof.o -lgl -lxlf -lm</PRE>
+
+
+<P><A NAME="A3C0F110871mhay"></A>This binds the MIXED application with
+the C GL library, the XLF library, and the Math Library. The XLF Library
+is used to resolve externals from the module compiled by the <B>xlf</B>
+command. </P>
+
+
+<P><A NAME="A3C0F110891mhay"></A>To link C and FORTRAN source where GL
+is referenced through both the C and FORTRAN interfaces, enter the following:</P>
+
+
+<PRE><A NAME="BC7B53A502vbia"></A>xlf -U -qextname -c foof.f
+xlc -c fooc.c
+xlc  foof.o fooc.o -lgl -lc -lfgl -lxlf -lm</PRE>
+
+
+<P><A NAME="A3C0F110911mhay"></A>This creates the MIXED application. By
+compiling the FORTRAN modules with the <B>-qextname</B> flag, the extended
+naming rules are enforced. The extended naming rules append an underscore
+to all user-defined symbols. </P>
+
+
+<OL><LI><A NAME="BC7B53A998vbia"></A>The C libraries are specified first so
+that all C externals are resolved for the FORTRAN GL library contains references
+to functions with and without the trailing underscores. The FORTRAN libraries
+will then resolve all functions with the trailing underscores.</LI>
+
+
+<LI><A NAME="BC7B53B378vbia"></A>The order in which the libraries are placed
+on the compile line is important. If they are not placed according to the
+guidelines herein, the proper linkage will not be achieved and run-time
+errors will result.</LI></OL>
+
+
+
+
+<hr><center>
+[  <a href="linkncompil.html">Previous</a>  |
+<a href="unsupsubs.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/FORTRANnC.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+

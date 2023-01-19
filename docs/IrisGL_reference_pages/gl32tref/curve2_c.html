@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>curve2.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="curve1_c.html">Previous</a>  |
+<a href="curve3_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c7cd"></A>curve2.c Example C Language Program
+</H2>
+<A NAME="INDEX2211" REL="I1" TITLE="curve2.c example program (GL)"></A>
+<A NAME="INDEX2212" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2213" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2214" REL="I3" TITLE="curve segments"></A>
+<A NAME="INDEX2215" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2216" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2217" REL="I3" TITLE="joined curve segments"></A>
+<A NAME="INDEX2218" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2219" REL="I2" TITLE="curve segments"></A>
+<A NAME="INDEX2220" REL="I3" TITLE="drawing"></A>
+<PRE><A NAME="A64EA07622ttay"></A>/*
+curve2.c</PRE>
+<PRE><A NAME="A64EA07824ttay"></A>This program demonstrates the use of joined curve segments. It
+draws three curves. One with a Bezier basis, one with a Cardinal
+spline basis, and one with a B-spline basis.</PRE>
+<PRE><A NAME="A64EA08065ttay"></A>The array geom2 contains 6 control points.  With the Bezier basis
+matrix, 3 sets of overlapping control points result in 3 separate
+curve segments.  With the Cardinal spline and B-spline matrices,
+the same overlapping sets of control points result in 3 joined
+curve segments.
+*/</PRE>
+<PRE><A NAME="A64EA08222ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EA08403ttay"></A>Matrix beziermatrix = {
+  { -1,  3, -3,  1 } ,
+  {  3, -6,  3,  0 },
+  { -3,  3,  0,  0 },
+  {  1,  0,  0,  0 }};</PRE>
+<PRE><A NAME="A64EA08598ttay"></A>Matrix cardinalmatrix = { 
+  { -0.5,  1.5, -1.5,  0.5 },
+  {  1.0, -2.5,  2.0, -0.5 },
+  { -0.5,  0.0,  0.5,  0.0 },
+  {  0.0,  1.0,  0.0,  0.0 }};</PRE>
+<PRE><A NAME="A64EA08812ttay"></A>Matrix bsplinematrix = { 
+  { -1.0/6.0,  3.0/6.0, -3.0/6.0, 1.0/6.0 },
+  {  3.0/6.0, -6.0/6.0,  3.0/6.0,    0.0 },
+  { -3.0/6.0,      0.0,  3.0/6.0,    0.0 },
+  {  1.0/6.0,  4.0/6.0,  1.0/6.0,    0.0 }};</PRE>
+<PRE><A NAME="A64EA08961ttay"></A>#define BEZIER 1</PRE>
+<PRE><A NAME="A64EA09109ttay"></A>#define CARDINAL 2</PRE>
+<PRE><A NAME="A64EA09257ttay"></A>#define BSPLINE 3</PRE>
+<PRE><A NAME="A64EA09457ttay"></A>Coord geom2[6][3] = {
+  { 150.0, 400.0, 0.0},
+  { 350.0, 100.0, 0.0},
+  { 200.0, 350.0, 0.0},
+  {  50.0,   0.0, 0.0},
+  {   0.0, 200.0, 0.0},
+  { 100.0, 300.0, 0.0}};</PRE>
+<PRE><A NAME="A64EA09611ttay"></A>main()
+{    
+  int dev,val;    </PRE>
+<PRE><A NAME="A64EA09846ttay"></A>  initialize();    
+  while (TRUE) {
+    if (qtest()) {            
+      dev = qread(&amp;val);            
+      if (dev == ESCKEY) {
+        gexit();
+        exit();
+      }
+      else if (dev == REDRAW) {
+        reshapeviewport();
+        drawcurve();
+      }</PRE>
+<PRE><A NAME="A64EA09991ttay"></A>    }</PRE>
+<PRE><A NAME="A64EA0A134ttay"></A>  }</PRE>
+<PRE><A NAME="A64EA0A277ttay"></A>}</PRE>
+<PRE><A NAME="A64EA0A431ttay"></A>initialize()
+{    
+  int gid;    </PRE>
+<PRE><A NAME="A64EA0A637ttay"></A>  prefposition(200, 650, 200, 800);
+  gid = winopen("curve2");    
+  winconstraints();                  /* Allows resizing */
+  qdevice(ESCKEY);
+  qdevice(REDRAW);
+  qenter(REDRAW,gid);</PRE>
+<PRE><A NAME="A64EA0A779ttay"></A>}</PRE>
+<PRE><A NAME="A64EA0A933ttay"></A>drawcurve()
+{    
+  short i,xx,yy;</PRE>
+<PRE><A NAME="A64EA0B605ttay"></A>  color(BLACK);
+  clear();    
+  pushmatrix();                      /* Copy the top matrix */
+  translate (50.0,100.0,0.0);        /* Center the splines */
+  defbasis(BEZIER,beziermatrix);     /* define a basis matrix 
+                                        called BEZIER */
+  defbasis(CARDINAL,cardinalmatrix); /* a new basis is 
+                                        defined */
+  defbasis(BSPLINE,bsplinematrix);   /* a new basis is 
+                                        defined */
+  curvebasis(BEZIER);      /* the Bezier matrix becomes the 
+                              current basis */
+  curveprecision(20);      /* the precision is set to 20 */
+  color(RED);
+  crvn(6, geom2);          /* the curvs command called with a 
+                              Bezier basis causes 3 separate 
+                              curve segments to be drawn */
+  curvebasis(CARDINAL);    /* the Cardinal basis becomes the 
+                              current basis */
+  color(GREEN);
+  crvn(6, geom2);          /* the crvs command called with a 
+                              Cardinal spline basis causes a 
+                              smooth curve to be drawn */
+  curvebasis(BSPLINE);     /* the B-spline basis becomes the 
+                              current basis */
+  color(BLUE);
+  crvn(6, geom2);          /* the curvs command called with a 
+                              B-spline basis causes the 
+                              smoothest curve to be drawn */</PRE>
+<PRE><A NAME="A64EA0D290ttay"></A>    /* show the control points */
+  color(WHITE);
+  for ( i = 0 ; i &lt; 6 ; i++ )  {
+    for ( xx = -2 ; xx &lt; 2 ; xx++) {
+      for ( yy = -2 ; yy &lt; 2 ; yy++) {
+        pnt2( geom2[i][0] + (Coord) xx , geom2[i][1] + (Coord) yy);
+      }
+    }
+  }
+  popmatrix();</PRE>
+<PRE><A NAME="A64EA0D432ttay"></A>}</PRE>
+<PRE><A NAME="A64EA0D606ttay"></A>/*
+  Changes:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Now the control points are displayed
+    - The window can be resized
+*/</PRE>
+
+<H3><A NAME="A200C1147"></A>Related Information</H3>
+<P><A NAME="E1D77AF748ceb"></A>The <A HREF="crvn.html#ESS22c0marj"><B>crvn</B></A> subroutine<A HREF="ESS22c0marj.html" REL="PAGENUM"></A>.</P>
+
+<P><A NAME="E1D77AF774ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#DB213a0marj">Drawing Curves</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<hr><center>
+[  <a href="curve1_c.html">Previous</a>  |
+<a href="curve3_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

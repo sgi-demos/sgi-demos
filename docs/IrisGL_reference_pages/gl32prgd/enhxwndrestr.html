@@ -1,0 +1,342 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/enhxwndrestr.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>Restrictions on Using Enhanced X-Windows Calls with GL Subroutines
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="exhwindcalls.html">Previous</a>  |
+<a href="enhxinterop.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="enhxwndrestr.html"></A>Restrictions on Using Enhanced X-Windows Calls with GL Subroutines</H2>
+<P><A NAME="A3C0F009489mhay"></A>Some GL and Enhanced X-Windows calls cannot be used together. Only a few routines make sense and are valid, while all others result in undefined behavior.</P>
+
+<P><A NAME="A3C0F009510mhay"></A>As mentioned previously, the GL subroutine library is partitioned into two pieces: one, of which the X server remains ignorant, and the second, which operates through Enhanced X-Windows. Due to this partitioning, certain Enhanced X-Windows calls, when invoked with GL calls, result in unpredictable behavior. For this reason, do not use these calls together. The following sections outline restrictions on calls:</P>
+
+<UL><LI><A NAME="A110C1ae"></A><A HREF="enhxwndrestr.html#d6m20nita">Rendering Models</A></LI>
+
+<LI><A NAME="A110C1af"></A><A HREF="enhxwndrestr.html#A27m380nita">Color Maps</A></LI>
+
+<LI><A NAME="A110C1b0"></A><A HREF="enhxwndrestr.html#F7m380nita">Fonts</A></LI>
+
+<LI><A NAME="A110C1b1"></A><A HREF="enhxwndrestr.html#B8m240nita">Internal Properties</A></LI>
+
+<LI><A NAME="A110C1b2"></A><A HREF="enhxwndrestr.html#a8m240nita">Fullscreen Mode</A></LI>
+
+<LI><A NAME="A110C1b3"></A><A HREF="enhxwndrestr.html#a9m200nita">Coordinate Transformation</A></LI>
+
+<LI><A NAME="A110C1b4"></A><A HREF="enhxwndrestr.html#QN8Sg169csol">Mixed GL and Windows Input</A></LI></UL>
+
+
+<H3><A NAME="A142C11688"></A>List of GL Enhanced X-Windows Subroutines<A NAME="INDEX924" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX925" REL="I2" TITLE="subroutines"></A>
+<A NAME="INDEX926" REL="I3" TITLE="Windows"></A>
+<A NAME="INDEX927" REL="I1" TITLE="Windows"></A>
+<A NAME="INDEX928" REL="I2" TITLE="GL"></A>
+<A NAME="INDEX929" REL="I3" TITLE="subroutines"></A>
+</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A142C11689"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getXdpy.html#A114C13c"><B>getXdpy</B></A>
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the Enhanced X-Windows connection for the given GL session.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A142C1168a"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getXdpy.html#A114C13c"><B>getXwid</B></A>
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the Enhanced X-Windows ID of the current GL window.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A142C1168b"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/winX.html#A114C163"><B>winX</B></A>
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Converts the specified Enhanced X-Windows window into a GL window.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="AAE7457372ttay"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/finish.html#A9URSg3c3csol"><B>finish</B></A>
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Blocks until all buffers and FIFOs are empty.</TD></TR></TABLE>
+
+<H3><A NAME="d6m20nita"></A>Rendering Models</H3>
+<P><A NAME="A3C0F009544mhay"></A>Enhanced X-Windows calls should not be used to render into a GL window, and GL calls should not be used to render into an Enhanced X-Windows window. The X server is ignorant of the state of a GL window, and the GL subroutines are not aware of Enhanced X-Windows. If rendering into the other type of window is attempted, the most likely outcome is that anything drawn appears either in the wrong colors or the wrong place, or does not appear at all. In some situations, the application exits prematurely.</P>
+
+<P><A NAME="A3C0F009564mhay"></A>The previous restrictions do not imply that you cannot do Enhanced X-Windows and GL drawing within the same process, only that you should not use both rendering models to draw into the same <I>window</I>. As long as Enhanced X-Windows drawing is limited to Enhanced X-Windows windows, and GL drawing is limited to GL windows, there should be no conflicts.</P>
+
+<P><A NAME="A3C0F009584mhay"></A>The following is a partial list of Enhanced X-Windows and AIX drawing routines. Do <I>not</I> use these routines to draw inside a GL window.</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2">Enhanced X-Windows and AIX Drawing Routines Restricted from GL Windows</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XClearArea</B></TD>
+
+<TD><B>XDrawString16</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XClearWindow</B></TD>
+
+<TD><B>XDrawText</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XDrawArc</B></TD>
+
+<TD><B>XDrawText16</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XDrawArcsXDrawRectangles</B></TD>
+
+<TD><B>XFillArc</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XDrawImageString</B></TD>
+
+<TD><B>XFillArcs</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XDrawImageString16</B></TD>
+
+<TD><B>XFillPolygon</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XDrawLine</B></TD>
+
+<TD><B>XFillRectangle</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XDrawLines</B></TD>
+
+<TD><B>XFillRectangles</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XDrawPoint</B></TD>
+
+<TD><B>XPutImage</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XDrawPoints</B></TD>
+
+<TD><B>XPutPixel</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XDrawRectangle</B></TD>
+
+<TD><B>XmStringDraw</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XDrawRectangles</B></TD>
+
+<TD><B>XmStringDrawImage</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XDrawSegments</B></TD>
+
+<TD><B>XmStringDrawUnderline</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XDrawString</B></TD>
+
+<TD><BR></TD></TR></TABLE>
+
+<P><A NAME="A3C0F009609mhay"></A>Do not use GL subroutines on an Enhanced X-Windows window unless that window has first been converted to a GL window with the <!--:libs:gl32tref:--><A HREF="../gl32tref/winX.html#A114C163"><B>winX</B></A> subroutine.</P>
+
+<H3><A NAME="A27m380nita"></A>Color Maps</H3>
+<P><A NAME="A3C0F009630mhay"></A>The AIXwindows window manager does not always install a new colormap immediately. Usually, colormaps are installed only when the input focus changes. This problem can affect color index mode windows, as well as RGB mode windows on the POWERgraphics GTO, POWER Gt4, and POWER Gt4x adapters.</P>
+
+<P><A NAME="A3C0F009650mhay"></A>Although the X server performs overall color map management, including color map creation, allocation, and installation, do not use Enhanced X-Windows calls to change the GL color map, or GL calls to change X color maps.</P>
+
+<P><A NAME="A3C0F009670mhay"></A>Internally, GL maintains two color maps. One is the global color-index-mode color map, and it can be modified by any GL application. The other color map is an internal color map maintained for PseudoRGB graphics adapters. For 8-bit adapters, this internal palette is loaded with a 3-3-2 dithered color map. On 24-bit adapters, this palette is loaded with an 8-8-8 straight ramp. The actual format of either of these two color maps depends on which adapter is installed in your system. Modifying either of these color maps results in unpredictable colors on the screen.</P>
+
+<P><A NAME="A3C0F009690mhay"></A>The following is a partial list of Enhanced X-Windows color map manipulation routines. Do<I> not</I> use these routines to modify GL color maps.</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2">Enhanced X-Windows Color Map Routines Restricted from GL</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XAllocColor</B></TD>
+
+<TD><B>XSetRGBColormaps</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XAllocColorCells</B></TD>
+
+<TD><B>XSetWindowColormaps</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XAllocColorPlanes</B></TD>
+
+<TD><B>XSetWMColormapWindows</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XAllocNamedColor</B></TD>
+
+<TD><B>XStoreColor</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XAllocStandardColormap</B></TD>
+
+<TD><B>XStoreColors</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XCopyColormapAndFree</B></TD>
+
+<TD><B>XStoreNamedColor</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XCreateColormap</B></TD>
+
+<TD><B>XUninstallColormap</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XInstallColormap</B></TD>
+
+<TD><BR></TD></TR></TABLE>
+
+<H3><A NAME="F7m380nita"></A>Fonts</H3>
+<P><A NAME="A3C0F009714mhay"></A>Do <I>not</I> use Enhanced X-Windows fonts calls to load a GL font<I>.</I> If you wish to use Enhanced X-Windows fonts with the GL <!--:libs:gl32tref:--><A HREF="../gl32tref/charstr.html#A143X9cfb"><B>charstr</B></A> subroutine, use the GL <!--:libs:gl32tref:--><A HREF="../gl32tref/loadXfont.html#vUO390nita"><B>loadXfont</B></A> subroutine to access them. The following Enhanced X-Windows routines cannot be used to load a GL font and do not affect the current GL font:</P>
+
+<UL><LI><A NAME="A110C1bd"></A><B>XLoadFont</B></LI>
+
+<LI><A NAME="A110C1be"></A><B>XLoadQueryFont</B></LI></UL>
+
+
+<P><A NAME="A3C0F009736mhay"></A>Likewise, do not attempt to use the GL <B>loadXfont</B> subroutine to get a font for Enhanced X-Windows rendering.</P>
+
+<P><A NAME="A3C0F009756mhay"></A>Although the internal GL font structure is almost identical to the Enhanced X-Windows font structure, each font registered with either the <!--:libs:gl32tref:--><A HREF="../gl32tref/loadXfont.html#vUO390nita"><B>loadXfont</B></A> or <!--:libs:gl32tref:--><A HREF="../gl32tref/defrasterfont.html#A143X9d3f"><B>defrasterfont</B></A> subroutine associates a handle with that font. GL keeps an internal hash table of all fonts registered for the process. Xfonts need to be registered with GL to be usable by GL.</P>
+
+<H3><A NAME="B8m240nita"></A>Internal Properties</H3>
+<P><A NAME="A3C0F009777mhay"></A>GL defines several Enhanced X-Windows properties that are used internally. If these properties are changed or destroyed, unpredictable behavior results. Therefore, use the following routines with caution:</P>
+
+<UL><LI><A NAME="A110C1c2"></A><B>XChangeProperty</B></LI>
+
+<LI><A NAME="A110C1c3"></A><B>XDeleteProperty</B></LI></UL>
+
+
+<H3><A NAME="A5FADEE402csol"></A>Widgets</H3>
+<P><A NAME="A3C0F009800mhay"></A>The GL widget is not properly created and initialized if it is created with the <B>XtCreateManagedWidget</B> subroutine. To properly create and initialize the GL widget, use the <B>XtCreateWidget</B> subroutine and subsequently manage the widget with the <B>XtManageChild</B> subroutine.</P>
+
+<H3><A NAME="a8m240nita"></A>Fullscreen Mode</H3>
+<P><A NAME="A3C0F009821mhay"></A>In the current implementation of the GL <!--:libs:gl32tref:--><A HREF="../gl32tref/fullscrn.html#Qga140marj"><B>fullscrn</B></A> subroutine, the pointer is grabbed so that all input is redirected to the process that has called the <B>fullscrn</B> subroutine. Ungrabbing the pointer prematurely causes unpredictable results. Performing any other grabs or ungrabs can also cause unpredictable results within a <B>fullscrn</B>/<!--:libs:gl32tref:--><A HREF="../gl32tref/endfullscrn.html#laa350marj"><B>endfullscrn</B></A> subroutine pair.</P>
+
+<P><A NAME="A3C0F009840mhay"></A>The following Enhanced X-Windows functions interfere with GL fullscreen mode. Do <I>not</I> use these routines when GL is in fullscreen mode<I>.</I></P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2">Enhanced X-Windows Grab Routines Restricted from GL Fullscreen Mode</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XChangeActive PointerGrab</B></TD>
+
+<TD><B>XUngrabServer</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XGrabButton</B></TD>
+
+<TD><B>XtGrabButton</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XGrabKey</B></TD>
+
+<TD><B>XtGrabKey</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XGrabKeyboard</B></TD>
+
+<TD><B>XtGrabKeyboard</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XGrabPointer</B></TD>
+
+<TD><B>XtGrabPointer</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XGrabServer</B></TD>
+
+<TD><B>XtRemoveGrab</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XUngrabButton</B></TD>
+
+<TD><B>XtUngrabButton</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XUngrabKey</B></TD>
+
+<TD><B>XtUngrabKey</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XUngrabKeyboard</B></TD>
+
+<TD><B>XtUngrabPointer</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XUngrabPointer</B></TD>
+
+<TD><BR></TD></TR></TABLE>
+
+<H3><A NAME="a9m200nita"></A>Coordinate Transformation</H3>
+<P><A NAME="A3C0F009865mhay"></A>GL and Enhanced X-Windows have different coordinate mappings. The GL window origin is in the lower left and the Enhanced X-Windows window origin is in the upper left. Do not use the <B>XTranslateCoordinates</B> subroutine, an Enhanced X-Windows function, to manipulate GL coordinate data.</P>
+
+<P><A NAME="A3C0F009885mhay"></A>Likewise, do not use GL matrix and viewport manipulation routines on Enhanced X-Windows windows.</P>
+
+<H3><A NAME="QN8Sg169csol"></A>Mixed GL and Windows Input</H3>
+<P><A NAME="A3C0F009906mhay"></A>Currently, programming that combines GL input queue handling routines (such as <B>qread</B> and <B>qtest</B>) with X input queue handling routines (such as <B>XNextEvent</B> and <B>XCheckIfEvent</B> ) on the same display connection is not recommended. X and GL input can be combined provided that such input is obtained through separate sockets.</P>
+
+<P><A NAME="A3C0F009926mhay"></A>Although you can use the Enhanced X-Windows event mechanism to obtain Enhanced X-Windows events for a GL window, do not try to use the GL event mechanism to obtain events for some GL windows and the Enhanced X-Windows event mechanism to obtain events for other GL windows.</P>
+
+<P><A NAME="A3C0F009946mhay"></A>The GL event queue is fed by events returning from the X server; the GL event handling library simply converts events from X format into GL format. The mapping is not one-to-one; sometimes multiple X events translate into only on GL event; sometimes multiple GL events are generated from one X event. If an unrecognized or unexpected event is encountered, it is discarded. Thus, changing the event mask for the GL connection, removing X events from the GL connection, or sending events to the GL connection results in the unpredictable or inconsistent operation of the GL input queue handling routines. It is for this reason that X and GL event routines should not be combined on the same display connection.</P>
+
+<P><A NAME="A3C0F009966mhay"></A>In the current implementation, when a <!--:libs:gl32tref:--><A HREF="../gl32tref/qtest.html#A143X9cd"><B>qtest</B></A> or <!--:libs:gl32tref:--><A HREF="../gl32tref/qread.html#A143X989"><B>qread</B></A> subroutine call is made, all pending events for the process are retrieved from the X server and placed in an internal device queue. As a result, the GL and the Enhanced X-Windows event queues are no longer synchronized; that is, the arrival order of events is not preserved. Events retrieved by freely mixing calls to the GL <B>qread</B> subroutines and calls to the Enhanced X-Windows event processing routines are not guaranteed to be in chronological order.</P>
+
+<P><A NAME="A3C0F00A328mhay"></A>In the current implementation, the GL <!--:libs:gl32tref:--><A HREF="../gl32tref/qenter.html#A143X9152"><B>qenter</B></A> subroutine performs an <!--:libs:x11tr:--><A HREF="../x11tr/pdf/XSeEvent.pdf"><B>XSendEvent</B></A> subroutine call, and thus writes to the Enhanced X-Windows event queue.</P>
+
+<P><A NAME="A3C0F00B152mhay"></A>The following is a partial list of Enhanced X-Windows functions that, if used in conjunction with the GL input queue, lead to asynchronous event delivery. Do <I>not</I> use these routines in conjunction with the GL input queue<I>.</I></P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2">Enhanced X-Windows Event Routines Restricted from GL Input Queue</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XChangeKeyboardMapping</B></TD>
+
+<TD><B>XSelectInput</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XCheckIfEvent</B></TD>
+
+<TD><B>XSetPlaneMask</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XCheckMaskEvent</B></TD>
+
+<TD><B>XWindowEvent</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XCheckTypedEvent</B></TD>
+
+<TD><B>XtAppMainLoop</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XCheckTypedWindowEvent</B></TD>
+
+<TD><B>XtAppNextEvent</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XCheckWindowEvent</B></TD>
+
+<TD><B>XtAppPeekEvent</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XEventsQueued</B></TD>
+
+<TD><B>XtAppPending</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XIfEvent</B></TD>
+
+<TD><B>XtAppProcessEvent</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XNextEvent</B></TD>
+
+<TD><B>XtDispatchEvent</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XPeekEvent</B></TD>
+
+<TD><B>XtMainLoop</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XPeekIfEvent</B></TD>
+
+<TD><B>XtNextEvent</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XPending</B></TD>
+
+<TD><B>XtPeekEvent</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XPutBackEvent</B></TD>
+
+<TD><B>XtPending</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>XQLength</B></TD>
+
+<TD><B>XtProcessEvent</B></TD></TR></TABLE>
+
+<H3><A NAME="A163C1172c"></A>Example Programs</H3>
+<P><A NAME="A3C0F00B201mhay"></A>Example programs showing the usage of the <!--:libs:gl32tref:--><A HREF="../gl32tref/getXdpy.html#A114C13c"><B>getXdpy</B></A>, <!--:libs:gl32tref:--><A HREF="../gl32tref/getXdpy.html#A114C13c"><B>getXwid</B></A>, and <!--:libs:gl32tref:--><A HREF="../gl32tref/winX.html#A114C163"><B>winX</B></A> subroutines can be found in the <B>/usr/lpp/GL/examples</B> directory.</P><hr><center>
+[  <a href="exhwindcalls.html">Previous</a>  |
+<a href="enhxinterop.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/enhxwndrestr.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+
+

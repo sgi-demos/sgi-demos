@@ -1,0 +1,366 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>paint.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="overlay_c.html">Previous</a>  |
+<a href="patch1_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A13C0bd84"></A>paint.c Example C Language Program
+</H2>
+<A NAME="INDEX2368" REL="I1" TITLE="paint.c example program (GL)"></A>
+<A NAME="INDEX2369" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2370" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2371" REL="I3" TITLE="pixel"></A>
+<PRE><A NAME="A64EAEF241ttay"></A>/*
+ *        paint.c -
+ *                A minimal object space paint program.
+ *
+ *                Paul Haeberli - 1985
+ */</PRE>
+<PRE><A NAME="A64EAEF404ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h>
+#include &lt;math.h></PRE>
+<PRE><A NAME="A64EAEF679ttay"></A>#define ABS( a )        (((a) > 0) ? (a) : -(a))
+#define MOUSE               12
+#define TABLET              13
+#define DRAWLINE             2
+#define NEWCOLOR             3
+#define CLEAR                4
+#define NEWSIZE              5
+#define MOUSEXMAP(x)        ( (100.0*((x)-xorg))/(xsize) )
+#define MOUSEYMAP(y)        ( (100.0*((y)-yorg))/(ysize) )
+#define BPSCALE 16.0</PRE>
+<PRE><A NAME="A64EAEF858ttay"></A>struct event {
+&nbsp;&nbsp;&nbsp;struct event *next;
+&nbsp;&nbsp;&nbsp;int func;
+&nbsp;&nbsp;&nbsp;float arg1;
+&nbsp;&nbsp;&nbsp;float arg2;
+&nbsp;&nbsp;&nbsp;float arg3;
+&nbsp;&nbsp;&nbsp;float arg4;
+};</PRE>
+<PRE><A NAME="A64EAF1312ttay"></A>int xsize, ysize;
+int xorg, yorg;
+int mx, my;
+int bpx, bpy;
+int mmiddle, mleft;
+int curcolor = 7;
+int lastcurcolor = 7;
+float curx, cury, cursize;
+int curdev = MOUSE;
+struct event *histstart = 0;
+struct event *histend = 0;
+float xpos, ypos;
+int pendown;
+int brushsides;
+float brushcoords[30][2];
+int menu;</PRE>
+<PRE><A NAME="A64EAF1529ttay"></A>main()
+{
+&nbsp;&nbsp;&nbsp;cursize = 1.0;
+&nbsp;&nbsp;&nbsp;prefposition(XMAXSCREEN/4,XMAXSCREEN*3/4,YMAXSCREEN/4,
+&nbsp;&nbsp;&nbsp;    YMAXSCREEN*3/4);
+&nbsp;&nbsp;&nbsp;winopen("paint");
+&nbsp;&nbsp;&nbsp;menu = defpup("paint %t|mouse|tablet");
+&nbsp;&nbsp;&nbsp;makebrush();
+&nbsp;&nbsp;&nbsp;makeframe();
+&nbsp;&nbsp;&nbsp;getinput();
+}</PRE>
+<PRE><A NAME="A64EAF1925ttay"></A>getinput()
+{
+&nbsp;&nbsp;&nbsp;Device dev;
+&nbsp;&nbsp;&nbsp;short val;
+&nbsp;&nbsp;&nbsp;float x, y;
+&nbsp;&nbsp;&nbsp;while(TRUE) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dev = qread(&amp;val);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch (dev) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case MOUSEX:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mx = val;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (curdev == MOUSE)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xpos = MOUSEXMAP(val);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case MOUSEY:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my = val;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (curdev == MOUSE)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ypos = MOUSEYMAP(val);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case BPADX:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bpx = val;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (curdev == TABLET)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xpos = val/BPSCALE;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case BPADY:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bpy = val;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (curdev == TABLET)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ypos = val/BPSCALE;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case BPAD0:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (curdev == TABLET)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pendown = val;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (val) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curx = xpos = bpx/BPSCALE;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cury = ypos = bpy/BPSCALE;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAF2142ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case MENUBUTTON:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(val) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch (dopup(menu)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case 1:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curdev = MOUSE;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case 2:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curdev = TABLET;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAF2287ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAF2477ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case MIDDLEMOUSE:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mmiddle = val;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (mmiddle) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clearscreen();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;history(CLEAR);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAF2704ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case LEFTMOUSE:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mleft = val;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (mleft) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!inside(mx-xorg, my-yorg, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    0, xsize, 0, ysize, 0)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newcolor(getapixel(mx,my));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;history(NEWCOLOR,(float)curcolor);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAF2849ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAF3038ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (curdev == MOUSE) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pendown = val;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curx = xpos = MOUSEXMAP(mx);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cury = ypos = MOUSEYMAP(my);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAF3235ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case REDRAW:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;makeframe();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;replay();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case ESCKEY:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gexit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAF3440ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} while (qtest());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (pendown) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = xpos;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y = ypos;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawbrush(x,y,curx,cury);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;history(DRAWLINE,x,y,curx,cury);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curx = x;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cury = y;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAF3583ttay"></A>}</PRE>
+<PRE><A NAME="A64EAF3742ttay"></A>clearscreen()
+{
+&nbsp;&nbsp;&nbsp;color(curcolor);
+&nbsp;&nbsp;&nbsp;clear();
+}</PRE>
+<PRE><A NAME="A64EAF3912ttay"></A>newcolor(c)
+int c;
+{
+&nbsp;&nbsp;&nbsp;lastcurcolor = curcolor;
+&nbsp;&nbsp;&nbsp;curcolor = c;
+&nbsp;&nbsp;&nbsp;paintport();
+}</PRE>
+<PRE><A NAME="A64EAF4170ttay"></A>makeframe()
+{
+&nbsp;&nbsp;&nbsp;qdevice(ESCKEY);
+&nbsp;&nbsp;&nbsp;qdevice(MOUSEX);
+&nbsp;&nbsp;&nbsp;qdevice(MOUSEY);
+&nbsp;&nbsp;&nbsp;qdevice(MENUBUTTON);
+&nbsp;&nbsp;&nbsp;qdevice(MIDDLEMOUSE);
+&nbsp;&nbsp;&nbsp;qdevice(LEFTMOUSE);
+&nbsp;&nbsp;&nbsp;qdevice(BPADX);
+&nbsp;&nbsp;&nbsp;qdevice(BPADY);
+&nbsp;&nbsp;&nbsp;qdevice(BPAD0);
+&nbsp;&nbsp;&nbsp;getsize(&amp;xsize,&amp;ysize);
+&nbsp;&nbsp;&nbsp;getorigin(&amp;xorg,&amp;yorg);
+&nbsp;&nbsp;&nbsp;paintport();
+&nbsp;&nbsp;&nbsp;newcolor(0);
+&nbsp;&nbsp;&nbsp;clearscreen();
+&nbsp;&nbsp;&nbsp;newcolor(255);
+&nbsp;&nbsp;&nbsp;newcolor(128+32);
+}</PRE>
+<PRE><A NAME="A64EAF4340ttay"></A>paintport()
+{
+&nbsp;&nbsp;&nbsp;viewport(0,xsize-1,0,ysize);
+&nbsp;&nbsp;&nbsp;ortho2(-0.5,99.5,-0.5,99.5);
+}</PRE>
+<PRE><A NAME="A64EAF4548ttay"></A>inside(x,y,xmin,xmax,ymin,ymax,fudge)
+int x, y, xmin, xmax, ymin, ymax, fudge;
+{
+&nbsp;&nbsp;&nbsp;if (x>xmin-fudge &amp;&amp; x&lt;xmax+fudge &amp;&amp; 
+&nbsp;&nbsp;&nbsp;    y>ymin-fudge &amp;&amp; y&lt;ymax+fudge)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 1;
+&nbsp;&nbsp;&nbsp;else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+}</PRE>
+<PRE><A NAME="A64EAF4828ttay"></A>makebrush()
+{
+&nbsp;&nbsp;&nbsp;int i;
+&nbsp;&nbsp;&nbsp;brushsides = 4;
+&nbsp;&nbsp;&nbsp;brushcoords[0][0] = -0.6;
+&nbsp;&nbsp;&nbsp;brushcoords[0][1] = -0.2;
+&nbsp;&nbsp;&nbsp;brushcoords[1][0] = -0.6;
+&nbsp;&nbsp;&nbsp;brushcoords[1][1] = -0.4;
+&nbsp;&nbsp;&nbsp;brushcoords[2][0] =  0.6;
+&nbsp;&nbsp;&nbsp;brushcoords[2][1] =  0.2;
+&nbsp;&nbsp;&nbsp;brushcoords[3][0] =  0.6;
+&nbsp;&nbsp;&nbsp;brushcoords[3][1] =  0.4;
+&nbsp;&nbsp;&nbsp;for (i=0; i&lt;brushsides; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;brushcoords[i][0] = 0.5*brushcoords[i][0];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;brushcoords[i][1] = 0.5*brushcoords[i][1];
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAF4970ttay"></A>}</PRE>
+<PRE><A NAME="A64EAF5383ttay"></A>drawbrush(x,y,ox,oy)
+float x, y, ox, oy;
+{
+&nbsp;&nbsp;&nbsp;register int i, n;
+&nbsp;&nbsp;&nbsp;register float dx, dy;
+&nbsp;&nbsp;&nbsp;float quad[4][2];
+&nbsp;&nbsp;&nbsp;float delta;
+&nbsp;&nbsp;&nbsp;int c;
+&nbsp;&nbsp;&nbsp;dx = ox-x;
+&nbsp;&nbsp;&nbsp;dy = oy-y;
+&nbsp;&nbsp;&nbsp;if (lastcurcolor != curcolor) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delta = sqrt(dx*dx+dy*dy);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (delta&lt;0.001)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c = (int) (curcolor + (lastcurcolor-curcolor) * 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    (ABS(dx)/delta) );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(c);
+&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(curcolor);
+&nbsp;&nbsp;&nbsp;pushmatrix();
+&nbsp;&nbsp;&nbsp;translate(x,y,0.0);
+&nbsp;&nbsp;&nbsp;for (i=0; i&lt;brushsides; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n = (i+1) % brushsides;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;quad[0][0] = brushcoords[i][0];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;quad[0][1] = brushcoords[i][1];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;quad[1][0] = brushcoords[n][0];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;quad[1][1] = brushcoords[n][1];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;quad[2][0] = quad[1][0]+dx;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;quad[2][1] = quad[1][1]+dy;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;quad[3][0] = quad[0][0]+dx;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;quad[3][1] = quad[0][1]+dy;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;polf2(4,quad);
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAF5542ttay"></A>&nbsp;&nbsp;&nbsp;polf2(brushsides,brushcoords);
+&nbsp;&nbsp;&nbsp;popmatrix();
+}</PRE>
+<PRE><A NAME="A64EAF5869ttay"></A>history(func,arg1,arg2,arg3,arg4)
+int func;
+float arg1, arg2, arg3, arg4;
+{
+&nbsp;&nbsp;&nbsp;register struct event *e, *n;
+&nbsp;&nbsp;&nbsp;e = (struct event *)malloc(sizeof(struct event));
+&nbsp;&nbsp;&nbsp;switch (func) {
+&nbsp;&nbsp;&nbsp;case CLEAR:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zaphistory();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;history(NEWCOLOR,(float)curcolor);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;case NEWCOLOR:
+&nbsp;&nbsp;&nbsp;case DRAWLINE:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e->func = func;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e->arg1 = arg1;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e->arg2 = arg2;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e->arg3 = arg3;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e->arg4 = arg4;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e->next = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!histstart) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;histstart = histend = e;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;histend->next = e;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;histend = e;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAF6016ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAF6159ttay"></A>}</PRE>
+<PRE><A NAME="A64EAF6343ttay"></A>zaphistory()
+{
+&nbsp;&nbsp;&nbsp;register struct event *e, *n;
+&nbsp;&nbsp;&nbsp;e = histstart;
+&nbsp;&nbsp;&nbsp;while (e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n = e->next;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free(e);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e = n;
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAF6495ttay"></A>&nbsp;&nbsp;&nbsp;histstart = histend = 0;
+}</PRE>
+<PRE><A NAME="A64EAF6760ttay"></A>replay()
+{
+&nbsp;&nbsp;&nbsp;register struct event *e;
+&nbsp;&nbsp;&nbsp;register int i;
+&nbsp;&nbsp;&nbsp;i = 0;
+&nbsp;&nbsp;&nbsp;e = histstart;
+&nbsp;&nbsp;&nbsp;while (e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch (e->func) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case NEWCOLOR:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newcolor((int)e->arg1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case DRAWLINE:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawbrush(e->arg1,e->arg2,e->arg3,e->arg4);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case CLEAR:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clearscreen();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e = e->next;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i++;
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAF6903ttay"></A>}</PRE>
+<PRE><A NAME="A64EAF7151ttay"></A>/* 
+ *        getapixel - 
+ *                Read a pixel from a specific screen location.
+ *
+ */
+getapixel(mousex, mousey)
+short mousex, mousey;
+{
+&nbsp;&nbsp;&nbsp;short pixel;
+&nbsp;&nbsp;&nbsp;int   xmin, ymin;    /* Convert position to window relative coordinates */
+&nbsp;&nbsp;&nbsp;getorigin(&amp;xmin, &amp;ymin);
+&nbsp;&nbsp;&nbsp;mousex -= xmin;
+&nbsp;&nbsp;&nbsp;mousey -= ymin;</PRE>
+<PRE><A NAME="A64EAF7312ttay"></A>&nbsp;&nbsp;&nbsp;rectread(mousex, mousey, mousex+1, mousey+1, &amp;pixel);</PRE>
+<PRE><A NAME="A64EAF7462ttay"></A>&nbsp;&nbsp;&nbsp;return(pixel);
+}</PRE>
+
+<H3><A NAME="A201C1188"></A>Related Information</H3>
+<P><A NAME="E1D787B057ceb"></A>The <A HREF="getorigin.html#A142X91f76"><B>getorigin</B></A> subroutine<A HREF="../gl32tref/A142X91f76" REL="PAGENUM"></A>, <A HREF="getsize.html#X513200marj"><B>getsize</B></A> subroutine<A HREF="../gl32tref/X513200marj" REL="PAGENUM"></A>, <A HREF="ortho.html#A144X9496"><B>ortho or ortho2</B></A> subroutine<A HREF="../gl32tref/A144X9496" REL="PAGENUM"></A>, <A HREF="rectread.html#A142X9c7c"><B>rectread or lrectread</B></A> subroutine<A HREF="../gl32tref/A142X9c7c" REL="PAGENUM"></A>, <A HREF="viewport.html#qrY270marj"><B>viewport</B></A> subroutine<A HREF="../gl32tref/qrY270marj" REL="PAGENUM"></A>.</P>
+
+<hr><center>
+[  <a href="overlay_c.html">Previous</a>  |
+<a href="patch1_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

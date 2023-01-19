@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>writeRGB Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="writepixels.html">Previous</a>  |
+<a href="zbuffer.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9ff2"></A>writeRGB Subroutine</H2>
+<A NAME="INDEX2090" REL="I1" TITLE="writeRGB subroutine (GL)"></A>
+<A NAME="INDEX2091" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2092" REL="I2" TITLE="pixel block transfer"></A>
+<A NAME="INDEX2093" REL="I3" TITLE="painting pixel row on screen in RGB mode"></A>
+<A NAME="INDEX2094" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2095" REL="I2" TITLE="pixel block transfer"></A>
+<A NAME="INDEX2096" REL="I3" TITLE="writeRGB"></A>
+
+<H3><A NAME="A213X9120d2"></A>Purpose</H3>
+<P><A NAME="E1D76CA100ceb"></A>Paints a row of pixels on the screen in RGB mode.</P>
+
+<H3><A NAME="A79C1108"></A>Libraries</H3>
+<P><A NAME="E1D76CA139ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D76CA163ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X9120d5"></A>C Syntax</H3>
+<PRE><A NAME="A213X9120d6"></A><B>void writeRGB</B>
+<B>(Int16 </B><A HREF="writeRGB.html#A7QR2350marj"><I>number</I></A><B>, </B>
+<B>RGBvalue</B> <A HREF="writeRGB.html#QQR270marj"><I>red</I></A><B>[&nbsp;], RGBvalue </B><A HREF="writeRGB.html#bQR2d0marj"><I>green</I></A><B>[&nbsp;], RGBvalue</B> <A HREF="writeRGB.html#A2RR2110marj"><I>blue</I></A><B>[&nbsp;])</B></PRE>
+
+<H3><A NAME="A29C010b3f"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010b40"></A><B>SUBROUTINE WRITER(</B><I>number</I><B>,</B><I> red</I><B>,</B><I> green</I><B>,</B><I> blue</I><B>)</B>
+<B>INTEGER*4 </B><I>number</I>
+<B>CHARACTER*(*) </B><I>red</I><B>,</B><I> green</I><B>,</B><I> blue</I></PRE>
+
+<BLOCKQUOTE><A NAME="A79C110b"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X9120d9"></A>Description</H3>
+<P><A NAME="E1D76CA297ceb"></A>The <B>writeRGB</B> subroutine paints a row of pixels on the screen in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>.The system reads elements from the arrays specified in the <A HREF="writeRGB.html#QQR270marj"><I>red</I></A>, <A HREF="writeRGB.html#bQR2d0marj"><I>green</I></A>, and <A HREF="writeRGB.html#A2RR2110marj"><I>blue</I></A> parameters and writes a pixel of the appropriate color for each.</P>
+
+<P><A NAME="E1D76CA323ceb"></A>The starting location for the row of pixels is the current character position. The system updates the current character position to one pixel to the right of the last painted pixel. The system paints pixels from left to right and clips to the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P018">screenmask</A>. The current character position becomes undefined if the new position is outside the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A>.</P>
+
+<P><A NAME="E1D76CA349ceb"></A>The <B>writeRGB</B> subroutine does not automatically wrap from one line to the next. It supplies a 24-bit RGB value (8 bits for each color) for each pixel. This value is written directly into the bitplanes.</P>
+
+<BLOCKQUOTE><A NAME="A336C95bd8"></A><B>Note: </B>When there are only 12 color bitplanes available, the lower 4 bits of each color are ignored.</BLOCKQUOTE>
+
+
+<P><A NAME="E1D76CA394ceb"></A>The <A HREF="rectwrite.html#A142X9c9e"><B>rectwrite</B></A> subroutine provides significantly better performance for pixel block transfers. Even when only one row of pixels needs to be read, use the <B>rectwrite</B> subroutine. </P>
+
+<OL><LI><A NAME="A336C95bd4"></A>This subroutine is available only in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>.</LI>
+
+<LI><A NAME="A336C95bd5"></A>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI>
+
+<LI><A NAME="A81C12b"></A>The use of this subroutine is deprecated. Do not use the <B>writeRGB </B>subroutine in new development.</LI></OL>
+
+<H3><A NAME="A213X9120de"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A7QR2350marj"></A><I>number</I></TD>
+<TD>  Specifies the number of pixels to paint.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="QQR270marj"></A><I>red</I></TD>
+<TD>  Specifies an array containing red values for each pixel to paint.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="bQR2d0marj"></A><I>green</I></TD>
+<TD>  Specifies an array containing green values for pixel to paint.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A2RR2110marj"></A><I>blue</I></TD>
+<TD>  Specifies an array containing blue values for each pixel to paint.</TD></TR></TABLE>
+
+<H3><A NAME="A336C95bd7"></A>Implementation Specifics</H3>
+<P><A NAME="E1D76CA606ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C110c"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C110d"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C110e"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X9120ea"></A>Related Information</H3>
+<P><A NAME="E1D76CA703ceb"></A>Returning the value of specific pixels in RGB mode with the <A HREF="readRGB.html#A142X9107b"><B>readRGB</B></A> subroutine.</P>
+
+<P><A NAME="E1D76CA729ceb"></A>Copying a rectangle of pixels with an optional zoom with the <A HREF="rectcopy.html#A142X9d04"><B>rectcopy</B></A> subroutine.</P>
+
+<P><A NAME="E1D76CA754ceb"></A>Reading a rectangular array of pixels into host memory with the <A HREF="rectread.html#A142X9c7c"><B>rectread</B></A> subroutine.</P>
+
+<P><A NAME="E1D76CA779ceb"></A>Drawing a rectangular array of pixels into the frame buffer with the <A HREF="rectwrite.html#A142X9c9e"><B>rectwrite</B></A> subroutine.</P>
+
+<P><A NAME="E1D76CA805ceb"></A>Painting a row of pixels on the screen in color map mode with the <A HREF="writepixels.html#A142X9e62"><B>writepixels</B></A> subroutine.</P>
+
+<P><A NAME="E1D76CA831ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Reading and Writing <!--gl32prgd:--><A HREF="../gl32prgd/rwpixels.html#rwpixels.html">Pixels</A>, 
+Using <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Viewports and Screenmasks</A>, 
+and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="writepixels.html">Previous</a>  |
+<a href="zbuffer.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

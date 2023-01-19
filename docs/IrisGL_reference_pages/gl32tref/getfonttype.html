@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getfonttype Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getfontencoding.html">Previous</a>  |
+<a href="getgdesc.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="Y89340nita"></A>getfonttype Subroutine</H2>
+
+<H3><A NAME="A140C17ec"></A>Purpose</H3>
+<P><A NAME="E1B0EA9736ceb"></A>Indicates whether the current font is a double-byte character set (DBCS) font.</P>
+
+<H3><A NAME="A140C17ee"></A>Libraries</H3>
+<P><A NAME="E1B0EA9884ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0EA9988ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A140C17f1"></A>C Syntax</H3>
+<PRE><A NAME="A140C17f2"></A><B>int getfonttype()</B></PRE>
+
+<H3><A NAME="A140C17f3"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A140C17f4"></A><B>INTEGER *4 FUNCTION GETFONT</B></PRE>
+
+<H3><A NAME="A140C17f5"></A>Description</H3>
+<P><A NAME="E1B0EAA346ceb"></A>The <B>getfonttype</B> subroutine indicates whether the currently bound font is a single-byte or double-byte font.</P>
+
+<P><A NAME="E1B0EAA455ceb"></A>The behavior of the <A HREF="charstr.html#A143X9cfb"><B>charstr</B></A> subroutine depends on the font type of the currently loaded font. Use the <B>getfonttype</B> subroutine to determine whether to pass single-byte or double-byte character strings to the <B>charstr</B> subroutine.</P>
+
+<BLOCKQUOTE><A NAME="A140C17f8"></A><B>Note: </B>Most European fonts, including all ISO8859 code sets, are single-byte fonts. Most Asian font sets, including the JIS (Japanese Kanji) fonts, are double-byte fonts.</BLOCKQUOTE>
+
+
+<H3><A NAME="A140C17f9"></A>Return Values</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A140C17fa"></A><B>FT_SBCS</B></TD>
+<TD>  Indicates that the current font is a single-byte font.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A140C17fb"></A><B>FT_DBCS</B></TD>
+<TD>  Indicates that the current font is a double-byte font.</TD></TR></TABLE>
+
+<H3><A NAME="A140C1800"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0EAA834ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A140C1802"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A140C1803"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A140C1804"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A140C1809"></A>Related Information</H3>
+<P><A NAME="E1B0EAB155ceb"></A>Determining the font name with the <A HREF="getfontencoding.html#Az7960nita"><B>getfontencoding</B></A> subroutine.</P>
+
+<P><A NAME="E1B0EAB262ceb"></A>Defining bitmaps for a raster font with the <A HREF="defrasterfont.html#A143X9d3f"><B>defrasterfont</B></A> subroutine.</P>
+
+<P><A NAME="E1B0EAB370ceb"></A>Selecting a raster font with the <A HREF="font.html#A143X9d61"><B>font</B></A> subroutine.</P>
+
+<P><A NAME="E1B0EAB478ceb"></A><!--:genprogc:--><A HREF="../genprogc/nls.html#A2919f7">National Language Support Overview for Programming</A> in<I> AIX General Programming Concepts: Writing and Debugging Programs</I>.</P>
+
+<P><A NAME="E1B0EAB585ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/textchars.html#textchars.html">Creating Text Characters</A>.</P><hr><center>
+[  <a href="getfontencoding.html">Previous</a>  |
+<a href="getgdesc.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

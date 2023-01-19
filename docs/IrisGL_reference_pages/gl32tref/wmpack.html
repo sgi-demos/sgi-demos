@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>wmpack Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="winX.html">Previous</a>  |
+<a href="writemask.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9570"></A>wmpack Subroutine</H2>
+<A NAME="INDEX2069" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2070" REL="I2" TITLE="frame buffer update control"></A>
+<A NAME="INDEX2071" REL="I3" TITLE="wmpack"></A>
+<A NAME="INDEX2072" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2073" REL="I2" TITLE="writemask"></A>
+<A NAME="INDEX2074" REL="I3" TITLE="RGBA"></A>
+<A NAME="INDEX2075" REL="I1" TITLE="wmpack subroutine (GL)"></A>
+
+<H3><A NAME="A143X9572"></A>Purpose</H3>
+<P><A NAME="E1D7697490ceb"></A>Specifies RGBA writemask with a single packed integer.</P>
+
+<H3><A NAME="A78C1204"></A>Libraries</H3>
+<P><A NAME="E1D7697530ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7697554ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9576"></A>C Syntax</H3>
+<PRE><A NAME="A143X9577"></A><B>void wmpack(Uint32 </B><A HREF="wmpack.html#A143X957b"><I>pack</I></A><B>)</B></PRE>
+
+<H3><A NAME="A28C010779"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C01077a"></A><B>SUBROUTINE WMPACK(</B><I>pack</I><B>)</B>
+<B>INTEGER*4 </B><I>pack</I></PRE>
+
+<H3><A NAME="A143X9578"></A>Description</H3>
+<P><A NAME="E1D7697666ceb"></A>The <B>wmpack </B>subroutine changes the current 
+RGBA writemask. Bytes 0, 1, 2, and 3 are alpha, blue, green, and red, respectively (red is the least significant byte in the packed integer, then green, blue, and alpha). Components must range from 0 through 255.</P>
+
+<P><A NAME="E1D7697688ceb"></A>For example,</P>
+<PRE><A NAME="A54C014a0a"></A>wmpack(0xFF004080); </PRE>
+
+<P><A NAME="E1D7697730ceb"></A>sets red mask to 0x80, green mask to 0x40, blue mask to 0, and alpha mask to 0xFF.</P>
+
+<BLOCKQUOTE><A NAME="A213X9122b5"></A><B>Note: </B>You can load alpha values only if the graphics adapter has alpha bitplanes.</BLOCKQUOTE>
+
+
+<P><A NAME="E1D7697775ceb"></A>You can also use the <B>wmpack</B> subroutine in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e3">color map mode</A> to specify 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemasks</A> of more than 12 bits. This is useful for certain 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P1160a">z-buffer</A> and 
+smoothline
+ applications.</P>
+
+<H3><A NAME="A143X957a"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X957b"></A><I>pack</I> </TD>
+<TD>  Specifies a packed integer containing the 
+RGBA writemask.</TD></TR></TABLE>
+
+<H3><A NAME="A64C0165d7"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7697854ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1D7697880ceb"></A>The POWER GXT1000 adapter supports only on/off control of individual R, G, and B bitplanes. Individual bits cannot be masked in the color planes.</P>
+
+
+<H3><A NAME="A78C1207"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1208"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1209"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9590"></A>Related Information</H3>
+<P><A NAME="E1D7697979ceb"></A>Returning the current writemask with the <A HREF="getwritemask.html#A143X94c6"><B>getwritemask</B></A> subroutine.</P>
+
+<P><A NAME="E1D7698005ceb"></A>Returning the current RGB writemask with the <A HREF="gRGBmask.html#A143X94e8"><B>gRGBmask</B></A> subroutine.</P>
+
+<P><A NAME="E1D7698030ceb"></A>Granting write access to a subset of available bitplanes with the <A HREF="RGBwritemask.html#A143X93fa"><B>RGBwritemask</B></A> subroutine.</P>
+
+<P><A NAME="E1D7698056ceb"></A>Granting write permission to a subset of available bitplanes with the <A HREF="writemask.html#A143X9592"><B>writemask</B></A> subroutine.</P>
+
+<P><A NAME="E1D7698083ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>, Removing <!--gl32prgd:--><A HREF="../gl32prgd/remhidden.html#remhidden.html">Hidden Surfaces</A>, and Smoothing Jagged Lines with <!--gl32prgd:--><A HREF="../gl32prgd/smjaglines.html#smjaglines.html">Antialiasing</A>.</P>
+
+<P><A NAME="E1D7698109ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/writemasks.html#writemasks.html">Writemasks and Logical Operations</A>
+ and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="winX.html">Previous</a>  |
+<a href="writemask.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>curorigin Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="crvn.html">Previous</a>  |
+<a href="curson.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A150X9398"></A>curorigin Subroutine</H2>
+<A NAME="INDEX308" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX309" REL="I2" TITLE="cursor"></A>
+<A NAME="INDEX310" REL="I3" TITLE="curorigin"></A>
+<A NAME="INDEX311" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX312" REL="I2" TITLE="cursor"></A>
+<A NAME="INDEX313" REL="I3" TITLE="setting origin of"></A>
+<A NAME="INDEX314" REL="I1" TITLE="curorigin subroutine (GL)"></A>
+
+<H3><A NAME="A150X939a"></A>Purpose</H3>
+<P><A NAME="E1B0810988ceb"></A>Sets the origin of a cursor.</P>
+
+<H3><A NAME="A78C1c5"></A>Libraries</H3>
+<P><A NAME="E1B0811137ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0811241ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A150X939d"></A>C Syntax</H3>
+<PRE><A NAME="A150X939e"></A><B>void curorigin</B>
+<B>(Int16 </B><A HREF="curorigin.html#A150X93a5"><I>index</I></A><B>, Int16 </B><A HREF="curorigin.html#A150X93a6"><I>xorigin</I></A><B>, Int16</B> <A HREF="curorigin.html#A150X93a7"><I>yorigin</I></A><B>)</B></PRE>
+
+<H3><A NAME="A150X9375"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A150X9378"></A><B>SUBROUTINE CURORI(</B><I>index</I><B>,</B><I> xorigin</I><B>,</B><I> yorigin</I><B>)</B>
+<B>INTEGER*4</B> <I>index</I><B>,</B><I> xorigin</I><B>,</B><I> yorigin</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C1c8"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A150X93a1"></A>Description</H3>
+<P><A NAME="E1B0811666ceb"></A>The <B>curorigin</B> subroutine sets the origin of a cursor glyph. The origin is the point on the cursor glyph that aligns with the current cursor valuators. The origin is specified in pixels from the lower left-hand corner of the cursor glyph. Before calling the <B>curorigin</B> subroutine, the cursor glyph must have been defined with the <A HREF="defcursor.html#A150X9444"><B>defcursor</B></A> subroutine. The <B>curorigin</B> subroutine does not take effect until the <A HREF="setcursor.html#ZR1nita"><B>setcursor</B></A> subroutine is called.</P>
+
+<P><A NAME="E1B0811781ceb"></A>The default origin for a user-defined cursor glyph is (0,0), that is, the lower left-hand corner.</P>
+
+<BLOCKQUOTE><A NAME="A318C9cc6"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A150X93a4"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A150X93a5"></A><I>index</I> </TD>
+<TD>  Specifies an index into the cursor table.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A150X93a6"></A><I>xorigin</I></TD>
+<TD>  Specifies the <I>x </I>distance of the origin relative to the lower left corner of the cursor.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A150X93a7"></A><I>yorigin</I></TD>
+<TD>  Specifies the <I>y </I>distance of the origin relative to the lower left corner of the cursor.</TD></TR></TABLE>
+
+<H3><A NAME="A64C016568"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0812215ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1c9"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1ca"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1cb"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A150X93ba"></A>Related Information</H3>
+<P><A NAME="E1B0812537ceb"></A>Defining the type and size of a cursor with the <A HREF="curstype.html#A150X93ee"><B>curstype</B></A> subroutine.</P>
+
+<P><A NAME="E1B0812644ceb"></A>Defining a cursor with the <A HREF="defcursor.html#A150X9444"><B>defcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0812751ceb"></A>Setting the drawing mode to CURSORDRAW with the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine. </P>
+
+<P><A NAME="E1B0812858ceb"></A>Setting the cursor characteristics with the <A HREF="setcursor.html#ZR1nita"><B>setcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0812964ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/cursorgl.html#cursorgl.html">Creating a Cursor</A>, and Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="crvn.html">Previous</a>  |
+<a href="curson.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

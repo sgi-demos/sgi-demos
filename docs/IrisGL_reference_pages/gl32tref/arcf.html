@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>arcf Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="arc.html">Previous</a>  |
+<a href="attachcursor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="AJp60nita"></A>arcf Subroutine</H2>
+<A NAME="INDEX16" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX17" REL="I2" TITLE="high-level drawing"></A>
+<A NAME="INDEX18" REL="I3" TITLE="arcf"></A>
+<A NAME="INDEX19" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX20" REL="I2" TITLE="arc"></A>
+<A NAME="INDEX21" REL="I3" TITLE="filled circular"></A>
+<A NAME="INDEX22" REL="I1" TITLE="arcf subroutine (GL)"></A>
+<H3><A NAME="A213X9115cd"></A>Purpose</H3>
+<P><A NAME="E1B03A9206ceb"></A>Draws a filled, pie-slice-shaped, circular arc.</P>
+
+<H3><A NAME="A78C1256"></A>Libraries</H3>
+<P><A NAME="E1B03A9361ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B03A9481ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X9115d0"></A>C Syntax</H3>
+<PRE><A NAME="A213X9115d1"></A><B>void arcf</B>
+<B>(Coord </B><A HREF="arcf.html#A213X9115df"><I>x</I></A><B>, Coord</B> <A HREF="arcf.html#A213X9115e0"><I>y</I></A><B>, Coord</B> <A HREF="arcf.html#A213X9115e1"><I>radius</I></A><B>,</B>
+<B>Angle</B> <A HREF="arcf.html#A213X9115e2"><I>startang</I></A><B>, Angle</B> <A HREF="arcf.html#A213X9115e4"><I>endang</I></A><B>)</B></PRE>
+<PRE><A NAME="A213X9115d2"></A><B>void arcfi</B>
+<B>(Icoord </B><A HREF="arcf.html#A213X9115df"><I>x</I></A><B>, Icoord</B> <A HREF="arcf.html#A213X9115e0"><I>y</I></A><B>, Icoord</B> <A HREF="arcf.html#A213X9115e1"><I>radius</I></A><B>,</B>
+<B>Angle</B> <A HREF="arcf.html#A213X9115e2"><I>startang</I></A><B>, Angle</B> <A HREF="arcf.html#A213X9115e4"><I>endang</I></A><B>)</B></PRE>
+<PRE><A NAME="A213X9115d3"></A><B>void arcfs</B>
+<B>(Scoord </B><A HREF="arcf.html#A213X9115df"><I>x</I></A><B>, Scoord</B> <A HREF="arcf.html#A213X9115e0"><I>y</I></A><B>, Scoord</B> <A HREF="arcf.html#A213X9115e1"><I>radius</I></A><B>,</B>
+<B>Angle</B> <A HREF="arcf.html#A213X9115e2"><I>startang</I></A><B>, Angle</B> <A HREF="arcf.html#A213X9115e4"><I>endang</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X9115ab"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X9115ae"></A><B>SUBROUTINE ARCF(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>radius</I><B>, </B><I>startang</I><B>, </B><I>endang</I><B>)</B>
+<B>REAL </B><I>x</I><B>, </B><I>y</I><B>, </B><I>radius</I>
+<B>INTEGER*4 </B><I>startang</I><B>, </B><I>endang</I></PRE>
+<PRE><A NAME="A28C01073c"></A><B>SUBROUTINE ARCFI(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>radius</I><B>, </B><I>startang</I><B>, </B><I>endang</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>, </B><I>y</I><B>, </B><I>radius</I><B>,</B><I> startang</I><B>, </B><I>endang</I></PRE>
+<PRE><A NAME="A28C01073f"></A><B>SUBROUTINE ARCFS(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>radius</I><B>, </B><I>startang</I><B>, </B><I>endang</I><B>)</B>
+<B>INTEGER*2 </B><I>x</I><B>, </B><I>y</I><B>, </B><I>radius</I><B>,</B><I> startang</I><B>, </B><I>endang</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C1259"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference. Also, the FORTRAN INTEGER*2 version, the <B>ARCFS</B> subroutine, should not be called with integer constant parameters. For example, 2 is an integer constant; JJ is an integer variable. The XL FORTRAN compiler, invoked by the <B>xlf</B> command, stores all integer constants as long integers (INTEGER*4), not as short integers (INTEGER*2). Invoking the short version of this subroutine with an integer constant will result in unexpected behavior.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X9115d8"></A>Description</H3>
+<P><A NAME="E1B03AA143ceb"></A>The <B>arcf</B> subroutine draws a circular filled arc in the <I>x</I>-<I>y </I>plane (<I>z </I>= <I>0</I>) and fills the arc with the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791abd">pattern</A>. The filled area is bounded by the arc and by the start and end radii. The subroutine uses the current area attributes: 
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P020">texture</A>, 
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A31996bc">color</A>, and 
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemask</A>. To draw a filled arc in a plane other than the <I>x</I>-<I>y </I>plane, define the filled arc in the <I>x</I>-<I>y </I>plane and then rotate or translate the arc.  </P>
+
+<P><A NAME="E1B03AA251ceb"></A>The syntax for each of the subroutine forms is the same except for the first argument.  They differ only in that the <A HREF="arcf.html#A213X9115d1"><B>arcf</B></A> subroutine expects real coordinates for the first argument, the <A HREF="arcf.html#A213X9115d2"><B>arcfi</B></A> subroutine expects integer coordinates, and the <A HREF="arcf.html#A213X9115d3"><B>arcfs</B></A> subroutine expects short integer coordinates.  After the <B>arcf</B> subroutine executes, the graphics position is undefined.</P>
+
+<H3><A NAME="A213X9115de"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X9115df"></A><I>x</I> </TD>
+<TD>  Specifies the <I>x </I>coordinate of the center of the filled arc, which is the center of the circle that would contain the arc.    </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X9115e0"></A><I>y</I> </TD>
+<TD>  Specifies the <I>y </I>coordinate of the center of the filled arc, which is the center of the circle that would contain the arc.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X9115e1"></A><I>radius</I> </TD>
+<TD>  Specifies the length of the radius of the filled arc, which is the radius of the circle that would contain the arc. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X9115e2"></A><I>startang</I></TD>
+<TD>  Specifies the measure of the start angle of the filled arc, which is measured from the positive x-axis.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X9115e4"></A><I>endang</I></TD>
+<TD>  Specifies the measure of the end angle of the filled arc, which is measured from the positive x-axis.</TD></TR></TABLE>
+
+<H3><A NAME="A213X9115e7"></A>Example</H3>
+<P><A NAME="E1B03AA817ceb"></A>The example C language program <A HREF="tpbig_c.html#A16C0c9bd"><B>tpbig.c</B></A> uses the <B>arcfi</B> subroutine to draw a scoop of ice cream. </P>
+
+<H3><A NAME="A62C015cce"></A>Implementation Specifics</H3>
+<P><A NAME="E1B03AB008ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C125a"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C125b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C125c"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c54a"></A>Related Information</H3>
+<P><A NAME="E1B03AB334ceb"></A>Drawing a circular arc with the <A HREF="arc.html#tEp310nita"><B>arc</B></A> subroutine.</P>
+
+<P><A NAME="E1B03AB457ceb"></A>Drawing a circle with the <A HREF="circ.html#ZJpnita"><B>circ</B></A> subroutine.</P>
+
+<P><A NAME="E1B03AB563ceb"></A>Drawing a filled circle with the <A HREF="circf.html#sJp120nita"><B>circf</B></A> subroutine.</P>
+
+<P><A NAME="E1B03AB669ceb"></A>Drawing a curve with the <A HREF="crv.html#ZMS220marj"><B>crv</B></A> subroutine.</P>
+
+<P><A NAME="E1B03AB777ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</A>.</P><hr><center>
+[  <a href="arc.html">Previous</a>  |
+<a href="attachcursor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

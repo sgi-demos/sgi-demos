@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>ginit Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="gexit.html">Previous</a>  |
+<a href="glcompat.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="LDg21c0marj"></A>ginit Subroutine</H2>
+<A NAME="INDEX901" REL="I1" TITLE="ginit subroutine (GL)"></A>
+<A NAME="INDEX902" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX903" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX904" REL="I3" TITLE="ginit"></A>
+<A NAME="INDEX905" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX906" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX907" REL="I3" TITLE="graphics system"></A>
+<H3><A NAME="A213X91249a"></A>Purpose</H3>
+<P><A NAME="E1B1243662ceb"></A>Initializes the graphics system. </P>
+
+<H3><A NAME="A213X91249c"></A>Library</H3>
+<P><A NAME="E1B1243814ceb"></A>Graphics Library (<B>libgl.a</B>)</P>
+
+<H3><A NAME="A213X91249d"></A>C Syntax</H3>
+<PRE><A NAME="A213X91249e"></A><B>void ginit(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010ba8"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010ba9"></A><B>SUBROUTINE GINIT</B></PRE>
+
+<H3><A NAME="A213X9124a1"></A>Description</H3>
+<P><A NAME="E1B1244170ceb"></A>The <B>ginit</B> subroutine initializes the graphics environment to its default values for the global state 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A78P0561">attributes</A> and creates a window that covers the screen. The <B>ginit</B> subroutine queues the 
+REDRAW
+ window manager device.</P>
+
+<P><A NAME="E1B1244278ceb"></A>Call the <B>ginit </B>subroutine once, before any other GL subroutine.</P>
+
+<P><A NAME="E1B1244386ceb"></A>The recommendation is to use the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine for initialization functions to take advantage of the window manager and to avoid unexpected events in the <!--gl32prgd:--><A HREF="../gl32prgd/cntrlques.html#A29C0109de">event queue</A>.</P>
+
+<BLOCKQUOTE><A NAME="A318C9e90"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A30C011042"></A>Example</H3>
+<P><A NAME="E1B1244629ceb"></A>The example C language program <A HREF="prompt_c.html#A16C0c8de"><B>prompt.c</B></A> uses the <B>ginit</B> subroutine to do a basic graphics setup.</P>
+
+<H3><A NAME="A64C0165f8"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1244793ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C11d7"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11d8"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11d9"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X9124b1"></A>Related Information</H3>
+<P><A NAME="E1B1245113ceb"></A>Initializing the graphics system without changing the color map with the <A HREF="gbegin.html#JS4380nita"><B>gbegin</B></A> subroutine.</P>
+
+<P><A NAME="E1B1245222ceb"></A>Terminating a graphics program with the <A HREF="gexit.html#xT41a0nita"><B>gexit</B></A> subroutine.</P>
+
+<P><A NAME="E1B1245330ceb"></A>Resetting all global state attributes to their initial values with the <A HREF="greset.html#xW42e0nita"><B>greset</B></A> subroutine.</P>
+
+<P><A NAME="E1B1245437ceb"></A>Creating a new window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine.</P>
+
+<P><A NAME="E1B1245545ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>
+ and <!--gl32prgd:--><A HREF="../gl32prgd/cntrlques.html#cntrlques.html">Controlling Queues and Devices</A>.</P>
+
+<P><A NAME="E1B1245654ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware Used by GL</A>, <!--gl32prgd:--><A HREF="../gl32prgd/clrrstintgl.html#clrrstintgl.html">Clearing, Resetting, and Initializing GL</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/underwininput.html#underwininput.html">Windows and Input Control Overview</A>.</P><hr><center>
+[  <a href="gexit.html">Previous</a>  |
+<a href="glcompat.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

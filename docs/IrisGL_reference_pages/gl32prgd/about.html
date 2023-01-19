@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/about.html Mon, 24 Jan 2022 16:27:48 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>About This Book
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="trademarks.html">Previous</a>  |
+<a href="gloverview.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+<H1><A NAME="about.html"></A>About This Book</H1>
+<P><A NAME="A3C0DE27001mhay"></A><I>GL3.2 Version 4 for AIX: Programming Concepts</I> provides information on the 
+Graphics Library (GL). GL is an application programming interface (API) for performing 
+advanced 3-D rendering, window management, and input device support. This book serves as 
+both a tutorial and a guide; it is a programmer's source book for learning about 3-D 
+graphics from a programmer's perspective.</P>
+
+
+
+<H3><A NAME="A157C11209"></A>Who Should Use This Book</H3>
+<P><A NAME="A3C0DE27023mhay"></A>This book is intended for programmers with C programming knowledge who want to develop 3-D applications. You should be acquainted with the C programming language enough to be able to write, compile, and link a program that prints <SAMP>Hello,&nbsp;World! </SAMP>on the screen. This book does not assume knowledge of computer graphics as a prerequisite.</P>
+
+<H3><A NAME="C519672796vbia"></A>Before You Begin</H3>
+<P><A NAME="A3C0DE27045mhay"></A>Having a basic understanding of the concepts of computer graphics makes this book easier to understand. An introduction to computer graphics can be found in one of the following books:</P>
+
+<UL><LI><A NAME="A157C1120c"></A>Foley, James D.; van Dam, Andries; Feiner, Steven K.; and Hughes, John F. <I>Computer Graphics: Principles and Practice</I>, Second Edition. Reading, Massachusetts: Addison-Wesley Publishing Company, 1990.</LI>
+
+<LI><A NAME="A157C1120d"></A>Rogers, David F. <I>Procedural Elements for Computer Graphics</I>. New York: McGraw-Hill Book Company, 1985.</LI>
+
+<LI><A NAME="A157C1120e"></A>Hearn, Donald; and Baker, M. Pauline. <I>Computer Graphics</I>. Englewood Cliffs, New Jersey: Prentice-Hall, Inc., 1986.</LI></UL>
+
+
+<H3><A NAME="A157C1120f"></A>How to Use This Book </H3>
+<P><A NAME="A3C0DE27069mhay"></A>In general, each chapter begins with basic information and progresses to more advanced topics. On first reading, advanced topics can be skipped.</P>
+
+<H4><A NAME="A157C11211"></A>Overview of Contents</H4>
+<P><A NAME="A3C0DE27089mhay"></A>This book contains the following chapters and appendixes:</P>
+
+<UL><LI><A NAME="A157C11212"></A>Chapter 1, "AIX Graphics Library Overview," describes the AIX Graphics Library (GL) structure and function. It includes hardware and software prerequisites for running GL applications in addition to information on choosing the right GL subroutine.</LI>
+
+<LI><A NAME="A157C11213"></A>Chapter 2, "Getting Started in GL," introduces GL functions with a series of programs.</LI>
+
+<LI><A NAME="A157C11215"></A>Chapter 3, "Drawing with the Graphics Library," describes the GL drawing subroutines, including begin-end style, move-draw style, high-level, text, wire-frame, and NURBS curve subroutines. It also discusses such drawing operations as transferring pixel blocks, antialiasing, and setting pipeline options and drawing attributes. </LI>
+
+<LI><A NAME="A157C11216"></A>Chapter 4, "Working with Coordinate Systems," discusses the coordinate transformations necessary to manipulate geometric figures and viewpoints in 3-D space.</LI>
+
+<LI><A NAME="A157C11217"></A>Chapter 5, "Using Viewports and Screenmasks," describes the uses and implementation of viewports and screenmasks in a GL application.</LI>
+
+<LI><A NAME="A157C11218"></A>Chapter 6, "Removing Hidden Surfaces," discusses GL use of a z-buffer.</LI>
+
+<LI><A NAME="A157C11219"></A>Chapter 7, "Creating Lighting Effects," describes the GL lighting facility, used to specify light and material properties.</LI>
+
+<LI><A NAME="A157C1121a"></A>Chapter 8, "Performing Depth-Cueing," discusses how to make an image appear three-dimensional by drawing those points brighter that are nearer to the viewer.</LI>
+
+<LI><A NAME="A157C1121b"></A>Chapter 9, "Configuring the Frame Buffer," describes the organization and control of the frame buffer.</LI>
+
+<LI><A NAME="A157C1121c"></A>Chapter 10, "Working with Objects (Display Lists)," discusses grouping a sequence of drawing subroutines as a single list to facilitate drawing identical figures. These graphical objects, or display lists, can be edited subsequently to create other figures.</LI>
+
+<LI><A NAME="A157C1121d"></A>Chapter 11, "Picking and Selecting," describes two methods of obtaining three-dimensional input from a user.</LI>
+
+<LI><A NAME="A157C1121e"></A>Chapter 12, "Understanding Windows and Input Control," discusses window management, cursors, keyboard input, queue and device control, system queries, pop-up menus, and textports.</LI>
+
+<LI><A NAME="A157C1121f"></A>Chapter 13, "Using Enhanced X-Windows Calls with GL Subroutines," discusses how Enhanced X-Windows subroutines and GL subroutines can be used together.</LI>
+
+<LI><A NAME="A157C11220"></A>Chapter 14, "Portability, Compatibility, and Performance," provides a list of enhancements included in this release (new or revised subroutines, new example programs, and new utilities), and discusses performance tuning.</LI>
+
+<LI><A NAME="C519674228vbia"></A>Chapter 15, "System Programming Considerations,"  discusses special programming considerations applicable to multiple process management, linking and compiling using the GL shared library, linking FORTRAN and C modules; and lists unsupported or obsolete subroutines.</LI>
+
+<LI><A NAME="C519674305vbia"></A>Chapter 16, "Understanding the Graphics Adapter," describes frame buffer configurations of various adapters, and discusses other relevant hardware considerations.</LI>
+
+<LI><A NAME="A157C11221"></A>Appendix A lists the GL subroutines in alphabetical order.</LI>
+
+<LI><A NAME="A157C11222"></A>Appendix B gives an overview of important modalities for GL subroutines.</LI>
+
+<LI><A NAME="A157C11223"></A>Appendix C lists <B>getgdesc</B> subroutine return values for various adapters.</LI>
+
+<LI><A NAME="D29ADD1704aic0"></A>Appendix D describes two procedures that detail how to port SGI GL applications to your GL environment.</LI></UL>
+
+
+<P><A NAME="A3C0DE27132mhay"></A>For the subroutines themselves and for example programs not shown in this book, see <I>GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I>.</P>
+
+<P><A NAME="A3C0DE27152mhay"></A>The examples given in this book and in <I>GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I> are merely examples, provided for the sole purpose of illustrating that the GL basic subroutines can be used to create extended or enhanced subroutines. The subroutines are provided "as is" without warranty of any kind, either express or implied, including but not limited to the implied warranties of merchantability and fitness for a particular purpose. The entire risk as to the quality and performance of each GL subroutine is with you.</P>
+
+<H4><A NAME="A157C11226"></A>Highlighting</H4>
+<P><A NAME="A3C0DE27172mhay"></A>The following highlighting conventions are used in this book:</P>
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A157C11228"></A><B>Bold</B></TD>
+<TD>  Identifies commands, subroutines, keywords, files, structures, directories, and other items whose names are predefined by the system. Also identifies graphical objects such as buttons, labels, and icons that the user selects.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A157C11229"></A><I>Italics</I></TD>
+<TD>  Identifies parameters whose actual names or values are to be supplied by the user.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A157C1122a"></A><SAMP>Monospace</SAMP></TD>
+<TD>  Identifies examples of specific data values, examples of text similar to what you might see displayed, examples of portions of program code similar to what you might write as a programmer, messages from the system, or information you should actually type.</TD></TR></TABLE>
+
+<H3><A NAME="A157C1122b"></A>Related Publications</H3>
+<P><A NAME="A3C0DE27196mhay"></A>The following books contain information about or related to programming graphics:</P>
+
+<UL><LI><I>AIX and Related Products Documentation Overview</I>, Order Number SC23-2456.</LI>
+
+<LI><A NAME="A157C1122e"></A><I>AIX Version 4.3 System Management Guide: Operating System and Devices</I>, Order Number SC23-4126.</LI>
+
+<LI><A NAME="A157C1122f"></A><I>GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I>, Order Number SC23-2630.</LI>
+
+<LI><A NAME="A205C1223"></A><I>Introducing the 7235 POWER GTO</I>, Order Number SA23-2125.</LI>
+
+<LI><A NAME="C7A31E4975vbia"></A><I>OpenGL Reference Manual</I>, order number SR28-5125.</LI>
+
+<LI><A NAME="C7A31E5051vbia"></A><I>OpenGL Programming Guide</I>, order number SR28-5126.</LI></UL>
+
+
+<H3><A NAME="A157C11232"></A>Ordering Publications</H3>
+<P><A NAME="A3C0DE27223mhay"></A>You can order publications from your sales representative or from your point of sale.</P>
+
+
+<P><A NAME="A3C0DE27246mhay"></A>To order additional copies of this book, use order number SC23-2612.</P><hr><center>
+[  <a href="trademarks.html">Previous</a>  |
+<a href="gloverview.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/about.html Mon, 24 Jan 2022 16:27:48 GMT -->
+</HTML>
+
+

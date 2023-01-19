@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>gsync  Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="gselect.html">Previous</a>  |
+<a href="gversion.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A4h41120marj"></A>gsync  Subroutine</H2>
+<A NAME="INDEX937" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX938" REL="I2" TITLE="animation"></A>
+<A NAME="INDEX939" REL="I3" TITLE="gsync"></A>
+<A NAME="INDEX940" REL="I1" TITLE="gsync subroutine (GL)"></A>
+<A NAME="INDEX941" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX942" REL="I2" TITLE="vertical retrace"></A>
+<A NAME="INDEX943" REL="I3" TITLE="waiting for next"></A>
+<H3><A NAME="A318C9c83"></A>Purpose</H3>
+<P><A NAME="E1B13BE788ceb"></A>Waits for a vertical retrace period.</P>
+
+<H3><A NAME="A77C12b"></A>Libraries</H3>
+<P><A NAME="E1B13BE936ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B13BF041ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A318C9c87"></A>C Syntax</H3>
+<PRE><A NAME="A318C9c88"></A><B>void gsync(&nbsp;)</B></PRE>
+
+<H3><A NAME="A17C0d9b3"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A17C0d9b4"></A><B>SUBROUTINE GSYNC</B></PRE>
+
+<H3><A NAME="A318C9c89"></A>Description</H3>
+<P><A NAME="E1B13BF394ceb"></A>The <B>gsync</B> subroutine waits for the next 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P031">vertical retrace</A>. Because this subroutine does not return until vertical retrace begins, the calling process is effectively blocked until that time.</P>
+
+<P><A NAME="E1B13BF502ceb"></A>This subroutine is useful for pacing the drawing when in single buffer mode. If the amount of drawing to be done is small, this subroutine can be used to achieve a limited amount of smooth animation in single buffer mode. For high-quality, smooth-animation, double-buffer mode should be used with the <A HREF="swapbuffers.html#A145X9302"><B>swapbuffers</B></A> subroutine.</P>
+
+<BLOCKQUOTE><A NAME="A318C9c8b"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A11C0b4a4"></A>Example</H3>
+<P><A NAME="E1B13BF712ceb"></A>The <A HREF="worms_c.html#A16C0ca03"><B>worms.c</B></A> example C language program uses the <B>gsync</B> subroutine to help smooth the display while it is changing the frame buffer.</P>
+
+<H3><A NAME="A62C015cad"></A>Implementation Specifics</H3>
+<P><A NAME="E1B13BF873ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="A3CFCA5D361janb"></A>The POWERgraphics GXT1000 does not support the <B>gsync</B> subroutine.</P>
+
+<H3><A NAME="A11C0b4a6"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C12e"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C12f"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c34c"></A>Related Information</H3>
+<P><A NAME="E1B13C0191ceb"></A>Setting the display mode to double buffer mode with the <A HREF="doublebuffer.html#A145X91a7"><B>doublebuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B13C0300ceb"></A>Setting the display mode to single buffer mode with the <A HREF="singlebuffer.html#A145X9259"><B>singlebuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B13C0407ceb"></A>Exchanging the front and back buffers in double buffer mode with the <A HREF="swapbuffers.html#A145X9302"><B>swapbuffers</B></A> subroutine.</P>
+
+<P><A NAME="E1B13C0515ceb"></A>Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A> and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P>
+
+<P><A NAME="E1B13C0621ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/animatescene.html#animatescene.html">Creating Animated Scenes</A>.</P><hr><center>
+[  <a href="gselect.html">Previous</a>  |
+<a href="gversion.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

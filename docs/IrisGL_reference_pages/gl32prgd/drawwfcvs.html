@@ -1,0 +1,869 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/drawwfcvs.html Mon, 24 Jan 2022 16:27:53 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>Drawing Wire Frame Curves and Surface Patches in GL
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="smjaglines.html">Previous</a>  |
+<a href="drawnurbs.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+<H2><A NAME="drawwfcvs.html"></A>Drawing Wire Frame Curves and Surface Patches</H2>
+
+
+<P><A NAME="INDEX295"></A><A NAME="INDEX296"></A><A NAME="INDEX297"></A><A NAME="INDEX298"></A><A NAME="INDEX299"></A><A NAME="INDEX300"></A><A NAME="INDEX301"></A><A NAME="INDEX302"></A></P>
+
+
+<P><A NAME="A3C0E530858mhay"></A>This section discusses the following topics:</P>
+
+
+<UL><LI><A NAME="A258C01c2bb"></A>Wire Frame Curves and Surface Patches <A HREF="drawwfcvs.html#Uf1370nita">Introduction</A></LI>
+
+
+<LI><A NAME="A34C011a7d"></A><A HREF="drawwfcvs.html#A300X9c5f">Curve
+Mathematics</A> including <A HREF="drawwfcvs.html#A25P03bf">Bezier Cubic
+Curve</A>, <A HREF="drawwfcvs.html#A300X9c74">Cardinal Spline Cubic Curve</A>,
+and <A HREF="drawwfcvs.html#A300X9c80">B-Spline Cubic Curve</A> </LI>
+
+
+<LI><A NAME="A34C011a81"></A><A HREF="drawwfcvs.html#DB213a0marj">Drawing
+Curves</A></LI>
+
+
+<LI><A NAME="A34C011a82"></A><A HREF="drawwfcvs.html#A300X9dae">Drawing
+Surfaces</A></LI></UL>
+
+
+<H3><A NAME="Mm5260marj"></A>List of GL Wire Frame Curve and Surface Patch
+Subroutines<A NAME="INDEX303"></A> <A NAME="INDEX304"></A> <A NAME="INDEX305"></A>
+<A NAME="INDEX306"></A> <A NAME="INDEX307"></A> <A NAME="INDEX308"></A>
+<A NAME="INDEX309"></A> <A NAME="INDEX310"></A> <A NAME="INDEX311"></A>
+<A NAME="INDEX312"></A> <A NAME="INDEX313"></A> <A NAME="INDEX314"></A></H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bfd"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/crv.html#ZMS220marj">crv</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a cubic spline curve. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bfe"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/crvn.html#ESS22c0marj">crvn</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a series of cubic spline curves. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bff"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/curvebasis.html#sTS23a0marj">curvebasis</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the current cubic spline curve basis matrix.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c00"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/curveit.html#LPS22c0marj">curveit</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a curve segment by iterating the forward difference matrix. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c01"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/curveprecision.html#aUS2120marj">curveprecision</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the number of line segments that compose a cubic spline curve.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c02"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/defbasis.html#A150X930">defbasis</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Defines a cubic spline basis matrix. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A321C93479"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/patch.html#A143X95b4">patch</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a cubic spline surface patch.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A321C9347a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchbasis.html#A143X95d6">patchbasis</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the current spline surface basis matrices. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A321C9347b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchcurves.html#A143X95f8">patchcurves</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the number of curves used to represent a patch. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A321C9347c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchprecision.html#A143X961a">patchprecision</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the precision at which curves are drawn. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c03"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rcrv.html#WRS2380marj">rcrv</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a rational cubic spline curve. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c04"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rcrvn.html#A1TS2220marj">rcrvn</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a series of rational curve segments. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A321C9347d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rpatch.html#O5k2marj">rpatch</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a rational cubic spline surface patch. </TD></TR></TABLE>
+
+
+<H3><A NAME="Uf1370nita"></A>Wire Frame Curves and Surface Patches Introduction</H3>
+
+
+<P><A NAME="A3C0E530901mhay"></A>This section describes the models, mathematics,
+and programming statements used for drawing curves and surfaces that were
+available before the NURBS functions that have been introduced in the latest
+release of GL. These techniques and GL functions are still supported for
+compatibility with programs written for earlier versions of GL. </P>
+
+
+<P><A NAME="A3C0E530926mhay"></A>You draw a curve segment by specifying:</P>
+
+
+<UL><LI><A NAME="A300X9c57"></A>A set of four control points.</LI>
+
+
+<LI><A NAME="A300X9c58"></A>A basis, which defines how the system uses
+the control points to determine the shape of the segment.</LI></UL>
+
+
+<P><A NAME="A3C0E530951mhay"></A>You create complex curved lines by joining
+several curve segments end to end. The curve facility provides the means
+for making smooth joints between the segments. </P>
+
+
+<P><A NAME="A3C0E530974mhay"></A>Three-dimensional surfaces, or patches,
+are represented by a <A HREF="specialterms.html#A3C0F2A4572mhay">wire
+frame</A> of curve segments. You draw a patch by specifying: </P>
+
+
+<UL><LI><A NAME="A300X9c5b"></A>A set of 16 control points.</LI>
+
+
+<LI><A NAME="A300X9c5c"></A>The number of curve segments to be drawn in
+each direction of the patch.</LI>
+
+
+<LI><A NAME="A300X9c5d"></A>The two bases that define how the control points
+determine the shape of the patch.</LI></UL>
+
+
+<P><A NAME="A3C0E531000mhay"></A>You can create complex surfaces by joining
+several patches into one large patch. </P>
+
+
+<H3><A NAME="A300X9c5f"></A>Curve Mathematics<A NAME="INDEX315"></A> <A NAME="INDEX316"></A>
+<A NAME="INDEX317"></A> <A NAME="INDEX318"></A> <A NAME="INDEX319"></A>
+<A NAME="INDEX320"></A> <A NAME="INDEX321"></A> <A NAME="INDEX322"></A></H3>
+
+
+<P><A NAME="A3C0E531025mhay"></A>The mathematical basis for the GL curve
+facility is the <A HREF="specialterms.html#A3C0F2A3949mhay">parametric
+cubic curve</A>. The curves in most applications are too complex to be
+represented by a single curve segment and instead must be represented by
+a series of curve segments joined end to end. To create smooth joints,
+you must control the positions and curvatures at the endpoints of curve
+segments. Parametric cubic curves are the lowest order representation of
+curve segments that provide continuity of position, slope, and curvature
+at the point where two curve segments meet. </P>
+
+
+<P><A NAME="A3C0E531048mhay"></A>In the following equation,
+a parametric cubic curve has the property that <I>x</I>, <I>y</I>, and
+<I>z</I> can be defined as third-order polynomials for variable <I>t</I>
+: </P>
+
+
+<IMG SRC="figures/gl32p55.jpg">
+<P><A NAME="A3C0E531072mhay"></A>A cubic curve segment is defined over
+a range of values for <I>t</I> (usually 0 &amp;le;<I> t </I>&amp;le; 1),
+and can be expressed as a vector product as in this equation:
+</P>
+
+
+<IMG SRC="figures/gl32p56.jpg"> 
+
+<P><A NAME="A3C0E531097mhay"></A>GL approximates the shape of a curve segment
+with a series of straight line segments. The endpoints for all the line
+segments can be computed by evaluating the vector product C(t) for a series
+of t values between 0 and 1. The shape of the curve segment is determined
+by the coefficients of the vector product, which are stored in column vector
+M. These coefficients can be expressed as a function of a set of four control
+points. Thus, the vector product becomes </P>
+
+
+<PRE><A NAME="A300X9c64"></A>C(t)&nbsp;=&nbsp;T&nbsp;M&nbsp;=&nbsp;T&nbsp;(B&nbsp;G)</PRE>
+
+
+<P><A NAME="A3C0E531126mhay"></A>where G is a set of four control points,
+or the geometry, and B is a matrix called the basis. The basis matrix is
+determined from a set of constraints that express how the shape of the
+curve segment relates to the control points. For example, a constraint
+might be that one endpoint of the curve segment is located at the first
+control point; or the tangent vector at that endpoint lies on the line
+segment formed by the first two control points. When the vector product
+C is solved for a particular set of constraints, the coefficients of the
+vector product are identified as a function of four variables (the control
+points). Then, given four control points, you can use the vector product
+to generate the points on the curve segment. </P>
+
+
+<P><A NAME="A3C0E531149mhay"></A>There are three classes of cubic curves:
+<A HREF="specialterms.html#A25P03bf">Bezier</A>, 
+<A HREF="specialterms.html#A25P03de">Cardinal
+spline</A>, and <A HREF="specialterms.html#A150P1959">B-spline</A>.
+Each has a set of constraints that define its class, plus a 
+<A HREF="specialterms.html#A25P03be">basis
+matrix</A> derived from those constraints that you can use to 
+<A HREF="drawwfcvs.html#DB213a0marj">draw
+curve segments</A>. </P>
+
+
+<H4><A NAME="A25P03bf"></A>Bezier Cubic Curve </H4>
+
+
+<P><A NAME="A3C0E531174mhay"></A>A Bezier cubic curve segment passes through
+the first and fourth control points and uses the second and third points
+to determine the shape of the curve segment. Of the three kinds of curves,
+the Bezier form provides the most intuitive control over the shape of the
+curve. The Bezier basis matrix is derived from the following four constraints:</P>
+
+
+<P><A NAME="A3C0E531197mhay"></A>One <A HREF="figures/gl32p57.jpg">endpoint</A>
+of the segment is located at p(1): </P>
+
+
+<P><A NAME="A3C0E531221mhay"></A>The other <A HREF="figures/gl32p58.jpg">endpoint</A>
+is located at p(4): </P>
+
+
+<P><A NAME="A3C0E531244mhay"></A>The first derivative, or slope, of the
+segment at one endpoint is equal to this <A HREF="figures/gl32p59.jpg">value</A>:</P>
+
+
+<P><A NAME="A3C0E531268mhay"></A>The first derivative at the other endpoint
+is equal to this <A HREF="figures/gl32p60.jpg">value</A>: </P>
+
+
+<P><A NAME="A3C0E531292mhay"></A>Solving for these constraints yields this equation: </P>
+
+
+<IMG SRC="figures/gl32p61.jpg">
+<P><A NAME="A3C0E531317mhay"></A>You can generate all the points on the
+Bezier cubic curve segment from p(1) to p(4) by evaluating Bezier(t) for
+0&nbsp;&amp;le;<I>&nbsp;</I>t&nbsp;&amp;le;&nbsp;1. It is more efficient,
+however, to construct a <A HREF="specialterms.html#A26P051b">forward
+difference matrix</A> that generates the points in a curve segment incrementally.</P>
+
+
+<P><A NAME="A3C0E531340mhay"></A>The following figure, <A HREF="figures/gl32p62.jpg">Bezier,
+Cardinal, and B-Spline Curves</A>, shows three Bezier curve segments. The
+first segment uses points 0, 1, 2, and 3 as control points. The second
+uses 1, 2, 3, and 4. The third uses 2, 3, 4, and 5. You can use the technique
+of overlapping sets of control points more effectively with the following
+two classes of cubic curves to create a single large curve from a series
+of curve segments. </P>
+
+
+<H4><A NAME="A300X9c74"></A>Cardinal Spline Cubic Curve </H4>
+
+
+<P><A NAME="A3C0E531365mhay"></A>In the following <A HREF="figures/gl32p62.jpg">figure</A>,
+a spline curve segment passes through the two interior control points and
+is continuous in the first derivative at the points where segments meet.
+The curve segment starts at p(2) and ends at p ( 3), and uses p(1) and
+p(4) to define the shape of the curve. </P>
+
+
+<P><A NAME="A3C0E531389mhay"></A>Three different curves are shown with
+appropriate basis matrices. With the Bezier basis matrix, three sets of
+overlapping control points result in three separate curve segments. With
+the Cardinal spline and B-spline matrices, the same overlapping sets of
+control points result in three joined curve segments. </P>
+
+
+<P><A NAME="A3C0E531412mhay"></A>The Cardinal spline basis matrix is derived
+from the following four constraints:</P>
+
+
+<IMG SRC="figures/gl32p63.jpg">
+<P><A NAME="A3C0E531435mhay"></A>The scalar coefficient a must be positive;
+it determines the length of the tangent vector at 
+point:</P>
+
+
+<IMG SRC="figures/gl32p64.jpg">
+<P><A NAME="A3C0E531459mhay"></A>and at 
+>point:</P>
+
+
+<IMG SRC="figures/gl32p65.jpg"><P><A NAME="A3C0E531483mhay"></A>Solving for these constraints yields the
+following equation: </P>
+
+
+<IMG SRC="figures/gl32p66.jpg">
+<P><A NAME="A3C0E531510mhay"></A>The three joined Cardinal spline curve
+segments in the <A HREF="figures/gl32p62.jpg">Bezier, Cardinal, and B-Spline
+Curves</A> figure use the same three sets of control points as the Bezier
+curve segments. Many different bases have Cardinal spline properties. You
+can derive the different bases by trying different values of <I>a</I>.</P>
+
+
+<H4><A NAME="A300X9c80"></A>B-Spline Cubic Curve </H4>
+
+
+<P><A NAME="A3C0E531535mhay"></A>In general, a B-spline curve segment does
+not pass through any control points, but is continuous in both the first
+and second derivatives at the points where segments meet. Thus, a series
+of joined B-spline curve segments is smoother than a series of Cardinal
+spline segments (see the <A HREF="figures/gl32p62.jpg">Bezier, Cardinal,
+and B-Spline Curves</A> figure). </P>
+
+
+<P><A NAME="A3C0E531558mhay"></A>The B-spline basis matrix is derived from
+the following four constraints: </P>
+
+
+<IMG SRC="figures/gl32p67.jpg">
+<P><A NAME="A3C0E531582mhay"></A>Solving for these constraints yields the
+following equation: </P>
+
+
+<IMG SRC="figures/gl32p68.jpg">
+<H3><A NAME="DB213a0marj"></A>Drawing Curves<A NAME="INDEX323"></A> <A NAME="INDEX324"></A>
+<A NAME="INDEX325"></A> <A NAME="INDEX326"></A> <A NAME="INDEX327"></A>
+<A NAME="INDEX328"></A> <A NAME="INDEX329"></A> <A NAME="INDEX330"></A>
+<A NAME="INDEX331"></A> </H3>
+
+
+<P><A NAME="A3C0E531606mhay"></A>Drawing a curve segment on the screen
+involves four steps: </P>
+
+
+<OL><LI><A NAME="A300X9c8c"></A>Define and name a basis matrix with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defbasis.html#A150X930">defbasis</A></B>
+subroutine.</LI>
+
+
+<LI><A NAME="A300X9c8d"></A>Select a defined basis matrix as the current
+basis matrix with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/curvebasis.html#sTS23a0marj">curvebasis</A></B>
+subroutine.</LI>
+
+
+<LI><A NAME="A300X9c8e"></A>Specify the number of line segments used to
+approximate each curve segment with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/curveprecision.html#aUS2120marj">curveprecision</A></B>
+subroutine.</LI>
+
+
+<LI><A NAME="A300X9c8f"></A>Draw the curve segment using the current basis
+matrix, the current curve precision, and the four control points with the
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/crv.html#ZMS220marj">crv</A></B>
+subroutine. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rcrv.html#WRS2380marj">rcrv</A></B>
+subroutine draws a rational curve.</LI></OL>
+
+
+<H4><A NAME="A300X9c90"></A>defbasis Subroutine </H4>
+
+
+<P><A NAME="A3C0E531636mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defbasis.html#A150X930">defbasis</A></B>
+subroutine defines and names a basis matrix to generate curves and patches.
+The value of the <I>mat</I> parameter is saved and is associated with the
+<I>id</I> parameter. Use the <I>id</I> parameter in subsequent calls to
+the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/curvebasis.html#sTS23a0marj">curvebasis</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchbasis.html#A143X95d6">patchbasis</A></B>
+subroutines. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c2ca"></A>void&nbsp;defbasis(Int32&nbsp;id,&nbsp;Matrix&nbsp;mat)</PRE>
+
+
+<H4><A NAME="A300X9c97"></A>curvebasis Subroutine </H4>
+
+
+<P><A NAME="A3C0E531661mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/curvebasis.html#sTS23a0marj">curvebasis</A></B>
+subroutine selects a basis matrix (defined by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defbasis.html#A150X930">defbasis</A></B>
+subroutine) as the current basis matrix to draw curve segments. The syntax
+is as follows: </P>
+
+
+<PRE><A NAME="A258C01c2cb"></A>void&nbsp;curvebasis(Int32&nbsp;basis_id)</PRE>
+
+
+<H4><A NAME="A300X9c9d"></A>curveprecision Subroutine </H4>
+
+
+<P><A NAME="A3C0E531688mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/curveprecision.html#aUS2120marj">curveprecision</A></B>
+subroutine specifies the number of line segments used to draw a curve.
+Whenever the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/crv.html#ZMS220marj">crv</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/crvn.html#ESS22c0marj">crvn</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/rcrv.html#WRS2380marj">rcrv</A></B>,
+or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rcrvn.html#A1TS2220marj">rcrvn</A></B>
+subroutine executes, a number of straight line segments (the value of the
+<I>nsegments</I> parameter) approximates each curve segment. The greater
+the value of the <I>nsegments</I> parameter, the smoother the curve, but
+the longer the drawing time. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c2cc"></A>void&nbsp;curveprecision(Int16&nbsp;nsegments)</PRE>
+
+
+<H4><A NAME="A300X9ca3"></A>crv Subroutine </H4>
+
+
+<P><A NAME="A3C0E531715mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/crv.html#ZMS220marj">crv</A></B>
+subroutine draws the curve segment using the current basis matrix, the
+current curve precision, and the four control points specified in the <I>points</I>
+parameter. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A300X9ca7"></A>void&nbsp;crv(Coord&nbsp;points[4][3])</PRE>
+
+
+<P><A NAME="A3C0E531739mhay"></A>When you issue the <B>crv</B> command,
+a matrix is built from the geometry,
+the current basis, and the current precision: </P>
+
+
+<IMG SRC="figures/gl32p69.jpg">
+<P><A NAME="A3C0E531763mhay"></A>where n = the current precision. The bottom
+row of the resulting 
+<A HREF="specialterms.html#A27P021">transformation
+matrix</A> identifies the first of n points that describe the curve. To
+generate the remaining points in the curve, the following algorithm is
+used to iterate the matrix as a forward difference matrix. The third row
+is added to the fourth row, the second row is added to the third row, and
+the first row is added to the second row. The fourth row is then output
+as one of the points on the curve. </P>
+
+
+<PRE><A NAME="A300X9cab"></A>/*&nbsp;This&nbsp;is&nbsp;the&nbsp;forward&nbsp;difference&nbsp;algorithm&nbsp;*/
+/*&nbsp;M&nbsp;is&nbsp;the&nbsp;current&nbsp;transformation&nbsp;matrix&nbsp;*/
+move&nbsp;(M[3][0]/M[3][3],&nbsp;M[3][1]/M[3][3],&nbsp;M[3][2]/M[3][3]);
+/*&nbsp;iteration&nbsp;loop&nbsp;*/
+for&nbsp;(cnt&nbsp;=&nbsp;0;&nbsp;cnt&nbsp;&lt;&nbsp;iterationcount;&nbsp;cnt++)&nbsp;{
+&nbsp;&nbsp;&nbsp;for&nbsp;(i=3;&nbsp;i&gt;0;&nbsp;i--)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(j=0;&nbsp;j&lt;4;&nbsp;j++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;M[i][j]&nbsp;=&nbsp;M[i][j]&nbsp;+&nbsp;M[i-1][j];
+&nbsp;&nbsp;&nbsp;draw(M[3][0]/M[3][3],&nbsp;M[3][1]/M[3][3],&nbsp;M[3][2]/M[3][3]);
+}</PRE>
+
+
+<P><A NAME="A3C0E531787mhay"></A>Each iteration draws one line segment
+of the curve segment. If the precision matrix on the previous page is iterated
+as a forward difference matrix, it generates the <A HREF="figures/gl32p70.jpg">sequence
+of points</A>: </P>
+
+
+<P><A NAME="A3C0E531810mhay"></A>This is the same sequence of points generated
+by the equation: </P>
+
+
+<IMG SRC="figures/gl32p71.jpg">
+<P><A NAME="A3C0E531834mhay"></A>for the 
+vector</P>
+
+
+<IMG SRC="figures/gl32p72.jpg">
+<P><A NAME="A3C0E531858mhay"></A>The example program <B><!--:libs:gl32tref:--><A HREF="../gl32tref/curve2_c.html#A16C0c7cd">curve2.c</A></B>
+(found in  in<I> GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I>) draws the three curve segments in the
+figure entitled <A HREF="figures/gl32p73.jpg">Curve Segments</A>. All use
+the same set of four control points, which is contained in the <I>geom1</I>
+parameter. The three basis matrix arrays (<TT>beziermatrix</TT>, <TT>cardinalmatrix</TT>,
+and <TT>bsplinematrix</TT>) contain the values outlined in the <A HREF="figures/gl32p62.jpg">Bezier,
+Cardinal, and B-Spline Curves</A> figure. </P>
+
+
+<P><A NAME="A3C0E531881mhay"></A>Before the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/crv.html#ZMS220marj">crv</A></B>
+or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rcrv.html#WRS2380marj">rcrv</A></B>
+subroutine is called, a basis and precision matrix must be defined. This
+is also true if the routines are compiled into an object. </P>
+
+
+<P><A NAME="A3C0E531908mhay"></A>Each of the curve segments in the previous
+figure uses the same set of four control points and the same precision,
+but a different basis matrix. </P>
+
+
+<H4><A NAME="A300X9d02"></A>crvn Subroutine </H4>
+
+
+<P><A NAME="A3C0E531984mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/crvn.html#ESS22c0marj">crvn</A></B>
+subroutine takes a series of control points and draws a series of cubic
+spline or rational cubic spline curve segments using the current basis
+and precision; the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rcrvn.html#A1TS2220marj">rcrvn</A></B>
+subroutine draws rational splines. The control points specified in the
+<I>geom</I> parameter determine the shapes of the curve segments and are
+used four at a time. If the current basis is a B-spline, Cardinal spline,
+or basis with similar properties, the curve segments are joined end to
+end and appear as a single curve. Calling the <B>crvn</B> subroutine has
+the same effect as calling the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/crv.html#ZMS220marj">crv</A></B>
+subroutine with overlapping control points (see the <A HREF="figures/gl32p41.jpg">Uniform
+Cubic B-Spline With No Rational Component</A> figure). The syntax is as
+follows: </P>
+
+
+<PRE><A NAME="A258C01c2ce"></A>void&nbsp;crvn(Int32&nbsp;n,&nbsp;Coord&nbsp;geom[][3])</PRE>
+
+
+<P><A NAME="A3C0E532010mhay"></A>When you issue this subroutine with a
+Cardinal spline or B-spline basis, it produces a single curve. However,
+a <B><!--:libs:gl32tref:--><A HREF="../gl32tref/crvn.html#ESS22c0marj">crvn</A></B>
+subroutine issued with a Bezier basis produces several separate curve segments.</P>
+
+
+<P><A NAME="A3C0E532033mhay"></A>As with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/crv.html#ZMS220marj">crv</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rcrv.html#WRS2380marj">rcrv</A></B>
+subroutines, a precision and basis must be defined before calling the <B>crvn</B>
+or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rcrvn.html#A1TS2220marj">rcrvn</A></B>
+subroutine. This is true even if the routines are compiled into objects.
+The example program <B><!--:libs:gl32tref:--><A HREF="../gl32tref/curve2_c.html#A16C0c7cd">curve2.c</A></B> (found in  in<I> GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I>) draws
+the three joined curve segments in the <A HREF="figures/gl32p51.jpg">Bezier
+Surface Patch figure</A> using the <B>crvn</B> subroutine. The <I>geom2</I>
+parameter contains six control points. </P>
+
+
+<H4><A NAME="A300X9d51"></A>curveit Subroutine </H4>
+
+
+<P><A NAME="A3C0E532059mhay"></A>The iteration loop of the <A HREF="drawwfcvs.html#A300X9cab">forward
+difference algorithm</A> is implemented in the graphics pipeline. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/curveit.html#LPS22c0marj">curveit</A></B>
+subroutine provides direct access to this facility, making it possible
+to generate a curve directly from a forward difference matrix. This subroutine
+iterates the current matrix (the one on top of the matrix stack) as many
+times as indicated in the <I>count</I> parameter. Each iteration draws
+one of the line segments that approximate the curve. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A258C01c2d0"></A>void&nbsp;curveit(Int16&nbsp;count)</PRE>
+
+
+<P><A NAME="A3C0E532083mhay"></A>The <B>curveit</B> subroutine does not
+execute the initial move in the forward difference algorithm. A <TT>move(0.0,0.0,0.0)</TT>
+must precede the <B>curveit</B> subroutine so that the correct first point
+is generated from the forward difference matrix. </P>
+
+
+<P><A NAME="A3C0E532106mhay"></A>This example program <B><!--:libs:gl32tref:--><A HREF="../gl32tref/curve3_c.html#A16C0c81c">curve3.c</A></B> (found in  in<I> GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I>) draws
+the Bezier curve segment shown in the figure entitled <A HREF="figures/gl32p73.jpg">Curve
+Segments</A> using the <B>curveit</B> subroutine. The Cardinal spline and
+B-spline curve segments could be drawn using a similar sequence of commands&amp;mdash;only
+the basis matrix would be different. </P>
+
+
+<H3><A NAME="A300X9d8f"></A>Rational Curves </H3>
+
+
+<P><A NAME="A3C0E532129mhay"></A>Cubic splines have been the focus of discussion.
+Cubic splines are splines whose <I>x</I>, <I>y</I>, and <I>z</I> coordinates
+can be expressed as a cubic polynomial in <I>t</I>. </P>
+
+
+<P><A NAME="A3C0E532152mhay"></A>GL actually works in 
+<A HREF="specialterms.html#A26P0623">homogeneous
+coordinates</A> <I>x</I>,&nbsp;<I>y</I>,&nbsp;<I>z</I>, and <I>w</I>, where
+3-D coordinates are given by <I>xw</I>, <I>yw</I>, and <I>zw</I>. The <I>w</I>
+coordinate is normally the constant 1, so the homogeneous character of
+the system is hidden. </P>
+
+
+<P><A NAME="A3C0E532175mhay"></A>In fact, the <I>w</I> coordinate can also
+be expressed as a cubic function of <I>t</I>, so that the 3-D coordinates
+of points along the curve are given as a quotient of two cubic polynomials.
+The only constraint is that the denominator for all three coordinates must
+be the same. When <I>w</I> is not the constant 1, but some cubic polynomial
+function of <I>t</I>, the curves generated are usually called parametric
+rational cubic curves. </P>
+
+
+<P><A NAME="A3C0E532198mhay"></A>A circle is a useful example. There is
+no cubic spline that exactly matches any short segment of a circle, but
+if <I>x</I>,&nbsp;<I>y</I>,&nbsp;<I>z</I>, and <I>w</I> are defined in
+this equation>: </P>
+
+
+<IMG SRC="figures/gl32p74.jpg">
+<P><A NAME="A3C0E532221mhay"></A>the real coordinates, as shown in this
+equation, </P>
+
+
+<IMG SRC="figures/gl32p49.jpg">
+<P><A NAME="A3C0E532244mhay"></A>all lie on the circle with center at (<TT>0,0,0</TT>)
+in the <I>x</I>-<I>y</I> plane with radius 1 (exactly). All the conic sections
+(ellipses, hyperbolas, parabolas) can be similarly defined. </P>
+
+
+<P><A NAME="A3C0E532267mhay"></A>For rational splines, the basis definitions
+and precision specifications are identical to those for cubic splines.
+The only difference is that the geometry matrix must be specified in four-dimensional
+homogeneous coordinates. This is done with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rcrv.html#WRS2380marj">rcrv</A></B>
+subroutine. </P>
+
+
+<H4><A NAME="A300X9da3"></A>rcrv Subroutine </H4>
+
+
+<P><A NAME="A3C0E532295mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rcrv.html#WRS2380marj">rcrv</A></B>
+subroutine draws a rational curve segment using the current basis matrix,
+the current curve precision, and the four control points specified in the
+its parameter. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c2d2"></A>void&nbsp;rcrv(Coord&nbsp;geom[4][4])</PRE>
+
+
+<P><A NAME="A3C0E532318mhay"></A>The <B>rcrv</B> subroutine is exactly
+analogous to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/crv.html#ZMS220marj">crv</A></B>
+subroutine, except that <I>w</I> coordinates are included in the control
+point definitions. </P>
+
+
+<H4><A NAME="A300X9da9"></A>rcrvn Subroutine </H4>
+
+
+<P><A NAME="A3C0E532343mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rcrvn.html#A1TS2220marj">rcrvn</A></B>
+subroutine takes a series of control points given by the value of the <I>n</I>
+parameter and draws a series of parametric rational cubic curve segments,
+using the current basis and precision. The control points specified in
+the <I>geom</I> parameter determine the shapes of the curve segments and
+are used four at a time. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c2d3"></A>void&nbsp;rcrvn(Int32&nbsp;n,&nbsp;Coord&nbsp;geom[][4])</PRE>
+
+
+<H3><A NAME="A300X9dae"></A>Drawing Surfaces<A NAME="INDEX332"></A> <A NAME="INDEX333"></A>
+<A NAME="INDEX334"></A> <A NAME="INDEX335"></A> <A NAME="INDEX336"></A>
+<A NAME="INDEX337"></A> <A NAME="INDEX338"></A> <A NAME="INDEX339"></A>
+<A NAME="INDEX340"></A> </H3>
+
+
+<P><A NAME="A3C0E532368mhay"></A>The method for drawing surfaces is similar
+to that for drawing curves. A surface patch appears on the screen as a
+<A HREF="specialterms.html#A3C0F2A4572mhay">wire frame </A>of curve
+segments. A set of user-defined control points determines the shape of
+the patch. A complex surface consisting of several joined patches can be
+created by using overlapping sets of control points and the B-spline and
+Cardinal spline curve bases shown in the <A HREF="figures/gl32p62.jpg">Bezier,
+Cardinal, and B-Spline Curves</A> figure. </P>
+
+
+<P><A NAME="A3C0E532390mhay"></A>The mathematical basis for the GL surface
+facility is the parametric bicubic surface. </P>
+
+
+<P><A NAME="A3C0E532413mhay"></A>The parametric 
+equation for <I>x</I> is: </P>
+
+
+<IMG SRC="figures/gl32p50.jpg">
+<P><A NAME="A3C0E532436mhay"></A>(The equations for <I>y</I> and <I>z</I>
+are similar.) The points on a bicubic patch are defined by varying the
+parameters u and v from 0 to 1. If one parameter is held constant and the
+other varied from 0 to 1, the result is a cubic curve. Thus, a wire frame
+patch can be created by holding u constant at several values and using
+the GL curve facility to draw curve segments in one direction, and then
+doing the same for v in the other direction. </P>
+
+
+<P><A NAME="A3C0E532458mhay"></A>There are five steps involved in drawing
+a surface patch: </P>
+
+
+<OL><LI><A NAME="A300X9db6"></A>The appropriate bases matrices are defined
+using the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defbasis.html#A150X930">defbasis</A></B>
+subroutine. A Bezier basis provides intuitive control over the shape of
+the patch. The Cardinal spline and B-spline bases shown in the <A HREF="figures/gl32p62.jpg">Bezier,
+Cardinal, and B-Spline Curves</A> figure allow smooth joints to be created
+between patches.</LI>
+
+
+<LI><A NAME="A300X9db7"></A>A basis for each of the directions in the patch,
+u and v, must be specified with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchbasis.html#A143X95d6">patchbasis</A></B>
+subroutine. 
+
+<BLOCKQUOTE><P><A NAME="A151C1229b"></A><B>Note: </B>The u basis and the v basis do
+not have to be the same. </P></BLOCKQUOTE></LI>
+
+
+<LI><A NAME="A300X9db8"></A>The number of curve segments to be drawn in
+each direction is specified by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchcurves.html#A143X95f8">patchcurves</A></B>
+subroutine. A different number of curve segments can be drawn in each direction.</LI>
+
+
+<LI><A NAME="A300X9db9"></A>The precisions for the curve segments in each
+direction must be specified with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchprecision.html#A143X961a">patchprecision</A></B>
+subroutine. The precision is the minimum number of line segments approximating
+each curve segment and can be different for each direction. The actual
+number of line segments is a multiple of the number of curve segments being
+drawn in the opposing direction. This guarantees that the u and v curve
+segments forming the wire frame actually intersect.</LI>
+
+
+<LI><A NAME="A300X9dba"></A>The surface patch is actually drawn with the
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/patch.html#A143X95b4">patch</A></B>
+subroutine. The parameters contain the 16 control points that govern the
+shape of the patch. The value of the&nbsp;<I>geomx</I> parameter is a 4x4
+matrix containing the <I>x</I> coordinates of the 16 control points; the
+<I>geomy</I> parameter contains the <I>y</I> coordinates; the <I>geomz</I>
+parameter contains the <I>z</I> coordinates. The curve segments in the
+patch are drawn using the current linestyle, linewidth, color, and writemask.</LI></OL>
+
+
+<P><A NAME="A3C0E532489mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rpatch.html#O5k2marj">rpatch</A></B>
+subroutine draws a rational surface patch. </P>
+
+
+<H4><A NAME="A300X9dbc"></A>patchbasis Subroutine </H4>
+
+
+<P><A NAME="A3C0E532513mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchbasis.html#A143X95d6">patchbasis</A></B>
+subroutine sets the current basis matrices (defined by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defbasis.html#A150X930">defbasis</A></B>
+subroutine) for the parametric directions of a surface patch as given in
+the <I>uid</I> and <I>vid</I> parameters. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c2da"></A>void&nbsp;patchbasis(Int32&nbsp;uid,&nbsp;Int32&nbsp;vid)</PRE>
+
+
+<H4><A NAME="A300X9dc2"></A>patchcurves Subroutine </H4>
+
+
+<P><A NAME="A3C0E532541mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchcurves.html#A143X95f8">patchcurves</A></B>
+subroutine sets the current number of curves in both directions as given
+in the <I>ucurves</I> and <I>vcurves</I> parameters that represent a patch
+as a wire frame. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c2db"></A>void&nbsp;patchcurves(Int32&nbsp;ucurves,&nbsp;Int32&nbsp;vcurves)</PRE>
+
+
+<H4><A NAME="A300X9dc8"></A>patchprecision Subroutine </H4>
+
+
+<P><A NAME="A3C0E532567mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchprecision.html#A143X961a">patchprecision</A></B>
+subroutine sets the precision at which curves defining a wire frame patch
+are drawn. The u and v directions for a patch specify the precisions independently.
+Patch precisions specify the minimum number of line segments used to draw
+a patch. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c2dc"></A>void&nbsp;patchprecision(Int32&nbsp;usegments,&nbsp;Int32&nbsp;vsegments)</PRE>
+
+
+<H4><A NAME="A300X9dce"></A>patch and rpatch Subroutines </H4>
+
+
+<P><A NAME="A3C0E532593mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/patch.html#A143X95b4">patch</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rpatch.html#O5k2marj">rpatch</A></B>
+subroutines draw a surface patch using the current values set by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchbasis.html#A143X95d6">patchbasis</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchprecision.html#A143X961a">patchprecision</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/patchcurves.html#A143X95f8">patchcurves</A></B>
+subroutines. The <B>rpatch </B>subroutine draws a rational surface patch.
+The control points given in the <I>geomx</I>, <I>geomy</I>, and <I>geomz</I>
+parameters determine the shape of the patch. The control point given in
+the <I>geomw</I> parameter specifies the rational component of the patch
+to the <B>rpatch</B> subroutine. The syntax for the <B>patch</B> and <B>rpatch</B>
+subroutines is as follows: </P>
+
+
+<PRE><A NAME="A258C01c2dd"></A>void&nbsp;patch(Matrix&nbsp;geomx,&nbsp;Matrix&nbsp;geomy,&nbsp;Matrix&nbsp;geomz)</PRE>
+
+
+<PRE><A NAME="A258C01c2de"></A>void&nbsp;rpatch(Matrix&nbsp;geomx,&nbsp;Matrix&nbsp;geomy,&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Matrix&nbsp;geomz,&nbsp;Matrix&nbsp;geomw)</PRE>
+
+
+<P><A NAME="A3C0E532617mhay"></A>The <A HREF="figures/gl32p51.jpg">Bezier
+Surface Patch</A>, <A HREF="figures/gl32p52.jpg">Cardinal Spline Surface
+Patch</A>, and <A HREF="figures/gl32p53.jpg">B-Spline Surface Patch</A>
+figures show the same number of curve segments and the same precisions
+but different basis matrices. All three use the same set of 16 control
+points. </P>
+
+
+<P><A NAME="A3C0E532643mhay"></A>The example program <B><!--:libs:gl32tref:--><A HREF="../gl32tref/patch1_c.html#A17C0daf">patch1.c</A></B> (found in  in<I> GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I>) draws
+three surface patches similar to those shown in the foregoing figures.</P>
+
+
+<P><A NAME="A3C0E532665mhay"></A>You can join patches to create a more
+complex surface by using the Cardinal spline or B-spline bases and by overlapping
+sets of control points. The surface in the <A HREF="figures/gl32p54.jpg">Joined
+Patches</A> figure consists of three joined patches and was drawn using
+a Cardinal spline basis matrix. </P><hr><center>
+[  <a href="smjaglines.html">Previous</a>  |
+<a href="drawnurbs.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/drawwfcvs.html Mon, 24 Jan 2022 16:28:01 GMT -->
+</HTML>
+

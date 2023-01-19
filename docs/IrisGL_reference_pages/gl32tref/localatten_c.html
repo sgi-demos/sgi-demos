@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>localatten.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="iobounce_c.html">Previous</a>  |
+<a href="makefile.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A10C0abc5"></A>localatten.c Example C Language Program
+</H2>
+<A NAME="INDEX2328" REL="I1" TITLE="localatten.c example program (GL)"></A>
+<A NAME="INDEX2329" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2330" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2331" REL="I3" TITLE="lighting"></A>
+<A NAME="INDEX2332" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2333" REL="I2" TITLE="lighting"></A>
+<A NAME="INDEX2334" REL="I3" TITLE="example program"></A>
+<A NAME="INDEX2335" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2336" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2337" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64EB05562ttay"></A>/*
+This program demonstrates the effect of light attenuation
+by continuously moving a local light toward a flat plate.</PRE>
+<PRE><A NAME="A64EB05949ttay"></A>It draws a flat green plate at z = 0; -1.0 > x, y > 1.0.
+The eye is 6 units above, looking down.  A
+light bounces up and down in the range 0.1 > z > 1.5, and
+x = y = 0.  The lighting model attenuates intensity with
+distance, so the center of the plate gets brighter as
+the light moves closer.  The character string printed at
+the lower left of the plate shows the height of the
+light.
+Note that the color is set after the cmov()
+command -- the cmov() actually sends a vertex through the
+transformation, and it will set the current color.  
+If you move the cpack() command just above the cmov()
+command, the character string will be lighted and will
+appear in varying shades of green.
+*/</PRE>
+<PRE><A NAME="A64EB06104ttay"></A>#include &lt;gl/gl.h> 
+#include &lt;stdio.h> </PRE>
+<PRE><A NAME="A64EB06280ttay"></A>Matrix idmat = {
+&nbsp;&nbsp;&nbsp;1.0,0.0,0.0,0.0, 
+&nbsp;&nbsp;&nbsp;0.0,1.0,0.0,0.0, 
+&nbsp;&nbsp;&nbsp;0.0,0.0,1.0,0.0, 
+&nbsp;&nbsp;&nbsp;0.0,0.0,0.0,1.0};</PRE>
+<PRE><A NAME="A64EB06446ttay"></A>float  green_material[] = {
+&nbsp;&nbsp;&nbsp;DIFFUSE,  0.0, 1.0, 0.0,
+&nbsp;&nbsp;&nbsp;LMNULL};</PRE>
+<PRE><A NAME="A64EB06622ttay"></A>float  local_white_light[] = {
+&nbsp;&nbsp;&nbsp;LCOLOR, 1.0, 1.0, 1.0,
+&nbsp;&nbsp;&nbsp;POSITION, 0.0, 0.0, 1.0, 1.0,
+&nbsp;&nbsp;&nbsp;LMNULL};</PRE>
+<PRE><A NAME="A64EB06800ttay"></A>float  light_model[] = {
+&nbsp;&nbsp;&nbsp;AMBIENT, 0.0, 0.0, 0.0,
+&nbsp;&nbsp;&nbsp;LOCALVIEWER, 0.0,
+&nbsp;&nbsp;&nbsp;ATTENUATION, 1.0, 1.0,
+&nbsp;&nbsp;&nbsp;LMNULL};</PRE>
+<PRE><A NAME="A64EB07036ttay"></A>/*
+** draw_plate draws a flat plate covering the
+** range -1.0 &lt;= x, y &lt;= 1.0 and z = 0. using
+** n^2 rectangles.  All the normal vectors are
+** perpendicular to the plate.
+*/
+draw_plate(n)
+long n;
+{
+&nbsp;&nbsp;&nbsp;long i, j;
+&nbsp;&nbsp;&nbsp;float p0[3], p1[3], p2[3], p3[3];
+&nbsp;&nbsp;&nbsp;float n0[3];    </PRE>
+<PRE><A NAME="A64EB07342ttay"></A>&nbsp;&nbsp;&nbsp;n0[0] = n0[1] = 0.0;
+&nbsp;&nbsp;&nbsp;n0[2] = 1.0;
+&nbsp;&nbsp;&nbsp;p0[2] = p1[2] = p2[2] = p3[2] = 0.0;    
+&nbsp;&nbsp;&nbsp;for (i = 0; i &lt; n; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p0[0] = p1[0] = -1.0 + 2.0*i/n;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p2[0] = p3[0] = -1.0 + 2.0*(i+1)/n;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (j = 0; j &lt; n; j++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p0[1] = p3[1] = -1.0 + 2.0*j/n;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p1[1] = p2[1] = -1.0 + 2.0*(j+1)/n;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bgnpolygon();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n3f(n0); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v3f(p0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n3f(n0); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v3f(p1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n3f(n0); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v3f(p2);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n3f(n0); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v3f(p3);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endpolygon();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB07485ttay"></A>}</PRE>
+<PRE><A NAME="A64EB07778ttay"></A>/*
+** Tell the Graphics Library to DEFINE a
+** lighting calculation that accounts for
+** diffuse and ambient reflection.  In
+** addition, this lighting calculation
+** includes a local light whose emitted
+** light is attenuated as a function of
+** distance from the object.
+*/
+def_light_calc()
+{
+&nbsp;&nbsp;&nbsp;lmdef(DEFLMODEL, 1, 10, light_model);
+&nbsp;&nbsp;&nbsp;lmdef(DEFMATERIAL, 1, 5, green_material);
+&nbsp;&nbsp;&nbsp;lmdef(DEFLIGHT, 1, 10, local_white_light);
+}</PRE>
+<PRE><A NAME="A64EB07983ttay"></A>/*
+** Tell the Graphics Library to USE the lighting
+** calculation that we defined earlier.
+*/
+use_light_calc()
+{
+&nbsp;&nbsp;&nbsp;lmbind(LMODEL, 1);
+&nbsp;&nbsp;&nbsp;lmbind(LIGHT1, 1);
+&nbsp;&nbsp;&nbsp;lmbind(MATERIAL, 1);
+}</PRE>
+<PRE><A NAME="A64EB08146ttay"></A>main()
+{
+&nbsp;&nbsp;&nbsp;float dist;
+&nbsp;&nbsp;&nbsp;long flag = 1;
+&nbsp;&nbsp;&nbsp;char str[32];    </PRE>
+<PRE><A NAME="A64EB08344ttay"></A>&nbsp;&nbsp;&nbsp;keepaspect(1, 1);
+&nbsp;&nbsp;&nbsp;prefposition(XMAXSCREEN/4,XMAXSCREEN*3/4,YMAXSCREEN/4,
+&nbsp;&nbsp;&nbsp;    YMAXSCREEN*3/4);
+&nbsp;&nbsp;&nbsp;winopen("local");
+&nbsp;&nbsp;&nbsp;RGBmode();
+&nbsp;&nbsp;&nbsp;doublebuffer();
+&nbsp;&nbsp;&nbsp;gconfig();</PRE>
+<PRE><A NAME="A64EB08643ttay"></A>   /*
+    ** Use mmode() to set up projection and
+    ** viewing matrices for lighting.
+&nbsp;&nbsp;&nbsp;  */
+&nbsp;&nbsp;&nbsp;mmode(MVIEWING);
+&nbsp;&nbsp;&nbsp;perspective(400, 1.0, 0.5, 10.0);
+&nbsp;&nbsp;&nbsp;loadmatrix(idmat);
+&nbsp;&nbsp;&nbsp;lookat(0.0,0.0,6.0,0.0,0.0,0.0,0);    
+&nbsp;&nbsp;&nbsp;def_light_calc();
+&nbsp;&nbsp;&nbsp;use_light_calc();    
+&nbsp;&nbsp;&nbsp;dist = 1.0;    
+&nbsp;&nbsp;&nbsp;while (TRUE) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (flag) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist += .01;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (dist > 1.5) flag = 1 - flag;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist -= .01;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (dist &lt; 0.1) flag = 1 - flag;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB08838ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cpack(0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprintf(str, "Light Distance: %1.2f", dist);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmov2(-1.5, -1.5);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cpack(0xffffff);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charstr(str);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pushmatrix();</PRE>
+<PRE><A NAME="A64EB0A399ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;       /*
+            ** Change the position of the local light
+            ** by REDEFINING and REBINDING the light.
+            ** Repositioning the light changes the
+            ** illumination of the plate for two reasons:
+            ** 1) the affect of attenuation, and 
+            ** 2) the light direction vector from a
+            ** vertex on the plate to the repositioned
+            ** light source has changed.
+            */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_white_light[7] = dist;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lmdef(DEFLIGHT, 1, 10, local_white_light);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lmbind(LIGHT1, 1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;draw_plate(20);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;popmatrix();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;swapbuffers();
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB0A542ttay"></A>}</PRE>
+
+<H3><A NAME="A200C1156"></A>Related Information</H3>
+<P><A NAME="E1D784B187ceb"></A>The <A HREF="cpack.html#A143X9284"><B>cpack</B></A> subroutine<A HREF="../gl32tref/A143X9284" REL="PAGENUM"></A>, <A HREF="loadmatrix.html#A144X9430"><B>loadmatrix</B></A> subroutine<A HREF="../gl32tref/A144X9430" REL="PAGENUM"></A>, <A HREF="RGBmode.html#A143X93b6"><B>RGBmode</B></A> subroutine<A HREF="../gl32tref/A143X93b6" REL="PAGENUM"></A>.</P>
+
+<hr><center>
+[  <a href="iobounce_c.html">Previous</a>  |
+<a href="makefile.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

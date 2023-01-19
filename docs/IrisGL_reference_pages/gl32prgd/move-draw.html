@@ -1,0 +1,826 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/move-draw.html Mon, 24 Jan 2022 16:27:51 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Drawing with Move-Draw Style Subroutines in GL
+
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="drawbeg-end.html">Previous</a>  |
+<a href="setglattrib.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="move-draw.html"></A>Drawing with Move-Draw Style Subroutines</H2>
+
+
+<P><A NAME="INDEX75"></A><A NAME="INDEX76"></A><A NAME="INDEX77"></A><A NAME="INDEX78"></A><A NAME="INDEX79"></A><A NAME="INDEX80"></A><A NAME="INDEX81"></A><A NAME="INDEX82"></A></P>
+
+
+<P><A NAME="A3C0E52C035mhay"></A>This section discusses the following aspects
+of move-draw style subroutines: </P>
+
+
+<UL><LI><A NAME="A258C01c1ac"></A><A HREF="move-draw.html#IHJ4d0nita">Move-Draw
+Introduction</A></LI>
+
+
+<LI><A NAME="A258C01c1ad"></A><A HREF="move-draw.html#A11C0b110">Current
+Graphics Position</A></LI>
+
+
+<LI><A NAME="A258C01c1ae"></A><A HREF="move-draw.html#A11C0b117">Points</A></LI>
+
+
+<LI><A NAME="A258C01c1af"></A><A HREF="move-draw.html#A11C0b12a">Lines
+and Relative Lines</A></LI>
+
+
+<LI><A NAME="A258C01c1b0"></A><A HREF="move-draw.html#A11C0b153">Polygons
+and Relative Polygons</A></LI></UL>
+
+
+<H3><A NAME="A264X92ed"></A>List of GL Move-Draw Style Subroutines<A NAME="INDEX83"></A>
+<A NAME="INDEX84"></A> <A NAME="INDEX85"></A> <A NAME="INDEX86"></A> <A NAME="INDEX87"></A>
+<A NAME="INDEX88"></A> </H3>
+
+
+<P><A NAME="A3C0E52C067mhay"></A>The following GL Move-Draw Style Subroutines
+are found in &amp;BkSym.TRGraphics;. </P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c3c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/draw.html#EYf2e0marj">draw</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a line. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c3d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getgpos.html#CZf60marj">getgpos</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Gets the current graphics position. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c3e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/move.html#pofmarj">move</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Moves the current graphics position to a specified point.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c3f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pclos.html#t2g270marj">pclos</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Closes a filled polygon. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c40"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pdr.html#bqf1c0marj">pdr</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies the next point in a polygon. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c41"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pmv.html#A139X91eed">pmv</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies the starting point for a polygon. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c42"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pnt.html#Ptf3a0marj">pnt</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a point. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c43"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rdr.html#gpf1c0marj">rdr</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a relative line. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c45"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rmv.html#kzf90marj">rmv</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Moves the current graphics position to a point relative to the current
+point. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c44"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rpdr.html#hrfa0marj">rpdr</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a relative polygon. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c46"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rpmv.html#lXf370marj">rpmv</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Moves the current graphics position to the starting point for a filled
+polygon relative to the current point. </TD></TR></TABLE>
+
+
+<H3><A NAME="IHJ4d0nita"></A>Move-Draw Introduction </H3>
+
+
+<P><A NAME="A3C0E52C107mhay"></A>Except for polygons, the figures drawn
+by the move-draw subroutines are the same as those drawn by the begin-end
+style ones. For example, points are drawn as a single pixel. However, the
+subroutines draw polygons only similar to <A HREF="drawbeg-end.html#A364C9930f">point-sampled
+polygons</A>; they draw lines connecting the vertices, effectively point-sampled
+polygons with an outline. For many polygons, the drawing time is approximately
+doubled when both the polygon and its outline are drawn. </P>
+
+
+<P><A NAME="A3C0E52C132mhay"></A>The display list subroutines described
+in the section entitled <A HREF="workobjects.html#workobjects.html">&quot;Working
+with Objects (Display Lists)&quot;</A> (<B><!--:libs:gl32tref:--><A HREF="../gl32tref/makeobj.html#A142X912d">makeobj</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/closeobj.html#A142X915b">closeobj</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/callobj.html#A142X91c8">callobj</A></B>,
+and so on) are not supported in the begin-end style subroutines. </P>
+
+
+<P><A NAME="A3C0E52C157mhay"></A>The move-draw style subroutines used most
+often are the three-dimensional ones. Therefore, the naming convention
+assigns the shortest name (for example, the<B> pnt</B> subroutine) to the
+most common, 3-D form. The less-used, 2-D form is assigned the longer name,
+as in the <B>pnt2</B> subroutine. The 2-D versions are assumed to lie in
+the <I>z</I>=0 plane, but the 2-D primitives can be transformed out of
+that plane by the various 
+<A HREF="specialterms.html#A27P021">transformation</A>
+subroutines. </P>
+
+
+<H3><A NAME="A11C0b110"></A>Current Graphics Position<A NAME="INDEX89"></A>
+<A NAME="INDEX90"></A> <A NAME="INDEX91"></A> <A NAME="INDEX92"></A> <A NAME="INDEX93"></A>
+<A NAME="INDEX94"></A> <A NAME="INDEX95"></A> <A NAME="INDEX96"></A> <A NAME="INDEX97"></A>
+<A NAME="INDEX98"></A> <A NAME="INDEX99"></A> </H3>
+
+
+<P><A NAME="A3C0E52C183mhay"></A>In GL, the graphical figures are sent
+together: a set of points, a polyline, and a polygon are sent bracketed
+by a call to the <B>bgn&lt;</B><I>type</I>&gt; and <B>end&lt;</B><I>type</I>&gt;
+subroutines. The rendering of the figure does not start until the <B>end&lt;</B><I>type</I>&gt;
+subroutine is received. </P>
+
+
+<P><A NAME="A3C0E52C208mhay"></A>The system automatically maintains the
+current graphics position, so very few applications need to access it directly,
+although the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getgpos.html#CZf60marj">getgpos</A></B>
+subroutine does return the current graphics position. Its parameters include
+four pointers to floating point numbers in which the homogeneous coordinates
+of the current transformed point are returned. The form is <TT>getgpos(&amp;fx,&nbsp;&amp;fy,&nbsp;&amp;fz,&nbsp;&amp;fw)</TT>.</P>
+
+
+<P><A NAME="A3C0E52C233mhay"></A>For compatibility, the current graphics
+position is maintained in exactly the same way for all the move-draw style
+subroutines. All other graphics subroutines do not depend on the current
+graphics position, and in fact, leave it in an unpredictable state. </P>
+
+
+<H3><A NAME="A11C0b117"></A>Points<A NAME="INDEX100"></A> <A NAME="INDEX101"></A>
+<A NAME="INDEX102"></A> <A NAME="INDEX103"></A> <A NAME="INDEX104"></A>
+<A NAME="INDEX105"></A> <A NAME="INDEX106"></A> <A NAME="INDEX107"></A>
+<A NAME="INDEX108"></A> <A NAME="INDEX109"></A> <A NAME="INDEX110"></A>
+<A NAME="INDEX111"></A> </H3>
+
+
+<P><A NAME="A3C0E52C258mhay"></A>The six versions of the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pnt.html#Ptf3a0marj">pnt</A></B>
+subroutine are shown in the following table. </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="3"><B>Versions of the Point Subroutine</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Parameter type</B> </TD>
+
+
+<TD><B>2-D</B> </TD>
+
+
+<TD><B>3-D</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>short integer </TD>
+
+
+<TD><B>pnt2s</B> </TD>
+
+
+<TD><B>pnts</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>long integer </TD>
+
+
+<TD><B>pnt2i</B> </TD>
+
+
+<TD><B>pnti</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>floating point </TD>
+
+
+<TD><B>pnt2</B> </TD>
+
+
+<TD><B>pnt</B> </TD></TR></TABLE>
+
+
+<P><A NAME="A3C0E52C286mhay"></A>The parameter lists are: pnt2<I>(x,&nbsp;y)</I>
+and pnt<I>(x,&nbsp;y,&nbsp;z)</I>. In addition to drawing a point, the
+<B>pnt</B> subroutine updates the current graphics position to its location.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c1b4"></A>void&nbsp;pnt(Coord&nbsp;x,&nbsp;Coord&nbsp;y,&nbsp;Coord&nbsp;z)&nbsp;</PRE>
+
+
+<P><A NAME="A3C0E52C311mhay"></A>The following example program draws 100
+points in a square area of the window: </P>
+
+
+<PRE><A NAME="A11C0b11c"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A25C0f6d8"></A>main()
+{</PRE>
+
+
+<PRE><A NAME="A11C0b11f"></A>&nbsp;&nbsp;&nbsp;int&nbsp;i,&nbsp;j;
+&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;500,&nbsp;100,&nbsp;500);
+&nbsp;&nbsp;&nbsp;winopen(&quot;pointsquare&quot;);
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(BLUE);
+&nbsp;&nbsp;&nbsp;for&nbsp;(i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;10;&nbsp;i++)
+&nbsp;&nbsp;&nbsp;for&nbsp;(j&nbsp;=&nbsp;0;&nbsp;j&nbsp;&lt;&nbsp;10;&nbsp;j++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pnti(i*5,&nbsp;j*5,&nbsp;0);
+&nbsp;&nbsp;&nbsp;sleep(3);
+}</PRE>
+
+
+<H3><A NAME="A11C0b12a"></A>Lines and Relative Lines<A NAME="INDEX112"></A>
+<A NAME="INDEX113"></A> <A NAME="INDEX114"></A> <A NAME="INDEX115"></A>
+<A NAME="INDEX116"></A> <A NAME="INDEX117"></A> <A NAME="INDEX118"></A>
+<A NAME="INDEX119"></A> <A NAME="INDEX120"></A> <A NAME="INDEX121"></A>
+<A NAME="INDEX122"></A> <A NAME="INDEX123"></A> <A NAME="INDEX124"></A>
+<A NAME="INDEX125"></A> <A NAME="INDEX126"></A> </H3>
+
+
+<P><A NAME="A3C0E52C340mhay"></A>Lines can be drawn using either the <B>move</B>
+or <B>draw</B> subroutine. Similar subroutines draw relative lines. </P>
+
+
+<H4><A NAME="A11C0b12d"></A>move and draw Subroutines </H4>
+
+
+<P><A NAME="A3C0E52C369mhay"></A>Lines can be drawn using either of two
+subroutines, <B><!--:libs:gl32tref:--><A HREF="../gl32tref/move.html#pofmarj">move</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/draw.html#EYf2e0marj">draw</A></B>.
+The syntax for the <B>move</B> and <B>draw</B> subroutines is as follows:</P>
+
+
+<PRE><A NAME="A258C01c1b6"></A>void&nbsp;move(Coord&nbsp;x,&nbsp;Coord&nbsp;y,&nbsp;Coord&nbsp;z)&nbsp;</PRE>
+
+
+<PRE><A NAME="A258C01c1b7"></A>void&nbsp;draw(Coord&nbsp;x,&nbsp;Coord&nbsp;y,&nbsp;Coord&nbsp;z)&nbsp;</PRE>
+
+
+<P><A NAME="A3C0E52C396mhay"></A>The <B>move</B> subroutine sets the current
+graphics position to the specified point. The <B>draw</B> subroutine draws
+from the current graphics position to the specified point and then updates
+the current graphics position to that point. The parameters and types of
+the <B>move</B> and <B>draw</B> subroutines are the same as for the point
+subroutines. The following table is a complete list of the <B>move</B>
+and <B>draw</B> subroutines. </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="3"><B>The move and draw Subroutines</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Parameter type</B> </TD>
+
+
+<TD><B>2-D</B> </TD>
+
+
+<TD><B>3-D</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>short integer </TD>
+
+
+<TD><B>move2s</B> </TD>
+
+
+<TD><B>moves</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>long integer </TD>
+
+
+<TD><B>move2i</B> </TD>
+
+
+<TD><B>movei</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>floating point </TD>
+
+
+<TD><B>move2</B> </TD>
+
+
+<TD><B>move</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>short integer </TD>
+
+
+<TD><B>draw2s</B> </TD>
+
+
+<TD><B>draws</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>long integer </TD>
+
+
+<TD><B>draw2i</B> </TD>
+
+
+<TD><B>drawi</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>floating point </TD>
+
+
+<TD><B>draw2</B> </TD>
+
+
+<TD><B>draw</B> </TD></TR></TABLE>
+
+
+<P><A NAME="A3C0E52C423mhay"></A>The following example program draws the
+outline of a blue box on the screen using the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/move.html#pofmarj">move</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/draw.html#EYf2e0marj">draw</A></B>
+subroutines: </P>
+
+
+<PRE><A NAME="A11C0b12f"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A11C0b130"></A>main()
+{</PRE>
+
+
+<PRE><A NAME="A11C0b132"></A>&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;500,&nbsp;100,&nbsp;500);
+&nbsp;&nbsp;&nbsp;winopen(&quot;bluebox&quot;);
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(BLUE);
+&nbsp;&nbsp;&nbsp;move2i(200,&nbsp;200);
+&nbsp;&nbsp;&nbsp;draw2i(200,&nbsp;300);
+&nbsp;&nbsp;&nbsp;draw2i(300,&nbsp;300);
+&nbsp;&nbsp;&nbsp;draw2i(300,&nbsp;200);
+&nbsp;&nbsp;&nbsp;draw2i(200,&nbsp;200);
+&nbsp;&nbsp;&nbsp;sleep(3);
+}</PRE>
+
+
+<H4><A NAME="A11C0b141"></A>Relative Line Subroutines </H4>
+
+
+<P><A NAME="A3C0E52C455mhay"></A>The relative line-drawing subroutines
+are similar to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/move.html#pofmarj">move</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/draw.html#EYf2e0marj">draw</A></B>
+subroutines, except that their parameters are interpreted as motions relative
+to the current graphics position. The relative move and draw subroutines
+are the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rmv.html#kzf90marj">rmv</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rdr.html#gpf1c0marj">rdr</A></B>
+subroutines, respectively. After each call to a relative move or draw subroutine,
+the current graphics position is updated to the specified position. The
+syntax for the <B>rmv</B> and <B>rdr</B> subroutines is as follows: </P>
+
+
+<PRE><A NAME="A258C01c1b9"></A>void&nbsp;rmv(Coord&nbsp;x,&nbsp;Coord&nbsp;y,&nbsp;Coord&nbsp;z)&nbsp;</PRE>
+
+
+<PRE><A NAME="A258C01c1ba"></A>void&nbsp;rdr(Coord&nbsp;x,&nbsp;Coord&nbsp;y,&nbsp;Coord&nbsp;z)&nbsp;</PRE>
+
+
+<P><A NAME="A3C0E52C481mhay"></A>If the current graphics position is (<I>x</I>,
+<I>y</I>, <I>z</I>), then <B>rdr</B>(<I>a</I>,&nbsp;<I>b</I>,&nbsp;<I>c</I>)
+draws a line from (<I>x</I>, <I>y</I>, <I>z</I>) to (<I>x</I>+<I>a</I>,
+<I>y</I>+<I>b</I>, <I>z</I>+<I>c</I>), and leaves the current graphics
+position at (<I>x</I>+<I>a</I>, <I>y</I>+<I>b</I>, <I>z</I>+<I>c</I>).</P>
+
+
+<P><A NAME="A3C0E52C506mhay"></A>The following table is a complete list
+of the relative line subroutines. </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="3"><B>Relative Line Subroutines</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Parameter type</B> </TD>
+
+
+<TD><B>2-D</B> </TD>
+
+
+<TD><B>3-D</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>short integer </TD>
+
+
+<TD><B>rmv2s</B> </TD>
+
+
+<TD><B>rmvs</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>long integer </TD>
+
+
+<TD><B>rmv2i</B> </TD>
+
+
+<TD><B>rmvi</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>floating point </TD>
+
+
+<TD><B>rmv2</B> </TD>
+
+
+<TD><B>rmv</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>short integer </TD>
+
+
+<TD><B>rdr2s</B> </TD>
+
+
+<TD><B>rdrs</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>long integer </TD>
+
+
+<TD><B>rdr2i</B> </TD>
+
+
+<TD><B>rdri</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>floating point </TD>
+
+
+<TD><B>rdr2</B> </TD>
+
+
+<TD><B>rdr</B> </TD></TR></TABLE>
+
+
+<P><A NAME="A3C0E52C534mhay"></A>The following program draws a blue box
+identical to the blue box drawn by the previous example program. But this
+time, the program uses relative drawing subroutines. </P>
+
+
+<PRE><A NAME="A11C0b143"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A11C0b144"></A>main()
+{</PRE>
+
+
+<PRE><A NAME="A11C0b146"></A>&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;500,&nbsp;100,&nbsp;500);
+&nbsp;&nbsp;&nbsp;winopen(&quot;bluebox2&quot;);
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(BLUE);
+&nbsp;&nbsp;&nbsp;move2i(200,&nbsp;200);
+&nbsp;&nbsp;&nbsp;rdr2i(0,&nbsp;100);
+&nbsp;&nbsp;&nbsp;rdr2i(100,&nbsp;0);
+&nbsp;&nbsp;&nbsp;rdr2i(0,&nbsp;-100);
+&nbsp;&nbsp;&nbsp;rdr2i(-100,&nbsp;0);
+&nbsp;&nbsp;&nbsp;sleep(3);
+}</PRE>
+
+
+<BLOCKQUOTE><P><A NAME="A11C0b152"></A><B>Note: </B>The first subroutine is still <B><!--:libs:gl32tref:--><A HREF="../gl32tref/move.html#pofmarj">move2i</A></B>;
+this initializes the current graphics position. If another box were to
+be drawn starting 200 units to the right of the first, it might begin with
+<B>rmv2i</B>(200, 0). </P></BLOCKQUOTE>
+
+
+<H3><A NAME="A11C0b153"></A>Polygons and Relative Polygons<A NAME="INDEX127"></A>
+<A NAME="INDEX128"></A> <A NAME="INDEX129"></A> <A NAME="INDEX130"></A>
+<A NAME="INDEX131"></A> <A NAME="INDEX132"></A> <A NAME="INDEX133"></A>
+<A NAME="INDEX134"></A> <A NAME="INDEX135"></A> <A NAME="INDEX136"></A>
+<A NAME="INDEX137"></A> <A NAME="INDEX138"></A> <A NAME="INDEX139"></A>
+<A NAME="INDEX140"></A> <A NAME="INDEX141"></A> </H3>
+
+
+<P><A NAME="A3C0E52C565mhay"></A>GL provides subroutines to draw filled
+polygons and relative versions of filled polygons. </P>
+
+
+<H4><A NAME="A11C0b155"></A>Filled Polygon Subroutines </H4>
+
+
+<P><A NAME="A3C0E52C593mhay"></A>The move-draw style subroutines that draw
+filled polygons are the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pmv.html#A139X91eed">pmv</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pdr.html#bqf1c0marj">pdr</A></B>
+subroutines. The following table is a complete list of the filled polygon
+subroutines. </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="3"><B>Filled Polygon Subroutines</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Parameter type</B> </TD>
+
+
+<TD><B>2-D</B> </TD>
+
+
+<TD><B>3-D</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>short integer </TD>
+
+
+<TD><B>pmv2s</B> </TD>
+
+
+<TD><B>pmvs</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>long integer </TD>
+
+
+<TD><B>pmv2i</B> </TD>
+
+
+<TD><B>pmvi</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>floating point </TD>
+
+
+<TD><B>pmv2</B> </TD>
+
+
+<TD><B>pmv</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>short integer </TD>
+
+
+<TD><B>pdr2s</B> </TD>
+
+
+<TD><B>pdrs</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>long integer </TD>
+
+
+<TD><B>pdr2i</B> </TD>
+
+
+<TD><B>pdri</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>floating point </TD>
+
+
+<TD><B>pdr2</B> </TD>
+
+
+<TD><B>pdr</B> </TD></TR></TABLE>
+
+
+<P><A NAME="A3C0E52C621mhay"></A>The syntax for the <B>pmv</B> and <B>pdr</B>
+subroutines is as follows: </P>
+
+
+<PRE><A NAME="A258C01c1be"></A>void&nbsp;pmv(Coord&nbsp;x,&nbsp;Coord&nbsp;y,&nbsp;Coord&nbsp;z)&nbsp;</PRE>
+
+
+<PRE><A NAME="A258C01c1bf"></A>void&nbsp;pdr(Coord&nbsp;x,&nbsp;Coord&nbsp;y,&nbsp;Coord&nbsp;z)&nbsp;</PRE>
+
+
+<H4><A NAME="A11C0b15d"></A>Relative Filled Polygon Subroutines </H4>
+
+
+<P><A NAME="A3C0E52C650mhay"></A>The relative versions of the filled polygon
+routines are shown in the following table: </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="3"><B>Relative Filled Polygon Routines</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Parameter type</B> </TD>
+
+
+<TD><B>2-D</B> </TD>
+
+
+<TD><B>3-D</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>short integer </TD>
+
+
+<TD><B>rpmv2s</B> </TD>
+
+
+<TD><B>rpmvs</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>long integer </TD>
+
+
+<TD><B>rpmv2i</B> </TD>
+
+
+<TD><B>rpmvi</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>floating point </TD>
+
+
+<TD><B>rpmv2</B> </TD>
+
+
+<TD><B>rpmv</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>short integer </TD>
+
+
+<TD><B>rpdr2s</B> </TD>
+
+
+<TD><B>rpdrs</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>long integer </TD>
+
+
+<TD><B>rpdr2i</B> </TD>
+
+
+<TD><B>rpdri</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>floating point </TD>
+
+
+<TD><B>rpdr2</B> </TD>
+
+
+<TD><B>rpdr</B> </TD></TR></TABLE>
+
+
+<P><A NAME="A3C0E52C677mhay"></A>The syntax for the <B>rpmv</B> and <B>rpdr</B>
+subroutines is as follows: </P>
+
+
+<PRE><A NAME="A258C01c1c1"></A>void&nbsp;rpmv(Coord&nbsp;x,&nbsp;Coord&nbsp;y,&nbsp;Coord&nbsp;z)&nbsp;</PRE>
+
+
+<PRE><A NAME="A258C01c1c2"></A>void&nbsp;rpdr(Coord&nbsp;x,&nbsp;Coord&nbsp;y,&nbsp;Coord&nbsp;z)&nbsp;</PRE>
+
+
+<P><A NAME="A3C0E52C704mhay"></A>A polygon is specified by the following
+sequence of calls: </P>
+
+
+<OL><LI><A NAME="A258C01c1c4"></A>A <B>pmv</B> subroutine (or <B>rpmv</B> subroutine)
+to locate the first point on the boundary</LI>
+
+
+<LI><A NAME="A258C01c1c5"></A>A sequence of <B>pdr</B> (or <B>rpdr</B>)
+subroutines for each additional vertex</LI>
+
+
+<LI><A NAME="A258C01c1c6"></A>The <B>pclos</B> subroutine to close and
+fill the polygon.</LI></OL>
+
+
+<P><A NAME="A3C0E52C731mhay"></A>The <B>pclos</B> subroutine has no parameters
+All the other subroutines take either two or three parameters of the appropriate
+type. </P>
+
+
+<P><A NAME="A3C0E52C755mhay"></A>After any polygon subroutine, the current
+graphics position is left at the original point of the polygon, the point
+identified by the <B>pmv</B> (or <B>rpmv</B>) subroutine. </P>
+
+
+<P><A NAME="A3C0E52C779mhay"></A>The following sample program draws a filled
+blue polygon: </P>
+
+
+<PRE><A NAME="A11C0b161"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A11C0b162"></A>main()
+{</PRE>
+
+
+<PRE><A NAME="A11C0b164"></A>&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;500,&nbsp;100,&nbsp;500);
+&nbsp;&nbsp;&nbsp;winopen(&quot;bluebox&quot;);
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(BLUE);
+&nbsp;&nbsp;&nbsp;pmv2i(200,&nbsp;200);
+&nbsp;&nbsp;&nbsp;pdr2i(200,&nbsp;300);
+&nbsp;&nbsp;&nbsp;pdr2i(300,&nbsp;300);
+&nbsp;&nbsp;&nbsp;pdr2i(300,&nbsp;200);
+&nbsp;&nbsp;&nbsp;pclos();
+&nbsp;&nbsp;&nbsp;sleep(3);
+}</PRE>
+
+
+<BLOCKQUOTE><P><A NAME="A11C0b170"></A><B>Note: </B>The <B>pclos</B> subroutine connects
+back to the original starting point. </P></BLOCKQUOTE>
+
+
+
+
+<P><A NAME="A3C0E52C808mhay"></A>Other drawing methods are explained in
+<A HREF="drawbeg-end.html">Drawing with Begin-End Style Subroutines</A>and <A HREF="drawpoly.html#drawpoly.html">Drawing Rectangles, Circles,
+Arcs, and Polygons</A>. </P>
+
+
+
+
+<hr><center>
+[  <a href="drawbeg-end.html">Previous</a>  |
+<a href="setglattrib.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/move-draw.html Mon, 24 Jan 2022 16:27:51 GMT -->
+</HTML>
+

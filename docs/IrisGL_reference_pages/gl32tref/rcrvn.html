@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>rcrvn Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="rcrv.html">Previous</a>  |
+<a href="rdr.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A1TS2220marj"></A>rcrvn Subroutine</H2>
+<A NAME="INDEX1552" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1553" REL="I2" TITLE="wire frame curve and surface patch"></A>
+<A NAME="INDEX1554" REL="I3" TITLE="rcrvn"></A>
+<A NAME="INDEX1555" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1556" REL="I2" TITLE="cubic spline curve segments"></A>
+<A NAME="INDEX1557" REL="I3" TITLE="rational"></A>
+<A NAME="INDEX1558" REL="I1" TITLE="rcrvn subroutine (GL)"></A>
+
+<H3><A NAME="A213X91109f"></A>Purpose</H3>
+<P><A NAME="E1D72A9975ceb"></A>Draws a series of rational curve segments.</P>
+
+<H3><A NAME="A78C1139"></A>Libraries</H3>
+<P><A NAME="E1D72AA014ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D72AA038ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X9110a2"></A>C Syntax</H3>
+<PRE><A NAME="A213X9110a3"></A><B>void rcrvn(Int32 </B><A HREF="rcrvn.html#L1j2290marj"><I>n</I></A><B>, Coord </B><A HREF="rcrvn.html#Z1j23b0marj"><I>geom</I></A><B> [&nbsp;][4]) </B></PRE>
+
+<H3><A NAME="A213X911080"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X911083"></A><B>SUBROUTINE RCRVN(</B><I>n</I><B>,</B><I> geom</I><B>)</B>
+<B>INTEGER*4 </B><I>n</I>
+<B>REAL </B><I>geom</I><B>(4,</B><I>n</I><B>)</B></PRE>
+
+<H3><A NAME="A213X9110a6"></A>Description</H3>
+<P><A NAME="E1D72AA151ceb"></A>The <B>rcrvn</B> subroutine draws a series of rational 
+cubic spline curve segments using the current basis and precision. </P>
+
+<P><A NAME="E1D72AA177ceb"></A>The control points specified in the <A HREF="rcrvn.html#Z1j23b0marj"><I>geom</I></A> parameter determine the shapes of the curve segments and are used four at a time. The <A HREF="rcrvn.html#L1j2290marj"><I>n</I></A> parameter specifies the number of 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e7">control points</A> to be used in drawing the curve. For example, if <I>n </I>is 6, three curve segments are drawn: </P>
+
+<OL><LI><A NAME="A213X9110a9"></A>Using points 0,1,2,3 as control points.</LI>
+
+<LI><A NAME="A213X9110aa"></A>Using points 1,2,3,4 as control points.</LI>
+
+<LI><A NAME="A213X9110ab"></A>Using points 2,3,4,5 as control points.</LI></OL>
+
+<P><A NAME="E1D72AA265ceb"></A>If the current basis is a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A150P1959">B-spline</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03de">Cardinal spline</A>, or 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03be">basis</A> with similar properties, the curve segments are joined end to end and appear as a single curve.</P>
+
+<H3><A NAME="A213X9110ad"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="L1j2290marj"></A><I>n</I> </TD>
+<TD>  Specifies the number of control points to be used in drawing the curve.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Z1j23b0marj"></A><I>geom</I> </TD>
+<TD>  Specifies the matrix containing the control points of the curve segments.</TD></TR></TABLE>
+
+<H3><A NAME="A64C016592"></A>Implementation Specifics</H3>
+<P><A NAME="E1D72AA363ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C113c"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C113d"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C113e"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X9110b3"></A>Related Information</H3>
+<P><A NAME="E1D72AA461ceb"></A>Drawing a cubic spline curve with the <A HREF="crv.html#ZMS220marj"><B>crv</B></A> subroutine.</P>
+
+<P><A NAME="E1D72AA486ceb"></A>Drawing a series of curve segments with the <A HREF="crvn.html#ESS22c0marj"><B>crvn</B></A> subroutine.</P>
+
+<P><A NAME="E1D72AA512ceb"></A>Setting the current cubic spline curve basis matrix with the <A HREF="curvebasis.html#sTS23a0marj"><B>curvebasis</B></A> subroutine.</P>
+
+<P><A NAME="E1D72AA537ceb"></A>Setting the number of line segments that compose a cubic spline curve with the <A HREF="curveprecision.html#aUS2120marj"><B>curveprecision</B></A> subroutine.</P>
+
+<P><A NAME="E1D72AA563ceb"></A>Defining a cubic spline basis matrix with the <A HREF="defbasis.html#A150X930"><B>defbasis</B></A> subroutine.</P>
+
+<P><A NAME="E1D72AA588ceb"></A>Drawing a rational curve with the <A HREF="rcrv.html#WRS2380marj"><B>rcrv</B></A> subroutine.</P>
+
+<P><A NAME="E1D72AA615ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">NURBS Curves and Surfaces</A>, and Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#drawwfcvs.html">Wire Frame Curves and Surface Patches</A>.</P><hr><center>
+[  <a href="rcrv.html">Previous</a>  |
+<a href="rdr.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

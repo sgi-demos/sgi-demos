@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>rectread or lrectread Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="rectf.html">Previous</a>  |
+<a href="rectwrite.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9c7c"></A>rectread or lrectread Subroutine</H2>
+<A NAME="INDEX1608" REL="I1" TITLE="rectread subroutine (GL)"></A>
+<A NAME="INDEX1609" REL="I1" TITLE="lrectread subroutine (GL)"></A>
+<A NAME="INDEX1610" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1611" REL="I2" TITLE="pixel block transfer"></A>
+<A NAME="INDEX1612" REL="I3" TITLE="reading rectangular pixel array to host memory"></A>
+<A NAME="INDEX1613" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1614" REL="I2" TITLE="pixel block transfer"></A>
+<A NAME="INDEX1615" REL="I3" TITLE="rectread"></A>
+<A NAME="INDEX1616" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1617" REL="I2" TITLE="pixel block transfer"></A>
+<A NAME="INDEX1618" REL="I3" TITLE="lrectread"></A>
+
+<H3><A NAME="A213X91203e"></A>Purpose</H3>
+<P><A NAME="E1D731E497ceb"></A>Reads a rectangular array of pixels into host memory.</P>
+
+<H3><A NAME="A79C1dd"></A>Libraries</H3>
+<P><A NAME="E1D731E537ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D731E563ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912041"></A>C Syntax</H3>
+<PRE><A NAME="A213X912042"></A><B>Int32 rectread</B>
+<B>(Screencoord </B><A HREF="rectread.html#d5P2150marj"><I>xll</I></A><B>, Screencoord </B><A HREF="rectread.html#o5P230marj"><I>yll</I></A><B>,</B>
+<B>Screencoord </B><A HREF="rectread.html#I8P210marj"><I>xur</I></A><B>, Screencoord </B><A HREF="rectread.html#U8P2330marj"><I>yur</I></A><B>,</B>
+<B>Int16 *</B><A HREF="rectread.html#A139X91ee9"><I>parray</I></A><B>)</B></PRE>
+<PRE><A NAME="A213X912043"></A><B>Int32 lrectread</B>
+<B>(Screencoord </B><A HREF="rectread.html#d5P2150marj"><I>xll</I></A><B>, Screencoord </B><A HREF="rectread.html#o5P230marj"><I>yll</I></A><B>,</B>
+<B>Screencoord </B><A HREF="rectread.html#I8P210marj"><I>xur</I></A><B>, Screencoord </B><A HREF="rectread.html#U8P2330marj"><I>yur</I></A><B>,</B>
+<B>Int32 *</B><A HREF="rectread.html#A139X91ee9"><I>parray</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010b17"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010b18"></A><B>INTEGER*4 RECTRE(</B><I>xll</I><B>, </B><I>yll</I><B>, </B><I>xur</I><B>, </B><I>yur</I><B>, </B><I>parray</I><B>)</B>
+<B>INTEGER*4 </B><I>xll</I><B>, </B><I>yll</I><B>,</B><I> xur</I><B>, </B><I>yur</I>
+<B>INTEGER*2 </B><I>parray</I><B>(1)</B></PRE>
+<PRE><A NAME="A29C010b19"></A><B>INTEGER*4 LRECTR(</B><I>xll</I><B>, </B><I>yll</I><B>, </B><I>xur</I><B>, </B><I>yur</I><B>, </B><I>parray</I><B>)</B>
+<B>INTEGER*4 </B><I>xll</I><B>,</B><I> yll</I><B>,</B><I> xur</I><B>,</B><I> yur</I><B>, </B><I>parray</I><B>(1)</B></PRE>
+
+<BLOCKQUOTE><A NAME="A79C1e0"></A><B>Note: </B>For FORTRAN users, these subroutines accept long integer parameters (INTEGER*4) when started from a FORTRAN program, although they accept short integers when started from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912047"></A>Description</H3>
+<P><A NAME="E1D731E773ceb"></A>The <B>rectread</B> and <B>lrectread </B>subroutines each return a rectangular array of 16- and 32-bit pixels, respectively, to the host array specified in the <A HREF="rectread.html#A139X91ee9"><I>parray</I></A> parameter. For the <B>lrectread</B> subroutine, the <I>parray</I> parameter contains 32-bit packed RGB, RGBA, or <I>z</I> values. The returned value of this function is the number of pixels that the system actually reads, left to right, then bottom to top. The returned function value is 0 (zero) if any part of the specified rectangle is off the screen. </P>
+
+<P><A NAME="E1D731E799ceb"></A>The returned data is undefined if the <A HREF="rectread.html#d5P2150marj"><I>xll</I></A> and <A HREF="rectread.html#o5P230marj"><I>yll</I></A> parameters do not specify the lower-left corner of a rectangle that appears completely on the screen. All coordinates are relative to the lower left corner of the window and not to the screen or 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A>.</P>
+
+<P><A NAME="E1D731E826ceb"></A>When performing operations with the <B>lrectread</B> subroutine on the POWER Gt4 and POWER Gt4x in RGBmode with a specified pixel size of 32, pixels are returned with one 24-bit pixel packed in a 32-bit word. The high-order byte (the A byte) is set to the value 0xff.</P>
+
+<P><A NAME="E1D731E851ceb"></A>The <A HREF="readsource.html#A142X9cc0"><B>readsource</B></A> subroutine specifies the pixel source from which the pixels are read. </P>
+
+<P><A NAME="E1D731E877ceb"></A>The behavior of the <B>lrectread</B> subroutine is modified by the attributes set with the <B>pixmode </B>subroutine. Please refer to the <A HREF="pixmode.html#bav30marj"><B>pixmode</B></A> subroutine for more detail.</P>
+
+<OL><LI><A NAME="A213X91204b"></A>Both the <B>rectread</B> and <B>lrectread</B> subroutines leave the current character position unpredictable.</LI>
+
+<LI><A NAME="A79C1e1"></A>Do not put the pixel array on the 
+stack. Allocate the memory space for the pixel array dynamically, by using the <!--:libs:basetrf1:--><A HREF="../basetrf1/malloc.html#A174921e"><B>malloc</B></A> or <B>calloc</B> command (that is, place it on the heap), or specify it as a 
+static variable. Do not specify the pixel array memory space as a block 
+scope variable.</LI>
+
+<LI><A NAME="A318C9dbf"></A>These subroutines cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI></OL>
+
+<H3><A NAME="A213X91204d"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="d5P2150marj"></A><I>xll </I></TD>
+<TD>  Specifies the <I>x </I>coordinate of the lower-left corner of the rectangle to be read.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="o5P230marj"></A><I>yll </I></TD>
+<TD>  Specifies the <I>y</I> coordinate of the lower-left corner of the rectangle to be read.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="I8P210marj"></A><I>xur </I></TD>
+<TD>  Specifies the <I>x </I>coordinate of the upper-right corner of the rectangle to be read.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="U8P2330marj"></A><I>yur </I></TD>
+<TD>  Specifies the <I>y</I> coordinate of the upper-right corner of the rectangle to be read.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A139X91ee9"></A><I>parray</I> </TD>
+<TD>  Specifies the array to receive the pixels that are read. The returned data in the<I> parray </I>parameter are undefined if the <A HREF="rectread.html#d5P2150marj"><I>xll</I></A> and <A HREF="rectread.html#o5P230marj"><I>yll</I></A> parameters do not specify the lower-left corner of a rectangle that appears completely on the screen.</TD></TR></TABLE>
+
+<P><A NAME="E1D731F089ceb"></A>All coordinates are relative to the lower-left corner of the window and not to the screen or viewport.</P>
+
+<H3><A NAME="A213X912050"></A>Return Value</H3>
+<P><A NAME="E1D731F131ceb"></A>The returned value of this function is the number of pixels that the system actually reads. The returned function value is 0 (zero) if any part of the specified rectangle is off the screen.</P>
+
+<P><A NAME="E1D731F157ceb"></A>On the POWER GXT1000 adapter, the returned value of this function is always the width&nbsp;times&nbsp;height of the specified rectangle, or (<I>xur&nbsp;</I>-&nbsp;<I>xll</I>)(<I>yur&nbsp;</I>-&nbsp;<I>yll</I>).</P>
+
+
+<H3><A NAME="A30C011006"></A>Example</H3>
+<P><A NAME="E1D731F214ceb"></A>The example C language program <A HREF="paint_c.html#A13C0bd84"><B>paint.c</B></A> uses the <B>rectread</B> subroutine to get the color index value for a single pixel. </P>
+
+<H3><A NAME="A61C0159b5"></A>Implementation Specifics</H3>
+<P><A NAME="E1D731F258ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C1e2"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1e3"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1e4"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X91205d"></A>Related Information</H3>
+<P><A NAME="E1D731F354ceb"></A>Specifying the source for pixels to be read with the <A HREF="readsource.html#A142X9cc0"><B>readsource</B></A> subroutine.</P>
+
+<P><A NAME="E1D731F380ceb"></A>Controlling the transfer of pixels with the <A HREF="pixmode.html#bav30marj"><B>pixmode</B></A> subroutine.</P>
+
+<P><A NAME="E1D731F405ceb"></A>Copying a rectangle of pixels with an optional zoom with the <A HREF="rectcopy.html#A142X9d04"><B>rectcopy</B></A> subroutine.</P>
+
+<P><A NAME="E1D731F432ceb"></A>Drawing a rectangular array of pixels into the frame buffer with the <A HREF="rectwrite.html#A142X9c9e"><B>rectwrite </B>or <B>lrectwrite</B></A> subroutine.</P>
+
+<P><A NAME="E1D731F458ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Reading and Writing <!--gl32prgd:--><A HREF="../gl32prgd/rwpixels.html#rwpixels.html">Pixels</A>, 
+Using <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Viewports and Screenmasks</A>, 
+and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="rectf.html">Previous</a>  |
+<a href="rectwrite.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

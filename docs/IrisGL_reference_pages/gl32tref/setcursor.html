@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>setcursor Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="setbell.html">Previous</a>  |
+<a href="setdblights.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="ZR1nita"></A>setcursor Subroutine</H2>
+<A NAME="INDEX1765" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1766" REL="I2" TITLE="cursor"></A>
+<A NAME="INDEX1767" REL="I3" TITLE="setcursor"></A>
+<A NAME="INDEX1768" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1769" REL="I2" TITLE="cursor"></A>
+<A NAME="INDEX1770" REL="I3" TITLE="setting characteristics"></A>
+<A NAME="INDEX1771" REL="I1" TITLE="setcursor subroutine (GL)"></A>
+
+<H3><A NAME="A213X910e98"></A>Purpose</H3>
+<P><A NAME="E1D7448479ceb"></A>Sets the cursor characteristics.</P>
+
+<H3><A NAME="A78C1e5"></A>Libraries</H3>
+<P><A NAME="E1D7448518ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7448542ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X910e9b"></A>C Syntax</H3>
+<PRE><A NAME="A213X910e9c"></A><B>void setcursor</B>
+<B>(Int16 </B><A HREF="setcursor.html#Au32c0nita"><I>index</I></A><B>,</B> <B>Colorindex</B> <A HREF="setcursor.html#Tu3280nita"><I>color</I></A><B>,</B> <B>Colorindex</B> <A HREF="setcursor.html#ku3280nita"><I> writemask</I></A><B>)</B></PRE>
+
+<H3>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X910e7a"></A><B>SUBROUTINE SETCUR(</B><I>index</I><B>,</B><I> color</I><B>, </B><I>writemask</I><B>)</B>
+<B>INTEGER*4 </B><I>index</I><B>,</B> <I>color</I><B>,</B> <I>writemask</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C1e8"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X910e9f"></A>Description</H3>
+<P><A NAME="E1D7448675ceb"></A>The <B>setcursor</B> subroutine selects a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A263A93ae">cursor</A> from among those defined with the <A HREF="defcursor.html#A150X9444"><B>defcursor</B></A> subroutine. To set the color for the cursor, use the <A HREF="mapcolor.html#A146X9535"><B>mapcolor</B></A> and <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutines.</P>
+
+<BLOCKQUOTE><A NAME="A318C9cd4"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X910ea2"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Au32c0nita"></A><I>index</I></TD>
+<TD>  Specifies an index that was previously associated with a bitmap by the <A HREF="defcursor.html#A150X9444"><B>defcursor</B></A> subroutine.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Tu3280nita"></A><I>color</I></TD>
+<TD>  Retained for compatibility, but disregarded.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="ku3280nita"></A><I>writemask</I></TD>
+<TD>  Retained for compatibility, but disregarded.</TD></TR></TABLE>
+
+<H3><A NAME="A64C016572"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7448811ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1e9"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1ea"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1eb"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X910eae"></A>Related Information</H3>
+<P><A NAME="E1D7448908ceb"></A>Setting the origin of a cursor with the <A HREF="curorigin.html#A150X9398"><B>curorigin</B></A> subroutine.</P>
+
+<P><A NAME="E1D7448934ceb"></A>Controlling cursor visibility by window with the <A HREF="curson.html#ru1280nita"><B>curson</B> or <B>cursoff</B></A> subroutine.</P>
+
+<P><A NAME="E1D7448959ceb"></A>Defining the type and size of a cursor with the <A HREF="curstype.html#A150X93ee"><B>curstype</B></A> subroutine.</P>
+
+<P><A NAME="E1D7448985ceb"></A>Defining a cursor with the <A HREF="defcursor.html#A150X9444"><B>defcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1D7449010ceb"></A>Setting the drawing mode to CURSORDRAW with the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine. </P>
+
+<P><A NAME="E1D7449036ceb"></A>Returning the cursor characteristics with the <A HREF="getcursor.html#sP1160nita"><B>getcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1D7449061ceb"></A>Changing a color map entry with the <A HREF="mapcolor.html#A146X9535"><B>mapcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1D7449087ceb"></A>Putting the system in picking mode with the <A HREF="pick.html#h632f0nita"><B>pick</B></A> subroutine.</P>
+
+<P><A NAME="E1D7449113ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/cursorgl.html#cursorgl.html">Creating a Cursor</A>, and Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="setbell.html">Previous</a>  |
+<a href="setdblights.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

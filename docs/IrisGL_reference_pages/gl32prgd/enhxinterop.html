@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/enhxinterop.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE> Enhanced X-Windows and GL Interoperability
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="enhxwndrestr.html">Previous</a>  |
+<a href="portabilty.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="enhxinterop.html"></A>Enhanced X-Windows and GL Interoperability</H2>
+
+
+<P><A NAME="A3C0F00B255mhay"></A>This section describes the interoperability
+between GL applications and Enhanced X-Windows and discussing interoperability
+issues such as queue handling and synchronization. The interoperability
+topics discussed in this section are as follows: </P>
+
+
+<UL><LI><A NAME="A71A2E1826csol"></A><A HREF="enhxinterop.html#f2ASg12fcsol">Mapping
+and Unmapping GL Windows</A></LI>
+
+
+<LI><A NAME="A71A2E2284csol"></A><A HREF="enhxinterop.html#iO8Sg147csol">Integration
+of GL and Enhanced X-Windows</A></LI>
+
+
+<LI><A NAME="A71A2E2494csol"></A><A HREF="enhxinterop.html#ee8Sg148csol">Maintaining
+Synchronization</A></LI>
+
+
+<LI><A NAME="BC7BC7A192vbia"></A><A HREF="enhxinterop.html#A6C855E724vbia">X11
+Header File Collision with the /usr/include/gl/gl.h File</A></LI></UL>
+
+
+<H3><A NAME="f2ASg12fcsol"></A>Mapping and Unmapping GL Windows </H3>
+
+
+<P><A NAME="A3C0F00B381mhay"></A>The mapping of GL windows can be deferred
+by creating them using a <B>noport</B>; <B>winopen</B>; subroutine combination.
+The <B>mapwin.c</B> example program illustrates this usage. However, the
+following warning applies: </P>
+
+
+<BLOCKQUOTE><P><A NAME="A71A2E3533csol"></A><B>Attention: </B>One should NEVER draw
+into a recently mapped window until after a REDRAW (MapNotify) event has
+been received for that window. For a window to be ready for GL rendering,
+it must not only be mapped, but the X server must complete a number of
+internal computations. After the X server has properly set up the window,
+it will generate a REDRAW (MapNotify) event for that window. Any drawing
+done prior to the receipt of the REDRAW event will result in a race condition:
+drawing orders may be lost or ignored, or other unrelated unpredictable
+behaviors may result (such as the inconsistent placement of the mapped
+window). Invoking XSync is NOT sufficient to guarantee that the X server
+has completed mapping the window. </P></BLOCKQUOTE>
+
+
+<H3><A NAME="iO8Sg147csol"></A>Integration of GL and Enhanced X-Windows</H3>
+
+
+<P><A NAME="A3C0F00B442mhay"></A>By default, there is no guaranteed synchronization
+between actions performed through the Enhanced X-Windows programming interface
+(hereafter termed X) and the GL programming interface. In particular, there
+is no guarantee that drawing done with X and drawing done with GL will
+appear on the screen in the same order as performed by the application.</P>
+
+
+<P><A NAME="A3C0F00B512mhay"></A>The underlying reason for this asynchronous
+behavior is the differing GL and X drawing models. The X server does all
+X drawing, and much of the rest of X processing. The processing does not
+actually occur until the X server is scheduled to run by the operating
+system; in the meantime, work requests are queued up. In contrast, all
+GL drawing subroutines send drawing orders to the graphics adapter directly;
+the adapter, in turn, renders as fast as possible. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A71A2E6426csol"></A><B>Note: </B>For some harware systems,
+there is no synchronization of drawing across GL windows resulting in asynchronous
+windows input. </P></BLOCKQUOTE>
+
+
+<P><A NAME="A3C0F00B564mhay"></A>Synchronization of X and GL drawing can
+be re-established by using the <B>finish</B> subroutine and the <B>XSync</B>
+subroutine. The <B>finish</B> subroutine will block (will not return) until
+all GL primitives have been rendered. The <B>XSync</B> subroutine flush
+the X display connection. </P>
+
+
+<P><A NAME="A3C0F00B604mhay"></A>Use of the <B>XSync</B> subroutine does
+not guarantee that all X drawing is complete; it only guarantees that the
+Windows Server has received all generated Windows protocol packets. The
+Windows Server and/or adapter can still be in the process of rendering
+when the <B>XSync</B> subroutine returns. Since the latency between the
+Windows Server's receipt of a protocol packet and the completion of rendering
+to the screen is almost never more than a few milliseconds, this latency
+should normally not be noticeable. </P>
+
+
+<H3><A NAME="ee8Sg148csol"></A>Maintaining Synchronization </H3>
+
+
+<P><A NAME="A3C0F00B736mhay"></A>On the POWER Gt4 and the POWER Gt4x adapters,
+there is no guarantee that drawing is synchronized between different windows
+belonging to the same process. That is, a line drawn in one window may
+appear on the screen before a polygon is drawn in another window, even
+though the application made the subroutine call to draw the polygon before
+the subroutine call to draw the line. This de-synchronization occurs because
+a separate FIFO (first-in, first-out queue) is maintained for every window.
+All drawing commands are placed as tokens into the FIFOs. The graphics
+hardware has been designed to service the FIFOs in a round-robin fashion;
+the hardware does not necessarily drain one FIFO before moving on to the
+next. As a result, tokens in one FIFO may be processed before tokens in
+another, even though they were placed in the FIFO at a later time. </P>
+
+
+<P><A NAME="A3C0F00B777mhay"></A>In most cases, the synchronization jitter
+should be on the order of milliseconds, or less, and should therefore be
+visually unobservable. If it is absolutely vital to re-establish synchronization,
+the <B>finish</B> subroutine can be used. The<B> finish </B>subroutine
+blocks (does not return to the calling application) until all buffers/FIFOs
+associated with the current window have been drained. The <B>finish</B>
+subroutine guarantees, in effect, that all drawing sent to a window has
+appeared on the screen. </P>
+
+
+<H3><A NAME="A6C855E724vbia"></A>X11 Header File Collision with the /user/include/gl/gl.h
+File </H3>
+
+
+<P><A NAME="A3C0F00B832mhay"></A>The <B>/user/include/gl/gl.h</B> file
+contains three typedefs that collide with X11 Toolkit Header files. These
+typedefs are as follows: </P>
+
+
+<UL><LI><A NAME="A6C855F067vbia"></A>typedef long Boolean;</LI>
+
+
+<LI><A NAME="A6C855F218vbia"></A>typedef long Object;</LI>
+
+
+<LI><A NAME="A6C855F369vbia"></A>typedef char *String;</LI></UL>
+
+
+<P><A NAME="A3C0F00B878mhay"></A>To avoid this collision, adhere to following
+directions: </P>
+
+
+<UL><LI><A NAME="A6C855F700vbia"></A>Do not use these GL types in any source
+file that includes X11 code.</LI>
+
+
+<LI><A NAME="A6C855F866vbia"></A>Include all X11 header files before including
+any GL header file.</LI></UL>
+
+
+<P><A NAME="A3C0F00B930mhay"></A>By doing this, the X11 types will hold,
+and the GL types will be undefined. </P>
+
+
+<P><A NAME="A3C0F00B970mhay"></A>These three typedefs were in the <B>/usr/include/gai/g3dm2types.h</B>
+file and have been moved to the <B>/usr/include/gl/gl.h</B> file. </P>
+
+
+<P><A NAME="A3C0F00C010mhay"></A>The typedefs Boolean and String were colliding
+with similiar typedefs in the <B>/usr/include/X11/Intrinsic.h</B> file
+while Object collided with a structure definition in the <B>/usr/include/X11/Object.h</B>
+file. The following was placed in <B>/usr/include/gl/gl.h</B> file to alleviate
+the type collisions. </P>
+
+
+<P><A NAME="A3C0F00C048mhay"></A>#ifndef _XtIntrinsic_h </P>
+
+
+<P><A NAME="A3C0F00C158mhay"></A>typedef long Boolean; </P>
+
+
+<P><A NAME="A3C0F00C206mhay"></A>typedef char *String; </P>
+
+
+<P><A NAME="A3C0F00C230mhay"></A>#endif </P>
+
+
+<P><A NAME="A3C0F00C292mhay"></A>#ifndef _XtObject_h </P>
+
+
+<P><A NAME="A3C0F00C351mhay"></A>typedef long Object; </P>
+
+
+<P><A NAME="A3C0F00C391mhay"></A>#endif </P>
+
+
+<P><A NAME="A3C0F00C514mhay"></A>This scenario requires that any include
+of XToolkit header files must occur before any include of <B>/usr/include/gl/gl.h</B>
+file. While using mixed mode programming the X11 types are the only valid
+types. </P>
+
+
+
+
+<hr><center>
+[  <a href="enhxwndrestr.html">Previous</a>  |
+<a href="portabilty.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/enhxinterop.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+

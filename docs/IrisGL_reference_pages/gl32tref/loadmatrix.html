@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>loadmatrix Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="lmdef.html">Previous</a>  |
+<a href="loadname.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X9430"></A>loadmatrix Subroutine</H2>
+<A NAME="INDEX1059" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1060" REL="I2" TITLE="coordinate transformation"></A>
+<A NAME="INDEX1061" REL="I3" TITLE="loadmatrix"></A>
+<A NAME="INDEX1062" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1063" REL="I2" TITLE="matrix"></A>
+<A NAME="INDEX1064" REL="I3" TITLE="transformation"></A>
+<A NAME="INDEX1065" REL="I1" TITLE="loadmatrix subroutine (GL)"></A>
+
+<H3><A NAME="A144X9432"></A>Purpose</H3>
+<P><A NAME="E1B1618063ceb"></A>Loads a transformation matrix.</P>
+
+<H3><A NAME="A78C179"></A>Libraries</H3>
+<P><A NAME="E1B1618212ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1618320ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X9436"></A>C Syntax</H3>
+<PRE><A NAME="A144X9437"></A><B>void loadmatrix(Matrix </B><A HREF="loadmatrix.html#A144X943c"><I>matrix</I></A><B>)</B></PRE>
+
+<H3><A NAME="A15C0c6e3"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A15C0c6e4"></A><B>SUBROUTINE LOADMA(</B><I>matrix</I><B>)</B>
+<B>REAL </B><I>matrix</I><B>(4,4)</B></PRE>
+
+<H3><A NAME="A144X9438"></A>Description</H3>
+<P><A NAME="E1B1618738ceb"></A>The <B>loadmatrix</B> subroutine loads a 4x4 floating point matrix onto the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P021">transformation</A> stack, replacing the current top matrix. If the system is in projection matrix mode (<SAMP>mmode(MPROJ);),</SAMP> the projection matrix is replaced.</P>
+
+<P><A NAME="E1B1618851ceb"></A>Be sure to exit projection matrix mode before performing any drawing because drawing is not enabled while in this mode.</P>
+
+<BLOCKQUOTE><A NAME="A258C01c44b"></A><B>Note: </B>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. (See <!--gl32prgd:--><A HREF="../gl32prgd/powerstation730.html#NITAXIO">"Hardware Considerations"</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.) </BLOCKQUOTE>
+
+
+<H3><A NAME="A144X943a"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A144X943c"></A><I>matrix</I></TD>
+<TD>  Specifies the matrix to be loaded onto the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06dd">matrix stack</A>.</TD></TR></TABLE>
+
+<H3><A NAME="A144X9440"></A>Example</H3>
+<P><A NAME="E1B1619171ceb"></A>After changing the matrix mode to <B>MVIEWING</B> with the <A HREF="mmode.html#XhZ2370marj"><B>mmode</B></A> subroutine, the example C language program <A HREF="localatten_c.html#A10C0abc5"><B>localatten.c</B></A> uses the <B>loadmatrix</B> subroutine to load the modelling/viewing matrix with the identity matrix.</P>
+
+<H3><A NAME="A62C015d28"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1619348ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C17c"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C17d"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C17e"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X9450"></A>Related Information</H3>
+<P><A NAME="E1B1619697ceb"></A>Setting the current matrix mode with the <A HREF="mmode.html#XhZ2370marj"><B>mmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B1619805ceb"></A>Getting a copy of the current transformation matrix with the <A HREF="getmatrix.html#A144X940e"><B>getmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1B1619926ceb"></A>Premultiplying the current transformation matrix with the <A HREF="multmatrix.html#A144X9474"><B>multmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1B161A055ceb"></A>Popping the transformation matrix stack with the <A HREF="popmatrix.html#A144X951e"><B>popmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1B161A169ceb"></A>Pushing down the transformation matrix stack with the <A HREF="pushmatrix.html#A144X9540"><B>pushmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1B161A295ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Working with Coordinate Systems</A>.</P><hr><center>
+[  <a href="lmdef.html">Previous</a>  |
+<a href="loadname.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

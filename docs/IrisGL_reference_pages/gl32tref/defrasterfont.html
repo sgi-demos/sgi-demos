@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>defrasterfont Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="defpup.html">Previous</a>  |
+<a href="delobj.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9d3f"></A>defrasterfont Subroutine</H2>
+<A NAME="INDEX403" REL="I1" TITLE="defrasterfont subroutine (GL)"></A>
+<A NAME="INDEX404" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX405" REL="I2" TITLE="text"></A>
+<A NAME="INDEX406" REL="I3" TITLE="defrasterfont"></A>
+<A NAME="INDEX407" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX408" REL="I2" TITLE="text"></A>
+<A NAME="INDEX409" REL="I3" TITLE="defining raster font bitmaps"></A>
+<H3><A NAME="A143X9d41"></A>Purpose</H3>
+<P><A NAME="E1B09B9995ceb"></A>Defines bitmaps for a raster font.</P>
+
+<H3><A NAME="A79C121c"></A>Libraries</H3>
+<P><A NAME="E1B09BA145ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B09BA249ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9d45"></A>C Syntax</H3>
+<PRE><A NAME="A143X9d46"></A><B>void defrasterfont</B>
+<B>(Int32</B> <A HREF="defrasterfont.html#A213X912613"><I>index</I></A><B>, Int16</B> <A HREF="defrasterfont.html#A213X912614"><I>height</I></A><B>, </B>
+<B>Int16</B> <A HREF="defrasterfont.html#A213X912615"><I>numchars</I></A><B>, Fontchar</B> <A HREF="defrasterfont.html#A213X912616"><I>chars</I></A><B> [&nbsp;], </B>
+<B>Int16</B> <A HREF="defrasterfont.html#A213X91261d"><I>numraster</I></A><B>, Int16</B> <A HREF="defrasterfont.html#A213X91261e"><I>raster</I></A><B> [&nbsp;])</B></PRE>
+
+<H3><A NAME="A29C010bf4"></A>FORTRAN Syntax</H3>
+<P><A NAME="E1B09BA519ceb"></A><B>SUBROUTINE DEFRAS(</B><I>index</I><B>,</B> <I>height</I><B>,</B> <I>numchars</I><B>,</B> <I>chars</I><B>,</B> <I>numraster</I><B>,</B> <I>raster</I><B>)</B></P>
+
+<P><B>INTEGER *4 </B><I>index</I><B>,</B><I> height</I><B>,</B> <I>numchars</I><B>,</B> <I>numraster</I></P>
+
+<P><B>INTEGER*2 </B><I>raster</I><B>(</B><I>numraster</I><B>),</B> <I>chars</I><B>(4*</B><I>numchars</I><B>)</B></P>
+
+<BLOCKQUOTE><A NAME="A79C121f"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X9d47"></A>Description</H3>
+<P><A NAME="E1B09BA735ceb"></A>The <B>defrasterfont </B>subroutine defines a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P073b">raster font</A>.</P>
+
+<P><A NAME="E1B09BA844ceb"></A>To replace a raster font, specify the index of the previous font as the index for the new font. To delete a raster font, define a font with no characters. 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791abd">Patterns</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A172P1436">linestyles</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A263A93ae">cursors</A>, and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A270A983b">fonts</A> are available to all windows when using multiple windows. The assumed code set table encoding is 
+locale dependent. In most locales, this is an ISO8859 encoding.</P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A62C015d86"></A>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI>
+
+<LI><A NAME="A62C015d87"></A>The hardest part of creating a new raster font is generating a bitmap for each character. You may want to write a graphically oriented tool for creating the bitmaps expected by the <A HREF="defrasterfont.html#A213X91261e"><I>raster</I></A> parameter.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A143X9d49"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912613"></A><I>index</I></TD>
+<TD>  Specifies a constant to use as the identifier for this raster font. This constant is used as an index into a font table. The default font, 0, is a fixed-pitch font with a height of 16 and width of 9. Font 0 cannot be redefined. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912614"></A><I>height</I></TD>
+<TD>  Specifies the maximum height (in pixels) for a character.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912615"></A><I>numchars</I></TD>
+<TD>  Specifies the number of characters in this font.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912616"></A><I>chars</I></TD>
+<TD>  Specifies an array of character description structures of type <B>Fontchar</B>. The <B>Fontchar</B> structure is defined in the <B>/usr/include/gl/gl.h</B> file as: 
+
+<PRE><A NAME="A139X91ecd"></A>typedef&nbsp;struct&nbsp;{
+&nbsp;&nbsp;unsigned&nbsp;short&nbsp;offset;
+&nbsp;&nbsp;&nbsp;&nbsp;Byte&nbsp;w,&nbsp;h;
+&nbsp;&nbsp;&nbsp;&nbsp;signed&nbsp;char&nbsp;xoff,&nbsp;yoff;
+&nbsp;&nbsp;&nbsp;&nbsp;short&nbsp;width;
+}&nbsp;Fontchar;</PRE>
+
+
+
+
+<P><A NAME="A232C13d"></A>The character description structures are as follows:</P>
+
+
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912617"></A><B>offset</B> </TD>
+<TD>  Specifies the element of the <A HREF="defrasterfont.html#A213X91261e"><I>raster</I></A> array at which the bitmap for this character starts. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912618"></A><B>w</B></TD>
+<TD>  Specifies the number of columns in the bitmap that contain set bits (character width).</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912619"></A><B>h</B> </TD>
+<TD>  Specifies the number of rows in the bitmap of the character (including ascender and descender).</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91261a"></A><B>xoff</B> </TD>
+<TD>  Specifies the bitmap columns between the start of the character's bitmap and the start of the character. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91261b"></A><B>yoff</B> </TD>
+<TD>  Specifies the number of rows between the character's baseline and the bottom of the bitmap. For characters with descenders (for example, g) this value is a negative number. For characters that rest entirely on the baseline, this value is zero.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91261c"></A><B>width</B> </TD>
+<TD>  Specifies the pixel width for the character. This value tells the system how far to space after drawing the character. (This value is added to the character position.) </TD></TR></TABLE></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91261d"></A><I>numraster</I></TD>
+<TD>  Specifies the length of the <A HREF="defrasterfont.html#A213X91261e"><I>raster</I></A> parameter array.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X91261e"></A><I>raster</I></TD>
+<TD>  Specifies a one-dimensional array that contains all the bitmaps for the characters in the font. Each element of the array is a 16-bit integer and the elements are ordered left to right, bottom to top. When interpreting each element, the bits are left justified within the character's 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A255B966">bounding box</A>.</TD></TR></TABLE>
+
+<P><A NAME="E1B09BB969ceb"></A>Maximum row width for a single bitmap is not limited to the capacity of a single 16-bit integer array element. The rows of a bitmap may span more than one array element. However, each new row in the character bitmap must start with its own array element. Likewise, each new character bitmap must start with its own array element. The system reads the row width and starting location for a character bitmap from the structures records in the <A HREF="defrasterfont.html#A213X912616"><I>chars</I></A> array.</P>
+
+<H3><A NAME="A30C011054"></A>Example</H3>
+<P><A NAME="E1B09BC124ceb"></A>The example C language programs <A HREF="curved_c.html#A16C0c830"><B>curved.c</B></A> and <A HREF="font3_c.html#A149C18a9"><B>font3.c</B></A> use the <B>defrasterfont</B> subroutine to define a new raster font. </P>
+
+<H3><A NAME="A62C015d88"></A>Implementation Specifics</H3>
+<P><A NAME="E1B09BC285ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<P><A NAME="E1B09BC392ceb"></A>This subroutine is not available for National Language Support.</P>
+
+<H3><A NAME="A79C1220"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1221"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1222"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9d5f"></A>Related Information</H3>
+<P><A NAME="E1B09BC762ceb"></A>Drawing a string of raster characters on the screen with the <A HREF="charstr.html#A143X9cfb"><B>charstr</B></A> subroutine.</P>
+
+<P><A NAME="E1B09BC869ceb"></A>Updating the current character position with the <A HREF="cmov.html#A143X9d1d"><B>cmov</B></A> subroutine.</P>
+
+<P><A NAME="E1B09BC976ceb"></A>Selecting a raster font with the <A HREF="font.html#A143X9d61"><B>font</B></A> subroutine.</P>
+
+<P><A NAME="E1B09BD084ceb"></A>Returning the current character position with the <A HREF="getcpos.html#A144X9364"><B>getcpos</B></A> subroutine.</P>
+
+<P><A NAME="E1B09BD192ceb"></A>Returning the baseline extent of the longest character descender with the <A HREF="getdescender.html#A144X9386"><B>getdescender</B></A> subroutine.</P>
+
+<P><A NAME="E1B09BD300ceb"></A>Returning the current raster font number with the <A HREF="getfont.html#A144X93a8"><B>getfont</B></A> subroutine.</P>
+
+<P><A NAME="E1B09BD407ceb"></A>Returning the maximum character height in the current raster font with the <A HREF="getheight.html#A144X93ca"><B>getheight</B></A> subroutine.</P>
+
+<P><A NAME="E1B09BD514ceb"></A>Using an AIXwindows font to define a raster font with the <A HREF="loadXfont.html#vUO390nita"><B>loadXfont</B></A> subroutine.</P>
+
+<P><A NAME="E1B09BD620ceb"></A>Returning the width of the specified text string with the <A HREF="strwidth.html#A144X93ec"><B>strwidth</B></A> subroutine.</P>
+
+<P><A NAME="E1B09BD729ceb"></A><!--:genprogc:--><A HREF="../genprogc/nls.html#A2919f7">National Language Support Overview</A> in<I> AIX General Programming Concepts: Writing and Debugging Programs</I>.</P>
+
+<P><A NAME="E1B09BD838ceb"></A>Creating <!--gl32prgd:--><A HREF="../gl32prgd/textchars.html#textchars.html">Text Characters</A>.</P><hr><center>
+[  <a href="defpup.html">Previous</a>  |
+<a href="delobj.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

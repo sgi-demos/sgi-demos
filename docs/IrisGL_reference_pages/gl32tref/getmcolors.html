@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getmcolors Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getmcolor.html">Previous</a>  |
+<a href="getmmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="UI2f0marj"></A>getmcolors Subroutine</H2>
+<A NAME="INDEX759" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX760" REL="I2" TITLE="color map and RGB mode"></A>
+<A NAME="INDEX761" REL="I3" TITLE="getmcolors"></A>
+<A NAME="INDEX762" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX763" REL="I2" TITLE="color map"></A>
+<A NAME="INDEX764" REL="I3" TITLE="returning range of RGB values"></A>
+<A NAME="INDEX765" REL="I1" TITLE="getmcolors subroutine (GL)"></A>
+
+<H3><A NAME="A58C0153f9"></A>Purpose</H3>
+<P><A NAME="E1B0FFC285ceb"></A>Returns a range of color map RGB values.</P>
+
+<H3><A NAME="A78C145"></A>Libraries</H3>
+<P><A NAME="E1B0FFC434ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0FFC538ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A58C0153fd"></A>C Syntax</H3>
+<P><A NAME="E1B0FFC694ceb"></A><B>void getmcolors(Int16 </B><A HREF="getmcolors.html#lq21f0marj"><I>start_idx</I></A><B>, Int16</B> <A HREF="getmcolors.html#Vr23b0marj"><I>end_idx</I></A><B>,&nbsp;Int16</B> <B>*</B><A HREF="getmcolors.html#hr21d0marj"><I>r</I></A><B>, Int16</B> <B>*</B><A HREF="getmcolors.html#yr230marj"><I>g</I></A><B>, Int16</B> <B>*</B><A HREF="getmcolors.html#Ys2390marj"><I>b</I></A><B>)</B></P>
+
+<H3><A NAME="A58C0153ff"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A58C015400"></A><B>SUBROUTINE GETMCOLORS (</B><I>start_idx</I><B>,</B> <I>end_idx</I><B>,</B> <I>r</I><B>,</B> <I>g</I><B>,</B> <I>b</I><B>)</B>
+<B>INTEGER*4 </B><I>start_idx</I><B>, </B><I>end_idx</I><B>,</B>
+<B>INTEGER*2</B><I> r(1)</I><B>, </B><I>g(1)</I><B>, </B><I>b(1)</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C148"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when started from a FORTRAN program, although it accepts short integers when started from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A58C015401"></A>Description</H3>
+<P><A NAME="E1B0FFD019ceb"></A>The <B>getmcolors</B> subroutine returns a range of color map table entries. The range that is returned begins with the <A HREF="getmcolors.html#lq21f0marj"><I>start_idx</I></A> parameter and ends with the <A HREF="getmcolors.html#Vr23b0marj"><I>end_idx</I></A> parameter, inclusive. The length of the array must be equal to <I>end_idx</I> - <I>start_idx</I> + 1. For instance, to return only one color map entry, set <I>start_idx</I> and <I>end_idx</I> to the same number. To return two entries, set <I>end_idx</I> to <I>start_idx&nbsp;</I>+&nbsp;1.</P>
+
+<P><A NAME="E1B0FFD127ceb"></A>The <B>getmcolors</B> subroutine is functionally equivalent to the C code shown in the following fragment, although it executes considerably faster.</P>
+<PRE><A NAME="A58C015404"></A>&nbsp;{
+&nbsp;&nbsp;&nbsp;int&nbsp;i;
+&nbsp;&nbsp;&nbsp;for&nbsp;(&nbsp;i=0;&nbsp;i&nbsp;&lt;&nbsp;(end_idx&nbsp;-&nbsp;start_idx&nbsp;+&nbsp;1);&nbsp;i++&nbsp;)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getmcolors&nbsp;(start_idx+i,&amp;r[i],&amp;g[i],&amp;b[i]);
+&nbsp;}</PRE>
+
+<P><A NAME="E1B0FFD292ceb"></A>The <B>getmcolors</B> subroutine can be used to read the underlay, overlay, cursor, pop-up, or main frame buffer color map. Which map is read depends on the current drawing mode (as set by the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine).</P>
+
+<BLOCKQUOTE><A NAME="A58C015406"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A58C015407"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="lq21f0marj"></A><I>start_idx</I></TD>
+<TD>  Specifies the starting index in the color map to be returned.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Vr23b0marj"></A><I>end_idx</I></TD>
+<TD>  Specifies the ending index in the color map to be returned.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="hr21d0marj"></A><I>r</I></TD>
+<TD>  Specifies an array containing the intensity of the red component.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="yr230marj"></A><I>g</I></TD>
+<TD>  Specifies an array containing the intensity of the green component.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Ys2390marj"></A><I>b</I></TD>
+<TD>  Specifies an array containing the intensity of the blue component.</TD></TR></TABLE>
+
+<H3><A NAME="A64C016566"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0FFD837ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C149"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C14a"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C14b"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A58C01540a"></A>Related Information</H3>
+<P><A NAME="E1B0FFE153ceb"></A>Choosing a set of bitplanes for drawing with the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B0FFE260ceb"></A>Returning the current RGB color with the <A HREF="gRGBcolor.html#ESL13a0marj"><B>gRGBcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0FFE367ceb"></A>Loading a range of color map entries with the <A HREF="mapcolors.html#cv2170marj"><B>mapcolors</B></A> subroutine</P>
+
+<P><A NAME="E1B0FFE475ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System.</P>
+
+<P><A NAME="E1B0FFE582ceb"></A>Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="getmcolor.html">Previous</a>  |
+<a href="getmmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

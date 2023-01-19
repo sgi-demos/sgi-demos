@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>lmbind Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="linewidth.html">Previous</a>  |
+<a href="lmcolor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="XeZ2340marj"></A>lmbind Subroutine</H2>
+<A NAME="INDEX1038" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1039" REL="I2" TITLE="lighting"></A>
+<A NAME="INDEX1040" REL="I3" TITLE="lmbind"></A>
+<A NAME="INDEX1041" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1042" REL="I2" TITLE="lighting model, light source, or material"></A>
+<A NAME="INDEX1043" REL="I3" TITLE="binding"></A>
+<A NAME="INDEX1044" REL="I1" TITLE="lmbind subroutine (GL)"></A>
+<H3><A NAME="A213X911dff"></A>Purpose</H3>
+<P><A NAME="E1B1596893ceb"></A>Makes a material, light, or lighting model definition active.</P>
+
+<H3><A NAME="A78C12cd"></A>Libraries</H3>
+<P><A NAME="E1B1597053ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1597161ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911e02"></A>C Syntax</H3>
+<PRE><A NAME="A213X911e03"></A><B>void lmbind(Int16 </B><A HREF="lmbind.html#QOa2300marj"><I>target</I></A><B>, Int32 </B><A HREF="lmbind.html#A5Oa2e0marj"><I>index</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X911dde"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X911de1"></A><B>SUBROUTINE LMBIND(</B><I>target</I><B>, </B><I>index</I><B>)</B>
+<B>INTEGER*4 </B><I>target</I><B>,</B><I> index</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C12d0"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911e06"></A>Description</H3>
+<P><A NAME="E1B1597612ceb"></A>The <B>lmbind</B> subroutine takes a previously defined material, light, or lighting model and makes it active. Up to eight lights can be active (turned on) at the same time, but only one lighting model or material can be turned on at any time. Therefore, binding a material or lighting model automatically unbinds (deactivates) the previous lighting model or material. </P>
+
+<P><A NAME="E1B1597739ceb"></A>The definition of a light, lighting model, or material (created previously with the <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> subroutine) is not destroyed when one of these is unbound. The definition remains and can be rebound at a later time.</P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A213X911de4"></A>Some of the properties of the currently bound material can be changed on the fly with the <A HREF="lmcolor.html#ofZ220marj"><B>lmcolor</B></A> subroutine, which provides a highly efficient path for temporarily changing material properties. Using the <B>lmcolor</B> subroutine is much more efficient than employing a combination of the <B>lmdef</B> and <B>lmbind</B> subroutines.</LI>
+
+<LI><A NAME="A213X911dfc"></A>Lighting cannot be turned on and does not work if the matrix mode is not set to MVIEWING. The matrix mode can be changed with the <A HREF="mmode.html#XhZ2370marj"><B>mmode</B></A> subroutine.</LI>
+
+<LI><A NAME="A258C01c58f"></A>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. (See <!--gl32prgd:--><A HREF="../gl32prgd/powerstation730.html#NITAXIO">"Hardware Considerations"</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.)</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911e09"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A5Oa2e0marj"></A><I>index</I></TD>
+<TD>  Specifies the index into the table of previously defined materials, lights, or lighting models. Created with the <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> subroutine.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="QOa2300marj"></A><I>target</I></TD>
+<TD>  Specifies the target of the bind. There are 10 valid constants tokens that can be used for this parameter:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Constants</B></TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>MATERIAL</TD>
+
+<TD>MATERI</TD>
+
+<TD>Indicates that the material definition passed by the <I>index</I> parameter should become the currently active material. Lighting can be turned off by binding index 0 to a material.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LIGHT0, LIGHT1, LIGHT2, LIGHT3, LIGHT4, LIGHT5, LIGHT6, LIGHT7</TD>
+
+<TD>LIGHT0, LIGHT1, LIGHT2, LIGHT3, LIGHT4, LIGHT5, LIGHT6, LIGHT7</TD>
+
+<TD>Indicate that the light definition passed by the <I>index</I> parameter should be bound to the respective light. Each light is distinct from the others and can be on or off. A light can be turned off by binding index 0 to it.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LMODEL</TD>
+
+<TD>LMODEL</TD>
+
+<TD>Indicates that the lighting model definition passed by the <I>index</I> parameter is the current lighting model. There can be only one current lighting model.</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A30C010ff0"></A>Example</H3>
+<P><A NAME="E1B1598406ceb"></A>The example C language program <A HREF="cylinder2_c.html#A16C0c87c"><B>cylinder2.c</B></A> uses the <B>lmbind</B> subroutine to use the materials, lights, and lighting model defined with the <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> subroutine. </P>
+
+<H3><A NAME="A62C015ce4"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1598586ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="A3CFCB71056janb"></A>Materials with different material properties on each side are now supported on the Gt4 class of graphics adapters and the GXT1000. Support for two-sided lighting is accomplished with the following token:</P>
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFCB71067janb"></A><B>Target</B></TD>
+<TD>  BACKMATERIAL</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFCB71079janb"></A><B>Function</B></TD>
+<TD>  Indicates that the material definition passed by the index parameter should be used as the active material for back-facing polygons. Two-sided lighting must be enabled in order for this material definition to be used. </TD></TR></TABLE>
+
+<P><A NAME="A3CFCB71097janb"></A>If two-sided lighting is enabled, and BACKMATERIAL is bound to a non-zero index, then the BACKMATERIAL properties are used for back-facing polygons, and MATERIAL properties are used for front-facing polygons. If two-sided lighting is enabled, and a zero index is bound to BACKMATERIAL, then the MATERIAL properties are used for both sides. If two-sided lighting is disabled, the material bound to BACKMATERIAL is not used.</P>
+
+<P><A NAME="A3CFCB71110janb"></A>Two-sided lighting applies only to polygons and triangles; it does not apply to points, lines and characters, where only the MATERIAL properties are used.</P>
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFCB71121janb"></A><B>Target</B></TD>
+<TD>  LIGHT0</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFCB71132janb"></A><B>Function</B></TD>
+<TD>  The light position is transformed by the current matrix at the time the the light is bound. That is, the actual position that the light will have in world coordinates is determined by its defined position and the current matrix when it is bound. Subsequent changes to the matrix do not affect the light position. The position value stored in the light definition (as defined with the <B>lmdef</B> subroutine) is not affected or changed.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFCB71143janb"></A><B>Description</B></TD>
+<TD>  Lighting is disabled when index 0 (zero) is bound to either the MATERIAL or to the LMODEL (or both). Both the material and the lighting model must be bound to a non-zero index for lighting to be enabled. Even if all lights are off, lighting is still enabled, although only the emmisive material properties contribute to the lit color.</TD></TR></TABLE>
+
+<BLOCKQUOTE><A NAME="A3CFCB71154janb"></A><B>Note: </B>If a light does not appear to be in the correct location, be sure that the current matrix had an appropriate value when the light was bound. The light position is transformed by the current matrix when the light is bound.</BLOCKQUOTE>
+
+
+<H3><A NAME="A78C12d1"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12d2"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12d3"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911e18"></A>Related Information</H3>
+<P><A NAME="E1B1598930ceb"></A>Specifying RGBA colors with a single packed 32-bit integer using the <A HREF="cpack.html#A143X9284"><B>cpack</B></A> subroutine.</P>
+
+<P><A NAME="E1B1599043ceb"></A>Changing the target of the color commands with the <A HREF="lmcolor.html#ofZ220marj"><B>lmcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B1599164ceb"></A>Making a new material, light source, or lighting model active with the <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> subroutine.</P>
+
+<P><A NAME="E1B1599286ceb"></A>Setting the current matrix mode with the <A HREF="mmode.html#XhZ2370marj"><B>mmode</B></A> subroutine. </P>
+
+<P><A NAME="E1B1599404ceb"></A>Specifying a normal vector with the <A HREF="n3f.html#A139X91ef3"><B>n3f</B></A> subroutine. </P>
+
+<P><A NAME="E1B1599514ceb"></A>Updating the current normal vector with the <A HREF="normal.html#A142X9b7"><B>normal</B></A> subroutine. </P>
+
+<P><A NAME="E1B1599716ceb"></A>Setting the current color in RGB mode with the <A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> subroutine. </P>
+
+<P><A NAME="E1B1599824ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Creating <!--gl32prgd:--><A HREF="../gl32prgd/crlighteff.html#crlighteff.html">Lighting Effects</A>, and Setting <!--gl32prgd:--><A HREF="../gl32prgd/setglpipeops.html#setglpipeops.html">Pipeline Options</A>.</P><hr><center>
+[  <a href="linewidth.html">Previous</a>  |
+<a href="lmcolor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>prefposition Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="popviewport.html">Previous</a>  |
+<a href="prefsize.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9164f"></A>prefposition Subroutine</H2>
+<A NAME="INDEX1449" REL="I1" TITLE="prefposition subroutine (GL)"></A>
+<A NAME="INDEX1450" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1451" REL="I2" TITLE="window"></A>
+<A NAME="INDEX1452" REL="I3" TITLE="prefposition"></A>
+<A NAME="INDEX1453" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1454" REL="I2" TITLE="window sizes"></A>
+<A NAME="INDEX1455" REL="I3" TITLE="constraining"></A>
+<A NAME="INDEX1456" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1457" REL="I2" TITLE="window locations"></A>
+<A NAME="INDEX1458" REL="I3" TITLE="constraining"></A>
+
+<H3><A NAME="A142X91651"></A>Purpose</H3>
+<P><A NAME="E1D71EB294ceb"></A>Constrains the size of a window.</P>
+
+<H3><A NAME="A79C131a"></A>Libraries</H3>
+<P><A NAME="E1D71EB334ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D71EB359ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X91655"></A>C Syntax</H3>
+<PRE><A NAME="A213X912b3a"></A><B>void prefposition</B>
+<B>(Int32 </B><A HREF="prefposition.html#t753210marj"><I>x1</I></A><B>, Int32</B> <A HREF="prefposition.html#A2853370marj"><I>x2</I></A><B>,</B>
+<B>Int32 </B><A HREF="prefposition.html#J853b0marj"><I>y1</I></A><B>, Int32 </B><A HREF="prefposition.html#Y853330marj"><I>y2</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c39"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c3a"></A><B>SUBROUTINE PREFPO(</B><I>x1</I><B>, </B><I>x2</I><B>, </B><I>y1</I><B>, </B><I>y2</I><B>)</B>
+<B>INTEGER*4 </B><I>x1</I><B>, </B><I>x2</I><B>, </B><I>y1</I><B>, </B><I>y2</I></PRE>
+
+<H3><A NAME="A142X91657"></A>Description</H3>
+<P><A NAME="E1D71EB476ceb"></A>The <B>prefposition </B>subroutine sets the location and constrains the size, in pixels, of a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A>. With the <B>prefposition</B> subroutine, the applications programmer can prevent the user from resizing a window. </P>
+
+<P><A NAME="E1D71EB503ceb"></A>To remove constraints from a window, call the <A HREF="winconstraints.html#A142X914c1"><B>winconstraints</B></A> subroutine immediately after calling the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine. Calling the <B>winconstraints</B> subroutine twice in a row also removes the constraints from the window.</P>
+
+<BLOCKQUOTE><A NAME="ABF38A4909ttay"></A><B>Note: </B>This process nullifies all constraints, not just that of size.</BLOCKQUOTE>
+
+
+<P><A NAME="E1D71EB550ceb"></A>If the <B>prefposition </B>subroutine call is followed by a call to the <B>winopen</B> subroutine, the window manager creates and maps the window immediately. A rubberband outline is not shown.</P>
+
+<P><A NAME="E1D71EB576ceb"></A>If the <B>prefposition </B>subroutine call is followed by a call to the <B>winconstraints</B> subroutine, the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A60P0189">current window</A> is resized. The resizing occurs at the time of the <B>winconstraints</B> call; the <B>prefposition </B>subroutine has no effect on the current window until that time.</P>
+
+<P><A NAME="E1D71EB603ceb"></A>The window manager controls both how the <B>prefposition</B> subroutine parameters are interpreted and where a window is finally placed. For more information on the window manager operation, see the discussion on 
+"<!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#BC9D0F8612vbia">Window Placement</A>" in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f55"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X91659"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="t753210marj"></A><I>x1</I></TD>
+<TD>  Specifies the <I>x</I>-coordinate position (in pixels) of one corner of the window.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A2853370marj"></A><I>y1</I></TD>
+<TD>  Specifies the <I>y</I>-coordinate position (in pixels) of the point of one corner of the window.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="J853b0marj"></A><I>x2</I></TD>
+<TD>  Specifies the <I>x</I>-coordinate position (in pixels) of the opposite corner of the window.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Y853330marj"></A><I>y2</I></TD>
+<TD>  Specifies the <I>y</I>-coordinate position (in pixels) of the opposite corner of the window.</TD></TR></TABLE>
+
+<H3><A NAME="A142X9165f"></A>Example</H3>
+<P><A NAME="E1D71EB774ceb"></A>The example C language program <A HREF="colored_c.html"><B>colored.c</B></A> uses the <B>prefposition</B> subroutine to specify a window's original location size.</P>
+
+<H3><A NAME="A61C0159ec"></A>Implementation Specifics</H3>
+<P><A NAME="E1D71EB818ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C131d"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C131e"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C131f"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X9166f"></A>Related Information</H3>
+<P><A NAME="E1D71EB918ceb"></A>Specifying pixel values to be added to a window with the <A HREF="fudge.html#A142X917a6"><B>fudge</B></A> subroutine.</P>
+
+<P><A NAME="E1D71EB944ceb"></A>Obtaining the position of a window with the <A HREF="getorigin.html#A142X91f76"><B>getorigin</B></A> subroutine.</P>
+
+<P><A NAME="E1D71EB971ceb"></A>Obtaining the size of a window with the <A HREF="getsize.html#X513200marj"><B>getsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D71EB997ceb"></A>Constraining the size of a window with the <A HREF="prefsize.html#A142X91671"><B>prefsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D71EC023ceb"></A>Specifying a window size change in discrete steps with the <A HREF="stepunit.html#A142X91bd2"><B>stepunit</B></A> subroutine.</P>
+
+<P><A NAME="E1D71EC049ceb"></A>Binding window constraints to the current window with the <A HREF="winconstraints.html#A142X914c1"><B>winconstraints</B></A> subroutine. </P>
+
+<P><A NAME="E1D71EC076ceb"></A>Creating a window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine. </P>
+
+<P><A NAME="E1D71EC102ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="popviewport.html">Previous</a>  |
+<a href="prefsize.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

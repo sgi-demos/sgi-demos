@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>nurbssurface Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="nurbscurve.html">Previous</a>  |
+<a href="objdelete.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A252X98b9"></A>nurbssurface Subroutine</H2>
+<A NAME="INDEX1266" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1267" REL="I2" TITLE="NURBS curves and surfaces"></A>
+<A NAME="INDEX1268" REL="I3" TITLE="nurbssurface"></A>
+<A NAME="INDEX1269" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1270" REL="I2" TITLE="surface (NURBS)"></A>
+<A NAME="INDEX1271" REL="I3" TITLE="controlling shape of"></A>
+<A NAME="INDEX1272" REL="I1" TITLE="nurbssurface subroutine (GL)"></A>
+
+<H3><A NAME="A252X98bb"></A>Purpose</H3>
+<P><A NAME="E1D7055682ceb"></A>Controls the shape of a NURBS surface </P>
+
+<H3><A NAME="A78C1349"></A>Libraries</H3>
+<P><A NAME="E1D7055721ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7055745ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A252X98be"></A>C Syntax</H3>
+<PRE><A NAME="A252X98bf"></A><B>void nurbssurface</B>
+<B>(Int32 </B><A HREF="nurbssurface.html#A252X98c6"><I>s_knot_count</I></A><B>,</B>
+<B>Float64</B> <A HREF="nurbssurface.html#A252X98c7"><I>s_knots</I></A><B>[],</B>
+<B>Int32</B> <A HREF="nurbssurface.html#A252X98c8"><I>t_knot_count</I></A><B>,</B>
+<B>Float64</B> <A HREF="nurbssurface.html#A252X98c9"><I>t_knots</I></A><B>[],</B>
+<B>Int32 </B><A HREF="nurbssurface.html#A252X98ca"><I>s_stride</I></A><B>,</B>
+<B>Int32</B> <A HREF="nurbssurface.html#A252X98cb"><I>t_stride</I></A><B>,</B>
+<B>Float64</B> <B>*</B><A HREF="nurbssurface.html#A252X98cc"><I>ctlarray</I></A><B>,</B>
+<B>Int32 </B><A HREF="nurbssurface.html#A252X98cd"><I>s_order</I></A><B>,</B>
+<B>Int32</B> <A HREF="nurbssurface.html#A252X98ce"><I>t_order</I></A><B>,</B>
+<B>Int32</B> <A HREF="nurbssurface.html#A252X98cf"><I>type</I></A><B>)</B></PRE>
+
+<H3><A NAME="A51C013e8d"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A51C013e8e"></A><B>SUBROUTINE NURBSS(</B><I>s_knot_count</I><B>,</B>
+<I>s_knots</I><B>, </B><I>t_knot_count</I><B>, </B><I>t_knots</I><B>, </B><I>s_stride</I><B>,</B>
+<I>t_stride</I><B>, </B><I>ctlarray</I><B>, </B><I>s_order</I><B>, </B><I>t_order</I><B>, </B><I>type</I><B>)</B>
+<B>INTEGER*4 </B><I>s_knot_count</I><B>, </B><I>t_knot_count</I>
+<B>REAL*8 </B><I>s_knots</I><B>(</B><I>s_knot_count</I><B>)</B>
+<B>REAL*8 </B><I>t_knots</I><B>(</B><I>t_knot_count</I><B>)</B>
+<B>INTEGER*4 </B><I>s_stride</I><B>, </B><I>t_stride</I>
+<B>INTEGER*4 </B><I>s_order</I><B>, </B><I>t_order</I><B>, </B><I>type</I>
+<B>REAL*8 </B><I>ctlarray</I><B>(*)</B></PRE>
+
+<H3><A NAME="A252X98c0"></A>Description</H3>
+<P><A NAME="E1D7055860ceb"></A>The <B>nurbssurface</B> subroutine controls the shape of a Non-Uniform Rational B-Spline (NURBS) surface. Use this subroutine within a NURBS surface definition to describe the shape of a NURBS surface before any trimming takes place. To mark the beginning and end of a NURBS surface definition, use the <A HREF="bgnsurface.html#A251X9d7"><B>bgnsurface</B> and <B>endsurface</B></A> subroutines. Call the <B>nurbssurface </B>subroutine only within a NURBS surface definition. </P>
+
+<P><A NAME="E1D7055886ceb"></A>You can trim a NURBS surface by using the <A HREF="nurbscurve.html#A255X93ca"><B>nurbscurve</B></A> and <A HREF="pwlcurve.html#A257X9fc"><B>pwlcurve</B></A> subroutines between calls to the <A HREF="bgntrim.html#A251X98d"><B>bgntrim</B> and <B>endtrim</B></A> subroutines. </P>
+
+<P><A NAME="E1D7055912ceb"></A>The system renders a NURBS surface as a polygonal mesh and analytically calculates normal vectors at the corners of the polygons within the mesh. Therefore, your program should specify a lighting model when it uses NURBS surfaces, otherwise much detailed surface information is lost. Use the <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> and <A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> subroutines to define or modify materials and their properties.</P>
+
+<BLOCKQUOTE><A NAME="A252X98c4"></A><B>Note: </B>If backfacing is on, the system cannot correctly eliminate 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03bd">backfacing polygons</A> on the surface.</BLOCKQUOTE>
+
+
+<H3><A NAME="A252X98c5"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A252X98c6"></A><I>s_knot_count</I></TD>
+<TD>  Specifies the number of knots in the parametric <I>s</I> direction. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A252X98c7"></A><I>s_knots</I></TD>
+<TD>  Specifies an array of <I>s_knot_count</I> nondecreasing knot values in the parametric <I>s</I> direction. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A252X98c8"></A><I>t_knot_count</I></TD>
+<TD>  Specifies the number of knots in the parametric <I>t</I> direction. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A252X98c9"></A><I>t_knots</I></TD>
+<TD>  Specifies an array of <I>t_knot_count</I> nondecreasing knot values in the parametric <I>t</I> direction. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A252X98ca"></A><I>s_stride</I></TD>
+<TD>  Specifies the offset (in bytes) between successive control points in the parametric <I>s</I> direction in <I>ctlarray</I>. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A252X98cb"></A><I>t_stride</I></TD>
+<TD>  Specifies the offset (in bytes) between successive control points in the parametric <I>t</I> direction in <I>ctlarray</I>. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A252X98cc"></A><I>ctlarray</I></TD>
+<TD>  Specifies an array containing control points for the NURBS surface. The coordinates must appear as either <I>(x, y, z) </I>triples or as <I>(x, y, z, w) </I>quadruples. The offsets between successive control points in the parametric <I>s</I> and <I>t</I> directions are given by <I>s_stride</I> and <I>t_stride</I>. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A252X98cd"></A><I>s_order</I></TD>
+<TD>  Specifies the order of the NURBS surface in the parametric <I>s</I> direction. The order is one more than the degree, so a cubic surface has an order of 4. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A252X98ce"></A><I>t_order</I></TD>
+<TD>  Specifies the order of the NURBS surface in the parametric <I>t </I>direction. The order is one more than the degree, so a cubic surface has an order of 4. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A252X98cf"></A><I>type</I></TD>
+<TD>  Specifies a value indicating the control point type. Current options are:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>N_XYZ</TD>
+
+<TD>NXYZ</TD>
+
+<TD>Indicates 3-dimensional control points.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>N_XYZW</TD>
+
+<TD>NXYZW</TD>
+
+<TD>Indicates 4-dimensional (rational) control points.</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A62C015da0"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7056196ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C134c"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C134d"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C134e"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A252X98d4"></A>Related Information</H3>
+<P><A NAME="E1D7056293ceb"></A>Marking the beginning and end of a NURBS surface definition with the <A HREF="bgnsurface.html#A251X9d7"><B>bgnsurface </B>and <B>endsurface</B></A> subroutines. </P>
+
+<P><A NAME="E1D7056318ceb"></A>Marking the beginning and end of a NURBS surface trimming loop with the <A HREF="bgntrim.html#A251X98d"><B>bgntrim</B> and <B>endtrim</B></A> subroutines. </P>
+
+<P><A NAME="E1D7056344ceb"></A>Returning the current value of a trimmed NURBS surfaces display property with the <A HREF="getnurbsproperty.html#A252X986e"><B>getnurbsproperty</B></A> subroutine. </P>
+
+<P><A NAME="E1D7056369ceb"></A>Controlling the shape of a NURBS trimming curve with the <A HREF="nurbscurve.html#A255X93ca"><B>nurbscurve</B></A> subroutine. </P>
+
+<P><A NAME="E1D7056394ceb"></A>Describing a piecewise linear trimming curve for NURBS surfaces with the <A HREF="pwlcurve.html#A257X9fc"><B>pwlcurve</B></A> subroutine. </P>
+
+<P><A NAME="E1D7056420ceb"></A>Setting a property for the display of trimmed NURBS with the <A HREF="setnurbsproperty.html#A257X911b"><B>setnurbsproperty</B></A> subroutine. </P>
+
+<P><A NAME="E1D7056445ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">NURBS Curves and Surfaces</A>.</P><hr><center>
+[  <a href="nurbscurve.html">Previous</a>  |
+<a href="objdelete.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

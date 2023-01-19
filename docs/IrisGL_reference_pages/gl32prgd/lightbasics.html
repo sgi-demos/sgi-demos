@@ -1,0 +1,410 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/lightbasics.html Mon, 24 Jan 2022 16:28:07 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Lighting Basics
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="lightintro.html">Previous</a>  |
+<a href="advlightcap.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="lightbasics.html"></A>Lighting Basics </H2>
+
+
+<P><A NAME="INDEX496"></A><A NAME="INDEX497"></A><A NAME="INDEX498"></A><A NAME="INDEX499"></A><A NAME="INDEX500"></A><A NAME="INDEX501"></A></P>
+
+
+<P><A NAME="A3C0EA80377mhay"></A>This section discusses the basic techniques
+of lighting, including: </P>
+
+
+<UL><LI><A NAME="A258C01bfbe"></A>A Simple <A HREF="lightbasics.html#A342C970d0">Lighting
+Calculation</A></LI>
+
+
+<LI><A NAME="A258C01bfbf"></A><A HREF="lightbasics.html#A342C970eb">Specularity</A></LI>
+
+
+<LI><A NAME="A258C01bfc0"></A>Multiple Surface Materials and <A HREF="lightbasics.html#A342C97101">Multiple
+Lights</A></LI></UL>
+
+
+<H3><A NAME="A342C970d0"></A>A Simple Lighting Calculation </H3>
+
+
+<P><A NAME="A3C0EA80402mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/cylinder1_c.html#Ggi2e0marj">cylinder1.c</A></B>
+example program (found in Symbol.&amp;TRGraphics;) illustrates how to use
+GL to light a cylinder using a simple lighting calculation. Consider a
+pale gray cylinder with a rough surface that is illuminated by a source
+of white light. Objects with rough surfaces tend to reflect or scatter
+light equally in all directions. Such reflections are termed diffuse reflections.</P>
+
+
+<P><A NAME="A3C0EA80422mhay"></A>In our simple lighting calculation, the
+color and intensity of the diffusely reflected light at a point on the
+surface depends on three things: </P>
+
+
+<UL><LI><A NAME="A342C970d3"></A>Light source color</LI>
+
+
+<LI><A NAME="A342C970d4"></A>The angular relationship between the light
+source direction and reflecting surface orientation at that point</LI>
+
+
+<LI><A NAME="A342C970d5"></A>The reflectance characteristics of the cylinder
+surface</LI></UL>
+
+
+<P><A NAME="A3C0EA80445mhay"></A>The short arrows in the following <A HREF="figures/gl32p23.jpg">figure</A>
+show how the diffuse light is scattered equally in all directions. </P>
+
+
+<P><A NAME="A3C0EA80467mhay"></A>The orientation of the reflecting surface
+is specified by the surface normal vector, which is perpendicular to the
+surface at the point in question. The normal vector must be normalized
+(must be of unit length). Because the surface normal differs at every point
+on a curved surface, the calculation for reflected light produces a different
+color at every point on the surface. </P>
+
+
+<P><A NAME="A3C0EA80488mhay"></A>The number of points used in the lighting
+calculations depends on the number of vertices used to define the surface.
+For a local light (a light not very far from the surface), the system computes
+a color at every vertex of the polygon mesh used to represent the surface.
+The application writer must specify the surface-normal vector at every
+vertex of the polygon mesh. </P>
+
+
+<P><A NAME="A3C0EA80509mhay"></A>In addition to the light originating from
+the light source that reflects off the surface, ambient light is also accounted for in the model. Ambient light is assumed
+to be nondirectional and is reflected uniformly in all directions by the
+reflecting surface. Thus, the color and intensity of the reflected ambient
+light are functions of both the level of ambient light in the scene and
+the reflectance properties of the surface. They are not functions of the
+angular relationship between the source of light and the surface normal.</P>
+
+
+<H4><A NAME="A258C01bfc2"></A>Subroutines from Example Program cylinder1.c</H4>
+
+
+<P><A NAME="A3C0EA80531mhay"></A>The example C language program <B><!--:libs:gl32tref:--><A HREF="../gl32tref/cylinder1_c.html#Ggi2e0marj">cylinder1.c</A></B>
+introduces four new subroutines that use the GL lighting facility. The
+new subroutines are <B><!--:libs:gl32tref:--><A HREF="../gl32tref/mmode.html#XhZ2370marj">mmode</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmbind.html#XeZ2340marj">lmbind</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/n3f.html#A139X91ef3">n3f</A></B>.</P>
+
+
+<P><A NAME="A3C0EA80552mhay"></A>To perform lighting calculations, the
+system must be able to distinguish between the projection matrix (used
+by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/perspective.html#A144X94da">perspective</A></B>
+subroutine) and the viewing and modeling matrix (used by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lookat.html#A144X9452">lookat</A></B>
+subroutine and the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rotate.html#A8g2120marj">rotate</A></B>
+subroutine). The <B>mmode</B> subroutine is used to indicate to the hardware
+which matrices represent <A HREF="specialterms.html#A27P021">projection transformations</A>
+and which represent <A HREF="specialterms.html#A27P021">viewing</A> or <A HREF="specialterms.html#A27P021">modeling
+transformation</A>s. </P>
+
+
+<P><A NAME="A3C0EA80573mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+subroutine, called from the <TT><!--:libs:gl32tref:--><A HREF="../gl32tref/cylinder1_c.html#A64EA57551ttay">def_simple_light_calc</A></TT> subroutine of the example program, found
+in  in<I> GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I>, defines instances of the three necessary components
+to perform a lighting calculation: </P>
+
+
+<UL><LI><A NAME="A342C970dc"></A>A surface material</LI>
+
+
+<LI><A NAME="A342C970dd"></A>A light source</LI>
+
+
+<LI><A NAME="A342C970de"></A>A lighting model</LI></UL>
+
+
+<P><A NAME="A3C0EA80597mhay"></A>The program line <TT>lmdef(DEFMATERIAL,&nbsp;1,&nbsp;0,&nbsp;NULL)</TT>
+tells GL about surface material number 1. The value given the first parameter,
+<TT>DEFMATERIAL</TT>, indicates that you are defining a surface material.
+The value for the second parameter defines this material as material number
+<TT>1</TT>. The value for the third parameter (<TT>0</TT>) is the length
+of the properties array specified by the fourth parameter. The properties
+array specifies the properties of the surface material. Here, NULL instructs
+GL to use the default values for surface materials. </P>
+
+
+<P><A NAME="A3C0EA80619mhay"></A>The next two calls to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+subroutine are similar to the first. By substituting <TT>DEFMATERIAL</TT>
+with <TT>DEFLIGHT,</TT> and subsequently <TT>DEFLMODEL</TT>, you can define
+a light source and lighting model using the default values prescribed by
+GL. The default values for a surface material, a light source, and a lighting
+model are all that are necessary to perform a simple lighting calculation.
+Properties of a lighting model are the properties that affect the entire
+scene rather than a specific light source or surface material (the intensity
+and color of the ambient light in the scene). The subroutine <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+is covered in greater detail in the section on <A HREF="lightsubs.html#lightsubs.html">lighting
+subroutines</A>. </P>
+
+
+<P><A NAME="A3C0EA80641mhay"></A>Another subroutine introduced in the example
+program is the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmbind.html#XeZ2340marj">lmbind</A></B>
+subroutine. Once you have defined a surface material, light source, and
+lighting model you can instruct GL to use them when performing lighting
+calculations. The three calls to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmbind.html#XeZ2340marj">lmbind</A></B>
+subroutine in the example program tell the system to use the material,
+light source, and light model defined by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+subroutine. </P>
+
+
+<P><A NAME="A3C0EA80663mhay"></A>It is more efficient to define surface
+materials, light sources, and lighting models before activating them with
+the <B>lmbind</B> subroutine because more computation is involved in defining
+models than in invoking them. By predefining all the materials, light sources,
+and lighting models to use in your application, you can quickly switch
+among different materials and lighting sources when drawing a scene. </P>
+
+
+<P><A NAME="A3C0EA80684mhay"></A>There can be only one active light model
+and surface material at any one time. However, you can use up to the value
+of MAXLIGHTS lights, where MAXLIGHTS is a constant defined in the <B>/usr/include/gl/gl.h</B>
+file. (The value is 8 for the High Performance 3-D Color Graphics Processor,
+and should not be changed.) The example program <B><!--:libs:gl32tref:--><A HREF="../gl32tref/cylinder2_c.html#A16C0c87c">cylinder2.c</A></B>
+(found in  in<I> GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I>) uses multiple lights. </P>
+
+
+<P><A NAME="A3C0EA80706mhay"></A>The final new subroutine is the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/n3f.html#A139X91ef3">n3f</A></B>
+subroutine. Use it to define surface normal vectors. Look at the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/n3f.html#A139X91ef3">n3f</A></B>
+subroutine called from the 
+<TT><!--:libs:gl32tref:--><A HREF="../gl32tref/cylinder1_c.html#A64EA59429ttay">draw_cylinder</A></TT> subroutine of the example program (found
+in  in<I> GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I>) . In the simple lighting calculation, the resultant
+color at a vertex depends on the angular relationship between the surface
+normal at that vertex and the light source direction. </P>
+
+
+<P><A NAME="A3C0EA80728mhay"></A>The call to the <B>n3f</B> subroutine
+sends a normal vector of unit length to the graphics hardware to be transformed
+and subsequently used for a lighting calculation. Each time a different
+normal is sent to the graphics hardware, a lighting calculation is performed
+and the resultant color is associated with the vertex (using the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/v.html#A144X97a4">v3f</A></B>
+subroutine) following the <B>n3f</B> command. </P>
+
+
+<P><A NAME="A3C0EA80749mhay"></A>If you have not done so already, try running
+the example program <B><!--:libs:gl32tref:--><A HREF="../gl32tref/cylinder1_c.html#Ggi2e0marj">cylinder1.c</A></B>.
+Notice as the cylinder rotates, the color changes to different shades of
+gray. This is because the angular relationships between the surface normals
+and the light source (which happens to be located behind our eye along
+the <I>z</I> axis) is changing. </P>
+
+
+<P><A NAME="A3C0EA80771mhay"></A>Also, note that as the interior of the
+cylinder comes into view, the interior color appears a constant shade of
+dark gray. This is because the surface normals are facing away from the
+light source, so the interior of the cylinder is illuminated only by ambient
+light, which is independent of the direction of the light source. </P>
+
+
+<P><A NAME="A3C0EA80792mhay"></A>Now that you have seen how to implement
+a simple lighting calculation, you can expand the capabilities of the lighting
+calculation to include specularity and multiple surface materials and lights.</P>
+
+
+<H3><A NAME="A342C970eb"></A>Specularity<A NAME="INDEX502"></A> <A NAME="INDEX503"></A>
+<A NAME="INDEX504"></A> <A NAME="INDEX505"></A> </H3>
+
+
+<P><A NAME="A3C0EA80814mhay"></A>What if the cylinder in the example were
+made of a shiny metal instead of a rough material? Compared to rough or
+diffusely reflecting surfaces that reflect light equally in all directions,
+smooth surfaces tend to reflect light in a directional manner. This directional
+reflection, called specular reflection, is what causes highlights. </P>
+
+
+<P><A NAME="A3C0EA80836mhay"></A>On a perfectly smooth surface such as
+a mirror, the direction of a reflected ray is equal to the angle of incidence
+(that is, the angle between the light direction vector and the surface
+normal vector). On surfaces that are less than perfectly smooth there will
+be some scattering of the reflected light. Thus, the angle of the reflected
+light is weighted towards, but not always equal to, the angle of incidence
+(see the following <A HREF="figures/gl32p24.jpg">figure</A>). </P>
+
+
+<P><A NAME="A3C0EA80858mhay"></A>Calculations for diffusely reflected light
+from a light source depend on the angular relationship between the surface
+normal and light source direction, as well as the reflectance characteristics
+of the surface. In addition to reflectance characteristics, specularly
+reflected light depends on the angular relationships between the surface
+normal, light source direction, and view direction. When the view direction
+coincides with the direction of the reflected light rays, the viewer sees
+a specular highlight or glare. </P>
+
+
+<P><A NAME="A3C0EA80880mhay"></A>The surface material of the cylinder can
+be made to appear smoother by incorporating specular reflections. You can
+do this by changing the <TT><!--:libs:gl32tref:--><A HREF="../gl32tref/cylinder1_c.html#A64EA57551ttay">def_simple_light_calc</A></TT> subroutine to look like this: </P>
+
+
+<PRE><A NAME="A342C970f2"></A>def_simple_light_model(){</PRE>
+
+
+<PRE><A NAME="A342C970f4"></A>&nbsp;&nbsp;&nbsp;lmdef(DEFMATERIAL,&nbsp;1,&nbsp;11,&nbsp;shiny_material);
+&nbsp;&nbsp;&nbsp;lmdef(DEFLIGHT,&nbsp;1,&nbsp;0,&nbsp;NULL);
+&nbsp;&nbsp;&nbsp;lmdef(DEFLMODEL,&nbsp;1,&nbsp;0,&nbsp;NULL);
+}</PRE>
+
+
+<P><A NAME="A3C0EA80904mhay"></A>At the module level of the program, include
+the definition for the <TT>shiny_material</TT> property array: </P>
+
+
+<PRE><A NAME="A342C970f9"></A>float&nbsp;&nbsp;shiny_material[]&nbsp;=&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPECULAR,&nbsp;0.8,&nbsp;0.8,&nbsp;0.8,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DIFFUSE,&nbsp;0.4,&nbsp;0.4,&nbsp;0.4,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHININESS,&nbsp;30.0,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LMNULL};</PRE>
+
+
+<P><A NAME="A3C0EA80926mhay"></A>Now we have provided a non-<TT>NULL</TT>
+properties array; values are available for further lighting calculations.
+Properties are set by specifying a property identifier followed by the
+expected values for that property. In our example, we set the specular
+reflectance (using <TT>SPECULAR</TT> as the property identifier) of the
+surface for the red, green, and blue components of white light to <TT>[0.8</TT>,
+<TT>0.8</TT>, and <TT>0.8],</TT> respectively. Likewise, the diffuse reflectance
+was set to <TT>[0.4</TT>, <TT>0.4</TT>, <TT>0.4]</TT>. </P>
+
+
+<P><A NAME="A3C0EA80948mhay"></A>Reflectance components vary between 0.0
+and 1.0 (0.0 being 0% reflective and 1.0 being 100% reflective). The shininess
+property indicates how smooth or shiny the surface appears. The higher
+the number, the smoother the surface, and subsequently the more focused
+the specular highlight. </P>
+
+
+<P><A NAME="A3C0EA80969mhay"></A>The values for <TT>SHININESS</TT> can
+range from <TT>0.0</TT> (no specular highlight) to <TT>128.0</TT> (very
+focused specular highlight). The shininess specified should be a whole
+number. When a property identifier and the corresponding values are specified
+in a call to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+subroutine, the new value for that property overrides a default that is
+provided by GL. This way, you have to specify only those properties whose
+default values you do not want. </P>
+
+
+<P><A NAME="A3C0EA80991mhay"></A>You must always end a property list with
+the <TT>LMNULL</TT> token. This token lets GL know that you are finished
+specifying properties. There are more properties for surface materials
+that we have not discussed as well as other properties that apply specifically
+to lighting models and light sources. A complete description of all the
+properties available to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+subroutine call and their defaults appears in the section on <A HREF="lightsubs.html#lightsubs.html">Lighting
+Subroutines</A> . </P>
+
+
+<P><A NAME="A3C0EA81012mhay"></A>If you run the example program with these
+changes, you will notice how much shinier the cylinder looks. Watch how
+the highlight appears when the surface normals point at your eye and disappear
+as they move away. </P>
+
+
+<H3><A NAME="A342C97101"></A>Multiple Surface Materials and Multiple Lights<A NAME="INDEX506"></A>
+<A NAME="INDEX507"></A> <A NAME="INDEX508"></A> <A NAME="INDEX509"></A>
+<A NAME="INDEX510"></A> <A NAME="INDEX511"></A> <A NAME="INDEX512"></A>
+<A NAME="INDEX513"></A> <A NAME="INDEX514"></A> <A NAME="INDEX515"></A>
+<A NAME="INDEX516"></A> <A NAME="INDEX517"></A> </H3>
+
+
+<P><A NAME="A3C0EA81035mhay"></A>The next example program displays two
+intersecting cylinders, using a different surface material for each cylinder.
+You can also light each cylinder with two light sources. Study the example
+program <B><!--:libs:gl32tref:--><A HREF="../gl32tref/cylinder2_c.html#A16C0c87c">cylinder2.c</A></B>
+(found in  in<I> GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I>) . </P>
+
+
+<P><A NAME="A3C0EA81057mhay"></A>At the top of the program, a second property
+list is defined for a new material called <TT>purple_material</TT> and
+a property list for a second light called <TT>blue_light</TT>. In the <TT>blue_light</TT>
+property list, the light direction is specified as <TT>[0.0,&nbsp;1.0,&nbsp;0.0,&nbsp;0.0</TT>].
+The first three numbers specify the <I>xyz</I> direction of the light.
+The direction vector <TT>[0.0,&nbsp;1.0,&nbsp;0.0]</TT> indicates that
+the light direction is along the <I>y</I> axis pointing towards the origin.</P>
+
+
+<P><A NAME="A3C0EA81079mhay"></A>In other words, the blue light is above
+the cylinders and pointing toward them. The fourth number (<TT>0.0</TT>)
+indicates that the light is positioned infinitely far away along the direction
+vector (in our example the <I>y</I> axis). Differences between infinite
+and noninfinite lights are discussed in <A HREF="advlightcap.html#advlightcap.html">&quot;Advanced
+Lighting Capabilities&quot;</A>. </P>
+
+
+<P><A NAME="A3C0EA81101mhay"></A>The <TT>LCOLOR</TT> specifies the RGB
+color of the light. This light has only blue color. By varying the values
+of each of the three color components between 0.0 and 1.0 you can vary
+the intensity of the light. That is, setting the blue light color to <TT>[0.0,&nbsp;0.0,&nbsp;0.6]</TT>
+produces a more intense blue than it would have been if you had set the
+color to <TT>[0.0,&nbsp;0.0,&nbsp;0.3</TT>]. </P>
+
+
+<P><A NAME="A3C0EA81123mhay"></A>In the <TT><!--:libs:gl32tref:--><A HREF="../gl32tref/cylinder2_c.html#A64EA47488ttay">def_light_calc</A></TT> subroutine, additional material and light
+source are defined using the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+subroutine. In the <TT><!--:libs:gl32tref:--><A HREF="../gl32tref/cylinder2_c.html#A64EA47742ttay">use_light_calc</A></TT> portion of the program, both light sources
+are bound because both are used during the entire animation. However, because
+you want to switch back and forth between surface materials, the program
+does not bind the surface material until ready to use it. In the main loop,
+the program performs an </P>
+
+
+<PRE><A NAME="A342C971d0"></A>lmbind(MATERIAL,&nbsp;1)</PRE>
+
+
+<P><A NAME="A3C0EA81145mhay"></A>before drawing the first cylinder and
+then another </P>
+
+
+<PRE><A NAME="A342C971d2"></A>lmbind(MATERIAL,&nbsp;2)</PRE>
+
+
+<P><A NAME="A3C0EA81167mhay"></A>when drawing the second cylinder. </P>
+
+
+<P><A NAME="A3C0EA81188mhay"></A>When you run the example program <B><!--:libs:gl32tref:--><A HREF="../gl32tref/cylinder2_c.html#A16C0c87c">cylinder2.c</A></B>,
+notice that the first cylinder has the same surface material as the cylinder
+drawn by the example program <B><!--:libs:gl32tref:--><A HREF="../gl32tref/cylinder1_c.html#Ggi2e0marj">cylinder1.c</A></B>,
+but that the second cylinder consists of a duller, purple material. In
+addition, each cylinder reflects different amounts of the blue overhead
+light. </P>
+
+
+
+
+<hr><center>
+[  <a href="lightintro.html">Previous</a>  |
+<a href="advlightcap.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/lightbasics.html Mon, 24 Jan 2022 16:28:08 GMT -->
+</HTML>
+

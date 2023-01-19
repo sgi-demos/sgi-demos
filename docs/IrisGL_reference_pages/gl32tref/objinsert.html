@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>objinsert Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="objdelete.html">Previous</a>  |
+<a href="objreplace.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9adb"></A>objinsert Subroutine</H2>
+<A NAME="INDEX1279" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1280" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX1281" REL="I3" TITLE="objinsert"></A>
+<A NAME="INDEX1282" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1283" REL="I2" TITLE="inserting into display list"></A>
+<A NAME="INDEX1284" REL="I1" TITLE="objinsert subroutine (GL)"></A>
+
+<H3><A NAME="A142X9add"></A>Purpose</H3>
+<P><A NAME="E1D7071611ceb"></A>Inserts routines in an object at a specified location.</P>
+
+<H3><A NAME="A79C178"></A>Libraries</H3>
+<P><A NAME="E1D7071650ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7071675ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9ae1"></A>C Syntax</H3>
+<PRE><A NAME="A142X9ae2"></A><B>void objinsert(Int32 </B><A HREF="objinsert.html#A142X9ae6"><I>tag</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010a95"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010a96"></A><B>SUBROUTINE OBJINS(</B><I>tag</I><B>)</B>
+<B>INTEGER*4 </B><I>tag</I></PRE>
+
+<H3><A NAME="A142X9ae3"></A>Description</H3>
+<P><A NAME="E1D7071786ceb"></A>The <B>objinsert</B> subroutine positions the editing pointer at the location specified by the <A HREF="objinsert.html#A142X9ae6"><I>tag</I></A> parameter. All subsequent graphics 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0702">primitives</A> are inserted into the display list at the current location of the editing pointer. Each graphics primitive increments the editing pointer to point immediately after the most recently inserted subroutine (in the same way that the cursor advances in an ordinary text editing facility as letters are typed).</P>
+
+<P><A NAME="E1D7071812ceb"></A>Use the <A HREF="closeobj.html#A142X915b"><B>closeobj</B></A> to terminate insertion and close up the current display list or one of the positioning subroutines (<A HREF="objdelete.html#A142X9afd"><B>objdelete</B></A>, <A HREF="objinsert.html#A142X9adb"><B>objinsert</B></A>, or <A HREF="objreplace.html#A142X9b50"><B>objreplace</B></A>) to reposition the editing pointer. </P>
+
+<BLOCKQUOTE><A NAME="A318C9d99"></A><B>Note: </B>This editing subroutine itself cannot be added to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X9ae5"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X9ae6"></A><I>tag</I></TD>
+<TD>  Specifies a tag within the object definition to be edited.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015d06"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7071909ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C17b"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C17c"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C17d"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X9afb"></A>Related Information</H3>
+<P><A NAME="E1D7072006ceb"></A>Closing an object with the <A HREF="closeobj.html#A142X915b"><B>closeobj</B></A> subroutine.</P>
+
+<P><A NAME="E1D7072032ceb"></A>Opening an object for editing with the <A HREF="editobj.html#A142X9360"><B>editobj</B></A> subroutine.</P>
+
+<P><A NAME="E1D7072057ceb"></A>Marking a location in the display list with the <A HREF="maketag.html#A142X942c"><B>maketag</B></A> subroutine.</P>
+
+<P><A NAME="E1D7072082ceb"></A>Deleting a routine from an object with the <A HREF="objdelete.html#A142X9afd"><B>objdelete</B></A> subroutine.</P>
+
+<P><A NAME="E1D7072108ceb"></A>Replacing an existing display list routine with a new one with the <A HREF="objreplace.html#A142X9b50"><B>objreplace</B></A> subroutine.</P>
+
+<P><A NAME="E1D7072134ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating <!--gl32prgd:--><A HREF="../gl32prgd/workobjects.html#workobjects.html">Objects (Display Lists)</A>.</P><hr><center>
+[  <a href="objdelete.html">Previous</a>  |
+<a href="objreplace.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+
+<!--gl32prgd/toc.html Mon, 24 Jan 2022 16:27:17 GMT -->
+<head>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<title>GL3.2 Version 4.1 for AIX: Programming Concepts</title>
+</head>
+<frameset cols="25%%, 75%%">
+<noframes>
+<body bgcolor="fcfbf0">
+<center>
+<font color="#a62a2a" size="+2">
+</font>
+</center>
+<hr>
+<H1><a href="edition.html#edition.html">First Edition (October 1994) </a></H1>
+<H1><a href="trademarks.html#trademarks.html">Trademarks and Acknowledgements</a></H1>
+<H1><a href="about.html#about.html">About This Book</a></H1>
+<H1><a href="gloverview.html#gloverview.html">Chapter 1. AIX Graphics Library Overview </a></H1>
+<H2><a href="glintro.html#glintro.html">Introducing AIX Graphics Library</a></H2>
+<H2><a href="glsubcats.html#glsubcats.html">Graphics Library Subroutines and Functional Categories</a></H2>
+<H1><a href="getstart.html#getstart.html">Chapter 2. Getting Started in GL </a></H1>
+<H2><a href="helloexmp.html#helloexmp.html">Hello World Example Program </a></H2>
+<H2><a href="animatexmp.html#animatexmp.html">Animation Example Program </a></H2>
+<H2><a href="eventsxmp.html#eventsxmp.html">Events Example Program </a></H2>
+<H1><a href="drawwithgl.html#drawwithgl.html">Chapter 3. Drawing with Graphics Library</a></H1>
+<H2><a href="drawbeg-end.html#drawbeg-end.html">Drawing with Begin-End Style Subroutines</a></H2>
+<H2><a href="move-draw.html#move-draw.html">Drawing with Move-Draw Style Subroutines</a></H2>
+<H2><a href="setglattrib.html#setglattrib.html">Setting Drawing Attributes </a></H2>
+<H2><a href="setglpipeops.html#setglpipeops.html">Setting Pipeline Options </a></H2>
+<H2><a href="drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</a></H2>
+<H2><a href="rwpixels.html#rwpixels.html">Reading and Writing Pixels</a></H2>
+<H2><a href="textchars.html#textchars.html">Creating Text Characters</a></H2>
+<H2><a href="smjaglines.html#smjaglines.html">Smoothing Jagged Lines with Antialiasing</a></H2>
+<H2><a href="drawwfcvs.html#drawwfcvs.html">Drawing Wire Frame Curves and Surface Patches</a></H2>
+<H2><a href="drawnurbs.html#drawnurbs.html">Drawing NURBS Curves and Surface Patches</a></H2>
+<H1><a href="workcoords.html#workcoords.html">Chapter 4. Working with Coordinate Systems</a></H1>
+<H2><a href="listofcoords.html#listofcoords.html">List of GL Coordinate Transformation Subroutines</a></H2>
+<H2><a href="coordtransfrms.html#coordtransfrms.html">Coordinate Transformations </a></H2>
+<H2><a href="user-deftrans.html#user-deftrans.html">User-Defined Transformations</a></H2>
+<H2><a href="cntrltransfrms.html#cntrltransfrms.html">Controlling the Order of Transformations </a></H2>
+<H2><a href="mathdetails.html#mathdetails.html">Mathematical Details of the Matrix Subroutines</a></H2>
+<H1><a href="useviewprts.html#useviewprts.html">Chapter 5. Using Viewports and Screenmasks</a></H1>
+<H2><a href="listofviewprts.html#listofviewprts.html">List of GL Viewport and Screenmask Subroutines</a></H2>
+<H2><a href="viewport.html#viewport.html">viewport Subroutine </a></H2>
+<H2><a href="getviewport.html#getviewport.html">getviewport Subroutine </a></H2>
+<H2><a href="scrmask.html#scrmask.html">scrmask Subroutine </a></H2>
+<H2><a href="getscrmask.html#getscrmask.html">getscrmask Subroutine </a></H2>
+<H2><a href="pushviewport.html#pushviewport.html">pushviewport Subroutine </a></H2>
+<H2><a href="popviewport.html#popviewport.html">popviewport Subroutine </a></H2>
+<H1><a href="remhidden.html#remhidden.html">Chapter 6. Removing Hidden Surfaces </a></H1>
+<H2><a href="listhidden.html#listhidden.html">List of GL Hidden Surface Removal Subroutines</a></H2>
+<H2><a href="underhidden.html#underhidden.html">Understanding Hidden Surface Removal</a></H2>
+<H2><a href="backfacepoly.html#backfacepoly.html">Backfacing Polygon Removal </a></H2>
+<H2><a href="Z-Buffering.html#Z-Buffering.html">Z-Buffering</a></H2>
+<H2><a href="contrzvals.html#contrzvals.html">Control of Z Values </a></H2>
+<H2><a href="addzvals.html#addzvals.html">Additional Z-Buffer Features</a></H2>
+<H1><a href="crlighteff.html#crlighteff.html">Chapter 7. Creating Lighting Effects </a></H1>
+<H2><a href="listlightsubs.html#listlightsubs.html">List of GL Lighting Subroutines</a></H2>
+<H2><a href="lightintro.html#lightintro.html">Lighting Introduction</a></H2>
+<H2><a href="lightbasics.html#lightbasics.html">Lighting Basics </a></H2>
+<H2><a href="advlightcap.html#advlightcap.html">Advanced Lighting Capabilities </a></H2>
+<H2><a href="lightmatrix.html#lightmatrix.html">Lighting in Matrix Mode </a></H2>
+<H2><a href="lightsubs.html#lightsubs.html">Lighting Subroutines </a></H2>
+<H2><a href="lightexec.html#lightexec.html">Lighting Execution Time and Performance</a></H2>
+<H2><a href="lightformula.html#lightformula.html">Formula for Lighting Calculation</a></H2>
+<H1><a href="depth-cueing.html#depth-cueing.html">Chapter 8. Performing Depth-Cueing </a></H1>
+<H2><a href="listofdepth-cues.html#listofdepth-cues.html">List of GL Depth-Cueing Subroutines</a></H2>
+<H2><a href="depth-cuecolor.html#depth-cuecolor.html">Depth-Cueing in Color Map Mode </a></H2>
+<H2><a href="depth-dueRGB.html#depth-dueRGB.html">Depth-Cueing in RGB Mode</a></H2>
+<H1><a href="configframebuf.html#configframebuf.html">Chapter 9. Configuring the Frame Buffer </a></H1>
+<H2><a href="listframebufsubs.html#listframebufsubs.html">List of GL Frame Buffer Configuration Subroutines</a></H2>
+<H2><a href="underframebuf.html#underframebuf.html">Understanding the Frame Buffer </a></H2>
+<H2><a href="workcolor.html#workcolor.html">Working in Color Map and RGB Modes</a></H2>
+<H2><a href="animatescene.html#animatescene.html">Creating Animated Scenes</a></H2>
+<H2><a href="underovermodes.html#underovermodes.html">Underlay and Overlay Modes</a></H2>
+<H2><a href="alphablend.html#alphablend.html">Alpha Blending Modes </a></H2>
+<H2><a href="writemasks.html#writemasks.html">Writemasks and Logical Operations</a></H2>
+<H2><a href="clrrstintgl.html#clrrstintgl.html">Clearing, Resetting, and Initializing GL</a></H2>
+<H1><a href="workobjects.html#workobjects.html">Chapter 10. Working with Objects (Display
+Lists) </a></H1>
+<H2><a href="listobjects.html#listobjects.html">List of GL Object (Display List) Subroutines</a></H2>
+<H2><a href="defobject.html#defobject.html">Defining an Object</a></H2>
+<H2><a href="useobject.html#useobject.html">Using Objects </a></H2>
+<H2><a href="mapcoords2wrld.html#mapcoords2wrld.html">Mapping Screen Coordinates to World Coordinates</a></H2>
+<H2><a href="objectedit.html#objectedit.html">Object Editing</a></H2>
+<H1><a href="picknselect.html#picknselect.html">Chapter 11. Picking and Selecting </a></H1>
+<H2><a href="listofpkselsbs.html#listofpkselsbs.html">List of GL Picking and Selecting Subroutines</a></H2>
+<H2><a href="Picking.html#Picking.html">Picking </a></H2>
+<H2><a href="Selecting.html#Selecting.html">Selecting </a></H2>
+<H1><a href="underwininput.html#underwininput.html">Chapter 12. Understanding Windows and Input
+Control </a></H1>
+<H2><a href="managewinds.html#managewinds.html">Creating and Managing Windows</a></H2>
+<H2><a href="cursorgl.html#cursorgl.html">Creating a Cursor</a></H2>
+<H2><a href="keyboardgl.html#keyboardgl.html">Using the Keyboard</a></H2>
+<H2><a href="cntrlques.html#cntrlques.html">Controlling Queues and Devices</a></H2>
+<H2><a href="querysys.html#querysys.html">Querying the System
+</a></H2>
+<H2><a href="popupmenus.html#popupmenus.html">Creating and Managing Pop-Up Menus</a></H2>
+<H2><a href="textport.html#textport.html">Working with the Textport</a></H2>
+<H1><a href="exhwindcalls.html#exhwindcalls.html">Chapter 13. Using Enhanced X-Windows
+Calls with GL Subroutines </a></H1>
+<H2><a href="enhxwndrestr.html#enhxwndrestr.html">Restrictions on Using Enhanced X-Windows Calls with GL Subroutines</a></H2>
+<H2><a href="enhxinterop.html#enhxinterop.html">Enhanced X-Windows and GL Interoperability</a></H2>
+<H1><a href="portabilty.html#portabilty.html">Chapter 14. Portability, Compatibility,
+and Performance </a></H1>
+<H2><a href="aixwind3d.html#aixwind3d.html">AIXwindows Environment/6000 3-D
+Feature Version 1 </a></H2>
+<H2><a href="exampprogs.html#exampprogs.html">Example Programs </a></H2>
+<H2><a href="perftuning.html#perftuning.html">Performance Tuning </a></H2>
+<H1><a href="progconsider.html#progconsider.html">Chapter 15. System Programming Considerations</a></H1>
+<H2><a href="multiprocman.html#multiprocman.html">Multiple Process Management</a></H2>
+<H2><a href="linkncompil.html#linkncompil.html">Linking and Compiling Using the GL Shared Library</a></H2>
+<H2><a href="FORTRANnC.html#FORTRANnC.html">Linking FORTRAN and C Modules </a></H2>
+<H2><a href="unsupsubs.html#unsupsubs.html">Unsupported Subroutines</a></H2>
+<H2><a href="obsoletesubs.html#obsoletesubs.html">Obsolete Subroutines</a></H2>
+<H1><a href="undergraphadapt.html#undergraphadapt.html">Chapter 16. Understanding the Graphics Adapter</a></H1>
+<H2><a href="3dclrproc.html#3dclrproc.html">3-D Color Graphics Processor </a></H2>
+<H2><a href="powerstation730.html#powerstation730.html">IBM RISC System/6000 POWERstation 730 and POWERgraphics GTO Supergraphics Processor Subsystem</a></H2>
+<H2><a href="powerGt4.html#powerGt4.html">POWER Gt4 and POWER Gt4x
+Adapters </a></H2>
+<H2><a href="PGXT1000.html#PGXT1000.html">POWER GXT1000 Adapter </a></H2>
+<H2><a href="hdwrcolormap.html#hdwrcolormap.html">Hardware Colormap Organization</a></H2>
+<H1><a href="glsublist.html#glsublist.html">Appendix A. GL Subroutines</a></H1>
+<H2><a href="glsubsA-F.html#glsubsA-F.html">GL Subroutines (A-F)</a></H2>
+<H2><a href="glsubsM-R.html#glsubsM-R.html">GL Subroutines (M-R)</a></H2>
+<H2><a href="glsubsS-Z.html#glsubsS-Z.html">GL Subroutines (S-Z)</a></H2>
+<H1><a href="glsubmodal.html#glsubmodal.html">Appendix B. GL Subroutine Modality </a></H1>
+<H1><a href="descrtable.html#descrtable.html">Appendix C. Adapter Description Table for GL</a></H1>
+<H1><a href="portSGIapps.html#portSGIapps.html">Appendix D. Porting SGI GL Applications to Your GL Environment</a></H1>
+<H2><a href="SGIfiletrans.html#SGIfiletrans.html">SGI GL File Transfer Compiling and Linking</a></H2>
+<H2><a href="SGIperformance.html#SGIperformance.html">SGI GL Performance and System Environment Considerations</a></H2>
+<H1><a href="specialterms.html#specialterms.html">Special Terms Used in GL </a></H1>
+</noframes>
+</body>
+<frame src="frame_toc.html" name="toc">
+<frame src="edition.html" name="text">
+</frameset>
+
+<!--gl32prgd/toc.html Mon, 24 Jan 2022 16:27:48 GMT -->
+</html>

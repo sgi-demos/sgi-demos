@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>gversion Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="gsync.html">Previous</a>  |
+<a href="iconsize.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A237X9480e"></A>gversion Subroutine</H2>
+<A NAME="INDEX944" REL="I1" TITLE="gversion subroutine (GL)"></A>
+<A NAME="INDEX945" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX946" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX947" REL="I3" TITLE="gversion"></A>
+<A NAME="INDEX948" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX949" REL="I2" TITLE="query"></A>
+<A NAME="INDEX950" REL="I3" TITLE="gversion"></A>
+<A NAME="INDEX951" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX952" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX953" REL="I3" TITLE="returning graphics hardware, library information"></A>
+
+<H3><A NAME="A237X94810"></A>Purpose</H3>
+<P><A NAME="E1B13E0544ceb"></A>Returns graphics hardware and library version information.</P>
+
+<H3><A NAME="A79C11dc"></A>Libraries</H3>
+<P><A NAME="E1B13E0696ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B13E0799ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A237X94814"></A>C Syntax</H3>
+<PRE><A NAME="A213X91134f"></A><B>Int32 gversion(Char8 *</B><A HREF="gversion.html#A213X911344"><I>v</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X91134c"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A52C0142ce"></A><B>INTEGER*4 GVERSI(</B><I>v</I><B>, </B><A HREF="gversion.html#A237X9481b"><I>length</I></A><B>)</B>
+<B>CHARACTER*(*) </B><I>v</I>
+<B>INTEGER*4 </B><I>length</I></PRE>
+
+<H3><A NAME="A237X94816"></A>Description</H3>
+<P><A NAME="E1B13E1164ceb"></A>The <B>gversion</B> subroutine fills the buffer, identified by the <I>v</I> parameter, with a null-terminated string that specifies the graphics hardware type and the version number of GL. </P>
+
+<P><A NAME="E1B13E1272ceb"></A>It is not necessary to open a GL window or to call the <B>ginit</B> subroutine before using the <B>getdesc</B> subroutine.</P>
+
+<P><A NAME="E1B13E1379ceb"></A>The <B>gversion</B> subroutine returns a value of -1 if GL is not supported on this particular hardware configuration.</P>
+
+<BLOCKQUOTE><A NAME="A325C93ba0"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<BLOCKQUOTE><A NAME="A5DB26C823bett"></A><B>Attention: </B>Calling the <B>gversion</B> subroutine before calling the <B>winopen</B> subroutine on the POWERgraphics GTO and the POWERstation 730, results in a core dump when the initial <B>winopen</B> subroutine call is made.</BLOCKQUOTE>
+
+
+<H3><A NAME="A237X94828"></A>Return Value</H3>
+<P><A NAME="E1B13E1647ceb"></A>In the following values table, <I>m</I> and <I>n</I> indicate the major and minor release numbers of the installed software libraries:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Installed Adapter</B></TD>
+
+<TD><B>String Returned</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>3-D Color Graphics Processor</TD>
+
+<TD>GL:CGP-<I>m.n</I></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Supergraphics Processor</TD>
+
+<TD>GL:GTO-<I>m.n</I></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>POWER GTO adapter</TD>
+
+<TD>GL:GTO-<I>m.n</I></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>POWER Gt4 adapter</TD>
+
+<TD>GL:GT4-<I>m.n</I></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>POWER Gt4x adapter</TD>
+
+<TD>GL:GT4-<I>m.n</I></TD></TR></TABLE>
+
+<H3><A NAME="A237X94818"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911344"></A><I>v</I></TD>
+<TD>  Specifies a buffer into which you can copy a string. Reserve at least a 12-character buffer. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A237X9481b"></A><I>length</I></TD>
+<TD>  Specifies the length of the string.</TD></TR></TABLE>
+
+<H3><A NAME="A64C01660a"></A>Implementation Specifics</H3>
+<P><A NAME="E1B13E2049ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C11df"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11e0"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11e1"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A237X9482e"></A>Related Information</H3>
+<P><A NAME="E1B13E2369ceb"></A>Creating a new window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine.</P>
+
+<P><A NAME="E1B13E2475ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware</A> Used by GL and <!--gl32prgd:--><A HREF="../gl32prgd/clrrstintgl.html#clrrstintgl.html">Clearing, Resetting, and Initializing GL</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P><hr><center>
+[  <a href="gsync.html">Previous</a>  |
+<a href="iconsize.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

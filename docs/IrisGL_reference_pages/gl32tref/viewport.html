@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>viewport Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="v.html">Previous</a>  |
+<a href="winclose.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="qrY270marj"></A>viewport Subroutine</H2>
+<A NAME="INDEX1968" REL="I1" TITLE="viewport subroutine (GL)"></A>
+<A NAME="INDEX1969" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1970" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX1971" REL="I3" TITLE="viewport"></A>
+<A NAME="INDEX1972" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1973" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX1974" REL="I3" TITLE="setting areas"></A>
+
+<H3><A NAME="A213X911b99"></A>Purpose</H3>
+<P><A NAME="E1D75C7723ceb"></A>Sets the area of the window used for all drawing.</P>
+
+<H3><A NAME="A79C129c"></A>Libraries</H3>
+<P><A NAME="E1D75C7762ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D75C7786ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911b9c"></A>C Syntax</H3>
+<PRE><A NAME="A213X911b9d"></A><B>void viewport</B>
+<B>(Screencoord </B><A HREF="viewport.html#A213X911ba6"><I>left</I></A><B>, Screencoord</B> <A HREF="viewport.html#A213X911ba7"><I>right</I></A><B>,</B>
+<B>Screencoord</B> <A HREF="viewport.html#A213X911ba8"><I>bottom</I></A><B>, Screencoord</B> <A HREF="viewport.html#A213X911ba9"><I>top</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X911b77"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X911b7a"></A><B>SUBROUTINE VIEWPO(</B><I>left</I><B>,</B> <I>right</I><B>,</B> <I>bottom</I><B>,</B> <I>top</I><B>)</B>
+<B>INTEGER*4 </B><I>left</I><B>,</B> <I>right</I><B>,</B> <I>bottom</I><B>,</B> <I>top</I></PRE>
+
+<BLOCKQUOTE><A NAME="A79C129f"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911ba0"></A>Description</H3>
+<P><A NAME="E1D75C7921ceb"></A>The <B>viewport</B> subroutine specifies, in pixels, the area of the window in which all drawing occurs. The 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A> locations are specified relative to the lower left corner of the window. Specifying the viewport is the last step in mapping 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06el">modeling coordinates</A> to 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P017">screen coordinates</A>. </P>
+
+<P><A NAME="E1D75C7947ceb"></A>The portion of world space that the <A HREF="window.html#A144X95ea"><B>window</B></A>, <A HREF="ortho.html#A144X9496"><B>ortho</B></A>, or <A HREF="perspective.html#A144X94da"><B>perspective</B></A> subroutines describe is mapped into the viewport. The <A HREF="viewport.html#A213X911ba6"><I>left</I></A>, <A HREF="viewport.html#A213X911ba7"><I>right</I></A>, <A HREF="viewport.html#A213X911ba8"><I>bottom</I></A>, <A HREF="viewport.html#A213X911ba9"><I>top</I></A> coordinates define a rectangular area on the screen.</P>
+
+<P><A NAME="E1D75C7974ceb"></A>The viewport is set to the size of the window when the window is first opened (thus, a <A HREF="getviewport.html#A142X9107"><B>getviewport</B></A> would return the size of the window). However, if the window is resized, the viewport dimensions are not automatically updated (use the <A HREF="reshapeviewport.html#A7LQ3b0marj"><B>reshapeviewport</B></A> subroutine). The viewport may be much larger or much smaller than the window size. All drawing occurs inside the current viewport, but is clipped to the window.</P>
+
+<P><A NAME="E1D75C8000ceb"></A>If the <I>left</I> parameter is greater than the <I>right</I> parameter, the displayed image will be left-right reversed. If the <I>bottom</I> parameter is greater than the <I>top</I> parameter, the displayed image will be up-down reversed.</P>
+
+<P><A NAME="E1D75C8026ceb"></A>The viewport is the mapping from normalized device coordinates (NDC) to device coordinates (DC). The same function is provided for the z-direction with the <A HREF="lsetdepth.html#naR120marj"><B>lsetdepth</B></A> subroutine.</P>
+
+<P><A NAME="E1D75C8051ceb"></A>The <B>viewport</B> subroutine also resets the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P018">screenmask</A>. The screenmask is set to be exactly the same size as the viewport.</P>
+
+<H3><A NAME="A213X911ba5"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911ba6"></A><I>left</I> </TD>
+<TD>  Specifies the <I>x </I>location (in pixels) of left side of viewport.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911ba7"></A><I>right</I> </TD>
+<TD>  Specifies the <I>x </I>location (in pixels) of right side of viewport.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911ba8"></A><I>bottom</I> </TD>
+<TD>  Specifies the <I>y </I>location (in pixels) of bottom of viewport.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911ba9"></A><I>top</I> </TD>
+<TD>  Specifies the <I>y </I>location (in pixels) of top of viewport.</TD></TR></TABLE>
+
+<H3><A NAME="A30C01100e"></A>Example</H3>
+<P><A NAME="E1D75C8187ceb"></A>The example C language program <A HREF="paint_c.html#A13C0bd84"><B>paint.c</B></A> uses the <B>viewport</B> subroutine to define a viewport for displaying an image. </P>
+
+<H3><A NAME="A62C015d44"></A>Implementation Specifics</H3>
+<P><A NAME="E1D75C8230ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C12a0"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12a1"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12a2"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911bbc"></A>Related Information</H3>
+<P><A NAME="E1D75C8327ceb"></A>Defining the viewport depth with the <A HREF="lsetdepth.html#naR120marj"><B>lsetdepth</B></A> subroutine.</P>
+
+<P><A NAME="E1D75C8353ceb"></A>Popping the viewport off the viewport stack with the <A HREF="popviewport.html#A213X911d3c"><B>popviewport</B></A> subroutine. </P>
+
+<P><A NAME="E1D75C8378ceb"></A>Pushing the viewport onto the viewport stack with the <A HREF="pushviewport.html#A213X911bee"><B>pushviewport</B></A> subroutine. </P>
+
+<P><A NAME="E1D75C8404ceb"></A>Changing the viewport shape with the <A HREF="reshapeviewport.html#A7LQ3b0marj"><B>reshapeviewport</B></A> subroutine.</P>
+
+<P><A NAME="E1D75C8432ceb"></A>Defining a rectangular 2-D clipping mask with the <A HREF="scrmask.html#fwN250marj"><B>scrmask</B></A> subroutine.</P>
+
+<P><A NAME="E1D75C8458ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Using <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Viewports and Screenmasks</A>, and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="v.html">Previous</a>  |
+<a href="winclose.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

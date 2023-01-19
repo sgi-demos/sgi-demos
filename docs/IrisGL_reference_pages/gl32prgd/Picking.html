@@ -1,0 +1,534 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/Picking.html Mon, 24 Jan 2022 16:28:19 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Picking
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="listofpkselsbs.html">Previous</a>  |
+<a href="Selecting.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="Picking.html"></A>Picking </H2>
+
+
+<P><A NAME="INDEX743"></A><A NAME="INDEX744"></A><A NAME="INDEX745"></A>
+<A NAME="INDEX746"></A></P>
+
+
+<P><A NAME="A3C0EC60956mhay"></A>This section discusses the following aspects
+of picking: </P>
+
+
+<UL><LI><A NAME="A258C01c0f1"></A><A HREF="Picking.html#Oud160nita">Picking
+Introduction</A></LI>
+
+
+<LI><A NAME="A258C01c0f2"></A><A HREF="Picking.html#A1vdd0nita">Recording
+Hits</A></LI>
+
+
+<LI><A NAME="A258C01c0f3"></A><A HREF="Picking.html#A15C0c661">Using
+the Name Stack</A></LI>
+
+
+<LI><A NAME="A258C01c0f4"></A><A HREF="Picking.html#A15C0c677">Defining
+the Picking Region</A></LI>
+
+
+<LI><A NAME="A151C12296"></A><A HREF="Picking.html#sdk220nita">Pick Matrix</A></LI></UL>
+
+
+<H3><A NAME="Oud160nita"></A>Picking Introduction </H3>
+
+
+<P><A NAME="A3C0EC60983mhay"></A>Use picking to identify the figures (drawing
+primitives) on the screen that appear near the cursor. To use picking,
+your software must be structured so that you can regenerate the picture
+on the screen whenever picking is required. When it is, set the system
+into picking mode with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pick.html#h632f0nita">pick</A></B>
+subroutine, redraw the image on the screen, and finish by calling the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/endpick.html#A213X91185b">endpick</A></B>
+subroutine. Data recorded during the pick appears in the buffer specified
+by the <B>pick</B> and <B>endpick</B> subroutines. </P>
+
+
+<P><A NAME="A3C0EC61003mhay"></A>When the system is in picking mode, it
+does not draw anything to the screen. Instead, it checks for <I>hits</I>.
+A hit occurs every time a drawing primitive intersects the picking region.
+The picking region is a rectangular area of the screen, centered about
+the location of the cursor. By default, it is 10 by 10 pixels in size.
+The size of the picking region can be controlled with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/picksize.html#A6cv180marj">picksize</A></B>
+subroutine. </P>
+
+
+<P><A NAME="A3C0EC61024mhay"></A>With one exception, all the standard drawing
+routines cause hits, including those for points, lines, polygons, arcs,
+circles, curves, and patches. Raster objects, such as character strings
+and pixels drawn with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/charstr.html#A143X9cfb">charstr</A></B>
+subroutine, do not cause hits, but the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/cmov.html#A143X9d1d">cmov</A></B>
+subroutine does. Thus, to pick the string, the cursor must be near the
+lower left corner of the string. Note also that because the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/readpixels.html#A142X91059">readpixels</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/readRGB.html#A142X9107b">readRGB</A></B>
+subroutines are often preceded by a call to the <B>cmov</B> subroutine,
+these routines can appear to cause hits. The following <A HREF="figures/gl32p32.jpg">figure</A>
+illustrates the picking process. </P>
+
+
+<P><A NAME="A3C0EC61045mhay"></A>In picking mode, you can identify the
+parts of an image that lie near the cursor. The cursor is shown as an arrow.
+The small box at the tip of the arrow is the picking region. The large
+shaded circle is picked. The text string whose origin is in the picking
+region is also picked. The shaded triangle and the other text string are
+not picked. </P>
+
+
+<H3><A NAME="A1vdd0nita"></A>Recording Hits </H3>
+
+
+<P><A NAME="A3C0EC61067mhay"></A>The system records hits by writing data
+into the picking buffer. The actual data that is recorded is the entire
+contents of the name stack, preceded by the size of the name stack. The
+name stack is a stack of 16-bit integers (here referred to as <I>names</I>,
+not to be confused with the actual GL names of the routines that cause
+hits). </P>
+
+
+<P><A NAME="A3C0EC61087mhay"></A>The application (your program) has complete
+control over the name stack. Names can be loaded onto the stack; pushed
+onto the stack; popped off the stack with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/loadname.html#A213X9119af">loadname</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/pushname.html#A213X911b48">pushname</A></B>,
+or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/popname.html#A213X911af9">popname</A></B>
+subroutine; or initialized with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/initnames.html#YlD250marj">initnames</A></B>
+subroutine. </P>
+
+
+<P><A NAME="A3C0EC61108mhay"></A>Note that the actual ASCII name of the
+drawing routine (for example, <B><!--:libs:gl32tref:--><A HREF="../gl32tref/arc.html#tEp310nita">arc</A></B>)
+that caused the hit is <I>not</I> recorded. Rather, you must add 16-bit
+integer names to the name stack or delete them from the name stack to receive
+interpretable data back when picking is completed. </P>
+
+
+<P><A NAME="A3C0EC61128mhay"></A>It is very important to realize that not
+every hit is recorded. A hit is recorded only if the name stack has been
+changed since the last hit. The three name stack subroutines, <B>loadname</B>,
+<B>pushname</B>, and <B>popname</B>, all touch the name stack. Thus, multiple
+hits can occur, but only one gets recorded into the buffer if the name
+stack never changes. </P>
+
+
+<P><A NAME="A3C0EC61148mhay"></A>For example, suppose your application
+draws three points widely spaced on the screen, and you want to find which
+one is close to the cursor using picking mode. Your point-drawing code
+(that is executed both to draw points and to redraw them in a picking operation),
+might look like this: </P>
+
+
+<PRE><A NAME="A15C0c634"></A>ortho(&lt;ortho&nbsp;parameters&gt;);
+lookat&nbsp;(&lt;lookat&nbsp;parameters&gt;);
+translate&nbsp;(-x,&nbsp;-y,&nbsp;-z);
+rotate(30,&nbsp;'y');
+translate(x,&nbsp;y,&nbsp;z);
+loadname(0);
+pnt(&lt;point&nbsp;0&gt;);
+loadname(1);
+pnt(&lt;point&nbsp;1&gt;);
+loadname(2);
+pnt(&lt;point&nbsp;2&gt;);</PRE>
+
+
+<P><A NAME="A3C0EC61170mhay"></A>Note that the complete specification for
+drawing the picture must be there, including any <A HREF="specialterms.html#A27P021">viewing</A>
+and <A HREF="specialterms.html#A27P021">transformation</A> routines. When this code segment is executed in picking
+mode and the cursor is near point 1, the buffer returned after the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/endpick.html#A213X91185b">endpick</A></B>
+subroutine would contain the name 1. If the cursor is near point 2, the
+buffer would contain the name 2. If the cursor is not near any of the points,
+an empty buffer would be returned. </P>
+
+
+<P><A NAME="A3C0EC61190mhay"></A>The stack is intended for used with hierarchical
+drawings. For example, suppose you want to draw a car with four instances
+of a wheel, with each wheel having five instances of a bolt, and you want
+to pick an individual bolt from the picture. You might have one piece of
+code to draw each wheel that contained the sequence: </P>
+
+
+<PRE><A NAME="A15C0c641"></A>pushname(0);
+&lt;draw&nbsp;bolt&nbsp;0&gt;
+popname();
+pushname(1);
+&lt;draw&nbsp;bolt&nbsp;1&gt;
+popname();
+&nbsp;&nbsp;&nbsp;.
+&nbsp;&nbsp;&nbsp;.
+&nbsp;&nbsp;&nbsp;.</PRE>
+
+
+<P><A NAME="A3C0EC61210mhay"></A>The car-drawing code might look like this:</P>
+
+
+<PRE><A NAME="A15C0c64b"></A>loadname(0);
+&lt;translate&gt;
+&lt;draw&nbsp;wheel&gt;
+loadname(1);
+&lt;translate&gt;
+&lt;draw&nbsp;wheel&gt;
+&nbsp;&nbsp;&nbsp;.
+&nbsp;&nbsp;&nbsp;.
+&nbsp;&nbsp;&nbsp;.</PRE>
+
+
+<P><A NAME="A3C0EC61231mhay"></A>Each hit on a bolt would occur with the
+name stack containing two names, the first of which is the wheel number
+and the second of which is the bolt number on that wheel. Deeper nesting
+of the hierarchy is possible. </P>
+
+
+<P><A NAME="A3C0EC61251mhay"></A>The names reported on hits are completely
+application dependent. Many drawing routines can occur between changes
+to the name stack. If any of those routines cause a hit, the contents of
+the name stack is reported. </P>
+
+
+<P><A NAME="A3C0EC61271mhay"></A>Because the contents of the name stack
+is reported only when it changes, one hit is reported no matter how many
+of the drawing routines actually draw something near the cursor. If more
+accuracy than this is required by the application, it must touch the name
+stack more often. In the code fragment that follows, if all three points
+caused hits, three identical name stacks are reported: </P>
+
+
+<PRE><A NAME="A15C0c656"></A>loadname(1);
+pnt(-);
+loadname(1);
+pnt(-);
+loadname(1);
+pnt(-);</PRE>
+
+
+<H4><A NAME="A15C0c65c"></A>pick Subroutine </H4>
+
+
+<P><A NAME="A3C0EC61294mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pick.html#h632f0nita">pick</A></B>
+subroutine puts the system in picking mode. The <I>bufferlen</I> parameter
+specifies the length of the buffer array. It should be less than or equal
+to the size of the buffer as measured in 16-bit short integers. Graphical
+items that intersect the picking region cause hits. If the name stack has
+changed since the last hit, the length and contents of the name stack are
+recorded in the buffer. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A66C016bfa"></A>void&nbsp;pick(Int16&nbsp;buffer,&nbsp;Int32&nbsp;bufferlen)</PRE>
+
+
+<H3><A NAME="A15C0c661"></A>Using the Name Stack<A NAME="INDEX747"></A>
+<A NAME="INDEX748"></A> <A NAME="INDEX749"></A> <A NAME="INDEX750"></A>
+<A NAME="INDEX751"></A> <A NAME="INDEX752"></A> <A NAME="INDEX753"></A>
+<A NAME="INDEX754"></A> <A NAME="INDEX755"></A> </H3>
+
+
+<P><A NAME="A3C0EC61316mhay"></A>You maintain the name stack with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/loadname.html#A213X9119af">loadname</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/pushname.html#A213X911b48">pushname</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/popname.html#A213X911af9">popname</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/initnames.html#YlD250marj">initnames</A></B>
+subroutines. Each name in the name stack is 16 bits long. You can store
+up to 1000 names in the name stack. You can intersperse these routines
+with drawing routines, or you can insert them into 
+<A HREF="specialterms.html#A26P0473">display
+lists</A>. </P>
+
+
+<H4><A NAME="A15C0c663"></A>loadname Subroutine </H4>
+
+
+<P><A NAME="A3C0EC61337mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/loadname.html#A213X9119af">loadname</A></B>
+subroutine puts a new <I>name</I> at the top of the name stack and erases
+what was there before. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A66C016bfb"></A>void&nbsp;loadname(Int16&nbsp;name)</PRE>
+
+
+<H4><A NAME="A15C0c667"></A>pushname Subroutine </H4>
+
+
+<P><A NAME="A3C0EC61359mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pushname.html#A213X911b48">pushname</A></B>
+subroutine puts a new <I>name</I> at the top of the stack and pushes all
+the other names in the stack one level lower. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A66C016bfc"></A>void&nbsp;pushname(Int16&nbsp;name)</PRE>
+
+
+<P><A NAME="A3C0EC61380mhay"></A>Before the first <B>loadname</B> subroutine
+is called, the current name is unpredictable. Calling the <B>pushname</B>
+subroutine before calling the <B>loadname</B> subroutine can cause unpredictable
+results. </P>
+
+
+<H4><A NAME="A15C0c66c"></A>popname Subroutine </H4>
+
+
+<P><A NAME="A3C0EC61401mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/popname.html#A213X911af9">popname</A></B>
+subroutine discards the name at the top of the stack and moves all the
+other names up one level. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A66C016bfd"></A>void&nbsp;popname()</PRE>
+
+
+<H4><A NAME="A15C0c66f"></A>initnames Subroutine </H4>
+
+
+<P><A NAME="A3C0EC61423mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/initnames.html#YlD250marj">initnames</A></B>
+discards all the names in the stack and leaves the stack empty. The syntax
+is as follows: </P>
+
+
+<PRE><A NAME="A66C016bfe"></A>void&nbsp;initnames()</PRE>
+
+
+<H4><A NAME="A15C0c672"></A>endpick Subroutine </H4>
+
+
+<P><A NAME="A3C0EC61445mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/endpick.html#A213X91185b">endpick</A></B>
+subroutine takes the system out of picking mode and returns the number
+of times the name stack was dumped into the buffer. If this number is positive,
+the buffer was large enough to contain all of the name stacks written to
+it. If the number is negative, the buffer was too small to store all the
+name lists. The magnitude of the returned number is the number of name
+stacks that were recorded. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A66C016bff"></A>Int32&nbsp;endpick(Int16&nbsp;buffer[])</PRE>
+
+
+<P><A NAME="A3C0EC61466mhay"></A>The <I>buffer</I> parameter contains copies
+of the name stack that were recorded as hits occurred. As explained previously,
+not every hit causes the name stack to be recorded; only the first hit
+after the name stack has been touched is recorded. When stored in the buffer,
+each name stack is preceded by the length of the name stack. If the name
+stack is empty when a hit occurs, the length is recorded as 0 (zero), and
+the stack is not recorded. </P>
+
+
+<H3><A NAME="A15C0c677"></A>Defining the Picking Region<A NAME="INDEX756"></A>
+<A NAME="INDEX757"></A> <A NAME="INDEX758"></A> <A NAME="INDEX759"></A>
+<A NAME="INDEX760"></A> <A NAME="INDEX761"></A> </H3>
+
+
+<P><A NAME="A3C0EC61487mhay"></A>Picking loads a projection <A HREF="figures/gl32p81.jpg">matrix</A>
+that makes the picking region fill the entire <A HREF="specialterms.html#A27P039">viewport</A>.
+This picking matrix replaces the projection transformation matrix that
+is normally used when drawing routines are called. Therefore, you must
+restate the original projection transformation after the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pick.html#h632f0nita">pick</A></B>
+subroutine to ensure that the system maps the objects to be picked to the
+proper coordinates. </P>
+
+
+<P><A NAME="A3C0EC61507mhay"></A>If no projection transformation was originally
+issued, you must specify the default subroutine, <B><!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496">ortho2</A></B>.
+When the transformation routine is restated, the product of the transformation
+matrix and the picking matrix is placed at the top of the matrix stack.
+If you do not restate the projection transformation, picking does not work
+properly. Instead, the system typically picks every object, regardless
+of cursor position and picksize. </P>
+
+
+<H4><A NAME="A15C0c684"></A>picksize Subroutine </H4>
+
+
+<P><A NAME="A3C0EC61529mhay"></A>The default height and width of the picking
+region is 10 pixels, centered at the cursor. You can change the picking
+region with the <B>picksize</B> subroutine. The <I>deltax</I> and <I>deltay</I>
+parameters specify a rectangle centered at the current cursor position
+(the origin of the cursor glyph). (See &quot;<A HREF="cursorgl.html#cursorgl.html">Creating
+a Cursor</A>&quot; for a discussion of cursors.) The syntax is as follows:</P>
+
+
+<PRE><A NAME="A66C016c00"></A>void&nbsp;picksize(Int16&nbsp;deltax,&nbsp;Int16&nbsp;deltay)</PRE>
+
+
+<H4><A NAME="A258C01c0f6"></A>Picking Example Program </H4>
+
+
+<P><A NAME="A3C0EC61551mhay"></A>The following example program draws an
+object consisting of three shapes; then it loops, until the right mouse
+button is pressed. Each time the middle mouse button is pressed, the graphics
+system: </P>
+
+
+<OL><LI><A NAME="A65C016815"></A>Enters pick mode.</LI>
+
+
+<LI><A NAME="A65C016816"></A>Calls the object.</LI>
+
+
+<LI><A NAME="A65C016817"></A>Records hits for any routines that draw into
+the picking region.</LI>
+
+
+<LI><A NAME="A65C016818"></A>Prints out the contents of the picking buffer.
+
+
+<BLOCKQUOTE><A NAME="A65C016819"></A><B>Note: </B>When you call an object in picking
+mode, the screen does not change. Because the picking matrix is recalculated
+only when pick is called, the system exits and reenters picking mode to
+obtain new cursor positions. </BLOCKQUOTE></LI></OL>
+
+
+<P><A NAME="A3C0EC61576mhay"></A>When the program is run, there are five
+possible outcomes for each picking session (the circles can be picked together
+because they overlap): </P>
+
+
+<UL><LI><A NAME="A65C01681b"></A>Nothing is picked = hit count: 0 hits:</LI>
+
+
+<LI><A NAME="A65C01681c"></A>The square is picked = hit count: 1. hits:
+(1)</LI>
+
+
+<LI><A NAME="A65C01681d"></A>The bottom circle is picked = hit count: 1.
+hit: (2 21)</LI>
+
+
+<LI><A NAME="A65C01681e"></A>The top circle is picked = hit count: 1. hit:
+(2 22)</LI>
+
+
+<LI><A NAME="A65C01681f"></A>Both the top and bottom circles are picked
+= hit count: 2 hits: (2 21) (2 22) 
+
+<PRE><A NAME="A65C016820"></A>/***
+&nbsp;&nbsp;&nbsp;&nbsp;pick.c&nbsp;-&nbsp;example&nbsp;of&nbsp;picking
+***/</PRE></LI></UL>
+
+
+<PRE><A NAME="A65C016821"></A>#include&nbsp;&lt;gl/gl.h&gt;
+#include&nbsp;&lt;gl/device.h&gt;</PRE>
+
+
+<PRE><A NAME="A65C016822"></A>#define&nbsp;BUFSIZE&nbsp;50</PRE>
+
+
+<PRE><A NAME="A65C016823"></A>void
+drawit()
+{
+&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;loadname(1);
+&nbsp;&nbsp;&nbsp;rectfi(20,20,100,100);
+&nbsp;&nbsp;&nbsp;loadname(2);
+&nbsp;&nbsp;&nbsp;pushname(21);
+&nbsp;&nbsp;&nbsp;circi(50,&nbsp;500,&nbsp;50);
+&nbsp;&nbsp;&nbsp;popname();
+&nbsp;&nbsp;&nbsp;pushname(22);
+&nbsp;&nbsp;&nbsp;circi(50,&nbsp;530,&nbsp;60);
+&nbsp;&nbsp;&nbsp;popname();
+}</PRE>
+
+
+<PRE><A NAME="A65C016824"></A>int
+main()
+{
+short&nbsp;dev,&nbsp;val;
+short&nbsp;buffer[BUFSIZE];
+int&nbsp;hits;
+int&nbsp;xsize,&nbsp;ysize;
+int&nbsp;i;&nbsp;&nbsp;&nbsp;&nbsp;</PRE>
+
+
+<PRE><A NAME="A65C016825"></A>&nbsp;&nbsp;&nbsp;prefsize(600,&nbsp;600);
+&nbsp;&nbsp;&nbsp;(void)&nbsp;winopen(&quot;pick&quot;);
+&nbsp;&nbsp;&nbsp;getsize(&amp;xsize,&nbsp;&amp;ysize);
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;qdevice(LEFTMOUSE);
+&nbsp;&nbsp;&nbsp;qdevice(ESCKEY);
+&nbsp;&nbsp;&nbsp;for&nbsp;(i&nbsp;=&nbsp;0;&nbsp;&nbsp;i&nbsp;&lt;&nbsp;BUFSIZE;&nbsp;&nbsp;i++)&nbsp;&nbsp;buffer[i]&nbsp;=&nbsp;0;
+&nbsp;&nbsp;&nbsp;&nbsp;</PRE>
+
+
+<PRE><A NAME="A65C016826"></A>&nbsp;&nbsp;&nbsp;drawit();</PRE>
+
+
+<PRE><A NAME="A65C016827"></A>&nbsp;&nbsp;&nbsp;while&nbsp;(1)&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;dev&nbsp;=&nbsp;qread(&amp;val);
+&nbsp;&nbsp;&nbsp;switch&nbsp;(dev)&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;LEFTMOUSE:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(val&nbsp;==&nbsp;0)&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pick(buffer,&nbsp;BUFSIZE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ortho2(-0.5,&nbsp;xsize&nbsp;+&nbsp;0.5,&nbsp;-0.5,&nbsp;ysize&nbsp;+&nbsp;0.5);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawit();&nbsp;/*&nbsp;no&nbsp;actual&nbsp;drawing&nbsp;takes&nbsp;place&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hits&nbsp;=&nbsp;endpick(buffer);</PRE>
+
+
+<PRE><A NAME="A65C016828"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;display&nbsp;hit&nbsp;information&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;index,&nbsp;items,&nbsp;h,&nbsp;i;</PRE>
+
+
+<PRE><A NAME="A65C016829"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;hit&nbsp;count:&nbsp;%d&nbsp;&nbsp;&nbsp;hits:&nbsp;&nbsp;&quot;,&nbsp;hits);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index&nbsp;=&nbsp;0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(h&nbsp;=&nbsp;0;&nbsp;&nbsp;h&nbsp;&lt;&nbsp;hits;&nbsp;&nbsp;h++)&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items&nbsp;=&nbsp;buffer[index++];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;(&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(i&nbsp;=&nbsp;0;&nbsp;&nbsp;i&nbsp;&lt;&nbsp;items;&nbsp;&nbsp;i++)&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(i&nbsp;!=&nbsp;0)&nbsp;&nbsp;printf(&quot;&nbsp;&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;%d&quot;,&nbsp;buffer[index++]);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;)&nbsp;&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;\n&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;ESCKEY:&nbsp;/*&nbsp;exit&nbsp;program&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;}
+}</PRE>
+
+
+<H3><A NAME="sdk220nita"></A>Pick Matrix </H3>
+
+
+<P><A NAME="A3C0EC61613mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pick.html#h632f0nita">pick</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/endpick.html#A213X91185b">endpick</A></B>
+subroutines create the following <A HREF="figures/gl32p81.jpg">matrix</A>
+and load it as the current matrix. This formula is placed here for information
+only. It is not necessary to understand its meaning to use it successfully.</P>
+
+
+
+
+<hr><center>
+[  <a href="listofpkselsbs.html">Previous</a>  |
+<a href="Selecting.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/Picking.html Mon, 24 Jan 2022 16:28:19 GMT -->
+</HTML>
+

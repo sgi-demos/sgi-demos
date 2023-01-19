@@ -1,0 +1,293 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>greset Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="glcompat.html">Previous</a>  |
+<a href="gRGBcolor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="xW42e0nita"></A>greset Subroutine</H2>
+<A NAME="INDEX909" REL="I1" TITLE="greset subroutine (GL)"></A>
+<A NAME="INDEX910" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX911" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX912" REL="I3" TITLE="greset"></A>
+<A NAME="INDEX913" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX914" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX915" REL="I3" TITLE="resetting all global state attributes"></A>
+
+<H3><A NAME="A213X9124b8"></A>Purpose</H3>
+<P><A NAME="E1B1330291ceb"></A>Resets all global state attributes to their initial values.</P>
+
+<H3><A NAME="A75C11"></A>Libraries</H3>
+<P><A NAME="E1B1330440ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1330543ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X9124bb"></A>C Syntax</H3>
+<PRE><A NAME="A213X9124bc"></A><B>void greset(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010bb5"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010bb6"></A><B>SUBROUTINE GRESET</B></PRE>
+
+<H3><A NAME="A213X9124bf"></A>Description</H3>
+<P><A NAME="E1B1330895ceb"></A>The <B>greset</B> subroutine resets all global state attributes to their initial values. This subroutine can be called at any time to reset the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A78P0561">attributes</A>.</P>
+
+<P><A NAME="E1B1331003ceb"></A>The following table lists the global state attributes:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Global State Attributes</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Attribute</B></TD>
+
+<TD><B>Initial Value</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>backface mode</TD>
+
+<TD>off</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>blinking</TD>
+
+<TD>off</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>buffer mode</TD>
+
+<TD>single</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>color</TD>
+
+<TD>undefined</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>color map mode</TD>
+
+<TD>one map</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>concave</TD>
+
+<TD>off</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>cursor</TD>
+
+<TD>0 (arrow)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>depth range</TD>
+
+<TD>-0x800000,+0x7FFFFF (On Supergraphics Processor Subsystem: 0x0,0x1FFFFF)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>depthcue mode</TD>
+
+<TD>off</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>display mode</TD>
+
+<TD>color map</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>drawmode</TD>
+
+<TD>NORMALDRAW</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>font</TD>
+
+<TD>0</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>linestyle</TD>
+
+<TD>0 (solid)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>linewidth</TD>
+
+<TD>1 pixel</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>logical operation</TD>
+
+<TD>LO_SRC</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>lsrepeat</TD>
+
+<TD>1</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>pattern</TD>
+
+<TD>0 (solid)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>picking size</TD>
+
+<TD>10x10 pixels</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>RGB color</TD>
+
+<TD>undefined</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>RGB shaderange</TD>
+
+<TD>undefined</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>RGB writemask</TD>
+
+<TD>undefined</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>shademodel</TD>
+
+<TD>GOURAUD</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>shaderange</TD>
+
+<TD>0,7,-0x800000,+0x7FFFFF (On Supergraphics Processor Subsystem: 0x0,0x1FFFFF)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>viewport</TD>
+
+<TD>entire window</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>writemask</TD>
+
+<TD>all planes enabled</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>z-buffer mode</TD>
+
+<TD>off</TD></TR></TABLE>
+
+<BLOCKQUOTE><A NAME="A213X9124b6"></A><B>Note: </B>Font 0 (zero) is a Helvetica-like font.</BLOCKQUOTE>
+
+
+<P><A NAME="E1B1331557ceb"></A>The <B>greset </B>subroutine puts a 2-D orthographic <!--gl32prgd:--><A HREF="../gl32prgd/coordtransfrms.html#A264X9141">projection transformation</A> on the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06dd">matrix stack</A> with left, right, bottom, and top set to the boundaries of the screen. The subroutine also turns on the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A263A93ae">cursor</A> and ties it to MOUSEX and MOUSEY. </P>
+
+<P><A NAME="E1B1331667ceb"></A>The <B>greset</B> subroutine removes all 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A1819349">button</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A79P07a">valuator</A>, and keyboard entries from the event queue and discards them. Each button is set to FALSE and untied from valuators. Each valuator (and in particular MOUSEX) is set to XMAXSCREEN/2 with range 0 to XMAXSCREEN. MOUSEY is set to YMAXSCREEN/2 and has range 0 to YMAXSCREEN.</P>
+
+<P><A NAME="E1B1331774ceb"></A>The <B>greset </B>subroutine also defines certain entries in the color map, as follows:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="4"><B>Color Map Entries</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><BR></TD>
+
+<TD COLSPAN="3"><B>RGB Value</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Name</B></TD>
+
+<TD><B>Red</B></TD>
+
+<TD><B>Green</B></TD>
+
+<TD><B>Blue</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BLACK</TD>
+
+<TD>    0</TD>
+
+<TD>    0</TD>
+
+<TD>    0</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>RED</TD>
+
+<TD>255</TD>
+
+<TD>    0</TD>
+
+<TD>    0</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GREEN</TD>
+
+<TD>    0</TD>
+
+<TD>255</TD>
+
+<TD>    0</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>YELLOW</TD>
+
+<TD>255</TD>
+
+<TD>255</TD>
+
+<TD>    0</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BLUE</TD>
+
+<TD>    0</TD>
+
+<TD>    0</TD>
+
+<TD>255</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>MAGENTA</TD>
+
+<TD>255</TD>
+
+<TD>    0</TD>
+
+<TD>255</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>CYAN</TD>
+
+<TD>    0</TD>
+
+<TD>255</TD>
+
+<TD>255</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>WHITE</TD>
+
+<TD>255</TD>
+
+<TD>255</TD>
+
+<TD>255</TD></TR></TABLE>
+
+<BLOCKQUOTE><A NAME="A318C9e96"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A30C011044"></A>Example</H3>
+<P><A NAME="E1B1332132ceb"></A>The example C language program <A HREF="vlsi_c.html#A16C0c9fd"><B>vlsi.c</B></A> uses the <B>greset</B> subroutine to reset all global attributes on any keyboard event.</P>
+
+<H3><A NAME="A64C0165fc"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1332293ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="C418D23215root"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C418D23745root"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C418D24010root"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="C418D24931root"></A>Related Information</H3>
+<P><A NAME="E1B1332611ceb"></A>Reconfiguring the graphics system with the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine.</P>
+
+<P><A NAME="E1B1332718ceb"></A>Initializing the graphics system with the <A HREF="ginit.html#LDg21c0marj"><B>ginit</B></A> subroutine.</P>
+
+<P><A NAME="E1B1332825ceb"></A>Creating a new window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine.</P>
+
+<P><A NAME="E1B1332935ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/cntrlques.html#cntrlques.html">Controlling Queues and Devices</A>, <!--gl32prgd:--><A HREF="../gl32prgd/cursorgl.html#cursorgl.html">Creating a Cursor</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware Used by GL</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, <!--gl32prgd:--><A HREF="../gl32prgd/underwininput.html#underwininput.html">Windows and Input Control Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Working with Coordinate Systems</A>.</P>
+
+<P><A NAME="E1B1333043ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>, <!--gl32prgd:--><A HREF="../gl32prgd/clrrstintgl.html#clrrstintgl.html">Clearing, Resetting, and Initializing GL</A>.</P><hr><center>
+[  <a href="glcompat.html">Previous</a>  |
+<a href="gRGBcolor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

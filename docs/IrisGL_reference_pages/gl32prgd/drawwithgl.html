@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/drawwithgl.html Mon, 24 Jan 2022 16:27:48 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Chapter 3. Drawing with Graphics Library
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="eventsxmp.html">Previous</a>  |
+<a href="drawbeg-end.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H1><A NAME="drawwithgl.html"></A>Chapter 3. Drawing with Graphics Library</H1>
+
+
+<P><A NAME="A3C0E529455mhay"></A>The GL provides several categories of
+drawing subroutines for creating geometric figures, curves and surfaces,
+and character strings. Some subroutines draw a complete figure while others
+are very basic and draw only a line or a point. The following sections
+explain the drawing subroutine categories and how each works: </P>
+
+
+<UL><LI><A NAME="A40C01264e"></A><A HREF="drawbeg-end.html">Drawing
+with Begin-End Style Subroutines</A> 
+
+<P><A NAME="A142C1167c"></A>These subroutines draw primitive graphics figures,
+points, lines, and polygons, which are described as a set of vertices.</P></LI>
+
+
+<LI><A NAME="A40C01264f"></A><A HREF="move-draw.html">Drawing
+with Move-Draw Style Subroutines</A> 
+
+<P><A NAME="A142C1167d"></A>These subroutines draw essentially the same
+figures as the begin-end style subroutines, but not point-sampled polygons.
+These subroutines are primarily included for compatibility with existing
+GL programs. </P></LI>
+
+
+<LI><A NAME="A258C01c091"></A><A HREF="setglattrib.html#setglattrib.html">Setting
+Drawing Attributes</A> 
+
+<P><A NAME="A142C1167e"></A>Color, texture pattern, line style, and many
+others attributes affect all drawing subroutines. Unless you change an
+attribute before calling a drawing subroutine, the subroutine renders to
+the screen using the attributes currently set in the system. </P></LI>
+
+
+<LI><A NAME="A258C01c092"></A><A HREF="setglpipeops.html#setglpipeops.html">Setting
+Pipeline Options</A>  
+
+<P><A NAME="A142C1167f"></A>Turning optional pipeline tasks on and off
+speeds up the rendering process. </P></LI>
+
+
+<LI><A NAME="A40C01264c"></A><A HREF="drawpoly.html#drawpoly.html">Drawing
+Rectangles, Circles, Arcs, and Polygons</A> 
+
+<P><A NAME="A142C11680"></A>The high-level subroutines draw rectangles,
+circles, arcs, and polygons with varying parameters and in either filled
+or unfilled styles. </P></LI>
+
+
+<LI><A NAME="A40C012652"></A><A HREF="rwpixels.html#rwpixels.html">Reading
+and Writing Pixels</A> 
+
+<P><A NAME="A142C11681"></A>The pixel subroutines handle reading and writing
+pixel data, which are nongeometric drawing tasks. </P></LI>
+
+
+<LI><A NAME="A40C012653"></A><A HREF="textchars.html#textchars.html">Creating
+Text Characters</A> 
+
+<P><A NAME="A142C11682"></A>The text subroutines handle text drawing, a
+nongeometric drawing task. </P></LI>
+
+
+<LI><A NAME="A40C012651"></A><A HREF="smjaglines.html#smjaglines.html">Smoothing
+Jagged Lines with Antialiasing</A> 
+
+<P><A NAME="A142C11683"></A>This section deals with smoothing jagged lines
+of geometric figures through a method called antialiasing. </P></LI>
+
+
+<LI><A NAME="A40C012650"></A><A HREF="drawwfcvs.html#drawwfcvs.html">Drawing
+Wire Frame Curves and Surface Patches</A>  
+
+<P><A NAME="A142C11684"></A>These subroutines support previous methods
+for drawing curves and surfaces. </P></LI>
+
+
+<LI><A NAME="A40C01264d"></A><A HREF="drawnurbs.html#drawnurbs.html">Drawing
+NURBS Curves and Surfaces</A> 
+
+<P><A NAME="A142C11685"></A>These subroutines support nonuniform rational
+B-splines (NURBS). </P></LI></UL>
+
+
+
+
+<hr><center>
+[  <a href="eventsxmp.html">Previous</a>  |
+<a href="drawbeg-end.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/drawwithgl.html Mon, 24 Jan 2022 16:27:48 GMT -->
+</HTML>
+

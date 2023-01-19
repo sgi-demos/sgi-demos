@@ -1,0 +1,434 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>curved.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="curve3_c.html">Previous</a>  |
+<a href="cylinder1_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c830"></A>curved.c Example C Language Program
+</H2>
+<A NAME="INDEX2231" REL="I1" TITLE="curved.c example program (GL)"></A>
+<A NAME="INDEX2232" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2233" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2234" REL="I3" TITLE="curve and surface patch"></A>
+<A NAME="INDEX2235" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2236" REL="I2" TITLE="curve"></A>
+<A NAME="INDEX2237" REL="I3" TITLE="editor"></A>
+<A NAME="INDEX2238" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2239" REL="I2" TITLE="curve and surface patch"></A>
+<A NAME="INDEX2240" REL="I3" TITLE="wire frame"></A>
+<PRE><A NAME="A64E9D2523ttay"></A>/*
+curved.c -
+A minimal curve editor.*</PRE>
+<PRE><A NAME="A64E9D2677ttay"></A>           Paul Haeerli - 1985
+*/</PRE>
+<PRE><A NAME="A64E9D2835ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64E9D2996ttay"></A>float endgeom[4][3];
+float geom[100][3];
+int pt[100];</PRE>
+<PRE><A NAME="A64E9D3260ttay"></A>#define ADDPOINT        1
+#define MOVEPOINT       2
+#define INSERTPOINT     3
+#define DELETEPOINT     4
+#define CHANGEPOINT     5
+#define BACKGROUND      7
+#define LINE            0
+#define ROUND           1
+#define SQUARE          2
+#define MOUSEXMAP(x)    ( (100.0*((x)-xorg))/xsize )
+#define MOUSEYMAP(y)    ( (100.0*((y)-yorg))/ysize )</PRE>
+<PRE><A NAME="A64E9D3439ttay"></A>short raster[] = { 
+  0xf800, 0x8800, 0x8800, 0x8800, 0xf800,
+  0x7000, 0x8800, 0x8800, 0x8800, 0x7000, };</PRE>
+<PRE><A NAME="A64E9D3614ttay"></A>Fontchar chars[] = {
+  {0,0,0, 0, 0,0},
+  {0,5,5,-2,-2,5},
+  {5,5,5,-2,-2,5}
+};</PRE>
+<PRE><A NAME="A64E9D3822ttay"></A>Matrix b_spline = {
+  {-1.0/6.0, 1.0/2.0,  -1.0/2.0, 1.0/6.0},
+  { 1.0/2.0,    -1.0,   1.0/2.0,     0.0},
+  {-1.0/2.0,     0.0,   1.0/2.0,     0.0},
+  { 1.0/6.0, 2.0/3.0,   1.0/6.0,     0.0}
+};</PRE>
+<PRE><A NAME="A64E9D4032ttay"></A>Matrix lob_spline = {
+  {     0.0,       0.0,       0.0,  0.0},
+  { 1.0/3.0,  -2.0/3.0,   1.0/3.0,  0.0},
+  {-7.0/6.0,   4.0/3.0,  -1.0/6.0,  0.0},
+  {     1.0,       0.0,       0.0,  0.0}, };</PRE>
+<PRE><A NAME="A64E9D4240ttay"></A>Matrix hib_spline = {
+  {0.0,       0.0,       0.0,      0.0},
+  {0.0,   1.0/3.0,  -2.0/3.0,  1.0/3.0},
+  {0.0,  -1.0/2.0,       0.0,  1.0/2.0},
+  {0.0,   1.0/6.0,   2.0/3.0,  1.0/6.0}, };</PRE>
+<PRE><A NAME="A64E9D4433ttay"></A>Matrix c_spline =  {
+  {-0.5,   1.5,  -1.5,   0.5},
+  { 1.0,  -2.5,   2.0,  -0.5},
+  {-0.5,   0.0,   0.5,   0.0},
+  { 0.0,   1.0,   0.0,   0.0}
+};</PRE>
+<PRE><A NAME="A64E9D4626ttay"></A>Matrix loc_spline = {
+  { 0.0,   0.0,   0.0,  0.0},
+  { 0.5,  -1.0,   0.5,  0.0},
+  {-1.5,   2.0,  -0.5,  0.0},
+  { 1.0,   0.0,   0.0,  0.0}
+};</PRE>
+<PRE><A NAME="A64E9D4815ttay"></A>Matrix hic_spline = {
+  {0.0,  0.0,  0.0,  0.0},
+  {0.0,  0.5, -1.0,  0.5},
+  {0.0, -0.5,  0.0,  0.5},
+  {0.0,  0.0,  1.0,  0.0}
+};</PRE>
+<PRE><A NAME="A64E9D4988ttay"></A>#define BSPLINE          100
+#define LOBSPLINE        101
+#define HIBSPLINE        102</PRE>
+<PRE><A NAME="A64E9D5352ttay"></A>int xsize, ysize;
+int xorg, yorg;
+float mx, my;
+int curmode = ADDPOINT;
+int points;
+int menu;
+main(argc,argv)
+int argc;
+char **argv;
+{
+  prefposition(XMAXSCREEN/4,XMAXSCREEN*3/4,YMAXSCREEN/4,
+      YMAXSCREEN*3/4);
+  winopen("curved");
+  menu = defpup("curved %t|add|move|insert|delete|change");
+  defrasterfont(1,7,3,chars,10,raster);
+  font(1);
+  deflinestyle(1,0xf0f0);
+  if (argc == 1) {
+    defbasis(BSPLINE,b_spline);
+    defbasis(LOBSPLINE,lob_spline);
+    defbasis(HIBSPLINE,hib_spline);
+  }
+  else {
+    defbasis(BSPLINE,c_spline);
+    defbasis(LOBSPLINE,loc_spline);
+    defbasis(HIBSPLINE,hic_spline);
+  }</PRE>
+<PRE><A NAME="A64E9D5529ttay"></A>  curveprecision(6);
+  makeframe();
+  initdevices();
+  points = 0;
+  while (1)
+    getinput();
+}</PRE>
+<PRE><A NAME="A64E9D5714ttay"></A>initdevices()
+{
+  qdevice(MOUSEX);
+  qdevice(MOUSEY);
+  qdevice(LEFTMOUSE);
+  qdevice(MENUBUTTON);
+  qdevice(KEYBD);
+}</PRE>
+<PRE><A NAME="A64E9D5949ttay"></A>getinput()
+{
+  Device dev;
+  short val;
+  int sel;
+  do {
+    if (!qtest())
+      mouseevent(2,mx,my);
+    dev = qread(&amp;val);
+    switch (dev) {
+    case MENUBUTTON:
+      if (val) {
+        sel = dopup(menu);
+        if (sel>0)
+          curmode = sel;
+      }</PRE>
+<PRE><A NAME="A64E9D7817ttay"></A>      font(1);
+      break;
+    case LEFTMOUSE:
+      mouseevent(val,mx,my);
+      break;
+    case MOUSEX:
+      mx = MOUSEXMAP(val);
+      break;
+    case MOUSEY:
+      my = MOUSEYMAP(val);
+      break;
+    case KEYBD:
+      switch (val) {
+      case 'a':
+        break;
+      case 'i':
+        curmode = INSERTPOINT;
+        break;
+      case 'm':
+        curmode = MOVEPOINT;
+        break;
+      case 'd':
+        curmode = DELETEPOINT;
+        break;
+      case 'c':
+        curmode = CHANGEPOINT;
+        break;
+      }</PRE>
+<PRE><A NAME="A64E9D7993ttay"></A>      break;
+    case REDRAW:
+      reshapeviewport();
+      makeframe();
+      break;
+    }</PRE>
+<PRE><A NAME="A64E9D8143ttay"></A>  } while (qtest());
+}</PRE>
+<PRE><A NAME="A64E9D8295ttay"></A>int curpoint;
+int moving;</PRE>
+<PRE><A NAME="A64E9D8534ttay"></A>mouseevent(state,x,y)
+int state;
+float x, y;
+{
+  int nextpoint;
+  switch (curmode) {
+  case ADDPOINT:
+    if (state == 1) {
+      curpoint = duppoint(points);
+      geom[curpoint][0] = x;
+      geom[curpoint][1] = y;
+      pt[curpoint] = SQUARE;
+      drawline(LINE);
+    }</PRE>
+<PRE><A NAME="A64E9D8774ttay"></A>    break;
+  case MOVEPOINT:
+    if (state == 1) {
+      curpoint = findpoint(x,y);
+      moving = 1;
+    }
+    else if (state == 2) {
+      if (moving) {
+        drawline(BACKGROUND);
+        geom[curpoint][0] = x;
+        geom[curpoint][1] = y;
+        drawline(LINE);
+      }</PRE>
+<PRE><A NAME="A64E9D9126ttay"></A>    }
+    else if (state == 0)
+      moving = 0;
+    break;
+  case INSERTPOINT:
+    if (state == 1) {
+      curpoint = findpoint(x,y);
+      if (curpoint &lt; 0)
+        curpoint = duppoint(points);
+      else
+        curpoint = duppoint(curpoint);
+      drawline(BACKGROUND);
+      geom[curpoint][0] = x;
+      geom[curpoint][1] = y;
+      pt[curpoint] = SQUARE;
+      drawline(LINE);
+    }
+    break;
+  case DELETEPOINT:
+    if (state == 1) {
+      curpoint = findpoint(x,y);
+      if (curpoint >= 0) {
+        drawline(BACKGROUND);
+        delpoint(curpoint);
+        drawline(LINE);
+      }</PRE>
+<PRE><A NAME="A64E9D9271ttay"></A>    }</PRE>
+<PRE><A NAME="A64E9D9514ttay"></A>    break;
+  case CHANGEPOINT:
+    if (state == 1) {
+      curpoint = findpoint(x,y);
+      if (curpoint >= 0) {
+        drawline(BACKGROUND);
+        if (pt[curpoint] == ROUND)
+          pt[curpoint] = SQUARE;
+        else
+          pt[curpoint] = ROUND;
+        drawline(LINE);
+      }</PRE>
+<PRE><A NAME="A64E9D9658ttay"></A>    }</PRE>
+<PRE><A NAME="A64E9D9805ttay"></A>    break;
+  }</PRE>
+<PRE><A NAME="A64E9D9948ttay"></A>}</PRE>
+<PRE><A NAME="A64E9DA142ttay"></A>makeframe()
+{
+  getorigin(&amp;xorg,&amp;yorg);
+  getsize(&amp;xsize,&amp;ysize);
+  ortho2(0.0,100.0,0.0,100.0);
+  color(BACKGROUND);
+  clear();
+  drawline(LINE);
+}</PRE>
+<PRE><A NAME="A64E9DA342ttay"></A>float ppdist(x1,y1,x2,y2)
+float x1,y1,x2,y2;
+{
+  register float dx, dy;
+  dx = x2-x1;
+  if (dx&lt;0) dx = -dx;
+  dy = y2-y1;
+  if (dy&lt;0) dy = -dy;
+  return dx+dy;
+}</PRE>
+<PRE><A NAME="A64E9DA514ttay"></A>float pldist(x,y,x1,y1,x2,y2)
+float x, y, x1, y1, x2, y2;
+{
+  register float dx, dy, c;</PRE>
+<PRE><A NAME="A64E9DA673ttay"></A>  dx = x2-x1;
+  dy = y2-y1;
+  c = dy*x1-dx*y1;
+}</PRE>
+<PRE><A NAME="A64E9DA919ttay"></A>findpoint(x,y)
+float x, y;
+{
+  register float mindist;
+  register int minpnt;
+  register int i;
+  float dist;
+  mindist = 100000.0;
+  minpnt = -1;
+  for (i=0; i&lt;points; i++) {
+    dist = ppdist(geom[i][0],geom[i][1],x,y);
+    if (dist&lt;mindist) {
+      mindist = dist;
+      minpnt = i;
+    }</PRE>
+<PRE><A NAME="A64E9DB062ttay"></A>  }</PRE>
+<PRE><A NAME="A64E9DB211ttay"></A>  return minpnt;
+}</PRE>
+<PRE><A NAME="A64E9DB457ttay"></A>findedge(x,y)
+float x, y;
+{
+  register float mindist;
+  register int minpnt;
+  register int i;
+  float dist;
+  mindist = 100000.0;
+  minpnt = -1;
+  for (i=0; i&lt;points; i++) {
+    dist = ppdist(geom[i][0],geom[i][1],x,y);
+    if (dist&lt;mindist) {
+      mindist = dist;
+      minpnt = i;
+    }</PRE>
+<PRE><A NAME="A64E9DB600ttay"></A>  }</PRE>
+<PRE><A NAME="A64E9DB748ttay"></A>  return minpnt;
+}</PRE>
+<PRE><A NAME="A64E9DB946ttay"></A>duppoint(pnt)
+int pnt;
+{
+  register int i;
+  for (i=points; i>pnt; i--) {
+    geom[i][0] = geom[i-1][0];
+    geom[i][1] = geom[i-1][1];
+    pt[i] = pt[i-1];
+  }</PRE>
+<PRE><A NAME="A64E9DC099ttay"></A>  points++;
+  return pnt;
+}</PRE>
+<PRE><A NAME="A64E9DC298ttay"></A>delpoint(pnt)
+int pnt;
+{
+  register int i;
+  for (i=pnt; i&lt;points; i++) {
+    geom[i][0] = geom[i+1][0];
+    geom[i][1] = geom[i+1][1];
+    pt[i] = pt[i+1];
+  }</PRE>
+<PRE><A NAME="A64E9DC444ttay"></A>  points--;
+}</PRE>
+<PRE><A NAME="A64E9DC601ttay"></A>drawline(c)
+int c;
+{
+  register int i, j;</PRE>
+<PRE><A NAME="A64E9DC829ttay"></A>  pt[0] = SQUARE;
+  pt[points-1] = SQUARE;
+  color(c);
+  if (c == BACKGROUND)
+    clear();
+  else {
+    setlinestyle(1);
+    move2(geom[0][0],geom[0][1]);
+    for (i=0; i&lt;points; i++) {
+      draw2(geom[i][0],geom[i][1]);
+      putsym(i);
+    }</PRE>
+<PRE><A NAME="A64E9DD068ttay"></A>    setlinestyle(0);
+    move2(geom[0][0],geom[0][1]);
+    for (i=1; i&lt;points; i++) {
+      if(pt[i] == SQUARE) {
+        if(pt[i-1] == ROUND) {
+          for (j=0; j&lt;4; j++) {
+            endgeom[j][0] = geom[i-2+j][0];
+            endgeom[j][1] = geom[i-2+j][1];
+          }</PRE>
+<PRE><A NAME="A64E9DD298ttay"></A>          endgeom[3][0] = endgeom[2][0];
+          endgeom[3][1] = endgeom[2][1];
+          curvebasis(BSPLINE);
+          crv(endgeom);
+          draw2(geom[i][0],geom[i][1]);
+        }
+        else {
+          draw2(geom[i][0],geom[i][1]);
+        }</PRE>
+<PRE><A NAME="A64E9DD505ttay"></A>      }
+      else {
+        if (pt[i-1] == SQUARE) {
+          for (j=0; j&lt;4; j++) {
+            endgeom[j][0] = geom[i-2+j][0];
+            endgeom[j][1] = geom[i-2+j][1];
+          }</PRE>
+<PRE><A NAME="A64E9DD734ttay"></A>          endgeom[0][0] = endgeom[1][0];
+          endgeom[0][1] = endgeom[1][1];
+          curvebasis(BSPLINE);
+          crv(endgeom);
+        }
+        else {
+          curvebasis(BSPLINE);
+          crv(&amp;geom[i-2][0]);
+        }
+      }
+    }
+  }
+}</PRE>
+<PRE><A NAME="A64E9DD936ttay"></A>putsym(i)
+register int i;
+{
+  char buf[2];
+  cmov2(geom[i][0],geom[i][1]);
+  if (pt[i] == SQUARE)
+    buf[0] = 1;
+  else
+    buf[0] = 2;
+  buf[1] = 0;
+  charstr(buf);
+}</PRE>
+
+<H3><A NAME="A200C1122"></A>Related Information</H3>
+<P><A NAME="E1D77C8445ceb"></A>The <A HREF="charstr.html#A143X9cfb"><B>charstr</B></A> subroutine<A HREF="A143X9cfb.html" REL="PAGENUM"></A>, <A HREF="cmov.html#A143X9d1d"><B>cmov</B></A> subroutine<A HREF="../gl32tref/A143X9d1d" REL="PAGENUM"></A>, <A HREF="deflinestyle.html#A143X9b1f"><B>deflinestyle</B></A> subroutine<A HREF="../gl32tref/A143X9b1f" REL="PAGENUM"></A>, <A HREF="defpup.html#A142X910bf"><B>defpup</B></A> subroutine<A HREF="../gl32tref/A142X910bf" REL="PAGENUM"></A>, <A HREF="defrasterfont.html#A143X9d3f"><B>defrasterfont</B></A> subroutine<A HREF="A143X9d3f.html" REL="PAGENUM"></A>, <A HREF="dopup.html#A142X910e1"><B>dopup</B></A> subroutine<A HREF="../gl32tref/A142X910e1" REL="PAGENUM"></A>, <A HREF="font.html#A143X9d61"><B>font</B></A> subroutine<A HREF="A143X9d61.html" REL="PAGENUM"></A>.</P>
+
+<hr><center>
+[  <a href="curve3_c.html">Previous</a>  |
+<a href="cylinder1_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

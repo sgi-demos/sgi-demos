@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>popviewport Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="popname.html">Previous</a>  |
+<a href="prefposition.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A213X911d3c"></A>popviewport Subroutine</H2>
+<A NAME="INDEX1442" REL="I1" TITLE="popviewport subroutine (GL)"></A>
+<A NAME="INDEX1443" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1444" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX1445" REL="I3" TITLE="popviewport"></A>
+<A NAME="INDEX1446" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1447" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX1448" REL="I3" TITLE="popping the stack"></A>
+
+<H3><A NAME="A213X911d3e"></A>Purpose</H3>
+<P><A NAME="E1D71DD062ceb"></A>Pops the viewport stack.</P>
+
+<H3><A NAME="A79C1277"></A>Libraries</H3>
+<P><A NAME="E1D71DD103ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D71DD128ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911d41"></A>C Syntax</H3>
+<PRE><A NAME="A213X911d42"></A><B>void popviewport(&nbsp;)</B></PRE>
+
+<H3><A NAME="A213X911d1c"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X911d1f"></A><B>SUBROUTINE POPVIE(&nbsp;)</B></PRE>
+
+<H3><A NAME="A213X911d45"></A>Description</H3>
+<P><A NAME="E1D71DD239ceb"></A>The <B>popviewport</B> subroutine pops the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A> stack, restoring the values of the viewport, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P018">screenmask</A>, and depth range most recently saved with the <A HREF="pushviewport.html#A213X911bee"><B>pushviewport</B></A> subroutine.</P>
+
+<H3><A NAME="A62C015d4e"></A>Implementation Specifics</H3>
+<P><A NAME="E1D71DD284ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C127a"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C127b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C127c"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911d53"></A>Related Information</H3>
+<P><A NAME="E1D71DD383ceb"></A>Setting the viewport depth range with the <A HREF="lsetdepth.html#naR120marj"><B>lsetdepth</B></A> subroutine.</P>
+
+<P><A NAME="E1D71DD409ceb"></A>Pushing the viewport onto the viewport stack with the <A HREF="pushviewport.html#A213X911bee"><B>pushviewport</B></A> subroutine.</P>
+
+<P><A NAME="E1D71DD439ceb"></A>Defining a rectangular 2-D clipping mask with the <A HREF="scrmask.html#fwN250marj"><B>scrmask</B></A> subroutine.</P>
+
+<P><A NAME="E1D71DD465ceb"></A>Setting the area of the window used for all drawing with the <A HREF="viewport.html#qrY270marj"><B>viewport</B></A> subroutine.</P>
+
+<P><A NAME="E1D71DD491ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Using <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Viewports and Screenmasks</A>.</P><hr><center>
+[  <a href="popname.html">Previous</a>  |
+<a href="prefposition.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

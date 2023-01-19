@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>tpbig.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="text_c.html">Previous</a>  |
+<a href="vlsi_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c9bd"></A>tpbig.c Example C Language Program
+</H2>
+<A NAME="INDEX2460" REL="I1" TITLE="tpbig.c example program (GL)"></A>
+<A NAME="INDEX2461" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2462" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2463" REL="I3" TITLE="textport"></A>
+<A NAME="INDEX2464" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2465" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2466" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2467" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2468" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2469" REL="I3" TITLE="text"></A>
+<A NAME="INDEX2470" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2471" REL="I2" TITLE="text"></A>
+<A NAME="INDEX2472" REL="I3" TITLE="example program"></A>
+<A NAME="INDEX2473" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2474" REL="I2" TITLE="textport"></A>
+<A NAME="INDEX2475" REL="I3" TITLE="example program"></A>
+<A NAME="INDEX2476" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2477" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2478" REL="I3" TITLE="arc"></A>
+<A NAME="INDEX2479" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2480" REL="I2" TITLE="arc"></A>
+<A NAME="INDEX2481" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2482" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2483" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2484" REL="I3" TITLE="polygon"></A>
+<A NAME="INDEX2485" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2486" REL="I2" TITLE="polygons"></A>
+<A NAME="INDEX2487" REL="I3" TITLE="drawing"></A>
+<PRE><A NAME="A64EBAD294ttay"></A>/*
+tpbig.c:</PRE>
+<PRE><A NAME="A64EBAD469ttay"></A>Basic graphics program demonstrating arcs, polygons, character
+strings, and use of a textport.
+*/</PRE>
+<PRE><A NAME="A64EBAD632ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h>
+#include &lt;stdio.h></PRE>
+<PRE><A NAME="A64EBAD797ttay"></A>long cone[][2] = {100, 300, 150, 100, 200, 300};
+char *singlechar;</PRE>
+<PRE><A NAME="A64EBAD999ttay"></A>main()
+{
+&nbsp;&nbsp;&nbsp;int gid;
+&nbsp;&nbsp;&nbsp;short val;    
+&nbsp;&nbsp;&nbsp;singlechar = malloc(2); /* Space for a character and a Null */
+&nbsp;&nbsp;&nbsp;memcpy(singlechar, "X", 2);
+&nbsp;&nbsp;&nbsp;prefposition(0,XMAXSCREEN,0,YMAXSCREEN); </PRE>
+<PRE><A NAME="A64EBAE258ttay"></A>&nbsp;&nbsp;&nbsp;gid = winopen("tpbig");
+&nbsp;&nbsp;&nbsp;qdevice(ESCKEY);
+&nbsp;&nbsp;&nbsp;qdevice(REDRAW);
+&nbsp;&nbsp;&nbsp;qenter(REDRAW,gid); 
+&nbsp;&nbsp;&nbsp;reshapeviewport();
+&nbsp;&nbsp;&nbsp;drawstuff();
+&nbsp;&nbsp;&nbsp;textport(50,300,750,900); 
+&nbsp;&nbsp;&nbsp;tpon();     
+&nbsp;&nbsp;&nbsp;while(TRUE) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch(qread(&amp;val)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case ESCKEY:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gexit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit();            
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case REDRAW:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reshapeviewport();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawstuff();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EBAE401ttay"></A>&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EBAE714ttay"></A>}
+drawstuff()
+{    
+&nbsp;&nbsp;&nbsp;register long i, j;             /* draw an ice-cream cone */
+&nbsp;&nbsp;&nbsp;color(WHITE);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(YELLOW);
+&nbsp;&nbsp;&nbsp;polf2i(3, cone);                /* draw the ice-cream cone */
+&nbsp;&nbsp;&nbsp;color(GREEN);                   /* first scoop is mint */
+&nbsp;&nbsp;&nbsp;arcfi(150, 300, 50, 0, 1800);   /* only half of it shows */
+&nbsp;&nbsp;&nbsp;color(RED);                     /* second scoop is cherry */
+&nbsp;&nbsp;&nbsp;circf(150.0, 400.0, 50.0);
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;poly2i(3, cone);                /* outline the cone in black */</PRE>
+<PRE><A NAME="A64EBAE941ttay"></A>&nbsp;&nbsp;&nbsp;/* Next, draw a few filled and unfilled arcs in the upper
+   * left corner of the screen.
+&nbsp;&nbsp;&nbsp; */  
+  arcf(100.0, 650.0, 40.0, 450, 2700);
+&nbsp;&nbsp;&nbsp;arci(100, 500, 40, 450, 2700);    
+&nbsp;&nbsp;&nbsp;arcfi(250, 650, 80, 2700, 450);
+&nbsp;&nbsp;&nbsp;arc(250.0, 500.0, 80.0, 2700, 450);</PRE>
+<PRE><A NAME="A64EBAF279ttay"></A>  /* Now, put up a series of filled and unfilled rectangles with
+   * the names of their colors printed inside of them across the
+   * rest of the top of the screen.
+&nbsp;&nbsp;&nbsp; */
+&nbsp;&nbsp;&nbsp;color(GREEN);
+&nbsp;&nbsp;&nbsp;recti(400, 600, 550, 700);
+&nbsp;&nbsp;&nbsp;cmov2i(420, 640);
+&nbsp;&nbsp;&nbsp;charstr("Green");    
+&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;rectfi(600, 600, 800, 650);
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;cmov2(690.0, 620.0);
+&nbsp;&nbsp;&nbsp;charstr("Red");    
+&nbsp;&nbsp;&nbsp;color(BLUE);
+&nbsp;&nbsp;&nbsp;rect(810.0, 700.0, 1000.0, 20.0);
+&nbsp;&nbsp;&nbsp;cmov2i(900, 300);
+&nbsp;&nbsp;&nbsp;charstr("Blue");
+   /* Now draw some text with a ruler on top to measure it by. */
+   /* First the ruler: */  </PRE>
+<PRE><A NAME="A64EBAF468ttay"></A>  color(BLACK);    
+&nbsp;&nbsp;&nbsp;move2i(300, 400);
+&nbsp;&nbsp;&nbsp;draw2i(650, 400);
+&nbsp;&nbsp;&nbsp;for (i = 300; i &lt;= 650; i += 10) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;move2i(i, 400);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;draw2i(i, 410);
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EBAF759ttay"></A> &nbsp;&nbsp;&nbsp; /* Then some text: */ 
+  cmov2i(300, 380);
+&nbsp;&nbsp;&nbsp;charstr("The first line is drawn ");
+&nbsp;&nbsp;&nbsp;charstr("in two parts.");    
+&nbsp;&nbsp;&nbsp;cmov2i(300, 368);
+&nbsp;&nbsp;&nbsp;charstr("This line is only 12 pixels lower.");    
+&nbsp;&nbsp;&nbsp;cmov2i(300, 354);
+&nbsp;&nbsp;&nbsp;charstr("Now move down 14 pixels ...");    
+&nbsp;&nbsp;&nbsp;cmov2i(300, 338);
+&nbsp;&nbsp;&nbsp;charstr("And now down 16 ...");    
+&nbsp;&nbsp;&nbsp;cmov2i(300, 320);
+&nbsp;&nbsp;&nbsp;charstr("Now 18 ...");    
+&nbsp;&nbsp;&nbsp;cmov2i(300, 300);
+&nbsp;&nbsp;&nbsp;charstr("And finally, 20 pixels.");</PRE>
+<PRE><A NAME="A64EBB0067ttay"></A>   /* Finally, show off the entire font.  The cmov2i() before 
+    * each character is necessary in case that character is not 
+    * defined.
+&nbsp;&nbsp;&nbsp;  */
+&nbsp;&nbsp;&nbsp;for (i = 0; i &lt; 4; i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (j = 0; j &lt; 32; j++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmov2i(300 + 9*j, 200 - 18*i);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*singlechar = (char)(32*i + j);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charstr(singlechar);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;for (i = 0; i &lt; 4; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmov2i(300, 100 - 18*i);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (j = 0; j &lt; 32; j++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*singlechar = (char)(32*i + j);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charstr(singlechar);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EBB0210ttay"></A>}</PRE>
+<PRE><A NAME="A64EBB0420ttay"></A>/*
+  Changes:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Changed memcopy(singlechar, "X", 2); to memcpy ...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  - Added the &amp; in this statement:
+          switch(qread(&amp;val)) {
+      - Removed the textinit(); call for case ESCKEY
+*/</PRE>
+
+<H3><A NAME="A201C11aa"></A>Related Information</H3>
+<P><A NAME="E1D7903462ceb"></A>The <A HREF="arc.html#tEp310nita"><B>arc</B></A> subroutine<A HREF="../gl32tref/tEp310nita" REL="PAGENUM"></A>, <A HREF="arcf.html#AJp60nita"><B>arcf</B></A> subroutine<A HREF="../gl32tref/AJp60nita" REL="PAGENUM"></A>, <A HREF="circf.html#sJp120nita"><B>circf</B></A> subroutine<A HREF="../gl32tref/sJp120nita" REL="PAGENUM"></A>, <A HREF="polf.html#Zsf1c0marj"><B>polf</B></A> subroutine<A HREF="../gl32tref/Zsf1c0marj" REL="PAGENUM"></A>, <A HREF="poly.html#avf2c0marj"><B>poly</B></A> subroutine<A HREF="../gl32tref/avf2c0marj" REL="PAGENUM"></A>, <A HREF="rect.html#KAg110marj"><B>rect</B></A> subroutine<A HREF="../gl32tref/KAg110marj" REL="PAGENUM"></A>, <A HREF="rectf.html#Q5g330marj"><B>rectf</B></A> subroutine<A HREF="../gl32tref/Q5g330marj" REL="PAGENUM"></A>, <A HREF="tpon.html#A14k110nita"><B>tpon</B></A> subroutine<A HREF="../gl32tref/A14k110nita" REL="PAGENUM"></A>.</P>
+
+<hr><center>
+[  <a href="text_c.html">Previous</a>  |
+<a href="vlsi_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

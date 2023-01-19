@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>istag Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="isqueued.html">Previous</a>  |
+<a href="keepaspect.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="JXw220marj"></A>istag Subroutine</H2>
+<A NAME="INDEX989" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX990" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX991" REL="I3" TITLE="istag"></A>
+<A NAME="INDEX992" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX993" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX994" REL="I3" TITLE="checking tag presence in current open object"></A>
+<A NAME="INDEX995" REL="I1" TITLE="istag subroutine (GL)"></A>
+
+<H3><A NAME="A213X911f71"></A>Purpose</H3>
+<P><A NAME="E1B14B8443ceb"></A>Indicates whether a given tag is used within the current open object.</P>
+
+<H3><A NAME="A79C14a"></A>Libraries</H3>
+<P><A NAME="E1B14B8624ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B14B8761ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911f74"></A>C Syntax</H3>
+<PRE><A NAME="A213X911f75"></A><B>Int32 istag(Int32 </B><A HREF="istag.html#DfA2e0marj"><I>tag</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010a89"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010a8a"></A><B>LOGICAL FUNCTION ISTAG(</B><I>tag</I><B>)</B>
+<B>INTEGER*4 </B><I>tag</I></PRE>
+
+<H3><A NAME="A213X911f78"></A>Description</H3>
+<P><A NAME="E1B14B9177ceb"></A>The <B>istag</B> subroutine indicates whether a given tag number actually identifies an existing tag. The returned value is either True (1), if the tag is already in use, or False (0), if it is not. If there is no current open 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A255B9bc">object</A>, the result is undefined.</P>
+
+<BLOCKQUOTE><A NAME="A318C9d90"></A><B>Note: </B>This editing subroutine, itself, cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911f7b"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="DfA2e0marj"></A><I>tag</I></TD>
+<TD>  Specifies the tag to test.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911f7c"></A>Return Values</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911f7d"></A>True</TD>
+<TD>  Tag number is already in use.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C14d"></A>False</TD>
+<TD>  Tag number is not in use.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015d00"></A>Implementation Specifics</H3>
+<P><A NAME="E1B14B9660ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C14e"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C14f"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C150"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911f89"></A>Related Information</H3>
+<P><A NAME="E1B14B9987ceb"></A>Returning a unique integer for use as a tag number with the <A HREF="gentag.html#A48x2120marj"><B>gentag</B></A> subroutine.</P>
+
+<P><A NAME="E1B14BA095ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating <!--gl32prgd:--><A HREF="../gl32prgd/workobjects.html#workobjects.html">Objects (Display Lists)</A>.</P><hr><center>
+[  <a href="isqueued.html">Previous</a>  |
+<a href="keepaspect.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>isqueued Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="isobj.html">Previous</a>  |
+<a href="istag.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X91da"></A>isqueued Subroutine</H2>
+<A NAME="INDEX982" REL="I1" TITLE="isqueued subroutine (GL)"></A>
+<A NAME="INDEX983" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX984" REL="I2" TITLE="device"></A>
+<A NAME="INDEX985" REL="I3" TITLE="indicating whether enabled"></A>
+<A NAME="INDEX986" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX987" REL="I2" TITLE="queue and device"></A>
+<A NAME="INDEX988" REL="I3" TITLE="isqueued"></A>
+
+<H3><A NAME="A143X91dc"></A>Purpose</H3>
+<P><A NAME="E1B1492050ceb"></A>Indicates whether the specified device is enabled for queuing.</P>
+
+<H3><A NAME="A79C1150"></A>Libraries</H3>
+<P><A NAME="E1B1492199ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1492303ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X91e0"></A>C Syntax</H3>
+<PRE><A NAME="A143X91e1"></A><B>Int32 isqueued(Int16 </B><A HREF="isqueued.html#A143X91e5"><I>device</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c8e"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c8f"></A><B>LOGICAL FUNCTION ISQUEU(</B><I>device</I><B>)</B>
+<B>INTEGER*4 </B><I>device</I></PRE>
+
+<BLOCKQUOTE><A NAME="A79C1153"></A><B>Note: </B>For FORTRAN users, this function accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X91e2"></A>Description</H3>
+<P><A NAME="E1B1492730ceb"></A>The <B>isqueued</B> subroutine indicates whether the specified device is enabled for queuing.</P>
+
+<BLOCKQUOTE><A NAME="A81C11f4"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X91e4"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X91e5"></A><I>device</I></TD>
+<TD>  Specifies the identifier for the device you want to test (for example, MOUSEX or BPADX).</TD></TR></TABLE>
+
+<H3><A NAME="A143X91e8"></A>Return Values</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912c52"></A>True<I></I></TD>
+<TD>  Enabled for queuing. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912c53"></A>False</TD>
+<TD>  Not enabled for queuing.</TD></TR></TABLE>
+
+<H3><A NAME="A30C011070"></A>Example</H3>
+<P><A NAME="E1B1493200ceb"></A>The example C language program <A HREF="prompt_c.html#A16C0c8de"><B>prompt.c</B></A> uses the <B>isqueued</B> subroutine to determine whether the keyboard is enabled.</P>
+
+<H3><A NAME="A64C016631"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1493361ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A143X91f6"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1154"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1155"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1156"></A><B>/usr/include/gl/device.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1157"></A><B>/usr/include/gl/fdevice.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X91fa"></A>Related Information</H3>
+<P><A NAME="E1B1493793ceb"></A>Enabling an input device for event queuing with the <A HREF="qdevice.html#A143X967"><B>qdevice</B></A> subroutine.</P>
+
+<P><A NAME="E1B1493900ceb"></A>Reading the first entry in the event queue with the <A HREF="qread.html#A143X989"><B>qread</B></A> subroutine.</P>
+
+<P><A NAME="E1B1494007ceb"></A>Disabling an input device for event queuing with the <A HREF="unqdevice.html#A143X91b8"><B>unqdevice</B></A> subroutine.</P>
+
+<P><A NAME="E1B1494115ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/cntrlques.html#cntrlques.html">Controlling Queues and Devices</A>, <!--gl32prgd:--><A HREF="../gl32prgd/keyboardgl.html#keyboardgl.html">Using the Keyboard</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying the System</A>.</P><hr><center>
+[  <a href="isobj.html">Previous</a>  |
+<a href="istag.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

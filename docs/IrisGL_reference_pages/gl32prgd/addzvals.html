@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/addzvals.html Mon, 24 Jan 2022 16:28:07 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>Additional Z-Buffer Features
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="contrzvals.html">Previous</a>  |
+<a href="crlighteff.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="addzvals.html"></A>Additional Z-Buffer Features</H2>
+<A NAME="INDEX474" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX475" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX476" REL="I3" TITLE="into the z buffer"></A>
+<A NAME="INDEX477" REL="I1" TITLE="z buffer"></A>
+<A NAME="INDEX478" REL="I2" TITLE="GL"></A>
+<A NAME="INDEX479" REL="I3" TITLE="drawing into"></A>
+<A NAME="INDEX480" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX481" REL="I2" TITLE="alternate depth comparison"></A>
+<A NAME="INDEX482" REL="I1" TITLE="alternate depth comparison"></A>
+<A NAME="INDEX483" REL="I2" TITLE="GL"></A>
+<P><A NAME="A3C0EA34426mhay"></A>This section deals with special features that control z-buffering. Topics covered include <A HREF="addzvals.html#A5FA09D708ttay">reading the z-buffer</A>, using the z-buffer for <A HREF="addzvals.html#A5FA09E813ttay">hidden surface removal in overlay planes</A>, <A HREF="addzvals.html#A332C94c91">drawing directly into the z-buffer</A>, using <A HREF="addzvals.html#A332C94cef">alternate depth comparison</A> functions and sources, and <A HREF="addzvals.html#A332C94cff">writemasks for the z-buffer</A>.</P>
+
+<H3><A NAME="A5FA09D708ttay"></A>Reading the Z-Buffer</H3>
+<P><A NAME="A3C0EA34447mhay"></A>The contents of the z-buffer can be obtained by using the <B>zdraw</B> subroutine in conjunction with the <B>lrectread</B> subroutine.</P>
+
+<P><A NAME="A3C0EA34467mhay"></A>Due to the nature of the design of the 3D Color Graphics Processor, values read back from the z-buffer may appear to be incorrect. To avoid obtaining peculiar z values, use the <B>czclear</B> subroutine to clear the z-buffer before drawing, and specify any z-value other than 0x7fffff or -0x800000 for the clear value. For instance, clearing to a value of -0x7ffffe can work without sacrificing dynamic range or accuracy. Note, however, that clearing to such non-standard z-values may degrade z clear performance and affect overall application performance.</P>
+
+<BLOCKQUOTE><A NAME="A5FA09E455ttay"></A><B>Note: </B>Not all graphics adapters support reading the z-buffer.</BLOCKQUOTE>
+
+
+<H3><A NAME="A5FA09E813ttay"></A>Hidden Surface Removal in the Overlay Planes</H3>
+<P><A NAME="A3C0EA34489mhay"></A>The z-buffer can be used in conjunction with the overlay planes to provide hidden-line and hidden-surface removal in the overlays. In a typical application, a solid-shaded figure might be drawn in the main frame buffer, while a wire-frame drawing is actively dragged about in the overlays. If the wire-frame drawing is dragged behind the solid-shaded figure, the z-buffer automatically prevents the hidden portion of the wire-frame drawing from being drawn. When performing such dragging, be sure to enable the z-buffer (by setting the z-buffer to True), and to set the z-buffer writemask so that the wire-frame drawing does not change any values already in the z-buffer.</P>
+
+<BLOCKQUOTE><A NAME="A5FA09F588ttay"></A><B>Note: </B>Unless the above effect is specifically desired, it is recommended that z-buffering be disabled (by setting the z-buffer to False) while drawing into the overlay planes. Otherwise, confusing visual images may be the unintentional result when a drawing in the overlay becomes z-buffered.</BLOCKQUOTE>
+
+
+<H3><A NAME="A332C94c91"></A>Drawing into the Z-buffer</H3>
+<P><A NAME="A3C0EA34512mhay"></A>In some cases it is useful to be able to draw directly into the z-buffer. For instance, the z-buffer can be used as a clipping mask by writing near values into the region to be masked. If no other primitive is nearer than the value written into the z-buffer, the z-buffer hardware prevents the pixels from being written, effectively masking the region.</P>
+
+<P><A NAME="A3C0EA34532mhay"></A>On the High Performance 3-D Color Graphics Processor, the <!--:libs:gl32tref:--><A HREF="../gl32tref/zdraw.html#A143X97f5"><B>zdraw</B></A> subroutine enables block transfer of pixels into and out of the z-buffer. If the <B>zdraw</B> subroutine is enabled, the <!--:libs:gl32tref:--><A HREF="../gl32tref/rectwrite.html#A142X9c9e"><B>lrectwrite</B></A> and <!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c"><B>lrectread</B></A> subroutines transfer pixels to and from the z-buffer.</P>
+
+<P><A NAME="A3C0EA34552mhay"></A>The <!--:libs:gl32tref:--><A HREF="../gl32tref/zdraw.html#A143X97f5"><B>zdraw</B></A> subroutine is similar to the <!--:libs:gl32tref:--><A HREF="../gl32tref/frontbuffer.html#A145X9a0"><B>frontbuffer</B></A> and <!--:libs:gl32tref:--><A HREF="../gl32tref/backbuffer.html#A145X94a"><B>backbuffer</B></A> subroutines in that it permits writing into the z-buffer bank. Normally, if you are writing into the z-buffer, you do not want to write into the front buffer and back buffer at the same time. Usually, drawing into the z-buffer should be bracketed by subroutines that set <SAMP>backbuffer(FALSE)</SAMP> and then <SAMP>backbuffer(TRUE)</SAMP> afterwards (assuming the program is in <A HREF="animatescene.html#A300X9c17">double buffer mode</A>).</P>
+
+<P><A NAME="A3C0EA34572mhay"></A>In <A HREF="animatescene.html#A300X9c17">single buffer mode</A>, the <!--:libs:gl32tref:--><A HREF="../gl32tref/frontbuffer.html#A145X9a0"><B>frontbuffer</B></A> subroutine normally has no effect. However, if you call <SAMP>frontbuffer(FALSE)</SAMP>, a flag is set so that when the <B>zdraw</B> subroutine is set to <SAMP>TRUE</SAMP>, the front buffer (the only buffer in single buffer mode) is not written into. If the <B>zdraw</B> subroutine is set to<SAMP>&nbsp;FALSE</SAMP>, <SAMP>frontbuffer(FALSE)</SAMP> has no effect.</P>
+
+<H3><A NAME="A332C94cef"></A>Alternate Comparisons</H3>
+<P><A NAME="A3C0EA34593mhay"></A>In the default mode, the <I>z</I> coordinate of the new pixel is compared to the <I>z</I> coordinate of the figure currently at that pixel. If the incoming <I>z</I> value shows that the new geometry is closer to the eye than the old one, the values of the old pixel and of the old <I>z</I> value are replaced by the new ones.</P>
+
+<P><A NAME="A3C0EA34613mhay"></A>The new value is compared to the old, and if it is less than the old, the old quantities are replaced. It is possible to change the comparison function from less-than to many other things. The available comparisons are shown in the following list.</P>
+
+<TABLE><TR VALIGN="TOP" ALIGN="LEFT"><TH NOWRAP="NOWRAP">Comparison Function</TH>
+<TH>  Definition</TH></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A332C94cf3"></A>ZF_NEVER</TD>
+<TD>  Never overwrite the source pixel value.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A332C94cf4"></A>ZF_LESS </TD>
+<TD>  Overwrite the source pixel value if the <I>z</I> of the source pixel value is less than the z of the destination value.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A332C94cf5"></A>ZF_EQUAL</TD>
+<TD>  Overwrite the source pixel value if the z of the source pixel value is equal to the z of the destination value.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A332C94cf6"></A>ZF_LEQUAL</TD>
+<TD>  Overwrite the source pixel value if the z of the source pixel value is less than or equal to the z of the destination value (default). </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A332C94cf7"></A>ZF_GREATER </TD>
+<TD>  Overwrite the source pixel value if the z of the source pixel value is greater than the z of the destination value.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A332C94cf8"></A>ZF_NOTEQUAL</TD>
+<TD>  Overwrite the source pixel value if the z of the source pixel value is not equal to the z of the destination value.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A332C94cf9"></A>ZF_GEQUAL</TD>
+<TD>  Overwrite the source pixel value if the z of the source pixel value is greater than or equal to the z of the destination value.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A332C94cfa"></A>ZF_ALWAYS</TD>
+<TD>  Always overwrite the source pixel value regardless of destination value.</TD></TR></TABLE>
+
+<P><A NAME="A3C0EA34642mhay"></A>To change the comparison function, use the <!--:libs:gl32tref:--><A HREF="../gl32tref/zfunction.html#A22f0MARJ"><B>zfunction</B></A> subroutine.</P>
+
+<H3><A NAME="A332C94cff"></A>Z-buffer Writemask<A NAME="INDEX484" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX485" REL="I2" TITLE="z buffer"></A>
+<A NAME="INDEX486" REL="I3" TITLE="writemask"></A>
+<A NAME="INDEX487" REL="I1" TITLE="z buffer"></A>
+<A NAME="INDEX488" REL="I2" TITLE="GL"></A>
+<A NAME="INDEX489" REL="I3" TITLE="writemask"></A>
+</H3>
+<P><A NAME="A3C0EA34663mhay"></A>The <!--:libs:gl32tref:--><A HREF="../gl32tref/zwritemask.html#A143X9817"><B>zwritemask</B></A> subroutine can be used like other writemasks to control writing into the z-buffer. The two valid settings are <SAMP>0</SAMP> (no write at all) and <SAMP>0xffffff</SAMP> (write all the bits). This subroutine could be useful for a very complicated background into which a few objects are going to be drawn and moved quickly. Setting the <B>zwritemask</B> to <SAMP>0</SAMP> locks the background information in and prevents its modification. New objects are drawn or not depending on whether the depth comparison indicates that they are in front of or behind anything else in the scene.</P><hr><center>
+[  <a href="contrzvals.html">Previous</a>  |
+<a href="crlighteff.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/addzvals.html Mon, 24 Jan 2022 16:28:07 GMT -->
+</HTML>
+
+

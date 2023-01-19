@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/depth-cuecolor.html Mon, 24 Jan 2022 16:28:11 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Depth-Cueing in Color Map Mode
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="listofdepth-cues.html">Previous</a>  |
+<a href="depth-dueRGB.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="depth-cuecolor.html"></A>Depth-Cueing in Color Map Mode </H2>
+
+
+<P><A NAME="A3C0EAF8058mhay"></A>For depth-cueing to work properly, the
+<A HREF="specialterms.html#A31996bc">color map</A>
+locations specified by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lshaderange.html#fkk1d0marj">lshaderange</A></B>
+subroutine must be loaded with a series of colors that gradually increase
+or decrease intensity. The <B>lshaderange</B> subroutine specifies the
+low-intensity color map index (lowindex) and the high-intensity color map
+index (highindex). These values are mapped to the low and high <I>z</I>
+values specified by <I>z</I>1 and <I>z</I>2. The high index must be greater
+than the low index and the difference between the high index and the low
+index must be less than the difference between <I>z</I>1 and <I>z</I>2.</P>
+
+
+<P><A NAME="A3C0EAF8077mhay"></A>The values of <I>z</I>1 and <I>z</I>2
+should correspond to or lie within the range of <I>z</I> values specified
+by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lsetdepth.html#naR120marj">lsetdepth</A></B>
+subroutine, which delineates the entire transformation range. The <B>lshaderange</B>
+subroutine specifies the range of values where all of the shading is to
+occur. </P>
+
+
+<P><A NAME="A3C0EAF8098mhay"></A>The entries for the color map between
+the low index and the high index should reflect the appropriate sequence
+of intensities for the color being drawn. When a depth-cued point is drawn,
+its <I>z</I> value is used to determine its intensity. When a depth-cued
+line is drawn, the intensities of its points are linearly interpolated
+from the intensities of its endpoints, which are determined from their
+<I>z</I> values. You can achieve higher resolution if the near and far
+<A HREF="specialterms.html#A25P03e1">clipping planes</A> bound the object as closely as possible. </P>
+
+
+
+
+<hr><center>
+[  <a href="listofdepth-cues.html">Previous</a>  |
+<a href="depth-dueRGB.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/depth-cuecolor.html Mon, 24 Jan 2022 16:28:11 GMT -->
+</HTML>
+

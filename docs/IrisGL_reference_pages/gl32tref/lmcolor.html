@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>lmcolor Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="lmbind.html">Previous</a>  |
+<a href="lmdef.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="ofZ220marj"></A>lmcolor Subroutine</H2>
+<A NAME="INDEX1045" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1046" REL="I2" TITLE="lighting"></A>
+<A NAME="INDEX1047" REL="I3" TITLE="lmcolor"></A>
+<A NAME="INDEX1048" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1049" REL="I2" TITLE="color commands"></A>
+<A NAME="INDEX1050" REL="I3" TITLE="changing target of"></A>
+<A NAME="INDEX1051" REL="I1" TITLE="lmcolor subroutine (GL)"></A>
+<H3><A NAME="A213X911e80"></A>Purpose</H3>
+<P><A NAME="E1B15C2702ceb"></A>Changes the target of the color commands while lighting is active.</P>
+
+<H3><A NAME="A78C12d4"></A>Libraries</H3>
+<P><A NAME="E1B15C2851ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B15C2958ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911e83"></A>C Syntax</H3>
+<PRE><A NAME="A213X911e84"></A><B>void lmcolor(Int32 </B><A HREF="lmcolor.html#K2b2350marj"><I>mode</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010a54"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010a55"></A><B>SUBROUTINE LMCOLO(</B><I>mode</I><B>)</B>
+<B>INTEGER*4 </B><I>mode</I></PRE>
+
+<H3><A NAME="A213X911e87"></A>Description</H3>
+<P><A NAME="E1B15C3324ceb"></A>The <B>lmcolor</B> subroutine changes the target of the RGB color subroutines while lighting is active.</P>
+
+<P><A NAME="E1B15C3436ceb"></A>Properties of the currently bound material can be changed by calls to the <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> subroutine, but that subroutine is relatively slow to execute. The <B>lmcolor</B> subroutine is provided to support fast and efficient changes to the current material as maintained in the graphics hardware without changing the definition of the currently bound material. Changes made by the <B>lmcolor</B> subroutine are lost when a new material is bound. </P>
+
+<P><A NAME="E1B15C3544ceb"></A>The standard RGB color subroutines (<A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A>, <A HREF="c.html#A143X9262"><B>c</B></A>, <A HREF="cpack.html#A143X9284"><B>cpack</B></A>) are used to change material properties efficiently. The <B>lmcolor </B>subroutine specifies which material property is to be affected by these subroutines. Because the <B>lmcolor</B> subroutine is effective only when lighting is active, the standard color subroutines are used to change the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A3323mhay">current color</A> when lighting is off.</P>
+
+<BLOCKQUOTE><A NAME="A258C01c594"></A><B>Note: </B>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. (See "<!--gl32prgd:--><A HREF="../gl32prgd/powerstation730.html#NITAXIO">Hardware Considerations</A>".)</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911e8c"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="K2b2350marj"></A><I>mode</I></TD>
+<TD>  Specifies the name of the mode to be used in conjunction with RGB color subroutines. Possible modes are: 
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Mode Constants</B></TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LMC_COLOR</TD>
+
+<TD>LMCCOL</TD>
+
+<TD>Color subroutines set the current color. If a color is the last thing sent before a vertex, the vertex will be colored. If a normal is the last thing sent before a vertex, the vertex is lighted. <B>LMC_COLOR </B>is the default mode. </TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LMC_EMISSION</TD>
+
+<TD>LMCEMI</TD>
+
+<TD>Color subroutines set the current EMISSION color property of the current material. </TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LMC_AMBIENT</TD>
+
+<TD>LMCAMB</TD>
+
+<TD>Color subroutines set the current AMBIENT color property of the current material. </TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LMC_DIFFUSE</TD>
+
+<TD>LMCDIF</TD>
+
+<TD>Color subroutines set the current DIFFUSE color property of the current material. Alpha, the fourth color component specified by RGB color subroutines, sets the ALPHA property of the current material.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LMC_SPECULAR</TD>
+
+<TD>LMCSPE</TD>
+
+<TD>Color subroutines set the current SPECULAR color property of the current material.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LMC_AD</TD>
+
+<TD>LMCAD</TD>
+
+<TD>Color subroutines set the current DIFFUSE and AMBIENT color properties of the current material. Alpha, the fourth color component specified by RGB color subroutines, sets the ALPHA property of the current material.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>LMC_NULL</TD>
+
+<TD>LMCNUL</TD>
+
+<TD>RGB subroutines are ignored.</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A62C015cea"></A>Implementation Specifics</H3>
+<P><A NAME="E1B15C3992ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C12d7"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12d8"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12d9"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911e9e"></A>Related Information</H3>
+<P><A NAME="E1B15C4315ceb"></A>Specifying RGBA colors as vectors using the <A HREF="c.html#A143X9262"><B>c</B></A> subroutine.</P>
+
+<P><A NAME="E1B15C4426ceb"></A>Specifying RGBA colors with a single packed 32-bit integer using the <A HREF="cpack.html#A143X9284"><B>cpack</B></A> subroutine.</P>
+
+<P><A NAME="E1B15C4533ceb"></A>Making a new material, light, or lighting model definition active with the <A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> subroutine.</P>
+
+<P><A NAME="E1B15C4643ceb"></A>Defining a new material, light, or lighting model with the <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> subroutine.</P>
+
+<P><A NAME="E1B15C4750ceb"></A>Setting the current color in RGB mode with the <A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> subroutine. </P>
+
+<P><A NAME="E1B15C4858ceb"></A>AIX <!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">Graphics Library Overview</A>, Creating <!--gl32prgd:--><A HREF="../gl32prgd/crlighteff.html#crlighteff.html">Lighting Effects</A>, Setting <!--gl32prgd:--><A HREF="../gl32prgd/setglpipeops.html#setglpipeops.html">Pipeline Options</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="lmbind.html">Previous</a>  |
+<a href="lmdef.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+
+</HTML>
+
+

@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>overlay Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="ortho.html">Previous</a>  |
+<a href="patch.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X950a"></A>overlay Subroutine</H2>
+<A NAME="INDEX1306" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1307" REL="I2" TITLE="frame buffer configuration"></A>
+<A NAME="INDEX1308" REL="I3" TITLE="overlay"></A>
+<A NAME="INDEX1309" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1310" REL="I2" TITLE="overlay drawing"></A>
+<A NAME="INDEX1311" REL="I3" TITLE="setting bit planes for"></A>
+<A NAME="INDEX1312" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1313" REL="I2" TITLE="bitplanes"></A>
+<A NAME="INDEX1314" REL="I3" TITLE="setting number used for overlay drawing"></A>
+<A NAME="INDEX1315" REL="I1" TITLE="overlay subroutine (GL)"></A>
+<H3><A NAME="A143X950c"></A>Purpose</H3>
+<P><A NAME="E1D70A8699ceb"></A>Sets the number of user-defined bitplanes used for overlay drawing.</P>
+
+<H3><A NAME="A78C11cc"></A>Libraries</H3>
+<P><A NAME="E1D70A8738ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D70A8762ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9510"></A>C Syntax</H3>
+<PRE><A NAME="A143X9511"></A><B>void overlay(Int32 </B><A HREF="overlay.html#A143X9515"><I>planes</I></A><B>)</B></PRE>
+
+<H3><A NAME="A28C010718"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C010719"></A><B>SUBROUTINE OVERLA(</B><I>planes</I><B>)</B>
+<B>INTEGER*4 </B><I>planes</I></PRE>
+
+<H3><A NAME="A143X9512"></A>Description</H3>
+<P><A NAME="E1D70A8874ceb"></A>The <B>overlay</B> subroutine sets the number of user-defined bitplanes used for overlay colors to 0, 2, or 4, depending on the installed adapter. An overlay color is the color that is placed on top of the standard 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06fd">pixel</A> contents. The overlay color appears whenever any of its bits are nonzero. The system has either two or four bitplanes that can be allocated as either underlay or overlay. Call the <B>overlay</B> subroutine to set them as overlay bitplanes.</P>
+
+<P><A NAME="E1D70A8909ceb"></A>The High-Performance 8-bit 3-D Color Graphics Processor can be configured with either 0 or 2 overlay planes. The 8-bit adapter has a total of 2 auxiliary planes, which can be configured into 2/0 or 0/2 overlay/underlay. For example, setting the number of overlay planes to 2 forces the number of underlay planes to 0.</P>
+
+<P><A NAME="E1D70A8944ceb"></A>The High-Performance 24-bit 3-D Color Graphics Processor can be configured with either 0, 2, or 4 overlay planes. The 24-bit adapter has a total of 4 auxiliary planes, which can be configured into 4/0, 2/2, or 0/4 overlay/underlay. For example, setting the number of overlay planes to 4 forces the number of underlay planes to 0.</P>
+
+<P><A NAME="E1D70A8969ceb"></A>The POWER GXT1000 adapter has 8 overlay planes, all of which are nonmodifiable.</P>
+
+
+<P><A NAME="E1D70A8995ceb"></A>Call the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine after the <B>overlay </B>subroutine to activate the overlay setting. </P>
+
+<P><A NAME="E1D70A9020ceb"></A>When the drawing mode is OVERDRAW, all drawing occurs in the overlay bitplanes. In OVERDRAW mode, FLAT is the only available shading model.</P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A258C01c4f0"></A>The operation of this subroutine for the Supergraphics 
+Processor Subsystem is modified. (See "<!--gl32prgd:--><A HREF="../gl32prgd/undergraphadapt.html#undergraphadapt.html">Understanding the Adapter</A>")</LI>
+
+<LI><A NAME="A258C01c4f1"></A>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A143X9514"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9515"></A><I>planes</I> </TD>
+<TD>  Specifies the number of bitplanes to use for overlay drawing.</TD></TR></TABLE>
+
+<H3><A NAME="A30C010fce"></A>Example</H3>
+<P><A NAME="E1D70A9151ceb"></A>The example C language program <A HREF="overlay_c.html#A11C0b47c"><B>overlay.c</B></A> uses the <B>overlay</B> subroutine to set the number of overlay bitplanes to two. </P>
+
+<H3><A NAME="A64C016556"></A>Implementation Specifics</H3>
+<P><A NAME="E1D70A9194ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1D70A9220ceb"></A>The POWER Gt4, 
+ and 
+POWER Gt4x, and POWER GXT1000
+ adapters do not support hidden-line and hidden-surface removal when rendering into the overlay planes. The z-buffer is automatically disabled when drawmode (OVERDRAW) is specified. The z-buffer is automatically enabled when drawmode (NORMALDRAW) is specified.</P>
+
+<H3><A NAME="A78C11cf"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11d0"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11d1"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c4f2"></A>Related Information</H3>
+<P><A NAME="E1D70A9318ceb"></A>Specifying the target frame buffer for drawing subroutines with the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine.</P>
+
+<P><A NAME="E1D70A9343ceb"></A>Reconfiguring the system with the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine.</P>
+
+<P><A NAME="E1D70A9369ceb"></A>Setting the number of bitplanes used for underlay colors with the <A HREF="underlay.html#Az5O370nita"><B>underlay</B></A> subroutine.</P>
+
+<P><A NAME="E1D70A9394ceb"></A>
+<!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/writemasks.html#writemasks.html">Writemasks and Logical Operations</A>.</P><hr><center>
+[  <a href="ortho.html">Previous</a>  |
+<a href="patch.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

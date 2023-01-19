@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>closeobj Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="clkoff.html">Previous</a>  |
+<a href="cmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X915b"></A>closeobj Subroutine</H2>
+<A NAME="INDEX242" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX243" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX244" REL="I3" TITLE="closeobj"></A>
+<A NAME="INDEX245" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX246" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX247" REL="I3" TITLE="closing"></A>
+<A NAME="INDEX248" REL="I1" TITLE="closeobj subroutine (GL)"></A>
+
+<H3><A NAME="A142X915d"></A>Purpose</H3>
+<P><A NAME="E1B06E6584ceb"></A>Closes an object.</P>
+
+<H3><A NAME="A79C113"></A>Libraries</H3>
+<P><A NAME="E1B06E6733ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B06E6836ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9161"></A>C Syntax</H3>
+<PRE><A NAME="A142X9162"></A><B>void closeobj(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010a5e"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010a5f"></A><B>SUBROUTINE CLOSEO</B></PRE>
+
+<H3><A NAME="A142X9163"></A>Description</H3>
+<P><A NAME="E1B06E7190ceb"></A>The <B>closeobj</B> subroutine closes an open object definition. Use the <A HREF="makeobj.html#A142X912d"><B>makeobj</B></A> subroutine to open a definition for a new object. All display list routines between the <B>makeobj</B> subroutine and the <B>closeobj</B> subroutine become part of the object definition. </P>
+
+<P><A NAME="E1B06E7297ceb"></A>Use the <A HREF="editobj.html#A142X9360"><B>editobj</B></A> subroutine to open an existing object for editing and the <B>closeobj</B> subroutine to end the editing session. </P>
+
+<P><A NAME="E1B06E7403ceb"></A>If no object is open, the <B>closeobj</B> subroutine is ignored.</P>
+
+<BLOCKQUOTE><A NAME="A318C9d77"></A><B>Note: </B>This subroutine, <I>itself</I>, cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A30C010ff6"></A>Example</H3>
+<P><A NAME="E1B06E7614ceb"></A>The example C language program <A HREF="depthcue_c.html#A16C0c8ff"><B>depthcue.c</B></A> uses the <B>closeobj</B> subroutine to specify the end of a graphical object definition. </P>
+
+<H3><A NAME="A62C015cee"></A>Implementation Specifics</H3>
+<P><A NAME="E1B06E7774ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C116"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C117"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C118"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X917b"></A>Related Information</H3>
+<P><A NAME="E1B06E8094ceb"></A>Opening an object for editing with the <A HREF="editobj.html#A142X9360"><B>editobj</B></A> subroutine.</P>
+
+<P><A NAME="E1B06E8201ceb"></A>Creating an object with the <A HREF="makeobj.html#A142X912d"><B>makeobj</B></A> subroutine.</P>
+
+<P><A NAME="E1B06E8309ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating <!--gl32prgd:--><A HREF="../gl32prgd/workobjects.html#workobjects.html">Objects (Display Lists)</A>.</P><hr><center>
+[  <a href="clkoff.html">Previous</a>  |
+<a href="cmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

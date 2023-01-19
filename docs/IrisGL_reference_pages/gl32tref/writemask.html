@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>writemask Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="wmpack.html">Previous</a>  |
+<a href="writepixels.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9592"></A>writemask Subroutine</H2>
+<A NAME="INDEX2076" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2077" REL="I2" TITLE="frame buffer update control"></A>
+<A NAME="INDEX2078" REL="I3" TITLE="writemask"></A>
+<A NAME="INDEX2079" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2080" REL="I2" TITLE="bitplanes"></A>
+<A NAME="INDEX2081" REL="I3" TITLE="granting write permission to in color map mode"></A>
+<A NAME="INDEX2082" REL="I1" TITLE="writemask subroutine (GL)"></A>
+<H3><A NAME="A143X9594"></A>Purpose</H3>
+<P><A NAME="E1D76AA053ceb"></A>Grants write permission to available bitplanes.</P>
+
+<H3><A NAME="A78C120b"></A>Libraries</H3>
+<P><A NAME="E1D76AA093ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D76AA117ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9598"></A>C Syntax</H3>
+<PRE><A NAME="A143X9599"></A><B>void writemask(Colorindex </B><A HREF="writemask.html#A143X959d"><I>writem</I></A><B>)</B></PRE>
+
+<H3><A NAME="A28C01077b"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C01077c"></A><B>SUBROUTINE WRITEM(</B><I>writem</I><B>)</B>
+<B>INTEGER*4 </B><I>writem</I></PRE>
+
+<H3><A NAME="A143X959a"></A>Description</H3>
+<P><A NAME="E1D76AA230ceb"></A>The <B>writemask</B> subroutine sets the bitplane writemask in color map mode. Writemasks are used to shield portions of the frame buffer from being written into. A writemask is a small set of bits (8 bits or 12 bits, depending on the frame buffer configuration), one bit for each bitplane of the frame buffer. </P>
+
+<P><A NAME="E1D76AA256ceb"></A>If a bit is set (1), the corresponding bitplane is enabled for writing, and any routine that draws into the frame buffer will be able to write into that bitplane. If a bit is reset (0), the corresponding bitplane is marked as read only, and the values stored in that bitplane are not changed.</P>
+
+<P><A NAME="E1D76AA282ceb"></A>Note that the writemask protects planes in the color frame buffer. Thus, writemasks essentially prevent certain colors from being written into the frame buffer. Colors that are drawn while a writemask is enabled appear different, depending on the color, the writemask, and the color value currently stored in the frame buffer (at a given pixel).</P>
+
+<P><A NAME="E1D76AA307ceb"></A>Writemasks are useful for emulating overlay/underlay planes.</P>
+
+<BLOCKQUOTE><A NAME="A213X9122c2"></A><B>Note: </B>This subroutine is intended for use only in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e3">color map mode</A>. To set the writemask in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>, use the <A HREF="RGBwritemask.html#A143X93fa"><B>RGBwritemask</B></A> subroutine.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X959c"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X959d"></A><I>writem</I> </TD>
+<TD>  Specifies the mask that controls which bitplanes are available for drawing and which are read only. The mask contains one bit per available bitplane. </TD></TR></TABLE>
+
+<H3><A NAME="A30C01100c"></A>Example</H3>
+<P><A NAME="E1D76AA403ceb"></A>The example C language program <A HREF="vlsi_c.html#A16C0c9fd"><B>vlsi.c</B></A> uses the <B>writemask</B> subroutine to draw a rectangle in one of four colors by enabling writing into only one of four bitplanes. </P>
+
+<P><A NAME="E1D76AA429ceb"></A>The example C language program <A HREF="circuit_c.html#Ua32d0nita"><B>circuit.c</B></A> uses the <B>writemask</B> subroutine to draw power circuitry into several bitplanes.</P>
+
+<H3><A NAME="A64C0165da"></A>Implementation Specifics</H3>
+<P><A NAME="E1D76AA472ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C120f"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1210"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1211"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X95b2"></A>Related Information</H3>
+<P><A NAME="E1D76AA569ceb"></A>Specifying the target frame buffer for drawing subroutines with the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine.</P>
+
+<P><A NAME="E1D76AA595ceb"></A>Returning the current writemask with the <A HREF="getwritemask.html#A143X94c6"><B>getwritemask</B></A> subroutine.</P>
+
+<P><A NAME="E1D76AA620ceb"></A>Granting write access to a subset of available bitplanes with the <A HREF="RGBwritemask.html#A143X93fa"><B>RGBwritemask</B></A> subroutine.</P>
+
+<P><A NAME="E1D76AA646ceb"></A>Specifying the RGBA writemask with a single packed integer with the <A HREF="wmpack.html#A143X9570"><B>wmpack</B></A> subroutine. </P>
+
+<P><A NAME="E1D76AA671ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>.</P>
+
+<P><A NAME="E1D76AA697ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/writemasks.html#writemasks.html">Writemasks and Logical Operations</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="wmpack.html">Previous</a>  |
+<a href="writepixels.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

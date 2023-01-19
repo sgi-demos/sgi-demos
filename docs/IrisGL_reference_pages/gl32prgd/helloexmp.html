@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/helloexmp.html Mon, 24 Jan 2022 16:27:48 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Hello World Example Program
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getstart.html">Previous</a>  |
+<a href="animatexmp.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="helloexmp.html"></A>Hello World Example Program </H2>
+
+
+<P><A NAME="INDEX5"></A><A NAME="INDEX6"></A><A NAME="INDEX7"></A></P>
+
+
+<P><A NAME="A3C0DE53033mhay"></A>The first GL program opens a window on
+the screen, and prints the message <TT>Hello,&nbsp;World!</TT> inside it.
+Create a <B>hello.c</B> file and enter the following text: </P>
+
+
+<PRE><A NAME="A109C14f1"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A109C14f2"></A>main&nbsp;()</PRE>
+
+
+<PRE><A NAME="A109C14f3"></A>{&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;prefsize&nbsp;(200,&nbsp;100);
+&nbsp;&nbsp;&nbsp;winopen&nbsp;(&quot;HI&nbsp;THERE&quot;);
+&nbsp;&nbsp;&nbsp;color&nbsp;(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color&nbsp;(GREEN);
+&nbsp;&nbsp;&nbsp;cmov2&nbsp;(50,&nbsp;50);
+&nbsp;&nbsp;&nbsp;charstr&nbsp;(&quot;Hello,&nbsp;World!&quot;);
+&nbsp;&nbsp;&nbsp;sleep&nbsp;(5);
+}</PRE>
+
+
+<P><A NAME="A3C0DE53056mhay"></A>To compile and link this program, enter
+the following AIX command: </P>
+
+
+<PRE><A NAME="A109C14f5"></A>cc&nbsp;hello.c&nbsp;-o&nbsp;hello&nbsp;-lgl</PRE>
+
+
+<P><A NAME="A3C0DE53077mhay"></A>To run the program, enter the following
+at the command prompt: </P>
+
+
+<PRE><A NAME="A109C14f7"></A>./hello</PRE>
+
+
+<P><A NAME="A3C0DE53099mhay"></A>Depending on the configuration of your
+X server (as controlled by the <B>.Xdefaults</B> and <B>.mwmrc</B> files),
+either the window is displayed immediately on the screen or a <I>rubber
+band</I> is displayed. If a rubber band is displayed, you can place it
+at any location; to display the window, press the left mouse button. To
+learn more about customizing the X server for GL applications, see <A HREF="underwininput.html#underwininput.html">&quot;Understanding
+Windows and Input Control&quot;</A>. </P>
+
+
+<P><A NAME="A3C0DE53119mhay"></A>The first line of the <B>hello.c</B> program,
+<TT>#include&nbsp;&lt;gl/gl.h&gt;</TT>, includes constant, type, and function
+declarations needed for all GL programs. For instance, it defines the preprocessor
+tokens BLACK and GREEN. This line should be included in every GL program.</P>
+
+
+<P><A NAME="A3C0DE53139mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/prefsize.html#A142X91671">prefsize</A></B>
+subroutine communicates to the window manager the suggested size of the
+window that is created with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winopen.html#A142X91549">winopen</A></B>
+subroutine. The <B>prefsize</B> subroutine does not actually create the
+window; it only specifies the window size preferences. In this case, the
+preference is a window that is 200 pixels wide and 100 pixels high. You
+can also control other window properties, such as the preferred position
+or the window title. To learn more about creating and managing windows,
+see <A HREF="underwininput.html#underwininput.html">&quot;Understanding Windows
+and Input Control&quot;</A>. </P>
+
+
+<P><A NAME="A3C0DE53159mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/color.html#A146X9429">color</A></B>
+subroutine sets the current color. Everything you draw is is displayed
+in the current color until you change that color. The <B>color</B> subroutine
+itself does not draw anything. To learn more about setting attributes,
+see <A HREF="setglattrib.html#setglattrib.html">&quot;Setting Drawing Attributes&quot;</A>.
+To learn more about setting colors and frame buffer modes (an advanced
+topic), see <A HREF="underframebuf.html#underframebuf.html">&quot;Understanding the
+Frame Buffer&quot;</A>. </P>
+
+
+<P><A NAME="A3C0DE53178mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/clear.html#cEH1160marj">clear</A></B>
+subroutine clears the entire window to the current color. Because the program
+line immediately preceding the <B>clear</B> subroutine call sets the current
+color to black, the window is cleared to black. </P>
+
+
+<P><A NAME="A3C0DE53198mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/cmov.html#A143X9d1d">cmov2</A></B>
+subroutine sets the current character position. Every character you draw
+is displayed at the current character position until you change that position.
+In this example, the current character position is set to 50 pixels up
+and 50 pixels to the right of the lower left-hand corner of the window.</P>
+
+
+<P><A NAME="A3C0DE53218mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/charstr.html#A143X9cfb">charstr</A></B>
+subroutine actually draws the text <TT>Hello,&nbsp;World!</TT>. The text
+is drawn with the current color, which is now green. To learn more about
+drawing text (such as choosing fonts), see <A HREF="textchars.html#textchars.html">&quot;Creating
+Text Characters&quot;</A>. To learn about drawing lines and polygons, see
+<A HREF="drawwithgl.html#drawwithgl.html">&quot;Drawing with the Graphics
+Library&quot;</A>. </P>
+
+
+<P><A NAME="A3C0DE53238mhay"></A>The <B><!--:cmds:aixcmds5:--><A HREF="aixcmds5/sleep.html#A2089aeb">sleep</A></B>
+subroutine is an AIX system call. In this example, the <B>sleep</B>
+subroutine prompts the system to do nothing for 5 seconds. After 5 seconds,
+the <B>sleep</B> subroutine returns and the program exits. When a GL program
+exits, any windows that it has created disappear. Without the sleep call,
+the window would be created, would flash to black, with some green text,
+and would then disappear immediately. You can replace the sleep call with
+anything that will keep the program running: for instance, an infinite
+loop. But when the program exits, the window definitely disappears. </P>
+
+
+
+
+<hr><center>
+[  <a href="getstart.html">Previous</a>  |
+<a href="animatexmp.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/helloexmp.html Mon, 24 Jan 2022 16:27:48 GMT -->
+</HTML>
+

@@ -1,0 +1,241 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/Selecting.html Mon, 24 Jan 2022 16:28:19 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Selecting
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="Picking.html">Previous</a>  |
+<a href="underwininput.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="Selecting.html"></A>Selecting </H2>
+
+
+<P><A NAME="INDEX762"></A><A NAME="INDEX763"></A><A NAME="INDEX764"></A><A NAME="INDEX765"></A></P>
+
+
+<P><A NAME="A3C0EC61635mhay"></A>Selecting is much like picking, but is
+more general. The same concept of hits is used, and the same name stack
+manipulation routines apply. The returned data buffer is filled in the
+same way. The only difference is in the way the selecting region is defined.</P>
+
+
+<P><A NAME="A3C0EC61655mhay"></A>The selecting region corresponds to a
+rhomboid in world coordinates. Any drawing primitive that intersects with
+this rhomboid causes a hit and is recorded in the same manner as in picking.
+There is no special call to set the selecting volume; instead, the matrix
+manipulation routines are used. </P>
+
+
+<P><A NAME="A3C0EC61675mhay"></A>Like picking, no actual drawing occurs
+while the system is in select mode. Instead, all drawing primitives are
+transformed through the geometry pipeline and compared to the canonical
+3-D unit cube clipping volume. If the drawing primitive is inside this
+volume, it causes a hit. If it is wholly outside, there is no hit recorded.
+Transforming through the pipeline means that every drawing primitive is
+run through the combination of the modeling, viewing, and projection transformations.
+If, after these transformations, any portion of the primitive ends up inside
+the volume -<I>w</I> &amp;le; <I>x</I>, <I>y</I>, <I>z</I> &amp;le; +<I>w</I>,
+a hit has occurred. </P>
+
+
+<P><A NAME="A3C0EC61695mhay"></A>To perform selecting, you must set up
+your viewing/projection matrices correctly. You can set up the matrices
+either immediately before or after a call to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gselect.html#A213X9118b2">gselect</A></B>
+subroutine. The <B>gselect</B> subroutine, unlike the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pick.html#h632f0nita">pick</A></B>
+subroutine, does not alter the matrix stack. </P>
+
+
+<P><A NAME="A3C0EC61715mhay"></A>In most applications, only the viewing
+matrix is changed, not the projection matrix. The viewing matrix controls
+what portion of the world space ends up inside the NDC unit cube (-<I>w</I>
+&amp;le; <I>x</I>, <I>y</I>, <I>z</I> &amp;le; +<I>w</I>). Also, the individual
+modeling routines are not changed because they only serve to embed individual
+subportions of the drawing into the world coordinate frame. The usual process
+is to draw the same primitives in the same places they previously occupied
+while selecting is going on. </P>
+
+
+<P><A NAME="A3C0EC61734mhay"></A>To end selecting mode, call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/endselect.html#A213X91190c">endselect</A></B>
+subroutine. The returned data is in exactly the same format as for the
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/endpick.html#A213X91185b">endpick</A></B>
+subroutine. </P>
+
+
+<H3><A NAME="A15C0c69a"></A>gselect Subroutine </H3>
+
+
+<P><A NAME="A3C0EC61755mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/gselect.html#A213X9118b2">gselect</A></B>
+subroutine turns on the selection mode. The <B>gselect</B> and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pick.html#h632f0nita">pick</A></B>
+subroutines are identical, except that the <B>gselect </B>subroutine is
+more general. It allows you to define an arbitrary rhomboid in world coordinates
+as the selecting region. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A66C016c01"></A>void&nbsp;gselect(Int16&nbsp;buffer[],&nbsp;Int32&nbsp;numnames)</PRE>
+
+
+<P><A NAME="A3C0EC61776mhay"></A>The <I>numnames</I> parameter specifies
+the maximum number of values that the buffer can store. Each drawing routine
+that intersects the selecting region causes a hit. The contents of the
+name stack, preceded by the length of the name stack, are written into
+the buffer only if this is the first hit since the last time that the name
+stack was touched. The name stack is controlled in the same way as in picking.</P>
+
+
+<H3><A NAME="A15C0c6a0"></A>endselect Subroutine </H3>
+
+
+<P><A NAME="A3C0EC61797mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/endselect.html#A213X91190c">endselect</A></B>
+subroutine takes the system out of selecting mode mode and returns the
+number of times the name stack was dumped into the buffer. If this number
+is positive, the buffer was large enough to contain all of the name stacks
+written to it. If the number is negative, the buffer was too small to store
+all the name lists. The magnitude of the returned number is the number
+of name stacks that were recorded. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A66C016c02"></A>Int32&nbsp;endselect(Int16&nbsp;buffer[])</PRE>
+
+
+<P><A NAME="A3C0EC61818mhay"></A>The <I>buffer</I> parameter contains copies
+of the name stack that were recorded as hits occurred. As explained previously,
+not every hit causes the name stack to be recorded; only the first hit
+after the name stack has been touched is recorded. When stored in the buffer,
+each name stack is preceded by the length of the name stack. If the name
+stack is empty when a hit occurs, the length is recorded as 0 (zero), and
+the stack is not recorded. </P>
+
+
+<H3><A NAME="A258C01c0fc"></A>Selecting Example Program </H3>
+
+
+<P><A NAME="A3C0EC61839mhay"></A>The following program demonstrates a simple
+application of selecting. This program draws a planet and then draws a
+box representing the ship each time the left mouse button is pressed. The
+program prints <TT>CRASH</TT> and exits when the ship collides with the
+planet: </P>
+
+
+<PRE><A NAME="A65C01682a"></A>/***
+&nbsp;&nbsp;&nbsp;crash.c&nbsp;-&nbsp;example&nbsp;of&nbsp;selecting
+***/</PRE>
+
+
+<PRE><A NAME="A65C01682b"></A>#include&nbsp;&lt;gl/gl.h&gt;
+#include&nbsp;&lt;gl/device.h&gt;
+#define&nbsp;BUFSIZE&nbsp;50
+#define&nbsp;PLANET&nbsp;109
+#define&nbsp;SHIPWIDTH&nbsp;20
+#define&nbsp;SHIPHEIGHT&nbsp;10</PRE>
+
+
+<PRE><A NAME="A65C01682c"></A>void
+drawplanet()
+{
+&nbsp;&nbsp;&nbsp;circfi(200,&nbsp;200,&nbsp;20);
+}</PRE>
+
+
+<PRE><A NAME="A65C01682d"></A>int
+main()
+{
+short&nbsp;dev,&nbsp;val;
+short&nbsp;buffer[BUFSIZE];
+int&nbsp;count,&nbsp;i;
+float&nbsp;shipx,&nbsp;shipy,&nbsp;shipz;
+int&nbsp;xorigin,&nbsp;yorigin;</PRE>
+
+
+<PRE><A NAME="A65C01682e"></A>&nbsp;&nbsp;&nbsp;minsize(300,&nbsp;300);
+&nbsp;&nbsp;&nbsp;(void)&nbsp;winopen(&quot;crash&quot;);
+&nbsp;&nbsp;&nbsp;getorigin(&amp;xorigin,&nbsp;&amp;yorigin);
+&nbsp;&nbsp;&nbsp;qdevice(LEFTMOUSE);
+&nbsp;&nbsp;&nbsp;qdevice(ESCKEY);
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();</PRE>
+
+
+<PRE><A NAME="A65C01682f"></A>&nbsp;&nbsp;&nbsp;for&nbsp;(i&nbsp;=&nbsp;0;&nbsp;&nbsp;i&nbsp;&lt;&nbsp;BUFSIZE;&nbsp;&nbsp;i++)&nbsp;&nbsp;buffer[i]&nbsp;=&nbsp;0;</PRE>
+
+
+<PRE><A NAME="A65C016830"></A>&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;drawplanet();
+&nbsp;&nbsp;&nbsp;while&nbsp;(TRUE)&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;dev&nbsp;=&nbsp;qread(&amp;val);
+&nbsp;&nbsp;&nbsp;&nbsp;switch&nbsp;(dev)&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;LEFTMOUSE:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(val)&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shipz&nbsp;=&nbsp;0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shipx&nbsp;=&nbsp;getvaluator(MOUSEX)&nbsp;-&nbsp;xorigin;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shipy&nbsp;=&nbsp;getvaluator(MOUSEY)&nbsp;-&nbsp;yorigin;</PRE>
+
+
+<PRE><A NAME="A65C016831"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(BLUE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rect(shipx,&nbsp;shipy,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shipx&nbsp;+&nbsp;SHIPWIDTH,&nbsp;shipy&nbsp;+&nbsp;SHIPHEIGHT);</PRE>
+
+
+<PRE><A NAME="A65C016832"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;specify&nbsp;the&nbsp;selecting&nbsp;region&nbsp;to&nbsp;be&nbsp;a&nbsp;box
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;surrounding&nbsp;the&nbsp;rocket&nbsp;ship&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pushmatrix();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ortho2(shipx,&nbsp;shipx&nbsp;+&nbsp;SHIPWIDTH,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shipy,&nbsp;shipy&nbsp;+&nbsp;SHIPHEIGHT);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initnames();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gselect(buffer,&nbsp;BUFSIZE);&nbsp;/*enter&nbsp;selecting&nbsp;mode*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loadname(PLANET);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawplanet();&nbsp;/*&nbsp;no&nbsp;actual&nbsp;drawing&nbsp;takes&nbsp;place&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count&nbsp;=&nbsp;endselect(buffer);&nbsp;/*&nbsp;exit&nbsp;select&nbsp;mode&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;popmatrix();</PRE>
+
+
+<PRE><A NAME="A65C016833"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;check&nbsp;to&nbsp;see&nbsp;if&nbsp;PLANET&nbsp;was&nbsp;selected&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;((count&nbsp;&gt;&nbsp;0)&nbsp;&amp;&amp;&nbsp;(buffer[0]&nbsp;==&nbsp;1)&nbsp;&amp;&amp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(buffer[1]&nbsp;==&nbsp;PLANET)&nbsp;&nbsp;)&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;CRASH!\n&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;</PRE>
+
+
+<PRE><A NAME="A65C016834"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;ESCKEY:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;}
+}</PRE>
+
+
+
+
+<hr><center>
+[  <a href="Picking.html">Previous</a>  |
+<a href="underwininput.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/Selecting.html Mon, 24 Jan 2022 16:28:19 GMT -->
+</HTML>
+

@@ -1,0 +1,467 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>scrn_rotate.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="../gl32tref/run_all.html">Previous</a>  |
+<a href="select1_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c92f"></A>scrn_rotate.c Example C Language Program
+</H2>
+<A NAME="INDEX2417" REL="I1" TITLE="scrn_rotate.c example program (GL)"></A>
+<A NAME="INDEX2418" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2419" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2420" REL="I3" TITLE="hidden surface removal"></A>
+<A NAME="INDEX2421" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2422" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2423" REL="I3" TITLE="move-draw style"></A>
+<A NAME="INDEX2424" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2425" REL="I2" TITLE="hidden surface removal"></A>
+<A NAME="INDEX2426" REL="I3" TITLE="example program"></A>
+<A NAME="INDEX2427" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2428" REL="I2" TITLE="move-draw style"></A>
+<PRE><A NAME="A64EB53414ttay"></A>/*
+screenrotate.c
+This program illustrates a technique for rotating an object about
+a fixed set of axes (screen axes x, y, and z).
+ Use the numeric
+keypad to rotate the image.
+It also demonstrates a technique for doing backface elimination
+depending upon the visual relationship between the eye
+point and a six-sided cube.
+NOTE: If compiled with the "define" flag as "-DBACKFACE" the
+graphics library function backface() will replace the code
+ensuing from the function norm_dot and beyond.
+*/</PRE>
+<PRE><A NAME="A64EB53579ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h>
+#include &lt;math.h></PRE>
+<PRE><A NAME="A64EB53769ttay"></A>Coord ident [4][4] =     {
+&nbsp;&nbsp;&nbsp;1.0, 0.0, 0.0, 0.0,    /* identity matrix */
+&nbsp;&nbsp;&nbsp;0.0, 1.0, 0.0, 0.0,
+&nbsp;&nbsp;&nbsp;0.0, 0.0, 1.0, 0.0,
+&nbsp;&nbsp;&nbsp;0.0, 0.0, 0.0, 1.0};</PRE>
+<PRE><A NAME="A64EB53961ttay"></A>static Coord cm [4][4] = {
+&nbsp;&nbsp;&nbsp;1.0, 0.0, 0.0, 0.0,    /* cumulative matrix */
+&nbsp;&nbsp;&nbsp;0.0, 1.0, 0.0, 0.0,
+&nbsp;&nbsp;&nbsp;0.0, 0.0, 1.0, 0.0,
+&nbsp;&nbsp;&nbsp;0.0, 0.0, 0.0, 1.0};</PRE>
+<PRE><A NAME="A64EB54174ttay"></A>/*  Define the sides of the cube in world coordinates. */
+static Coord pfrnt[4][3] = {
+&nbsp;&nbsp;&nbsp;{    0.0,    0.0,    0.0},
+&nbsp;&nbsp;&nbsp;{  100.0,    0.0,    0.0},
+&nbsp;&nbsp;&nbsp;{  100.0,  100.0,    0.0},
+&nbsp;&nbsp;&nbsp;{    0.0,  100.0,    0.0}
+};</PRE>
+<PRE><A NAME="A64EB54408ttay"></A>static Coord pback[4][3] = {
+&nbsp;&nbsp;&nbsp;{    0.0,    0.0, -100.0},
+&nbsp;&nbsp;&nbsp;{    0.0,  100.0, -100.0},
+&nbsp;&nbsp;&nbsp;{  100.0,  100.0, -100.0},
+&nbsp;&nbsp;&nbsp;{  100.0,    0.0, -100.0}
+};</PRE>
+<PRE><A NAME="A64EB54603ttay"></A>static Coord ptop[4][3] =  {
+&nbsp;&nbsp;&nbsp;{    0.0,  100.0,    0.0},
+&nbsp;&nbsp;&nbsp;{  100.0,  100.0,    0.0},
+&nbsp;&nbsp;&nbsp;{  100.0,  100.0, -100.0},
+&nbsp;&nbsp;&nbsp;{    0.0,  100.0, -100.0}
+};</PRE>
+<PRE><A NAME="A64EB54796ttay"></A>static Coord pbot[4][3] =  {
+&nbsp;&nbsp;&nbsp;{    0.0,    0.0,    0.0},
+&nbsp;&nbsp;&nbsp;{    0.0,    0.0, -100.0},
+&nbsp;&nbsp;&nbsp;{  100.0,    0.0, -100.0},
+&nbsp;&nbsp;&nbsp;{  100.0,    0.0,    0.0}
+};</PRE>
+<PRE><A NAME="A64EB54992ttay"></A>static Coord prsid[4][3] = {
+&nbsp;&nbsp;&nbsp;{  100.0,    0.0,    0.0},
+&nbsp;&nbsp;&nbsp;{  100.0,    0.0, -100.0},
+&nbsp;&nbsp;&nbsp;{  100.0,  100.0, -100.0},
+&nbsp;&nbsp;&nbsp;{  100.0,  100.0,    0.0}
+};</PRE>
+<PRE><A NAME="A64EB55185ttay"></A>static Coord plsid[4][3] = {
+&nbsp;&nbsp;&nbsp;{    0.0,    0.0,    0.0},
+&nbsp;&nbsp;&nbsp;{    0.0,  100.0,    0.0},
+&nbsp;&nbsp;&nbsp;{    0.0,  100.0, -100.0},
+&nbsp;&nbsp;&nbsp;{    0.0,    0.0, -100.0}
+};</PRE>
+<PRE><A NAME="A64EB55346ttay"></A>Coord x, y, z;
+Angle rx, ry, rz;
+float norm_dot();</PRE>
+<PRE><A NAME="A64EB55492ttay"></A>main()
+{</PRE>
+<PRE><A NAME="A64EB55648ttay"></A>&nbsp;&nbsp;&nbsp;int i, j;
+&nbsp;&nbsp;&nbsp;long dev;
+&nbsp;&nbsp;&nbsp;short data;</PRE>
+<PRE><A NAME="A64EB55812ttay"></A>&nbsp;&nbsp;&nbsp;/*  initialize and set the display to double buffer mode */</PRE>
+<PRE><A NAME="A64EB55981ttay"></A>&nbsp;&nbsp;&nbsp;prefposition(XMAXSCREEN/4,XMAXSCREEN*3/4,YMAXSCREEN/4,
+&nbsp;&nbsp;&nbsp;    YMAXSCREEN*3/4);</PRE>
+<PRE><A NAME="A64EB56162ttay"></A>&nbsp;&nbsp;&nbsp;#ifdef BACKFACE
+&nbsp;&nbsp;&nbsp;winopen("screeen rotation (backface)");
+&nbsp;&nbsp;&nbsp;#else
+&nbsp;&nbsp;&nbsp;winopen("screeen rotation");
+&nbsp;&nbsp;&nbsp;#endif</PRE>
+<PRE><A NAME="A64EB57819ttay"></A>&nbsp;&nbsp;&nbsp;doublebuffer();
+&nbsp;&nbsp;&nbsp;gconfig();
+&nbsp;&nbsp;&nbsp;writemask((1&lt;&lt;getplanes())-1);
+&nbsp;&nbsp;&nbsp;qdevice(PAD1);   /* translate (in Z) toward the eyepoint */
+&nbsp;&nbsp;&nbsp;qdevice(PAD2);   /* rotate about the X axis in a negative direction */
+&nbsp;&nbsp;&nbsp;qdevice(PAD3);   /* translate (in Z) away from the eyepoint */
+&nbsp;&nbsp;&nbsp;qdevice(PAD4);   /* rotate about the Y axis in a positive direction */
+&nbsp;&nbsp;&nbsp;qdevice(PAD5);   /* reset rotations and translations to default */
+&nbsp;&nbsp;&nbsp;qdevice(PAD6);   /* rotate about the Y axis in a negative direction */
+&nbsp;&nbsp;&nbsp;qdevice(PAD7);   /* rotate about the Z axis in a positive direction */
+&nbsp;&nbsp;&nbsp;qdevice(PAD8);   /* rotate about the X axis in a positive direction */
+&nbsp;&nbsp;&nbsp;qdevice(PAD9);   /* rotate about the Z axis in a negative direction */
+&nbsp;&nbsp;&nbsp;qdevice(FKEY);   /* translate (in Z) toward the eyepoint */
+&nbsp;&nbsp;&nbsp;qdevice(BKEY);   /* translate (in Z) away from the eyepoint */
+&nbsp;&nbsp;&nbsp;qdevice(ESCKEY); /* exit program */</PRE>
+<PRE><A NAME="A64EB58000ttay"></A>&nbsp;&nbsp;&nbsp;#ifdef BACKFACE       
+&nbsp;&nbsp;&nbsp;/* compile with "-DBACKFACE" if you desire to use GL's */
+&nbsp;&nbsp;&nbsp;backface(TRUE);
+&nbsp;&nbsp;&nbsp;#endif</PRE>
+<PRE><A NAME="A64EB58202ttay"></A>&nbsp;&nbsp;&nbsp;perspective(470,1.25,1.0,10000.0);
+&nbsp;&nbsp;&nbsp;/*  initialize the modeling transformation values */
+&nbsp;&nbsp;&nbsp;rx =     0;
+&nbsp;&nbsp;&nbsp;ry =     0;
+&nbsp;&nbsp;&nbsp;rz =     0;
+&nbsp;&nbsp;&nbsp;x = -50.0;
+&nbsp;&nbsp;&nbsp;y = -50.0;
+&nbsp;&nbsp;&nbsp;z = -400.0;</PRE>
+<PRE><A NAME="A64EB58388ttay"></A>&nbsp;&nbsp;&nbsp;/*  set up the loop for reading input and drawing the cube */
+&nbsp;&nbsp;&nbsp;while(TRUE) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;viewcube();</PRE>
+<PRE><A NAME="A64EB58742ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*  read the input for moving the box around the eye point */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (qtest()) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dev = qread(&amp;data);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch (dev) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case REDRAW:                /* redraw event */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reshapeviewport();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;viewcube('t');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case(ESCKEY):             /* exit program */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gexit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case(FKEY):               /* translate toward the eyepoint */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case(PAD1):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(getbutton(FKEY) || getbutton(PAD1)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;z = z + 20.0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;viewcube('t');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB58957ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case(BKEY):               /* translate away from the eyepoint */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case(PAD3):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(getbutton(BKEY) || getbutton(PAD3)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;z = z - 20.0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;viewcube('t');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB59104ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;</PRE>
+<PRE><A NAME="A64EB59295ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case(PAD2):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(getbutton(PAD2)) {  /* rotate about the X axis */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rx = rx - 100;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;viewcube('x');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB59488ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;updatemat('x');           /* incorporate this rotation into */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rx = 0;                   /* cumulative rotation matrix */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;</PRE>
+<PRE><A NAME="A64EB59678ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case(PAD4):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(getbutton(PAD4)) {  /* rotate about the Y axis */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ry = ry + 100;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;viewcube('y');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB59872ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;updatemat('y');           /* incorporate this rotation into */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ry = 0;                   /* cumulative rotation matrix */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;</PRE>
+<PRE><A NAME="A64EB5A061ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case(PAD6):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(getbutton(PAD6)) {  /* rotate about the Y axis */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ry = ry - 100;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;viewcube('y');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB5A255ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;updatemat('y');           /* incorporate this rotation into */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ry = 0;                   /* cumulative rotation matrix */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;</PRE>
+<PRE><A NAME="A64EB5A447ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case(PAD7):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(getbutton(PAD7)) {  /* rotate about the Z axis */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rz = rz + 100;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;viewcube('z');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB5A689ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;updatemat('z');           /* incorporate this rotation into */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rz = 0;                   /* cumulative rotation matrix */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case(PAD8):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(getbutton(PAD8)) {  /* rotate about the X axis */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rx = rx + 100;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;viewcube('x');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB5A931ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;updatemat('x');           /* incorporate this rotation into */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rx = 0;                   /* cumulative rotation matrix */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case(PAD9):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(getbutton(PAD9)) {  /* rotate about the Z axis */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rz = rz - 100;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;viewcube('z');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB5B242ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;updatemat('z');           /* incorporate this rotation into */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rz = 0;                   /* cumulative rotation matrix */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case(PAD5):               /* reset rotations &amp; translations   */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x  =  -50.0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y  =  -50.0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;z  = -400.0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rx = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ry = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rz = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(i=0;i&lt;4;i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(j=0;j&lt;4;j++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cm[i][j] = ident[i][j];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;viewcube('t');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} /* end switch */</PRE>
+<PRE><A NAME="A64EB5B407ttay"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qreset();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} /* end while(qtest()) */
+&nbsp;&nbsp;&nbsp;} /* end while(1) */</PRE>
+<PRE><A NAME="A64EB5B557ttay"></A>} /* end of main */</PRE>
+<PRE><A NAME="A64EB5B709ttay"></A>viewcube(axis)
+char axis;
+{</PRE>
+<PRE><A NAME="A64EB5C038ttay"></A>&nbsp;&nbsp;&nbsp;/*  Transform the cube in world space and (if BACKFACE not 
+      defined, in software, ) check each face for back face 
+      elimination
+  */
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;pushmatrix();
+&nbsp;&nbsp;&nbsp;translate(x,y,z);
+&nbsp;&nbsp;&nbsp;pushmatrix();
+&nbsp;&nbsp;&nbsp;translate(50.0,50.0,-50.0);   /* apply rotation about a single axis */
+&nbsp;&nbsp;&nbsp;switch(axis) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case('x'):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(rx,'x');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case('y'):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(ry,'y');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case('z'):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(rz,'z');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;default:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;} /* apply all prior rotations */</PRE>
+<PRE><A NAME="A64EB5C197ttay"></A>&nbsp;&nbsp;&nbsp;multmatrix(cm);
+&nbsp;&nbsp;&nbsp;translate(-50.0,-50.0,50.0);</PRE>
+<PRE><A NAME="A64EB5C553ttay"></A>&nbsp;&nbsp;&nbsp;#ifdef BACKFACE
+&nbsp;&nbsp;&nbsp;/* compile with "-DBACKFACE" if you desire to use GL's version */
+&nbsp;&nbsp;&nbsp;color(1);
+&nbsp;&nbsp;&nbsp;polf(4,pfrnt);
+&nbsp;&nbsp;&nbsp;color(2);
+&nbsp;&nbsp;&nbsp;polf(4,pback);
+&nbsp;&nbsp;&nbsp;color(3);
+&nbsp;&nbsp;&nbsp;polf(4,ptop);
+&nbsp;&nbsp;&nbsp;color(4);
+&nbsp;&nbsp;&nbsp;polf(4,pbot);
+&nbsp;&nbsp;&nbsp;color(5);
+&nbsp;&nbsp;&nbsp;polf(4,prsid);
+&nbsp;&nbsp;&nbsp;color(6);
+&nbsp;&nbsp;&nbsp;polf(4,plsid);
+&nbsp;&nbsp;&nbsp;#else
+&nbsp;&nbsp;&nbsp;color(1);
+&nbsp;&nbsp;&nbsp;if(norm_dot(pfrnt) >= 0.0) polf(4,pfrnt);
+&nbsp;&nbsp;&nbsp;color(2);
+&nbsp;&nbsp;&nbsp;if(norm_dot(pback) >= 0.0) polf(4,pback);
+&nbsp;&nbsp;&nbsp;color(3);
+&nbsp;&nbsp;&nbsp;if(norm_dot(ptop) >= 0.0) polf(4,ptop);
+&nbsp;&nbsp;&nbsp;color(4);
+&nbsp;&nbsp;&nbsp;if(norm_dot(pbot) >= 0.0) polf(4,pbot);
+&nbsp;&nbsp;&nbsp;color(5);
+&nbsp;&nbsp;&nbsp;if(norm_dot(prsid) >= 0.0) polf(4,prsid);
+&nbsp;&nbsp;&nbsp;color(6);
+&nbsp;&nbsp;&nbsp;if(norm_dot(plsid) >= 0.0) polf(4,plsid);
+&nbsp;&nbsp;&nbsp;#endif</PRE>
+<PRE><A NAME="A64EB5C712ttay"></A>&nbsp;&nbsp;&nbsp;popmatrix();
+&nbsp;&nbsp;&nbsp;popmatrix();
+&nbsp;&nbsp;&nbsp;swapbuffers();</PRE>
+<PRE><A NAME="A64EB5C854ttay"></A>}</PRE>
+<PRE><A NAME="A64EB5D041ttay"></A>/*
+ *  Function to postmultiply cumulative rotations 
+ *     by rotation about a single axis 
+ */
+updatemat(axis)
+char axis;
+{</PRE>
+<PRE><A NAME="A64EB5D258ttay"></A>&nbsp;&nbsp;&nbsp;pushmatrix();
+&nbsp;&nbsp;&nbsp;loadmatrix(ident);
+&nbsp;&nbsp;&nbsp;switch (axis) {
+&nbsp;&nbsp;&nbsp;case ('x'):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(rx,'x');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;case ('y'):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(ry,'y');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;case ('z'):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(rz,'z');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;default:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB5D417ttay"></A>&nbsp;&nbsp;&nbsp;multmatrix(cm);
+&nbsp;&nbsp;&nbsp;getmatrix(cm);
+&nbsp;&nbsp;&nbsp;popmatrix();</PRE>
+<PRE><A NAME="A64EB5D561ttay"></A>}</PRE>
+<PRE><A NAME="A64EB5D838ttay"></A>/*
+      The function norm_dot takes as input an array of points in 
+      homogeneous coordinates which make up a surface or plane.  The 
+      unit normal of the surface and the eyepoint to surface unit 
+      vector are computed and the dot product is calculated.  This
+      function returns the dot product floating point value and the 
+      transformed points for the surface.
+*/</PRE>
+<PRE><A NAME="A64EB5D997ttay"></A>float norm_dot(passpoly)
+Coord passpoly[][3];
+{</PRE>
+<PRE><A NAME="A64EB5E161ttay"></A>&nbsp;&nbsp;&nbsp;int i;
+&nbsp;&nbsp;&nbsp;float a[3],b[3],c[3],d,abs;
+&nbsp;&nbsp;&nbsp;Coord postrans [4][3];</PRE>
+<PRE><A NAME="A64EB5E337ttay"></A>  /* Apply the current transformation to the surface points. */
+&nbsp;&nbsp;&nbsp;transform(4,passpoly,postrans);</PRE>
+<PRE><A NAME="A64EB5E640ttay"></A>  /* Determine two vectors which lie in the specified plane.  
+   * The first three points are taken from the surface array.  
+   * These points are ordered by the right-hand rule in the 
+   * right-hand coordinate system:  i.e. points ordered counter-
+   * clockwise when on the positive side of the plane or surface
+   * are visible, not backfacing, surfaces.
+   *    a[] gets the xyz coords of row 2
+   *    b[] gets the xyz coords of row 0.
+&nbsp;&nbsp;&nbsp; */</PRE>
+<PRE><A NAME="A64EB5E812ttay"></A>&nbsp;&nbsp;&nbsp;/* Determine two vectors.  Note that this routine assumes they
+   * are not in-line */</PRE>
+<PRE><A NAME="A64EB5F001ttay"></A>&nbsp;&nbsp;&nbsp;for(i = 0; i &lt; 3; i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a[i] = postrans[2][i] - postrans[1][i];
+&nbsp;&nbsp;&nbsp;for(i = 0; i &lt; 3; i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b[i] = postrans[0][i] - postrans[1][i];</PRE>
+<PRE><A NAME="A64EB5F197ttay"></A>  /* Find the cross product of the two vectors */
+&nbsp;&nbsp;&nbsp;c[0] = a[1] * b[2] - a[2] * b[1];
+&nbsp;&nbsp;&nbsp;c[1] = a[2] * b[0] - a[0] * b[2];
+&nbsp;&nbsp;&nbsp;c[2] = a[0] * b[1] - a[1] * b[0];</PRE>
+<PRE><A NAME="A64EB5F420ttay"></A>  /* Calculate the unit normal vector for the plane or poly 
+   * using the square root of the sum of the squares of x, y, 
+   * and z to determine length of vector, then dividing each 
+&nbsp;&nbsp;&nbsp; * axis by that length (x/l, y/l, z/l).
+   */</PRE>
+<PRE><A NAME="A64EB5F567ttay"></A>&nbsp;&nbsp;&nbsp;abs = 0.0;</PRE>
+<PRE><A NAME="A64EB5F989ttay"></A>&nbsp;&nbsp;&nbsp;for (i = 0; i &lt; 3; i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abs += (c[i]*c[i]);
+&nbsp;&nbsp;&nbsp;d = sqrt(abs);
+&nbsp;&nbsp;&nbsp;if (fabs(d) > 0.000001)    {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i = 0; i &lt; 3; i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a[i] = c[i]/d;
+        /* Calculate the unit vector pointing from the eyepoint to
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     * the normal of the plane or poly */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abs = 0.0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i = 0; i &lt; 3; i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c[i] = postrans[1][i];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i = 0; i &lt; 3; i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abs = abs + (c[i]*c[i]);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;d = sqrt(abs);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (fabs(d) > 0.000001)    {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i = 0; i &lt; 3; i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b[i] = c[i]/d;
+        /* Return the dot product between the eye vector and the 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   * plane normal */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i = 0, d=0.0; i &lt; 3; i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;d = d + a[i]*b[i];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf("\n Magnitude of surface vector is zero!");
+&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;else 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf("\n Magnitude of eye vector is zero!");
+&nbsp;&nbsp;&nbsp;return(d);</PRE>
+<PRE><A NAME="A64EB60132ttay"></A>}</PRE>
+<PRE><A NAME="A64EB60341ttay"></A>/* The function transform() simply multiplies each vertex point 
+ * with the current transformtion matrix without any clipping, 
+ * scaling, etc. to derive transformed world coordinate values.
+ */</PRE>
+<PRE><A NAME="A64EB60527ttay"></A>transform(n,passpoly,postrans)
+long n;
+Coord passpoly[][3], postrans[][3];
+{
+&nbsp;&nbsp;&nbsp;Matrix ctm;
+&nbsp;&nbsp;&nbsp;pushmatrix();
+&nbsp;&nbsp;&nbsp;getmatrix(ctm);</PRE>
+<PRE><A NAME="A64EB60798ttay"></A>&nbsp;&nbsp;&nbsp;postrans[0][0] = passpoly[0][0]*ctm[0][0] + 
+&nbsp;&nbsp;&nbsp;    passpoly[0][1]*ctm[1][0] +
+&nbsp;&nbsp;&nbsp;    passpoly[0][2]*ctm[2][0] + ctm[3][0];
+&nbsp;&nbsp;&nbsp;postrans[0][1] = passpoly[0][0]*ctm[0][1] + 
+&nbsp;&nbsp;&nbsp;    passpoly[0][1]*ctm[1][1] +
+&nbsp;&nbsp;&nbsp;    passpoly[0][2]*ctm[2][1] + ctm[3][1];
+&nbsp;&nbsp;&nbsp;postrans[0][2] = passpoly[0][0]*ctm[0][2] +
+&nbsp;&nbsp;&nbsp;    passpoly[0][1]*ctm[1][2] +
+&nbsp;&nbsp;&nbsp;    passpoly[0][2]*ctm[2][2] + ctm[3][2];</PRE>
+<PRE><A NAME="A64EB61071ttay"></A>&nbsp;&nbsp;&nbsp;postrans[1][0] = passpoly[1][0]*ctm[0][0] + 
+&nbsp;&nbsp;&nbsp;    passpoly[1][1]*ctm[1][0] +
+&nbsp;&nbsp;&nbsp;    passpoly[1][2]*ctm[2][0] + ctm[3][0];
+&nbsp;&nbsp;&nbsp;postrans[1][1] = passpoly[1][0]*ctm[0][1] + 
+&nbsp;&nbsp;&nbsp;    passpoly[1][1]*ctm[1][1] +
+&nbsp;&nbsp;&nbsp;    passpoly[1][2]*ctm[2][1] + ctm[3][1];
+&nbsp;&nbsp;&nbsp;postrans[1][2] = passpoly[1][0]*ctm[0][2] +
+&nbsp;&nbsp;&nbsp;    passpoly[1][1]*ctm[1][2] +
+&nbsp;&nbsp;&nbsp;    passpoly[1][2]*ctm[2][2] + ctm[3][2];</PRE>
+<PRE><A NAME="A64EB61475ttay"></A>&nbsp;&nbsp;&nbsp;postrans[2][0] = passpoly[2][0]*ctm[0][0] + 
+&nbsp;&nbsp;&nbsp;    passpoly[2][1]*ctm[1][0] +
+&nbsp;&nbsp;&nbsp;    passpoly[2][2]*ctm[2][0] + ctm[3][0];
+&nbsp;&nbsp;&nbsp;postrans[2][1] = passpoly[2][0]*ctm[0][1] + 
+&nbsp;&nbsp;&nbsp;    passpoly[2][1]*ctm[1][1] +
+&nbsp;&nbsp;&nbsp;    passpoly[2][2]*ctm[2][1] + ctm[3][1];
+&nbsp;&nbsp;&nbsp;postrans[2][2] = passpoly[2][0]*ctm[0][2] +
+&nbsp;&nbsp;&nbsp;    passpoly[2][1]*ctm[1][2] +
+&nbsp;&nbsp;&nbsp;    passpoly[2][2]*ctm[2][2] + ctm[3][2];
+&nbsp;&nbsp;&nbsp;postrans[3][0] = passpoly[3][0]*ctm[0][0] + 
+&nbsp;&nbsp;&nbsp;    passpoly[3][1]*ctm[1][0] +
+&nbsp;&nbsp;&nbsp;    passpoly[3][2]*ctm[2][0] + ctm[3][0];
+&nbsp;&nbsp;&nbsp;postrans[3][1] = passpoly[3][0]*ctm[0][1] + 
+&nbsp;&nbsp;&nbsp;    passpoly[3][1]*ctm[1][1] +
+&nbsp;&nbsp;&nbsp;    passpoly[3][2]*ctm[2][1] + ctm[3][1];
+&nbsp;&nbsp;&nbsp;postrans[3][2] = passpoly[3][0]*ctm[0][2] +
+&nbsp;&nbsp;&nbsp;    passpoly[3][1]*ctm[1][2] +
+&nbsp;&nbsp;&nbsp;    passpoly[3][2]*ctm[2][2] + ctm[3][2];</PRE>
+<PRE><A NAME="A64EB61623ttay"></A>&nbsp;&nbsp;&nbsp;popmatrix();
+}</PRE>
+<PRE><A NAME="A64EB61799ttay"></A>/*
+    Changes:
+      - changed the name of the window acccording to the
+        #ifdef BACKFACE
+*/</PRE>
+
+<H3><A NAME="A201C119b"></A>Related Information</H3>
+<P><A NAME="E1D78CB015ceb"></A>The <A HREF="getbutton.html#A143X91"><B>getbutton</B></A> subroutine<A HREF="../gl32tref/A143X91" REL="PAGENUM"></A>, <A HREF="getmatrix.html#A144X940e"><B>getmatrix</B></A> subroutine<A HREF="../gl32tref/A144X940e" REL="PAGENUM"></A>, <A HREF="getplanes.html#A143X94a4"><B>getplanes</B></A> subroutine<A HREF="../gl32tref/A143X94a4" REL="PAGENUM"></A>, 
+<A HREF="gexit.html#xT41a0nita"><B>gexit</B></A> subroutine<A HREF="../gl32tref/xT41a0nita" REL="PAGENUM"></A>, <A HREF="qdevice.html#A143X967"><B>qdevice</B></A> subroutine<A HREF="../gl32tref/A143X967" REL="PAGENUM"></A>, <A HREF="qenter.html#A143X9152"><B>qenter</B></A> subroutine<A HREF="../gl32tref/A143X9152" REL="PAGENUM"></A>, <A HREF="qread.html#A143X989"><B>qread</B></A> subroutine<A HREF="../gl32tref/A143X989" REL="PAGENUM"></A>, 
+<A HREF="qreset.html#A143X9ab"><B>qreset</B></A> subroutine<A HREF="../gl32tref/A143X9ab" REL="PAGENUM"></A>, <A HREF="qtest.html#A143X9cd"><B>qtest</B></A> subroutine<A HREF="../gl32tref/A143X9cd" REL="PAGENUM"></A>, <A HREF="reshapeviewport.html#A7LQ3b0marj"><B>reshapeviewport</B></A> subroutine<A HREF="../gl32tref/A7LQ3b0marj" REL="PAGENUM"></A>.</P>
+
+<hr><center>
+[  <a href="../gl32tref/run_all.html">Previous</a>  |
+<a href="select1_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

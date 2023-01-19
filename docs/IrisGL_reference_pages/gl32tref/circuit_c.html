@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>circuit.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="boxcirc_c.html">Previous</a>  |
+<a href="colored_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="Ua32d0nita"></A>circuit.c Example C Language Program
+</H2>
+<A NAME="INDEX2187" REL="I1" TITLE="circuit.c example program (GL)"></A>
+<A NAME="INDEX2188" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2189" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2190" REL="I3" TITLE="writemasks"></A>
+<PRE><A NAME="A64E9B2276ttay"></A>Here is a very simple complete program that draws 
+power and ground circuitry.  The interface consists of
+the keys P draw power rectangles, G draw ground
+rectangles, C clear the window, and Q quit.  To draw a
+rectangle, press down the left mouse button at one
+corner, hold it down and slide to the other corner,
+and release it.</PRE>
+<PRE><A NAME="A64E9B2480ttay"></A>When you use the program, be sure to exit by typing Q.
+This resets the four lowest entries in the color map
+(which are used by all the windows) back to the default
+values. 
+*/</PRE>
+<PRE><A NAME="A64E9B2636ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64E9B2836ttay"></A>#define BACKGROUND      0       /* = 00 */
+#define POWER           1       /* = 01 */
+#define GROUND          2       /* = 10 */
+#define SHORT           3       /* = 11 */</PRE>
+<PRE><A NAME="A64E9B3585ttay"></A>long    xorg, yorg, xsize, ysize;
+main()
+{
+  short val, drawtype;
+  short x1, y1, x2, y2;
+  drawtype = GROUND;
+  prefposition (0,800,0,800);
+  winopen("circuit");
+  winconstraints();
+  getorigin(&amp;xorg, &amp;yorg);
+  getsize (&amp;xsize,&amp;ysize);
+  ortho2 (-0.5,(Coord)xsize,-0.5,(Coord)ysize);
+  /*Allow any size to work*/
+  gconfig();
+  mapcolor(0, 255, 255, 255);
+  mapcolor(1, 0, 0, 255);
+  mapcolor(2, 0, 0, 0);
+  mapcolor(3, 255, 0, 0);
+  qdevice(PKEY);                /* draw power rectangles */
+  qdevice(GKEY);                /* draw ground rectangles */
+  qdevice(CKEY);                /* clear screen */
+  qdevice(QKEY);                /* quit */
+  qdevice(REDRAW);        
+  qdevice(LEFTMOUSE); /* mark rectangle corners */
+  tie(LEFTMOUSE, MOUSEX, MOUSEY);
+  color(0);
+  clear();
+  while (1)
+    switch (qread(&amp;val)) {
+    case PKEY:
+      drawtype = POWER;
+      break;
+    case GKEY:
+      drawtype = GROUND;
+      break;
+    case REDRAW:
+      reshapeviewport();
+      getorigin(&amp;xorg, &amp;yorg);
+      getsize (&amp;xsize,&amp;ysize);
+      ortho2 (-0.5,(Coord)xsize,-0.5,(Coord)ysize);
+      clearscreen();
+      gconfig();
+    case CKEY:
+      clearscreen();
+      break;
+    case QKEY:                /* restore default colors */
+      mapcolor(0, 0, 0, 0);
+      mapcolor(1, 255, 0, 0);
+      mapcolor(2, 0, 255, 0);
+      mapcolor(3, 255, 255, 0);
+      return;
+    case LEFTMOUSE:
+      qread(&amp;x1);
+      qread(&amp;y1);
+      qread(&amp;val);
+      qread(&amp;x2);
+      qread(&amp;y2);
+      if (drawtype == POWER)
+        powerrect(x1-xorg, y1-yorg,
+            x2-xorg, y2-yorg);
+      else
+        groundrect(x1-xorg, y1-yorg,
+            x2-xorg, y2-yorg);
+      break;
+    }</PRE>
+<PRE><A NAME="A64E9B3806ttay"></A>}
+clearscreen()
+{
+  writemask(3);                /* clear window before drawing. */
+  color(BACKGROUND);
+  clear();
+}
+powerrect(x1, y1, x2, y2)
+short x1, y1, x2, y2;
+{
+  writemask(1);
+  color(1);
+  rectfs(x1, y1, x2, y2);
+}</PRE>
+<PRE><A NAME="A64E9B3985ttay"></A>groundrect(x1, y1, x2, y2)
+short x1, y1, x2, y2;
+{
+  writemask(2);
+  color(2);
+  rectfs(x1, y1, x2, y2);
+}</PRE>
+<PRE><A NAME="A64E9B4278ttay"></A>/*
+&nbsp;&nbsp;&nbsp;Changes:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-The program now starts from the default size window
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prefposition (0,800,0,800);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getsize (&amp;xsize,&amp;ysize);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qdevice(REDRAW);        
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-The program now handles resize/redraw
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case REDRAW:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reshapeviewport();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getorigin(&amp;xorg, &amp;yorg);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getsize (&amp;xsize,&amp;ysize);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ortho2 (-0.5,(Coord)xsize,-0.5,(Coord)ysize);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clearscreen();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gconfig();
+*/</PRE>
+
+<H3><A NAME="A200C111f"></A>Related Information</H3>
+<P><A NAME="E1D7789542ceb"></A>The <A HREF="writemask.html#A143X9592"><B>writemask</B></A> subroutine<A HREF="A143X9592.html" REL="PAGENUM"></A>.</P>
+
+<P><A NAME="E1D7789569ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/writemasks.html#writemasks.html">Writemasks and Logical Operations</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<hr><center>
+[  <a href="boxcirc_c.html">Previous</a>  |
+<a href="colored_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

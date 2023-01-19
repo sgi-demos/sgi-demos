@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>n3f Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="multmatrix.html">Previous</a>  |
+<a href="newpup.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A139X91ef3"></A>n3f Subroutine</H2>
+<A NAME="INDEX1210" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1211" REL="I2" TITLE="begin-end style"></A>
+<A NAME="INDEX1212" REL="I3" TITLE="n3f"></A>
+<A NAME="INDEX1213" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1214" REL="I2" TITLE="normal vector"></A>
+<A NAME="INDEX1215" REL="I3" TITLE="setting"></A>
+<A NAME="INDEX1216" REL="I1" TITLE="n3f subroutine (GL)"></A>
+<H3><A NAME="A139X91ef5"></A>Purpose</H3>
+<P><A NAME="E1D6FE2340ceb"></A>Specifies a normal vector for lighting calculations.</P>
+
+<H3><A NAME="A78C113"></A>Libraries</H3>
+<P><A NAME="E1D6FE2383ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D6FE2408ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A139X91ef9"></A>C Syntax</H3>
+<PRE><A NAME="A139X91efa"></A><B>void n3f(Float32 </B><A HREF="n3f.html#A139X91efe"><I>vector</I></A><B>&nbsp;[3]&nbsp;)</B></PRE>
+
+<H3><A NAME="A20C0e2f1"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A61C0159d1"></A><B>SUBROUTINE N3F(</B><I>vector</I><B>)</B>
+<B>REAL </B><I>vector </I><B>(3)</B></PRE>
+
+<H3><A NAME="A139X91efb"></A>Description</H3>
+<P><A NAME="E1D6FE2539ceb"></A>The <B>n3f</B> subroutine specifies the normal vector to be used for <!--gl32prgd:--><A HREF="../gl32prgd/lightbasics.html#A342C970d0">lighting calculations</A>.</P>
+
+<P><A NAME="E1D6FE2572ceb"></A>The passed parameter (<I>vector</I>) becomes the current normal and is used when the lighting algorithm is rerun for all subsequent vertices. It is not necessary to respecify a normal if it is unchanged. For example, a single call to the 
+<B>n3f </B>subroutine is sufficient for a flat-shaded polygon. 
+However, the <B>n3f</B> subroutine must be called before the first vertex subroutine.</P>
+
+<P><A NAME="E1D6FE2603ceb"></A>Lighting calculations assume that the specified 
+normal is of unit length, as shown in the following equation: 
+</P>
+
+
+<PRE>   x<SUP>2</SUP> + y<SUP>2</SUP> + z<SUP>2</SUP> = 1.0</PRE>
+
+
+<P><A NAME="E1D6FE2652ceb"></A>If the normal does not equal 1.0, or if no lighting model is active, the results are unpredictable. </P>
+
+<P><A NAME="E1D6FE2679ceb"></A>When called with unequal arguments, the <A HREF="scale.html#A144X95a6"><B>scale</B></A> subroutine or any other nonorthonomial transformation causes a matrix skew that is corrected by renormalizing every normal. Lighting performance is reduced in this event.</P>
+
+<P><A NAME="E1D6FE2710ceb"></A>The <A HREF="normal.html#A142X9b7"><B>normal</B></A> and <B>n3f </B>subroutines are the same in all respects. </P>
+
+<H3><A NAME="A139X91efd"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A139X91efe"></A><I>vector</I> </TD>
+<TD>  Specifies the address of an array containing three floating point numbers. These numbers are used to set the value for the current vertex normal.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911e72"></A></TD>
+<TD>  Vector components are: 
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Vector Component</B></TD>
+
+<TD><B>C Index</B></TD>
+
+<TD><B>FORTRAN Index</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Nx</TD>
+
+<TD>0</TD>
+
+<TD>1</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Ny</TD>
+
+<TD>1</TD>
+
+<TD>2</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Nz</TD>
+
+<TD>2</TD>
+
+<TD>3</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A139X91f03"></A>Example</H3>
+<P><A NAME="E1D6FE2882ceb"></A>The example C language program <A HREF="cylinder2_c.html#A16C0c87c"><B>cylinder2.c</B></A> calls the <B>n3f</B> subroutine between the <A HREF="bgnpolygon.html#A144X9672"><B>bgnpolygon</B></A> subroutine and the <A HREF="bgnpolygon.html#A144X9672"><B>endpolygon</B></A> subroutine to specify the normal vectors of a polygon.</P>
+
+<H3><A NAME="A62C015d76"></A>Implementation Specifics</H3>
+<P><A NAME="E1D6FE2943ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C116"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C117"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C118"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A139X91f13"></A>Related Information</H3>
+<P><A NAME="E1D6FE3082ceb"></A>Binding a new material, light, or lighting model definition with the <A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FE3124ceb"></A>Defining a new material, light, or lighting model with the <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> subroutine.<B>  </B></P>
+
+<P><A NAME="E1D6FE3169ceb"></A>Specifying a current normal vector for lighting calculations with the <A HREF="normal.html#A142X9b7"><B>normal</B></A> subroutine.</P>
+
+<P><A NAME="E1D6FE3212ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Creating 
+<!--gl32prgd:--><A HREF="../gl32prgd/crlighteff.html#crlighteff.html">Lighting Effects</A>, Drawing with 
+<!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Begin-End Style</A> Subroutines, 
+and Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A>.</P><hr><center>
+[  <a href="multmatrix.html">Previous</a>  |
+<a href="newpup.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

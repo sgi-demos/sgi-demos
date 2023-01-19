@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>readRGB Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="readpixels.html">Previous</a>  |
+<a href="readsource.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9107b"></A>readRGB Subroutine</H2>
+<A NAME="INDEX1573" REL="I1" TITLE="readRGB subroutine (GL)"></A>
+<A NAME="INDEX1574" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1575" REL="I2" TITLE="pixel block transfer"></A>
+<A NAME="INDEX1576" REL="I3" TITLE="returning RGB mode pixel values"></A>
+<A NAME="INDEX1577" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1578" REL="I2" TITLE="pixel block transfer"></A>
+<A NAME="INDEX1579" REL="I3" TITLE="readRGB"></A>
+
+<H3><A NAME="A142X9107d"></A>Purpose</H3>
+<P><A NAME="E1D72D5795ceb"></A>Returns values of specific pixels in RGB mode.</P>
+
+<H3><A NAME="A79C1f5"></A>Libraries</H3>
+<P><A NAME="E1D72D5835ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D72D5859ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X91081"></A>C Syntax</H3>
+<PRE><A NAME="A142X91082"></A><B>Int32 readRGB</B>
+<B>(Int16 </B><A HREF="readRGB.html#A142X91086"><I>number</I></A><B>, </B>
+<B>RGBvalue</B> <A HREF="readRGB.html#A142X91087"><I>red</I></A><B>[&nbsp;], RGBvalue</B> <A HREF="readRGB.html#A142X91088"><I>green</I></A><B>[&nbsp;], RGBvalue</B> <A HREF="readRGB.html#N3R2170marj"><I>blue</I></A><B>[&nbsp;])</B></PRE>
+
+<H3><A NAME="A29C010b45"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010b46"></A><B>INTEGER*4 FUNCTION READRG(</B><I>number</I><B>, </B><I>red</I><B>, </B><I>green</I><B>, </B><I>blue)</I>
+<B>INTEGER*4 </B><I>number</I>
+<B>CHARACTER*(*) </B><I>red</I><B>, </B><I>green</I><B>, </B><I>blue</I><B>;</B></PRE>
+
+<BLOCKQUOTE><A NAME="A79C1f8"></A><B>Note: </B>For FORTRAN users, this function accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X91083"></A>Description</H3>
+<P><A NAME="E1D72D5995ceb"></A>The <B>readRGB</B> subroutine attempts to read specific pixel values from the frame buffer in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>. The returned value of this 
+function is the number of pixels actually read. A returned function value of 0 (zero) indicates that the 
+starting point is not a valid character position. </P>
+
+<P><A NAME="E1D72D6021ceb"></A>The <B>readRGB</B> subroutine reads the pixel values into the arrays specified by the <A HREF="readRGB.html#A142X91087"><I>red</I></A>, <A HREF="readRGB.html#A142X91088"><I>green</I></A>, and <A HREF="readRGB.html#N3R2170marj"><I>blue</I></A> parameters starting from the current character position along a single scan line (constant y) in the direction of increasing x.</P>
+
+<P><A NAME="E1D72D6048ceb"></A>The <B>readRGB</B> subroutine returns the number of pixels read, which is the number requested if the starting point is a valid character position (inside the current viewport). The subroutine returns 0 (zero) if the starting point is not a valid character position. The values of pixels read outside of the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A> or 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P018">screenmask</A> are undefined.</P>
+
+<P><A NAME="E1D72D6074ceb"></A>The <B>readRGB</B> subroutine updates the current character position to one pixel to the right of the last one read. The current character position is undefined if the new position is outside the viewport.</P>
+
+<P><A NAME="E1D72D6100ceb"></A>Use the <B>readsource</B> subroutine to specify which buffer is read. In RGB 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0474">double buffer mode</A>, by default the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P051c">back buffer</A> is read. </P>
+
+<P><A NAME="E1D72D6125ceb"></A>The <A HREF="rectread.html#A142X9c7c"><B>rectread</B></A> subroutine provides significantly better performance for pixel block transfers. Even when only one row of pixels needs to be read, use the <B>rectread</B> subroutine. </P>
+
+<OL><LI><A NAME="A29C010b47"></A>This subroutine is available only in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>. For new development, use the 
+<A HREF="rectread.html#A142X9c7c"><B>lrectread</B></A> subroutine.</LI>
+
+<LI><A NAME="A318C9dd7"></A>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI>
+
+<LI><A NAME="A81C12a"></A>The use of this subroutine is deprecated. Do not use the <B>readRGB </B>subroutine in new development.</LI></OL>
+
+<H3><A NAME="A142X91085"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X91086"></A><I>number</I></TD>
+<TD>  Specifies the number of pixels read by the function.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X91087"></A><I>red</I></TD>
+<TD>  Specifies the array in which the red pixel values will be stored.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X91088"></A><I>green</I></TD>
+<TD>  Specifies the array in which the green pixel values will be stored.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="N3R2170marj"></A><I>blue</I> </TD>
+<TD>  Specifies the array in which the blue pixel values will be stored.</TD></TR></TABLE>
+
+<H3><A NAME="A142X91089"></A>Return Value</H3>
+<P><A NAME="E1D72D6335ceb"></A>The returned value of this function is the number of pixels that the system actually reads. The returned function value is 0 (zero) if any part of the specified rectangle is off the screen.</P>
+
+<H3><A NAME="A61C0159ce"></A>Implementation Specifics</H3>
+<P><A NAME="E1D72D6379ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C1f9"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1fa"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1fb"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c67c"></A>Related Information</H3>
+<P><A NAME="E1D72D6477ceb"></A>Returning the value of specific pixels in color map mode with the <A HREF="readpixels.html#A142X91059"><B>readpixels</B></A> subroutine.</P>
+
+<P><A NAME="E1D72D6503ceb"></A>Specifying the source for pixels to be read with the <A HREF="readsource.html#A142X9cc0"><B>readsource</B></A> subroutine.</P>
+
+<P><A NAME="E1D72D6529ceb"></A>Copying a rectangle of pixels with an optional zoom with the <A HREF="rectcopy.html#A142X9d04"><B>rectcopy</B></A> subroutine.</P>
+
+<P><A NAME="E1D72D6555ceb"></A>Reading a rectangular array of pixels into host memory with the <A HREF="rectread.html#A142X9c7c"><B>rectread</B></A> subroutine.</P>
+
+<P><A NAME="E1D72D6580ceb"></A>Drawing a rectangular array of pixels into the frame buffer with the <A HREF="rectwrite.html#A142X9c9e"><B>rectwrite</B></A> subroutine.</P>
+
+<P><A NAME="E1D72D6606ceb"></A>Painting a row of pixels on the screen in RGB mode with the <A HREF="writeRGB.html#A142X9ff2"><B>writeRGB</B></A> subroutine.</P>
+
+<P><A NAME="E1D72D6632ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/animatescene.html#animatescene.html">Creating Animated Scenes</A>, 
+Reading and Writing <!--gl32prgd:--><A HREF="../gl32prgd/rwpixels.html#rwpixels.html">Pixels</A>, 
+Using <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Viewports and Screenmasks</A>, 
+and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="readpixels.html">Previous</a>  |
+<a href="readsource.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

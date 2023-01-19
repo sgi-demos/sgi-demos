@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>blanktime Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="blankscreen.html">Previous</a>  |
+<a href="blendfunction.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X9178"></A>blanktime Subroutine</H2>
+<A NAME="INDEX146" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX147" REL="I2" TITLE="window"></A>
+<A NAME="INDEX148" REL="I3" TITLE="blanktime"></A>
+<A NAME="INDEX149" REL="I1" TITLE="blanktime subroutine (GL)"></A>
+<A NAME="INDEX150" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX151" REL="I2" TITLE="windows"></A>
+<A NAME="INDEX152" REL="I3" TITLE="setting screen blanking timeout"></A>
+
+<H3><A NAME="C41D7B2833nqui"></A>Purpose</H3>
+<P><A NAME="E1B0566362ceb"></A>Sets the screen-blanking timeout.</P>
+
+<H3><A NAME="A79C12b4"></A>Libraries</H3>
+<P><A NAME="E1B0566541ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0566645ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="C41D7B3114nqui"></A>C Syntax</H3>
+<PRE><A NAME="A144X916a"></A><B>void blanktime(Int32</B> <A HREF="blanktime.html#A144X9164"><I>nframe</I></A><B>)</B></PRE>
+
+<H3><A NAME="A144X9169"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A17C0d9b0"></A><B>SUBROUTINE BLANKT(</B><I>nframe</I><B>)</B>
+<B>INTEGER*4</B> <I>nframe</I></PRE>
+
+<H3><A NAME="C41D7B3343nqui"></A>Description</H3>
+<P><A NAME="E1B0567011ceb"></A>The <B>blanktime</B> subroutine changes the amount of time the system waits before it blanks the screen to protect the color display. The default delay before the screen turns black is 15 minutes after the last input. This subroutine can also disable the screen-blanking feature. </P>
+
+<P><A NAME="E1B0567122ceb"></A>To calculate the value of the <A HREF="blanktime.html#A144X9164"><I>nframe</I></A> parameter, multiply the desired blanking delay period (in seconds) by 60. For example, when <I>nframe </I>is 18000, the blanking delay period is 5 minutes. If there are 60 frames per second, <I>nframe </I>is 60 times the number of seconds that the system waits before blanking the screen. To disable screen blanking, use 0 (zero) as the value for <I>nframe. </I></P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A258C01c328"></A>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI>
+
+<LI><A NAME="A258C01c329"></A>This call is intended for use by a window manager. If a window manager is already running, it is possible that this call will be overridden by the window manager.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="C41D7B3713nqui"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A144X9164"></A><I>nframe</I></TD>
+<TD>  Specifies the number of frames after which to blank the screen. This subroutine assumes 60 frames per second.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015cab"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0567547ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C12b7"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12b8"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12b9"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X9198"></A>Related Information</H3>
+<P><A NAME="E1B0567866ceb"></A>Turning screen refresh off or on with the <A HREF="blankscreen.html#A144X9128"><B>blankscreen</B></A> subroutine.</P>
+
+<P><A NAME="E1B0567976ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Creating and Managing Windows</A>, <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware Used by GL</A>, <!--gl32prgd:--><A HREF="../gl32prgd/underwininput.html#underwininput.html">Windows and Input Control</A>.</P><hr><center>
+[  <a href="blankscreen.html">Previous</a>  |
+<a href="blendfunction.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

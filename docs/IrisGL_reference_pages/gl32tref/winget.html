@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>winget Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="window.html">Previous</a>  |
+<a href="winmove.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X91505"></A>winget Subroutine</H2>
+<A NAME="INDEX2003" REL="I1" TITLE="winget subroutine (GL)"></A>
+<A NAME="INDEX2004" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2005" REL="I2" TITLE="window"></A>
+<A NAME="INDEX2006" REL="I3" TITLE="winget"></A>
+<A NAME="INDEX2007" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2008" REL="I2" TITLE="windows"></A>
+<A NAME="INDEX2009" REL="I3" TITLE="identifying current"></A>
+<A NAME="INDEX2010" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2011" REL="I2" TITLE="query"></A>
+<A NAME="INDEX2012" REL="I3" TITLE="winget"></A>
+<H3><A NAME="A142X91507"></A>Purpose</H3>
+<P><A NAME="E1D7612340ceb"></A>Returns the identifier of the current window.</P>
+
+<H3><A NAME="A79C1345"></A>Libraries</H3>
+<P><A NAME="E1D7612379ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7612404ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9150b"></A>C Syntax</H3>
+<PRE><A NAME="A213X912aa2"></A><B>Int32 winget(&nbsp;)</B></PRE>
+
+<H3><A NAME="A52C0142d5"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A52C0142d6"></A><B>INTEGER*4 FUNCTION WINGET</B></PRE>
+
+<H3><A NAME="A142X9150d"></A>Description</H3>
+<P><A NAME="E1D7612513ceb"></A>The <B>winget </B>subroutine returns the identifier of the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A>. The <I>current</I> <I>window</I> is the window into which all drawing is directed, the window most recently selected with the <B>winset</B> subroutine, or the window most recently created with the <B>winopen</B> subroutine. The <I>window</I> <I>identifier</I> of a window is the integer returned by the <B>winopen</B> subroutine.</P>
+
+<BLOCKQUOTE><A NAME="C4B2E33668vbia"></A><B>Attention: </B>If the current window is closed by the <B>winclose</B> subroutine, another window is chosen arbitrarily as the current window. In such cases, use the <B>winset</B> subroutine to choose a new current window.</BLOCKQUOTE>
+
+
+<BLOCKQUOTE><A NAME="A318C9f38"></A><B>Note: </B>The <B>winget</B> subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X91513"></A>Return Value</H3>
+<P><A NAME="E1D7612592ceb"></A>The identifier of the current window.</P>
+
+<H3><A NAME="A61C0159d8"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7612636ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1348"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1349"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C134a"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X91525"></A>Related Information</H3>
+<P><A NAME="E1D7612733ceb"></A>Closing the identified window with the <A HREF="winclose.html#A142X91418"><B>winclose</B></A> subroutine.</P>
+
+<P><A NAME="E1D7612758ceb"></A>Creating a window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine.</P>
+
+<P><A NAME="E1D7612784ceb"></A>Setting the current window with the <A HREF="winset.html#NY1320marj"><B>winset</B></A> subroutine. </P>
+
+<P><A NAME="E1D7612809ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="window.html">Previous</a>  |
+<a href="winmove.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

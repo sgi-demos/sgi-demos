@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>lshaderange Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="lsetdepth.html">Previous</a>  |
+<a href="lsrepeat.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="fkk1d0marj"></A>lshaderange Subroutine</H2>
+<A NAME="INDEX1107" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1108" REL="I2" TITLE="depth-cue"></A>
+<A NAME="INDEX1109" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1110" REL="I2" TITLE="depth-cueing"></A>
+<A NAME="INDEX1111" REL="I3" TITLE="in color map mode"></A>
+<A NAME="INDEX1112" REL="I1" TITLE="lshaderange subroutine (GL)"></A>
+
+<H3><A NAME="A60C015795"></A>Purpose</H3>
+<P><A NAME="E1B1735588ceb"></A>Sets the range of color indexes used in depth-cueing.</P>
+
+<H3><A NAME="A78C115c"></A>Libraries</H3>
+<P><A NAME="E1B1735738ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1735842ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A60C015799"></A>C Syntax</H3>
+<PRE><A NAME="A60C01579a"></A><B>void lshaderange</B>
+<B>(Colorindex </B><A HREF="lshaderange.html#HYf2150nita"><I>lowindex</I></A><B>, Colorindex </B><A HREF="lshaderange.html#Yf290nita"><I>highindex</I></A><B>, </B>
+<B>Int32 </B><A HREF="lshaderange.html#FZf22d0nita"><I>znear</I></A><B>, Int32 </B><A HREF="lshaderange.html#WZf21b0nita"><I>zfar</I></A><B>)</B></PRE>
+
+<H3><A NAME="A60C01579b"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A60C01579c"></A><B>SUBROUTINE LSHADE(</B><I>lowindex</I><B>,</B><I> highindex</I><B>,</B><I> znear</I><B>,</B><I> zfar</I><B>)</B>
+<B>INTEGER*4</B> <I>lowindex</I><B>,</B><I> highindex</I><B>,</B><I> znear</I><B>,</B><I> zfar</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C115f"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A60C01579d"></A>Description</H3>
+<P><A NAME="E1B1737239ceb"></A>The <B>lshaderange</B> subroutine sets the range of color indexes used for 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A150P19d9">depth-cueing</A>. The range is mapped linearly into the color index range. Any <I>z</I> values less than the value of the <A HREF="lshaderange.html#FZf22d0nita"><I>znear</I></A> parameter map to the <A HREF="lshaderange.html#Yf290nita"><I>highindex</I></A> parameter; <I>z</I> values greater than the <A HREF="lshaderange.html#WZf21b0nita"><I>zfar</I></A> parameter map to the <A HREF="lshaderange.html#HYf2150nita"><I>lowindex</I></A> parameter.</P>
+
+<P><A NAME="E1B1737350ceb"></A>The valid range of values for the <A HREF="lRGBrange.html#Lq2170marj"><I>znear</I></A> and <A HREF="lRGBrange.html#Zq212f0marj"><I>zfar</I></A> parameters can be found by using the <A HREF="getgdesc.html#t9311e0marj"><B>getgdesc</B></A> subroutine to query <B>GD_ZMIN</B> and <B>GD_ZMAX</B> attributes. The default is <B>lshaderange(0, 7, </B><I>zmin</I>, <I>zmax</I><B>)</B>. (See also "<A HREF="Tokens.html#QP3a0nita">Tokens for the getgdesc Subroutine</A>"
+<A HREF="QP3a0nita.html" REL="PAGENUM"></A>.)</P>
+
+<BLOCKQUOTE><A NAME="A258C01c4de"></A><B>Note: </B>The value for the <I>znear</I> parameter must be less than the value for the <I>zfar</I> parameter.</BLOCKQUOTE>
+
+
+<H3><A NAME="A60C0157a0"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="HYf2150nita"></A><I>lowindex</I> </TD>
+<TD>  Specifies the low-intensity color map index.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Yf290nita"></A><I>highindex</I> </TD>
+<TD>  Specifies the high-intensity color map index.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="FZf22d0nita"></A><I>znear</I> </TD>
+<TD>  Specifies the low <I>z</I> value.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="WZf21b0nita"></A><I>zfar</I> </TD>
+<TD>  Specifies the high <I>z</I> value.</TD></TR></TABLE>
+
+<H3><A NAME="A60C0157a1"></A>Example</H3>
+<P><A NAME="E1B1737893ceb"></A>The example C language program <A HREF="depthcue_c.html#A16C0c8ff"><B>depthcue.c</B></A> uses the <B>lshaderange</B> subroutine to map the z-axis values to a spread of colors in the color map. </P>
+
+<H3><A NAME="A64C0165b0"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1738054ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C1160"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1161"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1162"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A60C0157a5"></A>Related Information</H3>
+<P><A NAME="E1B1739423ceb"></A>Turning depth-cueing on and off with the <A HREF="depthcue.html#PNK22d0marj"><B>depthcue</B></A> subroutine.</P>
+
+<P><A NAME="E1B1739543ceb"></A>Getting information about the currently installed graphics hardware with the <A HREF="getgdesc.html#t9311e0marj"><B>getgdesc</B></A> subroutine
+.
+</P>
+
+<P><A NAME="E1B1739649ceb"></A>Setting the range of RGB colors used for depth-cueing with the <A HREF="lRGBrange.html#A143X93d8"><B>lRGBrange</B></A> subroutine.</P>
+
+<P><A NAME="E1B1739758ceb"></A>Setting the viewport depth range with the <A HREF="lsetdepth.html#naR120marj"><B>lsetdepth</B></A> subroutine.</P>
+
+<P><A NAME="E1B1739865ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Performing <!--gl32prgd:--><A HREF="../gl32prgd/depth-cueing.html">Depth-Cueing</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="lsetdepth.html">Previous</a>  |
+<a href="lsrepeat.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>blink Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="blendfunction.html">Previous</a>  |
+<a href="blkqread.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A146X937c"></A>blink Subroutine</H2>
+<A NAME="INDEX160" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX161" REL="I2" TITLE="animation"></A>
+<A NAME="INDEX162" REL="I3" TITLE="blink"></A>
+<A NAME="INDEX163" REL="I1" TITLE="blink subroutine (GL)"></A>
+<A NAME="INDEX164" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX165" REL="I2" TITLE="color map"></A>
+<A NAME="INDEX166" REL="I3" TITLE="changing"></A>
+<H3><A NAME="A146X937e"></A>Purpose</H3>
+<P><A NAME="E1B05A8637ceb"></A>Changes a color map entry at a selectable rate.</P>
+
+<H3><A NAME="A77C17"></A>Libraries</H3>
+<P><A NAME="E1B05A8784ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B05A8888ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A146X9381"></A>C Syntax</H3>
+<P><A NAME="E1B05A9046ceb"></A><B>void blink(Int16 </B><A HREF="blink.html#A146X9368"><I>rate</I></A><B>, Colorindex </B><A HREF="blink.html#mgJ1350marj"><I>color</I></A><B>, Int16 </B><A HREF="blink.html#EiJ130marj"><I>red</I></A><B>, Int16 </B><A HREF="blink.html#KlJ1f0marj"><I>green</I></A><B>, Int16 </B><A HREF="blink.html#llJ1270marj"><I>blue</I></A><B>)</B></P>
+
+<H3><A NAME="A146X9359"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A146X935c"></A><B>SUBROUTINE BLINK(</B><I>rate</I><B>,</B> <I>color</I><B>,</B> <I>red</I><B>,</B><I> green</I><B>,</B><I> blue</I><B>)</B>
+<B>INTEGER*4 </B><I>rate</I><B>,</B> <I>color</I><B>,</B> <I>red</I><B>,</B><I> green</I><B>,</B><I> blue</I></PRE>
+
+<BLOCKQUOTE><A NAME="A77C1a"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when started from a FORTRAN program, although it accepts short integers when started from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A146X9385"></A>Description</H3>
+<P><A NAME="E1B05A9368ceb"></A>The <B>blink</B> subroutine alternates the color located at index <A HREF="blink.html#mgJ1350marj"><I>color</I></A> in the current color map with the color defined by the parameters <A HREF="blink.html#EiJ130marj"><I>red</I></A>, <A HREF="blink.html#KlJ1f0marj"><I>green</I></A>, and <A HREF="blink.html#llJ1270marj"><I>blue</I></A>. The rate at which the two colors are alternated is set by the <A HREF="blink.html#A146X9368"><I>rate</I></A> parameter.</P>
+
+<P><A NAME="E1B05A9477ceb"></A>Up to 20 colors can blink simultaneously, each at a different rate. The blink rate is changed by calling the <B>blink</B> subroutine with the same <I>color</I> parameter and a different <I>rate</I> parameter.</P>
+
+<P><A NAME="E1B05A9586ceb"></A>For example, if the <I>rate</I> parameter is 3, the color changes (blinks) every third vertical retrace. Its value alternates between the original value and the new value supplied by the parameters <A HREF="blink.html#EiJ130marj"><I>red</I></A>, <A HREF="blink.html#KlJ1f0marj"><I>green</I></A>, and <A HREF="blink.html#llJ1270marj"><I>blue</I></A>.</P>
+
+<P><A NAME="E1B05A9693ceb"></A>The length of time between retraces varies according to the monitor used. When using a 60Hz monitor, a rate of 60 would cause the color to change once every second.</P>
+
+<P><A NAME="E1B05A9801ceb"></A>To terminate blinking and restore the original color for a single color map entry, set the <A HREF="blink.html#mgJ1350marj"><I>color</I></A> parameter to the color map entry for which to stop blinking and call the <B>blink</B> subroutine with the <A HREF="blink.html#A146X9368"><I>rate</I></A> parameter set to 0.</P>
+
+<P><A NAME="E1B05A9910ceb"></A>To terminate all blinking colors simultaneously, call the <B>blink</B> subroutine with the <I>rate</I> parameter set to -1. When <I>rate</I> is -1, the other parameters are ignored. </P>
+
+<BLOCKQUOTE><A NAME="A318C9c75"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A146X938a"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A146X9368"></A><I>rate</I></TD>
+<TD>  Specifies the number of vertical retraces per blink. On a standard 60 Hz monitor, there are 60 vertical retraces per second.  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="mgJ1350marj"></A><I>color</I></TD>
+<TD>  Specifies the index into the current color map. The color defined at that index is the color that is blinked (alternated).  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="EiJ130marj"></A><I>red</I></TD>
+<TD>  Specifies the red value of the alternate color that blinks against the color selected from the color map by the <I>color</I> parameter.  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="KlJ1f0marj"></A><I>green</I></TD>
+<TD>  Specifies the green value of the alternate color that blinks against the color selected from the color map by the <I>color</I> parameter.  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="llJ1270marj"></A><I>blue</I></TD>
+<TD>  Specifies the blue value of the alternate color that blinks against the color selected from the color map by the <I>color</I> parameter.  </TD></TR></TABLE>
+
+<H3><A NAME="A62C015ca5"></A>Implementation Specifics</H3>
+<P><A NAME="E1B05AA516ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1B05AA623ceb"></A>The POWER GXT1000 adapter does not support the <B>blink</B> subroutine.</P>
+
+<H3><A NAME="A146X9376"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1c"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="WU1f0nick"></A>Related Information</H3>
+<P><A NAME="E1B05AA940ceb"></A>Setting the current color in color map mode with the <A HREF="color.html#A146X9429"><B>color</B></A> subroutine.</P>
+
+<P><A NAME="E1B05AB050ceb"></A>Changing a color map entry to a specified RGB value with the <A HREF="mapcolor.html#A146X9535"><B>mapcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B05AB158ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware Used by GL</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<P><A NAME="E1B05AB265ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Working in Color Map and RGB Modes</A>, <!--gl32prgd:--><A HREF="../gl32prgd/cursorgl.html#cursorgl.html">Creating a Cursor</A>, <!--gl32prgd:--><A HREF="../gl32prgd/animatescene.html#animatescene.html">Creating Animated Scenes</A>.</P><hr><center>
+[  <a href="blendfunction.html">Previous</a>  |
+<a href="blkqread.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

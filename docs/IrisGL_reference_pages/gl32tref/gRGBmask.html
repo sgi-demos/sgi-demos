@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>gRGBmask Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="gRGBcolor.html">Previous</a>  |
+<a href="gselect.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X94e8"></A>gRGBmask Subroutine</H2>
+<A NAME="INDEX923" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX924" REL="I2" TITLE="frame buffer update control"></A>
+<A NAME="INDEX925" REL="I3" TITLE="gRGBmask"></A>
+<A NAME="INDEX926" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX927" REL="I2" TITLE="RGB writemask"></A>
+<A NAME="INDEX928" REL="I3" TITLE="returning current"></A>
+<A NAME="INDEX929" REL="I1" TITLE="gRGBmask subroutine (GL)"></A>
+
+<H3><A NAME="A143X94ea"></A>Purpose</H3>
+<P><A NAME="E1B1376579ceb"></A>Returns the current RGB writemask.</P>
+
+<H3><A NAME="A78C11ed"></A>Libraries</H3>
+<P><A NAME="E1B1376731ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1376835ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X94ee"></A>C Syntax</H3>
+<PRE><A NAME="A143X94ef"></A><B>void gRGBmask</B>
+<B>(Int16 *</B><A HREF="gRGBmask.html#A143X94f3"><I>redmask</I></A><B>, Int16 *</B><A HREF="gRGBmask.html#A143X94f4"><I>greenmask</I></A><B>, Int16 *</B><A HREF="gRGBmask.html#A143X94f5"><I>bluemask</I></A><B>)</B></PRE>
+
+<H3><A NAME="A28C010771"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C010772"></A><B>SUBROUTINE GRGBMA(</B><I>redmask</I><B>,</B> <I>greenmask</I><B>,</B> <I>bluemask</I><B>)</B>
+<B>INTEGER*2 </B><I>redmask</I><B>,</B> <I>greenmask</I><B>,</B> <I>bluemask</I></PRE>
+
+<H3><A NAME="A143X94f0"></A>Description</H3>
+<P><A NAME="E1B1377204ceb"></A>The <B>gRGBmask</B> subroutine gets the current RGB 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemask</A> as three 8-bit masks and copies them into the parameters. The subroutine places masks in the low order 8-bits of the locations <A HREF="gRGBmask.html#A143X94f3"><I>redmask</I></A>, <A HREF="gRGBmask.html#A143X94f4"><I>greenmask</I></A>, and <A HREF="gRGBmask.html#A143X94f5"><I>bluemask</I></A>. The system must be in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A> when this routine executes. </P>
+
+<P><A NAME="E1B1377312ceb"></A>This subroutine is intended for use in RGB mode only. To get the writemask when in color map mode, use the <A HREF="getwritemask.html#A143X94c6"><B>getwritemask</B></A> subroutine.</P>
+
+<BLOCKQUOTE><A NAME="A318C9e0b"></A><B>Note: </B>This subroutine cannot be used to add to a
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X94f2"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X94f3"></A><I>redmask</I> </TD>
+<TD>  Specifies the pointer to the location into which the system is to copy the current red writemask value.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X94f4"></A><I>greenmask</I> </TD>
+<TD>  Specifies the pointer to the location into which the system is to copy the current green writemask value.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X94f5"></A><I>bluemask</I> </TD>
+<TD>  Specifies the pointer to the location into which the system is to copy the current blue writemask value.</TD></TR></TABLE>
+
+<H3><A NAME="A64C0165d2"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1377758ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C11f0"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11f1"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11f2"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9508"></A>Related Information</H3>
+<P><A NAME="E1B1378092ceb"></A>Returning the current writemask with the <A HREF="getwritemask.html#A143X94c6"><B>getwritemask</B></A> subroutine.</P>
+
+<P><A NAME="E1B1378202ceb"></A>Granting write access to a subset of available bitplanes with the <A HREF="RGBwritemask.html#A143X93fa"><B>RGBwritemask</B></A> subroutine.</P>
+
+<P><A NAME="E1B1378312ceb"></A>Specifying the RGBA writemask with a single packed integer with the <A HREF="wmpack.html#A143X9570"><B>wmpack</B></A> subroutine. </P>
+
+<P><A NAME="E1B1378420ceb"></A>Granting write permission to available bitplanes with the <A HREF="writemask.html#A143X9592"><B>writemask</B></A> subroutine.</P>
+
+<P><A NAME="E1B1378528ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>, <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P>
+
+<P><A NAME="E1B1378651ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/writemasks.html#writemasks.html">Writemasks and Logical Operations</A>
+ and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="gRGBcolor.html">Previous</a>  |
+<a href="gselect.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

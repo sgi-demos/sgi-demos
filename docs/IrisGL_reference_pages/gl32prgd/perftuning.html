@@ -1,0 +1,285 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/perftuning.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Performance Tuning
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="exampprogs.html">Previous</a>  |
+<a href="progconsider.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="perftuning.html"></A>Performance Tuning </H2>
+
+
+<P><A NAME="A3C0F02D958mhay"></A>Programming in GL is similar to programming
+in a low-level language; small investments in programming effort can lead
+to large performance gains. Furthermore, different machines and adapters
+execute drawing commands at different relative drawing rates. An understanding
+of the type of hardware your code runs on can help you get optimal performance.</P>
+
+
+<P><A NAME="A3C0F02D978mhay"></A>For example, there are many ways to draw
+a rectangle: </P>
+
+
+<UL><LI><A NAME="A78C1444"></A>Call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/scrmask.html#fwN250marj">scrmask</A></B>
+subroutine to mask off the appropriate area of the window, and then call
+the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/clear.html#cEH1160marj">clear</A></B>
+subroutine.</LI>
+
+
+<LI><A NAME="A258C01c06d"></A>Call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/czclear.html#A143X92c8">czclear</A></B>
+subroutine.</LI>
+
+
+<LI><A NAME="A258C01c06e"></A>Call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/sboxf.html#Jte1190marj">sboxf</A></B>
+subroutine.</LI>
+
+
+<LI><A NAME="A258C01c06f"></A>Load the appropriate transform matrices on
+the matrix stack, and then call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectf.html#Q5g330marj">rectf</A></B>
+subroutine.</LI>
+
+
+<LI><A NAME="A258C01c070"></A>Call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectwrite.html#A142X9c9e">rectwrite</A></B>
+subroutine to block transfer of a pixmap that is one solid color. </LI></UL>
+
+
+<P><A NAME="A3C0F02E003mhay"></A>Which of these methods draws the rectangle
+most quickly depends on the type of hardware on which the code is executing.
+The end goal also determines the choice of subroutines. If you want to
+clear the entire window and its z-buffer, the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/czclear.html#A143X92c8">czclear</A></B>
+subroutine is the fastest method of achieving this. But if you want to
+clear only a portion of the window, the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/sboxf.html#Jte1190marj">sboxf</A></B>
+subroutine executes faster than a combination of the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/scrmask.html#fwN250marj">scrmask</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/clear.html#cEH1160marj">clear</A></B>
+subroutines. </P>
+
+
+<P><A NAME="A3C0F02E022mhay"></A>The previous discussion is only an example.
+There are several ways to perform nearly any graphics operation. Where
+speed is critical, so is design. The following paragraphs discuss some
+of the performance implications of new or modified subroutines. </P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A258C01c073"></A><B>lmcolor</B> subroutine </TD>
+
+
+<TD>If the design calls for changing material properties often, consider
+the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmcolor.html#ofZ220marj">lmcolor</A></B>
+subroutine. By using the <B>lmcolor</B> subroutine, you can avoid using
+the relatively slowly executing combination of the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmbind.html#XeZ2340marj">lmbind</A></B>
+subroutines. If the <B>lmcolor</B> subroutine cannot be used, then perform
+all transactions with the <B>lmdef</B> subroutine before drawing. This
+method pulls the relatively slowly executing <B>lmdef</B> subroutine out
+of the performance-critical drawing loop.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A258C01c075"></A><B>curson, cursoff</B> subroutines</TD>
+
+
+<TD>In the current release of GL, the <!--:libs:gl32tref:--><A HREF="../gl32tref/curson.html#ru1280nita"><B>curson</B>
+and <B>cursoff</B></A> subroutines turn the cursor visibility on and off.
+However, they execute fairly slowly and should not be heavily used. 
+<P><A NAME="A54C0149af"></A>GL formerly required the cursor to be turned
+off before any drawing was done, and turned on again after drawing completion.
+This is no longer required. However, existing code that is being ported
+to the current release may often make use of this function. This code should
+be modified to remove these subroutines, or the subroutines should be effectively
+removed by using the <B>#ifdef</B> condition with the C programming language
+preprocessor. Not doing so can result in a severe performance impact will
+be observed. </P></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A258C01c076"></A><B>mapcolors, getmcolors</B> subroutines</TD>
+
+
+<TD>If the design employs color maps or color map mode, use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapcolors.html#cv2170marj">mapcolors</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmcolors.html#UI2f0marj">getmcolors</A></B>
+subroutines. Using these subroutines improves performance 10 to 1,000 times
+over using the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapcolor.html#A146X9535">mapcolor</A></B>
+or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmcolor.html#nXI1100marj">getmcolor</A></B>
+subroutines inside a drawing loop. 
+<P><A NAME="A258C01c078"></A>Color maps are managed by the X server. The
+server updates the color map as change requests come into it. The <B>mapcolor</B>
+and <B>mapcolors</B> subroutines make one change request to the X server
+every time they are called. Because there is considerable system overhead
+in communication with the X server process, change requests are processed
+most efficiently if they are buffered and sent as one request by using
+the <B>mapcolors</B> subroutine. </P>
+
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A110C11e"></A><B>concave</B> subroutine </TD>
+
+
+<TD>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/concave.html#HXf320marj">concave</A></B>
+subroutine causes the system to use more robust, but slower algorithms
+to render concave polygons correctly. If all affected polygons are convex,
+the applications programmer should disable the concavity check; this causes
+the system to use faster algorithms for polygon rendering. On most adapters,
+the performance improvement gained by disabling concave polygon-checking
+should be noticeable.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A110C120"></A><B>getcolor, getcpos, getgpos,
+getmatrix, gRGBcolor</B> subroutines </TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>These routines must query the graphics adapter to obtain the information
+that they return. Due to the current graphics adapter design, there is
+a significant amount of latency in such an operation. For the returned
+data to be valid, the graphics adapter must complete all preceding operations
+that may be queued for execution. In some cases, the queue may be quite
+deep, or some operations may take a long time. Therefore, the amount of
+time it takes any of these five routines to execute is variable, and could
+be quite long, depending on the contents of the queue. To obtain maximum
+performance, the use of these routines should be avoided.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A110C122"></A><B>scale</B> subroutine </TD>
+
+
+<TD>If lighting is enabled, and the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/scale.html#A144X95a6">scale</A></B>
+subroutine is called with unequal arguments, the system is forced to renormalize
+all normal vectors. On some adapters, there is a noticeable performance
+improvement if the <B>scale</B> subroutine is not used with unequal arguments.</TD></TR>
+
+</TD></TR></TABLE>
+
+
+<H3><A NAME="A48E4C6448vbia"></A>Writing Event Driven Applications </H3>
+
+
+<P><A NAME="A3C0F02E055mhay"></A>Most graphics applications are event driven.
+When developing such applications, keep in mind that the responsiveness
+is highly dependent on the rate of arrival of events. In particular, the
+mouse transmit rate can have a tremendous impact on <I>look and feel</I>
+performance (that is, how the system appears to respond to a mouse movement).</P>
+
+
+<P><A NAME="A3C0F02E075mhay"></A>The reason for this is easy to understand.
+Many applications try to perform some fixed (and possibly large) amount
+of processing per mouse event. For example, the update and redraw of a
+slider, a scrollbar, or a 3D viewing parameter. High mouse transmit rates
+cause a large number of events to be queued up, and an application that
+does not discard some fraction of these events appears to be slow and sluggish.
+In contrast, low mouse transmit rates cause the same application to appear
+light and responsive. </P>
+
+
+<P><A NAME="A3C0F02E097mhay"></A>Following are several remedies you can
+use to improve user-interface response. </P>
+
+
+<UL><LI><A NAME="A48E4C7475vbia"></A>Decrease the mouse transmit rate. This
+is the most obvious approach. The program found in the <B>/usr/lpp/GL/examples/chrate.c</B>
+file shows how to use the terminal device driver to control the rate at
+which the mouse reports changes in its position. 
+
+<BLOCKQUOTE><A NAME="BC736F2066vbia"></A><B>Note: </B>Currently, there is no interface
+in GL, nor in AIXwindows, that controls this transmit rate.
+</BLOCKQUOTE>
+
+
+<P><A NAME="A48AA46814vbia"></A>This remedy is acceptable for prototype
+and non-commercial code. However, if the application is meant to be marketed
+to a broad customer base, it is not wise to depend strongly on the mouse
+transmit rate. Setting the mouse transmit rate may adversely affect other
+applications; and conversely, if other applications set the mouse transmit
+rate, your application may be adversely affected. </P></LI>
+
+
+<LI><A NAME="A48AA47218vbia"></A>Decrease the amount of work done per event.
+One way to do this is to simply record the current mouse position whenever
+a MOUSEX or MOUSEY event arrives, but not perform any other work. When
+the event queue has finally been emptied, then the image (whatever is being
+drawn) can be updated based on the last recorded position. Thus, events
+are processed very quickly, but significant computation is not performed
+until events have stopped arriving.</LI>
+
+
+<LI><A NAME="A48AA47642vbia"></A>Discard every other, or even two out of
+every three, mouse events. This strategy is less desirable than the others
+because it can give an inferior look and feel. This strategy can be particularly
+troublesome when the user is attempting to position some object very carefully
+with the mouse. A small correction made by the user may be the event that
+is thrown away.</LI></UL>
+
+
+<H3><A NAME="A48E4C8440vbia"></A>Minimizing REDRAW Events </H3>
+
+
+<P><A NAME="A3C0F02E127mhay"></A>You can reduce the number of REDRAW events
+issued to a GL application by changing the window manager default for feedback
+boxes. To do this, add the following to the <B>$HOME/.Xdefaults</B> file:</P>
+
+
+<PRE><A NAME="A48AA48461vbia"></A>Mwm*showFeedback:restart</PRE>
+
+
+<P><A NAME="A3C0F02E150mhay"></A>This setting causes the window manager
+not to display the small window size and position indicator that is normally
+shown when you move or resize a window. When it is on, this small indicator
+box (located in the center of the screen) can land on a GL window and generate
+REDRAW events. Multiple REDRAW events can result in significant performance
+impact on applications which take a long time to regenerate a window. </P>
+
+
+<H3><A NAME="A48E4C9206vbia"></A>Fast Line Drawing </H3>
+
+
+<P><A NAME="A3C0F02E171mhay"></A>You can improve polyline drawing performance
+by using the <B>polylinelist</B> subroutine. The <B>polylinelist</B> subroutine
+helps eliminate the subroutine interface calling overhead of the <TT>bgnline
+... v ... v ... endline</TT> interface. Subroutine calling overhead into
+the GL library can exceed one microsecond per call. </P>
+
+
+<H3><A NAME="A48E4C9597vbia"></A>Fast Pixel Transfer (BLITS) </H3>
+
+
+<P><A NAME="A3C0F02E192mhay"></A>On the POWER Gt4 and POWER Gt4x
+adapters, and on the POWER Gt4, POWER Gt4x, and
+POWER GXT1000 adapters, the use of the <B>rectread</B> and <B>rectwrite</B>subroutines is deprecated. The <B>lrectread</B> and <B>lrectwrite</B>
+subroutines provide a faster, more efficient interface to pixel transfers.
+The format of the pixels can be adjusted with the pixmode subroutine. </P>
+
+
+
+
+<hr><center>
+[  <a href="exampprogs.html">Previous</a>  |
+<a href="progconsider.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/perftuning.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+

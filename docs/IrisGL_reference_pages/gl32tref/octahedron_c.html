@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>octahedron.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="makefile.html">Previous</a>  |
+<a href="overlay_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="B6u1320bria"></A>octahedron.c Example C Language Program
+</H2>
+<A NAME="INDEX2345" REL="I1" TITLE="octahedron.c example program (GL)"></A>
+<A NAME="INDEX2346" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2347" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2348" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2349" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2350" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2351" REL="I3" TITLE="octahedron"></A>
+<A NAME="INDEX2352" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2353" REL="I2" TITLE="octahedron"></A>
+<A NAME="INDEX2354" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2355" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2356" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2357" REL="I3" TITLE="hidden surface removal"></A>
+<A NAME="INDEX2358" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2359" REL="I2" TITLE="hidden surface removal"></A>
+<A NAME="INDEX2360" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64EACD188ttay"></A>/* Example: octahedron.c */</PRE>
+<PRE><A NAME="A64EACD563ttay"></A>/* This example program draws a multicolored octahedron spinning
+ * like a top. The drawoctahedron subroutine demonstrates how
+ * triangle meshes, including the swaptmesh() subroutine,
+ * are used.
+ * The c3f() subroutine sets vertex colors; you can ignore these
+ * calls if you are studying the logic of mesh drawing.
+ * All rotation and hidden surface removal are handled in the
+ * main() routine.  The calculations of the rotation angles are
+ * based on Euler's equations for a spinning top.
+ * On adapters without a z-buffer, this program will not display
+ * the octahedron correctly, since it employs the z-buffer to
+ * remove hidden surfaces.
+ */</PRE>
+<PRE><A NAME="A64EACD711ttay"></A>#include &lt;gl/gl.h></PRE>
+<PRE><A NAME="A64EACD920ttay"></A>float octdata[6][3] = {   /* positions of the six vertices of octahedron */
+{
+&nbsp;&nbsp;&nbsp;1.0, 0.0, 0.0},
+&nbsp;&nbsp;&nbsp;{0.0, 1.0, 0.0},
+&nbsp;&nbsp;&nbsp;{0.0, 0.0, 1.0},
+&nbsp;&nbsp;&nbsp;{-1.0, 0.0, 0.0},
+&nbsp;&nbsp;&nbsp;{0.0, -1.0, 0.0},
+&nbsp;&nbsp;&nbsp;{0.0, 0.0, -1.0}
+};</PRE>
+<PRE><A NAME="A64EACE163ttay"></A>float colordata[6][3] = {  /* colors of the vertices */
+&nbsp;&nbsp;&nbsp;{1.0, 0.0, 0.0},         /* red */
+&nbsp;&nbsp;&nbsp;{0.0, 1.0, 0.0},         /* green */
+&nbsp;&nbsp;&nbsp;{0.0, 0.0, 1.0},         /* blue */
+&nbsp;&nbsp;&nbsp;{0.0, 1.0, 1.0},         /* cyan */
+&nbsp;&nbsp;&nbsp;{1.0, 0.0, 1.0},         /* magenta */
+&nbsp;&nbsp;&nbsp;{1.0, 1.0, 0.0}
+};          /* yellow */</PRE>
+<PRE><A NAME="A64EACE314ttay"></A>void drawoctahedron()
+{</PRE>
+<PRE><A NAME="A64EACE849ttay"></A>&nbsp;&nbsp;&nbsp;bgntmesh();              /* use triangle mesh to draw the
+&nbsp;&nbsp;&nbsp;                            octahedron */
+&nbsp;&nbsp;&nbsp;c3f (colordata[0]);
+&nbsp;&nbsp;&nbsp;v3f (octdata [0]);
+&nbsp;&nbsp;&nbsp;c3f (colordata[1]);
+&nbsp;&nbsp;&nbsp;v3f (octdata[1]);
+&nbsp;&nbsp;&nbsp;c3f (colordata[2]);
+&nbsp;&nbsp;&nbsp;v3f (octdata[2]);        /* vertices in first triangle are
+&nbsp;&nbsp;&nbsp;                                0, 1, 2 */
+&nbsp;&nbsp;&nbsp;c3f (colordata[3]);
+&nbsp;&nbsp;&nbsp;v3f (octdata[3]);        /* second triangle - 1, 2, 3 */
+&nbsp;&nbsp;&nbsp;swaptmesh();             /* swap vertex order (2,3) -> (3,2) */
+        c3f (colordata[4]);
+&nbsp;&nbsp;&nbsp;v3f (octdata[4]);        /* third triangle - 3, 2, 4 */
+&nbsp;&nbsp;&nbsp;c3f (colordata[0]);
+&nbsp;&nbsp;&nbsp;v3f (octdata[0]);        /* fourth triangle - 2, 4, 0 */
+&nbsp;&nbsp;&nbsp;swaptmesh();             /* swap vertex order (4,0) -> (0,4) */
+&nbsp;&nbsp;&nbsp;c3f (colordata[5]);
+&nbsp;&nbsp;&nbsp;v3f (octdata[5]);        /* fifth triangle - 0, 4, 5 */
+&nbsp;&nbsp;&nbsp;c3f (colordata[3]);
+&nbsp;&nbsp;&nbsp;v3f (octdata[3]);        /* sixth triangle - 4, 5, 3 */
+&nbsp;&nbsp;&nbsp;swaptmesh();             /* swap vertex order (5,3) -> (3,5) */
+&nbsp;&nbsp;&nbsp;c3f (colordata[1]);
+&nbsp;&nbsp;&nbsp;v3f (octdata[1]);        /* seventh trinagle - 3, 5, 1 */
+&nbsp;&nbsp;&nbsp;c3f (colordata[0]);
+&nbsp;&nbsp;&nbsp;v3f (octdata [0]);       /* eigth triangle - 5, 1, 0 */
+&nbsp;&nbsp;&nbsp;endtmesh();</PRE>
+<PRE><A NAME="A64EACE992ttay"></A>}</PRE>
+<PRE><A NAME="A64EACF136ttay"></A>main()
+{</PRE>
+<PRE><A NAME="A64EAD0998ttay"></A>&nbsp;&nbsp;&nbsp;long prec=0, spin=0;
+&nbsp;&nbsp;&nbsp;long i;   
+&nbsp;&nbsp;&nbsp;prefposition(100, 500, 100, 500);   /* location of window to
+&nbsp;&nbsp;&nbsp;                                       be opened */
+&nbsp;&nbsp;&nbsp;winopen("octahedron");   
+&nbsp;&nbsp;&nbsp;ortho(-2.0, 2.0, -2.0, 2.0, -2.0, 2.0);
+&nbsp;&nbsp;&nbsp;zbuffer(TRUE);      /* hidden surfaces removed with z buffer */
+&nbsp;&nbsp;&nbsp;doublebuffer();     /* for smooth motion */
+&nbsp;&nbsp;&nbsp;RGBmode();          /* direct color mode */
+&nbsp;&nbsp;&nbsp;gconfig();          /* reconfigure for RGBmode and
+&nbsp;&nbsp;&nbsp;                       doublebuffer */
+&nbsp;&nbsp;&nbsp;for (i=0; i&lt;1500; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pushmatrix();                 /* save viewing transformation */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translate (0.0, -1.0, 0.0);   /* make origin the
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                 bottom of the oct */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate (prec, 'y');           /* precession of axis */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate (323, 'x');            /* inclination of 32.3
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                 degrees */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate (spin, 'y');           /* spin around axis */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translate (0.0, 1.0, 0.0);    /* center in the middle of
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                 the window */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prec += 15;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spin += 45;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (prec > 3600) prec -= 3600;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (spin > 3600) spin -= 3600;      
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cpack(0);                     /* color black */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zclear();                     /* clear the z buffer */</PRE>
+<PRE><A NAME="CAA1AC6335vbia"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawoctahedron();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;swapbuffers();                /* show completed drawing */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;popmatrix();                  /* restore viewing
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                 transformation */
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAD1139ttay"></A>}</PRE>
+
+<H3><A NAME="A201C1182"></A>Related Information</H3>
+<P><A NAME="E1D7864272ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html#A364C9931f">Triangular Meshes</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I> explains how to specify three-dimensional objects that are composed of triangular faces.</P>
+
+<hr><center>
+[  <a href="makefile.html">Previous</a>  |
+<a href="overlay_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

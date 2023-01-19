@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>cmode Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="closeobj.html">Previous</a>  |
+<a href="cmov.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A146X93d6"></A>cmode Subroutine</H2>
+<A NAME="INDEX249" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX250" REL="I2" TITLE="color map and RGB mode"></A>
+<A NAME="INDEX251" REL="I3" TITLE="cmode"></A>
+<A NAME="INDEX252" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX253" REL="I2" TITLE="color map mode"></A>
+<A NAME="INDEX254" REL="I3" TITLE="setting current color in"></A>
+<A NAME="INDEX255" REL="I1" TITLE="cmode subroutine (GL)"></A>
+
+<H3><A NAME="A146X93d8"></A>Purpose</H3>
+<P><A NAME="E1B070D080ceb"></A>Sets color map mode as the current mode.</P>
+
+<H3><A NAME="A78C12b"></A>Libraries</H3>
+<P><A NAME="E1B070D228ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B070D333ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A146X93db"></A>C Syntax</H3>
+<PRE><A NAME="A146X93dc"></A><B>void cmode(&nbsp;)</B></PRE>
+
+<H3><A NAME="A146X93b4"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A146X93b7"></A><B>SUBROUTINE CMODE</B></PRE>
+
+<H3><A NAME="A146X93df"></A>Description</H3>
+<P><A NAME="E1B070D683ceb"></A>The <B>cmode</B> subroutine sets 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e3">color map mode</A> as the current mode. This mode is the default.  </P>
+
+<P><A NAME="E1B070D851ceb"></A>If your workstation has more than 12 standard bitplanes, you can write color indexes between 0 and 4095 into the standard bitplanes. The 
+drawing mode
+ must be set to <A HREF="drawmode.html#A143X946b">NORMALDRAW</A> to write into the standard bitplanes (NORMALDRAW is the default drawing mode). The system must be in color map mode in order to draw into the overlay or underlay bitplanes.</P>
+
+<P><A NAME="E1B070D968ceb"></A>You must call the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine after the <B>cmode</B> subroutine in order to have the <B>cmode</B> subroutine take effect. The system does not enter color map mode until the <B>gconfig</B> subroutine is called.</P>
+
+<BLOCKQUOTE><A NAME="A318C9cae"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A64C016558"></A>Implementation Specifics</H3>
+<P><A NAME="E1B070E473ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<P><A NAME="A3CBD17E975bolt"></A>The POWERgraphics GXT1000 will ignore the <B>cmode</B> subroutine when applied to windows created with the <B>winX</B> subroutine. The <B>cmode</B> subroutine can still be used with windows created with the <B>winopen</B> subroutine. See the <A HREF="winX.html#A114C163"><B>winX</B></A> subroutine for more detail.</P>
+
+<H3><A NAME="A78C12e"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12f"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C130"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A146X93f5"></A>Related Information</H3>
+<P><A NAME="E1B070E794ceb"></A>Choosing a set of bitplanes for drawing with the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B070E901ceb"></A>Configuring the system with the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine.</P>
+
+<P><A NAME="E1B070F009ceb"></A>Setting a display mode that bypasses the color map with the <A HREF="RGBmode.html#A143X93b6"><B>RGBmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B070F117ceb"></A>Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="closeobj.html">Previous</a>  |
+<a href="cmov.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

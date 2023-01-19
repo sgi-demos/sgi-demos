@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getsize Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getscrmask.html">Previous</a>  |
+<a href="getsm.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="X513200marj"></A>getsize Subroutine</H2>
+<A NAME="INDEX830" REL="I1" TITLE="getsize subroutine (GL)"></A>
+<A NAME="INDEX831" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX832" REL="I2" TITLE="window"></A>
+<A NAME="INDEX833" REL="I3" TITLE="getsize"></A>
+<A NAME="INDEX834" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX835" REL="I2" TITLE="window sizes"></A>
+<A NAME="INDEX836" REL="I3" TITLE="returning"></A>
+<A NAME="INDEX837" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX838" REL="I2" TITLE="query"></A>
+<A NAME="INDEX839" REL="I3" TITLE="getsize"></A>
+
+<H3><A NAME="A213X912b27"></A>Purpose</H3>
+<P><A NAME="E1B1122226ceb"></A>Returns the size of a window.</P>
+
+<H3><A NAME="A79C12d8"></A>Libraries</H3>
+<P><A NAME="E1B1122376ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1122479ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912b2a"></A>C Syntax</H3>
+<PRE><A NAME="A213X912b2b"></A><B>void getsize(Int32 *</B><A HREF="getsize.html#eO23270marj"><I>x</I></A><B>, Int32 *</B><A HREF="getsize.html#qO231d0marj"><I>y</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c37"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c38"></A><B>SUBROUTINE GETSIZ(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>, </B><I>y</I></PRE>
+
+<H3><A NAME="A213X912b2e"></A>Description</H3>
+<P><A NAME="E1B1122847ceb"></A>The <B>getsize</B> subroutine returns the size of the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A>. A window must be open for this subroutine to work.</P>
+
+<P><A NAME="E1B1122958ceb"></A>Call the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine to open a window, or the <A HREF="winset.html#NY1320marj"><B>winset</B></A> subroutine to choose the current window.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f52"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912b31"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="eO23270marj"></A><I>x</I></TD>
+<TD>  Specifies a pointer to the location into which to copy the width (in pixels) of the window. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="qO231d0marj"></A><I>y</I></TD>
+<TD>  Specifies a pointer to the location into which to copy the height (in pixels) of the window. </TD></TR></TABLE>
+
+<H3><A NAME="A30C01105c"></A>Example</H3>
+<P><A NAME="E1B1123333ceb"></A>The example C language program <A HREF="paint_c.html#A13C0bd84"><B>paint.c</B></A> uses the <B>getsize</B> subroutine to determine the size of a window. </P>
+
+<H3><A NAME="A61C0159ea"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1123495ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C12db"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12dc"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12dd"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912b37"></A>Related Information</H3>
+<P><A NAME="E1B1123817ceb"></A>Specifying pixel values to be added to a window with the <A HREF="fudge.html#A142X917a6"><B>fudge</B></A> subroutine.</P>
+
+<P><A NAME="E1B1123924ceb"></A>Obtaining the position of a window with the <A HREF="getorigin.html#A142X91f76"><B>getorigin</B></A> subroutine.</P>
+
+<P><A NAME="E1B1124032ceb"></A>Specifying the maximum size of a window with the <A HREF="maxsize.html#A142X916d6"><B>maxsize</B></A> subroutine.</P>
+
+<P><A NAME="E1B1124139ceb"></A>Specifying the minimum size of a window with the <A HREF="minsize.html#MJ13260marj"><B>minsize</B></A> subroutine.</P>
+
+<P><A NAME="E1B1124247ceb"></A>Constraining the size of a window with the <A HREF="prefsize.html#A142X91671"><B>prefsize</B></A> subroutine.</P>
+
+<P><A NAME="E1B1124356ceb"></A>Specifying a window size change in discrete steps with the <A HREF="stepunit.html#A142X91bd2"><B>stepunit</B></A> subroutine.</P>
+
+<P><A NAME="E1B1124464ceb"></A>Creating a window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine. </P>
+
+<P><A NAME="E1B1124573ceb"></A>Setting the current window with the <A HREF="winset.html#NY1320marj"><B>winset</B></A> subroutine.</P>
+
+<P><A NAME="E1B1124680ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>. </P><hr><center>
+[  <a href="getscrmask.html">Previous</a>  |
+<a href="getsm.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

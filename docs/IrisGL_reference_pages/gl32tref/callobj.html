@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>callobj Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="c.html">Previous</a>  |
+<a href="charstr.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X91c8"></A>callobj Subroutine</H2>
+<A NAME="INDEX186" REL="I1" TITLE="callobj subroutine (GL)"></A>
+<A NAME="INDEX187" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX188" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX189" REL="I3" TITLE="callobj"></A>
+<A NAME="INDEX190" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX191" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX192" REL="I3" TITLE="drawing an instance of"></A>
+
+<H3><A NAME="A142X91ca"></A>Purpose</H3>
+<P><A NAME="E1B060A916ceb"></A>Draws an instance of an object (display list).</P>
+
+<H3><A NAME="A79C17"></A>Libraries</H3>
+<P><A NAME="E1B060B065ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B060B171ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X91ce"></A>C Syntax</H3>
+<PRE><A NAME="A142X91cf"></A><B>void callobj(Int32 </B><A HREF="callobj.html#A142X91d3"><I>object</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010a62"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010a63"></A><B>SUBROUTINE CALLOB(</B><I>object</I><B>)</B>
+<B>INTEGER*4 </B><I>object</I></PRE>
+
+<H3><A NAME="A142X91d0"></A>Description</H3>
+<P><A NAME="E1B060B532ceb"></A>The <B>callobj</B> subroutine draws an instance of a previously defined 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A> (object). If the subroutine specifies an undefined object, the system ignores the routine. </P>
+
+<P><A NAME="E1B060B641ceb"></A>Global state 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A78P0561">attributes</A> are not saved before a call to the <B>callobj</B> subroutine. Thus, if you change a variable within an object, such as color, the change can affect the caller as well. </P>
+
+<P><A NAME="E1B060B749ceb"></A>Use the <A HREF="pushattributes.html#Thx220marj"><B>pushattributes</B></A> and <A HREF="popattributes.html#Vmx2140marj"><B>popattributes</B></A> subroutines to preserve global state attributes across calls. Also, the object may execute transformations that change the matrix stack. Use the <A HREF="pushmatrix.html#A144X9540"><B>pushmatrix</B></A> and <A HREF="popmatrix.html#A144X951e"><B>popmatrix</B></A> subroutines to restore the state of the matrix stack. </P>
+
+<BLOCKQUOTE><A NAME="A29C010a64"></A><B>Note: </B>This editing subroutine can be added to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X91d2"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X91d3"></A><I>object</I></TD>
+<TD>  Specifies the identifier of the object to be drawn.</TD></TR></TABLE>
+
+<H3><A NAME="A30C010ff8"></A>Example</H3>
+<P><A NAME="E1B060C067ceb"></A>The example C language program <A HREF="depthcue_c.html#A16C0c8ff"><B>depthcue.c</B></A> uses the <B>callobj</B> subroutine, after specifying a rotation transformation, to rotate a graphical object (a cube). </P>
+
+<H3><A NAME="A62C015cf0"></A>Implementation Specifics</H3>
+<P><A NAME="E1B060C227ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1a"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1c"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X91e8"></A>Related Information</H3>
+<P><A NAME="E1B060C545ceb"></A>Creating an object with the <A HREF="makeobj.html#A142X912d"><B>makeobj</B></A> subroutine.</P>
+
+<P><A NAME="E1B060C652ceb"></A>Popping the attribute stack with the <A HREF="popattributes.html#Vmx2140marj"><B>popattributes</B></A> subroutine.</P>
+
+<P><A NAME="E1B060C760ceb"></A>Popping the transformation matrix stack with the <A HREF="popmatrix.html#A144X951e"><B>popmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1B060C867ceb"></A>Saving the global state attributes with the <A HREF="pushattributes.html#Thx220marj"><B>pushattributes</B></A> subroutine.</P>
+
+<P><A NAME="E1B060C974ceb"></A>Pushing down the transformation matrix stack with the <A HREF="pushmatrix.html#A144X9540"><B>pushmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1B060D084ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Creating <!--gl32prgd:--><A HREF="../gl32prgd/workobjects.html#workobjects.html">Objects (Display Lists)</A>,  
+<!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, 
+and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="c.html">Previous</a>  |
+<a href="charstr.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

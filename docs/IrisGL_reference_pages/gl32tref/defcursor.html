@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>defcursor Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="defbasis.html">Previous</a>  |
+<a href="deflinestyle.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A150X9444"></A>defcursor Subroutine</H2>
+<A NAME="INDEX375" REL="I1" TITLE="defcursor subroutine (GL)"></A>
+<A NAME="INDEX376" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX377" REL="I2" TITLE="cursor"></A>
+<A NAME="INDEX378" REL="I3" TITLE="defcursor"></A>
+<A NAME="INDEX379" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX380" REL="I2" TITLE="cursor"></A>
+<A NAME="INDEX381" REL="I3" TITLE="defining"></A>
+<H3><A NAME="A150X9446"></A>Purpose</H3>
+<P><A NAME="E1B0931824ceb"></A>Defines a cursor glyph.</P>
+
+<H3><A NAME="A78C1d8"></A>Libraries</H3>
+<P><A NAME="E1B0931971ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0932075ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A150X9449"></A>C Syntax</H3>
+<PRE><A NAME="A150X944a"></A><B>void defcursor(Int32 </B><A HREF="defcursor.html#A150X9453"><I>index</I></A><B>, Uint16 *</B><A HREF="defcursor.html#A150X9454"><I>cursor</I></A><B>)</B></PRE>
+
+<H3><A NAME="A150X9421"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A150X9424"></A><B>SUBROUTINE DEFCUR(</B><I>index</I><B>,</B><I> cursor</I><B>)</B>
+<B>INTEGER*4 </B><I>index</I>
+<B>INTEGER*2 </B><I>cursor</I><B>(</B><I>1</I><B>);</B></PRE>
+
+<H3><A NAME="A150X944d"></A>Description</H3>
+<P><A NAME="E1B0932444ceb"></A>The <B>defcursor</B> subroutine defines a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03ee">cursor glyph</A> with the specified name and bitmap.  Call the <A HREF="curstype.html#A150X93ee"><B>curstype</B></A> subroutine to set the type and size of cursor before calling the <B>defcursor </B>subroutine.</P>
+
+<P><A NAME="E1B0932551ceb"></A>The bitmap can be 16x16 or 32x32 and one or two layers deep. If the cursor has been defined by the <B>curstype </B>subroutine as type C16X2 or C32X2, the bitmap array is two layers deep.</P>
+
+<P><A NAME="E1B0932659ceb"></A>By default, the bitmap cursor origin is at (0,0), its lower-left corner. Use the <A HREF="curorigin.html#A150X9398"><B>curorigin</B></A> subroutine to reset the cursor origin (the position controlled by 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A79P07a">valuators</A> attached to the cursor and the position used for the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06fb">picking region</A>).</P>
+
+<P><A NAME="E1B0932767ceb"></A>To replace the bitmap assigned to a cursor constant, call the <B>defcursor</B> subroutine again, keeping the <A HREF="defcursor.html#A150X9453"><I>index</I></A> parameter the same but changing the bitmap <A HREF="defcursor.html#A150X9454"><I>cursor</I></A> parameter. </P>
+
+<P><A NAME="E1B0932883ceb"></A>By default, a cross-hair cursor origin is at (15,15), the intersection of its two lines.</P>
+
+<P><A NAME="E1B0932991ceb"></A>By default, an arrow is defined as cursor 0 (zero) and cannot be redefined. </P>
+
+<BLOCKQUOTE><A NAME="A318C9cce"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<P><A NAME="E1B0933160ceb"></A>The ordering of the values in the <I>cursor</I> array is left-to-right, then bottom-to-top, low-order bit plane, then high-order bit plane. This format is the same as that used by the <B>defrasterfont </B>subroutine. In other words, the first 16-bit short word specifies the lower-left bits of the image. If the cursor is 32 bits wide, the next short word specifies the lower-right bits. For a 16-bit wide cursor, the second short word specifies the second row from the bottom, the third word specifies the third row, and so on. If the cursor is a three-color cursor, place the bitmap for the high bit after the data for the low bit. The four different cursor configurations make use of different array sizes, as follows:</P>
+
+<TABLE><TR VALIGN="TOP" ALIGN="LEFT"><TH NOWRAP="NOWRAP">Cursor Type</TH>
+<TH>  Array Size</TH></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A2D390C233ttay"></A>C16X1</TD>
+<TD>  16</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="AB641C2853ttay"></A>C16X2</TD>
+<TD>  32</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="AB641C2999ttay"></A>C32X1</TD>
+<TD>  64</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="AB641C3145ttay"></A>C32X2</TD>
+<TD>  128</TD></TR></TABLE>
+
+<H3><A NAME="A150X9452"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A150X9453"></A><I>index</I> </TD>
+<TD>  Specifies a number to identify a cursor to other cursor routines.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A150X9454"></A><I>cursor</I></TD>
+<TD>  Specifies the bitmap for the cursor. For the cross-hair cursor type, this parameter is disregarded.</TD></TR></TABLE>
+
+<H3><A NAME="A64C01656e"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0933717ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1db"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1dc"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1dd"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A150X9467"></A>Related Information</H3>
+<P><A NAME="E1B0934035ceb"></A>Setting the origin of a cursor with the <A HREF="curorigin.html#A150X9398"><B>curorigin</B></A> subroutine.</P>
+
+<P><A NAME="E1B0934142ceb"></A>Controlling cursor visibility by window with the <A HREF="curson.html#ru1280nita"><B>curson</B> or <B>cursoff</B></A> subroutine.</P>
+
+<P><A NAME="E1B0934249ceb"></A>Defining the type and size of a cursor with the <A HREF="curstype.html#A150X93ee"><B>curstype</B></A> subroutine.</P>
+
+<P><A NAME="E1B0934355ceb"></A>Returning the cursor characteristics with the <A HREF="getcursor.html#sP1160nita"><B>getcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0934464ceb"></A>Putting the system in picking mode with the <A HREF="pick.html#h632f0nita"><B>pick</B></A> subroutine.</P>
+
+<P><A NAME="E1B0934571ceb"></A>Setting the cursor characteristics with the <A HREF="setcursor.html#ZR1nita"><B>setcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0934679ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P>
+
+<P><A NAME="E1B0934787ceb"></A> <!--gl32prgd:--><A HREF="../gl32prgd/cursorgl.html#cursorgl.html">Creating a Cursor</A>.</P><hr><center>
+[  <a href="defbasis.html">Previous</a>  |
+<a href="deflinestyle.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

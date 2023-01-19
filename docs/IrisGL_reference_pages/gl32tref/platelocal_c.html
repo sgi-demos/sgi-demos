@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>platelocal.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="pick1_c.html">Previous</a>  |
+<a href="popup_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="sfM70marj"></A>platelocal.c Example C Language Program
+</H2>
+<A NAME="INDEX2389" REL="I1" TITLE="platelocal.c example program (GL)"></A>
+<A NAME="INDEX2390" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2391" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2392" REL="I3" TITLE="lighting"></A>
+<A NAME="INDEX2393" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2394" REL="I2" TITLE="lighting"></A>
+<A NAME="INDEX2395" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64EA87344ttay"></A>/*
+This example program uses a blue local light to
+illuminate a white flat plate.  By removing the
+definition of FIXED_LIGHT in the first line of
+the program, the light source will maintain its
+position relative to the plate.  This
+demonstrates an important concept:  the position
+of a light source (or direction if using an
+infinite light source) is transformed by the
+current transformation matrix at the time it is
+bound.</PRE>
+<PRE><A NAME="A64EA87601ttay"></A>Try changing the local light to an infinite
+light and run the program again.  Notice how the
+color across the plate is now constant at any
+given instant.  Since the plate surface material
+has no specular reflectance, we did not use a
+local viewer (remember diffuse reflection is
+independent of viewer position).
+*/</PRE>
+<PRE><A NAME="A64EA87907ttay"></A>/* Example C Language Program platelocal.c */
+/*
+This program draws a flat plate with a simple
+local light.  If the line at the top of the file
+is left in, the light is fixed, and the plate
+moves.  Thus the bright spot on the plate will
+appear to move around (on the plate).
+Sometimes, the plate gets in front of the light,
+and almost disappears, since only the back is
+lit.  It does not quite disappear, since there
+is a small ambient component for the default
+material.</PRE>
+<PRE><A NAME="A64EA88106ttay"></A>If the statement "#define FIXED_LIGHT" is
+deleted, the light is effectively attached to
+the moving plate, so the lighted portion of the
+plate moves with the plate.
+*/</PRE>
+<PRE><A NAME="A64EA88270ttay"></A>#define FIXED_LIGHT 
+#include &lt;gl/gl.h>
+#include &lt;stdio.h></PRE>
+<PRE><A NAME="A64EA88446ttay"></A>Matrix idmat = 
+   {1.0,0.0,0.0,0.0,
+    0.0,1.0,0.0,0.0,
+    0.0,0.0,1.0,0.0,
+    0.0,0.0,0.0,1.0};</PRE>
+<PRE><A NAME="A64EA88621ttay"></A>float  white_material[] =   {
+  DIFFUSE,  1.0, 1.0, 1.0,
+  SPECULAR, 0.0, 0.0, 0.0,
+  LMNULL};</PRE>
+<PRE><A NAME="A64EA88797ttay"></A>float  local_blue_light[] = {
+  LCOLOR, 0.0, 0.0, 1.0,
+  POSITION, 0.5, 0.5, 0.1, 1.0,
+  LMNULL};</PRE>
+<PRE><A NAME="A64EA89002ttay"></A>/*
+** draw_plate draws a flat plate covering
+** the range -1.0 &lt;= x, y &lt;= 1.0 and z = 0.0
+** using n^2 rectangles.  All the normal vectors are
+** perpendicular to the plate.
+*/</PRE>
+<PRE><A NAME="A64EA89347ttay"></A>draw_plate(n)
+long n;
+{
+  long i, j;
+  float p0[3], p1[3], p2[3], p3[3];
+  float n0[3];    
+  n0[0] = n0[1] = 0.0; 
+  n0[2] = 1.0;
+  p0[2] = p1[2] = p2[2] = p3[2] = 0.0;    
+  for (i = 0; i &lt; n; i++) {
+    p0[0] = p1[0] = -1.0 + 2.0*i/n;
+    p2[0] = p3[0] = -1.0 + 2.0*(i+1)/n;
+    for (j = 0; j &lt; n; j++) {
+      p0[1] = p3[1] = -1.0 + 2.0*j/n;
+      p1[1] = p2[1] = -1.0 + 2.0*(j+1)/n;
+      bgnpolygon();
+      n3f(n0); 
+      v3f(p0);
+      n3f(n0); 
+      v3f(p1);
+      n3f(n0); 
+      v3f(p2);
+      n3f(n0); 
+      v3f(p3);
+      endpolygon();
+    }</PRE>
+<PRE><A NAME="A64EA89491ttay"></A>  }</PRE>
+<PRE><A NAME="A64EA89633ttay"></A>}</PRE>
+<PRE><A NAME="A64EA89892ttay"></A>/*
+** Tell the Graphics Library to DEFINE a
+** lighting calculation that accounts for
+** diffuse and ambient reflection.  In addition,
+** the lighting calculation includes a LOCAL light.
+*/
+def_light_calc()
+{
+  lmdef(DEFLMODEL, 1, 0, NULL);
+  lmdef(DEFMATERIAL, 1, 9, white_material);
+  lmdef(DEFLIGHT, 1, 10, local_blue_light);
+}</PRE>
+<PRE><A NAME="A64EA8A097ttay"></A>/*
+** Tell the Graphics Library to USE the lighting
+** calculation that we defined earlier.
+*/
+use_light_calc()
+{
+  lmbind(LMODEL, 1);
+  lmbind(LIGHT0, 1);
+  lmbind(MATERIAL, 1);
+}</PRE>
+<PRE><A NAME="A64EA8A255ttay"></A>main()
+{
+  int i;    
+  keepaspect(1, 1);</PRE>
+<PRE><A NAME="A64EA8A481ttay"></A>  prefposition(XMAXSCREEN/4,XMAXSCREEN*3/4,YMAXSCREEN/4,
+      YMAXSCREEN*3/4);
+  winopen("local");
+  RGBmode();
+  doublebuffer();
+  gconfig();
+    /*
+    ** Use mmode() to set up projection and viewing
+    ** matrices for lighting.
+    */</PRE>
+<PRE><A NAME="A64EA8A721ttay"></A>  mmode(MVIEWING);
+  perspective(400, 1.0, 0.5, 10.0);
+  loadmatrix(idmat);
+  lookat(0.0,0.0,6.0,0.0,0.0,0.0,0);    
+  def_light_calc();
+  use_light_calc();    
+  for (i = 0; i &lt; 1800; i++) {
+    cpack(0);
+    clear();
+    pushmatrix();
+    rot(i*0.5, 'Z');
+    rot(i*0.5, 'Y');</PRE>
+<PRE><A NAME="A64EA8A879ttay"></A>    #ifndef FIXED_LIGHT
+    lmbind(LIGHT0, 1);</PRE>
+<PRE><A NAME="A64EA8B049ttay"></A>    #endif FIXED_LIGHT
+    draw_plate(10);
+    popmatrix();
+    swapbuffers();
+  }</PRE>
+<PRE><A NAME="A64EA8B192ttay"></A>}</PRE>
+
+<H3><A NAME="A200C1153"></A>Related Information</H3>
+<P><A NAME="E1D78A1041ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/advlightcap.html#advlightcap.html">Advanced Lighting Capabilities</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I> describes how to manipulate material emission, ambient light, run-time lighting capabilities (Imcolor Subroutine), local viewer, local lights, and light attenuation.</P>
+
+<hr><center>
+[  <a href="pick1_c.html">Previous</a>  |
+<a href="popup_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

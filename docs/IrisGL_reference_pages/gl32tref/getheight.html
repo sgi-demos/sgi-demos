@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getheight Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getgpos.html">Previous</a>  |
+<a href="getlsrepeat.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X93ca"></A>getheight Subroutine</H2>
+<A NAME="INDEX698" REL="I1" TITLE="getheight subroutine (GL)"></A>
+<A NAME="INDEX699" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX700" REL="I2" TITLE="query"></A>
+<A NAME="INDEX701" REL="I3" TITLE="returning"></A>
+<A NAME="INDEX702" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX703" REL="I2" TITLE="text"></A>
+<A NAME="INDEX704" REL="I3" TITLE="getheight"></A>
+<A NAME="INDEX705" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX706" REL="I2" TITLE="text"></A>
+<A NAME="INDEX707" REL="I3" TITLE="returning"></A>
+
+<H3><A NAME="A144X93cc"></A>Purpose</H3>
+<P><A NAME="E1B0F13440ceb"></A>Returns the maximum character height in the current raster font.</P>
+
+<H3><A NAME="A79C1246"></A>Libraries</H3>
+<P><A NAME="E1B0F13591ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0F13696ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X93d0"></A>C Syntax</H3>
+<PRE><A NAME="A213X912657"></A><B>Int32 getheight(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010c07"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c08"></A><B>INTEGER*4 FUNCTION GETHEI</B></PRE>
+
+<H3><A NAME="A144X93d2"></A>Description</H3>
+<P><A NAME="E1B0F14061ceb"></A>The <B>getheight </B>subroutine returns the maximum height of the characters, in the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P073b">raster font</A>. The height is defined as the number of 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06fd">pixels</A> between the top of the tallest ascender (in characters such as f and h) and the bottom of the lowest descender (in characters such as y and p). </P>
+
+<BLOCKQUOTE><A NAME="A318C9f22"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A144X93d8"></A>Return Value</H3>
+<P><A NAME="E1B0F14278ceb"></A>The maximum height (in pixels) of a character in the current font.</P>
+
+<H3><A NAME="A5C0a357"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0F14441ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C1249"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C124a"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C124b"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X93ea"></A>Related Information</H3>
+<P><A NAME="E1B0F14767ceb"></A>Returning the baseline extent of the longest character descender with the <A HREF="getdescender.html#A144X9386"><B>getdescender</B></A> subroutine.</P>
+
+<P><A NAME="E1B0F14874ceb"></A>Returning the current raster font number with the <A HREF="getfont.html#A144X93a8"><B>getfont</B></A> subroutine.</P>
+
+<P><A NAME="E1B0F14995ceb"></A>Returning the width of the specified text string with the <A HREF="strwidth.html#A144X93ec"><B>strwidth</B></A> subroutine.</P>
+
+<P><A NAME="E1B0F15103ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Creating <!--gl32prgd:--><A HREF="../gl32prgd/textchars.html#textchars.html">Text Characters</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System.</P><hr><center>
+[  <a href="getgpos.html">Previous</a>  |
+<a href="getlsrepeat.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

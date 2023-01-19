@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getdisplaymode Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getdev.html">Previous</a>  |
+<a href="getdrawmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A145X9206"></A>getdisplaymode Subroutine</H2>
+<A NAME="INDEX661" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX662" REL="I2" TITLE="animation"></A>
+<A NAME="INDEX663" REL="I3" TITLE="getdisplaymode"></A>
+<A NAME="INDEX664" REL="I1" TITLE="getdisplaymode subroutine (GL)"></A>
+<A NAME="INDEX665" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX666" REL="I2" TITLE="display mode"></A>
+<A NAME="INDEX667" REL="I3" TITLE="returning current"></A>
+<A NAME="INDEX668" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX669" REL="I2" TITLE="query"></A>
+<A NAME="INDEX670" REL="I3" TITLE="doublebuffer"></A>
+
+<H3><A NAME="A145X9208"></A>Purpose</H3>
+<P><A NAME="E1B0E29003ceb"></A>Returns the current display mode.</P>
+
+<H3><A NAME="A77C125"></A>Libraries</H3>
+<P><A NAME="E1B0E29152ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0E29256ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A145X920b"></A>C Syntax</H3>
+<PRE><A NAME="A145X920c"></A><B>Int32 getdisplaymode(&nbsp;)</B></PRE>
+
+<H3><A NAME="A145X91e4"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A145X91e7"></A><B>INTEGER*4 FUNCTION GETDIS</B></PRE>
+
+<H3><A NAME="A145X920f"></A>Description</H3>
+<P><A NAME="E1B0E29611ceb"></A>The <B>getdisplaymode</B> subroutine returns the current configuration of the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A270A984a">frame buffer</A> bitplanes and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A31996bc">color map</A>. </P>
+
+<BLOCKQUOTE><A NAME="A318C9c72"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A145X9212"></A>Return Values</H3>
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Symbolic Name</B></TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Display Mode</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>DMRGB</TD>
+
+<TD>DMRGB</TD>
+
+<TD>RGB single buffer mode</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>DMSINGLE</TD>
+
+<TD>DMSING</TD>
+
+<TD>Color map single buffer mode</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>DMDOUBLE</TD>
+
+<TD>DMDOUB</TD>
+
+<TD>Color map double buffer mode</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>DMRGBDOUBLE</TD>
+
+<TD>DMRGBD</TD>
+
+<TD>RGB double buffermode</TD></TR></TABLE>
+
+<H3><A NAME="A62C015ca3"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0E29957ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A145X9220"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C128"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C129"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c347"></A>Related Information</H3>
+<P><A NAME="E1B0E2A276ceb"></A>Setting color mode as the current mode with the <A HREF="cmode.html#A146X93d6"><B>cmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B0E2A383ceb"></A>Setting the display mode to double buffer mode with the <A HREF="doublebuffer.html#A145X91a7"><B>doublebuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B0E2A490ceb"></A>Returning the organization of the current color map with the <A HREF="getcmmode.html#A146X948e"><B>getcmmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B0E2A596ceb"></A>Returning the current drawing mode with the <A HREF="getdrawmode.html#A143X9482"><B>getdrawmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B0E2A707ceb"></A>Setting a display mode that bypasses the color map with the <A HREF="RGBmode.html#A143X93b6"><B>RGBmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B0E2A813ceb"></A>Setting the display to single buffer mode with the <A HREF="singlebuffer.html#A145X9259"><B>singlebuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B0E2A922ceb"></A>Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A>, <!--gl32prgd:--><A HREF="../gl32prgd/animatescene.html#animatescene.html">Creating Animated Scenes</A>, <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System.</P>
+
+<P><A NAME="E1B0E2B030ceb"></A>Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>
+ and <!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>
+ for GL.</P><hr><center>
+[  <a href="getdev.html">Previous</a>  |
+<a href="getdrawmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

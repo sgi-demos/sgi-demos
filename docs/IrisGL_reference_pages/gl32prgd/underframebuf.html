@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/underframebuf.html Mon, 24 Jan 2022 16:28:11 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Understanding the Frame Buffer in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="listframebufsubs.html">Previous</a>  |
+<a href="workcolor.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+
+
+<H2><A NAME="underframebuf.html"></A>Understanding the Frame Buffer </H2>
+
+
+<P><A NAME="A3C0EB46065mhay"></A>Effective use of the full capabilities
+of GL requires an understanding of the frame buffer and its organization.
+GL supports overlay planes, underlay planes, a double-buffered &quot;main&quot;
+frame buffer, a z-buffer, an alpha buffer, color maps, and gamma ramps
+(see the figure entitled <A HREF="figures/gl32p1.jpg">Frame Buffer Configuration</A>).
+These can be turned on or off, reconfigured, masked with writemasks, and
+so on. However, the actual number of bitplanes in each buffer varies from
+adapter to adapter, and therefore the ways in which these bitplanes can
+be configured and controlled vary from adapter to adapter. The following
+sections present some basic concepts about the operation of a frame buffer.
+Following these brief discussions are descriptions of the characteristics
+of the different systems. </P>
+
+
+<H3><A NAME="A78C13c4"></A>Main Color Buffer </H3>
+
+
+<P><A NAME="A3C0EB46089mhay"></A>The main color buffer can be thought of
+as having the width and height of the window and a depth that can vary
+from 8 bits to 48 bits, depending on the current configuration and the
+installed adapter. Pixels stored in this main buffer can be interpreted
+through a downstream color map (that is, the values stored in the frame
+buffer are color map indexes), or they can be interpreted directly as red,
+green, blue (RGB) values, with no intervening color maps. (For more information
+on how to use or bypass the color maps, see &quot;<A HREF="workcolor.html#workcolor.html">Working
+in Color Map and RGB Modes</A>&quot;.) </P>
+
+
+<P><A NAME="A3C0EB46112mhay"></A>The main color buffer can be single buffered
+or double buffered, depending on the current configuration and the installed
+adapter. In double buffer mode, the main color buffer is divided in two:
+the front buffer, which is visible, and the back buffer, which is invisible
+but can be drawn into. Double buffering is an important technique used
+to provide smooth animation of moving pictures. (For more information on
+how to use double buffering, see &quot;<A HREF="animatescene.html#animatescene.html">Creating
+Animated Scenes</A>&quot;.) </P>
+
+
+<P><A NAME="A3C0EB46134mhay"></A>The color map configuration and single
+and double buffer configuration can be changed dynamically by making appropriate
+GL subroutine calls. The scope of such reconfiguration extends only over
+the current drawing window. </P>
+
+
+<P><A NAME="A3C0EB46157mhay"></A>Multiple windows can appear on the screen,
+each independently double buffered, each in color map or RGB mode independent
+of the others. There is no limit to the number of such windows. </P>
+
+
+<H3><A NAME="A78C13c9"></A>Overlay and Underlay Buffers </H3>
+
+
+<P><A NAME="A3C0EB46179mhay"></A>Like the main color buffer, the overlay
+and underlay buffers have the width and height of the window. Their depth
+can range from 0 to 4 bits deep, depending on the installed adapter and
+the current configuration. Overlay and underlay bitplanes cannot be double
+buffered and are always in color map mode. </P>
+
+
+<P><A NAME="A3C0EB46201mhay"></A>Overlays and underlays function exactly
+as the names suggest: drawing into the overlay buffer obscures the main
+color buffer, and drawing into the main color buffer obscures the underlay.
+(For more information on overlays and underlays, consult &quot;<A HREF="underovermodes.html#underovermodes.html">Underlay
+and Overlay</A> Modes&quot;.) </P>
+
+
+<P><A NAME="A3C0EB46223mhay"></A>Some sophisticated applications find that
+four overlay and four underlay planes are not enough. Multiple overlays
+or underlays, even double-buffered overlays and underlays, can be created
+by appropriately manipulating the color map and the writemasks associated
+with the main color buffer. Such tricks can easily get quite complicated,
+and such extra overlays have effectively been stolen from the main color
+buffer. (For more information on writemasks, see &quot;<A HREF="writemasks.html#writemasks.html">Writemasks
+and Logical Operations</A>&quot;.)</P>
+
+
+<H3><A NAME="A78C13cd"></A>Alpha Buffer </H3>
+
+
+<P><A NAME="A3C0EB46246mhay"></A>In order for GL to support an alpha blending
+(transparency) buffer, the installed adapter must contain an alpha buffer.
+(For more information on alpha blending, see &quot;<A HREF="alphablend.html#alphablend.html">Alpha
+Blending Modes</A> &quot;.) </P>
+
+
+<H3><A NAME="xCk2270nita"></A>Z-Buffer<A NAME="INDEX592"></A> <A NAME="INDEX593"></A>
+<A NAME="INDEX594"></A> <A NAME="INDEX595"></A> </H3>
+
+
+<P><A NAME="A3C0EB46269mhay"></A>The z-buffer stores the <I>z</I> value
+for each pixel on the screen. The <I>z</I> value represents the <I>z</I>
+coordinate, or distance to the eye, for each pixel. When z-buffering is
+enabled with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/zbuffer.html#A143X97b1">zbuffer</A></B>
+subroutine, the system compares the <I>z</I> values for each pixel of any
+new polygon, line, point, or character to the current <I>z</I> value for
+each pixel and renders only those values representing a distance closer
+to the eye. (For further discussion of z-buffering, see &quot;<A HREF="remhidden.html#remhidden.html">Removing
+Hidden Surfaces</A>&quot;.) </P>
+
+
+<H3><A NAME="RGk2f0nita"></A>Query Functions </H3>
+
+
+<P><A NAME="A3C0EB46292mhay"></A>The query functions available for determining
+the current frame buffer configuration are the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getdrawmode.html#A143X9482">getdrawmode</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/getplanes.html#A143X94a4">getplanes</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getzbuffer.html#A9SR350marj">getzbuffer</A></B>
+subroutines. </P>
+
+
+
+
+<hr><center>
+[  <a href="listframebufsubs.html">Previous</a>  |
+<a href="workcolor.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/underframebuf.html Mon, 24 Jan 2022 16:28:12 GMT -->
+</HTML>
+

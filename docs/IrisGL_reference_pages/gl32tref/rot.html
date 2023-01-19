@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>rot  Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="rmv.html">Previous</a>  |
+<a href="rotate.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X9562"></A>rot  Subroutine</H2>
+<A NAME="INDEX1685" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1686" REL="I2" TITLE="coordinate transformation"></A>
+<A NAME="INDEX1687" REL="I3" TITLE="rot"></A>
+<A NAME="INDEX1688" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1689" REL="I2" TITLE="graphical primitives"></A>
+<A NAME="INDEX1690" REL="I3" TITLE="rotating (floating point version)"></A>
+<A NAME="INDEX1691" REL="I1" TITLE="rot subroutine (GL)"></A>
+
+<H3><A NAME="A144X9564"></A>Purpose</H3>
+<P><A NAME="E1D73A5607ceb"></A>Rotates graphical primitives (floating-point version).</P>
+
+<H3><A NAME="A78C1aa"></A>Libraries</H3>
+<P><A NAME="E1D73A5646ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D73A5670ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X9568"></A>C Syntax</H3>
+<PRE><A NAME="A144X9569"></A><B>void rot(Float 32 </B><A HREF="rot.html#dOO1e0marj"><I>angle</I></A><B>, Char8</B> <A HREF="rot.html#rOO1340marj"><I>axis</I></A><B>)</B></PRE>
+
+<H3><A NAME="A15C0c6fa"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A15C0c6fb"></A><B>SUBROUTINE ROT(</B><I>angle</I><B>, </B><I>axis</I><B>) </B>
+<B>REAL </B><I>angle</I>
+<B>CHARACTER*1 </B><I>axis</I></PRE>
+
+<H3><A NAME="A144X956a"></A>Description</H3>
+<P><A NAME="E1D73A5783ceb"></A>The <B>rot </B>subroutine specifies an angle (<A HREF="rot.html#dOO1e0marj"><I>angle</I></A>) and an axis of rotation (<A HREF="rot.html#rOO1340marj"><I>axis</I></A>). The floating point angle is given in degrees according to the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P11365">right-hand rule</A>. </P>
+
+<P><A NAME="E1D73A5809ceb"></A>The <B>rot </B>subroutine is a modeling routine; it changes the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P021">transformation</A> matrix. All objects drawn after the <B>rot </B>subroutine executes are rotated. Use the <A HREF="pushmatrix.html#A144X9540"><B>pushmatrix</B></A> and <A HREF="popmatrix.html#A144X951e"><B>popmatrix</B></A> subroutines to preserve and restore unrotated modeling coordinates. </P>
+
+<H3><A NAME="A144X956c"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="dOO1e0marj"></A><I>angle</I></TD>
+<TD>  Specifies the angle of rotation of an object. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="rOO1340marj"></A><I>axis</I></TD>
+<TD>  Specifies the relative axis of rotation. There are three values defined for this parameter (the character may be upper- or lowercase): </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X9126ef"></A><B></B></TD>
+<TD>  x, X indicates the x-axis. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X9126f0"></A><B></B></TD>
+<TD>  y, Y indicates the y-axis. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X9126f1"></A><B></B></TD>
+<TD>  z, Z indicates the z-axis. </TD></TR></TABLE>
+
+<H3><A NAME="A29C010b60"></A>Example</H3>
+<P><A NAME="E1D73A5968ceb"></A>The example C language program <A HREF="cylinder1_c.html#Ggi2e0marj"><B>cylinder1.c</B></A> uses the <B>rot</B> subroutine to rotate a cylinder about the y- and z-axes. </P>
+
+<H3><A NAME="A62C015d3a"></A>Implementation Specifics</H3>
+<P><A NAME="E1D73A6012ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C1ad"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1ae"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1af"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X9582"></A>Related Information</H3>
+<P><A NAME="E1D73A6108ceb"></A>Popping the transformation matrix stack with the <A HREF="popmatrix.html#A144X951e"><B>popmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1D73A6133ceb"></A>Pushing down the transformation matrix stack with the <A HREF="pushmatrix.html#A144X9540"><B>pushmatrix</B></A> subroutine.</P>
+
+<P><A NAME="E1D73A6162ceb"></A>Rotating a graphical primitive (fixed-point version) with the <A HREF="rotate.html#A8g2120marj"><B>rotate</B></A> subroutine.</P>
+
+<P><A NAME="E1D73A6188ceb"></A>Scaling and mirroring objects with the <A HREF="scale.html#A144X95a6"><B>scale</B></A> subroutine.</P>
+
+<P><A NAME="E1D73A6213ceb"></A>Translating a graphical primitive with the <A HREF="translate.html#A144X95c8"><B>translate</B></A> subroutine.</P>
+
+<P><A NAME="E1D73A6239ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="rmv.html">Previous</a>  |
+<a href="rotate.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

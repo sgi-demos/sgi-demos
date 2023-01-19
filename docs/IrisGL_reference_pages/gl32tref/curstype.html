@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>curstype Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="curson.html">Previous</a>  |
+<a href="curvebasis.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A150X93ee"></A>curstype Subroutine</H2>
+<A NAME="INDEX326" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX327" REL="I2" TITLE="cursor"></A>
+<A NAME="INDEX328" REL="I3" TITLE="curstype"></A>
+<A NAME="INDEX329" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX330" REL="I2" TITLE="cursor"></A>
+<A NAME="INDEX331" REL="I3" TITLE="defining type and size of"></A>
+<A NAME="INDEX332" REL="I1" TITLE="curstype subroutine (GL)"></A>
+
+<H3><A NAME="A150X93f0"></A>Purpose</H3>
+<P><A NAME="E1B084F170ceb"></A>Defines the type and size of the cursor.</P>
+
+<H3><A NAME="A78C1d2"></A>Libraries</H3>
+<P><A NAME="E1B084F317ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B084F420ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A150X93f3"></A>C Syntax</H3>
+<PRE><A NAME="A150X93f4"></A><B>void curstype(Int32 </B><A HREF="curstype.html#A150X93fd"><I>type</I></A><B>)</B></PRE>
+
+<H3><A NAME="A150X93cb"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A150X93ce"></A><B>SUBROUTINE CURSTY(</B><I>type</I><B>)</B>
+<B>INTEGER*4 </B><I>type</I></PRE>
+
+<H3><A NAME="A150X93f7"></A>Description</H3>
+<P><A NAME="E1B084F781ceb"></A>The <B>curstype</B> subroutine defines the type and size of the cursor. The system supports five cursor types:</P>
+
+<A NAME="A150X93f8"></A>
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD>Type</TD>
+
+<TD><B>Size</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>C16X1</TD>
+
+<TD>16x16 bit</TD>
+
+<TD>No more than one color (default)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>C16X2</TD>
+
+<TD>16x16 bit</TD>
+
+<TD>No more than three colors</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>C32X1</TD>
+
+<TD>32x32 bits</TD>
+
+<TD>No more than one color</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>C32X2</TD>
+
+<TD>32x32 bits</TD>
+
+<TD>No more than three colors</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>CCROSS</TD>
+
+<TD>Full window</TD>
+
+<TD>Cross-hair</TD></TR></TABLE>
+
+<P><A NAME="E1B084F967ceb"></A>After calling the <B>curstype</B> subroutine, call the <A HREF="defcursor.html#A150X9444"><B>defcursor</B></A> subroutine to assign a numeric value to the cursor and specify the cursor bitmap.</P>
+
+<P><A NAME="E1B0850084ceb"></A>The cross-hair cursor is formed with a horizontal line and a vertical line (each one pixel wide) that extend completely across the window. Its origin (15,15) is at the intersection of the two lines. It is a one-color cursor that uses color number one.</P>
+
+<H3><A NAME="A150X93fc"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A150X93fd"></A><I>type</I> </TD>
+<TD>  Specifies one of <A HREF="curstype.html#A150X93f8">five values</A> that describe the cursor. (The values are the same for both C and FORTRAN.)</TD></TR></TABLE>
+
+<H3><A NAME="A64C01656a"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0850350ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1d5"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1d6"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1d7"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A150X9410"></A>Related Information</H3>
+<P><A NAME="E1B0850669ceb"></A>Setting the origin of a cursor with the <A HREF="curorigin.html#A150X9398"><B>curorigin</B></A> subroutine.</P>
+
+<P><A NAME="E1B0850779ceb"></A>Controlling cursor visibility by window with the <A HREF="curson.html#ru1280nita"><B>curson</B> or <B>cursoff</B></A> subroutine.</P>
+
+<P><A NAME="E1B0850885ceb"></A>Defining a cursor with the <A HREF="defcursor.html#A150X9444"><B>defcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0850991ceb"></A>Setting the drawing mode to CURSORDRAW with the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine. </P>
+
+<P><A NAME="E1B0851099ceb"></A>Changing a color map entry with the <A HREF="mapcolor.html#A146X9535"><B>mapcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0851208ceb"></A>Setting the cursor characteristics with the <A HREF="setcursor.html#ZR1nita"><B>setcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0851316ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/cursorgl.html#cursorgl.html">Creating a Cursor</A>, and Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="curson.html">Previous</a>  |
+<a href="curvebasis.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>underlay Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="translate.html">Previous</a>  |
+<a href="unqdevice.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="Az5O370nita"></A>underlay Subroutine</H2>
+<A NAME="INDEX1941" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1942" REL="I2" TITLE="frame buffer configuration"></A>
+<A NAME="INDEX1943" REL="I3" TITLE="underlay"></A>
+<A NAME="INDEX1944" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1945" REL="I2" TITLE="underlay drawing"></A>
+<A NAME="INDEX1946" REL="I3" TITLE="setting bit planes for"></A>
+<A NAME="INDEX1947" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1948" REL="I2" TITLE="bitplanes"></A>
+<A NAME="INDEX1949" REL="I3" TITLE="setting number used for underlay drawing"></A>
+<A NAME="INDEX1950" REL="I1" TITLE="underlay subroutine (GL)"></A>
+<H3><A NAME="A213X912287"></A>Purpose</H3>
+<P><A NAME="E1D759A314ceb"></A>Sets the number of user-defined bitplanes used for underlay drawing.</P>
+
+<H3><A NAME="A78C11d2"></A>Libraries</H3>
+<P><A NAME="E1D759A354ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D759A378ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X91228a"></A>C Syntax</H3>
+<PRE><A NAME="A213X91228b"></A><B>void underlay(Int32 </B><A HREF="underlay.html#Wl8200marj"><I>planes</I></A><B>)</B></PRE>
+
+<H3><A NAME="A28C01071c"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C01071d"></A><B>SUBROUTINE UNDERL(</B><I>planes</I><B>)</B>
+<B>INTEGER*4 </B><I>planes</I></PRE>
+
+<H3><A NAME="A213X91228e"></A>Description</H3>
+<P><A NAME="E1D759A491ceb"></A>The <B>underlay</B> subroutine sets the number of user-defined bitplanes used for underlay colors to 0, 2, or 4, depending on the adapter. The underlay color appears whenever all the bits in the color bitplanes are 0 (zero). The system has either two or four bitplanes that can be allocated as either underlay or overlay. Call the <B>underlay</B> subroutine to set them as underlay bitplanes. </P>
+
+<P><A NAME="E1D759A526ceb"></A>The High-Performance 8-bit 3-D Color Graphics Processor can be configured with either 0 or 2 underlay planes. The 8-bit adapter has a total of 2 auxiliary planes, which can be configured into 2/0 or 0/2 overlay/underlay. For example, setting the number of underlay planes to 2 forces the number of overlay planes to 0.</P>
+
+<P><A NAME="E1D759A561ceb"></A>The High-Performance 24-bit 3-D Color Graphics Processor can be configured with either 0, 2, or 4 underlay planes. The 24-bit adapter has a total of 4 auxiliary planes, which can be configured into 4/0, 2/2, or 0/4 overlay/underlay. For example, setting the number of underlay planes to 4 forces the number of overlay planes to 0.</P>
+
+<P><A NAME="E1D759A587ceb"></A>Call the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine after the <B>underlay </B>subroutine to activate the underlay setting.</P>
+
+<P><A NAME="E1D759A612ceb"></A>When the 
+drawing mode
+ is UNDERDRAW, all drawing occurs in the underlay bitplanes. In UNDERDRAW mode, FLAT is the only available shading model.</P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A258C01c4f7"></A>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. (See <!--gl32prgd:--><A HREF="../gl32prgd/undergraphadapt.html#undergraphadapt.html">Understanding the Adapter</A>.)</LI>
+
+<LI><A NAME="A258C01c4f8"></A>This subroutine cannot be used to add to a
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912296"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Wl8200marj"></A><I>planes</I> </TD>
+<TD>  Specifies the number of bitplanes to use for underlay drawing.</TD></TR></TABLE>
+
+<H3><A NAME="A64C016554"></A>Implementation Specifics</H3>
+<P><A NAME="E1D759A746ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="A3CFD69F983janb"></A>Only the Color Graphics Processor has underlay planes.</P>
+
+<P><A NAME="A3CFD69F994janb"></A>The POWERgraphics GXT1000 does not support the <B>underlay</B> subroutine.</P>
+
+<H3><A NAME="A78C11d5"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11d6"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11d7"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X9122a4"></A>Related Information</H3>
+<P><A NAME="E1D759A844ceb"></A>Specifying the target frame buffer for drawing subroutines with the <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine.</P>
+
+<P><A NAME="E1D759A870ceb"></A>Reconfiguring the system with the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine.</P>
+
+<P><A NAME="E1D759A896ceb"></A>Setting the number of bitplanes used for overlay colors with the <A HREF="overlay.html#A143X950a"><B>overlay</B></A> subroutine.</P>
+
+<P><A NAME="E1D759A921ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/writemasks.html#writemasks.html">Writemasks and Logical Operations</A>.</P><hr><center>
+[  <a href="translate.html">Previous</a>  |
+<a href="unqdevice.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

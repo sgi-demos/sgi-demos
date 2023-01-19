@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>winset Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="winpush.html">Previous</a>  |
+<a href="wintitle.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="NY1320marj"></A>winset Subroutine</H2>
+<A NAME="INDEX2051" REL="I1" TITLE="winset subroutine (GL)"></A>
+<A NAME="INDEX2052" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2053" REL="I2" TITLE="window"></A>
+<A NAME="INDEX2054" REL="I3" TITLE="winset"></A>
+<A NAME="INDEX2055" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2056" REL="I2" TITLE="windows"></A>
+<A NAME="INDEX2057" REL="I3" TITLE="setting current"></A>
+
+<H3><A NAME="A213X912b04"></A>Purpose</H3>
+<P><A NAME="E1D766A792ceb"></A>Sets the current window.</P>
+
+<H3><A NAME="A79C1369"></A>Libraries</H3>
+<P><A NAME="E1D766A831ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D766A856ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912b07"></A>C Syntax</H3>
+<PRE><A NAME="A213X912b08"></A><B>void winset(Int32 </B><A HREF="winset.html#pqQ3260marj"><I>windowid</I></A><B>)</B></PRE>
+
+<H3><A NAME="A18C0dcfc"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A18C0dcfd"></A><B>SUBROUTINE WINSET(</B><I>windowid</I><B>)</B>
+<B>INTEGER*4 </B><I>windowid</I></PRE>
+
+<H3><A NAME="A213X912b0b"></A>Description</H3>
+<P><A NAME="E1D766A967ceb"></A>The <B>winset </B>subroutine takes the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A> associated with the <A HREF="winset.html#pqQ3260marj"><I>windowid</I></A> parameter and makes it the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A60P0189">current window</A>.</P>
+
+<P><A NAME="E1D766A993ceb"></A>All drawing (lines, polygons, and NURBS) is done in the current window. Lighting, depth-cueing, and z-buffering all apply to the current window. Every window has an independent set of stacks: matrix stack, name stack, attribute stack, and viewport stack, and all stack manipulation routines such as matrix multiplies are directed at the current window. </P>
+
+<P><A NAME="E1D766B019ceb"></A>The only attributes that are shared across windows are those defined with the <A HREF="defcursor.html#A150X9444"><B>defcursor</B></A>, <A HREF="deflinestyle.html#A143X9b1f"><B>deflinestyle</B></A>, <A HREF="defpattern.html#A143X9b41"><B>defpattern</B></A>, <A HREF="defrasterfont.html#A143X9d3f"><B>defrasterfont</B></A>, <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A>, <A HREF="loadXfont.html#vUO390nita"><B>loadXfont</B></A>, and <A HREF="makeobj.html#A142X912d"><B>makeobj</B></A> subroutines. </P>
+
+<P><A NAME="E1D766B045ceb"></A>The <B>winset </B>subroutine is the only subroutine that switches graphics servers.</P>
+
+<P><A NAME="E1D766B070ceb"></A>The <B>winset</B> subroutine does <I>not</I> raise the indicated window to the top position. Use the <A HREF="winpop.html#A142X9156b"><B>winpop</B></A> subroutine to raise a window to the top.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f49"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912b10"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="pqQ3260marj"></A><I>windowid</I></TD>
+<TD>  Specifies which window to set as current. </TD></TR></TABLE>
+
+<H3><A NAME="A61C0159e4"></A>Implementation Specifics</H3>
+<P><A NAME="E1D766B169ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C136c"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C136d"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C136e"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912b16"></A>Related Information</H3>
+<P><A NAME="E1D766B267ceb"></A>Returning the identifier of the current window with the <A HREF="winget.html#A142X91505"><B>winget</B></A> subroutine. </P>
+
+<P><A NAME="E1D766B292ceb"></A>Creating a new window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine.</P>
+
+<P><A NAME="E1D766B318ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="winpush.html">Previous</a>  |
+<a href="wintitle.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

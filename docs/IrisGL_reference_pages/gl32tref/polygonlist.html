@@ -1,0 +1,494 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>polygonlist or polylinelist Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="poly.html">Previous</a>  |
+<a href="popattributes.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="Xto2d0nita"></A>polygonlist or polylinelist Subroutine</H2>
+
+<H3><A NAME="A38F156c"></A>Purpose</H3>
+<P><A NAME="E1D71A2066ceb"></A>Draws multiple, disjointed polygons or polylines.</P>
+
+<H3><A NAME="A38F156e"></A>Libraries</H3>
+<P><A NAME="E1D71A2105ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D71A2130ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A38F1571"></A>C Syntax</H3>
+<PRE><A NAME="A38F1572"></A><B>void polygonlist(Int32 </B><I>num_polygons</I><B>, Int32 </B><I>type</I><B>, void *</B><I>se</I><B>)</B></PRE>
+<PRE><A NAME="A38F1573"></A><B>void polylinelist(Int32 </B><I>num_polylines</I><B>, Int32 </B><I>type</I><B>, void *</B><I>se</I><B>)</B></PRE>
+
+<H3><A NAME="A38F1574"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A38F1575"></A><B>SUBROUTINE POLYLI(</B><I>num_polygons</I><B>, </B><I>type</I><B>, </B><I>se</I><B>)</B>
+<B>INTEGER*4 </B><I>num_polygons</I><B>, </B><I>type</I><B>, </B><I>se</I><B>(</B><I>1</I><B>)</B></PRE>
+<PRE><A NAME="A38F1576"></A><B>SUBROUTINE  LINELI(</B><I>num_polylines</I><B>, </B><I>type</I><B>, </B><I>se</I><B>)</B>
+<B>INTEGER*4 </B><I>num_polylines</I><B>, </B><I>type</I><B>, </B><I>se</I><B>(</B><I>1</I><B>)</B></PRE>
+
+<H3><A NAME="A38F1577"></A>Description</H3>
+<P><A NAME="E1D71A2281ceb"></A>The <B>polygonlist</B> subroutine draws multiple, disjoint polygons.</P>
+
+<P><A NAME="E1D71A2307ceb"></A>The <B>polylinelist</B> subroutine draws multiple, disjoint polylines. Polylines can be lit and/or shaded; therefore, polylines may be specified with color and/or normal data.</P>
+
+<P><A NAME="E1D71A2333ceb"></A>If lighting is not enabled, all normal data is ignored. If no color data is supplied, the polygons or polylines are rendered with the current color. If lighting is enabled, color data is interpreted according to the current setting of the <B>lmcolor</B> attribute.</P>
+
+<OL><LI><A NAME="A38F157c"></A>The Supergraphics Processor Subsystem does not support lit and/or smooth-shaded polylines. It does support flat-shaded polylines.</LI>
+
+<LI><A NAME="A38F157d"></A>The Supergraphics Processor Subsystem does not support 4-dimensional data. It does support 2- and 3-dimensional data.</LI>
+
+<LI><A NAME="A3CFD0D0122janb"></A>These subroutines may not buy a performance improvement over begin-end style rendering on the POWERgraphics GXT1000. Begin-end style rendering has been highly optimized on the GXT1000.</LI></OL>
+
+<H3><A NAME="A38F157e"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A38F157f"></A><I>num_polygons</I></TD>
+<TD>  Specifies the number of polygons to be defined in the array pointed to by the <I>se</I> parameter in the <B>polygonlist</B> subroutine.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A38F1580"></A><I>num_polylines</I></TD>
+<TD>  Specifies the number of polylines to be defined in the array pointed to by the <I>se</I> parameter in the <B>polylinelist</B> subroutine.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A38F1581"></A><I>type</I></TD>
+<TD>  Specifies a bitflag indicating whether normals and/or colors are present in the data and whether the vertex data is 2-, 3-, or 4-dimensional. This bitflag is formed by using the bitwise OR operator to combine the following tokens:
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A38F1582"></A>SE_2D</TD>
+<TD>  Indicates that the vertex coordinates are 2-dimensional.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A38F1583"></A>SE_3D</TD>
+<TD>  Indicates that the vertex coordinates are 3-dimensional.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A38F1584"></A>SE_4D</TD>
+<TD>  Indicates that the vertex coordinates are 4-dimensional.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A38F1585"></A>SE_NORM</TD>
+<TD>  Indicates that normal data is present.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A38F1586"></A>SE_COLOR</TD>
+<TD>  Indicates that color index data is present.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A38F1587"></A>SE_RGB</TD>
+<TD>  Indicates that RGB data is present.</TD></TR></TABLE></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A38F1588"></A><I>se</I></TD>
+<TD>  Points to an array of mixed integer, binary, and floating point data. The array is a concatenation of a number of separate, disjoint polygons (polylines) as follows:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="3"><B>Polygons Data Structure</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Word</B></TD>
+
+<TD><B>Parameter</B></TD>
+
+<TD><B>Type</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0</TD>
+
+<TD>polygon (1)</TD>
+
+<TD>polygon format</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>.</TD>
+
+<TD>polygon (2)</TD>
+
+<TD>polygon format</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><BR></TD>
+
+<TD>...</TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>.</TD>
+
+<TD>polygon (n)</TD>
+
+<TD>polygon format</TD></TR></TABLE>
+
+
+
+
+<P><A NAME="A38F1589"></A>Each polygon consists of an integer indicating the number of vertices in that polygon, followed by vertex, normal, and color information. If the array is considered as a linear array of 32-bit words, the structure of the polygon data must be as follows:</P>
+
+
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="3"><B>Individual Polygon Data Structure</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Word</B></TD>
+
+<TD><B>Parameter</B></TD>
+
+<TD><B>Type</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>+0</TD>
+
+<TD>num verts</TD>
+
+<TD>signed 32-bit integer</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>+1</TD>
+
+<TD>vertex (1)</TD>
+
+<TD>vertex data</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>.</TD>
+
+<TD>vertex (2)</TD>
+
+<TD>vertex data</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><BR></TD>
+
+<TD>...</TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>.</TD>
+
+<TD>vertex (n)</TD>
+
+<TD>vertex data</TD></TR></TABLE>
+
+
+
+
+<P><A NAME="A38F158a"></A>Each vertex has one of a number of formats, depending on the setting of the flag word. The flag bits indicate whether a normal vector is or is not present, whether a color is or is not present, and whether the point data is 2-, 3-, or 4-dimensional. Therefore, the potential data for a vertex data structure is as follows:</P>
+
+
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Potential Vertex Data Structure</B></TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Word</B></TD>
+
+<TD><B>Parameter</B></TD>
+
+<TD><B>Type</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>+
+0</TD>
+
+<TD>x</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>+1</TD>
+
+<TD>y</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>+2 if 3D</TD>
+
+<TD>z</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>+3 if 4D</TD>
+
+<TD>w</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>2/3/4+0 if NORM</TD>
+
+<TD>nx</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>2/3/4+1 if NORM</TD>
+
+<TD>ny</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>2/3/4+2 if NORM</TD>
+
+<TD>nz</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>2...7+0 if CI</TD>
+
+<TD>color index</TD>
+
+<TD>IEEE integer</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>2...7+0 if RGB</TD>
+
+<TD>color r</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>2...7+1 if RGB</TD>
+
+<TD>color g</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>2...7+2 if RGB</TD>
+
+<TD>color b</TD>
+
+<TD>IEEE short Floating Point</TD></TR></TABLE>
+
+
+
+
+<P><A NAME="A38F158b"></A>More specifically, if there is no normal or color data, and the point contains only 2-dimensional data, a vertex data structure is no more than a pair of floating point numbers as follows:</P>
+
+
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>type = SE_2D</B></TD>
+
+<TD><BR></TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Word</B></TD>
+
+<TD><B>Parameter</B></TD>
+
+<TD><B>Type</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0</TD>
+
+<TD>x</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>1</TD>
+
+<TD>y</TD>
+
+<TD>IEEE short Floating Point</TD></TR></TABLE>
+
+
+
+
+<P><A NAME="A38F158c"></A>If  a normal vector is to be specified with 3-dimensional data, the vertex data structure would be as follows:</P>
+
+
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>type = SE_3D | SE_NORM</B></TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Word</B></TD>
+
+<TD><B>Parameter</B></TD>
+
+<TD><B>Type</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0</TD>
+
+<TD>x</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>1</TD>
+
+<TD>y</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>2</TD>
+
+<TD>z</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>3</TD>
+
+<TD>nx</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>4</TD>
+
+<TD>ny</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>5</TD>
+
+<TD>nz</TD>
+
+<TD>IEEE short Floating Point</TD></TR></TABLE>
+
+
+
+
+<P><A NAME="A38F158d"></A>A 4-dimensional vertex with color index data would have the following data structure:</P>
+
+
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>type = SE_4D | SE_COLOR</B></TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Word</B></TD>
+
+<TD><B>Parameter</B></TD>
+
+<TD><B>Type</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0</TD>
+
+<TD>x</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>1</TD>
+
+<TD>y</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>2</TD>
+
+<TD>z</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>3</TD>
+
+<TD>w</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>4</TD>
+
+<TD>color index</TD>
+
+<TD>32-bit integer</TD></TR></TABLE>
+
+
+
+
+<P><A NAME="A38F158e"></A>A 3-dimensional vertex with both normal and color data would have the following data structure:</P>
+
+
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>type = SE_3D | SE_NORM | SE_RGB</B></TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Word</B></TD>
+
+<TD><B>Parameter</B></TD>
+
+<TD><B>Type</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0</TD>
+
+<TD>x</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>1</TD>
+
+<TD>y</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>2</TD>
+
+<TD>z</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>3</TD>
+
+<TD>nx</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>4</TD>
+
+<TD>ny</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>5</TD>
+
+<TD>nz</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>6</TD>
+
+<TD>R</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>7</TD>
+
+<TD>G</TD>
+
+<TD>IEEE short Floating Point</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>8</TD>
+
+<TD>B</TD>
+
+<TD>IEEE short Floating Point</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A38F158f"></A>Implementation Specifics</H3>
+<P><A NAME="E1D71A2994ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A38F1591"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A38F1592"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A38F1593"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A38F1598"></A>Related Information</H3>
+<P><A NAME="E1D71A3090ceb"></A>Allowing the system to draw concave polygons with the <A HREF="concave.html#HXf320marj"><B>concave</B></A> subroutine.</P>
+
+<P><A NAME="E1D71A3116ceb"></A>Specifying the next point in a polygon with the <A HREF="pdr.html#bqf1c0marj"><B>pdr</B></A> subroutine.</P>
+
+<P><A NAME="E1D71A3141ceb"></A>Specifying the starting point for a polygon with the <A HREF="pmv.html#A139X91eed"><B>pmv</B></A> subroutine.</P>
+
+<P><A NAME="E1D71A3167ceb"></A>Drawing a relative polygon with the <A HREF="rpdr.html#hrfa0marj"><B>rpdr</B></A> subroutine.</P>
+
+<P><A NAME="E1D71A3192ceb"></A>Moving the current graphics position to a starting point for a filled polygon relative to the current point with the <A HREF="rpmv.html#lXf370marj"><B>rpmv</B></A> subroutine.</P>
+
+<P><A NAME="E1D71A3218ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, Creating <!--gl32prgd:--><A HREF="../gl32prgd/crlighteff.html#crlighteff.html">Lighting Effects</A>.</P>
+
+<P><A NAME="E1D71A3243ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</A>.</P><hr><center>
+[  <a href="poly.html">Previous</a>  |
+<a href="popattributes.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>patchprecision Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="patchcurves.html">Previous</a>  |
+<a href="pclos.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X961a"></A>patchprecision Subroutine</H2>
+<A NAME="INDEX1337" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1338" REL="I2" TITLE="wire frame curve and surface patch"></A>
+<A NAME="INDEX1339" REL="I3" TITLE="patchprecision"></A>
+<A NAME="INDEX1340" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1341" REL="I2" TITLE="surface patch, wire frame"></A>
+<A NAME="INDEX1342" REL="I3" TITLE="setting precision at which curves are drawn"></A>
+<A NAME="INDEX1343" REL="I1" TITLE="patchprecision subroutine (GL)"></A>
+
+<H3><A NAME="A143X961c"></A>Purpose</H3>
+<P><A NAME="E1D70DF398ceb"></A>Sets the precision at which curves are drawn in a patch.</P>
+
+<H3><A NAME="A78C112c"></A>Libraries</H3>
+<P><A NAME="E1D70DF437ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D70DF461ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9620"></A>C Syntax</H3>
+<PRE><A NAME="A143X9621"></A><B>void patchprecision(Int32 </B><A HREF="patchprecision.html#A143X9625"><I>usegments</I></A><B>, Int32</B> <A HREF="patchprecision.html#A143X9626"><I>vsegments</I></A><B>)</B></PRE>
+
+<H3><A NAME="A26C0fde9"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A26C0fdea"></A><B>PATCHP(</B><I>usegments</I><B>,</B> <I>vsegments</I><B>)</B>
+<B>INTEGER*4 </B><I>usegments</I><B>,</B> <I>vsegments</I></PRE>
+
+<H3><A NAME="A143X9622"></A>Description</H3>
+<P><A NAME="E1D70DF575ceb"></A>The <B>patchprecision</B> subroutine sets the precision with which the system draws curves to make up a wire frame 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06f7">patch</A>. Patch 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791b03">precisions</A> are similar to curve precisions; they specify the minimum number of line segments used to draw a patch. </P>
+
+<H3><A NAME="A143X9624"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9625"></A><I>usegments</I></TD>
+<TD>  Specifies the number of line segments used to draw a curve in the <I>u</I> direction. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9626"></A><I>vsegments</I></TD>
+<TD>  Specifies the number of line segments used to draw a curve in the <I>v</I> direction. </TD></TR></TABLE>
+
+<H3><A NAME="A30C010fd8"></A>Example</H3>
+<P><A NAME="E1D70DF671ceb"></A>The example C language program 
+<A HREF="patch1_c.html#A17C0daf"><B>patch1.c</B></A> calls the <B>patchprecision</B> subroutine to set the precision for drawing the curves that represent surface patches before calling the <A HREF="patch.html#A143X95b4"><B>patch</B></A> subroutine. </P>
+
+<H3><A NAME="A64C01659e"></A>Implementation Specifics</H3>
+<P><A NAME="E1D70DF714ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C112f"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1130"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1131"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X963a"></A>Related Information</H3>
+<P><A NAME="E1D70DF812ceb"></A>Setting the number of line segments that draw a curve segment with the <A HREF="curveprecision.html#aUS2120marj"><B>curveprecision</B></A> subroutine.</P>
+
+<P><A NAME="E1D70DF838ceb"></A>Drawing a surface patch with the <A HREF="patch.html#A143X95b4"><B>patch</B></A> subroutine.</P>
+
+<P><A NAME="E1D70DF863ceb"></A>Setting the current spline surface basis matrices with the <A HREF="patchbasis.html#A143X95d6"><B>patchbasis</B></A> subroutine.</P>
+
+<P><A NAME="E1D70DF888ceb"></A>Setting the number of curves used to represent a patch with the <A HREF="patchcurves.html#A143X95f8"><B>patchcurves</B></A> subroutine.</P>
+
+<P><A NAME="E1D70DF914ceb"></A>Drawing a rational surface patch with the <A HREF="rpatch.html#O5k2marj"><B>rpatch</B></A> subroutine.</P>
+
+<P><A NAME="E1D70DF939ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">NURBS Curves and Surfaces</A>, and Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#drawwfcvs.html">Wire Frame Curves and Surface Patches</A>.</P><hr><center>
+[  <a href="patchcurves.html">Previous</a>  |
+<a href="pclos.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

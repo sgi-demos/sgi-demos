@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>readpixels Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="rdr.html">Previous</a>  |
+<a href="readRGB.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X91059"></A>readpixels Subroutine</H2>
+<A NAME="INDEX1566" REL="I1" TITLE="readpixels subroutine (GL)"></A>
+<A NAME="INDEX1567" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1568" REL="I2" TITLE="pixel block transfer"></A>
+<A NAME="INDEX1569" REL="I3" TITLE="returning color map mode pixel values"></A>
+<A NAME="INDEX1570" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1571" REL="I2" TITLE="pixel block transfer"></A>
+<A NAME="INDEX1572" REL="I3" TITLE="readpixels"></A>
+
+<H3><A NAME="A142X9105b"></A>Purpose</H3>
+<P><A NAME="E1D72C7263ceb"></A>Returns values of specific pixels in color map mode.</P>
+
+<H3><A NAME="A79C1d0"></A>Libraries</H3>
+<P><A NAME="E1D72C7302ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D72C7327ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9105f"></A>C Syntax</H3>
+<PRE><A NAME="A142X91060"></A><B>Int32 readpixels(Int16 </B><A HREF="readpixels.html#A142X91064"><I>number</I></A><B>, Colorindex </B><A HREF="readpixels.html#A142X91065"><I>colors</I></A><B>[&nbsp;])</B></PRE>
+
+<H3><A NAME="A29C010b2a"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010b2b"></A><B>INTEGER*4 FUNCTION READPI(</B><I>number</I><B>,</B> <I>colors</I><B>)</B>
+<B>INTEGER*4 </B><I>number</I>
+<B>INTEGER*2 </B><I>colors</I><B>(</B><I>number</I><B>)</B></PRE>
+
+<H3><A NAME="A142X91061"></A>Description</H3>
+
+<P><A NAME="E1D72C7441ceb"></A>The <B>readpixels</B> subroutine returns values of specific pixels from the 
+frame buffer in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e3">color map mode</A>. 
+It reads them into the array starting from the 
+current character position along a single scan line (constant y) in the direction of increasing x. </P>
+
+<P><A NAME="E1D72C7467ceb"></A>The <A HREF="readpixels.html#A142X91064"><I>number</I></A> parameter returns the number of pixels read, which is the number requested if the starting point is a valid character position (inside the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A>.</P>
+
+<P><A NAME="E1D72C7493ceb"></A>The system must be in color map mode for the <B>readpixels</B> subroutine to function. Use the <A HREF="readRGB.html#A142X9107b"><B>readRGB</B></A> subroutine to read pixels in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>.</P>
+
+<P><A NAME="E1D72C7520ceb"></A>The <B>readpixels</B> subroutine returns zero if the starting point is not a valid character position. The values of pixels read outside the viewport or the screen are undefined. The subroutine updates the current character position to one pixel to the right of the last one read. The current character position is undefined if the new position is outside the viewport.</P>
+
+<P><A NAME="E1D72C7547ceb"></A>In 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0474">double buffer mode</A>, only the back buffer 
+is read by default. Use the <A HREF="readsource.html#A142X9cc0"><B>readsource</B></A> subroutine to specify 
+which buffer is read.</P>
+
+<P><A NAME="E1D72C7573ceb"></A>When the system is in SINGLEMAP mode, only the lowest 12 bits contain valid data, and the 4 upper bits of a color value (an element of the array in the <A HREF="readpixels.html#A142X91065"><I>colors</I></A> parameter) are undefined. When the system is in MULTIMAP mode, only the lowest 8 bits contain valid data, and the upper 8 bits of a color value are undefined.</P>
+
+<P><A NAME="E1D72C7599ceb"></A>The <A HREF="rectread.html#A142X9c7c"><B>rectread</B></A> subroutine provides significantly better performance for pixel block transfers. Even when only one row of pixels needs to be read, use the <B>rectread</B> subroutine. </P>
+
+<OL><LI><A NAME="A29C010b2c"></A>This subroutine is available only in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e3">color map mode</A>.</LI>
+
+<LI><A NAME="A318C9dc8"></A>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI>
+
+<LI><A NAME="A81C129"></A>The use of this subroutine is deprecated. Do not use the <B>readpixels </B>subroutine in new development.</LI></OL>
+
+<H3><A NAME="A142X91063"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X91064"></A><I>number</I></TD>
+<TD>  Specifies the number of pixels to be read by the function.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X91065"></A><I>colors</I> </TD>
+<TD>  Specifies the array in which the pixel values are to be stored.</TD></TR></TABLE>
+
+<H3><A NAME="A142X91067"></A>Return Value</H3>
+<P><A NAME="E1D72C7770ceb"></A>The number of pixels actually read. A returned function value of 0 (zero) indicates that the starting point is not a valid character position.</P>
+
+<H3><A NAME="A61C0159be"></A>Implementation Specifics</H3>
+<P><A NAME="E1D72C7815ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C1d3"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1d4"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1d5"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c661"></A>Related Information</H3>
+<P><A NAME="E1D72C7913ceb"></A>Returning the value of specific pixels in RGB mode with the <A HREF="readRGB.html#A142X9107b"><B>readRGB</B></A> subroutine.</P>
+
+<P><A NAME="E1D72C7938ceb"></A>Specifying the source for pixels to be read with the <A HREF="readsource.html#A142X9cc0"><B>readsource</B></A> subroutine.</P>
+
+<P><A NAME="E1D72C7965ceb"></A>Copying a rectangle of pixels with an optional zoom with the <A HREF="rectcopy.html#A142X9d04"><B>rectcopy</B></A> subroutine.</P>
+
+<P><A NAME="E1D72C7990ceb"></A>Reading a rectangular array of pixels into host memory with the <A HREF="rectread.html#A142X9c7c"><B>rectread</B></A> subroutine.</P>
+
+<P><A NAME="E1D72C8016ceb"></A>Drawing a rectangular array of pixels into the frame buffer with the <A HREF="rectwrite.html#A142X9c9e"><B>rectwrite</B></A> subroutine.</P>
+
+<P><A NAME="E1D72C8042ceb"></A>Painting a row of pixels on the screen in color map mode with the <A HREF="writepixels.html#A142X9e62"><B>writepixels</B></A> subroutine.</P>
+
+<P><A NAME="E1D72C8068ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Reading and Writing <!--gl32prgd:--><A HREF="../gl32prgd/rwpixels.html#rwpixels.html">Pixels</A>, 
+Using <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Viewports and Screenmasks</A>, 
+and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="rdr.html">Previous</a>  |
+<a href="readRGB.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

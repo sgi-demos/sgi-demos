@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>polarview Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="pntsmooth.html">Previous</a>  |
+<a href="polf.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X94fc"></A>polarview Subroutine</H2>
+<A NAME="INDEX1400" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1401" REL="I2" TITLE="coordinate transformation"></A>
+<A NAME="INDEX1402" REL="I3" TITLE="polarview"></A>
+<A NAME="INDEX1403" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1404" REL="I2" TITLE="viewer's position"></A>
+<A NAME="INDEX1405" REL="I3" TITLE="defining in polar coordinates"></A>
+<A NAME="INDEX1406" REL="I1" TITLE="polarview subroutine (GL)"></A>
+
+<H3><A NAME="A144X94fe"></A>Purpose</H3>
+<P><A NAME="E1D7174499ceb"></A>Defines the viewer's position in polar coordinates.</P>
+
+<H3><A NAME="A78C197"></A>Libraries</H3>
+<P><A NAME="E1D7174538ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7174563ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X9502"></A>C Syntax</H3>
+<PRE><A NAME="A213X9126d6"></A><B>void polarview</B>
+<B>(Coord </B><A HREF="polarview.html#JDN1d0marj"><I>distance</I></A><B>,</B>
+<B>Angle</B> <A HREF="polarview.html#iDN1250marj"><I>azimuth</I></A><B>,</B>
+<B>Angle</B> <A HREF="polarview.html#D1N1150marj"><I>incidence</I></A><B>,</B>
+<B>Angle </B><A HREF="polarview.html#H1N1290marj"><I>twist</I></A><B>)</B></PRE>
+
+<H3><A NAME="A15C0c6f1"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A15C0c6f2"></A><B>VOID POLARV(</B><I>distance</I><B>, </B><I>azimuth</I><B>, </B><I>incidence</I><B>, </B><I>twist</I><B>)</B>
+<B>REAL </B><I>distance</I>
+<B>INTEGER*4 </B><I>azimuth</I><B>, </B><I>incidence</I><B>, </B><I>twist</I></PRE>
+
+<H3><A NAME="A144X9504"></A>Description</H3>
+<P><A NAME="E1D7174676ceb"></A>The <B>polarview</B> subroutine defines the viewer's position in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06ff">polar coordinates</A>. Normally, the<B> polarview</B> subroutine is used to set up the mapping from world coordinates to eye coordinates (equivalently, to define the location of the viewer's eye in world coordinates). </P>
+
+<P><A NAME="E1D7174702ceb"></A>If the <B>polarview</B> subroutine is the first transformation subroutine called after projection matrix is set up and the matrix stack is initialized, it sets up such a mapping. The eye is located a distance, given in the <I>distance</I> parameter, from the world space origin. The line of sight extends from the eye through the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P03d">world space</A> origin (that is, the viewer is looking squarely upon the origin). The 
+incidence and azimuth are measured with respect to the world coordinate system.</P>
+
+<P><A NAME="E1D7174728ceb"></A>The <B>polarview</B> subroutine can also be used as a modeling transformation. Whether it behaves as a viewing transformation or a modeling transformation depends entirely on the order in which it is called with respect to the drawing subroutines.</P>
+
+<H3><A NAME="A144X9506"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="JDN1d0marj"></A><I>distance</I></TD>
+<TD>  Specifies the distance from the eye to the world space origin.  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="iDN1250marj"></A><I>azimuth</I></TD>
+<TD>  Specifies the azimuthal angle in the <I>x-y</I> plane, measured clockwise from the positive <I>y</I> axis. The angle must be specified as an integer, in tenths of a degree.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="D1N1150marj"></A><I>incidence</I></TD>
+<TD>  Specifies the angle of incidence in the <I>y-z</I> plane, measured from the <I>z</I> axis. The incidence angle is the angle of the line from origin to eye with respect to the <I>z</I> axis (the angle away from direct vertical, if you think of standing on the <I>x-y</I> plane. The angle must be specified as an integer, in tenths of a degree.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="H1N1290marj"></A><I>twist</I></TD>
+<TD>  Specifies the amount that the viewpoint is to be rotated around the line of sight using the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P11365">right-hand rule</A>. The angle must be specified as an integer, in tenths of a degree.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015d34"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7174865ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C19a"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C19b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C19c"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X951c"></A>Related Information</H3>
+<P><A NAME="E1D7174962ceb"></A>Defining a viewing transformation with the <A HREF="lookat.html#A144X9452"><B>lookat</B></A> subroutine.</P>
+
+<P><A NAME="E1D7174988ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="pntsmooth.html">Previous</a>  |
+<a href="polf.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

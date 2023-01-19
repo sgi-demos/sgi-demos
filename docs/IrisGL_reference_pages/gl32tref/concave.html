@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>concave Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="compactify.html">Previous</a>  |
+<a href="cpack.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="HXf320marj"></A>concave Subroutine</H2>
+<A NAME="INDEX277" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX278" REL="I2" TITLE="pipeline optionetting"></A>
+<A NAME="INDEX279" REL="I3" TITLE="concave"></A>
+<A NAME="INDEX280" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX281" REL="I2" TITLE="high-level drawing"></A>
+<A NAME="INDEX282" REL="I3" TITLE="concave"></A>
+<A NAME="INDEX283" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX284" REL="I2" TITLE="polygons"></A>
+<A NAME="INDEX285" REL="I3" TITLE="concave"></A>
+<A NAME="INDEX286" REL="I1" TITLE="concave subroutine (GL)"></A>
+<H3><A NAME="A213X912d20"></A>Purpose</H3>
+<P><A NAME="E1B078D129ceb"></A>Forces the system to draw accurate concave polygons.</P>
+
+<H3><A NAME="A78C126f"></A>Libraries</H3>
+<P><A NAME="E1B078D277ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B078D381ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912d23"></A>C Syntax</H3>
+<PRE><A NAME="A213X912d24"></A><B>void concave(Int32 </B><A HREF="concave.html#A213X912d2b"><I>bool</I></A><B>)</B></PRE>
+
+<H3><A NAME="A28C010763"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C010764"></A><B>SUBROUTINE CONCAV(</B><I>bool</I><B>)</B>
+<B>LOGICAL </B><I>bool</I></PRE>
+
+<H3><A NAME="A213X912d27"></A>Description</H3>
+<P><A NAME="E1B078D743ceb"></A>The <B>concave </B>subroutine forces the system to draw accurate 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A60P0188">concave polygons</A>. When the <A HREF="concave.html#A213X912d2b"><I>bool</I></A> parameter is True (1), the system draws accurate concave polygons. When the value of the <I>bool</I> parameter is False (0) (the default), the results of drawing a concave polygon are unpredictable.  </P>
+
+<P><A NAME="E1B078D852ceb"></A>The system draws polygons significantly faster if checking for concavity is turned off. Therefore, unless you specifically want to draw concave polygons, you should generally operate with the <I>bool</I> parameter set to False.</P>
+
+<H3><A NAME="A213X912d2a"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912d2b"></A><I>bool</I></TD>
+<TD>  Specifies a value for the state of concavity. The settings for the <I>bool</I> parameter are: 
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912d2c"></A>True</TD>
+<TD>  System draws accurate concave and convex polygons. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912d2d"></A>False</TD>
+<TD>  System draws only accurate convex polygons. This is the default. </TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A62C015ce0"></A>Implementation Specifics</H3>
+<P><A NAME="E1B078E231ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="A3CBD2DA177bolt"></A>On the POWERgraphics GXT1000, the value of the <B>concave</B> flag is ignored when drawing into the overlay planes. </P>
+
+<P><A NAME="A3CBD2DA281bolt"></A>If the <B>concave</B> flag has been set to TRUE, then the GXT1000 limits the number of vertices that can appear between a <B>bgnline</B> and <B>endline</B> pair to 255 vertices. Otherwise, an unlimited number of vertices can be specified.</P>
+
+<H3><A NAME="A78C1272"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1273"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1274"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912d3b"></A>Related Information</H3>
+<P><A NAME="E1B078E558ceb"></A>Drawing a vertex-based polygon with the <A HREF="bgnpolygon.html#A144X9672"><B>bgnpolygon</B></A> subroutine. </P>
+
+<P><A NAME="E1B078E665ceb"></A>Specifying the next point in a polygon with the <A HREF="pdr.html#bqf1c0marj"><B>pdr</B></A> subroutine.</P>
+
+<P><A NAME="E1B078E772ceb"></A>Specifying the starting point for a polygon with the <A HREF="pmv.html#A139X91eed"><B>pmv</B></A> subroutine.</P>
+
+<P><A NAME="E1B078E879ceb"></A>Drawing a filled polygon with the <A HREF="polf.html#Zsf1c0marj"><B>polf</B></A> subroutine.</P>
+
+<P><A NAME="E1B078E986ceb"></A>Drawing a polygon with the <A HREF="poly.html#avf2c0marj"><B>poly</B></A> subroutine.</P>
+
+<P><A NAME="E1B078F097ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglpipeops.html#setglpipeops.html">Setting Pipeline Options</A>, <!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</A>.</P><hr><center>
+[  <a href="compactify.html">Previous</a>  |
+<a href="cpack.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

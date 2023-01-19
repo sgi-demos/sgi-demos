@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>bgnsurface or endsurface Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="bgnpolygon.html">Previous</a>  |
+<a href="bgntmesh.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A251X9d7"></A>bgnsurface or endsurface Subroutine</H2>
+<A NAME="INDEX106" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX107" REL="I2" TITLE="NURBS curves and surfaces"></A>
+<A NAME="INDEX108" REL="I3" TITLE="endsurface"></A>
+<A NAME="INDEX109" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX110" REL="I2" TITLE="NURBS curves and surfaces"></A>
+<A NAME="INDEX111" REL="I3" TITLE="bgnsurface"></A>
+<A NAME="INDEX112" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX113" REL="I2" TITLE="surface (NURBS)"></A>
+<A NAME="INDEX114" REL="I3" TITLE="delimiting definition"></A>
+<A NAME="INDEX115" REL="I1" TITLE="endsurface subroutine (GL)"></A>
+<A NAME="INDEX116" REL="I1" TITLE="bgnsurface subroutine (GL)"></A>
+
+<H3><A NAME="A251X9d9"></A>Purpose</H3>
+<P><A NAME="E1B04DF900ceb"></A>Delimit a NURBS surface definition.</P>
+
+<H3><A NAME="A78C132f"></A>Libraries</H3>
+<P><A NAME="E1B04E0048ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B04E0152ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A251X9dc"></A>C Syntax</H3>
+<PRE><A NAME="A251X9dd"></A><B>void bgnsurface(&nbsp;)</B>
+<B>void endsurface(&nbsp;)</B></PRE>
+
+<H3><A NAME="A251X9b6"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A251X9b9"></A><B>SUBROUTINE BGNSUR</B>
+<B>SUBROUTINE ENDSUR</B></PRE>
+
+<H3><A NAME="A251X9e0"></A>Description</H3>
+<P><A NAME="E1B04E0519ceb"></A>The <B>bgnsurface </B>and <B>endsurface </B>subroutines mark the beginning and end, respectively, of a Non-Uniform Rational B-Spline (NURBS) surface definition. Between calls to these two subroutines, only those subroutines that define the surface and provide the trimming information can be invoked. They are: </P>
+
+<UL><LI><A NAME="A252X9838"></A><A HREF="bgntrim.html#A251X98d"><B>bgntrim</B></A></LI>
+
+<LI><A NAME="A252X9839"></A><A HREF="bgntrim.html#A251X98d"><B>endtrim</B></A></LI>
+
+<LI><A NAME="A252X983a"></A><A HREF="nurbscurve.html#A255X93ca"><B>nurbscurve</B></A></LI>
+
+<LI><A NAME="A252X983b"></A><A HREF="nurbssurface.html#A252X98b9"><B>nurbssurface</B></A></LI>
+
+<LI><A NAME="A252X983c"></A><A HREF="pwlcurve.html#A257X9fc"><B>pwlcurve</B></A></LI></UL>
+
+
+<P><A NAME="E1B04E0864ceb"></A>The NURBS surface definition must consist of exactly one call to the <A HREF="nurbssurface.html#A252X98b9"><B>nurbssurface</B></A> subroutine (to define the shape of the surface), followed by a list of zero or more 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P11542">trimming loop</A> definitions (to define the boundaries of the surface). Each trimming loop definition consists of one call to the <A HREF="bgntrim.html#A251X98d"><B>bgntrim</B></A> subroutine, one or more calls to the <A HREF="pwlcurve.html#A257X9fc"><B>pwlcurve</B></A> or <A HREF="nurbscurve.html#A255X93ca"><B>nurbscurve</B></A> subroutines, and one call to the <A HREF="bgntrim.html#A251X98d"><B>endtrim</B></A> subroutine.</P>
+
+<P><A NAME="E1B04E0973ceb"></A>The system renders a NURBS surface as a polygonal mesh, and calculates normal vectors at the corners of the polygons within the mesh. Therefore, your program should specify a lighting model if it uses NURBS surfaces; otherwise much surface information is lost. When using a lighting model, define or modify materials and their properties with the <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> and <A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> subroutines.</P>
+
+<P><A NAME="E1B04E1083ceb"></A>The following code fragment draws a NURBS surface trimmed by two closed loops. The first closed loop is a single 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#rEf3b0nita">piecewise linear curve</A> (defined by the <A HREF="pwlcurve.html#A257X9fc"><B>pwlcurve</B></A> subroutine), and the second loop consists of two NURBS curves joined end to end: </P>
+<PRE><A NAME="A251X9e5"></A>bgnsurface(...); 
+    nurbssurface(...);
+    bgntrim();
+        pwlcurve(...); 
+    endtrim();
+    bgntrim();
+        nurbscurve(...);
+        nurbscurve(...); 
+    endtrim(); 
+endsurface();</PRE>
+
+<H3><A NAME="A62C015d9c"></A>Implementation Specifics</H3>
+<P><A NAME="E1B04E1300ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1332"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1333"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1334"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A251X9ed"></A>Related Information</H3>
+<P><A NAME="E1B04E1620ceb"></A>Marking the beginning and end of a NURBS surface trimming loop with the <A HREF="bgntrim.html#A251X98d"><B>bgntrim</B> and <B>endtrim</B></A> subroutines. </P>
+
+<P><A NAME="E1B04E1727ceb"></A>Returning the current value of a trimmed NURBS surface display property with the <A HREF="getnurbsproperty.html#A252X986e"><B>getnurbsproperty</B></A> subroutine. </P>
+
+<P><A NAME="E1B04E1834ceb"></A>Controlling the shape of a NURBS trimming curve with the <A HREF="nurbscurve.html#A255X93ca"><B>nurbscurve</B></A> subroutine. </P>
+
+<P><A NAME="E1B04E1941ceb"></A>Controlling the shape of a NURBS surface with the <A HREF="nurbssurface.html#A252X98b9"><B>nurbssurface</B></A> subroutine. </P>
+
+<P><A NAME="E1B04E2050ceb"></A>Describing a piecewise linear trimming curve for NURBS surfaces with the <A HREF="pwlcurve.html#A257X9fc"><B>pwlcurve</B></A> subroutine. </P>
+
+<P><A NAME="E1B04E2157ceb"></A>Setting a property for the display of trimmed NURBS with the <A HREF="setnurbsproperty.html#A257X911b"><B>setnurbsproperty</B></A> subroutine. </P>
+
+<P><A NAME="E1B04E2265ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Creating <!--gl32prgd:--><A HREF="../gl32prgd/crlighteff.html#crlighteff.html">Lighting Effects</A>, and Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">NURBS Curves and Surfaces</A>.</P><hr><center>
+[  <a href="bgnpolygon.html">Previous</a>  |
+<a href="bgntmesh.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

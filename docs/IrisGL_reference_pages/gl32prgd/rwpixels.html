@@ -1,0 +1,680 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/rwpixels.html Mon, 24 Jan 2022 16:27:52 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Reading and Writing Pixels in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="drawpoly.html">Previous</a>  |
+<a href="textchars.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="rwpixels.html"></A>Reading and Writing Pixels</H2>
+
+
+<P><A NAME="INDEX227"></A><A NAME="INDEX228"></A><A NAME="INDEX229"></A><A NAME="INDEX230"></A><A NAME="INDEX231"></A><A NAME="INDEX232"></A><A NAME="INDEX233"></A><A NAME="INDEX234"></A><A NAME="INDEX235"></A></P>
+
+
+<P><A NAME="A3C0E52D739mhay"></A>Information in this section includes the
+following: </P>
+
+
+<UL><LI><A NAME="A52C0142c7"></A>Pixel <A HREF="rwpixels.html#A18C0dc63">Formats</A></LI>
+
+
+<LI><A NAME="A52C0142c8"></A>Efficient Pixel <A HREF="rwpixels.html#A18C0dc69">Reading
+and Writing</A></LI>
+
+
+<LI><A NAME="C4ED94E420lpas"></A><A HREF="rwpixels.html#A6DACA5410vbia">Reading
+and Writing to Overlay Planes</A></LI>
+
+
+<LI><A NAME="A52C0142c9"></A>Other Pixel <A HREF="rwpixels.html#A48C013776">Access</A>
+Subroutines</LI></UL>
+
+
+<P><A NAME="A3C0E52D767mhay"></A>A pixel is a rectangular picture element.
+The display screen is composed of an array of pixels. In a black-and-white
+system, pixels are turned on and off to form images. In a color system,
+each pixel has three components: red, green, and blue. The intensity of
+each component can be controlled. </P>
+
+
+<P><A NAME="A3C0E52D791mhay"></A>Pixels, like 
+<A HREF="specialterms.html#A26P073b">raster
+fonts</A>, are not as easy to transform as geometric figures. Coding for
+pixel representation on the screen often requires information about the
+window dimensions, the screen resolution, and so forth. </P>
+
+
+<P><A NAME="A3C0E52D815mhay"></A>Another problem with reading and writing
+pixels is that the contents of each pixel can mean different things depending
+on the display mode. The same physical <A HREF="specialterms.html#A3C0F2A3129mhay">bitplanes</A>
+are used to store either color index information or RGB information. Accordingly,
+the mode of the window determines whether the contents are interpreted
+as RGB triples or as indexes into the color map. </P>
+
+
+<P><A NAME="A3C0E52D838mhay"></A>The GL pixel-handling subroutines operate
+on arbitrarily sized rectangles, and they operate in all modes. </P>
+
+
+<H3><A NAME="A264X9329"></A>List of GL Pixel Block Transfer Subroutines<A NAME="INDEX236"></A>
+<A NAME="INDEX237"></A> <A NAME="INDEX238"></A> <A NAME="INDEX239"></A>
+<A NAME="INDEX240"></A> <A NAME="INDEX241"></A> </H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A58C0153cd"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/logicop.html#iM521a0marj">logicop</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies a logical operation for pixel writes.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A78C144a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/pixmode.html#bav30marj">pixmode</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Controls the operation of the <B>lrectread</B> and <B>lrectwrite</B>
+subroutines.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A38C012067"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/readpixels.html#A142X91059">readpixels</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns a row of specific pixels in color map mode. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A38C012068"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/readRGB.html#A142X9107b">readRGB</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns a row of specific pixels in RGB mode.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A38C012069"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/readsource.html#A142X9cc0">readsource</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies the source for pixels to be read.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A38C01206a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectcopy.html#A142X9d04">rectcopy</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Copies a rectangle of pixels screen to screen with optional zoom. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A38C01206b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c">rectread,
+lrectread</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Reads a rectangular array of pixels into host memory.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A38C01206c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectwrite.html#A142X9c9e">rectwrite,
+lrectwrite</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a rectangular array of pixels into the frame buffer. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A38C01206d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectzoom.html#A142X9d26">rectzoom</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies the zoom factor for rectangle copies and writes. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A38C01206e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/writepixels.html#A142X9e62">writepixels</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Paints a row of pixels on screen in color map mode.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A38C01206f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/writeRGB.html#A142X9ff2">writeRGB</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Paints a row of pixels on screen in RGB mode. </TD></TR></TABLE>
+
+
+<P> </P>
+
+
+<H3><A NAME="A18C0dc63"></A>Pixel Formats </H3>
+
+
+<P><A NAME="A3C0E52D876mhay"></A>The following three pixel formats constitute
+the standard GL pixel formats: </P>
+
+
+<UL><LI><A NAME="A18C0dc66"></A>Pixel data to be interpreted as red-green-blue-alpha
+packs 8 bits for each into a 32-bit word. Bits 0-7 represent red, bits
+8-15 represent green, bits 16-23 represent blue, and bits 24-31 represent
+alpha. For example, 0x01020304 corresponds to a pixel whose red, green,
+blue, and alpha values are 4, 3, 2, and 1, respectively. This is exactly
+the same format used by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/cpack.html#A143X9284">cpack</A></B>
+subroutine. See &quot;<A HREF="workcolor.html#workcolor.html">Working in Color
+Map and RGB Modes</A>&quot; for more information. 
+
+<BLOCKQUOTE><A NAME="A38C012066"></A><B>Note: </B>Alpha functions require specialized
+alpha hardware. The High-Performance 3-D Color Graphics Processor does
+not have alpha bitplanes. </BLOCKQUOTE></LI>
+
+
+<LI><A NAME="A18C0dc67"></A>Pixels interpreted as indexes into a single,
+4096-entry color map interpret the low-order 12 bits as the color index.
+The high-order 20 bits should be zero.</LI>
+
+
+<LI><A NAME="A18C0dc68"></A>Pixels that read or write the <A HREF="specialterms.html#A154P1160a">z
+buffer </A>directly. The <I>z</I> buffer contains 24 bits of data, stored
+as the low-order 24 bits of a 32-bit word. The top 8 bits should be zero.</LI></UL>
+
+
+<H3><A NAME="A18C0dc69"></A>Efficient Pixel Reading and Writing </H3>
+
+
+<P><A NAME="A3C0E52D907mhay"></A>This section describes subroutines that
+read and write pixels with the highest possible performance. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A19C0e0d2"></A><B>Note: </B>These subroutines do not check
+to make sure that the data is valid. If you read pixel data from a window
+in <A HREF="specialterms.html#A25P03e3">color map mode </A>and
+then write the data into an RGB window or into the <I>z</I> buffer, the
+data is interpreted according to the new mode. The results are unpredictable.</P></BLOCKQUOTE>
+
+
+<H4><A NAME="A258C01c1fe"></A>pixmode Subroutine </H4>
+
+
+<P><A NAME="A3C0E52D936mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pixmode.html#bav30marj">pixmode</A></B>
+subroutine controls the format in which pixmaps are transferred to and
+from the adapter. You can use the <B>pixmode</B> subroutine to specify
+the format of a pixmap as handled by your application. The <B>pixmode</B>
+subroutine performs the following functions: </P>
+
+
+<UL><LI><A NAME="A33D882446ttay"></A>Describes the format of a pixmap so that
+the hardware can operate with it.</LI>
+
+
+<LI><A NAME="A33D882624ttay"></A>Provides a device-independent interface
+to pixel block transfers (BLITs).</LI>
+
+
+<LI><A NAME="A33D882805ttay"></A>Allows the casual user to perform BLITs
+without having to understand the frame buffer organization in detail.</LI>
+
+
+<LI><A NAME="A33D882974ttay"></A>Provides convenience by understanding
+a large variety of pixmap formats.</LI>
+
+
+<LI><A NAME="A33D883149ttay"></A>Provides the most efficient interface
+to the hardware by minimizing unneccesary data copying. 
+
+<BLOCKQUOTE><A NAME="A33D883334ttay"></A><B>Note: </B>The <B>pixmap</B> subroutine
+is not intended to be an &quot;image processing function&quot; or to be
+used for pixmap format conversion. </BLOCKQUOTE></LI></UL>
+
+
+<P><A NAME="A3C0E52D966mhay"></A>After you specify the pixmap format, the
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c">lrectread</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectwrite.html#A142X9c9e">lrectwrite</A></B>
+subroutines automatically perform the transfer from this format to the
+internal format of the <A HREF="specialterms.html#A270A984a">frame
+buffer</A>.  The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c200"></A>void&nbsp;pixmode&nbsp;(Int32&nbsp;mode,&nbsp;Int32&nbsp;value)</PRE>
+
+
+<P><A NAME="A3C0E52D991mhay"></A>FASTMODE is useful when it is important
+to store and retrieve images quickly, and when the internal format of the
+image is not important. A compatible mode is supplied by setting FASTMODE
+to FALSE. Using FASTMODE on certain adapters, for example the Supergraphics
+Processor Subsystem, can result in significantly improved pixel transfer
+capabilities. </P>
+
+
+<H4><A NAME="A18C0dc6b"></A>rectread and lrectread Subroutines </H4>
+
+
+<P><A NAME="A3C0E52E017mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c">rectread</A></B>
+subroutine reads a rectangular array of pixels from the window where the
+<I>xll</I>,&nbsp;<I>yll</I> parameters are the coordinates for the lower-left
+corner of the rectangle and the <I>xur</I>,&nbsp;<I>yur</I> parameters
+are the coordinates for the upper-right corner. All coordinates are relative
+to the lower-left corner of the window in screen coordinates. The syntax
+is as follows: </P>
+
+
+<PRE><A NAME="A258C01c203"></A>Int32&nbsp;rectread(Screencoord&nbsp;xll,&nbsp;Screencoord&nbsp;yll,
+Screencoord&nbsp;xur,&nbsp;Screencoord&nbsp;xur,&nbsp;Int16&nbsp;*parray) </PRE>
+
+
+<P><A NAME="A3C0E52E043mhay"></A>The <I>parray</I> parameter is an array
+of 16-bit values. Only the low-order 16 bits of each pixel are read, so
+the <B>rectread </B>subroutine is useful primarily for windows drawn in
+color map mode. The data is loaded into the <I>parray</I> parameter left
+to right, and then bottom to top. In other words, if the pixel data on
+the screen looked like this: </P>
+
+
+<PRE><A NAME="A18C0dc6d"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;2&nbsp;&nbsp;3&nbsp;&nbsp;4</PRE>
+
+
+<PRE><A NAME="A18C0dc6e"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;6&nbsp;&nbsp;7&nbsp;&nbsp;8</PRE>
+
+
+<PRE><A NAME="A18C0dc6f"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9&nbsp;10&nbsp;11&nbsp;12</PRE>
+
+
+<P><A NAME="A3C0E52E070mhay"></A>The <I>parray</I> parameter would contain
+<TT>parray[0]&nbsp;=&nbsp;9,&nbsp;parray[1]&nbsp;=&nbsp;10</TT>, or <TT>{9,&nbsp;10,&nbsp;11,&nbsp;12,&nbsp;5,&nbsp;6,&nbsp;7,&nbsp;8,&nbsp;1,&nbsp;2,&nbsp;3,&nbsp;4}</TT>,
+and so forth. The <B>rectread</B> subroutine returns the number of pixels
+successfully read. Normally, this is defined as: </P>
+
+
+<PRE><A NAME="A18C0dc71"></A>(x2&nbsp;-&nbsp;x1&nbsp;+&nbsp;1)(y2&nbsp;-&nbsp;y1&nbsp;+&nbsp;1)</PRE>
+
+
+<P><A NAME="A3C0E52E097mhay"></A>If any part of the specified rectangle
+is off the screen, or if the coordinates are mixed up, the behavior of
+the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c">rectread</A></B>
+subroutine is undefined. </P>
+
+
+<P><A NAME="A3C0E52E121mhay"></A>Errors occur only outside the screen,
+not in the window. It is possible to read pixels outside a window, as long
+as they are on the physical screen. This can be useful for certain applications
+that magnify data in other windows or that process images produced by other
+programs. The main difficulty is that the data can come from areas of the
+screen that are in different modes (<A HREF="specialterms.html#A25P03e3">color
+map mode</A> or <A HREF="specialterms.html#A26P0743">RGB mode</A>).
+Because the <B>rectread</B> subroutine is not restricted to the current
+window, any or all of the coordinates can be negative. </P>
+
+
+<P><A NAME="A3C0E52E145mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c">lrectread</A></B>
+subroutine is very similar to the <B>rectread</B> subroutine. It differs
+in that its operation is controlled by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pixmode.html#bav30marj">pixmode</A></B>
+subroutine and that the <I>parray</I> parameter contains 32-bit quantities.
+Although the <B>lrectread</B> subroutine is useful for any kind of data,
+it wastes space if the data is known to be from a window in color map mode.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c205"></A>Int32&nbsp;lrectread(Screencoord&nbsp;xll,&nbsp;Screencoord&nbsp;yll,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Screencoord&nbsp;xur,&nbsp;Screencoord&nbsp;xur,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Int32&nbsp;*parray)</PRE>
+
+
+<H4><A NAME="A18C0dc75"></A>readsource Subroutine </H4>
+
+
+<P><A NAME="A3C0E52E172mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/readsource.html#A142X9cc0">readsource</A></B>
+subroutine determines the source of pixels read by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c">rectread</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c">lrectread</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectcopy.html#A142X9d04">rectcopy</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/readpixels.html#A142X91059">readpixels</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/readRGB.html#A142X9107b">readRGB</A></B>
+subroutines. The <I>source</I> parameter has four possible values defined
+in the <B>/usr/include/gl/gl.h</B> file. They are SRC_AUTO, SRC_FRONT,
+SRC_BACK, and SRC_ZBUFFER. </P>
+
+
+<P><A NAME="A3C0E52E196mhay"></A>The default value is SRC_AUTO, which selects
+the front buffer in <A HREF="specialterms.html#A27P01c">single
+buffer mode </A>and the back buffer in 
+<A HREF="specialterms.html#A26P0474">double
+buffer mode</A>. The SRC_FRONT value always reads from the 
+<A HREF="specialterms.html#A26P051c">front
+buffer</A> (this is always valid), and the SRC_BACK value always reads
+from the <A HREF="specialterms.html#A26P051c">back buffer </A>(valid
+only in double buffer mode). Finally, SRC_ZBUFFER reads 24-bit data from
+the <A HREF="specialterms.html#A154P1160a">z buffer</A>. The SRC_ZBUFFER
+value is valid in both single and double buffer modes. The syntax is as
+follows: </P>
+
+
+<PRE><A NAME="A258C01c207"></A>void&nbsp;readsource(Int32&nbsp;source)</PRE>
+
+
+<H4><A NAME="A18C0dc77"></A>rectwrite and lrectwrite Subroutines </H4>
+
+
+<P><A NAME="A3C0E52E224mhay"></A>The subroutines that draw rectangular
+arrays of pixels, <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectwrite.html#A142X9c9e">rectwrite</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectwrite.html#A142X9c9e">lrectwrite</A></B>,
+are similar to those that read pixels. The data in the <I>parray</I> parameter
+is 16-bit quantities for the <B>rectwrite</B> subroutine, and 32-bit quantities
+for the <B>lrectwrite</B> subroutine. The destination buffer is determined
+by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/frontbuffer.html#A145X9a0">frontbuffer</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/backbuffer.html#A145X94a">backbuffer</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/zdraw.html#A143X97f5">zdraw</A></B>
+subroutines (see <A HREF="animatescene.html#A300X9c17">&quot;Double and Single
+Buffering&quot;</A> and <A HREF="Z-Buffering.html">&quot;Z-Buffering&quot;</A>).
+The syntax for the <B>rectwrite</B> and <B>lrectwrite</B> subroutines is
+as follows: </P>
+
+
+<PRE><A NAME="A258C01c208"></A>Int32&nbsp;rectwrite(Screencoord&nbsp;xll,&nbsp;Screencoord&nbsp;yll,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Screencoord&nbsp;xur,&nbsp;Screencoord&nbsp;xur,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Int16&nbsp;*parray)</PRE>
+
+
+<PRE><A NAME="A258C01c209"></A>Int32&nbsp;lrectwrite(Screencoord&nbsp;xll,&nbsp;Screencoord&nbsp;yll,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Screencoord&nbsp;xur,&nbsp;Screencoord&nbsp;xur,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Int32&nbsp;*parray)</PRE>
+
+
+<P><A NAME="A3C0E52E250mhay"></A>Data is stored in the same order as in
+the <B>rectread</B> subroutine. In other words, if you call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c">rectread</A></B>
+subroutine and then the <B>rectwrite</B> (or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c">lrectread</A></B>
+followed by <B>lrectwrite</B>) subroutine with the same parameters, exactly
+the same data is written as is read. The <B>rectwrite</B> and <B>lrectwrite</B>
+subroutines obey the zoom factors set by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectzoom.html#A142X9d26">rectzoom</A></B>
+subroutine. </P>
+
+
+<H4><A NAME="A18C0dc79"></A>rectcopy Subroutine </H4>
+
+
+<P><A NAME="A3C0E52E277mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectcopy.html#A142X9d04">rectcopy</A></B>
+subroutine copies the pixels from a rectangular region of the screen to
+a new region. As was the case with the <!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c"><B>rectread</B>
+and <B>lrectread</B></A> subroutines, the source rectangle must be on the
+physical screen, but not necessarily constrained to the current window.
+The bitplane source for the pixels is determined by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/readsource.html#A142X9cc0">readsource</A></B>
+subroutine, and the destination is determined by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/frontbuffer.html#A145X9a0">frontbuffer</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/backbuffer.html#A145X94a">backbuffer</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/zdraw.html#A143X97f5">zdraw</A></B>
+subroutines (see <A HREF="animatescene.html#A300X9c17">&quot;Double and Single
+Buffering&quot;</A> and <A HREF="Z-Buffering.html">&quot;Z-Buffering&quot;</A>).
+Self-intersecting rectangles work correctly in all cases. The syntax is
+as follows: </P>
+
+
+<PRE><A NAME="A258C01c20b"></A>void&nbsp;rectcopy(Screencoord&nbsp;xll,&nbsp;Screencoord&nbsp;yll,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Screencoord&nbsp;xur,&nbsp;Screencoord&nbsp;xur,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Screencoord&nbsp;newx,&nbsp;Screencoord&nbsp;newy)</PRE>
+
+
+<H4><A NAME="A19C0e0d3"></A>rectzoom Subroutine </H4>
+
+
+<P><A NAME="A3C0E52E306mhay"></A>With the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectcopy.html#A142X9d04">rectcopy</A></B>
+subroutine, the source rectangle can be zoomed by independent amounts in
+both the <I>x</I> and <I>y</I> directions. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectzoom.html#A142X9d26">rectzoom</A></B>
+subroutine accomplishes this, where its <I>xfactor</I> and <I>yfactor</I>
+parameters are floating-point values defaulting to 1.0. The syntax is as
+follows: </P>
+
+
+<PRE><A NAME="A258C01c20c"></A>void&nbsp;rectzoom(Float32&nbsp;xfactor,&nbsp;Float32&nbsp;yfactor)</PRE>
+
+
+<P><A NAME="A3C0E52E331mhay"></A>The current system supports only integer
+values for the <I>xfactor</I> and <I>yfactor</I> parameters. If <TT>rectzoom(2.0,&nbsp;3.0)</TT>
+is called and the following rectangle is copied: </P>
+
+
+<PRE><A NAME="A18C0dc7c"></A>1&nbsp;&nbsp;2</PRE>
+
+
+<PRE><A NAME="A18C0dc7d"></A>3&nbsp;&nbsp;4</PRE>
+
+
+<P><A NAME="A3C0E52E356mhay"></A>the&nbsp;following&nbsp;copy&nbsp;is&nbsp;made:</P>
+
+
+<PRE><A NAME="A18C0dc7f"></A>1&nbsp;&nbsp;1&nbsp;&nbsp;2&nbsp;&nbsp;2</PRE>
+
+
+<PRE><A NAME="A18C0dc80"></A>1&nbsp;&nbsp;1&nbsp;&nbsp;2&nbsp;&nbsp;2</PRE>
+
+
+<PRE><A NAME="A18C0dc81"></A>1&nbsp;&nbsp;1&nbsp;&nbsp;2&nbsp;&nbsp;2</PRE>
+
+
+<PRE><A NAME="A18C0dc82"></A>3&nbsp;&nbsp;3&nbsp;&nbsp;4&nbsp;&nbsp;4</PRE>
+
+
+<PRE><A NAME="A18C0dc83"></A>3&nbsp;&nbsp;3&nbsp;&nbsp;4&nbsp;&nbsp;4</PRE>
+
+
+<PRE><A NAME="A18C0dc84"></A>3&nbsp;&nbsp;3&nbsp;&nbsp;4&nbsp;&nbsp;4</PRE>
+
+
+<P><A NAME="A3C0E52E386mhay"></A>The following program, <TT>zoom</TT>,
+magnifies the rectangular area above and to the right of the cursor to
+fill the window: </P>
+
+
+<PRE><A NAME="A258C01c20e"></A>#include&nbsp;&lt;gl/gl.h&gt;
+#include&nbsp;&lt;device.h&gt;</PRE>
+
+
+<PRE><A NAME="A258C01c20f"></A>main()
+{
+&nbsp;&nbsp;&nbsp;Int32&nbsp;xsize,&nbsp;ysize,&nbsp;readxsize,&nbsp;readysize,&nbsp;x,&nbsp;y;
+&nbsp;&nbsp;&nbsp;Int32&nbsp;xorg,&nbsp;yorg;</PRE>
+
+
+<PRE><A NAME="A258C01c210"></A>&nbsp;&nbsp;&nbsp;winopen(&quot;zoom&quot;);
+&nbsp;&nbsp;&nbsp;getsize(&amp;xsize,&nbsp;&amp;ysize);
+&nbsp;&nbsp;&nbsp;getorigin(&amp;xorg,&nbsp;&amp;yorg);
+&nbsp;&nbsp;&nbsp;readxsize&nbsp;=&nbsp;xsize/3;
+&nbsp;&nbsp;&nbsp;readysize&nbsp;=&nbsp;ysize/3;
+&nbsp;&nbsp;&nbsp;rectzoom(3.0,&nbsp;3.0);
+&nbsp;&nbsp;&nbsp;while&nbsp;(1)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;=&nbsp;getvaluator(MOUSEX);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y&nbsp;=&nbsp;getvaluator(MOUSEY);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rectcopy(x-xorg,y-yorg,x-xorg+readxsize,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y-yorg+readysize,0,0);
+&nbsp;&nbsp;&nbsp;}
+}</PRE>
+
+
+<P><A NAME="A3C0E52E412mhay"></A>After determining the size and shape of
+the window, the program simply loops, copying a properly sized rectangle
+above and to the right of the cursor into the window magnified by a factor
+of 3 in each direction. The expressions <TT>x-xorg</TT> and <TT>y-yorg</TT>
+convert the cursor's <A HREF="specialterms.html#A27P017">screen
+coordinates</A> into window coordinates. </P>
+
+
+<P><A NAME="A3C0E52E436mhay"></A>If you use the previous program as it
+is, note that regions of the screen drawn in 
+<A HREF="specialterms.html#A26P0743">RGB
+mode</A> appear incorrect, and color-mapped portions look fine. Also, notice
+that with <A HREF="animatescene.html#A300X9c17">double-buffered</A> programs,
+the zoom window appears to blink. This happens because the program is continually
+switching buffers, while zoom is always reading the same buffer. If you
+magnify the program's own window some fairly interesting effects can appear;
+that is, a sort of recursion takes place. These effects are enhanced if
+the zoom factor is set to (1.0,1.0). </P>
+
+
+<H3><A NAME="A6DACA5410vbia"></A>Reading and Writing to Overlay Planes</H3>
+
+
+<P><A NAME="A3C0E52E461mhay"></A>To read from the overlay planes, set the
+pixel source with readsource (SRC_OVER). The <B>rectread</B> subroutine
+returns one pixel per short word; the <B>lrectread</B> subroutine returns
+one pixel per long word. When reading, all other bits in the short or long
+word are set to zero. </P>
+
+
+<P><A NAME="A3C0E52E485mhay"></A>To write to the overlay planes, set drawmode
+(OVERDRAW), and then use the <B>rectwrite</B> or <B>lrectwrite</B> subroutine.
+Pixels must be specified one pixel per short word for the <B>rectwrite</B>
+subroutine and one pixel per long word for the <B>lrectwrite</B> subroutine.
+The pixel must lie in the lowest order bits of the short or long word.
+All other bits in the short or long word are ignored during a write. </P>
+
+
+<P><A NAME="A3C0E52E509mhay"></A>To copy from one location in the overlay
+planes to another, specify readsource (SRC_OVER) and drawmode (OVERDRAW),
+and then use the <B>rectcopy</B> subroutine. The <B>rectcopy</B> subroutine
+does not support pixel block copies from the main frame buffer to the overlays,
+or vice versa. To copy to or from the main frame buffer to or from the
+overlays, adjust the <B>readsource</B> subroutine, use either the <B>rectread</B>
+or <B>lrectread</B> subroutine, adjust the <B>drawmode</B> subroutine,
+and then use either the <B>lrectwrite</B> or <B>rectwrite</B> subroutine.</P>
+
+
+<P><A NAME="A3C0E52E532mhay"></A>The setting for pixmode (PM_SIZE) is ignored
+when performing transfers to or from the overlay planes. </P>
+
+
+<H3><A NAME="A48C013776"></A>Other Pixel Access Subroutines </H3>
+
+
+<P><A NAME="A3C0E52E557mhay"></A>The following GL subroutines provide other
+types of access to pixel blocks: </P>
+
+
+<H4><A NAME="nQA52c0marj"></A>readpixels Subroutine </H4>
+
+
+<P><A NAME="A3C0E52E583mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/readpixels.html#A142X91059">readpixels</A></B>
+subroutine returns values of specific pixels from the frame buffer in <A HREF="specialterms.html#A25P03e3">color
+map mode.</A> It reads them into the array starting from the current character
+position along a single scan line (constant <I>y</I>) in the direction
+of increasing <I>x</I>. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c212"></A>Int32&nbsp;readpixels(Int16&nbsp;number,&nbsp;Colorindex&nbsp;colors[])</PRE>
+
+
+<H4><A NAME="JAA560marj"></A>readRGB Subroutine </H4>
+
+
+<P><A NAME="A3C0E52E611mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/readRGB.html#A142X9107b">readRGB</A></B>
+subroutine attempts to read specific pixel values from the frame buffer
+in RGB mode. The returned value of this function is the number of pixels
+actually read. A returned function value of 0 (zero) indicates that the
+starting point is not a valid character position. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A48C013779"></A><B>Note: </B>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c">rectread</A></B>
+subroutine provides significantly better performance for pixel block transfers.
+Even when only one row of pixels needs to be read, use the <B>rectread</B>
+subroutine. Do not use the <B>readpixels</B> or <B>readRGB </B>subroutines
+in new development. </P></BLOCKQUOTE>
+
+
+<P><A NAME="A3C0E52E635mhay"></A>The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c213"></A>Int32&nbsp;readRGB(Int16&nbsp;number,&nbsp;RGBvalue&nbsp;red[],&nbsp;RGBvalue&nbsp;green[],&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RGBvalue&nbsp;blue[])</PRE>
+
+
+<H4><A NAME="ySB5360marj"></A>writepixels Subroutine </H4>
+
+
+<P><A NAME="A3C0E52E662mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/writepixels.html#A142X9e62">writepixels</A></B>
+subroutine paints a row of pixels on the screen in color map mode.The system
+reads elements from the <I>colors</I> array and draws a pixel of the appropriate
+color for each. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c214"></A>void&nbsp;writepixels(Int16&nbsp;number,&nbsp;Colorindex&nbsp;colors[])</PRE>
+
+
+<H4><A NAME="QTB5240marj"></A>writeRGB Subroutine </H4>
+
+
+<P><A NAME="A3C0E52E689mhay"></A>The <B>writeRGB</B> subroutine paints
+a row of pixels on the screen in RGB mode. The system reads elements from
+the <I>red</I>, <I>green</I>, and <I>blue</I> arrays and draws a pixel
+of the appropriate color for each. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A48C01377c"></A><B>Note: </B>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectwrite.html#A142X9c9e">rectwrite</A></B>
+subroutine provides significantly better performance for pixel block transfers.
+Even when only one row of pixels needs to be read, use the <B>rectwrite</B>
+subroutine. Do not use the <B>writepixels </B>subroutine in new development.</P></BLOCKQUOTE>
+
+
+<P><A NAME="A3C0E52E714mhay"></A>The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01c215"></A>void&nbsp;writeRGB(Int16&nbsp;number,&nbsp;RGBvalue&nbsp;red[],&nbsp;RGBvalue&nbsp;green[],&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RGBvalue&nbsp;blue[])</PRE>
+
+
+
+
+<P><A NAME="A3C0E52E738mhay"></A>Other topics affected by reading and writing
+pixels are &quot;Creating <A HREF="textchars.html#textchars.html">Text Characters&quot;</A>
+and &quot;Working in <A HREF="workcolor.html#workcolor.html">Color Map and RGB
+Modes&quot;</A>. </P>
+
+
+
+
+<hr><center>
+[  <a href="drawpoly.html">Previous</a>  |
+<a href="textchars.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/rwpixels.html Mon, 24 Jan 2022 16:27:52 GMT -->
+</HTML>
+

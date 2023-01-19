@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>winposition Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="winpop.html">Previous</a>  |
+<a href="winpush.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9158d"></A>winposition Subroutine</H2>
+<A NAME="INDEX2034" REL="I1" TITLE="winposition subroutine (GL)"></A>
+<A NAME="INDEX2035" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2036" REL="I2" TITLE="window"></A>
+<A NAME="INDEX2037" REL="I3" TITLE="winposition"></A>
+<A NAME="INDEX2038" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2039" REL="I2" TITLE="window sizes"></A>
+<A NAME="INDEX2040" REL="I3" TITLE="changing"></A>
+<A NAME="INDEX2041" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2042" REL="I2" TITLE="window locations"></A>
+<A NAME="INDEX2043" REL="I3" TITLE="changing"></A>
+
+<H3><A NAME="A142X9158f"></A>Purpose</H3>
+<P><A NAME="E1D764D523ceb"></A>Changes the size and position of the current window.</P>
+
+<H3><A NAME="A190C1152"></A>Libraries</H3>
+<P><A NAME="E1D764D562ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D764D586ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912ade"></A>C Syntax</H3>
+<PRE><A NAME="A213X912adf"></A><B>void winposition</B>
+<B>(Int32 </B><A HREF="winposition.html#A5XQ32e0marj"><I>x1</I></A><B>, Int32</B> <A HREF="winposition.html#kZQ33a0marj"><I>x2</I></A><B>,</B>
+<B>Int32</B> <A HREF="winposition.html#A3bQ33a0marj"><I>y1</I></A><B>, Int32</B> <A HREF="winposition.html#EbQ3260marj"><I>y2</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c2f"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c30"></A><B>SUBROUTINE WINPOS(</B><I>x1</I><B>, </B><I>x2</I><B>, </B><I>y1</I><B>, </B><I>y2</I><B>)</B>
+<B>INTEGER*4 </B><I>x1</I><B>, </B><I>x2</I><B>, </B><I>y1</I><B>, </B><I>y2</I><B>;</B></PRE>
+
+<H3><A NAME="A142X91595"></A>Description</H3>
+<P><A NAME="E1D764D700ceb"></A>The <B>winposition </B>subroutine repositions and resizes the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A60P0189">current window</A>. The window is positioned at the new location as soon as the system receives the <B>winposition</B> subroutine call; the reposition is not deferred to a later time. If no window is open, this subroutine has no effect.</P>
+
+<P><A NAME="E1D764D726ceb"></A>The <B>winposition</B> subroutine removes the current size constraint. After the <B>winposition</B> subroutine has been started, the user can interactively change the position and size of the window.</P>
+
+<P><A NAME="E1D764D751ceb"></A>The <B>winposition</B> subroutine does not remove the other window constraints, such as the minimum and maximum size constraints, the aspect ratio, or the stepunit.</P>
+
+<P><A NAME="E1D764D777ceb"></A>To keep the window size constrained, use the <B>prefposition</B> or the <B>prefsize</B> subroutines to move and resize a window.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f43"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X91597"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A5XQ32e0marj"></A><I>x1</I></TD>
+<TD>  Specifies the<I> x</I>-pixel screen coordinate of the first corner of the new location for the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A60P0189">current window</A>. The first corner is diagonally opposite the second corner.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="kZQ33a0marj"></A><I>x2</I></TD>
+<TD>  Specifies the <I>x</I><B>-</B>pixel screen coordinate of the second corner of the new location for the current window. The second corner is diagonally opposite the first corner.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3bQ33a0marj"></A><I>y1</I></TD>
+<TD>  Specifies the <I>y</I>-pixel screen coordinate of the first corner of the new location for the current window.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="EbQ3260marj"></A><I>y2</I></TD>
+<TD>  Specifies the <I>y</I>-pixel screen coordinate of the second corner of the new location for the current window.</TD></TR></TABLE>
+
+<H3><A NAME="A61C0159e0"></A>Implementation Specifics</H3>
+<P><A NAME="E1D764D945ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A190C1155"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A190C1156"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A190C1157"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X915ad"></A>Related Information</H3>
+<P><A NAME="E1D764E041ceb"></A>Constraining the window position and size with the <A HREF="prefposition.html#A142X9164f"><B>prefposition</B></A> subroutine.</P>
+
+<P><A NAME="E1D764E067ceb"></A>Constraining the window size with the <A HREF="prefsize.html#A142X91671"><B>prefsize</B></A> subroutine.</P>
+
+<P><A NAME="E1D764E095ceb"></A>Moving the current window by its lower-left corner with the <A HREF="winmove.html#A142X91527"><B>winmove</B></A> subroutine. </P>
+
+<P><A NAME="E1D764E121ceb"></A>Raising the current window on top of all other windows with the <A HREF="winpop.html#A142X9156b"><B>winpop</B></A> subroutine.</P>
+
+<P><A NAME="E1D764E146ceb"></A>Lowering the current window beneath all other windows with the <A HREF="winpush.html#A4X13320marj"><B>winpush</B></A> subroutine.</P>
+
+<P><A NAME="E1D764E172ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="winpop.html">Previous</a>  |
+<a href="winpush.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

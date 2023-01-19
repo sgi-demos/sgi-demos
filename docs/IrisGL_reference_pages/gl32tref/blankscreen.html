@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>blankscreen Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="bgntrim.html">Previous</a>  |
+<a href="blanktime.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X9128"></A>blankscreen Subroutine</H2>
+<A NAME="INDEX139" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX140" REL="I2" TITLE="window"></A>
+<A NAME="INDEX141" REL="I3" TITLE="blankscreen"></A>
+<A NAME="INDEX142" REL="I1" TITLE="blankscreen subroutine (GL)"></A>
+<A NAME="INDEX143" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX144" REL="I2" TITLE="windows"></A>
+<A NAME="INDEX145" REL="I3" TITLE="controlling screen refresh"></A>
+
+<H3><A NAME="A144X912a"></A>Purpose</H3>
+<P><A NAME="E1B0545571ceb"></A>Turns screen refresh on and off.</P>
+
+<H3><A NAME="A79C12ab"></A>Libraries</H3>
+<P><A NAME="E1B0545720ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0545823ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X912e"></A>C Syntax</H3>
+<PRE><A NAME="A144X911a"></A><B>void blankscreen(Int32</B> <A HREF="blankscreen.html#A144X9114"><I>bool</I></A><B>)</B></PRE>
+
+<H3><A NAME="A144X9118"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A17C0d9af"></A><B>SUBROUTINE BLANKS(</B><I>bool</I><B>)</B>
+<B>LOGICAL</B><I> bool</I></PRE>
+
+<H3><A NAME="A144X9130"></A>Description</H3>
+<P><A NAME="E1B0546189ceb"></A>The <B>blankscreen </B>subroutine turns screen refresh on and off. Normally, the screen is refreshed 60 times a second. If the screen is not regularly refreshed, it goes blank. The screen refresh is turned on or off immediately upon invocation of this subroutine.</P>
+
+<P><A NAME="E1B0546300ceb"></A>The action of this subroutine is not affected by the <A HREF="blanktime.html#A144X9178"><B>blanktime</B></A> subroutine. The <B>blankscreen</B> subroutine affects the entire screen, not just an individual window.</P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A79C12ae"></A>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI>
+
+<LI><A NAME="A79C12af"></A>This call is intended for use by a window manager. If a window manager is already running, it is possible that this call will be overridden by the window manager.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A144X9132"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A144X9114"></A><I>bool</I></TD>
+<TD>  Specifies a value for the screen display. The settings for the <I>bool</I> parameter are:</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X9124f8"></A></TD>
+<TD>  True = Display stops and screen turns black <I>immediately</I>. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X9124f9"></A></TD>
+<TD>  False = Display is restored.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015ca9"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0546834ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C12b0"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12b1"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12b2"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X9148"></A>Related Information</H3>
+<P><A NAME="E1B0547163ceb"></A>Setting the screen-blanking time out with the <A HREF="blanktime.html#A144X9178"><B>blanktime</B></A> subroutine.</P>
+
+<P><A NAME="E1B0547271ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Creating and Windows</A>, <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware Used by GL</A>, Understanding <!--gl32prgd:--><A HREF="../gl32prgd/underwininput.html#underwininput.html">Understanding Windows and Input Control</A>.</P><hr><center>
+[  <a href="bgntrim.html">Previous</a>  |
+<a href="blanktime.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

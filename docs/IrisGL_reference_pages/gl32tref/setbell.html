@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>setbell Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="scrmask.html">Previous</a>  |
+<a href="setcursor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A213X9114ae"></A>setbell Subroutine</H2>
+<A NAME="INDEX1758" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1759" REL="I2" TITLE="keyboard control"></A>
+<A NAME="INDEX1760" REL="I3" TITLE="setbell"></A>
+<A NAME="INDEX1761" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1762" REL="I2" TITLE="keyboard bell"></A>
+<A NAME="INDEX1763" REL="I3" TITLE="setting duration of"></A>
+<A NAME="INDEX1764" REL="I1" TITLE="setbell subroutine (GL)"></A>
+
+<H3><A NAME="A213X9114b0"></A>Purpose</H3>
+<P><A NAME="E1D7439863ceb"></A>Sets the duration of the keyboard bell sound.</P>
+
+<H3><A NAME="A78C12b7"></A>Libraries</H3>
+<P><A NAME="E1D7439902ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7439926ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X9114b3"></A>C Syntax</H3>
+<PRE><A NAME="A213X9114b4"></A><B>void setbell(Char8 </B><A HREF="setbell.html#A213X9114bc"><I>durat</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X91148c"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X91148f"></A><B>SUBROUTINE SETBEL(</B><I>durat</I><B>)</B>
+<B>CHARACTER*1 </B><I>durat</I></PRE>
+
+<H3><A NAME="A213X9114b7"></A>Description</H3>
+<P><A NAME="E1D743A038ceb"></A>The <B>setbell</B> subroutine sets the duration of the keyboard bell sound. The keyboard bell is activated by the <A HREF="ringbell.html#A213X911463"><B>ringbell</B></A> subroutine. Settings for the <A HREF="setbell.html#A213X9114bc"><I>durat</I></A> parameter are as follows:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Value</B> </TD>
+
+<TD><B>Meaning</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0</TD>
+
+<TD>Off</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>1 </TD>
+
+<TD>Short beep</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>2</TD>
+
+<TD>Long beep</TD></TR></TABLE>
+
+<BLOCKQUOTE><A NAME="A318C9e7f"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X9114bb"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X9114bc"></A><I>durat</I></TD>
+<TD>  Specifies the duration of the keyboard bell.</TD></TR></TABLE>
+
+<H3><A NAME="A30C01103e"></A>Example</H3>
+<P><A NAME="E1D743A150ceb"></A>The example C language program <A HREF="overlay_c.html#A11C0b47c"><B>ovrlay.c</B></A> uses the <B>setbell</B> subroutine to set the duration of the bell sound for a short beep. </P>
+
+<H3><A NAME="A62C015d5e"></A>Implementation Specifics</H3>
+<P><A NAME="E1D743A194ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C12ba"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12bb"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12bc"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X9114cf"></A>Related Information</H3>
+<P><A NAME="E1D743A291ceb"></A>Turning off the keyboard click with the <A HREF="clkoff.html#A213X9112de"><B>clkoff</B></A> subroutine.</P>
+
+<P><A NAME="E1D743A316ceb"></A>Turning on the keyboard click with the <A HREF="clkoff.html#A213X9112de"><B>clkon</B></A> subroutine.</P>
+
+<P><A NAME="E1D743A341ceb"></A>Turning on the keyboard display lights with the <A HREF="lampoff.html#A213X9113bc"><B>lampon</B></A> subroutine.</P>
+
+<P><A NAME="E1D743A367ceb"></A>Ringing the keyboard bell with the <A HREF="ringbell.html#A213X911463"><B>ringbell</B></A> subroutine.</P>
+
+<P><A NAME="E1D743A392ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and <!--gl32prgd:--><A HREF="../gl32prgd/keyboardgl.html#keyboardgl.html">Using the Keyboard</A>.</P><hr><center>
+[  <a href="scrmask.html">Previous</a>  |
+<a href="setcursor.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

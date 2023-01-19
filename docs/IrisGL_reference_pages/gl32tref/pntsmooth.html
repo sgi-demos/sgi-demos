@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>pntsmooth Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="pnt.html">Previous</a>  |
+<a href="polarview.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="W3o220marj"></A>pntsmooth Subroutine</H2>
+<A NAME="INDEX1393" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1394" REL="I2" TITLE="antialiasing"></A>
+<A NAME="INDEX1395" REL="I3" TITLE="pntsmooth"></A>
+<A NAME="INDEX1396" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1397" REL="I2" TITLE="antialiasing"></A>
+<A NAME="INDEX1398" REL="I3" TITLE="of points"></A>
+<A NAME="INDEX1399" REL="I1" TITLE="pntsmooth subroutine (GL)"></A>
+<H3><A NAME="A213X912a4b"></A>Purpose</H3>
+<P><A NAME="E1D7166629ceb"></A>Turns point antialiasing on and off.</P>
+
+<H3><A NAME="A77C144"></A>Libraries</H3>
+<P><A NAME="E1D7166668ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7166692ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912a4e"></A>C Syntax</H3>
+<PRE><A NAME="A213X912a4f"></A><B>void pntsmooth(Int32 </B><A HREF="pntsmooth.html#A213X912a59"><I>mode</I></A><B>&nbsp;)</B></PRE>
+
+<H3><A NAME="A213X912a28"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X912a2b"></A><B>SUBROUTINE PNTSMO(</B><I>mode</I><B>)</B>
+<B>INTEGER*4 </B><I>mode</I></PRE>
+
+<H3><A NAME="A213X912a52"></A>Description</H3>
+<P><A NAME="E1D7166804ceb"></A>The <B>pntsmooth</B> subroutine allows the drawing of antialiased points in color map and RGB modes. </P>
+
+<P><A NAME="E1D7166830ceb"></A>In RGB mode, the current color is blended with the contents of the frame buffer in a read-modify-write operation. That is, the new pixel color is a calculated blend of the old pixel color and the current color, based on the percentage of overlap of the point with the pixel.</P>
+
+<P><A NAME="E1D7166859ceb"></A>In color map mode, the low-order 4 bits of the current color index are replaced with a value representing the pixel coverage.  Therefore, a color ramp must be loaded, with the low-order 4 bits of the color ramp blending between the foreground and background colors.</P>
+
+<BLOCKQUOTE><A NAME="A176C1bf"></A><B>Note: </B>In order for antialiased lines and points to appear visually smooth, gamma correction MUST be performed. A gamma correction factor in the range of 2.4 to 2.7 is suggested. If gamma correction is not performed, lines do not appear smooth, but exhibit a <I>roping</I> or <I>braiding</I> effect, as if the line were composed of separate, intertwining strands. For more information on gamma-correcting antialiased lines, see <!--gl32prgd:--><A HREF="../gl32prgd/smjaglines.html#A8k32380nita">"Smoothing Jagged Lines with Antialiasing"</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912a58"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912a59"></A><I>mode</I></TD>
+<TD>  Sets point-drawing mode as follows:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Mode Constants</B></TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>SMP_ON</TD>
+
+<TD>SMPON</TD>
+
+<TD>Turns on point-antialiasing capabilities.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>SMP_OFF</TD>
+
+<TD>SMPOFF</TD>
+
+<TD>Turns off point-antialiasing capabilities.</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A62C015cb2"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7166979ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A107C1297"></A>The 3-D Color Graphics Processor supports antialiased points only in color map mode. On this adapter, the value <SAMP>0xf</SAMP> represents maximum pixel coverage, and <SAMP>0x0</SAMP> represents minimum pixel coverage.  That is, the following color ramp should be loaded:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>3-D Color Graphics Processor Color Ramp</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Low-Order </B><B>4 Bits</B></TD>
+
+<TD><B>Ramp</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0000</TD>
+
+<TD>(1/16) * foreground color + (15/16) * background color</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0001</TD>
+
+<TD>(2/16) * foreground color + (14/16) * background color</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>0010</TD>
+
+<TD>(3/16) * foreground color + (13/16) * background color</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD> . . . . </TD>
+
+<TD> . . . . . </TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>1111</TD>
+
+<TD>(16/16) * foreground color + (0/16) * background color</TD></TR></TABLE>
+
+
+<PRE><A NAME="A107C1298"></A>For the 3-D Color Graphics Processor, the appearance of the intersections of color-index-mode antialiased lines and points can be significantly improved by setting the value of the  <A HREF="zsource.html#A143X96d6"><B>zsource</B></A> subroutine to ZSRC_COLOR and the value of the <A HREF="zfunction.html#A22f0MARJ"><B>zfunction</B></A> subroutine to ZF_GREATER. Refer to the subsection on <!--gl32prgd:--><A HREF="../gl32prgd/smjaglines.html#A8k32380nita">improving intersections</A> within <!--gl32prgd:--><A HREF="../gl32prgd/smjaglines.html#A8k32380nita">"Smoothing Jagged Lines with Antialiasing"</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I> for more details.</PRE></LI>
+
+<LI><A NAME="A107C1299"></A>The Supergraphics Processor supports antialiased points in RGB mode only.</LI>
+
+<LI><A NAME="A318C9ca5"></A>The POWER Gt4 and POWER Gt4x adapters do not support antialiased point rendering.</LI>
+
+<LI><A NAME="A3CFCFE6087janb"></A>When anti-aliased lines and points are drawn in RGB mode, a coverage factor (alpha value) for pixels on and near the anti-aliased objects is computed. This coverage factor is used to blend the color of the anti-aliased point or line with the contents of the frame buffer. The way in which the blending occurs is controlled by the <B>blendfunction</B> subroutine. When rendering anti-aliased objects in RGB mode, set the <B>blendfunction</B> to an appropriate value.</LI>
+
+<LI><A NAME="A3CFCFE6107janb"></A>The POWERgraphics GXT1000 supports anti-aliased point rendering in both color-index and RGB rendering modes.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912a68"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C147"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C148"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c36c"></A>Related Information</H3>
+<P><A NAME="E1D7167207ceb"></A>Drawing vertex-based points with the <A HREF="bgnpoint.html#A144X9650"><B>bgnpoint</B></A> subroutine.  </P>
+
+<P><A NAME="E1D7167233ceb"></A>Specifying the alpha blending ratio with the <A HREF="blendfunction.html#A143X9240"><B>blendfunction</B></A> subroutine.</P>
+
+<P><A NAME="E1D7167261ceb"></A>Ending a series of vertex-based points with the <A HREF="bgnpoint.html#A144X9650"><B>endpoint</B></A> subroutine.</P>
+
+<P><A NAME="E1D7167287ceb"></A>Drawing a point with the <A HREF="pnt.html#Ptf3a0marj"><B>pnt</B></A> subroutine.  </P>
+
+<P><A NAME="E1D7167313ceb"></A>Controlling the placement of point, line, and polygon vertices with the <A HREF="subpixel.html#jIZ1120marj"><B>subpixel</B></A> subroutine.</P>
+
+<P><A NAME="E1D7167339ceb"></A>Transferring a vertex to the graphics pipe with the <A HREF="v.html#A144X97a4"><B>v</B></A> subroutine.</P>
+
+<P><A NAME="E1D7167365ceb"></A>Smoothing Jagged Lines with <!--gl32prgd:--><A HREF="../gl32prgd/smjaglines.html#smjaglines.html">Antialiasing</A>, Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A>, Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>, 
+Performing <!--gl32prgd:--><A HREF="../gl32prgd/depth-cueing.html">Depth-Cueing</A>, Reading and Writing <!--gl32prgd:--><A HREF="../gl32prgd/rwpixels.html#rwpixels.html">Pixels</A>.</P><hr><center>
+[  <a href="pnt.html">Previous</a>  |
+<a href="polarview.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

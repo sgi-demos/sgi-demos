@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>zbuffer Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="writeRGB.html">Previous</a>  |
+<a href="zclear.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X97b1"></A>zbuffer Subroutine</H2>
+<A NAME="INDEX2097" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2098" REL="I2" TITLE="frame buffer configuration"></A>
+<A NAME="INDEX2099" REL="I3" TITLE="zbuffer"></A>
+<A NAME="INDEX2100" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2101" REL="I2" TITLE="hidden surface"></A>
+<A NAME="INDEX2102" REL="I3" TITLE="zbuffer"></A>
+<A NAME="INDEX2103" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2104" REL="I2" TITLE="z buffer"></A>
+<A NAME="INDEX2105" REL="I3" TITLE="enabling or disabling"></A>
+<A NAME="INDEX2106" REL="I1" TITLE="zbuffer subroutine (GL)"></A>
+
+<H3><A NAME="A143X97b3"></A>Purpose</H3>
+<P><A NAME="E1D76D9024ceb"></A>Enables or disables the z-buffer for storing depth information.</P>
+
+<H3><A NAME="A78C122d"></A>Libraries</H3>
+<P><A NAME="E1D76D9064ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D76D9088ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X97b7"></A>C Syntax</H3>
+<PRE><A NAME="A143X97b8"></A><B>void zbuffer(Int32 </B><A HREF="zbuffer.html#A143X97bc"><I>bool</I></A><B>&nbsp;)</B></PRE>
+
+<H3><A NAME="A28C010786"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C010787"></A><B>SUBROUTINE ZBUFFE(</B><I>bool</I><B>)</B>
+<B>LOGICAL </B><I>bool</I></PRE>
+
+<H3><A NAME="A143X97b9"></A>Description</H3>
+<P><A NAME="E1D76D9200ceb"></A>The <B>zbuffer</B> subroutine enables or disables the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P1160a">z-buffer</A> for storing depth information. Each pixel has an associated <I>z</I> value. To draw a pixel, the system compares the new <I>z</I> value with the existing one. If the new value is less than or equal to the existing value, the <B>zbuffer</B> subroutine stores a new color and <I>z</I> value in the bitplanes.</P>
+
+<P><A NAME="E1D76D9228ceb"></A>Drawing to the z-buffer with the <A HREF="zdraw.html#A143X97f5"><B>zdraw</B></A> subroutine must be disabled in order for the z-buffer to be enabled.</P>
+
+<H3><A NAME="A143X97bb"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X97bc"></A><I>bool</I> </TD>
+<TD>  Specifies a value for the state of drawing to the z-buffer. The settings for the <I>bool</I> parameter are:</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A258C01c527"></A></TD>
+<TD>  True = drawing to the 
+z-buffer
+ is enabled.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A258C01c528"></A></TD>
+<TD>  False = drawing to the z-buffer is disabled.</TD></TR></TABLE>
+
+<H3><A NAME="A143X97c1"></A>Example</H3>
+<P><A NAME="E1D76D9350ceb"></A>The example C language programs <A HREF="zbuffer1_c.html#A16C0ca2c"><B>zbuffer1.c</B></A> and <A HREF="zbuffer2_c.html#MYO10nita"><B>zbuffer2.c</B></A> enable z-buffering with the <B>zbuffer</B> subroutine to disable the display of hidden surfaces.</P>
+
+<H3><A NAME="A64C0165e2"></A>Implementation Specifics</H3>
+<P><A NAME="E1D76D9394ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1D76D9420ceb"></A>The POWER Gt4,
+and 
+POWER Gt4x, and POWER GXT1000
+ adapters do not support hidden-line and hidden-surface removal when rendering into the overlay planes. The z-buffer is automatically disabled when drawmode (OVERDRAW) is specified. The z-buffer is automatically enabled when drawmode (NORMALDRAW) is specified.</P>
+
+<H3><A NAME="A78C1231"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1232"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1233"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X97d1"></A>Related Information</H3>
+<P><A NAME="E1D76D9520ceb"></A>Determining whether z-buffering is on or off with the <A HREF="getzbuffer.html#A9SR350marj"><B>getzbuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1D76D9546ceb"></A>Setting a depth range with the <A HREF="lsetdepth.html#naR120marj"><B>lsetdepth</B></A> subroutine.</P>
+
+<P><A NAME="E1D76D9574ceb"></A>Clearing the z-buffer with the <A HREF="zclear.html#A143X97d3"><B>zclear</B></A> subroutine.</P>
+
+<P><A NAME="E1D76D9603ceb"></A>Enabling drawing to the z-buffer with the <A HREF="zdraw.html#A143X97f5"><B>zdraw</B></A> subroutine.</P>
+
+<P><A NAME="E1D76D9628ceb"></A>Specifying the function used for depth comparison with the <A HREF="zfunction.html#A22f0MARJ"><B>zfunction</B></A> subroutine.</P>
+
+<P><A NAME="E1D76D9654ceb"></A>Selecting depth or color as the source for <I>z</I> comparisons with the <A HREF="zsource.html#A143X96d6"><B>zsource</B></A> subroutine.</P>
+
+<P><A NAME="E1D76D9682ceb"></A>Specifying which bits of the z-buffer are written during normal z-buffer operation with the <A HREF="zwritemask.html#A143X9817"><B>zwritemask</B></A> subroutine.</P>
+
+<P><A NAME="E1D76D9708ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>, and Removing <!--gl32prgd:--><A HREF="../gl32prgd/remhidden.html#remhidden.html">Hidden Surfaces</A>.</P><hr><center>
+[  <a href="writeRGB.html">Previous</a>  |
+<a href="zclear.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

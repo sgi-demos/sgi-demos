@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>winpop Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="winopen.html">Previous</a>  |
+<a href="winposition.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X9156b"></A>winpop Subroutine</H2>
+<A NAME="INDEX2027" REL="I1" TITLE="winpop subroutine (GL)"></A>
+<A NAME="INDEX2028" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2029" REL="I2" TITLE="window"></A>
+<A NAME="INDEX2030" REL="I3" TITLE="winpop"></A>
+<A NAME="INDEX2031" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2032" REL="I2" TITLE="window"></A>
+<A NAME="INDEX2033" REL="I3" TITLE="raising to top"></A>
+<H3><A NAME="A142X9156d"></A>Purpose</H3>
+<P><A NAME="E1D763E881ceb"></A>Raises the current window on top of all other windows.</P>
+
+<BLOCKQUOTE><A NAME="A3CFD7A6214janb"></A><B>Note: </B>The GL window management routines are built on top the X11 Window System library. Because X11 is asynchronous in nature, there is no guarantee that windowing commands and drawing commands will be performed in the order issued. In particular, do <I>not</I> assume that the current window will be on top when the <B>winpop</B> subroutine returns (it will be moved to the top eventually but asynchronously from the subroutine call). When using the <B>winpop()</B> subroutine, wait for a REDRAW event for the associated window before drawing into it. Otherwise, early drawing (drawing before the window has been moved to the top) will be clipped to the old window boundaries. </BLOCKQUOTE>
+
+
+<P>Use the <B>gflush()</B> subroutine to ensure drawing is complete. Unless this is done, window pushes and pops may be scheduled and completed before drawing is complete. </P>
+
+<H3><A NAME="A79C1357"></A>Libraries</H3>
+<P><A NAME="E1D763E920ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D763E944ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X91571"></A>C Syntax</H3>
+<PRE><A NAME="A213X912ad7"></A><B>void winpop(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010c2d"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c2e"></A><B>SUBROUTINE WINPOP</B></PRE>
+
+<H3><A NAME="A142X91573"></A>Description</H3>
+<P><A NAME="E1D763F052ceb"></A>The <B>winpop </B>subroutine raises the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A60P0189">current window</A> from anywhere in the stack of windows to the top position. </P>
+
+<BLOCKQUOTE><A NAME="A318C9f41"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A61C0159de"></A>Implementation Specifics</H3>
+<P><A NAME="E1D763F114ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C135a"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C135b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A190C1151"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A142X9158b"></A>Related Information</H3>
+<P><A NAME="E1D763F211ceb"></A>Lowering the current window beneath all other windows with the <A HREF="winpush.html#A4X13320marj"><B>winpush</B></A> subroutine. </P>
+
+<P><A NAME="E1D763F237ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="winopen.html">Previous</a>  |
+<a href="winposition.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

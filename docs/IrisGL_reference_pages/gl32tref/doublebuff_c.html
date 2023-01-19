@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>doublebuff.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="../gl32tref/doily_c.html">Previous</a>  |
+<a href="draw_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c8ee"></A>doublebuff.c Example C Language Program
+</H2>
+<A NAME="INDEX2278" REL="I1" TITLE="doublebuff.c example program (GL)"></A>
+<A NAME="INDEX2279" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2280" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2281" REL="I3" TITLE="frame buffer"></A>
+<A NAME="INDEX2282" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2283" REL="I2" TITLE="frame buffer"></A>
+<A NAME="INDEX2284" REL="I3" TITLE="animation"></A>
+<A NAME="INDEX2285" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2286" REL="I2" TITLE="double buffering"></A>
+<A NAME="INDEX2287" REL="I3" TITLE="animation"></A>
+<PRE><A NAME="A64EA26071ttay"></A>/* doublebuff.c:
+ *
+ * This program demonstrates double buffering.
+ * Double buffering is a method for providing smooth,
+ * flicker free animation of moving images. This example
+ * draws two wireframe" cubes, one inside the other.
+ * The cubes are connected to the mouse, and move as the
+ * mouse is moved. Notice how the cubes move smoothly as
+ * the mouse is moved.
+ *
+ * Holding down the shift key puts the system into 
+ * singlebuffer mode. Notice how the image flickers.
+ * This flickering occurs because you are watching the
+ * window being cleared and the cube being redrawn.
+ * Letting go of the shift key puts the system back into
+ * doublebuffer mode. The motion is smooth because all
+ * drawing is occurring in the back buffer, which is 
+ * invisible. When the drawing is completed, the front
+ * and back buffers are * exchanged.
+ */</PRE>
+<PRE><A NAME="A64EA26229ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EA26387ttay"></A>#define DOUBLE_BUFFER 1
+#define SINGLE_BUFFER 0</PRE>
+<PRE><A NAME="A64EA26680ttay"></A>int buffer_mode=DOUBLE_BUFFER;         /* DOUBLE_BUFFER=doublebuffer, * 1=singlebuffer */
+main()
+{
+  int x, y;                /*  current position of object */
+  Device dev;
+  short val;
+  long event=0;
+  x = 0;
+  y = 0;
+  initialize();
+  while(TRUE) {
+    if (qtest())           /*If there are any events in the queue*/
+      dev = qread(&amp;val);   /*Read the queue*/
+      /*This allows the program always move the cube*/</PRE>
+<PRE><A NAME="A64EA27108ttay"></A>    switch(dev) {
+    case ESCKEY:           /*  exit program with ESC */
+      gexit();
+      exit(0);
+      break;
+    case REDRAW:           /* window was exposed. Redraw it. */
+      reshapeviewport();
+      drawcube(x,y);
+      break; 
+    case LEFTMOUSE:        /* LEFTMOUSE turns on double buffer*/
+      if (buffer_mode == SINGLE_BUFFER){
+        buffer_mode = DOUBLE_BUFFER;
+        doublebuffer();    /* put system in doublebuffer mode */
+        gconfig();
+      }
+      break;
+    case RIGHTMOUSE:       /* RIGHTMOUSE turns on single buffer*/
+      if (buffer_mode == DOUBLE_BUFFER) {
+        buffer_mode = SINGLE_BUFFER;
+        singlebuffer();    /* put system in singlebuffer mode */
+        gconfig();
+      }
+      break;
+    }                      /*End of the switch statement*/</PRE>
+<PRE><A NAME="A64EA27303ttay"></A>    y = getvaluator(MOUSEX); /*read the x,y value of the mouse*/
+    x = getvaluator(MOUSEY); /*works outside of the window*/
+    drawcube(x,y);
+  }
+}</PRE>
+<PRE><A NAME="A64EA27560ttay"></A>initialize()
+{
+  /* open a window, 500 by 500 pixels */
+  prefsize (500,500);
+  winopen("doublebuffer"); /* put system into double buffer mode */
+  winconstraints();
+  doublebuffer();
+  gconfig();               /* queue up the shift keys and the mouse */
+  qdevice (ESCKEY);
+  qdevice (LEFTMOUSE);
+  qdevice (RIGHTMOUSE);</PRE>
+<PRE><A NAME="A64EA27730ttay"></A>  /* use perspective projection */
+  perspective (400, 3.0/2.0, 0.001, 100000.0);</PRE>
+<PRE><A NAME="A64EA27934ttay"></A>  /* look at the origin from a distance of three units */
+  translate (0.0, 0.0, -3.0);
+  /* draw the first time, so that we don't stare
+      * at a blank screen */
+  drawcube();
+}</PRE>
+<PRE><A NAME="A64EA28246ttay"></A>drawcube(rotx,roty)
+int rotx, roty;
+{
+  /* clear to background color */
+  color(BLACK);
+  clear();
+  /* set the drawing color */
+  color(WHITE);
+  pushmatrix();
+  /* rotate into the desired viewing position */
+  rotate(rotx,'x');
+  rotate(roty,'y');
+  /* draw the big cube */
+  cube();
+  /* draw the small cube */
+  scale(0.3,0.3,0.3);
+  cube();
+  popmatrix();</PRE>
+<PRE><A NAME="A64EA28428ttay"></A>  /* put up a message, instructions */
+  cmov2 (-0.4,-1.0);
+  charstr ("Left: double buffer |  Right: single buffer");</PRE>
+<PRE><A NAME="A64EA28651ttay"></A>  /* put up a message, showing buffering mode */
+  cmov2 (-0.95, 0.95);
+  if (buffer_mode == SINGLE_BUFFER) {
+    charstr ("single-buffered, flickering image");
+  }
+  else {
+    charstr ("double-buffered, smoothly animated image");
+  }</PRE>
+<PRE><A NAME="A64EA28849ttay"></A>  /*If it is double buffered, exchange the front and back buffers */
+  /*Otherwise if it is single buffered the library ignores*/
+  /*this call*/
+  swapbuffers();</PRE>
+<PRE><A NAME="A64EA28993ttay"></A>}</PRE>
+<PRE><A NAME="A64EA29197ttay"></A>cube()
+{
+  /* make a cube out of 4 squares */
+  pushmatrix();
+  side();
+  rotate(900,'x');
+  side();
+  rotate(900,'x');
+  side();
+  rotate(900,'x');
+  side();
+  popmatrix();
+}</PRE>
+<PRE><A NAME="A64EA29392ttay"></A>side()
+{
+  /* make a square translated 0.5 in the z direction */
+  pushmatrix();
+  translate(0.0,0.0,0.5);
+  rect(-0.5,-0.5,0.5,0.5);
+  popmatrix();
+}</PRE>
+<PRE><A NAME="A64EA29826ttay"></A>/*Changes:
+  - The line once read buffer_mode = ; and now it reads:
+        buffer_mode = 1; (Actually now it is SINGLE_BUFFER)
+  - The qread and qdevice of MOUSEX and MOUSEY was removed.
+    It is too choppy and it cannot read the mouse once the
+    pointer's hot spot is outside of the window.  Now it is
+    the getvaluator (MOUSE[X|Y]).
+  - Put if (qtest) before the qread so the program does
+    not stay in the qread command when the mouse's hot
+    spot is outside of the window.
+  - Added the defines for better programming style
+      #define DOUBLE_BUFFER 1
+      #define SINGLE_BUFFER 0
+  - Made the left and right mouse buttons represent 
+      double and single buffer animation respectively
+  - Added the button instructions in the window (above) 
+  - Added winconstraints so the window can be made larger
+*/</PRE>
+
+<H3><A NAME="A200C1167"></A>Related Information</H3>
+<P><A NAME="E1D780D198ceb"></A>The <A HREF="doublebuffer.html#A145X91a7"><B>doublebuffer</B></A> subroutine<A HREF="../gl32tref/A145X91a7" REL="PAGENUM"></A>.</P>
+
+<P><A NAME="E1D780D224ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/animatescene.html#animatescene.html">Creating Animated Scenes</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<hr><center>
+[  <a href="../gl32tref/doily_c.html">Previous</a>  |
+<a href="draw_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

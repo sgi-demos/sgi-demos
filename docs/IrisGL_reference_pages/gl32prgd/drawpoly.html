@@ -1,0 +1,782 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/drawpoly.html Mon, 24 Jan 2022 16:27:51 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Drawing Rectangles, Circles, Arcs, and Polygons
+
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="setglpipeops.html">Previous</a>  |
+<a href="rwpixels.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="drawpoly.html"></A>Drawing Rectangles, Circles, Arcs, and Polygons</H2>
+
+
+<P><A NAME="INDEX165"></A><A NAME="INDEX166"></A><A NAME="INDEX167"></A><A NAME="INDEX168"></A><A NAME="INDEX169"></A><A NAME="INDEX170"></A><A NAME="INDEX171"></A><A NAME="INDEX172"></A></P>
+
+
+<P><A NAME="A3C0E52C985mhay"></A>By using the <A HREF="move-draw.html">move-draw</A>
+style subroutines, it is possible to draw any of the 
+<A HREF="specialterms.html#A26P0702">primitive </A>geometric figures in GL (except <A HREF="drawwfcvs.html#drawwfcvs.html">curves
+and surfaces</A>). However, because these primitives are drawn so often,
+GL provides subroutines to draw them. The following sections explain GL
+high-level drawing: </P>
+
+
+<UL><LI><A NAME="A6B2FF9113jzit"></A><A HREF="drawpoly.html#A7C0a4bd">Rectangles</A></LI>
+
+
+<LI><A NAME="A6B2FF9266jzit"></A><A HREF="drawpoly.html#A7C0a4c5">Circles</A></LI>
+
+
+<LI><A NAME="A6B2FF9417jzit"></A><A HREF="drawpoly.html#A7C0a4cc">Arcs</A></LI>
+
+
+<LI><A NAME="A6B2FF9579jzit"></A>Polygon outlines and filled <A HREF="drawpoly.html#A30C010fc7">polygons</A></LI></UL>
+
+
+<P><A NAME="A3C0E52D014mhay"></A>Most of the high-level subroutine names
+follow a pattern. If the geometric figures they draw are filled, the original
+subroutine name has a lowercase <B>f</B> appended to it. For example, the
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/rect.html#KAg110marj">rect</A></B>
+subroutine draws a rectangular outline, while <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectf.html#Q5g330marj">rectf</A></B>
+draws a filled (solid) rectangle. The parameters to the subroutines can
+be short integers (16 bits), long integers (32 bits), or floating-point
+numbers (32 bits). Floating point is the default, but if the parameter
+type is a short integer, there is a lowercase <B>s</B> suffix. If the parameter
+type is a long integer, the subroutine name takes a lowercase <B>i</B>
+suffix. As with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/v.html#A144X97a4">v</A></B>
+subroutine, only the least significant 24 bits of the long integer are
+considered . </P>
+
+
+<H3><A NAME="A264X92c9"></A>List of GL Rectangle, Circle, Arc, and Polygon
+Subroutines<A NAME="INDEX173"></A> <A NAME="INDEX174"></A> <A NAME="INDEX175"></A>
+<A NAME="INDEX176"></A> <A NAME="INDEX177"></A> <A NAME="INDEX178"></A></H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c2c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/arc.html#tEp310nita">arc</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a circular arc. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c2d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/arcf.html#AJp60nita">arcf</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a pie-shaped filled circular arc. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c2e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/circ.html#ZJpnita">circ</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a circle. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c2f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/circf.html#sJp120nita">circf</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a filled circle. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c30"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/polf.html#Zsf1c0marj">polf</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a filled polygon. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c31"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/poly.html#avf2c0marj">poly</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a polygon. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A78C1449"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/polygonlist.html#Xto2d0nita">polygonlist</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws multiple, disjointed polygons.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A219C1d6"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/polygonlist.html#Xto2d0nita">polylinelist</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws multiple, disjointed polylines.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c32"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rect.html#KAg110marj">rect</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a rectangle. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c33"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectf.html#Q5g330marj">rectf</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a filled rectangle. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c34"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/sbox.html#A213X91178a">sbox</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a screen-aligned rectangle. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c35"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/sboxf.html#Jte1190marj">sboxf</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a filled screen-aligned rectangle. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c36"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/splf.html#A143X9afd">splf</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Draws a shaded filled polygon. </TD></TR></TABLE>
+
+
+<P> </P>
+
+
+<H3><A NAME="A7C0a4bd"></A>Rectangles<A NAME="INDEX179"></A> <A NAME="INDEX180"></A>
+<A NAME="INDEX181"></A> <A NAME="INDEX182"></A> <A NAME="INDEX183"></A>
+<A NAME="INDEX184"></A> <A NAME="INDEX185"></A> <A NAME="INDEX186"></A>
+<A NAME="INDEX187"></A> <A NAME="INDEX188"></A> <A NAME="INDEX189"></A>
+<A NAME="INDEX190"></A> </H3>
+
+
+<P><A NAME="A3C0E52D055mhay"></A>GL provides two types of rectangle subroutines:
+filled and unfilled. Filled rectangles are just rectangular polygons, and
+unfilled rectangles are rectangular outlines. In both types of subroutines,
+only the <I>x</I> and <I>y</I> coordinates of the corners of the rectangle
+are given, and the <I>z</I> coordinate is assumed to be zero. The rectangle
+is assumed to be aligned with the <I>x</I> and <I>y</I> axes. </P>
+
+
+<P><A NAME="A3C0E52D079mhay"></A>The following table lists the six different
+forms of the rectangle subroutine. </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="3"><B>Forms of the Rectangle Subroutine</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Parameter type</B> </TD>
+
+
+<TD><B>Filled</B> </TD>
+
+
+<TD><B>Unfilled</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>short integer </TD>
+
+
+<TD><B>rectfs</B> </TD>
+
+
+<TD><B>rects</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>long integer </TD>
+
+
+<TD><B>rectfi</B> </TD>
+
+
+<TD><B>recti</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>floating point </TD>
+
+
+<TD><B>rectf</B> </TD>
+
+
+<TD><B>rect</B> </TD></TR></TABLE>
+
+
+<H4><A NAME="A7C0a4c0"></A>rect Subroutine </H4>
+
+
+<P><A NAME="A3C0E52D109mhay"></A>The parameters to all six versions of
+the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rect.html#KAg110marj">rect</A></B>
+rectangle subroutines are the same: rect(<I>x1,&nbsp;y1,&nbsp;x2,&nbsp;y2</I>).
+The point defined by the <I>x1,&nbsp;y1</I> parameters is one corner of
+the rectangle and that defined by the <I>x2,&nbsp;y2</I> parameters is
+the opposite corner. Because the rectangle is assumed to be aligned with
+the axes, the coordinates of the other corners are defined by the <I>x1,&nbsp;y2</I>
+and <I>y1,&nbsp;x2</I> parameters, respectively. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A66C016beb"></A>void&nbsp;rect(Coord&nbsp;x1,&nbsp;Coord&nbsp;y1,&nbsp;Coord&nbsp;x2,&nbsp;Coord&nbsp;y2)</PRE>
+
+
+<P><A NAME="A3C0E52D135mhay"></A>Rectangles can undergo three-dimensional
+geometric transformations, and the resulting figure need not appear to
+be a rectangle. (For example, imagine rotating the rectangle about the
+<I>x</I> axis so that one end is farther from you and then viewing it in
+perspective. On the screen, the rotated rectangle appears to be a trapezoid.)
+Rectangles drawn with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rect.html#KAg110marj">rect</A></B>
+subroutine (and also circles, arcs, and other 2-D figures) can be positioned
+anywhere in world space with the use of the routines described in <A HREF="workcoords.html#workcoords.html">&quot;Working
+With Coordinate Systems&quot;</A>. </P>
+
+
+<P><A NAME="A3C0E52D159mhay"></A>It is important to understand that the
+matrix manipulation routines (for instance, <B><!--:libs:gl32tref:--><A HREF="../gl32tref/translate.html#A144X95c8">translate</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/rotate.html#A8g2120marj">rotate</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/scale.html#A144X95a6">scale</A></B>)
+execute considerably slower than the drawing subroutines such as the begin-end
+style subroutines. Therefore, it is almost always more efficient to draw
+the desired rectangle in its final position with the subroutines <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpolygon.html#A144X9672">bgnpolygon</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bgnpolygon.html#A144X9672">endpolygon</A></B>,
+rather than using the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/rect.html#KAg110marj">rect</A></B>
+subroutine with <B>translate</B>, <B>rotate</B>, and <B>scale</B>. Performance
+considerations do not necessarily apply to circles and arcs, in part because
+these are more complex figures and are unique in the convenience they provide.</P>
+
+
+<P><A NAME="A3C0E52D184mhay"></A>The following example program draws a
+chess board with black and white squares on a green background using the
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/rect.html#KAg110marj">rect</A></B>
+subroutine. In addition, to demonstrate the unfilled rectangle subroutines,
+there is a red line outlining the board. </P>
+
+
+<PRE><A NAME="A65C0167f3"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A65C0167f4"></A>main()
+{
+&nbsp;&nbsp;&nbsp;Int32&nbsp;i,&nbsp;j;</PRE>
+
+
+<PRE><A NAME="A65C0167f5"></A>&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;500,&nbsp;100,&nbsp;500);
+&nbsp;&nbsp;&nbsp;winopen(&quot;chessboard&quot;);
+&nbsp;&nbsp;&nbsp;color(GREEN);&nbsp;&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;for&nbsp;(i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;8;&nbsp;i&nbsp;=&nbsp;i+1)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(j&nbsp;=&nbsp;0;&nbsp;j&nbsp;&lt;&nbsp;8;&nbsp;j&nbsp;=&nbsp;j+1)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(odd(i+j))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(WHITE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rectfi(100&nbsp;+&nbsp;i*25,&nbsp;100&nbsp;+&nbsp;j*25,&nbsp;124&nbsp;+&nbsp;i*25,&nbsp;124&nbsp;+&nbsp;j*25);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;recti(97,&nbsp;97,&nbsp;302,&nbsp;302);
+&nbsp;&nbsp;&nbsp;sleep(3);
+}</PRE>
+
+
+<PRE><A NAME="A65C0167f6"></A>odd(n)&nbsp;/*&nbsp;returns&nbsp;1&nbsp;if&nbsp;n&nbsp;is&nbsp;odd;&nbsp;0&nbsp;otherwise.&nbsp;*/
+Int32&nbsp;n;
+{
+&nbsp;&nbsp;&nbsp;return&nbsp;n&amp;1;
+}</PRE>
+
+
+<H4><A NAME="A4H4100marj"></A>sbox and sboxf Subroutines </H4>
+
+
+<P><A NAME="A3C0E52D215mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/sbox.html#A213X91178a">sbox</A></B>
+subroutine draws a two-dimensional, screen-aligned rectangle using the
+current <A HREF="specialterms.html#A3C0F2A3323mhay">color</A>, <A HREF="specialterms.html#A3C0F2A4599mhay">writemask</A>,
+linestyle, and linestyle repeat. Only these attributes, not the normal
+line attributes, are used. Most of the lighting/shading/viewing pipeline
+is bypassed. </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="3"><B>Forms of the sbox Subroutine</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Parameter type</B> </TD>
+
+
+<TD><B>Filled</B> </TD>
+
+
+<TD><B>Unfilled</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>short integer </TD>
+
+
+<TD><B>sboxfs</B> </TD>
+
+
+<TD><B>sboxs</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>long integer </TD>
+
+
+<TD><B>sboxfi</B> </TD>
+
+
+<TD><B>sboxi</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>floating point </TD>
+
+
+<TD><B>sboxf</B> </TD>
+
+
+<TD><B>sbox</B> </TD></TR></TABLE>
+
+
+<P><A NAME="A3C0E52D241mhay"></A>The syntax is as follows: </P>
+
+
+<PRE><A NAME="A66C016bec"></A>void&nbsp;sbox(Coord&nbsp;x1,&nbsp;Coord&nbsp;y1<B>,&nbsp;</B>Coord&nbsp;x2,&nbsp;Coord&nbsp;y2)</PRE>
+
+
+<P><A NAME="A3C0E52D266mhay"></A>The <B>sboxf</B> subroutine draws a filled
+rectangle. </P>
+
+
+<P><A NAME="A3C0E52D290mhay"></A>When you use the <B>sbox</B> subroutine,
+you must not use lighting, 
+<A HREF="specialterms.html#A25P03bd">backfacing</A>,
+<A HREF="specialterms.html#A150P19d9">depth-cueing</A>, 
+<A HREF="specialterms.html#A154P1160a">z buffering</A>, 
+<A HREF="specialterms.html#A26P0611">Gouraud shading</A>,
+or alphablending. </P>
+
+
+<H3><A NAME="A7C0a4c5"></A>Circles<A NAME="INDEX191"></A> <A NAME="INDEX192"></A>
+<A NAME="INDEX193"></A> <A NAME="INDEX194"></A> <A NAME="INDEX195"></A>
+<A NAME="INDEX196"></A> <A NAME="INDEX197"></A> <A NAME="INDEX198"></A>
+<A NAME="INDEX199"></A> <A NAME="INDEX200"></A> <A NAME="INDEX201"></A>
+<A NAME="INDEX202"></A> </H3>
+
+
+<P><A NAME="A3C0E52D315mhay"></A>Like rectangles, circles are two-dimensional
+figures, and lie in the<I> x</I>-<I>y </I>plane, with<I> z</I> coordinates
+equal to zero. If they are viewed at an angle, circles will be appear to
+be ellipses. </P>
+
+
+<P><A NAME="A3C0E52D339mhay"></A>The parameters for the circle subroutines
+include the center point, defined by the <I>x,&nbsp;y</I> parameters, and
+the radius. Like rectangles, circles are either filled or unfilled, and
+the center coordinates and radius are specified in integers, short integers,
+or floating-point numbers. </P>
+
+
+<P><A NAME="A3C0E52D363mhay"></A>The following table lists the six different
+forms of the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/circ.html#ZJpnita">circ</A></B>
+subroutine. The parameters to all six subroutines are the same: <B>circ</B>(<I>x</I>,&nbsp;<I>y</I>,&nbsp;<I>radius</I>).</P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="3"><B>Forms of the Circle Subroutine</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Parameter type</B> </TD>
+
+
+<TD><B>Filled</B> </TD>
+
+
+<TD><B>Unfilled</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>short integer </TD>
+
+
+<TD><B>circfs</B> </TD>
+
+
+<TD><B>circs</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>long integer </TD>
+
+
+<TD><B>circfi</B> </TD>
+
+
+<TD><B>circi</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>floating point </TD>
+
+
+<TD><B>circf</B> </TD>
+
+
+<TD><B>circ</B> </TD></TR></TABLE>
+
+
+<H4><A NAME="A7C0a4c9"></A>circ Subroutine </H4>
+
+
+<P><A NAME="A3C0E52D393mhay"></A>Circles are drawn with 80 equally spaced
+points, either as a closed line (for unfilled circles), or as a polygon
+(for filled circles). If your application draws many tiny circles, it is
+a good idea to write a circle <A HREF="specialterms.html#A26P0702">primitive</A>
+that uses fewer line segments, and which can therefore be drawn much more
+quickly. A similar problem can arise for very large circles. If they are
+magnified enough, you can see the individual straight line segments. However,
+circles drawn with 80 segments look smooth over a wide range of sizes.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A66C016bee"></A>void&nbsp;circ(Coord&nbsp;x,&nbsp;Coord&nbsp;y,&nbsp;Coord&nbsp;radius)&nbsp;</PRE>
+
+
+<P><A NAME="A3C0E52D418mhay"></A>The following example program, <TT>bullseye</TT>,
+draws an archery target using filled circles: </P>
+
+
+<PRE><A NAME="A65C0167f7"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A65C0167f8"></A>main()
+{</PRE>
+
+
+<PRE><A NAME="A65C0167f9"></A>&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;500,&nbsp;100,&nbsp;500);
+&nbsp;&nbsp;&nbsp;winopen(&quot;bullseye&quot;);
+&nbsp;&nbsp;&nbsp;ortho2(-1.0,&nbsp;1.0,&nbsp;-1.0,&nbsp;1.0);
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(GREEN);
+&nbsp;&nbsp;&nbsp;circf(0.0,&nbsp;0.0,&nbsp;0.9);
+&nbsp;&nbsp;&nbsp;color(YELLOW);
+&nbsp;&nbsp;&nbsp;circf(0.0,&nbsp;0.0,&nbsp;0.7);
+&nbsp;&nbsp;&nbsp;color(BLUE);
+&nbsp;&nbsp;&nbsp;circf(0.0,&nbsp;0.0,&nbsp;0.5);
+&nbsp;&nbsp;&nbsp;color(CYAN);
+&nbsp;&nbsp;&nbsp;circf(0.0,&nbsp;0.0,&nbsp;0.3);
+&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;circf(0.0,&nbsp;0.0,&nbsp;0.1);
+&nbsp;&nbsp;&nbsp;sleep(3);
+}</PRE>
+
+
+<H3><A NAME="A7C0a4cc"></A>Arcs<A NAME="INDEX203"></A> <A NAME="INDEX204"></A>
+<A NAME="INDEX205"></A> <A NAME="INDEX206"></A> <A NAME="INDEX207"></A>
+<A NAME="INDEX208"></A> <A NAME="INDEX209"></A> <A NAME="INDEX210"></A>
+<A NAME="INDEX211"></A> <A NAME="INDEX212"></A> <A NAME="INDEX213"></A>
+<A NAME="INDEX214"></A> </H3>
+
+
+<P><A NAME="A3C0E52D446mhay"></A>Arcs are also two-dimensional figures,
+and like circles and rectangles, GL assumes they lie in the plane <I>z</I>
+= 0. When viewed at an angle, arcs appear to be segments of ellipses. Arcs
+can be either filled or unfilled. As shown in the <A HREF="figures/gl32p39.jpg">Unfilled
+Arc figure</A>, these are simply segments of circles, whereas filled arcs,
+shown in the <A HREF="figures/gl32p40.jpg">Filled Arc</A> figure, look
+like sections of a pie. </P>
+
+
+<P><A NAME="A3C0E52D474mhay"></A>Arcs are defined by a center (<I>x, y</I>),
+a radius, a starting angle, and an ending angle. The angles are measured
+from the positive <I>x</I> axis in a counterclockwise (<A HREF="specialterms.html#A154P11365">right-hand
+rule</A>) direction. Negative angles are measured clockwise. Both angles
+are expressed as integers in tenths of degrees, so a 90 degree angle is
+expressed as 900. </P>
+
+
+<P><A NAME="A3C0E52D499mhay"></A>An arc is always drawn counterclockwise
+from the starting angle to the ending angle, so if <TT>startang&nbsp;=&nbsp;0</TT>
+and <TT>endang&nbsp;=&nbsp;100</TT>, a 10-degree arc is be drawn. If the
+starting angle is 100 and the ending angle is 0, a 350-degree arc is drawn.</P>
+
+
+<P><A NAME="A3C0E52D523mhay"></A>The circular portions of the arcs drawn
+are approximated by straight lines, and a full 360-degree arc consists
+of 80 segments. If your application draws many tiny arcs, it is a good
+idea to write an arcs primitive that uses fewer line segments and that
+can therefore be drawn much more quickly. A similar problem can arise for
+very large arcs. If they are magnified enough, you can easily see the individual
+straight line segments. However, arcs drawn with 80 segments look reasonably
+good over a wide range of sizes. </P>
+
+
+<P><A NAME="A3C0E52D547mhay"></A>Arcs subroutines come in the same six
+forms as subroutines for circles and rectangles as shown in the following
+table: </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="3"><B>Forms of the Arc Subroutine</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Parameter type</B> </TD>
+
+
+<TD><B>Filled</B> </TD>
+
+
+<TD><B>Unfilled</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>short integer </TD>
+
+
+<TD><B>arcfs</B> </TD>
+
+
+<TD><B>arcs</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>long integer </TD>
+
+
+<TD><B>arcfi</B> </TD>
+
+
+<TD><B>arci</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>floating point </TD>
+
+
+<TD><B>arcf</B> </TD>
+
+
+<TD><B>arc</B> </TD></TR></TABLE>
+
+
+<H4><A NAME="A7C0a4d7"></A>arc Subroutine </H4>
+
+
+<P><A NAME="A3C0E52D575mhay"></A>The parameter order for all six versions
+of the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/arc.html#tEp310nita">arc</A></B>
+subroutine is <I>x</I>, <I>y</I>, <I>radius</I>, <I>startang</I>, <I>endang</I>.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A66C016bef"></A>void&nbsp;arc(Coord&nbsp;x,&nbsp;Coord&nbsp;y,&nbsp;Coord&nbsp;radius,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Angle&nbsp;startang,&nbsp;Angle&nbsp;endang)&nbsp;</PRE>
+
+
+<P><A NAME="A3C0E52D600mhay"></A>The following example program, <TT>piechart</TT>,
+draws a pie chart using filled arcs: </P>
+
+
+<PRE><A NAME="A65C0167fa"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A65C0167fb"></A>main()
+{</PRE>
+
+
+<PRE><A NAME="A65C0167fc"></A>&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;500,&nbsp;100,&nbsp;500);
+&nbsp;&nbsp;&nbsp;winopen(&quot;piechart&quot;);
+&nbsp;&nbsp;&nbsp;ortho2(-1.0,&nbsp;1.0,&nbsp;-1.0,&nbsp;1.0);
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;arcf(0.0,&nbsp;0.0,&nbsp;0.9,&nbsp;0,&nbsp;800);
+&nbsp;&nbsp;&nbsp;color(GREEN);
+&nbsp;&nbsp;&nbsp;arcf(0.0,&nbsp;0.0,&nbsp;0.9,&nbsp;800,&nbsp;1200);
+&nbsp;&nbsp;&nbsp;color(YELLOW);
+&nbsp;&nbsp;&nbsp;arcf(0.0,&nbsp;0.0,&nbsp;0.9,&nbsp;1200,&nbsp;2200);
+&nbsp;&nbsp;&nbsp;color(MAGENTA);
+&nbsp;&nbsp;&nbsp;arcf(0.0,&nbsp;0.0,&nbsp;0.9,&nbsp;2200,&nbsp;3400);
+&nbsp;&nbsp;&nbsp;color(BLUE);
+&nbsp;&nbsp;&nbsp;arcf(0.0,&nbsp;0.0,&nbsp;0.9,&nbsp;3400,&nbsp;0);
+&nbsp;&nbsp;&nbsp;sleep(3);
+}</PRE>
+
+
+<H3><A NAME="A30C010fc7"></A>Polygon Outlines and Filled Polygons<A NAME="INDEX215"></A>
+<A NAME="INDEX216"></A> <A NAME="INDEX217"></A> <A NAME="INDEX218"></A>
+<A NAME="INDEX219"></A> <A NAME="INDEX220"></A> <A NAME="INDEX221"></A>
+<A NAME="INDEX222"></A> <A NAME="INDEX223"></A> <A NAME="INDEX224"></A>
+<A NAME="INDEX225"></A> <A NAME="INDEX226"></A> </H3>
+
+
+<P><A NAME="A3C0E52D628mhay"></A>GL has two sets of subroutines that take
+arrays of vertex coordinates and draw filled and unfilled polygons. These
+subroutines draw exactly the same figures as the <A HREF="move-draw.html">move-draw</A>
+(or polygon move and polygon draw) subroutines, but are often more convenient
+to use. </P>
+
+
+<H4><A NAME="A66C016bf0"></A>polf and poly Subroutines </H4>
+
+
+<P><A NAME="A3C0E52D656mhay"></A>Filled polygons are drawn by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/polf.html#Zsf1c0marj">polf</A></B>
+subroutine, and polygon outlines are drawn by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/poly.html#avf2c0marj">poly</A></B>
+subroutine. The following table is a complete list of the polygon and filled
+polygon subroutines. </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="3"><B>Forms of the Polygon Subroutines</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Parameter type</B> </TD>
+
+
+<TD><B>2-D</B> </TD>
+
+
+<TD><B>3-D</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>short integer </TD>
+
+
+<TD><B>poly2s</B> </TD>
+
+
+<TD><B>polys</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>long integer </TD>
+
+
+<TD><B>poly2i</B> </TD>
+
+
+<TD><B>polyi</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>floating point </TD>
+
+
+<TD><B>poly2</B> </TD>
+
+
+<TD><B>poly</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>short integer </TD>
+
+
+<TD><B>polf2s</B> </TD>
+
+
+<TD><B>polfs</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>long integer </TD>
+
+
+<TD><B>polf2i</B> </TD>
+
+
+<TD><B>polfi</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>floating point </TD>
+
+
+<TD><B>polf2</B> </TD>
+
+
+<TD><B>polf</B> </TD></TR></TABLE>
+
+
+<P><A NAME="A3C0E52D683mhay"></A>Both the <B>polf</B> and the <B>poly</B>
+subroutines take two parameters. The first parameter, <I>n</I>, is the
+number of vertices in the polygon, and the second, <I>parray</I>, is a
+two-dimensional array containing the coordinates. The syntax for the <B>polf</B>
+and <B>poly</B> subroutines is as follows: </P>
+
+
+<PRE><A NAME="A66C016bf1"></A>void&nbsp;polf(Int32&nbsp;n,&nbsp;Coord&nbsp;parray[][3])&nbsp;</PRE>
+
+
+<PRE><A NAME="A66C016bf2"></A>void&nbsp;poly(Int32&nbsp;n,&nbsp;Coord&nbsp;parray[][3])&nbsp;</PRE>
+
+
+<P><A NAME="A3C0E52D710mhay"></A>This example program draws a hexagon using
+the <B>polf</B> subroutine: </P>
+
+
+<PRE><A NAME="A11C0b176"></A>#include&nbsp;&lt;gl/gl.h&gt;</PRE>
+
+
+<PRE><A NAME="A11C0b177"></A>Int32&nbsp;parray[6][2]&nbsp;=&nbsp;{{200,100},{100,300},{200,500},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{400,500},{500,300},{400,100}};</PRE>
+
+
+<PRE><A NAME="A11C0b179"></A>main()
+{</PRE>
+
+
+<PRE><A NAME="A11C0b17b"></A>&nbsp;&nbsp;&nbsp;prefposition(100,&nbsp;600,&nbsp;100,&nbsp;600);
+&nbsp;&nbsp;&nbsp;winopen(&quot;hexagon&quot;);
+&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(GREEN);
+&nbsp;&nbsp;&nbsp;polf2i(6,&nbsp;parray);
+&nbsp;&nbsp;&nbsp;sleep(3);
+}</PRE>
+
+
+
+
+<hr><center>
+[  <a href="setglpipeops.html">Previous</a>  |
+<a href="rwpixels.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/drawpoly.html Mon, 24 Jan 2022 16:27:52 GMT -->
+</HTML>
+

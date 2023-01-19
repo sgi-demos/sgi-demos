@@ -1,0 +1,2729 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/descrtable.html Mon, 24 Jan 2022 16:28:21 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Appendix C. Adapter Description Table for GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="glsubmodal.html">Previous</a>  |
+<a href="portSGIapps.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H1><A NAME="descrtable.html"></A>Appendix C. Adapter Description Table for GL</H1>
+
+
+<P><A NAME="A3C0F259367mhay"></A>The following tables summarize the values
+returned by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getgdesc.html#t9311e0marj">getgdesc</A></B>
+subroutine for each of the available adapters as follows:</P>
+
+
+<TABLE><TR VALIGN="TOP" ALIGN="LEFT"><TH NOWRAP="NOWRAP">Adapter Name</TH>
+
+
+<TH>Column Name</TH></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A108C147"></A>8-bit 3-D Color Graphics Processor </TD>
+
+
+<TD>8-bit 3-D</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A108C148"></A>24-bit 3-D Color Graphics Processor </TD>
+
+
+<TD>24-bit 3-D</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A108C149"></A>16-bit Supergraphics Processor Subsystem</TD>
+
+
+<TD>16-bit SPS</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A108C14a"></A>48-bit Supergraphics Processor Subsystem</TD>
+
+
+<TD>48-bit SPS</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A108C14c"></A>16-bit POWER Gt4
+and POWER Gt4x16-bit Gt4/Gt4x </TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A191C11c5"></A>48-bit POWER Gt4
+and POWER Gt4x48-bit Gt4/Gt4x </TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C4F0346158lpas"></A>24-bit POWER GXT1000 </TD>
+
+
+<TD>GXT1000</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C4F0346272lpas"></A>48-bit POWER GXT1000 </TD>
+
+
+<TD>GXT1000</TD></TR></TABLE>
+
+
+<P><A NAME="A3C0F259396mhay"></A>The return is the value of the requested
+characteristic, or -1 if the request is not valid or cannot be determined.
+An empty entry in the table indicates that the characteristic is specific
+to the individual system configuration. </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="7"><B>getgdesc Queries</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Inquiry</B> </TD>
+
+
+<TD><B>8-bit 3-D</B> </TD>
+
+
+<TD><B>24-bit 3-D</B> </TD>
+
+
+<TD><B>16-bit SPS</B> </TD>
+
+
+<TD><B>48-bit SPS</B> </TD>
+
+
+<TD><B>16-bit Gt4/Gt4x</B> </TD>
+
+
+<TD><B>48-bit Gt4/Gt4x</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ XMMAX </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ YMMAX </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ XPMAX </TD>
+
+
+<TD>1280 </TD>
+
+
+<TD>1280 </TD>
+
+
+<TD>1280 </TD>
+
+
+<TD>1280 </TD>
+
+
+<TD>1280 </TD>
+
+
+<TD>1280 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ YPMAX </TD>
+
+
+<TD>1024 </TD>
+
+
+<TD>1024 </TD>
+
+
+<TD>1024 </TD>
+
+
+<TD>1024 </TD>
+
+
+<TD>1024 </TD>
+
+
+<TD>1024 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ZMIN </TD>
+
+
+<TD>-0x 800000 </TD>
+
+
+<TD>-0x 800000 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>-0x 800000 </TD>
+
+
+<TD>-0x 800000 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ZMAX </TD>
+
+
+<TD>0x7fffff </TD>
+
+
+<TD>0x7fffff </TD>
+
+
+<TD>0x1fffff </TD>
+
+
+<TD>0x1fffff </TD>
+
+
+<TD>0x7fffff </TD>
+
+
+<TD>0x7fffff </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ ALPHA- BUFFER </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ CURSOR </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>2 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ OVERLAY </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>4 </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>4 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>2 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ PLANE_ MASK </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ UNDER LAY </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>4 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ ZBUFFER </TD>
+
+
+<TD>24 </TD>
+
+
+<TD>24 </TD>
+
+
+<TD>21 </TD>
+
+
+<TD>21 </TD>
+
+
+<TD>24 </TD>
+
+
+<TD>24 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ NORM_ DBL_ CMODE </TD>
+
+
+<TD>4 </TD>
+
+
+<TD>12 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ NORM_ DBL_ RGB </TD>
+
+
+<TD>4 </TD>
+
+
+<TD>12 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>24 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>24 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ NORM_ SNG_ CMODE </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>12 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ NORM_ SNG_ RGB </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>24 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>24 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>24 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BIT_ OVER- UNDER_ SHARED </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ LARGE_ MAP_ SIZE </TD>
+
+
+<TD>256 </TD>
+
+
+<TD>4096 </TD>
+
+
+<TD>256 </TD>
+
+
+<TD>256 </TD>
+
+
+<TD>256 </TD>
+
+
+<TD>256 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ SMALL_ MAP_ SIZE </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>256 </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_NUM_ SMALL_ MAPS </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ POINT- SMOOTH_ CMODE </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ POINT- SMOOTH_ RGB </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_LINE- SMOOTH_ CMODE </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_LINE- SMOOTH_ RGB </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ SHADE- MODEL </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ SHADE- BUFFERS </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ RGBMODE </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ DITHER </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SUBPIXEL_ LINE </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SUB- PIXEL_ PNT </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SUB- PIXEL_ POLY </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_POLY MODE </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ LINESTYLE </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>32 </TD>
+
+
+<TD>32 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ LSREPEAT </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>252 </TD>
+
+
+<TD>252 </TD>
+
+
+<TD>64 </TD>
+
+
+<TD>64 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ NURBS_ ORDER </TD>
+
+
+<TD>4 </TD>
+
+
+<TD>4 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ TRIM_ ORDER </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ PATTERN _SIZE </TD>
+
+
+<TD>64 </TD>
+
+
+<TD>64 </TD>
+
+
+<TD>32 </TD>
+
+
+<TD>32 </TD>
+
+
+<TD>64 </TD>
+
+
+<TD>64 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ VERTS </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>255 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ ATTR_ STACK- DEPTH </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ MATRIX_ STACK- DEPTH </TD>
+
+
+<TD>32 </TD>
+
+
+<TD>32 </TD>
+
+
+<TD>64 </TD>
+
+
+<TD>64 </TD>
+
+
+<TD>32 </TD>
+
+
+<TD>32 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ VIEWPORT _STACK- DEPTH </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ ZDRAW_ GEOM </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ ZDRAW_ PIXELS </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ BLEND </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ LIGHTING _TWOSIDE </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ BUTBOX </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_DIALS </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_VERT_RETRACE _FREQ </TD>
+
+
+<TD>60 </TD>
+
+
+<TD>60 </TD>
+
+
+<TD>60 </TD>
+
+
+<TD>60 </TD>
+
+
+<TD>60 </TD>
+
+
+<TD>60 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ TEXTPORT </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ WSYS </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR></TABLE>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="5"><B>getgdesc Queries for 3-D and SPS Adapters</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Inquiry</B> </TD>
+
+
+<TD><B>8-bit 3-D</B> </TD>
+
+
+<TD><B>24-bit 3-D</B> </TD>
+
+
+<TD><B>16-bit SPS</B> </TD>
+
+
+<TD><B>48-bit SPS</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_XMMAX </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_YMMAX </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_XPMAX </TD>
+
+
+<TD>1280 </TD>
+
+
+<TD>1280 </TD>
+
+
+<TD>1280 </TD>
+
+
+<TD>1280 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_YPMAX </TD>
+
+
+<TD>1024 </TD>
+
+
+<TD>1024 </TD>
+
+
+<TD>1024 </TD>
+
+
+<TD>1024 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ZMIN </TD>
+
+
+<TD>-0x800000 </TD>
+
+
+<TD>-0x800000 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ZMAX </TD>
+
+
+<TD>0x7fffff </TD>
+
+
+<TD>0x7fffff </TD>
+
+
+<TD>0x1fffff </TD>
+
+
+<TD>0x1fffff </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ ALPHA- BUFFER </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ CURSOR </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>2 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ OVERLAY </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>4 </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>4 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ PLANE_ MASK </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ UNDERLAY </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>4 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ ZBUFFER </TD>
+
+
+<TD>24 </TD>
+
+
+<TD>24 </TD>
+
+
+<TD>21 </TD>
+
+
+<TD>21 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ NORM_DBL_ CMODE </TD>
+
+
+<TD>4 </TD>
+
+
+<TD>12 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ NORM_DBL_ RGB </TD>
+
+
+<TD>4 </TD>
+
+
+<TD>12 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>24 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ NORM_SNG_ CMODE </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>12 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ NORM_SNG_ RGB </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>24 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>24 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ OVER- UNDER_ SHARED </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_LARGE _MAP_SIZE </TD>
+
+
+<TD>256 </TD>
+
+
+<TD>4096 </TD>
+
+
+<TD>256 </TD>
+
+
+<TD>256 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SMALL _MAP_SIZE </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>256 </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_NUM_ SMALL_ MAPS </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_POINT- SMOOTH_ CMODE </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_POINT- SMOOTH_ RGB </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_LINE- SMOOTH_ CMODE </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_LINE- SMOOTH_ RGB </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SHADE- MODEL </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SHADE- BUFFERS </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ RGBMODE </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_DITHER </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ SUBPIXEL_ LINE </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ SUBPIXEL_ PNT </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ SUBPIXEL_ POLY </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ POLYMODE </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ LINESTYLE </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ LSREPEAT </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>252 </TD>
+
+
+<TD>252 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ NURBS_ ORDER </TD>
+
+
+<TD>4 </TD>
+
+
+<TD>4 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ TRIM_ ORDER </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ PATTERN_ SIZE </TD>
+
+
+<TD>64 </TD>
+
+
+<TD>64 </TD>
+
+
+<TD>32 </TD>
+
+
+<TD>32 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ VERTS </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>255 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ ATTR_ STACK- DEPTH </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ MATRIX_ STACK- DEPTH </TD>
+
+
+<TD>32 </TD>
+
+
+<TD>32 </TD>
+
+
+<TD>64 </TD>
+
+
+<TD>64 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ VIEWPORT_ STACK- DEPTH </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ZDRAW_ GEOM </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ZDRAW_ PIXELS </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BLEND </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ LIGHTING_ TWOSIDE </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ BUTBOX </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_DIALS </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_VERT_ RETRACE_ FREQ </TD>
+
+
+<TD>60 </TD>
+
+
+<TD>60 </TD>
+
+
+<TD>60 </TD>
+
+
+<TD>60 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ TEXTPORT </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_WSYS </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR></TABLE>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="5"><B>getgdesc Queries for Gt4, Gt4x, and GXT1000 Adapters</B></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Inquiry</B> </TD>
+
+
+<TD><B>16-bit Gt4/Gt4x</B> </TD>
+
+
+<TD><B>48-bit Gt4/Gt4x</B> </TD>
+
+
+<TD><B>24-bit GXT1000</B> </TD>
+
+
+<TD><B>48-bit GXT1000</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_XMMAX </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_YMMAX </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD>
+
+
+<TD>-1 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_XPMAX </TD>
+
+
+<TD>1280 </TD>
+
+
+<TD>1280 </TD>
+
+
+<TD>1280 </TD>
+
+
+<TD>1280 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_YPMAX </TD>
+
+
+<TD>1024 </TD>
+
+
+<TD>1024 </TD>
+
+
+<TD>1024 </TD>
+
+
+<TD>1024 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ZMIN </TD>
+
+
+<TD>-0x800000 </TD>
+
+
+<TD>-0x800000 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ZMAX </TD>
+
+
+<TD>0x7fffff </TD>
+
+
+<TD>0x7fffff </TD>
+
+
+<TD>0xfffff </TD>
+
+
+<TD>0xfffff </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ ALPHA- BUFFER </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ CURSOR </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>2 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ OVERLAY </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>2 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ PLANE_ MASK </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ UNDERLAY </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD>
+
+
+<TD>0 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ ZBUFFER </TD>
+
+
+<TD>24 </TD>
+
+
+<TD>24 </TD>
+
+
+<TD>24 </TD>
+
+
+<TD>24 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ NORM_DBL _CMODE </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>12 </TD>
+
+
+<TD>12 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ NORM_DBL _RGB </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>24 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>24 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ NORM_SNG _CMODE </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>12 </TD>
+
+
+<TD>12 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ NORM_SNG _RGB </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>24 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>24 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ OVER- UNDER_ SHARED </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_LARGE _MAP_SIZE </TD>
+
+
+<TD>256 </TD>
+
+
+<TD>256 </TD>
+
+
+<TD>4096 </TD>
+
+
+<TD>4096 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SMALL _MAP_SIZE </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_NUM_ SMALL_ MAPS </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_POINT- SMOOTH _CMODE </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_POINT- SMOOTH _RGB </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_LINE- SMOOTH_ CMODE </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_LINE- SMOOTH_ RGB </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SHADE- MODEL </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SHADE- BUFFERS </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ RGBMODE </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ DITHER </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD>GD_BF_ MAIN </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SUB- PIXEL_LINE </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SUB- PIXEL_PNT </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_SUB- PIXEL_ POLY </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_POLY- MODE </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BITS_ LINESTYLE </TD>
+
+
+<TD>32 </TD>
+
+
+<TD>32 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ LSREPEAT </TD>
+
+
+<TD>64 </TD>
+
+
+<TD>64 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>255 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ NURBS_ ORDER </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>6 </TD>
+
+
+<TD>6 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ TRIM_ ORDER </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>6 </TD>
+
+
+<TD>6 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ PATTERN _SIZE </TD>
+
+
+<TD>64 </TD>
+
+
+<TD>64 </TD>
+
+
+<TD>32 </TD>
+
+
+<TD>32 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ VERTS </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>255 </TD>
+
+
+<TD>? </TD>
+
+
+<TD>? </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ ATTR_ STACK- DEPTH </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ MATRIX_ STACK- DEPTH </TD>
+
+
+<TD>32 </TD>
+
+
+<TD>32 </TD>
+
+
+<TD>32 </TD>
+
+
+<TD>32 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_MAX_ VIEWPORT _STACK- DEPTH </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>8 </TD>
+
+
+<TD>16 </TD>
+
+
+<TD>16 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ZDRAW _GEOM </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ZDRAW _PIXELS </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_BLEND </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD>F </TD>
+
+
+<TD>F </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ LIGHTING _TWOSIDE </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ BUTBOX </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_DIALS </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_VERT_ RETRACE _FREQ </TD>
+
+
+<TD>60 </TD>
+
+
+<TD>60 </TD>
+
+
+<TD>? </TD>
+
+
+<TD>? </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_ TEXTPORT </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD>
+
+
+<TD>T </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>GD_WSYS </TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD>
+
+
+<TD><BR></TD></TR></TABLE>
+
+
+
+
+<hr><center>
+[  <a href="glsubmodal.html">Previous</a>  |
+<a href="portSGIapps.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/descrtable.html Mon, 24 Jan 2022 16:28:21 GMT -->
+</HTML>
+

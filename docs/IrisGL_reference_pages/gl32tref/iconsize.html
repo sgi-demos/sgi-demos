@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>iconsize Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="gversion.html">Previous</a>  |
+<a href="icontitle.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="LA13e0marj"></A>iconsize Subroutine</H2>
+<A NAME="INDEX954" REL="I1" TITLE="iconsize subroutine (GL)"></A>
+<A NAME="INDEX955" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX956" REL="I2" TITLE="window"></A>
+<A NAME="INDEX957" REL="I3" TITLE="iconsize"></A>
+<A NAME="INDEX958" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX959" REL="I2" TITLE="window icons"></A>
+<A NAME="INDEX960" REL="I3" TITLE="specifying"></A>
+
+<H3><A NAME="A213X912b43"></A>Purpose</H3>
+<P><A NAME="E1B1404792ceb"></A>Specifies the icon size of a window.</P>
+
+<H3><A NAME="A79C12de"></A>Libraries</H3>
+<P><A NAME="E1B1404961ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1405065ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912b46"></A>C Syntax</H3>
+<PRE><A NAME="A213X912b47"></A><B>void iconsize(Int32 </B><A HREF="iconsize.html#AzS232f0marj"><I>x</I></A><B>, Int32 </B><A HREF="iconsize.html#BT23130marj"><I>y</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c3b"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c3c"></A><B>SUBROUTINE ICONSI(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>integer*4 </B><I>x</I><B>, </B><I>y</I></PRE>
+
+<H3><A NAME="A213X912b4a"></A>Description</H3>
+<P><A NAME="E1B1405469ceb"></A>The <B>iconsize </B>subroutine specifies the size of a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A> icon as <A HREF="iconsize.html#AzS232f0marj"><I>x</I></A> pixels by <A HREF="iconsize.html#BT23130marj"><I>y</I></A> pixels. If a window has an icon size, the window manager reshapes the window to be that size and sends a REDRAWICONIC token to the graphics queue when the user stores that window. Windows without an icon size are handled by the window manager with the appropriate default behavior.</P>
+
+<P><A NAME="E1B1405578ceb"></A>To assign a new window an icon size, call the <B>iconsize</B> subroutine before opening the window. To give an existing window an icon size, use the <B>iconsize </B>subroutine with the <A HREF="winconstraints.html#A142X914c1"><B>winconstraints</B></A> subroutine. </P>
+
+<P><A NAME="E1B1405687ceb"></A>Any application using the <B>iconsize </B>subroutine should also call the <A HREF="qdevice.html#A143X967"><B>qdevice</B></A> subroutine to queue the tokens WINFREEZE and WINTHAW after opening the window. </P>
+
+<P><A NAME="E1B1405794ceb"></A>In the current implementation, the <B>iconsize</B> subroutine does not set the size of the icon.  The actual size and shape of the icon are controlled by the window manager application.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f58"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912b4f"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="AzS232f0marj"></A><I>x</I></TD>
+<TD>  Specifies the width of the window icon in pixels.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="BT23130marj"></A><I>y</I></TD>
+<TD>  Specifies the height of the window icon in pixels.</TD></TR></TABLE>
+
+<H3><A NAME="A61C0159ee"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1406190ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C12e1"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12e2"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C12e3"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912b55"></A>Related Information</H3>
+<P><A NAME="E1B1406509ceb"></A>Obtaining the size of the window with the <A HREF="getsize.html#X513200marj"><B>getsize</B></A> subroutine.</P>
+
+<P><A NAME="E1B1406615ceb"></A>Specifying the title of a window icon with the <A HREF="icontitle.html#sH13240marj"><B>icontitle</B></A> subroutine.</P>
+
+<P><A NAME="E1B1406722ceb"></A>Specifying the maximum size of a window with the <A HREF="maxsize.html#A142X916d6"><B>maxsize</B></A> subroutine.</P>
+
+<P><A NAME="E1B1406833ceb"></A>Specifying the minimum size of a window with the <A HREF="minsize.html#MJ13260marj"><B>minsize</B></A> subroutine.</P>
+
+<P><A NAME="E1B1406940ceb"></A>Constraining the size of a window with the <A HREF="prefsize.html#A142X91671"><B>prefsize</B></A> subroutine.</P>
+
+<P><A NAME="E1B1407046ceb"></A>Binding window constraints to the current window with the <A HREF="winconstraints.html#A142X914c1"><B>winconstraints</B></A> subroutine. </P>
+
+<P><A NAME="E1B1407170ceb"></A>Creating a window with the <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine. </P>
+
+<P><A NAME="E1B1407296ceb"></A>Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="gversion.html">Previous</a>  |
+<a href="icontitle.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

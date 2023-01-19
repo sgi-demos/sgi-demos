@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>pixmode Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="picksize.html">Previous</a>  |
+<a href="pmv.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="bav30marj"></A>pixmode Subroutine</H2>
+
+<H3><A NAME="A258C01c688"></A>Purpose</H3>
+<P><A NAME="E1D7139256ceb"></A>Controls the operation of pixmap transfers with the <A HREF="rectread.html#A142X9c7c"><B>lrectread</B></A> and <A HREF="rectwrite.html#A142X9c9e"><B>lrectwrite</B></A> subroutines.</P>
+
+<H3><A NAME="A79C1c6"></A>Libraries</H3>
+<P><A NAME="E1D7139295ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7139320ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A258C01c68c"></A>C Syntax</H3>
+<PRE><A NAME="A258C01c68d"></A><B>void pixmode (Int32 </B><A HREF="pixmode.html#Wc350marj"><I>mode</I></A><B>, Int32 </B><A HREF="pixmode.html#A3Xc130marj"><I>value</I></A><B>)</B></PRE>
+
+<H3><A NAME="A79C1c9"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A79C1ca"></A><B>SUBROUTINE PIXMOD (</B><I>mode</I><B>,</B> <I>value</I><B>)</B>
+<B>INTEGER*4 </B><I>mode</I><B>,</B><I> value</I></PRE>
+
+<H3><A NAME="A258C01c68e"></A>Description</H3>
+<P><A NAME="E1D7139432ceb"></A>The <B>pixmode</B> subroutine controls the manner in which the arguments of the <B>lrectread</B> and <B>lrectwrite</B> subroutines are interpreted while performing pixel transfers to and from the frame buffer. That is, the <B>pixmode</B> subroutine sets the attributes associated with a pixel-transfer operation. The attributes that can be set by this function <I>do not</I> control the operation of the <B>rectcopy</B> routine.</P>
+
+<P><A NAME="E1D7139459ceb"></A>This subroutine is intended to provide a device-independent interface to the reading and writing of 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791ae7">pixmaps</A>. It should be used to specify the format of the pixmaps maintained by the application. Transfers occurring with the <A HREF="rectread.html#A142X9c7c"><B>lrectread</B></A> and <A HREF="rectwrite.html#A142X9c9e"><B>lrectwrite</B></A> subroutines then automatically convert the incoming or outgoing data to or from the appropriate format for the internal device of the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A270A984a">frame buffer</A>.</P>
+
+<P><A NAME="E1D7139485ceb"></A>Only the <B>lrectread</B> and <B>lrectwrite</B> subroutines are affected by these attributes. The operation of the <B>rectread</B>, <B>rectwrite</B>, and <B>rectcopy</B> subroutines are not affected.</P>
+
+<P><A NAME="E1D7139510ceb"></A>The following information describes the various pixel transfer modes that are supported on the POWER Gt4 and POWER Gt4x adapters. </P>
+
+<BLOCKQUOTE><A NAME="AB8F252401ttay"></A><B>Note: </B>The 3-D Color Graphics Processor, the POWERgraphics GTO, and the POWERstation 730 adapters support only PM_FASTMODE.</BLOCKQUOTE>
+
+
+<TABLE><TR VALIGN="TOP" ALIGN="LEFT"><TH NOWRAP="NOWRAP">Mode</TH>
+<TH>  Default and Behavior</TH></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A58C9E3245ttay"></A><B>PM_TTOB</B></TD>
+<TD>  Default = False
+
+
+<P><A NAME="A58C9E3755ttay"></A>Indicates pixel row ordering from top to bottom or bottom to top. A value of True indicates that the top row comes first in the data, followed by remaining rows, top to bottom. A value of False indicates that the bottom row comes first in the data, followed by remaining rows, bottom to top. </P></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A58C9E4056ttay"></A><B>PM_STRIDE</B></TD>
+<TD>  Default = 0
+
+
+<P><A NAME="A58C9E4637ttay"></A>Indicates the number of 32-bit words between the starts of successive scan lines. On the POWER Gt4 and POWER Gt4x adapters, the stride must be positive and greater than the width of the pixmap (the width as specified with the <B>lrectread</B> and <B>lrectwrite</B> subroutines). If the stride is less than the width, the stride is to be changed to equal the width.</P>
+
+
+
+
+<P><A NAME="A58C9E5017ttay"></A>A stride factor that is different than the width is used to transfer subportions of an image to and from the screen. There are two scenarios:</P>
+
+
+
+
+<P><A NAME="A58C9E5583ttay"></A>1)&nbsp; A subportion of a large image on the system is to be transferred to the frame buffer. In this case, the row stride describes the length of a row on the system, while the arguments to the <B>lrectwrite</B> subroutine specify the subrectangle to be written. Note that the width specified through the <B>lrectwrite</B> subroutine is smaller than the row stride.</P>
+
+
+
+
+<P><A NAME="A58C9E6452ttay"></A>2)&nbsp; A subportion of a large image in the frame buffer is to be transferred to system memory. The subregion of the frame buffer is indicated with the <B>lrectread</B> subroutine. If the row stride factor is greater than the width specified with the <B>lrectread</B> subroutine, then only a <I>width</I> number of pixels in each row is transferred from the screen to the system. System memory beyond <I>width</I>, but before <I>stride</I> is not touched.</P></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A58C9E6800ttay"></A><B>PM_SIZE</B></TD>
+<TD>  Default = 32
+
+
+<P><A NAME="A58C9E7319ttay"></A>Indicates the number of bits between successive pixels in the data array. For instance, if the pixel size factor is 8, there are four pixels packed into one 32-bit word so that the system returns packed pixels while reading, and assumes that the user has presented packed pixels in the data when writing.</P>
+
+
+
+
+<P><A NAME="A58C9E7702ttay"></A>The POWER Gt4 and POWER Gt4x adapters support values of 8 and 32. Other values are ignored.</P>
+
+
+
+
+<P><A NAME="A58C9E8117ttay"></A>The setting of the PM_SIZE mode is ignored when reading from and writing to the overlay planes and the z-buffer. A size of 32 or one pixel per word is assumed.</P></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A58C9E8418ttay"></A><B>PM_FASTMODE</B></TD>
+<TD>  Default = True
+
+
+<P><A NAME="A58C9E8830ttay"></A>Indicates that the pixel transfer mode should be set automatically to values that maximize the hardware performance of pixel transfers. </P></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C507669152lpas"></A><B>All Adapters</B></TD>
+<TD>  Default = False
+
+
+<P><A NAME="C507669211lpas"></A>Pixel transfers proceed from left to right and then from bottom to top. Each pixel occupies one 32-bit word. RGB mode pixels are packed as 0xAABBGGRR. Colorindex mode pixels occupy the lowest order bits of the word.</P></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C507669268lpas"></A><B>3-D Color Graphics Processor</B></TD>
+<TD>  Default = True
+
+
+<P><A NAME="C507669324lpas"></A>The behavior is the same as PM_FASTMODE with default = False.</P></TD></TR></TABLE>
+
+<P><A NAME="E1D7139901ceb"></A>Different adapters have different pixel transfer methods. If an adapter has more than one fast pixel transfer mode, values that are closest to the default values are chosen. The following information summarizes the fast transfer modes for the POWER Gt4 and POWER Gt4x adapters.</P>
+
+<P><A NAME="E1D7139927ceb"></A>When PM_FASTMODE is set and True is specified, the pixel format depends on the current frame buffer configuration. When the window is in color-index mode, PM_SIZE is automatically set to 8; when in RGBmode, PM_SIZE is automatically set to 32.</P>
+
+<P><A NAME="E1D7139953ceb"></A>The POWER Gt4 and POWER Gt4x adapters natively support a packed pixel mode, with four 8-bit pixels stuffed into a 32-bit word. To obtain this transfer mode in colorindex mode, set PM_SIZE to 8.</P>
+
+<H3><A NAME="A258C01c692"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Wc350marj"></A><I>mode</I></TD>
+<TD>  A token representing the transfer mode to be changed.
+
+
+<P><A NAME="A258C01c694"></A>The actual behavior of the device when placed in FASTMODE TRUE is device specific.</P></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3Xc130marj"></A><I>value</I></TD>
+<TD>  The value to be associated with the pixel transfer mode.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c695"></A>Implementation Specifics</H3>
+<P><A NAME="E1D713A070ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<P><A NAME="A3CFCF81696janb"></A>The <B>pixmode</B> subroutine is currently inoperational on the POWERgraphics GXT1000.</P>
+
+<H3><A NAME="A79C1cb"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1cc"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1cd"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c69d"></A>Related Information</H3>
+<P><A NAME="E1D713A167ceb"></A>Drawing a rectangular array of pixels into the frame buffer with the <A HREF="rectwrite.html#A142X9c9e"><B>rectwrite </B>or <B>lrectwrite</B></A> subroutine.</P>
+
+<P><A NAME="E1D713A193ceb"></A>Reading a rectangular array of pixels into host memory with the <A HREF="rectread.html#A142X9c7c"><B>rectread</B> or <B>lrectread</B></A> subroutine.</P>
+
+<P><A NAME="E1D713A219ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and <!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>.</P>
+
+<P><A NAME="E1D713A244ceb"></A>Reading and Writing <!--gl32prgd:--><A HREF="../gl32prgd/rwpixels.html#rwpixels.html">Pixels</A>.</P><hr><center>
+[  <a href="picksize.html">Previous</a>  |
+<a href="pmv.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

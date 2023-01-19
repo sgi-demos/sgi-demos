@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>text.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="../gl32tref/sunflower_c.html">Previous</a>  |
+<a href="tpbig_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c9b2"></A>text.c Example C Language Program
+</H2>
+<A NAME="INDEX2453" REL="I1" TITLE="text.c example program (GL)"></A>
+<A NAME="INDEX2454" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2455" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2456" REL="I3" TITLE="text"></A>
+<A NAME="INDEX2457" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2458" REL="I2" TITLE="text"></A>
+<A NAME="INDEX2459" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64EBA3155ttay"></A>/*
+text.c:</PRE>
+<PRE><A NAME="A64EBA3320ttay"></A>A text drawing sample program using the charstr() subro utine.
+*/</PRE>
+<PRE><A NAME="A64EBA3476ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EBA3724ttay"></A>main()
+{
+&nbsp;&nbsp;&nbsp;Device dev;
+&nbsp;&nbsp;&nbsp;short val;    
+&nbsp;&nbsp;&nbsp;initialize();    
+&nbsp;&nbsp;&nbsp;while (TRUE) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (qtest()) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dev = qread(&amp;val);            
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (dev == ESCKEY) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gexit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (dev == REDRAW) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reshapeviewport();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawtext();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EBA3867ttay"></A>}</PRE>
+<PRE><A NAME="A64EBA4019ttay"></A>initialize()
+{
+&nbsp;&nbsp;&nbsp;int gid;    </PRE>
+<PRE><A NAME="A64EBA4229ttay"></A>&nbsp;&nbsp;&nbsp;prefposition(XMAXSCREEN/4, XMAXSCREEN*3/4, YMAXSCREEN/4, 
+&nbsp;&nbsp;&nbsp;    YMAXSCREEN*3/4);
+&nbsp;&nbsp;&nbsp;gid = winopen("text");
+&nbsp;&nbsp;&nbsp;winconstraints();    
+&nbsp;&nbsp;&nbsp;qdevice(ESCKEY);
+&nbsp;&nbsp;&nbsp;qdevice(REDRAW);
+&nbsp;&nbsp;&nbsp;qenter(REDRAW,gid);
+}</PRE>
+<PRE><A NAME="A64EBA4375ttay"></A>drawtext()
+{</PRE>
+<PRE><A NAME="A64EBA4583ttay"></A>&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(RED);
+&nbsp;&nbsp;&nbsp;cmov2i(300,380);
+&nbsp;&nbsp;&nbsp;charstr("The first line is drawn ");
+&nbsp;&nbsp;&nbsp;charstr("in two parts. ");
+&nbsp;&nbsp;&nbsp;cmov2i(300, 368);
+&nbsp;&nbsp;&nbsp;charstr("This line is 12 pixels lower. ");</PRE>
+<PRE><A NAME="A64EBA4725ttay"></A>}</PRE>
+
+<H3><A NAME="A201C11a7"></A>Related Information</H3>
+<P><A NAME="E1D78F9274ceb"></A>The <A HREF="curson.html#ru1280nita"><B>curson or cursoff</B></A> subroutine<A HREF="../gl32tref/ru1280nita" REL="PAGENUM"></A>.</P>
+
+<hr><center>
+[  <a href="../gl32tref/sunflower_c.html">Previous</a>  |
+<a href="tpbig_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getbutton Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getbuffer.html">Previous</a>  |
+<a href="getcmmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X91"></A>getbutton Subroutine</H2>
+<A NAME="INDEX591" REL="I1" TITLE="getbutton subroutine (GL)"></A>
+<A NAME="INDEX592" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX593" REL="I2" TITLE="query"></A>
+<A NAME="INDEX594" REL="I3" TITLE="getbutton"></A>
+<A NAME="INDEX595" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX596" REL="I2" TITLE="device"></A>
+<A NAME="INDEX597" REL="I3" TITLE="returning button state"></A>
+<A NAME="INDEX598" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX599" REL="I2" TITLE="queue and device"></A>
+<A NAME="INDEX600" REL="I3" TITLE="getbutton"></A>
+
+<H3><A NAME="A143X93"></A>Purpose</H3>
+<P><A NAME="E1B0D16177ceb"></A>Returns the state (up or down) of a button.</P>
+
+<H3><A NAME="A79C113f"></A>Libraries</H3>
+<P><A NAME="E1B0D16327ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0D16431ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X97"></A>C Syntax</H3>
+<PRE><A NAME="A143X98"></A><B>Int32 getbutton(Device </B><A HREF="getbutton.html#A143X9c"><I>number</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c53"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c54"></A><B>LOGICAL FUNCTION GETBUT(</B><I>number</I><B>)</B>
+<B>INTEGER*4 </B><I>number</I></PRE>
+
+<BLOCKQUOTE><A NAME="A79C1142"></A><B>Note: </B>For FORTRAN users, this function accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X99"></A>Description</H3>
+<P><A NAME="E1B0D16854ceb"></A>The <B>getbutton</B> subroutine returns the state of the button specified in the <A HREF="getbutton.html#A143X9c"><I>number</I></A> parameter. A complete list of buttons can be found in the file <B>/usr/include/gl/device.h</B>.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f71"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X9b"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9c"></A><I>number</I></TD>
+<TD>  Specifies the number of the button to test.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9f"></A>Return Values</H3>
+<P><A NAME="E1B0D17171ceb"></A>The return values and their corresponding states are as follows:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Value</B></TD>
+
+<TD><B> State</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>  0</TD>
+
+<TD>Up</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>  1</TD>
+
+<TD>Down</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>-1</TD>
+
+<TD>Invalid device number</TD></TR></TABLE>
+
+<H3><A NAME="A30C01105e"></A>Example</H3>
+<P><A NAME="E1B0D17380ceb"></A>The example C language program <A HREF="scrn_rotate_c.html#A16C0c92f"><B>scrn_rotate.c</B></A> uses the <B>getbutton</B> subroutine to check the state of various buttons. </P>
+
+<H3><A NAME="A64C01660d"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0D17541ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A143X91d"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1143"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1144"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1145"></A><B>/usr/include/gl/device.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1146"></A><B>/usr/include/gl/fdevice.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A318C9f72"></A>Related Information</H3>
+<P><A NAME="E1B0D17972ceb"></A>Returning the current state of a valuator with the <A HREF="getvaluator.html#A143X945"><B>getvaluator</B></A> subroutine.</P>
+
+<P><A NAME="E1B0D18079ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/cntrlques.html#cntrlques.html">Controlling Queues and Devices</A>, <!--gl32prgd:--><A HREF="../gl32prgd/keyboardgl.html#keyboardgl.html">Using the Keyboard</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying the System</A>.</P><hr><center>
+[  <a href="getbuffer.html">Previous</a>  |
+<a href="getcmmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

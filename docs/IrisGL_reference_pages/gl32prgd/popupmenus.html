@@ -1,0 +1,661 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/popupmenus.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Creating and Managing Pop-Up Menus
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="querysys.html">Previous</a>  |
+<a href="textport.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="popupmenus.html"></A>Creating and Managing Pop-Up Menus</H2>
+
+
+<P><A NAME="INDEX886"></A><A NAME="INDEX887"></A><A NAME="INDEX888"></A><A NAME="INDEX889"></A></P>
+
+
+<P><A NAME="A3C0ED59630mhay"></A>This section discusses the following topics:</P>
+
+
+<UL><LI><A NAME="A258C01c058"></A><A HREF="popupmenus.html#A42C01281f">Creating
+a Menu</A> </LI>
+
+
+<LI><A NAME="A258C01c059"></A><A HREF="popupmenus.html#A42C012832">Calling
+Up a Pop-Up Menu</A></LI>
+
+
+<LI><A NAME="A258C01c05a"></A><A HREF="popupmenus.html#A58C0153a7">Advanced
+Menu Formats</A></LI></UL>
+
+
+<H3><A NAME="A264X9335"></A>List of GL Pop-Up Menu Subroutines<A NAME="INDEX890"></A>
+<A NAME="INDEX891"></A> <A NAME="INDEX892"></A> <A NAME="INDEX893"></A>
+<A NAME="INDEX894"></A> <A NAME="INDEX895"></A> </H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c50"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/addtopup.html#A142X9109d">addtopup</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Adds an item to an existing pop-up menu. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c51"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/defpup.html#A142X910bf">defpup</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Defines a pop-up menu. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c52"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/dopup.html#A142X910e1">dopup</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Displays a pop-up menu. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c53"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/freepup.html#A142X91103">freepup</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Frees (deallocates) a pop-up menu and its data structures. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9c54"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/newpup.html#A142X91125">newpup</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Allocates and initializes the structure for a new pop-up menu. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A55C014c36"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/setpup.html#A5um1280marj">setpup</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Enables or disables a given pop-up entry.</TD></TR></TABLE>
+
+
+<P> </P>
+
+
+<BLOCKQUOTE><P><A NAME="A3C0ED59662mhay"></A><B>Note: </B>Using popup menu facilities
+when the X server has been initialized in layer 1 (the overlay bitplane)
+is ugly. The GL popup menus use the <B>fullscrn</B> subroutine. </P></BLOCKQUOTE>
+
+
+<H3><A NAME="A42C01281f"></A>Creating a Menu<A NAME="INDEX896"></A> <A NAME="INDEX897"></A>
+<A NAME="INDEX898"></A> <A NAME="INDEX899"></A> <A NAME="INDEX900"></A>
+<A NAME="INDEX901"></A> </H3>
+
+
+<P><A NAME="A3C0ED59675mhay"></A>GL contains subroutines that you can include
+in your graphics programs to create and use pop-up menus. When you select
+an item from a menu, these subroutines automatically identify which menu
+item has been selected. </P>
+
+
+<P><A NAME="A3C0ED59696mhay"></A>To create a pop-up menu in C programming
+language, use the <B><A HREF="popupmenus.html#Oh74260nita">defpup subroutine</A></B>.
+To create a pop-up menu in FORTRAN, use the <B><A HREF="popupmenus.html#A6j74260nita">newpup</A></B>
+and <B><A HREF="popupmenus.html#Rr74100nita">addtopup</A></B> subroutine.</P>
+
+
+<P><A NAME="A3C0ED59717mhay"></A>You can also design your own pop-up menu
+interface using the overlay bitplanes. </P>
+
+
+<P><A NAME="A3C0ED59738mhay"></A>To set pop-up menu colors, use the <B>mapcolor</B>
+and <B>mapcolors</B> subroutines. To facilitate color selection, the following
+tokens are defined in the <B>/usr/include/gl/gl.h</B> file: </P>
+
+
+<UL><LI><A NAME="A50C900256vbia"></A>PUP_CLEAR</LI>
+
+
+<LI><A NAME="A50C900404vbia"></A>PUP_COLOR</LI>
+
+
+<LI><A NAME="A50C900552vbia"></A>PUP_BLACK</LI>
+
+
+<LI><A NAME="A50C900705vbia"></A>PUP_WHITE</LI></UL>
+
+
+<H4><A NAME="Oh74260nita"></A>defpup Subroutine </H4>
+
+
+<P><A NAME="A3C0ED59765mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defpup.html#A142X910bf">defpup</A></B>
+subroutine defines a pop-up menu by allocating structure and making menu
+entries. In C programming language, you can combine the functions of the
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/newpup.html#A142X91125">newpup</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/addtopup.html#A142X9109d">addtopup</A></B>
+subroutines by calling the <B>defpup</B> subroutine, available only in
+C programming language. FORTRAN does not support variable parameter lists.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A55C014c2e"></A>Int32&nbsp;defpup(Char8&nbsp;*String&nbsp;[,&nbsp;Int32&nbsp;arguments&nbsp;...])</PRE>
+
+
+<P><A NAME="A3C0ED59786mhay"></A>The <B>defpup</B> subroutine creates the
+menu in one step. You can add menu entries with the <B>addtopup</B> subroutine.</P>
+
+
+<P><A NAME="A3C0ED59807mhay"></A>The PUPDRAW option of the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/drawmode.html#A143X9460">drawmode</A></B>
+subroutine allows you to define the colors for pop-up menus with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/mapcolor.html#A146X9535">mapcolor</A></B>
+subroutine. Be aware that you cannot draw while using the PUPDRAW option
+of the <B>drawmode</B> subroutine. </P>
+
+
+<P><A NAME="A3C0ED59828mhay"></A>If you program in FORTRAN, you must use
+the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/newpup.html#A142X91125">newpup</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/addtopup.html#A142X9109d">addtopup</A></B>
+subroutines to create the menu. </P>
+
+
+<H4><A NAME="A6j74260nita"></A>newpup Subroutine </H4>
+
+
+<P><A NAME="A3C0ED59850mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/newpup.html#A142X91125">newpup</A></B>
+subroutine allocates and initializes a structure for a new menu. This subroutine
+takes no arguments and returns a 32-bit integer identifier (the <I>popup</I>
+parameter) for the pop-up menu. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A55C014c2f"></A>Int32&nbsp;newpup()</PRE>
+
+
+<H4><A NAME="Rr74100nita"></A>addtopup Subroutine </H4>
+
+
+<P><A NAME="A3C0ED59874mhay"></A>After the <B>newpup</B> subroutine creates
+an empty menu, use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/addtopup.html#A142X9109d">addtopup</A></B>
+subroutine to build the menu by adding entries to the bottom of the empty
+menu structure. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A55C014c30"></A>void&nbsp;addtopup(Int32&nbsp;popup,&nbsp;Char8&nbsp;*String,&nbsp;Int32&nbsp;argument)</PRE>
+
+
+<P><A NAME="A3C0ED59896mhay"></A>The <I>popup</I> parameter is the menu
+identifier returned by the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/newpup.html#A142X91125">newpup</A></B>
+subroutine or the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defpup.html#A142X910bf">defpup</A></B>
+subroutine. The <I>String</I> parameter is a character string that specifies
+the entries in the menu. The string lists the menu labels from the top
+to the bottom of the menu, with a | (vertical bar delimiter) between entries.</P>
+
+
+<P><A NAME="A3C0ED59917mhay"></A>The FORTRAN version, the <B>addtopup</B>
+subroutine, takes an additional <I>Length</I> parameter, which specifies
+the number of characters in the string. The <I>Argument</I> parameter is
+necessary only for advanced menu formats. </P>
+
+
+<P><A NAME="A3C0ED59938mhay"></A>Following are two examples of adding to
+a menu: </P>
+
+
+<P><A NAME="A3C0ED59958mhay"></A>In C programming language: </P>
+
+
+<PRE><A NAME="A42C01282e"></A>menu&nbsp;=&nbsp;newpup();
+addtopup&nbsp;(menu,&nbsp;&quot;first|second|third&quot;);</PRE>
+
+
+<P><A NAME="A3C0ED59980mhay"></A>In FORTRAN: </P>
+
+
+<PRE><A NAME="A42C012830"></A>IMENU&nbsp;=&nbsp;NEWPUP();
+CALL&nbsp;ADDTOP&nbsp;(IMENU,&nbsp;&quot;first|second|third&quot;,&nbsp;18);</PRE>
+
+
+<P><A NAME="A3C0ED5A002mhay"></A>The number <TT>18</TT> in the FORTRAN
+subroutine is the number of characters in the string, including the vertical
+bar delimiters. </P>
+
+
+<H3><A NAME="A42C012832"></A>Calling Up a Pop-Up Menu<A NAME="INDEX902"></A>
+<A NAME="INDEX903"></A> <A NAME="INDEX904"></A> <A NAME="INDEX905"></A>
+<A NAME="INDEX906"></A> <A NAME="INDEX907"></A> </H3>
+
+
+<P><A NAME="A3C0ED5A024mhay"></A>The following subroutines allow you to
+invoke your choice of pop-up menus and free the memory occupied by the
+menu when no longer needed. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A5342FA798vbia"></A><B>Note: </B>Do not call the exit routine
+directly from a pop-up menu. This could cause the pop-up menu to be erased
+from the overlays. To prevent this, either return from the <B>dopup</B>
+subroutine or clear the overlays before you call the exit routine. </P></BLOCKQUOTE>
+
+
+<H4><A NAME="A42C012834"></A>dopup Subroutine </H4>
+
+
+<P><A NAME="A3C0ED5A048mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/dopup.html#A142X910e1">dopup</A></B>
+subroutine displays a pop-up menu previously defined with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defpup.html#A142X910bf">defpup</A></B>
+subroutine. The <I>popup</I> parameter is the identifier of the pop-up
+menu. The system displays the menu until you either make a selection or
+release the button with the cursor off the menu. The value that the <B>dopup</B>
+subroutine returns depends on the menu selection. If no selection is made,
+the <B>dopup</B> subroutine returns -1 (negative one). If the pop-up menu
+does not use an advanced menu format, the <B>dopup</B> subroutine returns
+an integer corresponding to the position of the item in the menu. The syntax
+is as follows: </P>
+
+
+<PRE><A NAME="A55C014c31"></A>Int32&nbsp;dopup(Int32&nbsp;popup)</PRE>
+
+
+<P><A NAME="A3C0ED5A071mhay"></A>To cause the right mouse button to bring
+up the menu built in the previous example, use the following code: </P>
+
+
+<P><A NAME="A3C0ED5A092mhay"></A>In C programming language: </P>
+
+
+<PRE><A NAME="A42C012839"></A>dev&nbsp;=&nbsp;qread(&amp;val);
+if&nbsp;(dev&nbsp;==&nbsp;RIGHTMOUSE)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(val&nbsp;==&nbsp;1)&nbsp;{&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;right&nbsp;mouse&nbsp;button&nbsp;is&nbsp;pressed&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menuval&nbsp;=&nbsp;dopup&nbsp;(menu);
+    }
+}</PRE>
+
+
+<P><A NAME="A3C0ED5A114mhay"></A>In FORTRAN: </P>
+
+
+<PRE><A NAME="A42C01283b"></A>IDEV&nbsp;=&nbsp;QREAD(IVAL)
+IF&nbsp;(IDEV&nbsp;.EQ.&nbsp;RIGHTM)&nbsp;THEN
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;(IVAL&nbsp;.EQ.&nbsp;1)&nbsp;THEN
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MENVAL&nbsp;=&nbsp;DOPUP&nbsp;(IMENU);
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF
+ENDIF</PRE>
+
+
+<P><A NAME="A3C0ED5A136mhay"></A>Select the <TT>first</TT>, <TT>second</TT>,
+or <TT>third</TT> item in the menu by positioning the cursor over one of
+these items, then releasing the button. To make no selection, release the
+button with the cursor off the menu. The following table shows the return
+value for each possible selection in the example: </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Default Return Values</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Selection</B> </TD>
+
+
+<TD><B>Return Value</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>First </TD>
+
+
+<TD>1 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Second </TD>
+
+
+<TD>2 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Third </TD>
+
+
+<TD>3 </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>No selection </TD>
+
+
+<TD>-1 </TD></TR></TABLE>
+
+
+<H4><A NAME="A42C01283d"></A>freepup Subroutine </H4>
+
+
+<P><A NAME="A3C0ED5A160mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/freepup.html#A142X91103">freepup</A></B>
+subroutine deletes a pop-up menu, freeing the memory reserved for its data
+structures. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A55C014c32"></A>void&nbsp;freepup(Int32&nbsp;popup)</PRE>
+
+
+<H4><A NAME="A55C014c33"></A>setpup Subroutine </H4>
+
+
+<P><A NAME="A3C0ED5A183mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/setpup.html#A5um1280marj">setpup</A></B>
+subroutine enables or disables a given pop-up menu entry. If used properly,
+this subroutine renders submenus associated with a disabled entry inaccessible.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A55C014c35"></A>void&nbsp;setpup(Int32&nbsp;pup,&nbsp;Int&nbsp;32&nbsp;entry,&nbsp;Int32&nbsp;mode)</PRE>
+
+
+<H3><A NAME="A58C0153a7"></A>Advanced Menu Formats<A NAME="INDEX908"></A>
+<A NAME="INDEX909"></A> <A NAME="INDEX910"></A> <A NAME="INDEX911"></A>
+<A NAME="INDEX912"></A> <A NAME="INDEX913"></A> </H3>
+
+
+<P><A NAME="A3C0ED5A206mhay"></A>You can use advanced menu format to: </P>
+
+
+<UL><LI><A NAME="A58C0153a9"></A>Change the value returned when you select
+a menu item.</LI>
+
+
+<LI><A NAME="A58C0153aa"></A>Bind a function to a whole menu or to a menu
+item.</LI>
+
+
+<LI><A NAME="A58C0153ab"></A>Make a title bar or a nested (rollover) menu.</LI></UL>
+
+
+<P><A NAME="A3C0ED5A593mhay"></A>You introduce the special format when
+you call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/defpup.html#A142X910bf">defpup</A></B>
+or <B><!--:libs:gl32tref:--><A HREF="../gl32tref/addtopup.html#A142X9109d">addtopup</A></B>
+subroutine. Following the string that defines the menu entry, add these
+format instructions: </P>
+
+
+<UL><LI><A NAME="A58C0153ad"></A>Percent sign (%) begins the special format.</LI>
+
+
+<LI><A NAME="A58C0153ae"></A>One format character specifies which format
+to use (see the Summary of Advanced Menu Formats table).</LI>
+
+
+<LI><A NAME="A58C0153af"></A>Numeric values, parameters, or both, are required
+for some formats. Numeric values immediately follow the format character.
+Parameters always come at the end of the <B>defpup</B> or <B>addtopup</B>
+subroutine.</LI></UL>
+
+
+<P><A NAME="A3C0ED5A617mhay"></A>More than one special format can be associated
+with a menu entry. Use a | (vertical bar) to separate entries. </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="5"><B>Summary of Advanced Menu Formats</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Task</B> </TD>
+
+
+<TD><B>Format</B> </TD>
+
+
+<TD><B>Changes Return Value?</B> </TD>
+
+
+<TD><B>Needs Numeric Value?</B> </TD>
+
+
+<TD><B>Needs Parameters?</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Return default values </TD>
+
+
+<TD>%n </TD>
+
+
+<TD>No </TD>
+
+
+<TD>No </TD>
+
+
+<TD>No </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Return other values </TD>
+
+
+<TD>%x </TD>
+
+
+<TD>Yes </TD>
+
+
+<TD>Yes </TD>
+
+
+<TD>No </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Make title </TD>
+
+
+<TD>%t </TD>
+
+
+<TD>No </TD>
+
+
+<TD>No </TD>
+
+
+<TD>No </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Bind function/ whole menu </TD>
+
+
+<TD>%F </TD>
+
+
+<TD>Yes </TD>
+
+
+<TD>Possibly </TD>
+
+
+<TD>Yes </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Bind function/ menu item </TD>
+
+
+<TD>%f </TD>
+
+
+<TD>Yes </TD>
+
+
+<TD>Possibly </TD>
+
+
+<TD>Yes </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Make nested menu </TD>
+
+
+<TD>%m </TD>
+
+
+<TD>Yes </TD>
+
+
+<TD>No </TD>
+
+
+<TD>Yes </TD></TR></TABLE>
+
+
+<H4><A NAME="A58C0153b1"></A>Returning the Default Values for Menu Selections</H4>
+
+
+<P><A NAME="A3C0ED5A642mhay"></A>The %n format can be used to return a
+menu entry to its default settings. The %n format takes no parameters.
+The following menu: </P>
+
+
+<PRE><A NAME="A58C0153b3"></A>menu&nbsp;=&nbsp;newpup();
+addtopup(menu,&nbsp;&quot;first|second|third&quot;);</PRE>
+
+
+<P><A NAME="A3C0ED5A664mhay"></A>is the same as this menu: </P>
+
+
+<PRE><A NAME="A58C0153b5"></A>menu&nbsp;=&nbsp;newpup();
+addtopup(menu,&nbsp;&quot;first&nbsp;%n|second&nbsp;%n|third&nbsp;%n&quot;);</PRE>
+
+
+<H4><A NAME="A58C0153b6"></A>Changing the Return Values for Menu Selections</H4>
+
+
+<P><A NAME="A3C0ED5A686mhay"></A>The %x format changes the numeric value
+that the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/dopup.html#A142X910e1">dopup</A></B>
+subroutine returns. Note the following menu: </P>
+
+
+<PRE><A NAME="A58C0153b8"></A>menu&nbsp;=&nbsp;newpup();
+addtopup(menu,&nbsp;&quot;first&nbsp;%x15|second&nbsp;%x7&quot;);</PRE>
+
+
+<P><A NAME="A3C0ED5A708mhay"></A>Selecting <TT>first</TT> causes the <B>dopup</B>
+subroutine to return 15, not -1 (the default). Selecting <TT>second</TT>
+causes the <B>dopup</B> subroutine to return 7, not 2 (the default). For
+this format, you must specify a numeric value that the <B>dopup</B> subroutine
+returns in place of the default. </P>
+
+
+<H4><A NAME="A58C0153ba"></A>Making a Title Bar </H4>
+
+
+<P><A NAME="A3C0ED5A730mhay"></A>The %t format creates a title bar on a
+pop-up menu. You cannot select the title bar. It does not highlight. </P>
+
+
+<P><A NAME="A3C0ED5A751mhay"></A>The following menu is the same as the
+first example, except that there is a title bar at the top of the menu.
+The %t format takes no parameters. </P>
+
+
+<PRE><A NAME="A58C0153bd"></A>menu&nbsp;=&nbsp;newpup();
+addtopup(menu,&nbsp;&quot;Cardinal&nbsp;%t|first|second|third&quot;);</PRE>
+
+
+<H4><A NAME="A58C0153be"></A>Binding a Function to a Whole Menu </H4>
+
+
+<P><A NAME="A3C0ED5A774mhay"></A>The %F format specifies a function that
+affects all values returned by any item in the menu. This format requires
+a parameter to specify the function or subroutine that affects all values
+that the <B>dopup</B> subroutine returns. </P>
+
+
+<PRE><A NAME="A58C0153c0"></A>menu&nbsp;=&nbsp;newpup();
+addtopup(menu,&nbsp;&quot;Cardinal&nbsp;%t&nbsp;%F|first|second&nbsp;%x10&quot;,&nbsp;funct);</PRE>
+
+
+<P><A NAME="A3C0ED5A796mhay"></A>When the user selects <TT>first</TT> from
+the pop-up menu, the <B>dopup</B> subroutine returns <TT>funct(1)</TT>
+instead of 1. When the user selects <TT>second</TT>, the <B>dopup</B> subroutine
+returns <TT>funct(10)</TT>. </P>
+
+
+<H4><A NAME="A58C0153c2"></A>Binding a Function to a Menu Entry </H4>
+
+
+<P><A NAME="A3C0ED5A817mhay"></A>The %f format makes a menu entry that
+calls a function or subroutine. The name of the function is the parameter
+to this format: </P>
+
+
+<PRE><A NAME="A58C0153c4"></A>menu&nbsp;=&nbsp;newpup();
+addtopup(menu,&nbsp;&quot;first|call&nbsp;%f&quot;,&nbsp;func);</PRE>
+
+
+<P><A NAME="A3C0ED5A839mhay"></A>When the user selects <TT>call</TT> from
+the pop-up menu, the <TT>funct</TT> function is called with a parameter
+of 2 (the default return value for this selection). The <TT>dopup(menu)</TT>
+returns <TT>funct(2)</TT>. </P>
+
+
+<P><A NAME="A3C0ED5A859mhay"></A>Call the <B>addtopup</B> subroutine each
+time you want to add another menu entry that has its own function. </P>
+
+
+<P><A NAME="A3C0ED5A880mhay"></A>You can also use the <B>defpup</B> subroutine
+to define a pop-up with one or more menu entries that bind to a function.</P>
+
+
+<H4><A NAME="A58C0153c8"></A>Making a Nested (Rollover) Menu </H4>
+
+
+<P><A NAME="A3C0ED5A902mhay"></A>The %m format creates a simple nested
+pop-up menu (a submenu). When you roll the cursor to the right side of
+the menu item, you invoke the submenu. Labels on the submenu can have further
+choices. This format requires a parameter to specify the menu identifier
+for the pop-up submenu. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A58C0153ca"></A><B>Note: </B>You must declare any submenus
+before the main menu in your program. </P></BLOCKQUOTE>
+
+
+<PRE><A NAME="A58C0153cb"></A>submenu&nbsp;=&nbsp;newpup();
+addtopup(submenu,&nbsp;&quot;one|two&quot;);
+menu&nbsp;=&nbsp;newpup();
+addtopup(menu,&nbsp;&quot;Cardinal&nbsp;%t|above&nbsp;%x5|below&nbsp;%m&quot;,&nbsp;submenu);</PRE>
+
+
+<P><A NAME="A3C0ED5A925mhay"></A>If you select an item from the submenu,
+the <TT>dopup(menu)</TT> returns the same value as the <TT>dopup(submenu)</TT>.
+If you display the submenu without making a selection, the <B>dopup</B>
+subroutine returns negative 1. </P>
+
+
+
+
+<hr><center>
+[  <a href="querysys.html">Previous</a>  |
+<a href="textport.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/popupmenus.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+

@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>qread Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="qenter.html">Previous</a>  |
+<a href="qreset.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X989"></A>qread Subroutine</H2>
+<A NAME="INDEX1521" REL="I1" TITLE="qread subroutine (GL)"></A>
+<A NAME="INDEX1522" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1523" REL="I2" TITLE="queue"></A>
+<A NAME="INDEX1524" REL="I3" TITLE="reading first entry in event queue"></A>
+<A NAME="INDEX1525" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1526" REL="I2" TITLE="queue and device"></A>
+<A NAME="INDEX1527" REL="I3" TITLE="qread"></A>
+<A NAME="INDEX1528" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1529" REL="I2" TITLE="query"></A>
+<A NAME="INDEX1530" REL="I3" TITLE="qread"></A>
+
+<H3><A NAME="A143X98b"></A>Purpose</H3>
+<P><A NAME="E1D7272186ceb"></A>Reads the first entry in the event queue. </P>
+
+<H3><A NAME="C46F28E015nqui"></A>Libraries</H3>
+<P><A NAME="E1D7272225ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7272249ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X98f"></A>C Syntax</H3>
+<PRE><A NAME="A143X990"></A><B>Int32 qread(Int16 *</B><A HREF="qread.html#A143X995"><I>data</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010c6a"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010c6b"></A><B>INTEGER*4 FUNCTION QREAD(</B><I>data</I><B>)</B>
+<B>INTEGER*2 </B><I>data</I></PRE>
+
+<H3><A NAME="A143X991"></A>Description</H3>
+<P><A NAME="E1D7272361ceb"></A>The <B>qread</B> subroutine returns the first entry on the event queue. If the event queue is empty, the <B>qread</B> subroutine blocks. That is, this subroutine does not return until an event occurs. If the event queue is not empty, the <B>qread</B> subroutine returns the device number associated with the first event in the queue, writes the associated data into the <I>data</I> parameter, and removes that entry from the queue.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f7e"></A><B>Note: </B>This subroutine cannot be used to add to a display list.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X993"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X995"></A><I>data</I></TD>
+<TD>  Specifies a pointer to the variable that is to receive the data in the event queue.</TD></TR></TABLE>
+
+<H3><A NAME="A143X997"></A>Return Value</H3>
+<P><A NAME="E1D7272456ceb"></A>The identifier for the device read.</P>
+
+<H3><A NAME="A30C011064"></A>Example</H3>
+<P><A NAME="E1D7272497ceb"></A>The example C language program <A HREF="scrn_rotate_c.html#A16C0c92f"><B>scrn_rotate.c</B></A> uses the <B>qread</B> subroutine to read input from the event queue. </P>
+
+<H3><A NAME="A64C016617"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7272541ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A143X9a5"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C46F28F043nqui"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C46F28F120nqui"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C46F28F196nqui"></A><B>/usr/include/gl/device.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="C46F28F272nqui"></A><B>/usr/include/gl/fdevice.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9a9"></A>Related Information</H3>
+<P><A NAME="E1D7272675ceb"></A>Enabling an input device for event queuing with the <A HREF="qdevice.html#A143X967"><B>qdevice</B></A> subroutine.</P>
+
+<P><A NAME="E1D7272701ceb"></A>Disabling an input device for event queuing with the <A HREF="unqdevice.html#A143X91b8"><B>unqdevice</B></A> subroutine.</P>
+
+<P><A NAME="E1D7272726ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and <!--gl32prgd:--><A HREF="../gl32prgd/cntrlques.html#cntrlques.html">Controlling Queues and Devices</A>.</P><hr><center>
+[  <a href="qenter.html">Previous</a>  |
+<a href="qreset.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

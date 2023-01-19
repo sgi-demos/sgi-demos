@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>draw Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="doublebuffer.html">Previous</a>  |
+<a href="drawmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="EYf2e0marj"></A>draw Subroutine</H2>
+<A NAME="INDEX447" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX448" REL="I2" TITLE="moveraw style"></A>
+<A NAME="INDEX449" REL="I3" TITLE="draw"></A>
+<A NAME="INDEX450" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX451" REL="I2" TITLE="line"></A>
+<A NAME="INDEX452" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX453" REL="I1" TITLE="draw subroutine (GL)"></A>
+<H3><A NAME="A213X912e47"></A>Purpose</H3>
+<P><A NAME="E1B0A7E350ceb"></A>Draws a line.</P>
+
+<H3><A NAME="A78C12e4"></A>Libraries</H3>
+<P><A NAME="E1B0A7E499ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0A7E603ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912e4a"></A>C Syntax</H3>
+<PRE><A NAME="A213X912e4b"></A><B>void draw</B>
+<B>(Coord </B><A HREF="draw.html#A213X912e55"><I>x</I></A><B>, Coord</B> <A HREF="draw.html#A213X912e56"><I>y</I></A><B>, Coord</B> <A HREF="draw.html#A213X912e57"><I>z</I></A><B>)</B></PRE>
+<PRE><A NAME="jxJ170marj"></A><B>void drawi</B>
+<B>(Icoord </B><A HREF="draw.html#A213X912e55"><I>x</I></A><B>, Icoord</B> <A HREF="draw.html#A213X912e56"><I>y</I></A><B>,</B> <B>Icoord</B> <A HREF="draw.html#A213X912e57"><I>z</I></A><B>)</B></PRE>
+<PRE><A NAME="QyJ230marj"></A><B>void draws</B>
+<B>(Scoord </B><A HREF="draw.html#A213X912e55"><I>x</I></A><B>, Scoord</B> <A HREF="draw.html#A213X912e56"><I>y</I></A><B>,</B> <B>Scoord</B> <A HREF="draw.html#A213X912e57"><I>z</I></A><B>)</B></PRE>
+<PRE><A NAME="pzJ150marj"></A><B>void draw2</B>
+<B>(Coord </B><A HREF="draw.html#A213X912e55"><I>x</I></A><B>, Coord</B> <A HREF="draw.html#A213X912e56"><I>y</I></A><B>)</B></PRE>
+<PRE><A NAME="qQJ150marj"></A><B>void draw2i</B>
+<B>(Icoord </B><A HREF="draw.html#A213X912e55"><I>x</I></A><B>, Icoord</B> <A HREF="draw.html#A213X912e56"><I>y</I></A><B>)</B></PRE>
+<PRE><A NAME="A7AJ90marj"></A><B>void draw2s</B>
+<B>(Scoord </B><A HREF="draw.html#A213X912e55"><I>x</I></A><B>, Scoord</B> <A HREF="draw.html#A213X912e56"><I>y</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010ab3"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010ab4"></A><B>SUBROUTINE DRAW(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I><B>)</B>
+<B>REAL </B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I></PRE>
+<PRE><A NAME="A29C010ab5"></A><B>SUBROUTINE DRAWI(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I></PRE>
+<PRE><A NAME="A29C010ab6"></A><B>SUBROUTINE DRAWS(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I><B>)</B>
+<B>INTEGER*2 </B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I></PRE>
+<PRE><A NAME="A29C010ab7"></A><B>SUBROUTINE DRAW2(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>REAL </B><I>x</I><B>, </B><I>y</I></PRE>
+<PRE><A NAME="A29C010ab8"></A><B>SUBROUTINE DRAW2I(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>, </B><I>y</I></PRE>
+<PRE><A NAME="A29C010ab9"></A><B>SUBROUTINE DRAW2S(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>INTEGER*2 </B><I>x</I><B>, </B><I>y</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C12e7"></A><B>Note: </B>For FORTRAN users, the INTEGER*2 versions of this subroutine, <B>DRAWS</B> and <B>DRAW2S</B>, should not be called with integer constant parameters. For example, 2 is an integer constant; JJ is an integer variable. The XL FORTRAN compiler, invoked by the <B>xlf</B> command, stores all integer constants as long integers (INTEGER*4), not as short integers (INTEGER*2). Invoking one of the short versions of this subroutine with an integer constant will result in unexpected behavior.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912e4e"></A>Description</H3>
+<P><A NAME="E1B0A7F598ceb"></A>The <B>draw</B> subroutine connects the point specifies by the <A HREF="draw.html#A213X912e55"><I>x</I></A>, <A HREF="draw.html#A213X912e56"><I>y</I></A>, <A HREF="draw.html#A213X912e57"><I>z</I></A> parameters and the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03eb">current graphics position</A> with a line segment. It uses the current line attributes: 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A172P1436">linestyle</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A172P1437">linewidth</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A31996bc">color</A> (if in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A150P19d9">depth-cue mode</A>, the depth-cued color is used), and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemask</A>. </P>
+
+<P><A NAME="E1B0A7F704ceb"></A>The <B>draw</B> subroutine updates the current graphics position to the specified point.  </P>
+
+<BLOCKQUOTE><A NAME="A213X912e51"></A><B>Note: </B>Do not place routines that invalidate the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03eb">current graphics position</A> within sequences of moves and draws.</BLOCKQUOTE>
+
+
+<P><A NAME="E1B0A7F870ceb"></A>The six different forms for the <B>draw</B> subroutine are as follows:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><BR></TD>
+
+<TD><B>2-D</B></TD>
+
+<TD><B>3-D</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int16</TD>
+
+<TD>draw2s</TD>
+
+<TD>draws</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int32</TD>
+
+<TD>draw2i</TD>
+
+<TD>drawi</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>float</TD>
+
+<TD>draw2</TD>
+
+<TD>draw</TD></TR></TABLE>
+
+<P><A NAME="E1B0A80033ceb"></A>The syntax for each of the subroutine forms is the same except for the parameter type.  They differ only in that <A HREF="draw.html#A213X912e4b"><B>draw</B></A> expects real coordinates, <A HREF="draw.html#jxJ170marj"><B>drawi</B></A> expects integer coordinates, and <A HREF="draw.html#QyJ230marj"><B>draws</B></A> expects short integer coordinates. In addition, the <A HREF="draw.html#pzJ150marj"><B>draw2</B></A> routines assume a 2-D point instead of a 3-D point.</P>
+
+<H3><A NAME="A213X912e54"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912e55"></A><I>x</I></TD>
+<TD>  Specifies the <I>x</I> coordinate of the point to which to draw a line segment.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912e56"></A><I>y</I></TD>
+<TD>  Specifies the <I>y</I> coordinate of the point to which to draw a line segment.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912e57"></A><I>z</I></TD>
+<TD>  Specifies the <I>z</I> coordinate of the point to which to draw a line segment (not used by 2-D subroutines).  </TD></TR></TABLE>
+
+<H3><A NAME="A30C010ffa"></A>Example</H3>
+<P><A NAME="E1B0A80409ceb"></A>The example C language program <A HREF="depthcue_c.html#A16C0c8ff"><B>depthcue.c</B></A> uses the <B>drawi</B> subroutine to draw the edges of a cube. </P>
+
+<H3><A NAME="A62C015d14"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0A80570ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C12e8"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12e9"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C12ea"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c5a4"></A>Related Information</H3>
+<P><A NAME="E1B0A80890ceb"></A>Moving the current graphics position to a specified point with the <A HREF="move.html#pofmarj"><B>move</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A80999ceb"></A>Drawing a point with the <A HREF="pnt.html#Ptf3a0marj"><B>pnt</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A81106ceb"></A>Drawing a relative line with the <A HREF="rdr.html#gpf1c0marj"><B>rdr</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A81215ceb"></A>Moving the current graphics position to a point relative to the current point with the <A HREF="rmv.html#kzf90marj"><B>rmv</B></A> subroutine.</P>
+
+<P><A NAME="E1B0A81323ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing with <!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Move-Draw Style</A> Subroutines, <!--gl32prgd:--><A HREF="../gl32prgd/depth-cueing.html">Performing Depth-Cueing</A> in GL, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="doublebuffer.html">Previous</a>  |
+<a href="drawmode.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

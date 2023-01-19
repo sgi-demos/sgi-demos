@@ -1,0 +1,646 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/lightsubs.html Mon, 24 Jan 2022 16:28:09 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Lighting Subroutines
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="lightmatrix.html">Previous</a>  |
+<a href="lightexec.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="lightsubs.html"></A>Lighting Subroutines </H2>
+
+
+<P><A NAME="INDEX562"></A><A NAME="INDEX563"></A><A NAME="INDEX564"></A><A NAME="INDEX565"></A><A NAME="INDEX566"></A><A NAME="INDEX567"></A><A NAME="INDEX568"></A><A NAME="INDEX569"></A><A NAME="INDEX570"></A></P>
+
+
+<P><A NAME="A3C0EA82482mhay"></A>The GL lighting facility is implemented
+with seven additional subroutines to the Graphics Library: </P>
+
+
+<UL><LI><A NAME="A342C9736e"></A><B><A HREF="lightsubs.html#A354C9873f">n3f</A></B>
+and <B><A HREF="lightsubs.html#A342C9737a">normal</A></B> subroutines,
+which set the current normal.</LI>
+
+
+<LI><A NAME="A342C9736f"></A><B><A HREF="lightsubs.html#A342C97380">mmode</A></B>
+subroutine, which sets the current matrix mode.</LI>
+
+
+<LI><A NAME="A342C97370"></A><B><A HREF="lightsubs.html#A342C9738d">getmmode</A></B>
+subroutine, which returns the current matrix mode.</LI>
+
+
+<LI><A NAME="A342C97371"></A><B><A HREF="lightsubs.html#A342C97392">lmdef</A></B>
+subroutine, which defines a material, light source, or lighting model.</LI>
+
+
+<LI><A NAME="A342C97372"></A><B><A HREF="lightsubs.html#A342C973d1">lmbind</A></B>
+subroutine, which makes a material, light source, or lighting model current.</LI>
+
+
+<LI><A NAME="A25C0f6d9"></A><B><A HREF="advlightcap.html#LuK21a0marj">lmcolor</A></B>
+subroutine, which enables dynamic resetting of the material properties.</LI></UL>
+
+
+<P><A NAME="A3C0EA82508mhay"></A>All lighting model property names and
+constants are symbolically defined in the <B>/usr/include/gl/gl.h&nbsp;</B>file.</P>
+
+
+<H3><A NAME="A354C9873f"></A>n3f Subroutine </H3>
+
+
+<P><A NAME="A3C0EA82531mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/n3f.html#A139X91ef3">n3f</A></B>
+subroutine takes the address of an array of three floating-point numbers
+(the <I>vector</I> parameter) and sets the value for the current vertex
+normal. Normal vectors are assumed to be of unit length, therefore, the
+<A HREF="figures/gl32p27.jpg">equation</A> </P>
+
+
+<P><A NAME="A3C0EA82552mhay"></A>should equal 1.0. The normal vector is
+transformed into eye coordinates using the inverse transpose of the current
+viewing matrix. It is then stored for use by the lighting equation. </P>
+
+
+<P><A NAME="A3C0EA82573mhay"></A>New normals can occur as frequently as
+every new graphics position and as infrequently as desired. If only one
+normal is given per polygon and the lighting equation is evaluated on a
+per-normal basis (when using an infinite viewer and infinite light sources),
+then the calculations are done only once per polygon. The syntax is as
+follows: </P>
+
+
+<PRE><A NAME="A258C01bfe2"></A>void&nbsp;n3f(Float32&nbsp;vector[3])</PRE>
+
+
+<H3><A NAME="A342C9737a"></A>normal Subroutine </H3>
+
+
+<P><A NAME="A3C0EA82596mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/normal.html#A142X9b7">normal</A></B>
+subroutine takes exactly the same parameter as the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/n3f.html#A139X91ef3">n3f</A></B>
+subroutine. The only difference is that <B>normal</B> can be used in display
+lists and <B>n3f</B> cannot. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01bfe3"></A>void&nbsp;normal(Coord&nbsp;narray[3])</PRE>
+
+
+<H3><A NAME="A342C97380"></A>mmode Subroutine </H3>
+
+
+<P><A NAME="A3C0EA82619mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/mmode.html#XhZ2370marj">mmode</A></B>
+subroutine takes one integer parameter (<I>mode</I>), which is either MSINGLE,
+MPROJECTION, or MVIEWING. The different modes are necessary to maintain
+a separate projection matrix and a separate modeling/viewing matrix and
+its inverse transpose. </P>
+
+
+<P><A NAME="A3C0EA82640mhay"></A>The modeling/viewing matrix transforms
+model coordinates into eye coordinates where the lighting calculations
+are performed. The inverse transpose of this matrix is used to transform
+normals from model coordinates into eye coordinates. The projection matrix
+transforms eye coordinates into screen coordinates. The figure entitled
+<A HREF="figures/gl32p26.jpg">Lighting Calculations</A> shows how the various
+matrices operate on display list coordinates and normal vectors to produce
+screen coordinates and colors. </P>
+
+
+<P><A NAME="A3C0EA82661mhay"></A>The lighting equation uses output of the
+modeling/viewing matrix and its inverse transpose. To use the lighting
+facility, it is necessary to call <TT>mmode(MVIEWING)</TT> before setting
+viewing or modeling matrices. This informs the system that future transformation
+subroutines will affect the modeling/viewing matrix and its inverse transpose.
+Each of the matrix modes is described fully in the following sections.
+The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01bfe4"></A>void&nbsp;mmode(Int16&nbsp;mode)</PRE>
+
+
+<P><A NAME="A3C0EA82683mhay"></A>MSINGLE mode is the default mode. The
+viewing, modeling, and projection matrices are combined into one matrix,
+which the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmatrix.html#A144X940e">getmatrix</A></B>
+subroutine returns. Because all matrices are combined in MSINGLE mode,
+there is no way to transform model coordinates into eye coordinates or
+to transform normals. Therefore, the lighting model facility does not work
+in MSINGLE mode. Entering or exiting from MSINGLE mode pops the entire
+matrix stack and leaves the current matrix undefined. </P>
+
+
+<P><A NAME="A3C0EA82704mhay"></A>In MPROJECTION mode, all matrix subroutines
+deal only with the projection matrix. There is only one projection matrix,
+and the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pushmatrix.html#A144X9540">pushmatrix</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/popmatrix.html#A144X951e">popmatrix</A></B>
+subroutines result in errors in MPROJECTION mode. The <B>getmatrix</B>
+subroutine returns the current projection matrix. The modeling/viewing
+matrix is disabled while in MPROJECTION mode: the results of transforming
+points in MPROJECTION are undefined. </P>
+
+
+<P><A NAME="A3C0EA82725mhay"></A>In MVIEWING mode, all matrix subroutines
+deal only with the modeling/viewing matrix and its inverse transpose. All
+matrix subroutines premultiply or load the modeling/viewing matrix by the
+matrix, and premultiply or load the inverse transpose viewing matrix with
+the inverse transpose of the matrix. </P>
+
+
+<P><A NAME="A3C0EA82746mhay"></A>For the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/loadmatrix.html#A144X9430">loadmatrix</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/multmatrix.html#A144X9474">multmatrix</A></B>
+subroutines, the matrix has to be inverted, so singular matrices will cause
+an error. In MVIEWING mode, the <B>getmatrix</B> subroutine returns the
+modeling/viewing matrix. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/perspective.html#A144X94da">perspective</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/window.html#A144X95ea">window</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496">ortho</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/ortho.html#A144X9496">ortho2</A></B>
+subroutines load a projection matrix even in <TT>MVIEWING</TT> mode. Because
+these subroutines do not affect the modeling/viewing matrix stack and because
+it is common to build a viewing matrix using subroutines that only multiply
+matrices, it normally is necessary to load an identity matrix onto the
+modeling/viewing matrix stack before defining the viewing matrix. </P>
+
+
+<H3><A NAME="A342C9738d"></A>getmmode Subroutine </H3>
+
+
+<P><A NAME="A3C0EA82768mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/getmmode.html#idZ2e0marj">getmmode</A></B>
+subroutine returns the current matrix mode. The values returned can be
+compared to the values of MSINGLE, MPROJECTION, and MVIEWING to determine
+the current mode. Mode identifiers are defined in the <B>/usr/include/gl/gl.h</B>file. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01bfe5"></A>Int32&nbsp;getmmode()</PRE>
+
+
+<H3><A NAME="A342C97392"></A>lmdef Subroutine </H3>
+
+
+<P><A NAME="A3C0EA82791mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+subroutine defines a new material, light source, or lighting model and
+takes four parameters. The first parameter, <I>deftype</I>, specifies what
+is to be defined and is either <TT>DEFMATERIAL</TT>, <TT>DEFLIGHT</TT>,
+or <TT>DEFLMODEL</TT>. The second parameter, <I>index</I>, is the name
+or index into the table of stored materials, light sources, or lighting
+models. Indexes for each of these groups are independent. You can define
+up to 65535 materials, 65535 light sources, and 65535 lighting models.
+However, index 0 is predefined for each group and cannot be changed. </P>
+
+
+<P><A NAME="A3C0EA82812mhay"></A>The third parameter, <I>numpoints</I>,
+is the length of the properties array and is the number of floating point
+numbers contained within the array. The fourth parameter, <I>properties</I>,
+is the properties array, which is a list of properties to be assigned to
+the material, light source, or lighting model. Values in the array are
+property identifiers, each followed by the appropriate number of data values.
+All identifiers and data values are floating-point numbers. Only property
+identifiers appropriate for the object being defined should be included
+in the properties array. The last entry must be <TT>LMNULL (0.0)</TT>.
+Property identifiers are defined in the <B>/usr/include/gl/gl.h </B>file.</P>
+
+
+<P><A NAME="A3C0EA82833mhay"></A>All properties have default values that
+have been chosen for their efficient execution. The first time a material,
+light, or lighting property is defined, it is initialized to the default
+values. A definition can be set to all default values by calling the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+subroutine with either a null pointer to the property array (C programming
+language only) or with <TT>LMNULL&nbsp;(0.0)</TT> as the first and only
+property identifier. </P>
+
+
+<P><A NAME="A3C0EA82854mhay"></A>Incremental changes can be made to a material,
+light source, or lighting model definition. Each call to the <B>lmdef</B>
+subroutine changes only the properties included in its properties array.
+Properties that are not specified in the properties array keep their previous
+values. Any valid property can be changed regardless of whether that property
+is relevant to the current lighting calculation. However, changes made
+to a definition that is currently bound are effective immediately. </P>
+
+
+<P><A NAME="A3C0EA82875mhay"></A>The format of the properties array is
+a sequence of property identifiers each followed by the appropriate number
+of data values. The last array entry must be LMNULL. Described below are
+the material, light source, and lighting model properties along with the
+number of data values that follow each identifier. Each property is called
+by its symbolic name. The syntax is as follows: </P>
+
+
+<PRE><A NAME="A258C01bfe6"></A>void&nbsp;lmdef(Int16&nbsp;deftype,&nbsp;Int32&nbsp;index,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Int16&nbsp;numpoints,&nbsp;Float32&nbsp;properties[])</PRE>
+
+
+<H4><A NAME="A85C19d"></A>Material Properties </H4>
+
+
+<P><A NAME="A3C0EA82898mhay"></A>Material properties are all the properties
+a material groups together to define its surface characteristics, such
+as diffuse reflectance and shininess. The available material properties
+are as follows: </P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C973a6"></A>EMISSION </TD>
+
+
+<TD>The EMISSION property is the emission color of the material. Following
+the property identifier should be the new R, G, B color values where 0.0
+&amp;le; R, G, B &amp;le; 1.0.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C973a8"></A>AMBIENT </TD>
+
+
+<TD>The AMBIENT property is the ambient reflectance of the material. Following
+the property identifier should be the new R, G, B color values where 0.0
+&amp;le; R, G, B &amp;le; 1.0.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C973aa"></A>DIFFUSE </TD>
+
+
+<TD>The DIFFUSE property is the diffuse reflectance of the material. Following
+the property identifier should be the new R, G, B color values where 0.0
+&amp;le; R, G, B &amp;le; 1.0.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C973ac"></A>SPECULAR </TD>
+
+
+<TD>The SPECULAR property is the specular reflectance of the material.
+Following the property identifier should be the new R, G, B color values
+where 0.0 &amp;le; R, G, B &amp;le; 1.0.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C973ae"></A>SHININESS </TD>
+
+
+<TD>The SHININESS property is the specular light scattering exponent. Following
+the property identifier should be the new value for the shininess. The
+values for shininess can range from 0.0 to 128.0 and should represent whole
+numbers. If shininess &amp;le; 0.0 then there will be no specular highlight.
+This is functionally equivalent to setting the material specular reflectance
+to [0.0, 0.0, 0.0].</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A32C01164f"></A>ALPHA </TD>
+
+
+<TD>The ALPHA property is the transparency of the material and can be used
+when performing alpha blending. Following the property identifier should
+be the new alpha value where 0.0 &amp;le; alpha &amp;le; 1.0. Certain alpha
+blending operations require that alpha bitplanes be installed in the system.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A189C1103"></A>COLORINDEXES </TD>
+
+
+<TD>Specifies the material properties used when lighting in color map mode.</TD></TR></TABLE>
+
+
+<P><A NAME="A3C0EA82926mhay"></A>The default values for material properties
+are: </P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A33C0117dd"></A>EMISSION </TD>
+
+
+<TD>0.0, 0.0, 0.0</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A33C0117de"></A>AMBIENT </TD>
+
+
+<TD>0.2, 0.2, 0.2</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A33C0117df"></A>DIFFUSE </TD>
+
+
+<TD>0.8, 0.8, 0.8</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A33C0117e0"></A>SPECULAR </TD>
+
+
+<TD>0.0, 0.0, 0.0</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A33C0117e1"></A>SHININESS </TD>
+
+
+<TD>0.0</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A75C19"></A>ALPHA </TD>
+
+
+<TD>1.0</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A189C1104"></A>COLORINDEXES </TD>
+
+
+<TD>0.0, 127.5, 255.0</TD></TR></TABLE>
+
+
+<H4><A NAME="A85C19e"></A>Light Source Properties </H4>
+
+
+<P><A NAME="A3C0EA82955mhay"></A>Light source properties are all the properties
+a light source groups together to define its characteristics, such as color
+and position. The available light properties are as follows: </P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C973bd"></A>AMBIENT </TD>
+
+
+<TD>The AMBIENT property is the color of the ambient light associated with
+the light source. Following the property identifier should be the new R,
+G, B color values where 0.0 &amp;le; R, G, B &amp;le; 1.0.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C973bf"></A>LCOLOR </TD>
+
+
+<TD>The LCOLOR property is the color of the light source. Following the
+property identifier should be the new R, G, B color values where 0.0 &amp;le;
+R, G, B &amp;le; 1.0.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C973c1"></A>POSITION </TD>
+
+
+<TD>The POSITION property is the position of the light source. Following
+the property identifier should be the new <I>x</I>, <I>y</I>, <I>z</I>,
+and <I>w</I> coordinates of the light. If the <I>w</I> coordinate of the
+light source is 0.0, the light is an infinite light source and its position
+specifies the light direction. (Such a light source can be called a directional
+light source.) The light direction is computed by normalizing the light's
+position vector. If the <I>w</I> coordinate of the light is not 0.0, then
+the light is a local light and <I>x</I>, <I>y</I>, <I>z</I>, and <I>w</I>
+are divided by <I>w</I> to specify the position. Light positions or directions
+are defined in the current model coordinate space and are affected by the
+current transformation matrix at the time they are bound.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A189C1105"></A>SPOTDIRECTION </TD>
+
+
+<TD>Assigns the direction (axis) in which a spotlight source emits.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A189C1106"></A>SPOTLIGHT </TD>
+
+
+<TD>Assigns the spread angle and concentration exponent of a spotlight.</TD></TR></TABLE>
+
+
+<P><A NAME="A3C0EA82981mhay"></A>The default values for light source properties
+are: </P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A33C0117e2"></A>AMBIENT </TD>
+
+
+<TD>0.0, 0.0, 0.0</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A33C0117e3"></A>LCOLOR </TD>
+
+
+<TD>1.0, 1.0, 1.0</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A33C0117e4"></A>POSITION </TD>
+
+
+<TD>0.0, 0.0, 1.0, 0.0</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A189C1107"></A>SPOTDIRECTION </TD>
+
+
+<TD>0.0, 0.0, -1.0</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A189C1108"></A>SPOTLIGHT </TD>
+
+
+<TD>0.0, 180.0</TD></TR></TABLE>
+
+
+<H4><A NAME="A85C19f"></A>Lighting Model Properties </H4>
+
+
+<P><A NAME="A3C0EA83008mhay"></A>Lighting model properties are all the
+properties of a lighting model, such as scene ambient light and distance
+attenuation factors. The available lighting model properties are as follows:</P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C973c8"></A>AMBIENT </TD>
+
+
+<TD>The AMBIENT property is the color of ambient light in the scene. Following
+the property identifier should be the new R, G, B color values where 0.0
+&amp;le; R, G, B &amp;le; 1.0.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C973ca"></A>LOCALVIEWER </TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2">The LOCALVIEWER property informs the system whether
+the viewer (eye position) is local to the scene. Following the property
+identifier should be either 1.0 or 0.0 (true or false). If the viewer is
+local, then the eye position is assumed to be located at (0,0,0) in eye
+coordinates. When the viewer is local, the vector from the vertex to the
+eye must be calculated for each vertex. If the viewer is not local, then
+the viewer is at infinity along the positive <I>z</I> axis. The view direction
+vector is [0,0,1] for all vertices. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD><BLOCKQUOTE><P><A NAME="A169C12b6"></A><B>Note: </B>The LOCALVIEWER property affects
+only the manner in which the lighting calculations are performed. The setting
+of the LOCALVIEWER does not in any way affect the transformation stack
+or alter the geometrical position of the surfaces being drawn. It only
+affects their apparent color (the output of the lighting calculations).</P></BLOCKQUOTE></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C973cc"></A>ATTENUATION </TD>
+
+
+<TD></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2">The ATTENUATION property is the scene attenuation
+factors. Following the property identifier should be the new values for
+the fixed scene attenuation factor and the variable scene attenuation factor.
+If either factor is less than 0.0 then it is set to 0.0. If the variable
+attenuation factor equals 0.0, then lighting attenuation is turned off.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD></TD></TR></TABLE>
+
+
+<P> </P>
+
+
+<P><A NAME="A3C0EA83033mhay"></A>The default values for lighting models
+are: </P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A33C0117e5"></A>AMBIENT </TD>
+
+
+<TD>0.2, 0.2, 0.2 
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A33C0117e6"></A>LOCALVIEWER </TD>
+
+
+<TD>0.0</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A33C0117e7"></A>ATTENUATION </TD>
+
+
+<TD>1.0, 0.0</TD></TR></TABLE>
+
+
+<P> </P></TD></TR></TABLE>
+
+
+<H3><A NAME="A342C973d1"></A>lmbind Subroutine </H3>
+
+
+<P><A NAME="A3C0EA83059mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmbind.html#XeZ2340marj">lmbind</A></B>
+subroutine takes two integer parameters: the first, <I>target</I>, specifies
+the target of the bind and the second, <I>index</I>, is the index of the
+source. When a source is bound to a target, it becomes current and subsequent
+evaluations of the lighting equation use its values. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A258C01bfe7"></A>void&nbsp;lmbind(Int16&nbsp;target,&nbsp;Int32&nbsp;index)</PRE>
+
+
+<P><A NAME="A3C0EA83080mhay"></A>The three types of targets are as follows:</P>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C973d9"></A>MATERIAL </TD>
+
+
+<TD>If the target of a bind is MATERIAL, the source material becomes the
+currently bound material. There is only one material target and therefore
+only one currently bound material. 
+<P><A NAME="A342C973da"></A>Source materials are specified using the same
+index as when the material was defined using the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+subroutine. For example, </P>
+
+
+<PRE><A NAME="A342C973db"></A>lmbind&nbsp;(MATERIAL,&nbsp;2)</PRE>
+
+
+<P><A NAME="A342C973dc"></A>binds material definition 2 to the currently
+bound material. Material 0 is the default material and disables lighting
+calculations. This is the most efficient method to disable the lighting
+calculations. It is functionally equivalent to binding lighting model 0.
+If an undefined material is the source for the <B>lmbind</B> subroutine,
+material 0 is bound instead. </P></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C973de"></A>LIGHTS </TD>
+
+
+<TD>There are MAXLIGHTS lights available as targets (LIGHT0, LIGHT1, and
+so on), and therefore a MAXLIGHTS number of current lights. If the target
+of a bind is a light, then the source light replaces whatever light was
+previously bound to the target. The replaced light is turned off and the
+newly bound light is turned on. To turn a light off, bind light index 0
+to the target light. 
+<P><A NAME="A342C973df"></A>Source lights are specified using the same
+index as when the light was defined using the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+subroutine. For example, </P>
+
+
+<PRE><A NAME="A342C973e0"></A>lmbind&nbsp;(LIGHT3,&nbsp;54)</PRE>
+
+
+<P><A NAME="A342C973e1"></A>binds user light definition 54 to system light
+3. Light index 0 is the default light and while bound disables lighting
+calculations for the system light target. If an undefined light is the
+source to the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmbind.html#XeZ2340marj">lmbind</A></B>
+subroutine, light 0 is bound instead. </P>
+
+
+<P><A NAME="A342C973e2"></A>When a local light is bound, its position is
+transformed by the current modeling/viewing matrix and stored. If the light
+is infinite, its position is taken as its direction and is also transformed
+by the current modeling/viewing matrix and stored. Thus, by binding a light
+after some modeling transformations, a light can easily be made part of
+an object that is moved through the scene (for example, a handheld candle).</P></TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A342C973e4"></A>LMODEL </TD>
+
+
+<TD>If the target of a bind is LMODEL, then the source lighting model becomes
+the current lighting model. There is only one lighting model target and
+therefore only one current lighting model. 
+<P><A NAME="A342C973e5"></A>Source lighting models are specified using
+the same index as when the lighting model was defined using the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>
+subroutine. For example, </P>
+
+
+<PRE><A NAME="A342C973e6"></A>lmbind&nbsp;(LMODEL,&nbsp;1)</PRE>
+
+
+<P><A NAME="A342C973e7"></A>binds lighting model 1 to the current lighting
+model. Lighting model 0 is the default lighting model and disables all
+lighting calculations. If an undefined lighting model is the source for
+the <B>lmbind</B> subroutine, lighting model 0 is bound instead. </P></TD></TR></TABLE>
+
+
+<H3><A NAME="A32C011650"></A>lmcolor Subroutine </H3>
+
+
+<P><A NAME="A3C0EA83117mhay"></A>The discussion of the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmcolor.html#ofZ220marj">lmcolor</A></B>
+subroutine appears in <A HREF="advlightcap.html#advlightcap.html">&quot;Advanced
+Lighting Capabilities&quot;</A>. </P>
+
+
+
+
+<hr><center>
+[  <a href="lightmatrix.html">Previous</a>  |
+<a href="lightexec.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/lightsubs.html Mon, 24 Jan 2022 16:28:09 GMT -->
+</HTML>
+

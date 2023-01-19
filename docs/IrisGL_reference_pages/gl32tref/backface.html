@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>backface Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="backbuffer.html">Previous</a>  |
+<a href="bbox2.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X974b"></A>backface Subroutine</H2>
+<A NAME="INDEX37" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX38" REL="I2" TITLE="hidden surface"></A>
+<A NAME="INDEX39" REL="I3" TITLE="backface"></A>
+<A NAME="INDEX40" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX41" REL="I2" TITLE="backfacing polygons"></A>
+<A NAME="INDEX42" REL="I3" TITLE="display"></A>
+<A NAME="INDEX43" REL="I1" TITLE="backface subroutine (GL)"></A>
+
+<H3><A NAME="A143X974d"></A>Purpose</H3>
+<P><A NAME="E1B0417702ceb"></A>Enables and disables backfacing polygon removals.</P>
+
+<H3><A NAME="A78C1215"></A>Libraries</H3>
+<P><A NAME="E1B0417849ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0417953ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9751"></A>C Syntax</H3>
+<PRE><A NAME="A143X9752"></A><B>void backface(Int32 </B><A HREF="backface.html#A143X9756"><I>bool</I></A><B>)</B></PRE>
+
+<H3><A NAME="A143X96c7"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A143X96c8"></A><B>SUBROUTINE BACKFA(</B><I>bool</I><B>)</B>
+<B>LOGICAL </B><I>bool</I></PRE>
+
+<H3><A NAME="A143X9753"></A>Description</H3>
+<P><A NAME="E1B0418317ceb"></A>The <B>backface </B>subroutine allows or suppresses the display of backfacing filled polygons. With the <A HREF="frontface.html#A74C12"><B>frontface</B></A> subroutine, it is useful for drawing polygons that have different colors on each side. The <B>frontface</B> subroutine can also be useful for performing a primitive kind of 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P061d">hidden surface</A> removal.</P>
+
+<P><A NAME="E1B0418426ceb"></A>A backfacing polygon is defined as a polygon whose vertices are in clockwise order in screen coordinates. When backfacing polygon removal is on, the system displays only polygons whose vertices are in counterclockwise order.</P>
+
+<P><A NAME="E1B0418534ceb"></A>For programs representing solid objects as collections of polygons, this subroutine can be used to help remove hidden surfaces. The <B>backface </B>subroutine works best for simple convex objects that do not obscure other objects.</P>
+
+<P><A NAME="E1B0418642ceb"></A>For complicated objects, this routine alone may not remove all hidden surfaces. To remove hidden surfaces for more complicated objects or groups of objects, use the <A HREF="zbuffer.html#A143X97b1"><B>zbuffer</B></A> subroutine. The <B>zbuffer</B> subroutine checks the relative distances of the figure from the viewer (z values) and draws only the nearest figures.</P>
+
+<P><A NAME="E1B0418754ceb"></A>If both frontfacing and backfacing polygon removal is enabled, no filled polygons are displayed. (An exception is made if the graphics pipeline cannot determine if a polygon is front- or backfacing because it is degenerate or otherwise exceptional.)</P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A237X9474f"></A>Matrices that negate coordinates, such as <SAMP>scale(-1.0,&nbsp;1.0,&nbsp;1.0)</SAMP>, reverse the directional order of a polygon's points and can cause the <B>backface </B>subroutine to do the opposite of what is intended.</LI>
+
+<LI><A NAME="A95C1230e"></A>If a polygon is extremely small or has degenerate vertices, the graphics pipeline cannot determine if the polygon is backfacing. In such cases, the polygon is rendered by default.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A143X9755"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9756"></A><I>bool </I></TD>
+<TD>  Specifies a value for the state of backfacing polygon removal. The settings for the <I>bool</I> parameter are:</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"></TD>
+<TD>  </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"></TD>
+<TD>  False = backfacing polygon removal disabled.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A258C01c51a"></A></TD>
+<TD>  True = backfacing polygon removal enabled.</TD></TR></TABLE>
+
+<H3><A NAME="A143X975b"></A>Example</H3>
+<P><A NAME="E1B0419285ceb"></A>The example C language program <A HREF="backface_c.html#A16C0c7a2"><B>backface.c</B></A> uses the <B>backface</B> subroutine to draw a cube two ways to demonstrate the difference between allowing or suppressing the display of backfacing polygons.</P>
+
+<H3><A NAME="A64C0165e4"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0419445ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows Desktop/3D Feature.</P>
+
+<P><A NAME="E1B0419554ceb"></A>On the POWERgraphics GTO adapter, either frontfacing polygon removal or backfacing polygon removal can be specified, but not both simultaneously. Enabling backfacing culling disables frontfacing culling.</P>
+
+<H3><A NAME="A78C1218"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1219"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C121a"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c51b"></A>Related Information</H3>
+<P><A NAME="E1B0419880ceb"></A>Initiating z-buffer mode with the <A HREF="zbuffer.html#A143X97b1"><B>zbuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B0419990ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Removing <!--gl32prgd:--><A HREF="../gl32prgd/remhidden.html#remhidden.html">Hidden Surfaces</A>.</P><hr><center>
+[  <a href="backbuffer.html">Previous</a>  |
+<a href="bbox2.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

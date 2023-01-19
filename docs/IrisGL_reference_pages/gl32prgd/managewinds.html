@@ -1,0 +1,780 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/managewinds.html Mon, 24 Jan 2022 16:28:19 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Creating and Managing Windows in GL
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="underwininput.html">Previous</a>  |
+<a href="cursorgl.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="managewinds.html"></A>Creating and Managing Windows</H2>
+
+
+<P><A NAME="INDEX766"></A><A NAME="INDEX767"></A><A NAME="INDEX768"></A><A NAME="INDEX769"></A><A NAME="INDEX770"></A><A NAME="INDEX771"></A></P>
+
+
+<P><A NAME="A3C0ED56588mhay"></A>This section discusses the following aspects
+of window management: </P>
+
+
+<UL><LI><A NAME="A54C0149e8"></A><A HREF="managewinds.html#A44C012b6b">Opening
+and Closing Windows</A> </LI>
+
+
+<LI><A NAME="A54C0149e9"></A><A HREF="managewinds.html#A44C012b6d">Setting
+Window Attributes and Constraints</A> </LI>
+
+
+<LI><A NAME="C4EE421559lpas"></A><A HREF="managewinds.html#BC9D0F8612vbia">Controlling
+Window Placement</A></LI>
+
+
+<LI><A NAME="A54C0149ea"></A><A HREF="managewinds.html#A44C012b72">Changing
+Windows Noninteractively</A></LI>
+
+
+<LI><A NAME="A54C0149eb"></A><A HREF="managewinds.html#A8tk2130nita">Managing
+Multiple Windows</A></LI>
+
+
+<LI><A NAME="A54C0149ec"></A><A HREF="managewinds.html#A44C012b75">Other
+Window Subroutines</A></LI></UL>
+
+
+<P><A NAME="A3C0ED56617mhay"></A>GL provides subroutines to create and
+manipulate windows from an application program. The windowing subroutines
+are implemented on top of Enhanced X-Windows and work with any window
+manager, including the AIXwindows window manager. A <I>GL
+window</I> is one in which a GL application draws an image, while a <I>text
+window</I> runs a shell. </P>
+
+
+<H3><A NAME="A264X9395"></A>List of GL Window Subroutines<A NAME="INDEX772"></A>
+<A NAME="INDEX773"></A> <A NAME="INDEX774"></A> <A NAME="INDEX775"></A>
+<A NAME="INDEX776"></A> <A NAME="INDEX777"></A> </H3>
+
+
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A264X921b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/blankscreen.html#A144X9128">blankscreen</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Turns screen refresh on and off.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A264X921a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/blanktime.html#A144X9178">blanktime</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets screen blanking timeout.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A19C0e0d9"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/endfullscrn.html#laa350marj">endfullscrn</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Ends full screen mode.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b95"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/fudge.html#A142X917a6">fudge</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies pixel values to be added to a window size. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A19C0e0da"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/fullscrn.html#Qga140marj">fullscrn</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Enables drawing outside current window boundaries.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b96"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getorigin.html#A142X91f76">getorigin</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the position of a window.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b97"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getsize.html#X513200marj">getsize</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the size of a window. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b98"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/iconsize.html#LA13e0marj">iconsize</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies the size of a window icon. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b99"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/icontitle.html#sH13240marj">icontitle</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies the title of a window icon. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b9a"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/keepaspect.html#A142X91896">keepaspect</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies the aspect ratio of a window. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b9b"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/maxsize.html#A142X916d6">maxsize</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies the maximum size of a window. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b9c"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/minsize.html#MJ13260marj">minsize</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies the minimum size of a window. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b9d"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/noborder.html#A142X91d7a">noborder</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Removes the border from a window. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b9e"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/noport.html#ZN13170marj">noport</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies that a program does not require a window. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9b9f"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/prefposition.html#A142X9164f">prefposition</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Constrains the window position and size. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9ba0"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/prefsize.html#A142X91671">prefsize</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Constrains the window size. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9ba1"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/stepunit.html#A142X91bd2">stepunit</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Specifies a window size change in discrete steps.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A58C0153ce"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/swinopen.html#A2T741b0nita">swinopen</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Creates a restricted subwindow.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9ba3"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winclose.html#A142X91418">winclose</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Closes a window.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9ba2"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winconstraints.html#A142X914c1">winconstraints</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Binds window constraints to the current window.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9ba4"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/windepth.html#A142X914e3">windepth</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Indicates the stacking order of windows on the screen.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9ba5"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winget.html#A142X91505">winget</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Returns the identifier of the current window. </TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9ba6"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winmove.html#A142X91527">winmove</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Moves the current window by its lower-left corner.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9ba7"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winopen.html#A142X91549">winopen</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Creates a new window.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9ba8"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winpop.html#A142X9156b">winpop</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Raises the current window on top of all other windows.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9ba9"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winposition.html#A142X9158d">winposition</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Changes current location and size of a window.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9baa"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winpush.html#A4X13320marj">winpush</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Lowers the current window beneath all other windows.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A44C012b77"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winset.html#NY1320marj">winset</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Sets the current window.</TD></TR>
+
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bab"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/wintitle.html#A142X915f3">wintitle</A></B></TD></TR>
+
+
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+
+
+<TD>Adds a title bar to the current window. </TD></TR></TABLE>
+
+
+<P> </P>
+
+
+<H3><A NAME="A44C012b6b"></A>Opening and Closing Windows<A NAME="INDEX778"></A>
+<A NAME="INDEX779"></A> <A NAME="INDEX780"></A> <A NAME="INDEX781"></A>
+<A NAME="INDEX782"></A> <A NAME="INDEX783"></A> </H3>
+
+
+<P><A NAME="A3C0ED56672mhay"></A>The GL subroutines for opening and closing
+windows are the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winopen.html#A142X91549">winopen</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/swinopen.html#A2T741b0nita">swinopen</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winclose.html#A142X91418">winclose</A></B>
+subroutines. (The <B>swinopen</B> subroutine creates subwindows from a
+parent window.) Exiting a program causes any existing windows to close
+automatically. </P>
+
+
+<H3><A NAME="A44C012b6d"></A>Setting Window Attributes and Constraints<A NAME="INDEX784"></A>
+<A NAME="INDEX785"></A> <A NAME="INDEX786"></A> <A NAME="INDEX787"></A>
+<A NAME="INDEX788"></A> <A NAME="INDEX789"></A> </H3>
+
+
+<P><A NAME="A3C0ED56696mhay"></A>You can control the size, location, and
+shape of windows from a GL client program. Calling the <B>winopen</B> subroutine
+without specifying any of these characteristics allows you to open a window
+of any size or shape anywhere on the screen. You can, however, open a specific
+window, such as a small square with a border, if you specify the desired
+size and shape. </P>
+
+
+<P><A NAME="A3C0ED56719mhay"></A>Use the window constraint subroutines
+in the following table to specify window characteristics. Call these subroutines
+before opening a window with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winopen.html#A142X91549">winopen</A></B>
+subroutine. GL applies these constraints when it opens the window. </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Window Constraint Subroutines</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>To Specify</B> </TD>
+
+
+<TD><B>Use</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Minimum size </TD>
+
+
+<TD><!--:libs:gl32tref:--><A HREF="../gl32tref/minsize.html#MJ13260marj"><B>minsize</B></A> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Maximum size </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/maxsize.html#A142X916d6">maxsize</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Aspect ratio </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/keepaspect.html#A142X91896">keepaspect</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Size, in pixels </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/prefsize.html#A142X91671">prefsize</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Size and location </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/prefposition.html#A142X9164f">prefposition</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Sizing increment </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/stepunit.html#A142X91bd2">stepunit</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Small increase in size </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/fudge.html#A142X917a6">fudge</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Size of window's icon </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/iconsize.html#LA13e0marj">iconsize</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Give a window's icon a title </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/icontitle.html#sH13240marj">icontitle</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Make a title bar for the current window </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/wintitle.html#A142X915f3">wintitle</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>No window borders </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/noborder.html#A142X91d7a">noborder</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>No screen space needed </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/noport.html#ZN13170marj">noport</A></B> </TD></TR></TABLE>
+
+
+<P><A NAME="A3C0ED56747mhay"></A>To respecify constraints for a window
+that is already open, first call the desired series of window constraint
+subroutines from the previous table, then call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winconstraints.html#A142X914c1">winconstraints</A></B>
+subroutine. </P>
+
+
+<P><A NAME="A3C0ED56770mhay"></A>When a user interactively changes a window,
+the window constraints are automatically enforced. Interactively changing
+a window means using the mouse and keyboard, in cooperation with the currently
+running window manager, to move, resize, or reshape a window. </P>
+
+
+<P><A NAME="A3C0ED56793mhay"></A>The window constraints allow the applications
+programmer to control and limit how the user resizes and reshapes a window.
+The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/maxsize.html#A142X916d6">maxsize</A></B>
+subroutine prevents a user from resizing a window to any size larger than
+the size set by the subroutine parameters. Likewise, the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/minsize.html#MJ13260marj">minsize</A></B>
+subroutine prevents the user from shrinking a window below the specified
+size. </P>
+
+
+<P><A NAME="A3C0ED56815mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/keepaspect.html#A142X91896">keepaspect</A></B>
+subroutine prevents a user from resizing a window so that the aspect ratio
+is changed. The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/stepunit.html#A142X91bd2">stepunit</A></B>
+subroutine allows the window to be resized only in specified discrete steps.
+Normally, a window can be resized by arbitrary amounts; in other words,
+the <B>stepunit</B> subroutine usually specifies one pixel. </P>
+
+
+<P><A NAME="A3C0ED56839mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/prefsize.html#A142X91671">prefsize</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/prefposition.html#A142X9164f">prefposition</A></B>
+subroutines constrain the size and position of the window. The <B>prefsize</B>
+subroutine prevents a user from resizing the window. The <B>prefposition</B>
+subroutine prevents a user from moving the window. To place a window on
+the screen in some position, allowing the user afterwards to reposition
+or resize the window, call the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winconstraints.html#A142X914c1">winconstraints</A></B>
+subroutine after the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winopen.html#A142X91549">winopen</A></B>
+subroutine (or call the <B>winconstraints</B> subroutine twice in a row.)
+The <B>winconstraints</B> subroutine clears previous constraints and sets
+any new ones. </P>
+
+
+<H3><A NAME="BC9D0F8612vbia"></A>Controlling Window Placement </H3>
+
+
+<P><A NAME="A3C0ED56862mhay"></A>Ultimately, window placement is controlled
+by the window manager. The default window manager for your system is the
+AIXwindows window manager. To control the behavior of this
+window manager regarding interpretation and placement, edit the <B>.Xdefaults</B>
+file in the user's home directory. </P>
+
+
+<P><A NAME="A3C0ED56885mhay"></A>In controlling interpretation of the <B>prefposition</B>
+subroutine parameters, if you add the following line to the <B>.Xdefaults</B>
+file: </P>
+
+
+<PRE><A NAME="A258C01c222"></A>Mwm*positionIsFrame:&nbsp;True</PRE>
+
+
+<P><A NAME="A3C0ED56909mhay"></A>the location of the window is assumed
+to include the boundary of the window. That is, the screen coordinates
+are assumed to refer to the lower left-hand corner of the window border.
+In contrast, if you add the following line to the <B>.Xdefaults</B> file:</P>
+
+
+<PRE><A NAME="A258C01c224"></A>Mwm*positionIsFrame:&nbsp;False</PRE>
+
+
+<P><A NAME="A3C0ED56932mhay"></A>the window manager interprets the position
+as the location of the window's interior, ignoring the window border. </P>
+
+
+<P><A NAME="A3C0ED56955mhay"></A>The AIXwindows window manager
+normally places a window so that it is fully visible on the screen. To
+open a window partly or wholly off the screen, add the following line to
+the <B>.Xdefaults</B> file: </P>
+
+
+<PRE><A NAME="A258C01c227"></A>Mwm*positionOnScreen:&nbsp;False</PRE>
+
+
+<P><A NAME="A3C0ED56978mhay"></A>Changing the line to read: </P>
+
+
+<PRE><A NAME="A258C01c229"></A>Mwm*positionOnScreen:&nbsp;True</PRE>
+
+
+<P><A NAME="A3C0ED57002mhay"></A>makes the window manager ignore the values
+specified with the <B>prefposition</B> subroutine and place the window
+so that it is fully visible on the screen. </P>
+
+
+<P><A NAME="A3C0ED57025mhay"></A>In controlling placement of a window,
+if you add the following line to the <B>.Xdefaults</B> file: </P>
+
+
+<PRE><A NAME="A258C01c22c"></A>Mwm*interactivePlacement:&nbsp;True</PRE>
+
+
+<P><A NAME="A3C0ED57048mhay"></A>a rubber-banded window appears when the
+<B>winopen </B>subroutine is executed. The user can place the window where
+desired on the screen. If you change the line to read: </P>
+
+
+<PRE><A NAME="A258C01c22e"></A>Mwm*interactivePlacement:&nbsp;False</PRE>
+
+
+<P><A NAME="A3C0ED57072mhay"></A>the window is immediately placed on the
+screen in the specified position when the <B>winopen </B>subroutine is
+executed. </P>
+
+
+<P><A NAME="A3C0ED57095mhay"></A>The AIXwindows window manager normally
+adds an offset to the location of every new window that is opened. This
+offset is used to keep new windows from piling up at one place. The offset
+spreads windows evenly over the entire screen. To turn off this behavior,
+specify </P>
+
+
+<PRE><A NAME="A175C1d88"></A>Mwm*clientAutoPlace:&nbsp;False</PRE>
+
+
+<P><A NAME="A3C0ED57119mhay"></A>When <TT>clientAutoPlace</TT> is turned
+off, GL windows are mapped on the screen exactly at the location specified
+with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/prefposition.html#A142X9164f">prefposition</A></B>
+subroutine. </P>
+
+
+<H3><A NAME="A44C012b72"></A>Changing Windows Noninteractively<A NAME="INDEX790"></A>
+<A NAME="INDEX791"></A> <A NAME="INDEX792"></A> <A NAME="INDEX793"></A>
+<A NAME="INDEX794"></A> <A NAME="INDEX795"></A> </H3>
+
+
+<P><A NAME="A3C0ED57143mhay"></A>The applications programmer can have the
+same control over windows that an applications user can. A window may be
+moved, resized, raised, and lowered from the applications program with
+the subroutines in the following table: </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Window Control Subroutines</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>To</B> </TD>
+
+
+<TD><B>Use</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Move and reshape the current window </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winposition.html#A142X9158d">winposition</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Move the current window </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winmove.html#A142X91527">winmove</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Lower the current window to bottom </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winpush.html#A4X13320marj">winpush</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Raise the current window to top </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winpop.html#A142X9156b">winpop</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Return the size of a window </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getsize.html#X513200marj">getsize</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Return the origin of the window </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getorigin.html#A142X91f76">getorigin</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Return depth of window in the window stack </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/windepth.html#A142X914e3">windepth</A></B> </TD></TR></TABLE>
+
+
+<P><A NAME="A3C0ED57168mhay"></A>GL performs these operations on the current
+window, which is set with the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winset.html#NY1320marj">winset</A></B>
+subroutine. </P>
+
+
+<H3><A NAME="A8tk2130nita"></A>Managing Multiple Windows<A NAME="INDEX796"></A>
+<A NAME="INDEX797"></A> <A NAME="INDEX798"></A> <A NAME="INDEX799"></A>
+<A NAME="INDEX800"></A> <A NAME="INDEX801"></A> </H3>
+
+
+<P><A NAME="A3C0ED57192mhay"></A>Multiple GL windows opened by the same
+process do not normally share attributes. Every window has its own current
+color; its own transformation matrix stack; and its own viewport stack,
+name stack, and attribute stack (which contains attributes such as the
+current linestyle and linewidth). The action of subroutines such as <B><!--:libs:gl32tref:--><A HREF="../gl32tref/swapbuffers.html#A145X9302">swapbuffers</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/RGBmode.html#A143X93b6">RGBmode</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/depthcue.html#PNK22d0marj">depthcue</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmbind.html#XeZ2340marj">lmbind</A></B>
+is limited to the current window. </P>
+
+
+<P><A NAME="A3C0ED57215mhay"></A>The only exceptions to this rule are a
+few window management subroutines (such as the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/winset.html#NY1320marj">winset</A></B>
+subroutine) and the <B>def</B> subroutines: <B><!--:libs:gl32tref:--><A HREF="../gl32tref/deflinestyle.html#A143X9b1f">deflinestyle</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/defpattern.html#A143X9b41">defpattern</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/defrasterfont.html#A143X9d3f">defrasterfont</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/loadXfont.html#vUO390nita">loadXfont</A></B>,
+<B><!--:libs:gl32tref:--><A HREF="../gl32tref/lmdef.html#rgZ2250marj">lmdef</A></B>,
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/makeobj.html#A142X912d">makeobj</A></B>.
+If a linestyle, pattern, light, font, or object is defined for one window,
+it becomes available to all windows opened by the same process. These definitions
+are referenced by the same index in all such windows. Information is <I>never</I>
+shared between different processes. The previous comments apply only to
+windows opened by one and the same process. </P>
+
+
+<P><A NAME="A3C0ED57238mhay"></A>The exception made for the <B>def</B>
+subroutines is provided as a convenience to the user. If a linestyle has
+been defined in one window, and the user wants to use it in another, the
+definition should not have to be respecified in other, possibly numerous,
+windows. In addition, the <B>def</B> subroutine exception allows the system
+to operate in a more efficient manner. The system does not need to keep
+track of multiple copies of duplicate information. </P>
+
+
+<P><A NAME="A3C0ED57261mhay"></A>Other than these shared definitions, all
+other attributes that are part of GL have been made deliberately nonsharable
+across windows. True multiple, independent drawing sessions can therefore
+be performed in multiple windows. Separate windows do not interfere with
+one another, and the applications writer does not have to engage in complicated
+window attribute management. The system maintains the attribute management
+automatically. </P>
+
+
+<H3><A NAME="A44C012b75"></A>Other Window Subroutines </H3>
+
+
+<P><A NAME="A3C0ED57284mhay"></A>GL provides other subroutines to control
+the windows, as shown in the following table: </P>
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>Miscellaneous Window Subroutines</B> </TD>
+
+
+<TD><BR></TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>To</B> </TD>
+
+
+<TD><B>Use</B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Put the program in screen space </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/screenspace.html#A213X911cf1">screenspace</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Put viewport at current window position </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/reshapeviewport.html#A7LQ3b0marj">reshapeviewport</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Enable the entire screen for writing </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/fullscrn.html#Qga140marj">fullscrn</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>End full-screen mode </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/endfullscrn.html#laa350marj">endfullscrn</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Return identifier of current window </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winget.html#A142X91505">winget</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Set the current window </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/winset.html#NY1320marj">winset</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Specify length of screen blank timeout </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/blanktime.html#A144X9178">blanktime</A></B> </TD></TR>
+
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Control screen refresh, on/off </TD>
+
+
+<TD><B><!--:libs:gl32tref:--><A HREF="../gl32tref/blankscreen.html#A144X9128">blankscreen</A></B> </TD></TR></TABLE>
+
+
+
+
+<hr><center>
+[  <a href="underwininput.html">Previous</a>  |
+<a href="cursorgl.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/managewinds.html Mon, 24 Jan 2022 16:28:19 GMT -->
+</HTML>
+

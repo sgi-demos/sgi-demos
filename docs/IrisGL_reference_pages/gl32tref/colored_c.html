@@ -1,0 +1,282 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>colored.c Example C Language Program
+
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="circuit_c.html">Previous</a>  |
+<a href="curve1_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="colored_c.html"></A>colored.c Example C Language Program</H2>
+<A NAME="INDEX2191" REL="I1" TITLE="colored.c example program (GL)"></A>
+<A NAME="INDEX2192" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2193" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2194" REL="I3" TITLE="color map editor"></A>
+<A NAME="INDEX2195" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2196" REL="I2" TITLE="color map editor"></A>
+<A NAME="INDEX2197" REL="I3" TITLE="example program"></A>
+<A NAME="INDEX2198" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2199" REL="I2" TITLE="editor"></A>
+<A NAME="INDEX2200" REL="I3" TITLE="color map"></A>
+<PRE><A NAME="A64E9BE586ttay"></A>/*Example colored.c</PRE>
+<PRE><A NAME="A64E9BE752ttay"></A>Edit the colormap and display the results in the graphics window.</PRE>
+<PRE><A NAME="A64E9BE908ttay"></A>This program works on any 3d adapter.
+*/</PRE>
+<PRE><A NAME="A64E9BF064ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64E9BF280ttay"></A>#define START 64
+#define CURRENTCOLOR 63
+#define BARWIDTH 67
+#define REDBAR   934
+#define GREENBAR 800
+#define BLUEBAR  666
+#define STARTBAR 250
+#define ENDBAR   1082
+#define indextovalue(index) (4*index + 3)</PRE>
+<PRE><A NAME="A64E9BF473ttay"></A>short redindex = 0, greenindex = 0, blueindex = 0;
+short whichbar();
+long xorg,yorg,xsize,ysize;
+long redbar,greenbar,bluebar;
+long startbar,endbar;</PRE>
+<PRE><A NAME="A64E9BF902ttay"></A>main()
+{
+  short index, val;
+  Device xpos, ypos;
+  initialize();
+  while (TRUE) {
+    switch (qread(&amp;val)) {
+    case ESCKEY:
+      greset();
+      gexit();
+      exit(0);
+    case REDRAW:
+      reshapeviewport();
+      getwindowsize();
+      buildmap();
+      displaymap();
+      break;
+    case LEFTMOUSE:
+      if (val){
+        qread(&amp;xpos);
+        qread(&amp;ypos);
+        qread(&amp;val);
+        qread(&amp;val);
+        qread(&amp;val);
+        if (insideport(xpos,ypos)) {
+          index = -1;
+          switch (whichbar(xpos,ypos,&amp;index)) {
+          case 0:
+            redindex = index;
+            break;
+          case 1:
+            greenindex = index;
+            break;
+          case 2:
+            blueindex = index;
+            break;
+          default:
+            break;
+          }</PRE>
+<PRE><A NAME="A64E9C0091ttay"></A>          if (index != -1) {
+            buildmap();
+            displaymap();
+          }
+        }
+      }
+      break;
+    }
+  }</PRE>
+<PRE><A NAME="A64E9C0234ttay"></A>}</PRE>
+<PRE><A NAME="A64E9C0385ttay"></A>initialize()
+{
+  int gid;</PRE>
+<PRE><A NAME="A64E9C2253ttay"></A>  prefposition(10, XMAXSCREEN-10, 10, YMAXSCREEN-20);
+  keepaspect(5,4);
+  gid = winopen("colored");
+  ortho2(-0.5, (float)XMAXSCREEN-0.5, -0.5, (float)YMAXSCREEN-0.5);
+  color(0);
+  clear();
+  mapcolor(CURRENTCOLOR, 0, 0, 0);
+  qdevice(LEFTMOUSE);
+  tie(LEFTMOUSE, MOUSEX, MOUSEY);
+  qdevice(ESCKEY);
+  qdevice(REDRAW);
+  qenter(REDRAW,gid);
+}</PRE>
+<PRE><A NAME="A64E9C2514ttay"></A>getwindowsize()
+{
+  getorigin(&amp;xorg,&amp;yorg);
+  getsize(&amp;xsize,&amp;ysize);
+  redbar = ((REDBAR * ysize) / YMAXSCREEN) + yorg;
+  greenbar = ((GREENBAR * ysize) / YMAXSCREEN) + yorg;
+  bluebar = ((BLUEBAR * ysize) / YMAXSCREEN) + yorg;
+  startbar = ((STARTBAR * xsize) / XMAXSCREEN) + xorg;
+  endbar = ((ENDBAR * xsize) / XMAXSCREEN) + xorg;
+}</PRE>
+<PRE><A NAME="A64E9C2884ttay"></A>buildmap()
+{
+  register i, j;
+  for (i = 0; i &lt; 3; i++) {
+    for (j = 0; j &lt; 64; j++) {
+      switch (i) {
+      case 0:                /* red */
+        mapcolor(START+i*64+j, indextovalue(j),
+            indextovalue(greenindex),
+            indextovalue(blueindex));
+        break;
+      case 1:                /* green */
+        mapcolor(START+i*64+j, indextovalue(redindex),
+            indextovalue(j),
+            indextovalue(blueindex));
+        break;
+      case 2:                /* blue */
+        mapcolor(START+i*64+j, indextovalue(redindex),
+            indextovalue(greenindex),
+            indextovalue(j));
+        break;
+      }</PRE>
+<PRE><A NAME="A64E9C3027ttay"></A>    }</PRE>
+<PRE><A NAME="A64E9C3171ttay"></A>  }</PRE>
+<PRE><A NAME="A64E9C3352ttay"></A>  mapcolor(CURRENTCOLOR, indextovalue(redindex),
+      indextovalue(greenindex),
+      indextovalue(blueindex));
+}</PRE>
+<PRE><A NAME="A64E9C3623ttay"></A>displaymap()
+{
+  register i, j;
+  char redstr[10], greenstr[10], bluestr[10];
+  color(BLACK);
+  clear();
+  for (i = 0; i &lt; 3; i++)
+    for (j = 0; j &lt; 64; j++) {
+      color(START+i*64 + j);
+      rectfi(250 + 13*j, 934 - i*133, 263 + 13*j, 
+          867 - i*133);
+      color(WHITE);
+      recti(250 + 13*j, 934 - i*133, 263 + 13*j, 
+          867 - i*133);
+    }</PRE>
+<PRE><A NAME="A64E9C4160ttay"></A>  color(CURRENTCOLOR);
+  rectfi(500, 267, 750, 400);
+  color(WHITE);
+  recti(500, 267, 750, 400);
+  cmov2i(186, 894);
+  charstr("RED");
+  cmov2i(186, 760);
+  charstr("GREEN");
+  cmov2i(186, 627);
+  charstr("BLUE");
+  cmov2i(343, 327);
+  charstr("CURRENT COLOR");
+  cmov2i(475, 133);
+  charstr("Left mouse button: choose a color");
+  cmov2i(475, 112);
+  charstr("Escape key : exit");
+  move2i(startbar + 13*redindex, 934);
+  draw2i(startbar + 13*redindex, 960);
+  cmov2i(startbar + 6 + 13*redindex, 940);
+  sprintf(redstr, "%d", indextovalue(redindex));
+  charstr(redstr);
+  move2i(startbar + 13*greenindex, 800);
+  draw2i(startbar + 13*greenindex, 827);
+  cmov2i(startbar + 6 + 13*greenindex, 806);
+  sprintf(greenstr, "%d", indextovalue(greenindex));
+  charstr(greenstr);
+  move2i(startbar + 13*blueindex, 666);
+  draw2i(startbar + 13*blueindex, 694);
+  cmov2i(startbar + 6 + 13*blueindex, 674);
+  sprintf(bluestr, "%d", indextovalue(blueindex));
+  charstr(bluestr);
+  cmov2i(563, 414);
+  charstr("(");
+  charstr(redstr);
+  charstr(", ");
+  charstr(greenstr);
+  charstr(", ");
+  charstr(bluestr);
+  charstr(")");
+}</PRE>
+<PRE><A NAME="A64E9C4599ttay"></A>/* return 1 if the position of the cursor is within the window */
+insideport(x,y)
+int x, y;
+{
+  if(x&lt;xorg)
+    return 0;
+  if(x>(xorg+xsize))
+    return 0;
+  if(y&lt;yorg)
+    return 0;
+  if(y>(yorg+ysize))
+    return 0;
+  return 1;
+}
+/*
+returns 0 if in the redbar, 1 if in the greenbar and 2 if in the 
+blue bar
+*/
+short whichbar(xpos,ypos,index)
+long xpos,ypos;
+short *index;
+{
+  short i;
+  i = -1;
+  if (redbar - BARWIDTH &lt;= ypos &amp;&amp; ypos &lt;= redbar)  /* red color bar */
+    i = 0;
+  else if (greenbar-BARWIDTH &lt;= ypos &amp;&amp; 
+      ypos &lt;= greenbar)                   /* green color bar */
+    i = 1;
+  else if (bluebar - BARWIDTH &lt;= ypos &amp;&amp; 
+      ypos &lt;= bluebar) /* blue color bar */
+    i = 2;
+  if (i != -1) {
+    if (startbar &lt;= xpos &amp;&amp; xpos &lt; endbar) {
+      *index = (xpos - startbar)/13;
+      return(i);
+    }</PRE>
+<PRE><A NAME="A64E9C4748ttay"></A>  }
+  return(-1);</PRE>
+<PRE><A NAME="A64E9C5089ttay"></A>}
+/*
+Changes:
+  - Added the define of start.  Before this addition this program
+    did not work on a gl adapter with an 8-bit color table
+    #define START 512
+    change to:
+    #define START 64
+  - Changed the CURRENTCOLOR to 63
+    Keep in mind that this program will alter the colormap and it
+    does not put it back the way it was before
+  - The comments at the beginning of the documentation are incorrect.
+    The way that the program was before this program only worked on a
+    machine with at least a 10-bit color look up table.
+*/</PRE>
+
+<H3><A NAME="A200C111c"></A>Related Information</H3>
+<P><A NAME="E1D7793801ceb"></A>The <A HREF="keepaspect.html#A142X91896"><B>keepaspect</B></A> subroutine<A HREF="../gl32tref/A142X91896" REL="PAGENUM"></A>, <A HREF="mapcolor.html#A146X9535"><B>mapcolor</B></A> subroutine<A HREF="../gl32tref/A146X9535" REL="PAGENUM"></A>, <A HREF="prefposition.html#A142X9164f"><B>prefposition</B></A> subroutine<A HREF="../gl32tref/A142X9164f" REL="PAGENUM"></A>, <A HREF="setlinestyle.html#XFM1310marj"><B>setlinestyle</B></A> subroutine<A HREF="../gl32tref/XFM1310marj" REL="PAGENUM"></A>, <A HREF="winconstraints.html#A142X914c1"><B>wincontraints</B></A> subroutine<A HREF="../gl32tref/A142X914c1" REL="PAGENUM"></A>, <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine<A HREF="../gl32tref/A142X91549" REL="PAGENUM"></A>.</P>
+
+<hr><center>
+[  <a href="circuit_c.html">Previous</a>  |
+<a href="curve1_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

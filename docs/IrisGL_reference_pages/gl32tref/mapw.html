@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>mapw Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="mapcolors.html">Previous</a>  |
+<a href="mapw2.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A213X9119fe"></A>mapw Subroutine</H2>
+<A NAME="INDEX1148" REL="I1" TITLE="mapw subroutine (GL)"></A>
+<A NAME="INDEX1149" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1150" REL="I2" TITLE="picking and selecting"></A>
+<A NAME="INDEX1151" REL="I3" TITLE="screen coordinates to modeling coordinates"></A>
+<A NAME="INDEX1152" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1153" REL="I2" TITLE="picking and selecting"></A>
+<A NAME="INDEX1154" REL="I3" TITLE="mapw"></A>
+<A NAME="INDEX1155" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1156" REL="I2" TITLE="coordinate transformation"></A>
+<A NAME="INDEX1157" REL="I3" TITLE="mapw"></A>
+
+<H3><A NAME="A213X911a00"></A>Purpose</H3>
+<P><A NAME="E1D6F61742ceb"></A>Computes the inverse mapping from screen coordinates to modeling coordinates.</P>
+
+<H3><A NAME="A79C15d"></A>Libraries</H3>
+<P><A NAME="E1D6F61782ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D6F61806ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911a03"></A>C Syntax</H3>
+<PRE><A NAME="A213X911a04"></A><B>void mapw</B>
+<B>(Int32 </B><A HREF="mapw.html#A213X911a0d"><I>viewobj</I></A><B>, </B>
+<B>Screencoord</B> <A HREF="mapw.html#A213X911a0b"><I>screenx</I></A><B>, Screencoord</B> <A HREF="mapw.html#A213X911a0c"><I>screeny</I></A><B>, </B>
+<B>Coord *</B><A HREF="mapw.html#A213X911a0e"><I>modelx1</I></A><B>, Coord *</B><A HREF="mapw.html#A213X911a0f"><I>modely1</I></A><B>, Coord *</B><A HREF="mapw.html#A213X911a10"><I>modelz1</I></A><B>, </B>
+<B>Coord *</B><A HREF="mapw.html#A213X911a11"><I>modelx2</I></A><B>, Coord *</B><A HREF="mapw.html#A213X911a12"><I>modely2</I></A><B>, Coord *</B> <A HREF="mapw.html#A213X911a13"><I>modelz2</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X9119dc"></A>FORTRAN Syntax</H3>
+<P><A NAME="E1D6F61884ceb"></A><B>SUBROUTINE MAPW(</B><I>viewobj</I><B>, </B><I>screenx</I><B>, </B><I>screeny</I><B>, </B><I>modelx1</I><B>, </B><I>modely1</I><B>, </B><I>modelz1</I><B>, </B><I>modelx2</I><B>, </B><I>modely2</I><B>, </B><I>modelz2</I><B>)</B></P>
+
+<P><B>INTEGER*4 </B><I>viewobj</I><B>,</B><I> screenx</I><B>, </B><I>screeny</I></P>
+
+<P><B>REAL </B><I>modelx1</I><B>, </B><I>modely1</I><B>, </B><I>modelz1</I><B>, </B><I>modelx2</I><B>, </B><I>modely2</I><B>, </B><I>modelz2</I> </P>
+
+<BLOCKQUOTE><A NAME="A79C160"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911a07"></A>Description</H3>
+<P><A NAME="E1D6F61949ceb"></A>The <B>mapw</B> subroutine takes a pair of 2-D 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P017">screen coordinates</A> and maps them into 3-D 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06el">modeling coordinates</A>. Because the z coordinate is missing from the screen coordinate system, the point becomes a line in modeling space. The <B>mapw</B> subroutine computes the inverse mapping from the viewing object.</P>
+
+<P><A NAME="E1D6F61975ceb"></A>The system returns a modeling coordinate line, which is computed from the (<A HREF="mapw.html#A213X911a0b"><I>screenx</I></A><B>,</B> <A HREF="mapw.html#A213X911a0c"><I>screeny</I></A>) parameters and the <A HREF="mapw.html#A213X911a0d"><I>viewobj</I></A> parameter as two points and stored in the locations addressed by the <A HREF="mapw.html#A213X911a0e"><I>modelx1</I></A><B>,</B> <A HREF="mapw.html#A213X911a0f"><I>modely1</I></A><B>,</B> <A HREF="mapw.html#A213X911a10"><I>modelz1</I></A> parameters and the <A HREF="mapw.html#A213X911a11"><I>modelx2</I></A><B>,</B> <A HREF="mapw.html#A213X911a12"><I>modely2</I></A><B>,</B>  <A HREF="mapw.html#A213X911a13"><I>modelz2</I></A> parameters. </P>
+
+<BLOCKQUOTE><A NAME="A318C9d02"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911a0a"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911a0d"></A><I>viewobj</I><B></B></TD>
+<TD>  Specifies a viewing object containing the transformations that map the current displayed objects to the screen.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911a0b"></A><I>screenx</I><B></B></TD>
+<TD>  Specifies the <I>x</I> coordinate of the screen point to be mapped.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911a0c"></A><I>screeny</I><B></B></TD>
+<TD>  Specifies the <I>y</I> coordinate of the screen point to be mapped.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911a0e"></A><I>modelx1</I><B></B></TD>
+<TD>  Specifies the <I>x</I> <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P03d">model coordinate</A> of one endpoint of a line. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911a0f"></A><I>modely1</I><B></B></TD>
+<TD>  Specifies the <I>y</I> model coordinate of one endpoint of a line.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911a10"></A><I>modelz1</I><B></B></TD>
+<TD>  Specifies the <I>z</I> model coordinate of one endpoint of a line.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911a11"></A><I>modelx2</I><B></B></TD>
+<TD>  Specifies the <I>x</I> model coordinate of the remaining endpoint of a line. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911a12"></A><I>modely2</I><B></B></TD>
+<TD>  Specifies the <I>y</I> model coordinate of the remaining endpoint of a line. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911a13"></A><I>modelz2</I><B></B></TD>
+<TD>  Specifies the <I>z</I> model coordinate of the remaining endpoint of a line.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015cbe"></A>Implementation Specifics</H3>
+<P><A NAME="E1D6F62226ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C161"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C162"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C163"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911a26"></A>Related Information</H3>
+<P><A NAME="E1D6F62323ceb"></A>Creating a new object in the display list with the <A HREF="makeobj.html#A142X912d"><B>makeobj</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F62348ceb"></A>Computing the inverse mapping from screen coordinates to 2-D modeling coordinates with the <A HREF="mapw2.html#A213X911a56"><B>mapw2</B></A> subroutine.</P>
+
+<P><A NAME="E1D6F62374ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/picknselect.html#picknselect.html">Picking and Selecting</A> Overview, and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="mapcolors.html">Previous</a>  |
+<a href="mapw2.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

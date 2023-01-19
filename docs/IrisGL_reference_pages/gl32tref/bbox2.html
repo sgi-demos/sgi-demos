@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>bbox2 Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="backface.html">Previous</a>  |
+<a href="bgnclosedline.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A142X922e"></A>bbox2 Subroutine</H2>
+<A NAME="INDEX44" REL="I1" TITLE="bbox2 subroutine (GL)"></A>
+<A NAME="INDEX45" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX46" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX47" REL="I3" TITLE="controlling subroutine execution"></A>
+<A NAME="INDEX48" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX49" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX50" REL="I3" TITLE="specifying bounding box"></A>
+<A NAME="INDEX51" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX52" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX53" REL="I3" TITLE="culling and pruning"></A>
+<A NAME="INDEX54" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX55" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX56" REL="I3" TITLE="bbox2"></A>
+<A NAME="INDEX57" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX58" REL="I2" TITLE="display list"></A>
+
+<H3><A NAME="A142X9230"></A>Purpose</H3>
+<P><A NAME="E1B0439709ceb"></A>Specifies the bounding box and minimum pixel radius.</P>
+
+<H3><A NAME="A79C11"></A>Libraries</H3>
+<P><A NAME="E1B0439856ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0439960ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A142X9234"></A>C Syntax</H3>
+<PRE><A NAME="A142X9235"></A><B>void bbox2</B>
+<B>(Screencoord </B><A HREF="bbox2.html#A142X9239"><I>xmin</I></A><B>, Screencoord </B><A HREF="bbox2.html#A142X923a"><I>ymin</I></A><B>,</B>
+<B>Coord</B> <A HREF="bbox2.html#cQu2d0marj"><I>x1</I></A><B>, Coord</B> <A HREF="bbox2.html#yQu2170marj"><I>y1</I></A><B>,</B>
+<B>Coord </B><A HREF="bbox2.html#DAu2290marj"><I>x2</I></A><B>,</B> <B>Coord</B> <A HREF="bbox2.html#A142X923b"><I>y2</I></A><B>)</B></PRE>
+<PRE><A NAME="A213X911f50"></A><B>void bbox2i</B>
+<B>(Screencoord </B><A HREF="bbox2.html#A142X9239"><I>xmin</I></A><B>, Screencoord </B><A HREF="bbox2.html#A142X923a"><I>ymin</I></A><B>,</B>
+<B>Icoord</B> <A HREF="bbox2.html#cQu2d0marj"><I>x1</I></A><B>, Icoord</B> <A HREF="bbox2.html#yQu2170marj"><I>y1</I></A><B>,</B>
+<B>Icoord </B><A HREF="bbox2.html#DAu2290marj"><I>x2</I></A><B>,</B> <B>Icoord</B> <A HREF="bbox2.html#A142X923b"><I>y2</I></A><B>)</B></PRE>
+<PRE><A NAME="A213X911f51"></A><B>void bbox2s</B>
+<B>(Screencoord </B><A HREF="bbox2.html#A142X9239"><I>xmin</I></A><B>, Screencoord </B><A HREF="bbox2.html#A142X923a"><I>ymin</I></A><B>,</B>
+<B>Scoord</B> <A HREF="bbox2.html#cQu2d0marj"><I>x1</I></A><B>, Scoord</B> <A HREF="bbox2.html#yQu2170marj"><I>y1</I></A><B>,</B>
+<B>Scoord </B><A HREF="bbox2.html#DAu2290marj"><I>x2</I></A><B>,</B> <B>Scoord</B> <A HREF="bbox2.html#A142X923b"><I>y2</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010a75"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010a76"></A><B>SUBROUTINE BBOX2(</B><I>xmin</I><B>,</B><I> ymin</I><B>,</B> <I>x1</I><B>,</B><I> y1</I><B>,</B><I> x2</I><B>,</B><I> y2</I><B>)</B>
+<B>INTEGER*4 </B><I>xmin</I><B>,</B><I> ymin</I>
+<B>REAL </B><I>x1</I><B>,</B><I> y1</I><B>,</B><I> x2</I><B>,</B><I> y2</I></PRE>
+<PRE><A NAME="A29C010a77"></A><B>SUBROUTINE BBOX2I(</B><I>xmin</I><B>,</B><I> ymin</I><B>,</B> <I>x1</I><B>,</B><I> y1</I><B>,</B><I> x2</I><B>,</B><I> y2</I><B>)</B>
+<B>INTEGER*4 </B><I>xmin</I><B>,</B><I> ymin</I><B>,</B><I> x1</I><B>,</B><I> y1</I><B>,</B><I> x2</I><B>,</B><I> y2</I></PRE>
+<PRE><A NAME="A29C010a78"></A><B>SUBROUTINE BBOX2S(</B><I>xmin</I><B>,</B><I> ymin</I><B>,</B> <I>x1</I><B>,</B><I> y1</I><B>,</B><I> x2</I><B>,</B><I> y2</I><B>)</B>
+<B>INTEGER*2 </B><I>xmin</I><B>,</B><I> ymin</I><B>, </B><I>x1</I><B>,</B><I> y1</I><B>,</B><I> x2</I><B>,</B><I> y2</I></PRE>
+
+<BLOCKQUOTE><A NAME="A139X91ed8"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference. Also, the FORTRAN INTEGER*2 version, the <B>BBOX2S</B> subroutine, should not be called with integer constant parameters. For example, 2 is an integer constant; JJ is an integer variable. The XL FORTRAN compiler, invoked by the 
+<B>xlf</B> command, stores all integer constants as long integers (INTEGER*4), not as short integers (INTEGER*2). Invoking the short version of this subroutine with an integer constant will result in unexpected behavior.</BLOCKQUOTE>
+
+
+<H3><A NAME="A142X9236"></A>Description</H3>
+<P><A NAME="E1B043A612ceb"></A>The <B>bbox2</B> subroutine controls the execution of routines in a GL object by performing the graphical functions known as 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e8">culling</A> and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0706">pruning</A>.</P>
+
+<P><A NAME="E1B043A721ceb"></A>The <B>bbox2</B> subroutine calculates the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A255B966">bounding box</A>, transforms it to
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P017">screen coordinates</A>, and compares it to the 
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A>. If the bounding box is completely outside the viewport, the routines between the call to the <B>bbox2</B> subroutine and the end of the object are ignored. </P>
+
+<P><A NAME="E1B043A830ceb"></A>If the bounding box is within the viewport, the system compares it with the minimum feature size. If the box is too small in both the <I>x</I> and <I>y</I> dimensions, the rest of the routines in the object are ignored. </P>
+
+<P><A NAME="E1B043A937ceb"></A>Overuse of the <B>bbox2</B> subroutine can impair performance, so it is best reserved for complicated object definitions.</P>
+
+<BLOCKQUOTE><A NAME="A318C9d84"></A><B>Note: </B>This subroutine can be used only to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>. </BLOCKQUOTE>
+
+
+<H3><A NAME="A142X9238"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X9239"></A><I>xmin </I></TD>
+<TD>  Specifies the width, in pixels, of the smallest displayable feature.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X923a"></A><I>ymin</I> </TD>
+<TD>  Specifies the height, in pixels, of the smallest displayable feature.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="cQu2d0marj"></A><I>x1 </I></TD>
+<TD>  Specifies the <I>x </I>coordinate of a corner of the bounding box.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="yQu2170marj"></A><I>y1 </I></TD>
+<TD>  Specifies the <I>y </I>coordinate of a corner of the bounding box.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="DAu2290marj"></A><I>x2 </I></TD>
+<TD>  Specifies the <I>x </I>coordinate of a corner of the bounding box. This corner must be diagonally opposite the corner (<I>x1,</I> <I>y1</I>).</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A142X923b"></A><I>y2 </I></TD>
+<TD>  Specifies the <I>y </I>coordinate of a corner of the bounding box. This corner must be diagonally opposite the corner (<I>x1,</I> <I>y1</I>).</TD></TR></TABLE>
+
+<H3><A NAME="A62C015cf8"></A>Implementation Specifics</H3>
+<P><A NAME="E1B043B540ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C14"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C15"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C16"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c5ec"></A>Related Information</H3>
+<P><A NAME="E1B043B858ceb"></A>Creating an object with the <A HREF="makeobj.html#A142X912d"><B>makeobj</B></A> subroutine.</P>
+
+<P><A NAME="E1B043B966ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Creating <!--gl32prgd:--><A HREF="../gl32prgd/workobjects.html#workobjects.html">Objects (Display Lists)</A>, 
+and Using <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Viewports and Screenmasks</A>.</P><hr><center>
+[  <a href="backface.html">Previous</a>  |
+<a href="bgnclosedline.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

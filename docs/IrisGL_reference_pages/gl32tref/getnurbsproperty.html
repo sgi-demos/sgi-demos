@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getnurbsproperty Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getmmode.html">Previous</a>  |
+<a href="getopenobj.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A252X986e"></A>getnurbsproperty Subroutine</H2>
+<A NAME="INDEX776" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX777" REL="I2" TITLE="query"></A>
+<A NAME="INDEX778" REL="I3" TITLE="getnurbsproperty"></A>
+<A NAME="INDEX779" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX780" REL="I2" TITLE="NURBS curves and surfaces"></A>
+<A NAME="INDEX781" REL="I3" TITLE="getnurbsproperty"></A>
+<A NAME="INDEX782" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX783" REL="I2" TITLE="surface (NURBS)"></A>
+<A NAME="INDEX784" REL="I3" TITLE="returning value of display property"></A>
+<A NAME="INDEX785" REL="I1" TITLE="getnurbsproperty subroutine (GL)"></A>
+
+<H3><A NAME="A252X9870"></A>Purpose</H3>
+<P><A NAME="E1B1050684ceb"></A>Returns the current value of a trimmed NURBS surfaces display property</P>
+
+<H3><A NAME="A78C133c"></A>Libraries</H3>
+<P><A NAME="E1B1050832ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1050937ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A252X9873"></A>C Syntax</H3>
+<PRE><A NAME="A252X9874"></A><B>void getnurbsproperty(Int32</B> <A HREF="getnurbsproperty.html#A252X987d"><I>property</I></A><B>, Float32</B> <B>*</B><A HREF="getnurbsproperty.html#A252X987e"><I>value</I></A><B>)</B></PRE>
+
+<H3><A NAME="A252X984c"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A252X984f"></A><B>SUBROUTINE GETNUR(</B><I>property</I><B>,</B><I> value</I><B>)</B>
+<B>INTEGER*4</B> <I>property</I>
+<B>REAL</B> <I>value</I></PRE>
+
+<H3><A NAME="A252X9877"></A>Description</H3>
+<P><A NAME="E1B1051318ceb"></A>The <B>getnurbsproperty</B> subroutine returns the current value of a trimmed Non-Uniform Rational B-Spline (NURBS) surfaces display property. The display of NURBS surfaces can be controlled in different ways, as explained in the description of the <A HREF="getnurbsproperty.html#A252X987e"><I>value</I></A> parameter.</P>
+
+<BLOCKQUOTE><A NAME="A318C9f29"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A252X987c"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A252X987d"></A><I>property</I></TD>
+<TD>  Specifies the name of the property to be queried.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A252X987e"></A><I>value</I></TD>
+<TD>  Specifies a pointer to the location into which the system is to write the value of the named property. The display properties that can be affected and their possible values are as follows:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>N_ERRORCHECKING</TD>
+
+<TD>NERROR</TD>
+
+<TD>If value is 1.0, some error checking is enabled. If error checking is disabled, the system runs slightly faster. The default value is 0.0.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>N_PIXEL_TOLERANCE</TD>
+
+<TD>NPIXEL</TD>
+
+<TD>The value is the maximum length, in pixels, of edges of polygons on the screen used to render trimmed NURBS surfaces. The default value is 50.0 pixels.</TD></TR></TABLE></TD></TR></TABLE>
+
+<H3><A NAME="A62C015d9e"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1051736ceb"></A>This subroutine is part of GL in the AIXwindows Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C133f"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1340"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1341"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A252X9883"></A>Related Information</H3>
+<P><A NAME="E1B1052060ceb"></A>Marking the beginning and end of a NURBS surface definition with the <A HREF="bgnsurface.html#A251X9d7"><B>bgnsurface </B>and <B>endsurface</B></A> subroutines. </P>
+
+<P><A NAME="E1B1052167ceb"></A>Marking the beginning and end of a NURBS surface trimming loop with the <A HREF="bgntrim.html#A251X98d"><B>bgntrim</B> and <B>endtrim</B></A> subroutines. </P>
+
+<P><A NAME="E1B1052277ceb"></A>Controlling the shape of a NURBS trimming curve with the <A HREF="nurbscurve.html#A255X93ca"><B>nurbscurve</B></A> subroutine. </P>
+
+<P><A NAME="E1B1052385ceb"></A>Controlling the shape of a NURBS surface with the <A HREF="nurbssurface.html#A252X98b9"><B>nurbssurface</B></A> subroutine. </P>
+
+<P><A NAME="E1B1052494ceb"></A>Describing a piecewise linear trimming curve for NURBS surfaces with the <A HREF="pwlcurve.html#A257X9fc"><B>pwlcurve</B></A> subroutine. </P>
+
+<P><A NAME="E1B1052600ceb"></A>Setting a property for the display of trimmed NURBS with the <A HREF="setnurbsproperty.html#A257X911b"><B>setnurbsproperty</B></A> subroutine. </P>
+
+<P><A NAME="E1B1052708ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing <!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">NURBS Curves and Surfaces</A>, and <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System.</P><hr><center>
+[  <a href="getmmode.html">Previous</a>  |
+<a href="getopenobj.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

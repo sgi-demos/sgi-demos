@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>lgetdepth Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="lampoff.html">Previous</a>  |
+<a href="linesmooth.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="qTc320marj"></A>lgetdepth Subroutine</H2>
+<A NAME="INDEX1014" REL="I1" TITLE="lgetdepth subroutine (GL)"></A>
+<A NAME="INDEX1015" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1016" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX1017" REL="I3" TITLE="lgetdepth"></A>
+<A NAME="INDEX1018" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1019" REL="I2" TITLE="query"></A>
+<A NAME="INDEX1020" REL="I3" TITLE="lgetdepth"></A>
+<A NAME="INDEX1021" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1022" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX1023" REL="I3" TITLE="getting clipping plane distances"></A>
+
+<H3><A NAME="A318C9e45"></A>Purpose</H3>
+<P><A NAME="E1B1524108ceb"></A>Gets the distance of the near and far clipping planes.</P>
+
+<H3><A NAME="A79C126a"></A>Libraries</H3>
+<P><A NAME="E1B1524261ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1524367ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A318C9e48"></A>C Syntax</H3>
+<PRE><A NAME="A318C9e49"></A><B>void lgetdepth(Int32 *</B><A HREF="lgetdepth.html#wm412e0marj"><I>near</I></A><B>, Int32</B> <B>*</B><A HREF="lgetdepth.html#Cn41c0marj"><I>far</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010b70"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010b71"></A><B>SUBROUTINE LGETDE(</B><I>near</I><B>,</B> <I>far</I><B>)</B>
+<B>INTEGER*4</B> <I>near</I><B>,</B> <I>far</I></PRE>
+
+<H3><A NAME="A318C9e4c"></A>Description</H3>
+<P><A NAME="E1B1524740ceb"></A>The <B>lgetdepth</B> subroutine gets the distance of the near and far clipping planes and writes them into the <A HREF="lgetdepth.html#wm412e0marj"><I>near</I></A> and <A HREF="lgetdepth.html#Cn41c0marj"><I>far</I></A> parameters. Set these distances using the <A HREF="lsetdepth.html#naR120marj"><B>lsetdepth</B></A> subroutine.</P>
+
+<BLOCKQUOTE><A NAME="A318C9e4e"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A318C9e4f"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="wm412e0marj"></A><I>near</I></TD>
+<TD>  Specifies a pointer to the location into which to write the distance of the near clipping plane.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Cn41c0marj"></A><I>far</I></TD>
+<TD>  Specifies a pointer to the location into which to write the distance of the far clipping plane.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015d54"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1525126ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C126d"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C126e"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C126f"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A318C9e56"></A>Related Information</H3>
+<P><A NAME="E1B1525451ceb"></A>Setting the viewport depth range with the <A HREF="lsetdepth.html#naR120marj"><B>lsetdepth</B></A> subroutine.</P>
+
+<P><A NAME="E1B1525562ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System, and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="lampoff.html">Previous</a>  |
+<a href="linesmooth.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

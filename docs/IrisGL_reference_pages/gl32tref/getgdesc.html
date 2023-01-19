@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getgdesc Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getfonttype.html">Previous</a>  |
+<a href="Tokens.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="t9311e0marj"></A>getgdesc Subroutine</H2>
+<H3><A NAME="A335C95993"></A>Purpose</H3>
+<P><A NAME="E1B0ED0143ceb"></A>Returns information about the currently installed graphics hardware
+.
+</P>
+
+<H3><A NAME="A77C1d8"></A>Libraries</H3>
+<P><A NAME="E1B0ED0295ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0ED0400ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A335C95996"></A>C Syntax</H3>
+<PRE><A NAME="A335C95997"></A><B>Int32 getgdesc(Int32 </B><A HREF="getgdesc.html#QH41a0marj"><I>inquiry</I></A><B>);</B></PRE>
+
+<H3><A NAME="A77C1db"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A77C1dc"></A><B>INTEGER *4 FUNCTION GETGDE(</B><I>inquiry</I><B>)</B>
+<B>INTEGER*4</B> <I>inquiry</I></PRE>
+
+<H3><A NAME="A335C9599a"></A>Description</H3>
+<P><A NAME="E1B0ED0773ceb"></A>The <B>getgdesc </B>subroutine allows you to inquire about characteristics of the graphics system. The characteristics are all hardware characteristics; that is, the values returned do not change as the adapter is software reconfigured.</P>
+
+<P><A NAME="E1B0ED0882ceb"></A>It is not necessary to open a GL window or call the <B>ginit</B> subroutine before using the <B>getgdesc </B>subroutine.</P>
+
+<BLOCKQUOTE><A NAME="A335C959a0"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A335C959a1"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="QH41a0marj"></A><I>inquiry</I></TD>
+<TD>  Represents the characteristics about which you want to inquire. Inquiries are submitted using <A HREF="Tokens.html#QP3a0nita">tokens</A>.</TD></TR></TABLE>
+
+<H3><A NAME="A335C959a2"></A>Return Values</H3>
+<P><A NAME="E1B0ED1208ceb"></A>The value of the requested characteristic, or -1 if the request is not valid or cannot be determined. For a listing of return values for adapters, see the <!--gl32prgd:--><A HREF="../gl32prgd/descrtable.html#descrtable.html">"Adapter Description Table for GL"</A>, Appendix B.</P>
+
+<H3><A NAME="A77C1dd"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0ED1370ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A77C1df"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1e0"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1e1"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c844"></A>Related Information</H3>
+<P><A NAME="E1B0ED1696ceb"></A>Getting the library version number with the <A HREF="gversion.html#A237X9480e"><B>gversion</B></A> subroutine.</P>
+
+<P><A NAME="E1B0ED1804ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware</A> Used by GL and <!--gl32prgd:--><A HREF="../gl32prgd/clrrstintgl.html#clrrstintgl.html">Clearing, Setting, and Initializing GL</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P><hr><center>
+[  <a href="getfonttype.html">Previous</a>  |
+<a href="Tokens.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

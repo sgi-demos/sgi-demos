@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getcursor Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getcpos.html">Previous</a>  |
+<a href="getdcm.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="sP1160nita"></A>getcursor Subroutine</H2>
+<A NAME="INDEX628" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX629" REL="I2" TITLE="cursor"></A>
+<A NAME="INDEX630" REL="I3" TITLE="getcursor"></A>
+<A NAME="INDEX631" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX632" REL="I2" TITLE="cursor"></A>
+<A NAME="INDEX633" REL="I3" TITLE="returning characteristics"></A>
+<A NAME="INDEX634" REL="I1" TITLE="getcursor subroutine (GL)"></A>
+
+<H3><A NAME="A213X910e52"></A>Purpose</H3>
+<P><A NAME="E1B0D9D727ceb"></A>Returns the cursor characteristics.</P>
+
+<H3><A NAME="A78C1df"></A>Libraries</H3>
+<P><A NAME="E1B0D9D876ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0D9D980ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X910e55"></A>C Syntax</H3>
+<PRE><A NAME="A213X910e56"></A><B>void getcursor</B>
+<B>(Int16 *</B><A HREF="getcursor.html#JD3120nita"><I>index</I></A><B>, </B>
+<B>Colorindex *</B><A HREF="getcursor.html#dD3240nita"><I>color</I></A><B>, Colorindex *</B><A HREF="getcursor.html#AD31a0nita"><I>writemask</I></A><B>, </B>
+<B>Int32 *</B><A HREF="getcursor.html#KE32a0nita"><I>bool</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X910e31"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X910e34"></A><B>SUBROUTINE GETCUR(</B><I>index</I><B>,</B><I> color</I><B>, </B><I>writemask</I><B>,</B><I> bool</I><B>)</B>
+<B>INTEGER*2 </B><I>index</I><B>,</B><I> color</I><B>,</B><I> writemask</I>
+<B>LOGICAL</B><I> bool</I></PRE>
+
+<H3><A NAME="A213X910e59"></A>Description</H3>
+<P><A NAME="E1B0D9E352ceb"></A>The <B>getcursor</B> subroutine finds the index of the current
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A263A93ae">cursor</A> and returns it in the <A HREF="getcursor.html#JD3120nita"><I>index</I></A> parameter. The cursor index is an index into a table of cursor bitmaps set by the <A HREF="defcursor.html#A150X9444"><B>defcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0D9E460ceb"></A>The default is the cursor at index 0 (zero) in the cursor bitmaps. This cursor is displayed in red and is automatically updated on each vertical retrace.</P>
+
+<BLOCKQUOTE><A NAME="A318C9cd1"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X910e5d"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="JD3120nita"></A><I>index</I></TD>
+<TD>  Specifies an index that was previously associated with a bitmap by the <A HREF="defcursor.html#A150X9444"><B>defcursor</B></A> subroutine.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="dD3240nita"></A><I>color</I></TD>
+<TD>  Retained for compatibility, but disregarded.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="AD31a0nita"></A><I>writemask</I></TD>
+<TD>  Retained for compatibility, but disregarded.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="KE32a0nita"></A><I>bool</I></TD>
+<TD>  Specifies a pointer to the location into which the system returns a boolean indicating if the cursor is visible in the current window.</TD></TR></TABLE>
+
+<H3><A NAME="A64C016570"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0D9E955ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1e2"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1e3"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1e4"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X910e69"></A>Related Information</H3>
+<P><A NAME="E1B0D9F321ceb"></A>Defining a cursor with the <A HREF="defcursor.html#A150X9444"><B>defcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0D9F428ceb"></A>Setting the cursor characteristics with the <A HREF="setcursor.html#ZR1nita"><B>setcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0D9F536ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/cursorgl.html#cursorgl.html">Creating a Cursor</A>, and Creating and Managing <!--gl32prgd:--><A HREF="../gl32prgd/managewinds.html#managewinds.html">Windows</A>.</P><hr><center>
+[  <a href="getcpos.html">Previous</a>  |
+<a href="getdcm.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

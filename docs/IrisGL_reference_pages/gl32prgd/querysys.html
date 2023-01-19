@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/querysys.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>Querying the System
+
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="cntrlques.html">Previous</a>  |
+<a href="popupmenus.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="querysys.html"></A>Querying the System
+
+</H2>
+<A NAME="INDEX875" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX876" REL="I2" TITLE="querying the system"></A>
+<A NAME="INDEX877" REL="I1" TITLE="query"></A>
+<A NAME="INDEX878" REL="I2" TITLE="GL"></A>
+<A NAME="INDEX879" REL="I3" TITLE="system"></A>
+<P><A NAME="A3C0ED59540mhay"></A>Certain GL subroutines obtain information about various processes in or aspects of the system. These include current cursor characteristics, maximum character height in the current raster font, and the current display, color map, or drawing mode.</P>
+
+<P><A NAME="A3C0ED59561mhay"></A>Other subroutines furnish lists, such as the <!--:libs:gl32tref:--><A HREF="../gl32tref/blkqread.html#A143X91fc"><B>blkqread</B></A> subroutine, which reads a block of event queue entries, and the <!--:libs:gl32tref:--><A HREF="../gl32tref/getdev.html#A143X923"><B>getdev</B></A> subroutine, which polls the specified valuators.</P>
+
+<H3><A NAME="A4x2190marj"></A>List of GL Query Subroutines<A NAME="INDEX880" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX881" REL="I2" TITLE="subroutines"></A>
+<A NAME="INDEX882" REL="I3" TITLE="query"></A>
+<A NAME="INDEX883" REL="I1" TITLE="query"></A>
+<A NAME="INDEX884" REL="I2" TITLE="GL"></A>
+<A NAME="INDEX885" REL="I3" TITLE="subroutines"></A>
+</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01237a"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/blkqread.html#A143X91fc"><B>blkqread</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Reads multiple entries from the event queue.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01237b"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/genobj.html#A142X91ea"><B>genobj</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns a unique integer for use as an object identifier.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01237c"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/gentag.html#A48x2120marj"><B>gentag</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns a unique integer for use as a tag number.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01237d"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getbackface.html#A143X976d"><B>getbackface</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Indicates whether backfacing polygon removal is on or off.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01237e"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getbuffer.html#A145X9f6"><B>getbuffer</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Indicates which buffers are enabled for drawing.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01237f"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getbutton.html#A143X91"><B>getbutton</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current state of a button.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012380"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getcmmode.html#A146X948e"><B>getcmmode</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the organization of the current color map.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012381"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getcolor.html#A146X924b"><B>getcolor</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current color in color map mode.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012382"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getcpos.html#A144X9364"><B>getcpos</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current character position.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012383"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getcursor.html#sP1160nita"><B>getcursor</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the cursor characteristics.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012384"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getdcm.html#A5OK230marj"><B>getdcm</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Indicates whether depth-cue mode is on or off.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012385"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getdescender.html#A144X9386"><B>getdescender</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the baseline extent of the longest character descender.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012386"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getdev.html#A143X923"><B>getdev</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Reads a list of valuators.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012387"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getdisplaymode.html#A145X9206"><B>getdisplaymode</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current display mode.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012388"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getdrawmode.html#A143X9482"><B>getdrawmode</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current drawing mode.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012389"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getfont.html#A144X93a8"><B>getfont</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current raster font number.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A78C144b"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getgdesc.html#t9311e0marj"><B>getgdesc</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns information about currently installed graphics hardware.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01238a"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getgpos.html#CZf60marj"><B>getgpos</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Gets the current graphics position.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01238b"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getheight.html#A144X93ca"><B>getheight</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the maximum character height in the current raster font.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01238c"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getlsrepeat.html#A143X9ba7"><B>getlsrepeat</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the linestyle repeat count.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01238d"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getlstyle.html#A143X9bc9"><B>getlstyle</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current linestyle.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01238e"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getlwidth.html#A213X91299c"><B>getlwidth</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current linewidth.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01238f"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getmap.html#A146X94e2"><B>getmap</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the number of the current color map.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012390"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getmatrix.html#A144X940e"><B>getmatrix</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Gets a copy of the current transformation matrix.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012391"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getmcolor.html#nXI1100marj"><B>getmcolor</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Gets a copy of the RGB values for a color map entry.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A59C01547e"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getmcolors.html#UI2f0marj"><B>getmcolors</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns a range of color map RGB values.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012392"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getmmode.html#idZ2e0marj"><B>getmmode</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current matrix mode.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012393"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getnurbsproperty.html#A252X986e"><B>getnurbsproperty</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current value of a trimmed NURBS surfaces display property.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012394"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getopenobj.html#A142X9382"><B>getopenobj</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current open object.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012395"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getorigin.html#A142X91f76"><B>getorigin</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the position of a window.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012396"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getpattern.html#A143X9b63"><B>getpattern</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the index of the current fill pattern.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012397"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getplanes.html#A143X94a4"><B>getplanes</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the number of available bitplanes.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012398"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getscrmask.html#A213X911c47"><B>getscrmask</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current screenmask.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C012399"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getsize.html#X513200marj"><B>getsize</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the size of a window.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01239a"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getsm.html#A143X9a53"><B>getsm</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current shading style used to draw filled polygons.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01239b"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getvaluator.html#A143X945"><B>getvaluator</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current state of a valuator.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01239c"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getviewport.html#A142X9107"><B>getviewport</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Gets a copy of the dimensions of the current viewport.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01239d"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getwritemask.html#A143X94c6"><B>getwritemask</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current writemask.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01239e"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/getzbuffer.html#A9SR350marj"><B>getzbuffer</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Indicates whether z-buffering is on or off.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C01239f"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/gRGBcolor.html#ESL13a0marj"><B>gRGBcolor</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current color in RGB mode.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C0123a0"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/gRGBmask.html#A143X94e8"><B>gRGBmask</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the current RGB writemask.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A52C0142cc"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/gversion.html#A237X9480e"><B>gversion</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the version of GL being used.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C0123a1"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/qread.html#A143X989"><B>qread</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Reads the first entry in the event queue.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A39C0123a2"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/strwidth.html#A144X93ec"><B>strwidth</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the width of the specified text string.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP" COLSPAN="2"><A NAME="A318C9bf6"></A><!--:libs:gl32tref:--><A HREF="../gl32tref/winget.html#A142X91505"><B>winget</B></A> 
+</TD></TR>
+<TR VALIGN="TOP"><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+<TD>  Returns the identifier of the current window.</TD></TR></TABLE><hr><center>
+[  <a href="cntrlques.html">Previous</a>  |
+<a href="popupmenus.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/querysys.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+
+

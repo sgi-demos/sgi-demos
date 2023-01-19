@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>cpack Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="concave.html">Previous</a>  |
+<a href="crv.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9284"></A>cpack Subroutine</H2>
+<A NAME="INDEX287" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX288" REL="I2" TITLE="attribute"></A>
+<A NAME="INDEX289" REL="I3" TITLE="cpack"></A>
+<A NAME="INDEX290" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX291" REL="I2" TITLE="colors"></A>
+<A NAME="INDEX292" REL="I3" TITLE="current"></A>
+<A NAME="INDEX293" REL="I1" TITLE="cpack subroutine (GL)"></A>
+<H3><A NAME="A143X9286"></A>Purpose</H3>
+<P><A NAME="E1B07AF969ceb"></A>Specifies RGBA color with a single packed 32-bit integer.</P>
+
+<H3><A NAME="A77C162"></A>Libraries</H3>
+<P><A NAME="E1B07B0151ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B07B0255ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X928a"></A>C Syntax</H3>
+<PRE><A NAME="A143X928b"></A><B>void cpack(unsigned Int32 </B><A HREF="cpack.html#A143X928f"><I>pack</I></A><B>)</B></PRE>
+
+<H3><A NAME="A19C0e0dd"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A19C0e0de"></A><B>SUBROUTINE CPACK(</B><I>pack</I><B>)</B>
+<B>INTEGER*4 </B><I>pack</I></PRE>
+
+<H3><A NAME="A143X928c"></A>Description</H3>
+<P><A NAME="E1B07B0619ceb"></A>The <B>cpack </B>subroutine changes the current RGBA (red, green, blue, alpha) values. It is valid only in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>. Red is the least significant byte in the packed integer, then green, blue, and alpha. Components must range from 0 through 255.  For example, </P>
+<PRE><A NAME="A213X9121f4"></A>cpack(0xFF004080); </PRE>
+
+<P><A NAME="E1B07B0777ceb"></A>sets red to <SAMP>0x80</SAMP>, green to <SAMP>0x40</SAMP>, blue to <SAMP>0x0</SAMP>, and alpha to <SAMP>0xFF</SAMP>. On systems without alpha bitplanes, set the alpha bit values to zero.  </P>
+
+<P><A NAME="E1B07B0883ceb"></A>Note that the <B>cpack</B> subroutine can be used while a 
+lighting model
+ is active. </P>
+
+<H3><A NAME="A143X928e"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X928f"></A><I>pack</I> </TD>
+<TD>  Specifies a packed integer containing the RGBA (red, green, blue, alpha) values to assign as the current color. </TD></TR></TABLE>
+
+<H3><A NAME="A143X9294"></A>Example</H3>
+<P><A NAME="E1B07B1145ceb"></A>To clear the screen to black, then set the color to white, the example C language program <A HREF="localatten_c.html#A10C0abc5"><B>localatten.c</B></A> calls the <B>cpack</B> subroutine with a value of <SAMP>0</SAMP> (black) before a <B>clear</B> subroutine, then calls the <B>cpack</B> subroutine with a value of <SAMP>0xFFFFFF</SAMP> (white).</P>
+
+<H3><A NAME="A62C015c6f"></A>Implementation Specifics</H3>
+<P><A NAME="E1B07B1305ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A11C0b4bb"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C165"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C166"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X92a4"></A>Related Information</H3>
+<P><A NAME="E1B07B1623ceb"></A>Setting the current color in RGB mode with the <A HREF="c.html#A143X9262"><B>c</B></A> subroutine.</P>
+
+<P><A NAME="E1B07B1730ceb"></A>Setting the current color in color map mode with the <A HREF="color.html#A146X9429"><B>color</B></A> subroutine.</P>
+
+<P><A NAME="E1B07B1838ceb"></A>Returning the current color in color map mode with the <A HREF="getcolor.html#A146X924b"><B>getcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B07B1945ceb"></A>Returning the current color in RGB mode with the <A HREF="gRGBcolor.html#ESL13a0marj"><B>gRGBcolor</B></A> subroutine.  </P>
+
+<P><A NAME="E1B07B2053ceb"></A>Setting the current color in RGB mode with the <A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B07B2161ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="concave.html">Previous</a>  |
+<a href="crv.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>getscrmask Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getplanes.html">Previous</a>  |
+<a href="getsize.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A213X911c47"></A>getscrmask Subroutine</H2>
+<A NAME="INDEX820" REL="I1" TITLE="getscrmask subroutine (GL)"></A>
+<A NAME="INDEX821" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX822" REL="I2" TITLE="viewport"></A>
+<A NAME="INDEX823" REL="I3" TITLE="getscrmask"></A>
+<A NAME="INDEX824" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX825" REL="I2" TITLE="query"></A>
+<A NAME="INDEX826" REL="I3" TITLE="getscrmask"></A>
+<A NAME="INDEX827" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX828" REL="I2" TITLE="screenmask"></A>
+<A NAME="INDEX829" REL="I3" TITLE="returning"></A>
+
+<H3><A NAME="A213X911c49"></A>Purpose</H3>
+<P><A NAME="E1B10FC936ceb"></A>Returns the current screenmask.</P>
+
+<H3><A NAME="A79C1264"></A>Libraries</H3>
+<P><A NAME="E1B10FD086ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B10FD190ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911c4c"></A>C Syntax</H3>
+<PRE><A NAME="A213X911c4d"></A><B>void getscrmask</B>
+<B>(Screencoord *</B><A HREF="getscrmask.html#A213X911c54"><I>left</I></A><B>, Screencoord *</B><A HREF="getscrmask.html#A213X911c55"><I>right</I></A><B>,</B>
+<B>Screencoord *</B><A HREF="getscrmask.html#A213X911c56"><I>bottom</I></A><B>, Screencoord *</B><A HREF="getscrmask.html#A213X911c57"><I>top</I></A><B>)</B></PRE>
+
+<H3><A NAME="A213X911c25"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A213X911c28"></A><B>SUBROUTINE GETSCR(</B><I>left</I><B>,</B> <I>right</I><B>,</B> <I>bottom</I><B>,</B> <I>top</I><B>)</B>
+<B>INTEGER*2 </B><I>left</I><B>,</B> <I>right</I><B>,</B> <I>bottom</I><B>,</B> <I>top</I></PRE>
+
+<H3><A NAME="A213X911c50"></A>Description</H3>
+<P><A NAME="E1B10FD562ceb"></A>The <B>getscrmask</B> subroutine returns the dimensions of the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P018">screenmask</A> (the top of the screenmask stack) and copies these dimensions to the location variables specified as parameters. The <A HREF="getscrmask.html#A213X911c54"><I>left</I></A>, <A HREF="getscrmask.html#A213X911c55"><I>right</I></A>, <A HREF="getscrmask.html#A213X911c56"><I>bottom</I></A>, <A HREF="getscrmask.html#A213X911c57"><I>top</I></A> parameters are the addresses of four memory locations assigned the left, right bottom, and top coordinates of the screenmask.</P>
+
+<BLOCKQUOTE><A NAME="A318C9e1d"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911c53"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911c54"></A><I>left</I></TD>
+<TD>  Specifies the memory location into which the system copies the <I>x</I> coordinate (in pixels) of the left side of the screenmask.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911c55"></A><I>right</I></TD>
+<TD>  Specifies the memory location into which the system copies the <I>x </I>coordinate (in pixels) of the right side of the screenmask.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911c56"></A><I>bottom</I></TD>
+<TD>  Specifies the memory location into which the system copies the <I>y </I>coordinate (in pixels) of the bottom side of the screenmask.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X911c57"></A> <I>top</I></TD>
+<TD>  Specifies the memory location into which the system copies the <I>y </I>coordinate (in pixels) of the top side of the screenmask.</TD></TR></TABLE>
+
+<H3><A NAME="A30C011017"></A>Example</H3>
+<P><A NAME="E1B10FE050ceb"></A>The example C language program <A HREF="prompt_c.html#A16C0c8de"><B>prompt.c</B></A> uses the <B>getscrmask</B> subroutine to get the current screenmask so that it can be restored later. </P>
+
+<H3><A NAME="A62C015d48"></A>Implementation Specifics</H3>
+<P><A NAME="E1B10FE212ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C1267"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1268"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1269"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911c6a"></A>Related Information</H3>
+<P><A NAME="E1B10FE536ceb"></A>Pushing the viewport onto the viewport stack with the <A HREF="pushviewport.html#A213X911bee"><B>pushviewport</B></A> subroutine.</P>
+
+<P><A NAME="E1B10FE644ceb"></A>Popping the viewport stack with the <A HREF="popviewport.html#A213X911d3c"><B>popviewport</B></A> subroutine.</P>
+
+<P><A NAME="E1B10FE761ceb"></A>Defining a rectangular 2-D clipping mask with the <A HREF="scrmask.html#fwN250marj"><B>scrmask</B></A> subroutine.</P>
+
+<P><A NAME="E1B10FE868ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, <!--gl32prgd:--><A HREF="../gl32prgd/querysys.html#querysys.html">Querying</A> the System, and Using <!--gl32prgd:--><A HREF="../gl32prgd/useviewprts.html#useviewprts.html">Viewports and Screenmasks</A>.</P><hr><center>
+[  <a href="getplanes.html">Previous</a>  |
+<a href="getsize.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

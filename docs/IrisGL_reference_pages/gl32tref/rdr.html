@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>rdr  Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="rcrvn.html">Previous</a>  |
+<a href="readpixels.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="gpf1c0marj"></A>rdr  Subroutine</H2>
+<A NAME="INDEX1559" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1560" REL="I2" TITLE="moveraw style"></A>
+<A NAME="INDEX1561" REL="I3" TITLE="rdr"></A>
+<A NAME="INDEX1562" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1563" REL="I2" TITLE="line"></A>
+<A NAME="INDEX1564" REL="I3" TITLE="drawing relative to current point"></A>
+<A NAME="INDEX1565" REL="I1" TITLE="rdr subroutine (GL)"></A>
+
+<H3><A NAME="A213X912dff"></A>Purpose</H3>
+<P><A NAME="E1D72B8947ceb"></A>Draws a line relative to the current graphics point.</P>
+
+<H3><A NAME="A78C1315"></A>Libraries</H3>
+<P><A NAME="E1D72B8987ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D72B9011ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912e02"></A>C Syntax</H3>
+<PRE><A NAME="A213X912e03"></A><B>void rdr</B>
+<B>(Coord </B><A HREF="rdr.html#A213X912e0d"><I>dx</I></A><B>, Coord</B> <A HREF="rdr.html#A213X912e0e"><I>dy</I></A><B>, Coord</B> <A HREF="rdr.html#A213X912e0f"><I>dz</I></A><B>)</B></PRE>
+<PRE><A NAME="Aze110marj"></A><B>void rdri</B>
+<B>(Icoord </B><A HREF="rdr.html#A213X912e0d"><I>dx</I></A><B>, Icoord</B> <A HREF="rdr.html#A213X912e0e"><I>dy</I></A><B>, Icoord</B> <A HREF="rdr.html#A213X912e0f"><I>dz</I></A><B>)</B></PRE>
+<PRE><A NAME="DQe110marj"></A><B>void rdrs</B>
+<B>(Scoord </B><A HREF="rdr.html#A213X912e0d"><I>dx</I></A><B>, Scoord</B> <A HREF="rdr.html#A213X912e0e"><I>dy</I></A><B>, Scoord</B> <A HREF="rdr.html#A213X912e0f"><I>dz</I></A><B>)</B></PRE>
+<PRE><A NAME="SQe290marj"></A><B>void rdr2</B>
+<B>(Coord </B><A HREF="rdr.html#A213X912e0d"><I>dx</I></A><B>, Coord</B> <A HREF="rdr.html#A213X912e0e"><I>dy</I></A><B>)</B></PRE>
+<PRE><A NAME="A2Ae2f0marj"></A><B>void rdr2i</B>
+<B>(Icoord </B><A HREF="rdr.html#A213X912e0d"><I>dx</I></A><B>, Icoord</B> <A HREF="rdr.html#A213X912e0e"><I>dy</I></A><B>)</B></PRE>
+<PRE><A NAME="FAe230marj"></A><B>void rdr2s</B>
+<B>(Scoord </B><A HREF="rdr.html#A213X912e0d"><I>dx</I></A><B>, Scoord</B> <A HREF="rdr.html#A213X912e0e"><I>dy</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010aee"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010aef"></A><B>SUBROUTINE RDR(</B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I><B>)</B>
+<B>REAL </B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I></PRE>
+<PRE><A NAME="A29C010af0"></A><B>SUBROUTINE RDRI(</B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I><B>)</B>
+<B>INTEGER*4 </B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I></PRE>
+<PRE><A NAME="A29C010af1"></A><B>SUBROUTINE RDRS(</B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I><B>)</B>
+<B>INTEGER*2 </B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I></PRE>
+<PRE><A NAME="A29C010af2"></A><B>SUBROUTINE RDR2(</B><I>dx</I><B>, </B><I>dy</I><B>)</B>
+<B>REAL </B><I>dx</I><B>, </B><I>dy</I></PRE>
+<PRE><A NAME="A29C010af3"></A><B>SUBROUTINE RDR2I(</B><I>dx</I><B>, </B><I>dy</I><B>)</B>
+<B>INTEGER*4 </B><I>dx</I><B>, </B><I>dy</I></PRE>
+<PRE><A NAME="A29C010af4"></A><B>SUBROUTINE RDR2S(</B><I>dx</I><B>, </B><I>dy</I><B>)</B>
+<B>INTEGER*2 </B><I>dx</I><B>, </B><I>dy</I></PRE>
+
+<H3><A NAME="A213X912e06"></A>Description</H3>
+<P><A NAME="E1D72B9314ceb"></A>The <B>rdr</B> subroutine is the relative version of the <A HREF="draw.html#EYf2e0marj"><B>draw</B></A> subroutine. It connects the point <A HREF="rdr.html#A213X912e0d"><I>dx</I></A>, <A HREF="rdr.html#A213X912e0e"><I>dy</I></A>, <A HREF="rdr.html#A213X912e0f"><I>dz</I></A> and the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03eb">current graphics position</A> with a line segment,  using the current line attributes: 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A172P1436">linestyle</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A172P1437">linewidth</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A31996bc">color</A> (if in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A150P19d9">depth-cue mode</A>, the depth-cued color is used), and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemask</A>. </P>
+
+<P><A NAME="E1D72B9339ceb"></A>The <B>rdr</B> subroutine updates the current graphics position to the specified point.  </P>
+
+<BLOCKQUOTE><A NAME="A213X912e09"></A><B>Note: </B>Do not place routines that invalidate the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03eb">current graphics position</A> within sequences of moves and draws.</BLOCKQUOTE>
+
+
+<P><A NAME="E1D72B9385ceb"></A>The six different forms for the <B>rdr</B> subroutine are as follows:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><BR></TD>
+
+<TD><B>2-D</B></TD>
+
+<TD><B>3-D</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int16</TD>
+
+<TD>rdr2s</TD>
+
+<TD>rdrs</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int32</TD>
+
+<TD>rdr2i</TD>
+
+<TD>rdri</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>float</TD>
+
+<TD>rdr2</TD>
+
+<TD>rdr</TD></TR></TABLE>
+
+<P><A NAME="E1D72B9428ceb"></A>The <A HREF="rdr.html#A213X912e02">syntax</A> for each of the subroutine forms is the same except for the parameter type. They differ only in that <A HREF="rdr.html#A213X912e03"><B>rdr</B></A> expects real coordinates, <A HREF="rdr.html#Aze110marj"><B>rdri</B></A> expects integer coordinates, and <A HREF="rdr.html#DQe110marj"><B>rdrs</B></A> expects short integer coordinates. In addition, the <A HREF="rdr.html#SQe290marj"><B>rdr2</B></A>* routines assume a 2-D point instead of a 3-D point.</P>
+
+<H3><A NAME="A213X912e0c"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912e0d"></A><I>dx</I></TD>
+<TD>  Specifies the distance from the <I>x</I> coordinate of the current graphics position to the <I>x</I> coordinate of the new point.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912e0e"></A><I>dy</I></TD>
+<TD>  Specifies the distance from the <I>y</I> coordinate of the current graphics position to the <I>y</I> coordinate of the new point.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912e0f"></A><I>dz</I></TD>
+<TD>  Specifies the distance from the <I>z</I> coordinate of the current graphics position to the <I>z</I> coordinate of the new point.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015d20"></A>Implementation Specifics</H3>
+<P><A NAME="E1D72B9545ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C1318"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1319"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C131a"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912e1d"></A>Related Information</H3>
+<P><A NAME="E1D72B9642ceb"></A>Drawing a line with the <A HREF="draw.html#EYf2e0marj"><B>draw</B></A> subroutine.</P>
+
+<P><A NAME="E1D72B9668ceb"></A>Moving the current graphics position to a specified point with the <A HREF="move.html#pofmarj"><B>move</B></A> subroutine.</P>
+
+<P><A NAME="E1D72B9694ceb"></A>Drawing a point with the <A HREF="pnt.html#Ptf3a0marj"><B>pnt</B></A> subroutine.</P>
+
+<P><A NAME="E1D72B9719ceb"></A>Moving the current graphics position to a point relative to the current point with the <A HREF="rmv.html#kzf90marj"><B>rmv</B></A> subroutine.</P>
+
+<P><A NAME="E1D72B9745ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing with <!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Move-Draw Style</A> Subroutines, Performing <!--gl32prgd:--><A HREF="../gl32prgd/depth-cueing.html">Depth-Cueing</A>, <!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="rcrvn.html">Previous</a>  |
+<a href="readpixels.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

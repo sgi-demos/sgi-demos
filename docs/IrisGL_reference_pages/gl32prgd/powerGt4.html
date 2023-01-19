@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/powerGt4.html Mon, 24 Jan 2022 16:28:20 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>POWER Gt4 and POWER Gt4x Adapters
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="powerstation730.html">Previous</a>  |
+<a href="PGXT1000.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="powerGt4.html"></A>POWER Gt4 and POWER Gt4x
+Adapters </H2>
+
+
+<P><A NAME="INDEX960"></A><A NAME="INDEX961"></A><A NAME="INDEX962"></A><A NAME="INDEX963"></A><A NAME="INDEX964"></A><A NAME="INDEX965"></A></P>
+
+
+<P><A NAME="A3C0F166948mhay"></A>The POWER Gt4 and POWER Gt4x
+adapters are available in 16-bit (double-buffered 8-bit), and 48-bit (double-buffered
+24-bit) configurations. Both adapters occupy 2 or 3 Micro Channel
+slots and support a 24-bit z-buffer. </P>
+
+
+<P><A NAME="A3C0F166968mhay"></A>Both adapters accelerate graphics line
+and polygon drawing speeds by using a custom very large scale integration
+(VLSI) raster subsystem, multiple digital signal processor (two on the
+POWER Gt4 and six on the POWER Gt4x), and a custom,
+high-speed VLSI interface chip. In addition to drawing speeds, these adapters
+optimize context switching (the servicing of drawing orders in multiple
+windows simultaneously) performance by supporting 16 independent logical
+first-in-first-out queues (FIFOs) and 16 graphics contexts resident on
+the adapter. </P>
+
+
+<P><A NAME="A3C0F166988mhay"></A>The POWER Gt4 and POWER Gt4x
+are functionally identical. The only difference between these two adapters
+is the number of onboard digital signal processors, which affects the overall
+drawing speeds. The POWER Gt4 and POWER Gt4x are
+available in two configurations: </P>
+
+
+<UL><LI><A NAME="A137C195"></A>48-bit (24 + 24) main color buffer, with 24-bit
+z-buffer</LI>
+
+
+<LI><A NAME="A137C196"></A>16-bit (8 + 8) main color buffer, with 24-bit
+z-buffer</LI></UL>
+
+
+<P><A NAME="A3C0F167010mhay"></A>The 48-bit POWER Gt4 and POWER Gt4x
+adapters each contain two 24-bit main frame buffers, 2 overlay bitplanes,
+and a 24-bit z-buffer. In double-buffered RGB mode, one 24-bit buffer is
+displayed, while the other is used for rendering. The POWER Gt4
+and POWER Gt4x support multiple per-window hardware gamma ramps.
+In particular, while in RGB mode, the gamma ramp for one window can be
+changed independently of the others, thus leading to new visualization
+capabiltities. In color map mode, these adapters each support an 8-bit
+(256-entry) output color lookup table. </P>
+
+
+<P><A NAME="A3C0F167031mhay"></A>The 16-bit POWER Gt4 and POWER Gt4x
+adapters each contain two 8-bit main frame buffers, 2 overlay bitplanes,
+and a 24-bit z-buffer. When in double-buffer mode, one 8-bit buffer is
+displayed, while the other is used for rendering. In single-buffer mode,
+the single buffer is 8 bits deep. Double-buffered color-index and double-buffered
+RGB modes are both supported, the latter by 332 dithering. Like the 48-bit
+POWER Gt4 and POWER Gt4x, the 16-bit adapters support
+per-window gamma ramps. In color-map mode, these adapters each support
+an 8-bit (256-entry) output color lookup table. </P>
+
+
+<P><A NAME="A3C0F167051mhay"></A>The 24-bit POWER GXT1000 adapter
+is available in double-buffered 12-bit color-index or double-buffered 8-bit
+RGB mode; the 48-bit POWER GXT1000 adapter is available in double-buffered
+12-bit color-index or double-buffered 24-bit RGB mode. Both adapters support
+24-bit z-buffer and 8-bit overlay planes. Graphics rendering speeds are
+accelerated by both adapters by using a custom VLSI raster subsystem and
+multiple digital signal processors. </P>
+
+
+<BLOCKQUOTE><P><A NAME="A631106998bett"></A><B>Note: </B>Valid z-buffer ranges on the
+POWER Gt4 and POWER Gt4x adapters are 0x0 to 0xffffff,
+and not the usual GL ranges -0x800000 to +0x7fffff. </P></BLOCKQUOTE>
+
+
+<P><A NAME="A3C0F167072mhay"></A>Affected subroutines include the following:</P>
+
+
+<UL><LI><A NAME="A631107149bett"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/getgdesc.html#t9311e0marj">getgdesc</A></B></LI>
+
+
+<LI><A NAME="A631107303bett"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectread.html#A142X9c7c">lrectread</A></B></LI>
+
+
+<LI><A NAME="A631107456bett"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/rectwrite.html#A142X9c9e">lrectwrite</A></B></LI>
+
+
+<LI><A NAME="A631107608bett"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/czclear.html#A143X92c8">czclear</A></B></LI>
+
+
+<LI><A NAME="A631107760bett"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/lshaderange.html#fkk1d0marj">lshaderange</A></B></LI>
+
+
+<LI><A NAME="A631107913bett"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/lRGBrange.html#A143X93d8">lRGBrange</A></B></LI>
+
+
+<LI><A NAME="A631108066bett"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/lsetdepth.html#naR120marj">lsetdepth</A></B></LI>
+
+
+<LI><A NAME="A631108219bett"></A><B><!--:libs:gl32tref:--><A HREF="../gl32tref/lgetdepth.html#qTc320marj">lgetdepth</A></B></LI></UL>
+
+
+
+
+<hr><center>
+[  <a href="powerstation730.html">Previous</a>  |
+<a href="PGXT1000.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/powerGt4.html Mon, 24 Jan 2022 16:28:20 GMT -->
+</HTML>
+

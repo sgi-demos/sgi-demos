@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>prompt.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="popup_c.html">Previous</a>  |
+<a href="../gl32tref/run_all.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c8de"></A>prompt.c Example C Language Program
+</H2>
+<A NAME="INDEX2403" REL="I1" TITLE="prompt.c example program (GL)"></A>
+<A NAME="INDEX2404" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2405" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2406" REL="I3" TITLE="pop-up menu"></A>
+<A NAME="INDEX2407" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2408" REL="I2" TITLE="pop-up menus"></A>
+<A NAME="INDEX2409" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64EB2D229ttay"></A>/*
+prompt.c:</PRE>
+<PRE><A NAME="A64EB2D429ttay"></A>This program demonstrates a standard GL prompt and a user-defined
+prompt. If you choose the user-defined prompt, mouse events are
+ignored until you press the Enter key.</PRE>
+<PRE><A NAME="A64EB2D585ttay"></A>Peter Broadwell &amp; dave ratcliffe 1989
+*/</PRE>
+<PRE><A NAME="A64EB2D748ttay"></A>#include &lt;stdio.h>
+#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EB2D908ttay"></A>#define PROMPT        1
+#define EXIT          2</PRE>
+<PRE><A NAME="A64EB2E081ttay"></A>long menu;                /* The user-defined prompt's identifier */
+char aString[40];</PRE>
+<PRE><A NAME="A64EB2E243ttay"></A>main()
+{
+  Device dev;
+  short val;
+  long menuval;</PRE>
+<PRE><A NAME="A64EB2E628ttay"></A>  init();                 /* process events forever */
+  while(TRUE) {
+    dev=qread(&amp;val);
+    switch(dev) {
+    case ESCKEY:
+      exit();
+      break;
+    case REDRAW:
+      reshapeviewport();
+      color(BLUE);
+      clear();
+      break;
+    case RIGHTMOUSE:
+      if(val) {
+        menuval = dopup(menu);
+        switch (menuval) {
+        case PROMPT:
+                          /* prompt to get file name */
+          getUserString("File: ", aString, 
+              sizeof(aString));
+          printf("The user entered \"%s\"\n",
+              aString);
+          break;
+        case EXIT:
+          exit();
+          break;
+        default:
+          break;
+        }</PRE>
+<PRE><A NAME="A64EB2E772ttay"></A>      }</PRE>
+<PRE><A NAME="A64EB2E930ttay"></A>      break;
+    default:
+      break;
+    }</PRE>
+<PRE><A NAME="A64EB2F073ttay"></A>  }</PRE>
+<PRE><A NAME="A64EB2F352ttay"></A>}
+init()                    /* do all the basic graphics setup */
+{
+  long sx, sy;
+  ginit();                /* Open a full size window */
+  overlay(2);
+  drawmode(OVERDRAW);
+  mapcolor(BLACK,0,0,0);
+  mapcolor(RED,255,0,0);
+  drawmode(NORMALDRAW);
+  gconfig();
+  qdevice(ESCKEY);
+  qdevice(RIGHTMOUSE);
+  qenter(REDRAW, 1);
+  menu = defpup("GL-style prompt %t|My Prompt|Exit");
+}</PRE>
+<PRE><A NAME="A64EB2F581ttay"></A>/*
+Clear prompt, move to start of prompt box, and output requested 
+prompt
+*/
+getUserString(prompt,userStr,maxlen)  /* get name of file */
+char *prompt, *userStr;
+int maxlen;
+{
+                                      /* lower left corner of prompt box */</PRE>
+<PRE><A NAME="A64EB2F729ttay"></A>  #define FILEX 5</PRE>
+<PRE><A NAME="A64EB2F878ttay"></A>  #define FILEY 15</PRE>
+<PRE><A NAME="A64EB30039ttay"></A>  #define FILEYHI (30+FILEY)          /* 30 pixels hi */</PRE>
+<PRE><A NAME="A64EB30190ttay"></A>  #define TEXTX (FILEX+5)</PRE>
+<PRE><A NAME="A64EB30342ttay"></A>  #define TEXTY (FILEY+10)</PRE>
+<PRE><A NAME="A64EB30555ttay"></A>  #define clearprompt(aprmpt)                \
+    color(RED); clear(); color(BLACK); linewidth(2);\
+    recti(FILEX+2, FILEY+2, wxsize-8, FILEYHI-1);\
+    linewidth(1); cmov2i(TEXTX, TEXTY); charstr(aprmpt);</PRE>
+<PRE><A NAME="A64EB32493ttay"></A>  int cur_str_len;
+  short c;
+  Device dev;
+  long maxwidth, maxxval;             /* max length of window's width 
+                                         in pixels */
+  char *str;
+  char *prmpt = prompt, keyBoardWasQueued;
+  long oldmode, xorig, yorig, wxsize, wysize;
+  Screencoord mask1, mask2, mask3, mask4; /* Save old state to restore latter */
+  pushmatrix();
+  oldmode = getdrawmode();
+  getscrmask(&amp;mask1, &amp;mask2, &amp;mask3, &amp;mask4);
+  keyBoardWasQueued = isqueued(KEYBD);
+  drawmode(OVERDRAW);                        /* Enable overlay */
+                                             /* Set viewport to fill window */
+  getorigin(&amp;xorig,&amp;yorig);
+  getsize(&amp;wxsize,&amp;wysize);
+  ortho2(-0.5,(float)wxsize, -0.5, (float)wysize);
+  maxxval = wxsize + xorig;
+  userStr[0] = '\0';
+  maxwidth = (wxsize-11) - (FILEX + strwidth(prompt));
+  scrmask(FILEX, (Screencoord)(wxsize-6), FILEY, FILEYHI);
+  cur_str_len = strlen(userStr);
+  clearprompt(prmpt);                        /* Display my prompt */
+  qdevice(KEYBD);
+                                             /* read till eof ('\n' or '\r') */
+  while(dev = qread(&amp;c)) {
+    if(dev != KEYBD)
+      continue;         /* don't care */
+    switch(c) {
+    case '\027':        /* ^W sets cursor back to start */
+      cur_str_len = 0;
+      clearprompt(prmpt);
+      break;
+    case '\n':
+    case '\r':
+      goto done;
+    case '\b':
+      if(cur_str_len) {
+        userStr[--cur_str_len] = '\0';
+        clearprompt(prmpt);
+        /* display rightmost portion */
+        for(str=userStr; *str &amp;&amp; strwidth(str) > 
+            maxwidth; str++);
+        charstr(str);
+      }</PRE>
+<PRE><A NAME="A64EB32706ttay"></A>      break;
+    default:
+      if(cur_str_len &lt; (maxlen -1)) {
+        str = &amp;userStr[cur_str_len];
+        userStr[cur_str_len++] = c;
+        userStr[cur_str_len] = '\0';
+        charstr(str);
+      }</PRE>
+<PRE><A NAME="A64EB32862ttay"></A>      else {
+        ringbell();
+      }</PRE>
+<PRE><A NAME="A64EB33010ttay"></A>      break;
+    }</PRE>
+<PRE><A NAME="A64EB33153ttay"></A>  }</PRE>
+<PRE><A NAME="A64EB33372ttay"></A>done:
+  if(!keyBoardWasQueued) unqdevice(KEYBD);
+  scrmask(mask1, mask2, mask3, mask4);       /* restore old */
+  drawmode(OVERDRAW);
+  color(0);
+  clear();
+  drawmode(oldmode);
+  popmatrix();
+  userStr[maxlen] = '\0';
+}</PRE>
+
+<H3><A NAME="A201C1192"></A>Related Information</H3>
+<P><A NAME="E1D78B6014ceb"></A>The <A HREF="drawmode.html#A143X9460"><B>drawmode</B></A> subroutine<A HREF="../gl32tref/A143X9460" REL="PAGENUM"></A>, <A HREF="getdrawmode.html#A143X9482"><B>getdrawmode</B></A> subroutine<A HREF="../gl32tref/A143X9482" REL="PAGENUM"></A>, <A HREF="getscrmask.html#A213X911c47"><B>getscrmask</B></A> subroutine<A HREF="../gl32tref/A213X911c47" REL="PAGENUM"></A>, <A HREF="ginit.html#LDg21c0marj"><B>ginit</B></A> subroutine<A HREF="../gl32tref/LDg21c0marj" REL="PAGENUM"></A>, <A HREF="isqueued.html#A143X91da"><B>isqueued</B></A> subroutine<A HREF="../gl32tref/A143X91da" REL="PAGENUM"></A>, <A HREF="linewidth.html#A3mM11b0marj"><B>linewidth</B></A> subroutine<A HREF="../gl32tref/A3mM11b0marj" REL="PAGENUM"></A>, <A HREF="scrmask.html#fwN250marj"><B>scrmask</B></A> subroutine<A HREF="../gl32tref/fwN250marj" REL="PAGENUM"></A>, <A HREF="strwidth.html#A144X93ec"><B>strwidth</B></A> subroutine<A HREF="../gl32tref/A144X93ec" REL="PAGENUM"></A>, <A HREF="unqdevice.html#A143X91b8"><B>unqdevice</B></A> subroutine<A HREF="../gl32tref/A143X91b8" REL="PAGENUM"></A>.</P>
+
+<P></P><hr><center>
+[  <a href="popup_c.html">Previous</a>  |
+<a href="../gl32tref/run_all.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

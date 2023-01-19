@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>ortho or ortho2 Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="onemap.html">Previous</a>  |
+<a href="overlay.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X9496"></A>ortho or ortho2 Subroutine</H2>
+<A NAME="INDEX1299" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1300" REL="I2" TITLE="coordinate transformation"></A>
+<A NAME="INDEX1301" REL="I3" TITLE="ortho, ortho2"></A>
+<A NAME="INDEX1302" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1303" REL="I2" TITLE="transformation"></A>
+<A NAME="INDEX1304" REL="I3" TITLE="orthographic"></A>
+<A NAME="INDEX1305" REL="I1" TITLE="ortho, ortho2 subroutine (GL)"></A>
+
+<H3><A NAME="A144X9498"></A>Purpose</H3>
+<P><A NAME="E1D709A836ceb"></A>Defines an orthographic transformation.</P>
+
+<H3><A NAME="A78C18b"></A>Libraries</H3>
+<P><A NAME="E1D709A875ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D709A899ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X949c"></A>C Syntax</H3>
+<PRE><A NAME="A213X9126b4"></A><B>void ortho</B>
+<B>(Coord </B><A HREF="ortho.html#A97l160marj"><I>left</I></A><B>, Coord </B><A HREF="ortho.html#Y8l40marj"><I>right</I></A><B>,</B>
+<B>Coord </B><A HREF="ortho.html#Z9l200marj"><I>bottom</I></A><B>, Coord</B> <A HREF="ortho.html#l9l100marj"><I>top</I></A><B>,</B>
+<B>Coord </B><A HREF="ortho.html#w9l2c0marj"><I>near</I></A><B>, Coord</B> <A HREF="ortho.html#PAl2a0marj"><I>far</I></A><B>)</B></PRE>
+<PRE><A NAME="A144X949d"></A><B>void ortho2</B>
+<B>(Coord </B><A HREF="ortho.html#A97l160marj"><I>left</I></A><B>,</B> <B>Coord </B><A HREF="ortho.html#Y8l40marj"><I>right</I></A><B>,</B>
+<B>Coord </B><A HREF="ortho.html#Z9l200marj"><I>bottom</I></A><B>, Coord </B><A HREF="ortho.html#l9l100marj"><I>top</I></A><B>)</B></PRE>
+
+<H3><A NAME="A15C0c6eb"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A15C0c6ec"></A><B>SUBROUTINE ORTHO(</B><I>left</I><B>, </B><I>right</I><B>, </B><I>bottom</I><B>, </B><I>top</I><B>, </B><I>near</I><B>, </B><I>far</I><B>)</B>
+<B>REAL </B><I>left</I><B>, </B><I>right</I><B>, </B><I>bottom</I><B>, </B><I>top</I><B>, </B><I>near</I><B>, </B><I>far</I></PRE>
+<PRE><A NAME="A15C0c6ed"></A><B>SUBROUTINE ORTHO2(</B><I>left</I><B>, </B><I>right</I><B>, </B><I>bottom</I><B>, </B><I>top</I><B>)</B>
+<B>REAL </B><I>left</I><B>, </B><I>right</I><B>, </B><I>bottom</I><B>, </B><I>top</I></PRE>
+
+<P><A NAME="E1D709B034ceb"></A>The foregoing routines are functionally the same. They differ only in that the <B>ortho</B> subroutine is used for 3-D applications and the <B>ortho2</B> subroutine is used for 2-D applications.</P>
+
+<H3><A NAME="A144X949e"></A>Description</H3>
+<P><A NAME="E1D709B076ceb"></A>The <B>ortho </B>and <B>ortho2 </B>subroutines set the current projection transformation to be an orthographic perspective transformation. With an orthographic projection, figures do not get smaller as they recede in relation to the viewer.  Orthographic projections also preserve angles.</P>
+
+<P><A NAME="E1D709B106ceb"></A>The <B>ortho</B> subroutine specifies a box-shaped enclosure in the eye coordinate system that is mapped to the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P039">viewport</A>. The <A HREF="ortho.html#A97l160marj"><I>left</I></A>, <A HREF="ortho.html#Y8l40marj"><I>right</I></A>, <A HREF="ortho.html#Z9l200marj"><I>bottom</I></A>, <A HREF="ortho.html#l9l100marj"><I>top</I></A> parameters are the <I>x </I>and <I>y </I>
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e1"><I>clipping planes</I></A><I>. </I>The <A HREF="ortho.html#w9l2c0marj"><I>near</I></A> and <A HREF="ortho.html#PAl2a0marj"><I>far</I></A> parameters are distances along the line of sight from the eye screen origin, and can be negative. The <I>z </I>clipping planes are at <I>-near</I> and <I>-far</I>. </P>
+
+<P><A NAME="E1D709B134ceb"></A>The <B>ortho2</B> subroutine defines a 2-D clipping rectangle. When you use this subroutine with 3-D 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06el">modeling coordinates</A>, the <I>z</I> values are not transformed. Objects with z values outside the range  <B>-</B>1 &lt;=<I> z </I>&lt;=1 are clipped out.</P>
+
+<P><A NAME="E1D709B160ceb"></A>When the system is in single matrix mode, both the <B>ortho </B>and <B>ortho2 </B>subroutines load a matrix onto the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06dd">matrix stack</A>, thus replacing the current top matrix. When the system is in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P036">viewing matrix mode</A> or 
+projection matrix mode, it replaces the current projection matrix without changing the matrix stack. </P>
+
+<P><A NAME="E1D709B186ceb"></A>To be more technically accurate, the <B>ortho</B> and <B>ortho2</B> subroutines set the mapping from eye coordinates to normalized device coordinates 
+(<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A92250jess">NDC</A>). Clipping occurs in NDC; all drawing primitives (except for text and 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A60P0184">blits</A>) are clipped to -w &lt;= x, y, z &lt;= +w. The map is such that the clipping plane -w=x (in NDC) appears to be at +w*left = x in eye coordinates, and so on for the other five sides. For most drawing primitives, w=1.</P>
+
+<P><A NAME="E1D709B212ceb"></A>After the <B>ortho</B> subroutine completes, the eye coordinate system is set up so that x is to the right, y is up, and z is towards the viewer (out of the screen).</P>
+
+<H3><A NAME="A144X94a0"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A97l160marj"></A><I>left</I></TD>
+<TD>  Specifies the coordinate for the left vertical clipping plane.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Y8l40marj"></A><I>right</I></TD>
+<TD>  Specifies the coordinate for the right vertical clipping plane.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Z9l200marj"></A><I>bottom</I></TD>
+<TD>  Specifies the coordinate for the bottom horizontal clipping plane.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="l9l100marj"></A><I>top</I></TD>
+<TD>  Specifies the coordinate for the top horizontal clipping plane.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="w9l2c0marj"></A><I>near</I></TD>
+<TD>  Specifies the coordinate for the nearest depth clipping plane.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="PAl2a0marj"></A><I>far</I></TD>
+<TD>  Specifies the coordinate for the farthest depth clipping plane.</TD></TR></TABLE>
+
+<H3><A NAME="A144X94a6"></A>Examples</H3>
+<OL><LI><A NAME="A144X94a7"></A>The example C language program <A HREF="paint_c.html#A13C0bd84"><B>paint.c</B></A> uses the <B>ortho2</B> subroutine to define the two-dimensional world coordinates that exactly fit the defined viewport.</LI>
+
+<LI><A NAME="A26C0fdf0"></A>The example C language program <A HREF="backface_c.html#A16C0c7a2"><B>backface.c</B></A> uses the <B>ortho</B> subroutine to map a rectangular volume of space to the viewport.</LI></OL>
+
+<H3><A NAME="A62C015d2e"></A>Implementation Specifics</H3>
+<P><A NAME="E1D709B440ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A78C18e"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C18f"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C190"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A144X94b6"></A>Related Information</H3>
+<P><A NAME="E1D709B536ceb"></A>Setting the current  matrix mode with the <A HREF="mmode.html#XhZ2370marj"><B>mmode</B></A> subroutine.</P>
+
+<P><A NAME="E1D709B561ceb"></A>Defining a perspective projection transformation in terms of a field of view with the <A HREF="perspective.html#A144X94da"><B>perspective</B></A> subroutine.</P>
+
+<P><A NAME="E1D709B587ceb"></A>Defining a perspective projection transformation in terms of <I>x</I> and <I>y</I> coordinates with the <A HREF="window.html#A144X95ea"><B>window</B></A> subroutine.</P>
+
+<P><A NAME="E1D709B612ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Working with <!--gl32prgd:--><A HREF="../gl32prgd/workcoords.html#workcoords.html">Coordinate Systems</A>.</P><hr><center>
+[  <a href="onemap.html">Previous</a>  |
+<a href="overlay.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

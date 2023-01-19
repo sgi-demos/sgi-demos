@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>gentag Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="genobj.html">Previous</a>  |
+<a href="getbackface.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A48x2120marj"></A>gentag Subroutine</H2>
+<A NAME="INDEX567" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX568" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX569" REL="I3" TITLE="gentag"></A>
+<A NAME="INDEX570" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX571" REL="I2" TITLE="object (display list)"></A>
+<A NAME="INDEX572" REL="I3" TITLE="returning a unique integer for use as tag"></A>
+<A NAME="INDEX573" REL="I1" TITLE="gentag subroutine (GL)"></A>
+
+<H3><A NAME="A213X911f8d"></A>Purpose</H3>
+<P><A NAME="E1B0CB5581ceb"></A>Returns a unique integer for use as a tag.</P>
+
+<H3><A NAME="A79C137"></A>Libraries</H3>
+<P><A NAME="E1B0CB5729ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0CB5832ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X911f90"></A>C Syntax</H3>
+<PRE><A NAME="A213X911f91"></A><B>Int32 gentag(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010a8d"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010a8e"></A><B>INTEGER*4 FUNCTION GENTAG</B></PRE>
+
+<H3><A NAME="A213X911f94"></A>Description</H3>
+<P><A NAME="E1B0CB6189ceb"></A>The <B>gentag</B> subroutine generates a unique 31-bit integer number for use as a tag. Tags must be unique within an 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A255B9bc">object</A>. Although the <B>gentag </B>subroutine generates unique tags, if a tag is defined later with the same value, the first tag is lost. </P>
+
+<P><A NAME="E1B0CB6297ceb"></A>The <A HREF="istag.html#JXw220marj"><B>istag</B></A> subroutine can affirm the uniqueness of a tag number.</P>
+
+<BLOCKQUOTE><A NAME="A318C9d93"></A><B>Note: </B>This editing subroutine itself cannot be added to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X911f97"></A>Return Value</H3>
+<P><A NAME="E1B0CB6801ceb"></A>A unique 31-bit integer for use as a tag.</P>
+
+<H3><A NAME="A62C015d02"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0CB6961ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C13a"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C13b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C13c"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X911fa4"></A>Related Information</H3>
+<P><A NAME="E1B0CB7282ceb"></A>Deleting tags from a display list with the <A HREF="deltag.html#A1N61210marj"><B>deltag</B></A> subroutine.</P>
+
+<P><A NAME="E1B0CB7391ceb"></A>Returning a unique integer for use as an object identifier with the <A HREF="genobj.html#A142X91ea"><B>genobj</B></A> subroutine. </P>
+
+<P><A NAME="E1B0CB7498ceb"></A>Establishing the uniqueness of a tag with the <A HREF="istag.html#JXw220marj"><B>istag</B></A> subroutine. </P>
+
+<P><A NAME="E1B0CB7605ceb"></A>Marking a location in a display list with the <A HREF="maketag.html#A142X942c"><B>maketag</B></A> subroutine.</P>
+
+<P><A NAME="E1B0CB7712ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Creating <!--gl32prgd:--><A HREF="../gl32prgd/workobjects.html#workobjects.html">Objects (Display Lists)</A>.</P><hr><center>
+[  <a href="genobj.html">Previous</a>  |
+<a href="getbackface.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

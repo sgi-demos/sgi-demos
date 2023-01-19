@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>gexit Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="getzbuffer.html">Previous</a>  |
+<a href="ginit.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="xT41a0nita"></A>gexit Subroutine</H2>
+<A NAME="INDEX894" REL="I1" TITLE="gexit subroutine (GL)"></A>
+<A NAME="INDEX895" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX896" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX897" REL="I3" TITLE="gexit"></A>
+<A NAME="INDEX898" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX899" REL="I2" TITLE="initializing"></A>
+<A NAME="INDEX900" REL="I3" TITLE="terminating a graphics program"></A>
+
+<H3><A NAME="A213X91244f"></A>Purpose</H3>
+<P><A NAME="E1B1220247ceb"></A>Terminates a graphics program.</P>
+
+<H3><A NAME="A79C11d0"></A>Libraries</H3>
+<P><A NAME="E1B1220398ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B1220502ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912452"></A>C Syntax</H3>
+<PRE><A NAME="A213X912453"></A><B>void gexit(&nbsp;)</B></PRE>
+
+<H3><A NAME="A29C010ba4"></A>FORTRAN Syntax</H3>
+
+<H3><A NAME="A213X912456"></A>Description</H3>
+<P><A NAME="E1B1220854ceb"></A>The <B>gexit</B> subroutine is the final graphics routine in a program. This subroutine waits for the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0612">graphics pipeline</A> to empty, then frees all GL data structures.</P>
+
+<P><A NAME="E1B1220963ceb"></A>After the <B>gexit</B> subroutine, a process can no longer call any routines that require the graphics to be initialized.</P>
+
+<BLOCKQUOTE><A NAME="A318C9e8d"></A><B>Note: </B>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<P><A NAME="E1B1221129ceb"></A>The <B>gexit</B> subroutine unmaps and eliminates all windows, closes the display connection,  detaches all GL shared memory segments, cleans up and closes all GL graphics hardware resources, and eliminates GL processes and kernel context.</P>
+
+<P><A NAME="E1B1221238ceb"></A>The <B>gexit</B> subroutine leaves the calling process in a state similar to that in which it would have been if no GL routine had ever been callled.</P>
+
+<H3><A NAME="A30C011040"></A>Example</H3>
+<P><A NAME="E1B1221394ceb"></A>The example C language program <A HREF="scrn_rotate_c.html#A16C0c92f"><B>scrn_rotate.c</B></A> uses the <B>gexit</B> subroutine to end graphics processing. </P>
+
+<H3><A NAME="A64C0165f5"></A>Implementation Specifics</H3>
+<P><A NAME="E1B1221554ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A79C11d3"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11d4"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C11d5"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912465"></A>Related Information</H3>
+<P><A NAME="E1B1221883ceb"></A>Resetting all global state attributes to their initial values with the <A HREF="greset.html#xW42e0nita"><B>greset</B></A> subroutine.</P>
+
+<P><A NAME="E1B1221994ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware</A> Used by GL in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<P><A NAME="E1B1222102ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/clrrstintgl.html#clrrstintgl.html">Clearing, Resetting, and Initializing GL</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P><hr><center>
+[  <a href="getzbuffer.html">Previous</a>  |
+<a href="ginit.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

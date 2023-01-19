@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>deflinestyle Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="defcursor.html">Previous</a>  |
+<a href="defpattern.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9b1f"></A>deflinestyle Subroutine</H2>
+<A NAME="INDEX382" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX383" REL="I2" TITLE="attribute"></A>
+<A NAME="INDEX384" REL="I3" TITLE="deflinestyle"></A>
+<A NAME="INDEX385" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX386" REL="I2" TITLE="linestyle"></A>
+<A NAME="INDEX387" REL="I3" TITLE="defining"></A>
+<A NAME="INDEX388" REL="I1" TITLE="deflinestyle subroutine (GL)"></A>
+
+<H3><A NAME="A143X9b21"></A>Purpose</H3>
+<P><A NAME="E1B0952961ceb"></A>Defines a linestyle.</P>
+
+<H3><A NAME="A77C167"></A>Libraries</H3>
+<P><A NAME="E1B0953110ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0953215ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9b25"></A>C Syntax</H3>
+<PRE><A NAME="A143X9b26"></A><B>void deflinestyle(Int32 </B><A HREF="deflinestyle.html#A143X9b2b"><I>index</I></A><B>,</B> <B>Linestyle</B> <A HREF="deflinestyle.html#A143X9b2a"><I>linestyle</I></A><B>)</B></PRE>
+
+<H3><A NAME="A19C0e0e4"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A19C0e0e5"></A><B>SUBROUTINE DEFLIN(</B><I>index</I><B>, </B><I>linestyle</I><B>)</B>
+<B>INTEGER*4 </B><I>index</I><B>,</B><I> linestyle</I></PRE>
+
+<BLOCKQUOTE><A NAME="A77C16a"></A><B>Note: </B>For FORTRAN users, this subroutine accepts long integer parameters (INTEGER*4) when invoked from a FORTRAN program, although it accepts short integers when invoked from a C program. The C and FORTRAN syntax shown here reflect this difference.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X9b27"></A>Description</H3>
+<P><A NAME="E1B0953639ceb"></A>The <B>deflinestyle</B> subroutine defines a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A172P1436">linestyle</A>, which is a write-enabled bit pattern that is applied when lines are drawn. The least significant bit of the linestyle is applied first.</P>
+
+<P><A NAME="E1B0953748ceb"></A>You can define up to 2(16) (65536) linestyles. By default, index 0 contains the pattern <SAMP>0xFFFF</SAMP>, which draws solid lines. Index 0 cannot be redefined. A 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A172P1436">linestyle</A> can be redefined by reusing an index.</P>
+
+<BLOCKQUOTE><B>Notes: </B>
+<OL><LI><A NAME="A258C01c378"></A>The operation of this subroutine for the Supergraphics Processor Subsystem is modified. (See 
+"<!--gl32prgd:--><A HREF="../gl32prgd/powerstation730.html#NITAXIO">Hardware Considerations</A>".)</LI>
+
+<LI><A NAME="A258C01c379"></A>This subroutine cannot be used to add to a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</LI></OL></BLOCKQUOTE>
+
+
+<H3><A NAME="A143X9b29"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9b2b"></A><I>index</I></TD>
+<TD>  Specifies the index into a table of linestyles.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9b2a"></A><I>linestyle</I></TD>
+<TD>  Specifies a 16-bit pattern stored in the linestyle table at <I>index</I>.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9b2f"></A>Example</H3>
+<P><A NAME="E1B0954233ceb"></A>The example C language program <A HREF="curved_c.html#A16C0c830"><B>curved.c</B></A> uses the <B>deflinestyle</B> subroutine to define a dashed line.</P>
+
+<H3><A NAME="A62C015c77"></A>Implementation Specifics</H3>
+
+
+<P><A NAME="E1B0954449ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1B0954556ceb"></A>On some display adapters, notably the High-Performance 3-D Graphics Processor, there is a performance penalty for drawing non-solid lines.</P>
+
+
+<P><A NAME="E1B0954663ceb"></A>On the POWER GXT1000 adapter, the line stipple is reset for 
+every line segment between a <B>bgnline</B> and <B>endline</B> subroutine pair and a 
+<B>bgnclosedline</B> and <B>endclosedline</B> subroutine pair.</P>
+
+
+
+<H3><A NAME="A11C0b4ca"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C16b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C16c"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c37a"></A>Related Information</H3>
+<P><A NAME="E1B0955019ceb"></A>Defining a cursor with the <A HREF="defcursor.html#A150X9444"><B>defcursor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0955128ceb"></A>Defining a pattern with the <A HREF="defpattern.html#A143X9b41"><B>defpattern</B></A> subroutine.</P>
+
+<P><A NAME="E1B0955235ceb"></A>Defining bitmaps for a raster font with the <A HREF="defrasterfont.html#A143X9d3f"><B>defrasterfont</B></A> subroutine.</P>
+
+<P><A NAME="E1B0955341ceb"></A>Returning the current linestyle with the <A HREF="getlstyle.html#A143X9bc9"><B>getlstyle</B></A> subroutine.</P>
+
+<P><A NAME="E1B0955447ceb"></A>Setting the repeat factor for the current linestyle with the <A HREF="lsrepeat.html#DmN1110marj"><B>lsrepeat</B></A> subroutine.</P>
+
+<P><A NAME="E1B0955553ceb"></A>Selecting a linestyle with the <A HREF="setlinestyle.html#XFM1310marj"><B>setlinestyle</B></A> subroutine.</P>
+
+<P><A NAME="E1B0955663ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/drawwfcvs.html#drawwfcvs.html">Drawing Wire Frame Curves and Surface Patches</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/drawnurbs.html#drawnurbs.html">Drawing NURBS Curves and Surfaces</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Drawing with Begin-End Style Subroutines</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Drawing with Move-Draw Style Subroutines</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, 
+<!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Understanding the Hardware Used by GL</A>, and 
+<!--gl32prgd:--><A HREF="../gl32prgd/drawpoly.html#drawpoly.html">Drawing Rectangles, Circles, Arcs, and Polygons</A>.</P><hr><center>
+[  <a href="defcursor.html">Previous</a>  |
+<a href="defpattern.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

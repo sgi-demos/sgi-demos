@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>drawmode Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="draw.html">Previous</a>  |
+<a href="editobj.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9460"></A>drawmode Subroutine</H2>
+<A NAME="INDEX454" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX455" REL="I2" TITLE="frame buffer configuration"></A>
+<A NAME="INDEX456" REL="I3" TITLE="drawmode"></A>
+<A NAME="INDEX457" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX458" REL="I2" TITLE="bitplanes"></A>
+<A NAME="INDEX459" REL="I3" TITLE="choosing a set for drawing"></A>
+<A NAME="INDEX460" REL="I1" TITLE="drawmode subroutine (GL)"></A>
+<H3><A NAME="A143X9462"></A>Purpose</H3>
+<P><A NAME="E1B0AA6938ceb"></A>Specifies the target frame buffer for the drawing subroutines.</P>
+
+<H3><A NAME="A78C11b7"></A>Libraries</H3>
+<P><A NAME="E1B0AA7086ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0AA7191ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9466"></A>C Syntax</H3>
+<PRE><A NAME="A143X9467"></A><B>void drawmode(Int32 </B><A HREF="drawmode.html#A143X946b"><I>mode</I></A><B>)</B></PRE>
+
+<H3><A NAME="A28C010704"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C010705"></A><B>SUBROUTINE DRAWMO(</B><I>mode</I><B>)</B>
+<B>INTEGER*4 </B><I>mode</I></PRE>
+
+<H3><A NAME="A143X9468"></A>Description</H3>
+<P><A NAME="E1B0AA7555ceb"></A>The <B>drawmode</B> subroutine reconfigures the system and redirects the target of a number of GL drawing and attribute subroutines. The affected routines depend on the mode that the user chooses. Calls to the <A HREF="color.html#A146X9429"><B>color</B></A>, <A HREF="getcolor.html#A146X924b"><B>getcolor</B></A>, <A HREF="writemask.html#A143X9592"><B>writemask</B></A>, <A HREF="getwritemask.html#A143X94c6"><B>getwritemask</B></A>, <A HREF="mapcolor.html#A146X9535"><B>mapcolor</B></A>, and <A HREF="getmcolor.html#nXI1100marj"><B>getmcolor</B></A> subroutines affect only the current drawing mode. In cursor mode, only the <B>getmcolor </B>and <B>mapcolor</B> subroutines perform a function. </P>
+
+<BLOCKQUOTE><A NAME="A318C9c90"></A><B>Note: </B>This subroutine cannot be used to add to a
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0473">display list</A>.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X946a"></A>Parameter</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X946b"></A><I>mode</I> </TD>
+<TD>  Specifies the drawing mode identifier. The mode constants for both C and FORTRAN and their functions are displayed in the following table:
+
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Mode Constants</B></TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>UNDERDRAW</TD>
+
+<TD>UNDRDR</TD>
+
+<TD>Redirects drawing into the background (underlay) bitplanes.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>NORMALDRAW</TD>
+
+<TD>NORMDR</TD>
+
+<TD>Redirects all drawing into the mainframe buffer bitplanes.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>OVERDRAW</TD>
+
+<TD>OVRDRW</TD>
+
+<TD>Redirects drawing into the foreground (overlay) bitplanes.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>PUPDRAW</TD>
+
+<TD>PUPDRW</TD>
+
+<TD>Redirects <B>mapcolor</B> and <B>getmcolor</B> subroutines to affect only the pop-up menus.</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>CURSORDRAW</TD>
+
+<TD>CURSDR</TD>
+
+<TD>Redirects <B>mapcolor</B> and <B>getmcolor</B> subroutines to affect only the cursor.</TD></TR></TABLE></TD></TR></TABLE>
+
+<P><A NAME="E1B0AA7917ceb"></A>The following provides additional descriptions for the preceding modes:</P>
+
+<TABLE><TR VALIGN="TOP" ALIGN="LEFT"><TH NOWRAP="NOWRAP">Mode</TH>
+<TH>  Description</TH></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A10C0abd9"></A>UNDERDRAW</TD>
+<TD>  The line drawing and polygon drawing routines (both <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">begin-end style</A> and <!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">move-draw style</A>) draw into the underlay planes rather than the main 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A270A984a">frame buffer</A>. The pixmap transfer subroutines (the <A HREF="rectread.html#A142X9c7c"><B>rectread</B></A>, <A HREF="rectwrite.html#A142X9c9e"><B>rectwrite</B></A>, and <A HREF="rectcopy.html#A142X9d04"><B>rectcopy</B></A> subroutines) also draw into the underlays. All of the current attributes are used during drawing, except the color and the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemask</A>. Each drawing mode has a separate current color and current writemask, which are saved and restored when that drawing mode is exited and entered.
+
+
+<P>Drawing into the underlay planes can only be done in colorindex mode. The system automatically goes into colorindex mode when the UNDERDRAW mode is entered. Lighting and NURBS subroutines do not work correctly in UNDERDRAW mode. Because of the small number of bitplanes, only flat shading is possible; Gouraud shading does not work. The 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P1160a">z-buffer</A> is not updated when in UNDERDRAW mode.</P>
+
+
+
+
+<P>The system must have been configured to contain underlay planes before the UNDERDRAW mode can be entered. Underlay planes may be configured by calling the <A HREF="underlay.html#Az5O370nita"><B>underlay</B></A> subroutine followed by the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine.</P></TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A10C0abdc"></A>NORMALDRAW</TD>
+<TD>  All drawing occurs in the main <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A270A984a">frame buffer</A>. NORMALDRAW is the default drawing mode.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A10C0abdd"></A>OVERDRAW</TD>
+<TD>  The line drawing and polygon drawing routines (both begin-end style and move-draw style) draw into the overlay planes rather than the main frame buffer. The pixmap transfer subroutines (the <A HREF="rectread.html#A142X9c7c"><B>rectread</B></A>, <A HREF="rectwrite.html#A142X9c9e"><B>rectwrite</B></A>, and <A HREF="rectcopy.html#A142X9d04"><B>rectcopy</B></A> subroutines) also draw into the overlays. All of the current attributes are used during drawing, except the color and the writemask. Each draw mode has a separate current color and current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemask</A>, which are saved and restored when that draw mode is exited and entered.
+
+
+<P>Drawing into the overlay planes can only be done in colorindex mode. The system automatically goes into colorindex mode when the OVERDRAW mode is entered. Lighting and NURBS subroutines do not work correctly in OVERDRAW mode. Because of the small number of bitplanes, only flat shading is possible; Gouraud shading does not work. The 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A154P1160a">z-buffer</A> is not updated when in OVERDRAW mode.</P>
+
+
+
+
+<P>The system must have been configured to contain overlay planes before the OVERDRAW mode can be entered. Overlay planes may be configured by calling the <A HREF="overlay.html#A143X950a"><B>overlay</B></A> subroutine followed by the <A HREF="gconfig.html#hS4260nita"><B>gconfig</B></A> subroutine.</P>
+
+
+
+
+<BLOCKQUOTE><A NAME="A6F1DB4132csol"></A><B>Note: </B>To z-buffer drawing into the overlay planes, enable z-buffering. If you do not want to z-buffer this type of drawing, disable z-buffering by calling the <B>zbuffer</B> subroutine with a value of False while drawing into the overlay planes. Unclear visual images may be the unintentional result when a drawing in the overlay becomes z-buffered.</BLOCKQUOTE>
+
+</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A10C0abe0"></A>PUPDRAW</TD>
+<TD>  Only the <A HREF="mapcolor.html#A146X9535"><B>mapcolor</B></A> subroutine and <A HREF="getmcolor.html#nXI1100marj"><B>getmcolor</B></A> subroutine are affected. Drawing subroutines cannot be used to draw into the pop-up menus. In particular, lines, polygons, and pixmaps cannot be drawn into the pop-up menus. Only the pop-up subroutines may be used to access the pop-up menus.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A10C0abe1"></A>CURSORDRAW</TD>
+<TD>  Only the <A HREF="mapcolor.html#A146X9535"><B>mapcolor</B></A> and <A HREF="getmcolor.html#nXI1100marj"><B>getmcolor</B></A> subroutine are affected. Drawing subroutines cannot be used to draw into the cursor. Only the cursor subroutines access the cursor.</TD></TR></TABLE>
+
+<H3><A NAME="A30C010fc8"></A>Example</H3>
+<P><A NAME="E1B0AA9030ceb"></A>The example C language program <A HREF="prompt_c.html#A16C0c8de"><B>prompt.c</B></A> uses the <B>drawmode</B> subroutine with the PUPDRAW mode identifier to set the drawing mode for operations on the pop-up menus.</P>
+
+<H3><A NAME="A64C01654e"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0AA9192ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="A3CFC5F7980janb"></A>Only the Color Graphics Processor has underlay planes. Neither the POWERgraphics Gt4 family of graphics adapters, nor the POWERgraphics GXT1000 posses underlay planes. The call drawmode(UNDERDRAW) is ignored on the GXT1000 and Gt4 family adapters.</P>
+
+<P><A NAME="A3CFC5F7991janb"></A>The call drawmode(OVERDRAW) is ignored for windows that have been created with the <B>winX</B> subroutine, unless the <B>glcompat</B> GLC_CREATE_OVERLAY flag has been set.</P>
+
+<P><A NAME="A3CFC5F8002janb"></A>When performing BLITs to and from the overlay planes on the GXT1000, note that the transparent pixel value on the GXT1000 is 255, not 0. That is, transparent pixels in a pixmap should have the value of 255. Ordinary drawing into the overlay planes still uses color 0 as the transparent color.</P>
+
+<H3><A NAME="A78C11ba"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11bb"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11bc"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9480"></A>Related Information</H3>
+<P><A NAME="E1B0AA9512ceb"></A>Enabling drawing into the back buffer with the <A HREF="backbuffer.html#A145X94a"><B>backbuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B0AA9620ceb"></A>Setting color map mode as the current mode with the <A HREF="cmode.html#A146X93d6"><B>cmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B0AA9729ceb"></A>Setting the color index in the current mode with the <A HREF="color.html#A146X9429"><B>color</B></A> subroutine. </P>
+
+<P><A NAME="E1B0AA9837ceb"></A>Setting the display mode to double buffer mode with the <A HREF="doublebuffer.html#A145X91a7"><B>doublebuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B0AA9943ceb"></A>Enabling or disabling drawing into the front buffer with the <A HREF="frontbuffer.html#A145X9a0"><B>frontbuffe</B></A>r subroutine.</P>
+
+<P><A NAME="E1B0AAA050ceb"></A>Changing a color map entry to an RGB value with the <A HREF="mapcolor.html#A146X9535"><B>mapcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0AAA158ceb"></A>Setting the number of bitplanes used for overlay colors with the <A HREF="overlay.html#A143X950a"><B>overlay</B></A> subroutine.</P>
+
+<P><A NAME="E1B0AAA265ceb"></A>Setting the current color in RGB mode with the <A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> subroutine.</P>
+
+<P><A NAME="E1B0AAA377ceb"></A>Setting a display mode that bypasses the color map with the <A HREF="RGBmode.html#A143X93b6"><B>RGBmode</B></A> subroutine.</P>
+
+<P><A NAME="E1B0AAA484ceb"></A>Granting write access to a subset of available bitplanes with the <A HREF="RGBwritemask.html#A143X93fa"><B>RGBwritemask</B></A> subroutine.</P>
+
+<P><A NAME="E1B0AAA591ceb"></A>Setting the display mode to single buffer mode with the <A HREF="singlebuffer.html#A145X9259"><B>singlebuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B0AAA698ceb"></A>Setting the number of bitplanes used for underlay colors with the <A HREF="underlay.html#Az5O370nita"><B>underlay</B></A> subroutine.</P>
+
+<P><A NAME="E1B0AAA807ceb"></A>Granting write permission to a subset of available bitplanes with the <A HREF="writemask.html#A143X9592"><B>writemask</B></A> subroutine.</P>
+
+<P><A NAME="E1B0AAA922ceb"></A>Turning z-buffer mode on and off with the <A HREF="zbuffer.html#A143X97b1"><B>zbuffer</B></A> subroutine.</P>
+
+<P><A NAME="E1B0AAB039ceb"></A>Enabling drawing to the z-buffer with the <A HREF="zdraw.html#A143X97f5"><B>zdraw</B></A> subroutine.</P>
+
+<P><A NAME="E1B0AAB147ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/animatescene.html#animatescene.html">Creating Animated Scenes</A>, Removing <!--gl32prgd:--><A HREF="../gl32prgd/remhidden.html#remhidden.html">Hidden Surfaces</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P>
+
+<P><A NAME="E1B0AAB256ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/configframebuf.html#configframebuf.html">Configuring the Frame Buffer</A>
+ and <!--gl32prgd:--><A HREF="../gl32prgd/writemasks.html#writemasks.html">Writemasks and Logical Operation</A>.</P><hr><center>
+[  <a href="draw.html">Previous</a>  |
+<a href="editobj.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

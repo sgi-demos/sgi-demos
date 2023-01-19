@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>rmv  Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="ringbell.html">Previous</a>  |
+<a href="rot.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="kzf90marj"></A>rmv  Subroutine</H2>
+<A NAME="INDEX1678" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1679" REL="I2" TITLE="moveraw style"></A>
+<A NAME="INDEX1680" REL="I3" TITLE="rmv"></A>
+<A NAME="INDEX1681" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1682" REL="I2" TITLE="graphics position"></A>
+<A NAME="INDEX1683" REL="I3" TITLE="moving relative to current point"></A>
+<A NAME="INDEX1684" REL="I1" TITLE="rmv subroutine (GL)"></A>
+
+<H3><A NAME="A213X912e24"></A>Purpose</H3>
+<P><A NAME="E1D7396719ceb"></A>Moves the graphics position relative to the current point.</P>
+
+<H3><A NAME="A78C131b"></A>Libraries</H3>
+<P><A NAME="E1D7396792ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7396817ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912e27"></A>C Syntax</H3>
+<PRE><A NAME="A213X912e28"></A><B>void rmv</B>
+<B>(Coord </B><A HREF="rmv.html#A213X912e30"><I>dx</I></A><B>, Coord</B> <A HREF="rmv.html#A213X912e31"><I>dy</I></A><B>, Coord</B> <A HREF="rmv.html#A213X912e32"><I>dz</I></A><B>)</B></PRE>
+<PRE><A NAME="T8f70marj"></A><B>void rmvi</B>
+<B>(Icoord </B><A HREF="rmv.html#A213X912e30"><I>dx</I></A><B>, Icoord</B> <A HREF="rmv.html#A213X912e31"><I>dy</I></A><B>, Icoord</B> <A HREF="rmv.html#A213X912e32"><I>dz</I></A><B>)</B></PRE>
+<PRE><A NAME="f8f170marj"></A><B>void rmvs</B>
+<B>(Scoord </B><A HREF="rmv.html#A213X912e30"><I>dx</I></A><B>, Scoord</B> <A HREF="rmv.html#A213X912e31"><I>dy</I></A><B>, Scoord</B> <A HREF="rmv.html#A213X912e32"><I>dz</I></A><B>)</B></PRE>
+<PRE><A NAME="H9fd0marj"></A><B>void rmv2</B>
+<B>(Coord </B><A HREF="rmv.html#A213X912e30"><I>dx</I></A><B>, Coord</B> <A HREF="rmv.html#A213X912e31"><I>dy</I></A><B>)</B></PRE>
+<PRE><A NAME="W9f170marj"></A><B>void rmv2i</B>
+<B>(Icoord </B><A HREF="rmv.html#A213X912e30"><I>dx</I></A><B>, Icoord</B> <A HREF="rmv.html#A213X912e31"><I>dy</I></A><B>)</B></PRE>
+<PRE><A NAME="k9f250marj"></A><B>void rmv2s</B>
+<B>(Scoord </B><A HREF="rmv.html#A213X912e30"><I>dx</I></A><B>, Scoord</B> <A HREF="rmv.html#A213X912e31"><I>dy</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010afa"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010afb"></A><B>SUBROUTINE RMV(</B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I><B>)</B>
+<B>REAL </B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I></PRE>
+<PRE><A NAME="A29C010afc"></A><B>SUBROUTINE RMVI(</B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I><B>)</B>
+<B>INTEGER*4 </B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I></PRE>
+<PRE><A NAME="A29C010afd"></A><B>SUBROUTINE RMVS(</B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I><B>)</B>
+<B>INTEGER*2 </B><I>dx</I><B>, </B><I>dy</I><B>, </B><I>dz</I></PRE>
+<PRE><A NAME="A29C010afe"></A><B>SUBROUTINE RMV2(</B><I>dx</I><B>, </B><I>dy</I><B>)</B>
+<B>REAL </B><I>dx</I><B>, </B><I>dy</I></PRE>
+<PRE><A NAME="A29C010aff"></A><B>SUBROUTINE RMV2I(</B><I>dx</I><B>, </B><I>dy</I><B>)</B>
+<B>INTEGER*4 </B><I>dx</I><B>, </B><I>dy</I></PRE>
+<PRE><A NAME="A29C010b00"></A><B>SUBROUTINE RMV2S(</B><I>dx</I><B>, </B><I>dy</I><B>)</B>
+<B>INTEGER*2 </B><I>dx</I><B>, </B><I>dy</I></PRE>
+
+<H3><A NAME="A213X912e2b"></A>Description</H3>
+<P><A NAME="E1D7397120ceb"></A>The <B>rmv</B> subroutine is the relative version of the <A HREF="move.html#pofmarj"><B>move</B></A> subroutine. It moves the graphics position (without drawing) the specified amount relative to its current value. The value of <B>rmv2(</B><I>x</I><B>,</B><I> y</I><B>) </B>is equivalent to <B>rmv(</B><I>x</I><B>,</B><I> y</I><B>, </B>0.0<B>)</B>. </P>
+
+<P><A NAME="E1D7397145ceb"></A>The six different forms for the <B>rmv</B> subroutine are as follows:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><BR></TD>
+
+<TD><B>2-D</B></TD>
+
+<TD><B>3-D</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int16</TD>
+
+<TD>rmv2s</TD>
+
+<TD>rmvs</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int32</TD>
+
+<TD>rmv2i</TD>
+
+<TD>rmvi</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>float</TD>
+
+<TD>rmv2</TD>
+
+<TD>rmv</TD></TR></TABLE>
+
+<P><A NAME="E1D7397188ceb"></A>The <A HREF="rmv.html#A213X912e27">syntax</A> for each of the subroutine forms is the same except for the parameter type. They differ only in that <A HREF="rmv.html#A213X912e28"><B>rmv</B></A> expects real coordinates, <A HREF="rmv.html#T8f70marj"><B>rmvi</B></A> expects integer coordinates, and <A HREF="rmv.html#f8f170marj"><B>rmvs</B></A> expects short integer coordinates. In addition, the <A HREF="rmv.html#H9fd0marj"><B>rmv2</B></A>* routines assume a 2-D point instead of a 3-D point.</P>
+
+<H3><A NAME="A213X912e2f"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912e30"></A><I>dx</I></TD>
+<TD>  Specifies the distance from the <I>x</I> coordinate of the current graphics position to the <I>x</I> coordinate of the new point.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912e31"></A><I>dy</I></TD>
+<TD>  Specifies the distance from the <I>y</I> coordinate of the current graphics position to the <I>y</I> coordinate of the new point.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912e32"></A><I>dz</I></TD>
+<TD>  Specifies the distance from the <I>z</I> coordinate of the current graphics position to the <I>z</I> coordinate of the new point.</TD></TR></TABLE>
+
+<H3><A NAME="A62C015d22"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7397321ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C131e"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C131f"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C1320"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912e40"></A>Related Information</H3>
+<P><A NAME="E1D7397418ceb"></A>Drawing a line with the <A HREF="draw.html#EYf2e0marj"><B>draw</B></A> subroutine.</P>
+
+<P><A NAME="E1D7397444ceb"></A>Moving the current graphics position to a specified point with the <A HREF="move.html#pofmarj"><B>move</B></A> subroutine.</P>
+
+<P><A NAME="E1D7397469ceb"></A>Drawing a relative line with the <A HREF="rdr.html#gpf1c0marj"><B>rdr</B></A> subroutine.</P>
+
+<P><A NAME="E1D7397495ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and Drawing with <!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Move-Draw Style</A> Subroutines.</P><hr><center>
+[  <a href="ringbell.html">Previous</a>  |
+<a href="rot.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

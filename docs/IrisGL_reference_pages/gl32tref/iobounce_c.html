@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>iobounce.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="gamma_c.html">Previous</a>  |
+<a href="localatten_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c8ae"></A>iobounce.c Example C Language Program
+</H2>
+<A NAME="INDEX2318" REL="I1" TITLE="iobounce.c example program (GL)"></A>
+<A NAME="INDEX2319" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2320" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2321" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2322" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2323" REL="I2" TITLE="sphere"></A>
+<A NAME="INDEX2324" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2325" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2326" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2327" REL="I3" TITLE="sphere"></A>
+<PRE><A NAME="A64EAB0276ttay"></A>/*
+iobounce.c:</PRE>
+<PRE><A NAME="A64EAB0470ttay"></A>  A "pool" ball that "bounces" around a 2-d "surface".
+  RIGHTMOUSE stops ball
+  MIDDLEMOUSE increases y velocity
+  LEFTMOUSE increases x velocity
+*/</PRE>
+<PRE><A NAME="A64EAB0626ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EAB0792ttay"></A>#define XMIN 100
+#define YMIN 100
+#define XMAX 900
+#define YMAX 700</PRE>
+<PRE><A NAME="A64EAB0945ttay"></A>long xvelocity = 0, yvelocity = 0;</PRE>
+<PRE><A NAME="A64EAB1091ttay"></A>main()
+{</PRE>
+<PRE><A NAME="A64EAB1245ttay"></A>&nbsp;&nbsp;&nbsp;Device dev;
+&nbsp;&nbsp;&nbsp;short val;    </PRE>
+<PRE><A NAME="A64EAB1609ttay"></A>&nbsp;&nbsp;&nbsp;initialize();    
+&nbsp;&nbsp;&nbsp;while (TRUE) {       
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (qtest()) {          
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dev = qread(&amp;val);          
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch (dev) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case LEFTMOUSE:          /* increase xvelocity */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (xvelocity >= 0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xvelocity++;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xvelocity--;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case MIDDLEMOUSE:        /* increase yvelocity */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (yvelocity >= 0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yvelocity++;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yvelocity--;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case RIGHTMOUSE:         /* stop ball */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xvelocity = yvelocity = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;                
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case ESCKEY:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gexit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawball();
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAB1751ttay"></A>}</PRE>
+<PRE><A NAME="A64EAB1898ttay"></A>initialize()
+{</PRE>
+<PRE><A NAME="A64EAB2046ttay"></A>&nbsp;&nbsp;&nbsp;int gid;    </PRE>
+<PRE><A NAME="A64EAB2314ttay"></A>&nbsp;&nbsp;&nbsp;prefposition(XMAXSCREEN/4, XMAXSCREEN*3/4, YMAXSCREEN/4, 
+&nbsp;&nbsp;&nbsp;    YMAXSCREEN*3/4);
+&nbsp;&nbsp;&nbsp;gid = winopen("iobounce");    
+&nbsp;&nbsp;&nbsp;doublebuffer();
+&nbsp;&nbsp;&nbsp;gconfig();
+&nbsp;&nbsp;&nbsp;shademodel(FLAT);    
+&nbsp;&nbsp;&nbsp;ortho2(XMIN - 0.5, XMAX + 0.5, YMIN - 0.5, YMAX + 0.5);    
+&nbsp;&nbsp;&nbsp;qdevice(ESCKEY);
+&nbsp;&nbsp;&nbsp;qdevice(REDRAW);
+&nbsp;&nbsp;&nbsp;qdevice(LEFTMOUSE);
+&nbsp;&nbsp;&nbsp;qdevice(MIDDLEMOUSE);
+&nbsp;&nbsp;&nbsp;qdevice(RIGHTMOUSE);
+&nbsp;&nbsp;&nbsp;qenter(REDRAW,gid);</PRE>
+<PRE><A NAME="A64EAB2457ttay"></A>}</PRE>
+<PRE><A NAME="A64EAB2604ttay"></A>drawball()
+{</PRE>
+<PRE><A NAME="A64EAB2764ttay"></A>&nbsp;&nbsp;&nbsp;static xpos = 500,ypos = 500;
+&nbsp;&nbsp;&nbsp;long radius = 10;    </PRE>
+<PRE><A NAME="A64EAB3012ttay"></A>&nbsp;&nbsp;&nbsp;color(BLACK);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;xpos += xvelocity;
+&nbsp;&nbsp;&nbsp;ypos += yvelocity;
+&nbsp;&nbsp;&nbsp;if (xpos > XMAX - radius ||
+&nbsp;&nbsp;&nbsp;    xpos &lt; XMIN + radius) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xpos -= xvelocity;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xvelocity = -xvelocity;
+&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;if (ypos > YMAX - radius ||
+&nbsp;&nbsp;&nbsp;    ypos &lt; YMIN + radius) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ypos -= yvelocity;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yvelocity = -yvelocity;
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EAB3176ttay"></A>&nbsp;&nbsp;&nbsp;color(YELLOW);
+&nbsp;&nbsp;&nbsp;circfi(xpos, ypos, radius);
+&nbsp;&nbsp;&nbsp;swapbuffers();</PRE>
+<PRE><A NAME="A64EAB3319ttay"></A>}</PRE>
+
+<H3><A NAME="A200C117c"></A>Related Information</H3><hr><center>
+[  <a href="gamma_c.html">Previous</a>  |
+<a href="localatten_c.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

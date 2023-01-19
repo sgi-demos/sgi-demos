@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<!--gl32prgd/useobject.html Mon, 24 Jan 2022 16:28:13 GMT -->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+   <TITLE>Using Objects
+</TITLE>
+   
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="defobject.html">Previous</a>  |
+<a href="mapcoords2wrld.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 Version 4.1 for AIX: Programming Concepts</i></font>
+</center>
+<hr size=3 noshade>
+
+
+
+<H2><A NAME="useobject.html"></A>Using Objects </H2>
+
+
+<P><A NAME="A3C0EC25515mhay"></A>After an object has been created, there
+are several subroutines for using the object in a display. </P>
+
+
+<H3><A NAME="A13C0bced"></A>callobj Subroutine </H3>
+
+
+<P><A NAME="A3C0EC25537mhay"></A>Once you create an object, use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/callobj.html#A142X91c8">callobj</A></B>
+subroutine to draw it on the screen. Its <I>object</I> parameter takes
+the numeric identifier of the object you want to draw. The syntax is as
+follows: </P>
+
+
+<PRE><A NAME="A58C0153a3"></A>void&nbsp;callobj(Int32&nbsp;object)</PRE>
+
+
+<P><A NAME="A3C0EC25558mhay"></A>You can use the <B>callobj</B> subroutine
+to call one object from inside another object. You can draw more complex
+pictures when you use a hierarchy of simple objects. For example, the following
+program uses a single <TT>callobj&nbsp;(pearl)</TT> call to draw the object,
+a string of pearls, by calling the previously defined object <TT>pearl</TT>
+seven times. </P>
+
+
+<PRE><A NAME="A65C016812"></A>Int32&nbsp;pearl&nbsp;=&nbsp;1,&nbsp;pearls&nbsp;=&nbsp;2</PRE>
+
+
+<PRE><A NAME="A65C016813"></A>makeobj(pearl);
+&nbsp;&nbsp;&nbsp;color(BLUE);
+&nbsp;&nbsp;&nbsp;for(angle=0;&nbsp;angle&lt;3600;&nbsp;angle=angle+300)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(300,&nbsp;'y');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circ(0.0,&nbsp;0.0,&nbsp;1.0);
+&nbsp;&nbsp;&nbsp;}
+closeobj();</PRE>
+
+
+<PRE><A NAME="A65C016814"></A>makeobj(pearls);
+&nbsp;&nbsp;&nbsp;for(i=0;&nbsp;i&lt;7;&nbsp;i=i+1)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translate(2.0,&nbsp;0.0,&nbsp;0.0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color(i);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callobj(pearl);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+closeobj();</PRE>
+
+
+<P><A NAME="A3C0EC25581mhay"></A>The <A HREF="figures/gl32p34.jpg">Solarsystem</A>
+figure shows another example using simple objects to build more complex
+ones. It defines a solar system as a hierarchical object. Calling one object
+<TT>solarsystem</TT> draws all the other objects named in its definition
+(the sun, the planets, and their orbits). </P>
+
+
+<P><A NAME="A3C0EC25602mhay"></A>Solarsystem, a complex object, is defined
+hierarchically, as shown in the tree diagram. Branches in the tree represent
+the <B>callobj</B> subroutines. </P>
+
+
+<P><A NAME="A3C0EC25622mhay"></A>The system does not save global attributes
+before the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/callobj.html#A142X91c8">callobj</A></B>
+subroutine takes effect. Thus, if an attribute, such as color, changes
+within an object, the change can affect the caller as well. When needed,
+use the <B><!--:libs:gl32tref:--><A HREF="../gl32tref/pushattributes.html#Thx220marj">pushattributes</A></B>
+and <B><!--:libs:gl32tref:--><A HREF="../gl32tref/popattributes.html#Vmx2140marj">popattributes</A></B>
+subroutines to preserve global attributes. </P>
+
+
+<P><A NAME="A3C0EC25643mhay"></A>When a complex object is called, the system
+draws the whole hierarchy of objects in its definition. For example, in
+the <A HREF="figures/gl32p34.jpg">Solarsystem</A> figure, because the system
+draws the whole object <TT>solarsystem,</TT> it can draw objects that are
+not visible in the viewport. The settings in the <B>bbox2</B> subroutine
+determine whether an object is within the viewport and whether it is large
+enough to be seen. </P>
+
+
+<H3><A NAME="A13C0bd05"></A>bbox2 Subroutine </H3>
+
+
+<P><A NAME="A3C0EC25664mhay"></A>The <B><!--:libs:gl32tref:--><A HREF="../gl32tref/bbox2.html#A142X922e">bbox2</A></B>
+subroutine performs the graphical functions known as pruning and culling.
+Culling determines which parts of the picture are less than the minimum
+feature size and, thus, too small to draw on the screen. Pruning calculates
+whether an object is completely outside the viewport. </P>
+
+
+<P><A NAME="A3C0EC25684mhay"></A>The <B>bbox2</B> subroutine takes as its
+parameters an object space bounding box in coordinates (given in the <I>x1</I>,
+<I>y1</I>, <I>x2</I>, <I>y2</I> parameters) and minimum horizontal and
+vertical feature sizes (given in the <I>xmin</I>, <I>ymin</I> parameters)
+in pixels. The system calculates the bounding box, transforms it to screen
+coordinates, and compares it with the viewport. </P>
+
+
+<P><A NAME="A3C0EC25704mhay"></A>If the bounding box is completely outside
+the viewport, the routines between the <B>bbox2</B> subroutine and the
+end of the object are ignored. If the bounding box is within the viewport,
+the system compares it with the minimum feature size. If it is too small
+in both the x and y dimensions, the rest of the routines in the object
+are ignored. Otherwise, the system continues to interpret the object. </P>
+
+
+<P><A NAME="A3C0EC25724mhay"></A>The <A HREF="figures/gl32p33.jpg">Bounding
+Boxes</A> figure shows some of the objects within the complex object <A HREF="figures/gl32p34.jpg">Solarsystem</A>
+juxtaposed to specified bounding boxes. The bounding boxes can perform
+pruning. to determine what objects are partially in the viewport. </P>
+
+
+<P><A NAME="A3C0EC25745mhay"></A>Bounding boxes are computed to determine
+which objects are outside the screen viewport. If the bounding box is entirely
+outside the viewport, the rest of the object display list is not traversed.
+The sphere in the bounding box that lies partially within the viewport
+is drawn and clipped to the edge of the viewport. The syntax is as follows:</P>
+
+
+<PRE><A NAME="A68C017197"></A>void&nbsp;bbox2(Screencoord&nbsp;xmin,&nbsp;Screencoord&nbsp;ymin,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Coord&nbsp;x1,&nbsp;Coord&nbsp;y1,&nbsp;Coord&nbsp;x2,&nbsp;Coord&nbsp;y2)</PRE>
+
+
+
+
+<hr><center>
+[  <a href="defobject.html">Previous</a>  |
+<a href="mapcoords2wrld.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html" TARGET="_parent">| Glossary</A>  
+ <A HREF="topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+
+<!--gl32prgd/useobject.html Mon, 24 Jan 2022 16:28:18 GMT -->
+</HTML>
+

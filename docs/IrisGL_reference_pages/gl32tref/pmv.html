@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>pmv  Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="pixmode.html">Previous</a>  |
+<a href="pnt.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A139X91eed"></A>pmv  Subroutine</H2>
+<A NAME="INDEX1379" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX1380" REL="I2" TITLE="moveraw style"></A>
+<A NAME="INDEX1381" REL="I3" TITLE="pmv"></A>
+<A NAME="INDEX1382" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX1383" REL="I2" TITLE="polygons"></A>
+<A NAME="INDEX1384" REL="I3" TITLE="filled"></A>
+<A NAME="INDEX1385" REL="I1" TITLE="pmv subroutine (GL)"></A>
+<H3><A NAME="A213X912d45"></A>Purpose</H3>
+<P><A NAME="E1D7148495ceb"></A>Moves to the starting point for a filled polygon.</P>
+
+<H3><A NAME="A78C1306"></A>Libraries</H3>
+<P><A NAME="E1D7148534ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7148558ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A213X912d48"></A>C Syntax</H3>
+<PRE><A NAME="A213X912d49"></A><B>void pmv</B>
+<B>(Coord </B><A HREF="pmv.html#A213X912d60"><I>x</I></A><B>, Coord</B> <A HREF="pmv.html#A213X912d61"><I>y</I></A><B>, Coord</B> <A HREF="pmv.html#A213X912d62"><I>z</I></A><B>)</B></PRE>
+<PRE><A NAME="iLd40marj"></A><B>void pmvi</B>
+<B>(Icoord </B><A HREF="pmv.html#A213X912d60"><I>x</I></A><B>, Icoord</B> <A HREF="pmv.html#A213X912d61"><I>y</I></A><B>, Icoord</B> <A HREF="pmv.html#A213X912d62"><I>z</I></A><B>)</B></PRE>
+<PRE><A NAME="yLd280marj"></A><B>void pmvs</B>
+<B>(Scoord </B><A HREF="pmv.html#A213X912d60"><I>x</I></A><B>, Scoord</B> <A HREF="pmv.html#A213X912d61"><I>y</I></A><B>, Scoord</B> <A HREF="pmv.html#A213X912d62"><I>z</I></A><B>)</B></PRE>
+<PRE><A NAME="GMd220marj"></A><B>void pmv2</B>
+<B>(Coord </B><A HREF="pmv.html#A213X912d60"><I>x</I></A><B>, Coord</B> <A HREF="pmv.html#A213X912d61"><I>y</I></A><B>)</B></PRE>
+<PRE><A NAME="YMd3a0marj"></A><B>void pmv2i</B>
+<B>(Icoord </B><A HREF="pmv.html#A213X912d60"><I>x</I></A><B>, Icoord</B> <A HREF="pmv.html#A213X912d61"><I>y</I></A><B>)</B></PRE>
+<PRE><A NAME="mMd340marj"></A><B>void pmv2s</B>
+<B>(Scoord </B><A HREF="pmv.html#A213X912d60"><I>x</I></A><B>, Scoord</B> <A HREF="pmv.html#A213X912d61"><I>y</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010ad6"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010ad7"></A><B>SUBROUTINE PMV(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I><B>)</B>
+<B>REAL </B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I></PRE>
+<PRE><A NAME="A29C010ad8"></A><B>SUBROUTINE PMVI(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I></PRE>
+<PRE><A NAME="A29C010ad9"></A><B>SUBROUTINE PMVS(</B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I><B>)</B>
+<B>INTEGER*2 </B><I>x</I><B>, </B><I>y</I><B>, </B><I>z</I></PRE>
+<PRE><A NAME="A29C010ada"></A><B>SUBROUTINE PMV2(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>REAL </B><I>x</I><B>, </B><I>y</I></PRE>
+<PRE><A NAME="A29C010adb"></A><B>SUBROUTINE PMV2I(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>INTEGER*4 </B><I>x</I><B>, </B><I>y</I></PRE>
+<PRE><A NAME="A29C010adc"></A><B>SUBROUTINE PMV2S(</B><I>x</I><B>, </B><I>y</I><B>)</B>
+<B>INTEGER*2 </B><I>x</I><B>, </B><I>y</I></PRE>
+
+<BLOCKQUOTE><A NAME="A78C1309"></A><B>Note: </B>For FORTRAN users, the INTEGER*2 versions of this subroutine, <B>PMVS</B> and <B>PMV2S</B>, should not be called with integer constant parameters. For example, 2 is an integer constant; JJ is an integer variable. The XL FORTRAN compiler, invoked by the <B>xlf</B> command, stores all integer constants as long integers (INTEGER*4), not as short integers (INTEGER*2). Invoking one of the short versions of this subroutine with an integer constant will result in unexpected behavior.</BLOCKQUOTE>
+
+
+<H3><A NAME="A213X912d4c"></A>Description</H3>
+<P><A NAME="E1D7148878ceb"></A>The <B>pmv </B>subroutine specifies the starting point of a filled polygon. To draw a typical polygon, start with a call to the <B>pmv</B> subroutine, follow it with a sequence of calls to the <A HREF="pdr.html#bqf1c0marj"><B>pdr</B></A> subroutine, and end it with a call to the <A HREF="pclos.html#t2g270marj"><B>pclos</B></A> subroutine. </P>
+
+<P><A NAME="E1D7148904ceb"></A>There can be no more than 256 vertices in a polygon. Therefore, there can be no more than 255 calls to the <A HREF="pdr.html#bqf1c0marj"><B>pdr</B></A> subroutine between calls to the <B>pmv </B>and <A HREF="pclos.html#t2g270marj"><B>pclos</B></A> subroutines. </P>
+
+<P><A NAME="E1D7148930ceb"></A>Between calls to the <B>pmv</B> and <A HREF="pclos.html#t2g270marj"><B>pclos</B></A> subroutines, you can issue calls only to the following GL subroutines: </P>
+
+<UL><LI><A NAME="A213X912d52"></A><A HREF="c.html#A143X9262"><B>c</B></A></LI>
+
+<LI><A NAME="A213X912d53"></A><A HREF="color.html#A146X9429"><B>color</B></A></LI>
+
+<LI><A NAME="A213X912d54"></A><A HREF="cpack.html#A143X9284"><B>cpack</B> </A></LI>
+
+<LI><A NAME="A213X912d55"></A><A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> </LI>
+
+<LI><A NAME="A213X912d56"></A><A HREF="lmcolor.html#ofZ220marj"><B>lmcolor</B></A></LI>
+
+<LI><A NAME="A249X954"></A><A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A></LI>
+
+<LI><A NAME="A213X912d58"></A><A HREF="n3f.html#A139X91ef3"><B>n3f</B></A></LI>
+
+<LI><A NAME="A213X912d57"></A><A HREF="normal.html#A142X9b7"><B>normal</B></A> </LI>
+
+<LI><A NAME="A213X912d59"></A><A HREF="pdr.html#bqf1c0marj"><B>pdr</B></A></LI>
+
+<LI><A NAME="A213X912d5a"></A><A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> </LI>
+
+<LI><A NAME="A213X912d5b"></A><A HREF="v.html#A144X97a4"><B>v</B></A></LI></UL>
+
+
+<P><A NAME="E1D7149125ceb"></A>Use the <A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A> and <A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A> subroutines to respecify only materials and their properties. </P>
+
+<P><A NAME="E1D7149150ceb"></A>The six different forms for the <B>pmv</B> subroutine are as follows:</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD><BR></TD>
+
+<TD><B>2-D</B></TD>
+
+<TD><B>3-D</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int16</TD>
+
+<TD>pmv2s</TD>
+
+<TD>pmvs</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>Int32</TD>
+
+<TD>pmv2i</TD>
+
+<TD>pmvi</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>float</TD>
+
+<TD>pmv2</TD>
+
+<TD>pmv</TD></TR></TABLE>
+
+<P><A NAME="E1D7149194ceb"></A>The syntax for each of the subroutine forms is the same except for the parameter type.  They differ only in that <A HREF="pmv.html#A213X912d49"><B>pmv</B></A> expects real coordinates, <A HREF="pmv.html#iLd40marj"><B>pmvi</B></A> expects integer coordinates, and <A HREF="pmv.html#yLd280marj"><B>pmvs</B></A> expects short integer coordinates. In addition, the <A HREF="pmv.html#GMd220marj"><B>pmv2</B></A> routines assume a 2-D point instead of a 3-D point.</P>
+
+<H3><A NAME="A213X912d5f"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912d60"></A><I>x</I></TD>
+<TD>  Specifies the <I>x</I> coordinate of the starting point for the polygon. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912d61"></A><I>y</I></TD>
+<TD>  Specifies the <I>y</I> coordinate of the starting point for the polygon. </TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A213X912d62"></A><I>z</I></TD>
+<TD>  Specifies the <I>z</I> coordinate of the starting point for the polygon. </TD></TR></TABLE>
+
+<H3><A NAME="A30C011002"></A>Example</H3>
+<P><A NAME="E1D7149309ceb"></A>The example C language program <A HREF="zbuffer1_c.html#A16C0ca2c"><B>zbuffer1.c</B></A> uses the <B>pmv</B> subroutine to move to the beginning position for drawing a filled polygon. </P>
+
+<H3><A NAME="A62C015d1c"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7149353ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A78C130a"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C130b"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C130c"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A213X912d70"></A>Related Information</H3>
+<P><A NAME="E1D7149450ceb"></A>Forcing the system to draw concave polygons correctly with the <A HREF="concave.html#HXf320marj"><B>concave</B></A> subroutine.</P>
+
+<P><A NAME="E1D7149475ceb"></A>Closing a filled polygon with the <A HREF="pclos.html#t2g270marj"><B>pclos</B></A> subroutine.</P>
+
+<P><A NAME="E1D7149501ceb"></A>Drawing a polygon with the <A HREF="poly.html#avf2c0marj"><B>poly</B></A> subroutine.</P>
+
+<P><A NAME="E1D7149526ceb"></A>Drawing a relative polygon with the <A HREF="rpdr.html#hrfa0marj"><B>rpdr</B></A> subroutine.</P>
+
+<P><A NAME="E1D7149552ceb"></A>Moving the current graphics position to a starting point for a filled polygon relative to the current point with the <A HREF="rpmv.html#lXf370marj"><B>rpmv</B></A> subroutine.</P>
+
+<P><A NAME="E1D7149578ceb"></A>Selecting the shading model used to draw a polygon with the <A HREF="shademodel.html#A143X9ab9"><B>shademodel</B></A> subroutine.</P>
+
+<P><A NAME="E1D7149603ceb"></A>
+<!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, 
+Creating <!--gl32prgd:--><A HREF="../gl32prgd/crlighteff.html#crlighteff.html">Lighting Effects</A>, 
+Drawing with <!--gl32prgd:--><A HREF="../gl32prgd/move-draw.html">Move-Draw Style</A> Subroutines, 
+<!--gl32prgd:--><A HREF="../gl32prgd/setglattrib.html#setglattrib.html">Setting Drawing Attributes</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="pixmode.html">Previous</a>  |
+<a href="pnt.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

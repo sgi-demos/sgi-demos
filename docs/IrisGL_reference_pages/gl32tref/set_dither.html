@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>set_dither Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="setdblights.html">Previous</a>  |
+<a href="setlinestyle.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A3CFD49E110janb"></A>set_dither Subroutine</H2>
+<H3><A NAME="A3CFD49E145janb"></A>Purpose</H3>
+<P><A NAME="A3CFD49E165janb"></A>Controls the dithering of polygons and blits.</P>
+
+<H3><A NAME="A3CFD49E187janb"></A>Libraries</H3>
+<P><A NAME="A3CFD49E220janb"></A>Graphics Library</P>
+
+<P><A NAME="A3CFD49E242janb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A3CFD49E304janb"></A>C Syntax</H3>
+<PRE><A NAME="A3CFD49E327janb"></A><B>void set_dither (Int32</B> <I>mode</I>)</PRE>
+
+<H3><A NAME="A3CFD49E378janb"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A3CFD49E398janb"></A><B>SUBROUTINE SETDITHER</B> (<I>mode</I>)
+<B>INTEGER*4</B> <I>mode</I></PRE>
+
+<H3><A NAME="A3CFD49E419janb"></A>Description</H3>
+<P><A NAME="A3CFD49E499janb"></A>The <B>set_dither</B> subroutine controls whether dithering is applied to blits and polygons. Dithering is a type of rounding or truncating of 24-bit pixel color values to make them fit in a smaller (typically 8-bit) frame buffer. Dithering avoids the sharp changes in color (Mach banding) that normally occur when all pixel color values are truncated in the same way. Dithering helps maintain the impression of smooth shading in small frame buffers.</P>
+
+<BLOCKQUOTE><A NAME="A3CFD49E540janb"></A><B>Note: </B>To enable dithering of both polygons and blits, call <B>set_dither</B> with the bitwise-OR of both the DITHER_POLYGONS and DITHER_BLITS flags. Calling <B>set_dither</B> with just one of these two flags will automatically disable the other mode.</BLOCKQUOTE>
+
+
+<H3><A NAME="A3CFD49E580janb"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFD49E648janb"></A><I>mode</I></TD>
+<TD>  Token representing the type of dithering to be enabled.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFD49E660janb"></A></TD>
+<TD>  DITHER_OFF (Dithering is disabled for both polygons and blits.)</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFD49E680janb"></A></TD>
+<TD>  DITHER_POLYGONS (Dithering is enabled for polygons and triangles.)</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFD49E700janb"></A></TD>
+<TD>  DITHER_BLITS (Dithering is enabled for blits.)</TD></TR></TABLE>
+
+<H3><A NAME="A3CFD49E735janb"></A>Implementation Specifics</H3>
+<P><A NAME="A3CFD49E792janb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature. </P>
+
+<H3><A NAME="A3CFD49E810janb"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFD49E832janb"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A3CFD49E848janb"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A3CFD49E863janb"></A>Related Information</H3>
+<P><A NAME="A3CFD49E884janb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A> and <!--gl32prgd:--><A HREF="../gl32prgd/keyboardgl.html#keyboardgl.html">Using the Keyboard</A>.</P><hr><center>
+[  <a href="setdblights.html">Previous</a>  |
+<a href="setlinestyle.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

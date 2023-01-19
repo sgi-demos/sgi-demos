@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>bgnline or endline Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="bgnclosedline.html">Previous</a>  |
+<a href="bgnpoint.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A144X962e"></A>bgnline or endline Subroutine</H2>
+<A NAME="INDEX73" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX74" REL="I2" TITLE="begin-end style"></A>
+<A NAME="INDEX75" REL="I3" TITLE="bgnline"></A>
+<A NAME="INDEX76" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX77" REL="I2" TITLE="line"></A>
+<A NAME="INDEX78" REL="I3" TITLE="vertex-based"></A>
+<A NAME="INDEX79" REL="I1" TITLE="bgnline subroutine (GL)"></A>
+<A NAME="INDEX80" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX81" REL="I2" TITLE="begin-end style"></A>
+<A NAME="INDEX82" REL="I3" TITLE="endline"></A>
+<A NAME="INDEX83" REL="I1" TITLE="endline subroutine (GL)"></A>
+<H3><A NAME="A144X9630"></A>Purpose</H3>
+<P><A NAME="E1B047C989ceb"></A>Begins or ends interpretation of vertex routines as line vertices.</P>
+
+<H3><A NAME="A77C1353"></A>Libraries</H3>
+<P><A NAME="E1B047D137ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B047D241ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A144X9634"></A>C Syntax</H3>
+<PRE><A NAME="A144X9635"></A><B>void bgnline(&nbsp;)</B></PRE>
+<PRE><A NAME="A107C116c"></A><B>void endline(&nbsp;)</B></PRE>
+
+<H3><A NAME="A20C0e2da"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A20C0e2db"></A><B>SUBROUTINE BGNLIN</B></PRE>
+<PRE><A NAME="A107C116d"></A><B>SUBROUTINE ENDLIN</B></PRE>
+
+<H3><A NAME="A144X9636"></A>Description</H3>
+<P><A NAME="E1B047D694ceb"></A>The <B>bgnline</B> subroutine begins the interpretation of vertex <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html#A264X925d">(begin-end style)</A> subroutines as line vertices. It is like the <A HREF="bgnclosedline.html#A144X960c"><B>bgnclosedline</B></A> subroutine, except that the last vertex does not connect to the first vertex.</P>
+
+<P><A NAME="E1B047D803ceb"></A>Vertices specified after the <B>bgnline</B> subroutine and before the <B>endline</B> subroutine are interpreted as endpoints of a series of line segments. Use the <A HREF="v.html#A144X97a4"><B>v</B></A> subroutine to specify a vertex. The first vertex connects to the second; the second connects to the third; and so on until the next-to-last vertex connects to the last one. All segments use the current linestyle and linewidth.</P>
+
+<P><A NAME="E1B047D910ceb"></A>After the <B>endline</B> subroutine executes, the current graphics position is undefined.</P>
+
+<P><A NAME="E1B047E023ceb"></A>All line segments use the current linestyle and linewidth. The <B>bgnline</B> subroutine resets the linestyle counter; that is, the first pixel drawn uses the first bit of the linestyle, and so on. The linestyle counter is <I>not</I> reset on subsequent vertices; instead, the pattern continues around corners, until the <B>endline</B> subroutine is reached. To reset the pattern, call the <B>endline</B> subroutine and then the <B>bgnline</B> subroutine again.</P>
+
+<P><A NAME="E1B047E132ceb"></A>If the color changes between a pair of vertices, the color of the line segment is constant if the current shading model is FLAT and interpolated if the current shading model is GOURAUD. In 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e3">color map mode</A>, the colors vary through the color map; to get reasonable results, the color map should contain a 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0610">gamma ramp</A>>. </P>
+
+<P><A NAME="E1B047E281ceb"></A>Between calls to the <B>bgnline</B> and <B>endline</B> subroutines, you can issue calls to the following Graphics Library subroutines only: </P>
+
+<UL><LI><A NAME="A228C1239"></A><A HREF="c.html#A143X9262"><B>c</B></A></LI>
+
+<LI><A NAME="A228C123a"></A><A HREF="color.html#A146X9429"><B>color</B></A></LI>
+
+<LI><A NAME="A228C123b"></A><A HREF="cpack.html#A143X9284"><B>cpack</B></A></LI>
+
+<LI><A NAME="A228C123c"></A><A HREF="lmbind.html#XeZ2340marj"><B>lmbind</B></A></LI>
+
+<LI><A NAME="A228C123d"></A><A HREF="lmcolor.html#ofZ220marj"><B>lmcolor</B></A></LI>
+
+<LI><A NAME="A228C123e"></A><A HREF="lmdef.html#rgZ2250marj"><B>lmdef</B></A></LI>
+
+<LI><A NAME="A228C123f"></A><A HREF="n3f.html#A139X91ef3"><B>n3f</B></A></LI>
+
+<LI><A NAME="A228C1240"></A><A HREF="normal.html#A142X9b7"><B>normal</B></A> </LI>
+
+<LI><A NAME="A228C1241"></A><A HREF="RGBcolor.html#A143X9394"><B>RGBcolor</B></A> </LI>
+
+<LI><A NAME="A228C1242"></A><A HREF="v.html#A144X97a4"><B>v</B></A></LI></UL>
+
+
+<P><A NAME="E1B047E849ceb"></A>Use the <B>lmdef</B> and <B>lmbind</B> subroutines to respecify only materials and their properties. </P>
+
+<H3><A NAME="A62C015d64"></A>Implementation Specifics</H3>
+<P><A NAME="E1B047F067ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="E1B047F174ceb"></A>The POWER Gt4, POWER Gt4x, and POWER GXT1000 adapters support an arbitrary number of vertices between the <B>bgnline</B> and <B>endline</B> subroutines.</P>
+
+<P><A NAME="E1B047F291ceb"></A>The POWERgraphics GTO and the 3-D Color Graphics Processor support a maximum of 255 vertices between the <B>bgnline</B> and <B>endline</B> subroutines.</P>
+
+<P><A NAME="A3CBCC68870bolt"></A>The POWER Gt4x will restart the linestyle stipple pattern periodically if a large number of vertices is issued between a <B>bgnline()</B> and <B>endline</B> pair. Such a reset will not occur within the first 255 vertices but will occur sometime between the first 400 and 2000 vertices and will then restart at multiples of this amount. The actual point at which the restart occurs depends on whether normals, colors, and/or materials have been specified in addition to the vertex data.</P>
+
+<H3><A NAME="A77C1356"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1357"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A77C1358"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A258C01c3d8"></A>Related Information</H3>
+<P><A NAME="E1B047F611ceb"></A>Drawing closed line vertices with the <A HREF="bgnclosedline.html#A144X960c"><B>bgnclosedline</B></A> subroutine.</P>
+
+<P><A NAME="E1B047F717ceb"></A>Setting the current color in RGB mode with the <A HREF="c.html#A143X9262"><B>c</B></A> subroutine.</P>
+
+<P><A NAME="E1B047F825ceb"></A>Selecting the shading model with the <A HREF="shademodel.html#A143X9ab9"><B>shademodel</B></A> subroutine.</P>
+
+<P><A NAME="E1B047F933ceb"></A>Transferring a vertex to the graphics pipe with the <A HREF="v.html#A144X97a4"><B>v</B></A> subroutine.</P>
+
+<P><A NAME="E1B0480041ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/gloverview.html#gloverview.html">AIX Graphics Library Overview</A>, Drawing with <!--gl32prgd:--><A HREF="../gl32prgd/drawbeg-end.html">Begin-End Style</A> Subroutines, Understanding the <!--gl32prgd:--><A HREF="../gl32prgd/glintro.html#A8G44310marj">Hardware Used by GL</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="bgnclosedline.html">Previous</a>  |
+<a href="bgnpoint.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

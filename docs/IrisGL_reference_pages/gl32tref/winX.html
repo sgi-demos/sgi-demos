@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>winX Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="wintitle.html">Previous</a>  |
+<a href="wmpack.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A114C163"></A>winX Subroutine</H2>
+<A NAME="INDEX2065" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX2066" REL="I2" TITLE="Windows"></A>
+<A NAME="INDEX2067" REL="I3" TITLE="winX"></A>
+<A NAME="INDEX2068" REL="I1" TITLE="winX subroutine (GL)"></A>
+<H3><A NAME="A114C164"></A>Purpose</H3>
+<P><A NAME="E1D7688364ceb"></A>Converts an Enhanced X-Windows window into a GL window.</P>
+
+<H3><A NAME="A114C166"></A>Library</H3>
+<P><A NAME="E1D7688403ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1D7688427ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A114C169"></A>C Syntax</H3>
+<PRE><A NAME="A114C16a"></A><B>short winX (Display</B> <B>*</B><A HREF="winX.html#A1lk340nita"><I>dpy</I></A><B>, Window </B><A HREF="winX.html#Qlk20nita"><I>xid</I></A><B>)</B></PRE>
+
+<H3><A NAME="A114C16b"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A114C16c"></A><B>INTEGER *2 FUNCTION WINX(</B><I>dpy</I>, <I>xid</I><B>)</B>
+<B>INTEGER *4 </B><I>dpy</I><B>,</B> <I>xid</I></PRE>
+
+<H3><A NAME="A114C16d"></A>Description</H3>
+
+<P><A NAME="E1D7688567ceb"></A>The <B>winX</B> subroutine converts the specified Enhanced X-Windows 
+window into a GL 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A13791dc4">window</A>. 
+The Enhanced X-Windows window must be created with the <B>XCreateWindow</B> subroutine from 
+the Enhanced X-Windows library. The Enhanced X-Windows window can be mapped before or after 
+conversion to a GL window, and can subsequently be unmapped or remapped.</P>
+
+<P><A NAME="E1D7688592ceb"></A>Not all possible combinations of GL and Enhanced X-Windows calls result in defined behavior, however. In particular, avoid the following usages:</P>
+
+<UL><LI><A NAME="A114C172"></A>Do not use Enhanced X-Windows drawing routines to draw into a GL window. The screen results are undefined. Use Enhanced X-Windows drawing routines to draw into Enhanced X-Windows only.</LI>
+
+<LI><A NAME="A140C15f7"></A>Use only the GL <A HREF="loadXfont.html#vUO390nita"><B>loadXfont</B></A> subroutine to load X fonts for use with the GL <A HREF="charstr.html#A143X9cfb"><B>charstr</B></A> subroutine. Use the <!--:libs:x11tr:--><A HREF="../x11tr/pdf/XLoadFont.pdf.html"><B>XLoadFont</B></A> or <!--:libs:x11tr:--><A HREF="../x11tr/pdf/XLoadFont.pdf.html"><B>XLoadQueryFont</B></A> subroutine only if you plan to use X text-rendering routines to draw into an Enhanced X-Windows window.</LI>
+
+<LI><A NAME="A114C175"></A>Do not change, modify, or delete GL internal properties associated with GL windows. Doing so causes unpredictable behavior.</LI>
+
+<LI><A NAME="A114C176"></A>Do not grab or ungrab pointers, keyboards, or the server while in GL fullscreen mode. Doing so causes unpredictable behavior.</LI>
+
+<LI><A NAME="A140C15f8"></A>Events associated with GL windows can be obtained through the Enhanced X-Windows 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0484">event queue</A>. 
+However, if you choose to obtain events in this manner, do not also use the GL event queue. Doing so 
+causes unpredictable results. An application can use both the GL and Enhanced X-Windows event queues 
+within the same executable if the GL queue is used only for GL events and the Enhanced X-Windows event 
+queue is used only for Enhanced X-Windows events.</LI></UL>
+
+
+<P><A NAME="E1D7688741ceb"></A>The previous brief restrictions are explained more fully in <!--gl32prgd:--><A HREF="../gl32prgd/exhwindcalls.html#exhwindcalls.html">"Using Enhanced X-Windows Calls with GL Subroutines"</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P>
+
+<P><A NAME="E1D7688767ceb"></A>To use the <B>winX</B> subroutine correctly, the Enhanced X-Windows window must have been created with the <B>XCreateWindow</B> subroutine. The following conditions must also be met within the <B>XCreateWindow</B> attributes:</P>
+
+<UL><LI><A NAME="A161C129f"></A>The visual specified with this subroutine <I>must</I> be the largest available PseudoColor visual. Failure to use the largest possible PseudoColor visual results in unpredictable behavior.</LI>
+
+<LI><A NAME="A161C12a0"></A>The window depth must match the depth of the visual. If it does not, a BadMatch event error is generated.</LI>
+
+<LI><A NAME="A161C12a1"></A>The window attributes must include a color map that was created with this large visual. Specifying a color map of the wrong size causes a BadMatch event error to be generated. Failure to specify a color map that has been created with the large visual results in unpredictable behavior.</LI>
+
+<LI><A NAME="A161C12a2"></A>Do not use the default attributes for the border_pixel and the back_pixel attributes, because the default CopyFromParent does not have the correct visual for the border and background pixel maps. Using the incorrect border and back attributes generates a BadMatch event error. It is acceptable to specify <SAMP>None</SAMP> for these attributes. Please refer to example programs in the <B>/usr/lpp/GL/examples</B> directory for usage.</LI></UL>
+
+
+<P><A NAME="E1D7688874ceb"></A>If only the Enhanced X-Windows ID of a GL window is needed, use the <A HREF="getXdpy.html#A114C13c"><B>getXdpy</B></A> and <A HREF="getXdpy.html#A114C13c"><B>getXwid</B></A> subroutines.</P>
+
+<P><A NAME="E1D7688920ceb"></A>A window <I>must</I> be converted to a DirectAccess window (with either the <B>winX</B> or <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine) before any GL drawing can occur in it. DirectAccess allows the GL drawing library to write rendering commands directly, without intervening layers, to the MicroChannel address space of the graphics adapter. Thus, a Direct Access client <I>must</I> execute locally; that is, a GL program must execute on the machine containing the display adapter. Currently, a GL program cannot be operated over a network.</P>
+
+<H3><A NAME="A144C1ca4"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A1lk340nita"></A><I>dpy</I></TD>
+<TD>  Specifies the Enhanced X-Windows connection (as returned by the <!--:libs:x11tr:--><A HREF="http://inetsd01.boulder.ibm.com/x11tr/pdf/XOpDsply.pdf"><B>XOpenDisplay</B></A> subroutine).</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="Qlk20nita"></A><I>xid</I></TD>
+<TD>  Specifies the Enhanced X-Windows window ID (as returned by the <B>XCreateWindow</B> subroutine) of the window to be converted into a GL window.</TD></TR></TABLE>
+
+<H3><A NAME="BD9BBA8672vbia"></A>Return Value</H3>
+<P><A NAME="E1D7689021ceb"></A>The GL window identifier.</P>
+
+<H3><A NAME="BD9BBA9317vbia"></A>Example</H3>
+<P><A NAME="E1D7689063ceb"></A>An example program showing the usage of the <B>winX</B> subroutine can be found in the <B>/usr/lpp/GL/examples</B> directory.</P>
+
+<H3><A NAME="A114C181"></A>Implementation Specifics</H3>
+<P><A NAME="E1D7689106ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="A3CFD813317janb"></A>Because the windowing design on the GXT1000 has changed from that supported on previous graphics adapters, the rules for using <B>winX</B> have changed. The <B>gconfig</B> subroutine cannot be used to change the mode (color index mode to RGB mode) of a window created with <B>winX</B> on the GXT1000. The X11 window must be created in advance with the appropriate visual type that is desired by the application. Choose a PseudoColor visual if color-index mode GL rendering is desired; choose a DirectColor visual if RGB mode operation is desired.</P>
+
+<P><A NAME="A3CFD813358janb"></A>The GLC_CREATE_OVERLAY token on the <B>glcompat</B> subroutine modifies the operation of the <B>winX</B> routine. </P>
+
+<H3><A NAME="A114C183"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A114C184"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A114C185"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A140C15f9"></A><B>/usr/include/X11/Xlib.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for version X11 of Enhanced X-Windows.</TD></TR></TABLE>
+
+<H3><A NAME="A114C18a"></A>Related Information</H3>
+<P><A NAME="E1D7689223ceb"></A>The <A HREF="charstr.html#A143X9cfb"><B>charstr</B></A> subroutine, <A HREF="getXdpy.html#A114C13c"><B>getXdpy</B></A> subroutine, <A HREF="getXdpy.html#A114C13c"><B>getXwid</B></A> subroutine, <A HREF="loadXfont.html#vUO390nita"><B>loadXfont</B></A> subroutine, <A HREF="winopen.html#A142X91549"><B>winopen</B></A> subroutine.</P>
+
+<P><A NAME="E1D7689268ceb"></A>The <!--:libs:x11tr:--><A HREF="http://inetsd01.boulder.ibm.com/x11tr/pdf/XOpDsply.pdf"><B>XOpenDisplay</B></A> subroutine, <B>XCreateWindow</B> subroutine, <!--:libs:x11tr:--><A HREF="../x11tr/pdf/XLoadFont.pdf.html"><B>XLoadFont</B></A> subroutine, <!--:libs:x11tr:--><A HREF="../x11tr/pdf/XLoadFont.pdf.html"><B>XLoadQueryFont</B></A> subroutine.</P>
+
+<P><A NAME="E1D7689297ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/exhwindcalls.html#exhwindcalls.html">Using Enhanced X-Windows Calls with GL Subroutines</A> in<I> GL3.2 Version 4 for AIX: Programming Concepts</I>.</P><hr><center>
+[  <a href="wintitle.html">Previous</a>  |
+<a href="wmpack.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

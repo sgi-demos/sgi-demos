@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>charstr Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="callobj.html">Previous</a>  |
+<a href="chunksize.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9cfb"></A>charstr Subroutine</H2>
+<A NAME="INDEX193" REL="I1" TITLE="charstr subroutine (GL)"></A>
+<A NAME="INDEX194" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX195" REL="I2" TITLE="text"></A>
+<A NAME="INDEX196" REL="I3" TITLE="charstr"></A>
+<A NAME="INDEX197" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX198" REL="I2" TITLE="text"></A>
+<A NAME="INDEX199" REL="I3" TITLE="drawing raster character string"></A>
+<H3><A NAME="A143X9cfd"></A>Purpose</H3>
+<P><A NAME="E1B062B095ceb"></A>Draws a string of raster characters on the screen.</P>
+
+<H3><A NAME="A79C120d"></A>Libraries</H3>
+<P><A NAME="E1B062B243ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B062B348ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9d01"></A>C Syntax</H3>
+<PRE><A NAME="A143X9d02"></A><B>void charstr(Char8 *</B><A HREF="charstr.html#A143X9d06"><I>string</I></A><B>)</B></PRE>
+
+<H3><A NAME="A29C010be5"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A29C010be6"></A><B>SUBROUTINE CHARST(</B><A HREF="charstr.html#A143X9d06"><I>string</I></A>, <A HREF="charstr.html#A143X9d07"><I>length</I></A><B>)</B>
+<B>CHARACTER*(*) </B><I>string</I>
+<B>INTEGER*4</B> <I>length</I></PRE>
+
+<H3><A NAME="A143X9d03"></A>Description</H3>
+<P><A NAME="E1B062B713ceb"></A>The <B>charstr </B>subroutine draws a string of text, using the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P073b">raster font</A>. After each character is drawn, the character width is added to the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e9">current character position</A>. The text string is drawn in the current raster font and color, using the current 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A3C0F2A4599mhay">writemask</A>. </P>
+
+<P><A NAME="E1B062B821ceb"></A>Characters that are not defined in the current raster font are treated as having zero size and are therefore ignored. </P>
+
+<P><A NAME="E1B062B928ceb"></A>The <B>charstr</B> subroutine supports both single- and double-byte raster character renderings.</P>
+
+<P><A NAME="E1B062C047ceb"></A>If the current font is a double-byte font, this subroutine expects the first two bytes to represent the first character, the second two bytes to represent the next character, and so on. Double-byte fonts are useful in languages with extremely large character sets such as Japanese and Chinese.</P>
+
+<P><A NAME="E1B062C163ceb"></A>If the current font is a single-byte font, each byte represents one character. The ASCII code set is an example of a single-byte font.</P>
+
+<P><A NAME="E1B062C271ceb"></A>It is the user's responsibility to determine if the currently bound font is a single- or double-byte font and to pass the appropriate string. To determine the font type, use the <A HREF="getfonttype.html#Y89340nita"><B>getfonttype</B></A> subroutine.</P>
+
+<H4><A NAME="A4758C1819bett"></A>Character Clipping</H4>
+<P><A NAME="E1B062C431ceb"></A>The beginning of the string is positioned at the current character position. The string is drawn from left to right, parallel to the surface of the screen. The string is fine clipped to the rectangular area defined with the <B>scrnmask</B> subroutine. The current color and writemask are used. Characters not defined in the current raster font are assumed to have zero width and are not drawn.</P>
+
+<P><A NAME="E1B062C540ceb"></A>Strings drawn by the <B>charstr</B> subroutine are subject to clipping and z-buffering. The algorithmic details of this process are as follows:</P>
+
+<OL><LI><A NAME="A4758C3327bett"></A>Trivial accept/trivial reject test. If the start point of the test string (after transformation by all matrices) is <I>not</I> within the NDC unit cube (-w&lt;x,y,z&lt;+w&lt; x,y,z &lt; +1.0) then the <I>entire</I> string is trivially rejected (not drawn).</LI>
+
+<LI><A NAME="A4758C4011bett"></A>If the preceding test passes, then z-buffering proceeds on a pixel-by-pixel basis. At the start point, the string is mapped to window-relative pixel coordinates. The z-value of the reference point is used as the z-value of the entire string. Then, for every pixel of every letter in the string:
+
+
+<OL TYPE="a"><LI><A NAME="A4758C4436bett"></A>If that pixel is outside of the screenmask, the pixel is not drawn.</LI>
+
+<LI><A NAME="A4758C4940bett"></A>If the pixel is inside the screenmask, then use z-compare. If the z-test passes, then update the frame buffer, <I>and</I> update the z-buffer (for that pixel only).</LI></OL></LI></OL>
+
+<H4><A NAME="A4758C5307bett"></A>Glyph Lookup for SBCS and DBCS Strings</H4>
+<P><A NAME="E1B062C947ceb"></A>Each character of the string should be thought of as a <I>glyph index</I>. That is, each byte (for an SBCS font) or each pair of bytes (for a DBCS font) serves as an index into a table of raster glyphs. The table of glyphs is the table that was loaded with the <B>defrasterfont</B> subroutine or the <B>loadXfont</B> subroutine. The mapping of glyph indices to glyphs is a constant, and is locale-independent. There is no processing or translation that is applied to the glyph index before the raster is looked up. The <I>raw</I> value is used unmodified. A single null byte is sufficient to indicate end-of-string for ordinary (single-byte) fonts; a null short integer (two consecutive null bytes) is required to terminate a DBCS string.</P>
+
+<P><A NAME="E1B062D058ceb"></A>Because the <B>charstr</B> routine does not perform any translation and conversion, it is left up to the application to make sure that appropriate fonts are loaded, and that multibyte text strings are converted into sequences of glyph indices. Some tools for performing such conversions are provided by the base operating system.</P>
+
+<BLOCKQUOTE><A NAME="A4758C7309bett"></A><B>Note: </B>The default font (font index 0) is locale-dependent; during initialization, a different default font is loaded, depending on the locale. The default font is always chosen from the iso8859 family of fonts.</BLOCKQUOTE>
+
+
+<H3><A NAME="A143X9d05"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9d06"></A><I>string </I></TD>
+<TD>  Specifies a pointer to the variable containing the string.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X9d07"></A><I>length</I> </TD>
+<TD>  Specifies the length (number of characters) of the string.</TD></TR></TABLE>
+
+<H3><A NAME="A30C011050"></A>Example</H3>
+<P><A NAME="E1B062D432ceb"></A>The example C language programs <A HREF="curved_c.html#A16C0c830"><B>curved.c</B></A> and <A HREF="font3_c.html#A149C18a9"><B>font3.c</B></A> use the <B>charstr</B> subroutine to draw a character string in the current raster font. </P>
+
+<H3><A NAME="A62C015d82"></A>Implementation Specifics</H3>
+<P><A NAME="E1B062D592ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<H3><A NAME="A79C1210"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1211"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A79C1212"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9d1b"></A>Related Information</H3>
+<P><A NAME="E1B062D914ceb"></A>Determining the font format with the <A HREF="getfonttype.html#Y89340nita"><B>getfonttype</B></A> subroutine.</P>
+
+<P><A NAME="E1B062E022ceb"></A>Determining the font name with the <A HREF="getfontencoding.html#Az7960nita"><B>getfontencoding</B></A> subroutine.</P>
+
+<P><A NAME="E1B062E130ceb"></A>Moving the current character position with the <A HREF="cmov.html#A143X9d1d"><B>cmov</B></A> subroutine.</P>
+
+<P><A NAME="E1B062E237ceb"></A>Defining bitmaps for a raster font with the <A HREF="defrasterfont.html#A143X9d3f"><B>defrasterfont</B></A> subroutine.</P>
+
+<P><A NAME="E1B062E346ceb"></A>Selecting a raster font with the <A HREF="font.html#A143X9d61"><B>font</B></A> subroutine.</P>
+
+<P><A NAME="E1B062E454ceb"></A>Returning the width of the specified text string with the <A HREF="strwidth.html#A144X93ec"><B>strwidth</B></A> subroutine.</P>
+
+<P><A NAME="E1B062E561ceb"></A><!--:genprogc:--><A HREF="../genprogc/nls.html#A2919f7">National Language Support Overview for Programming</A> in<I> AIX General Programming Concepts: Writing and Debugging Programs</I>.</P>
+
+<P><A NAME="E1B062E668ceb"></A>Creating <!--gl32prgd:--><A HREF="../gl32prgd/textchars.html#textchars.html">Text Characters</A>.</P><hr><center>
+[  <a href="callobj.html">Previous</a>  |
+<a href="chunksize.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

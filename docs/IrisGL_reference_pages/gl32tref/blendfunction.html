@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>blendfunction Subroutine
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="blanktime.html">Previous</a>  |
+<a href="blink.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A143X9240"></A>blendfunction Subroutine</H2>
+<A NAME="INDEX153" REL="I1" TITLE="GL subroutines"></A>
+<A NAME="INDEX154" REL="I2" TITLE="frame buffer update control"></A>
+<A NAME="INDEX155" REL="I3" TITLE="blendfunction"></A>
+<A NAME="INDEX156" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX157" REL="I2" TITLE="alpha blending ratio"></A>
+<A NAME="INDEX158" REL="I3" TITLE="specifying"></A>
+<A NAME="INDEX159" REL="I1" TITLE="blendfunction subroutine (GL)"></A>
+<H3><A NAME="A143X9242"></A>Purpose</H3>
+<P><A NAME="E1B0587936ceb"></A>Specifies the function to be used for alpha blending.</P>
+
+<H3><A NAME="A78C11df"></A>Libraries</H3>
+<P><A NAME="E1B0588085ceb"></A>Graphics Library</P>
+
+<P><A NAME="E1B0588189ceb"></A>C (<B>libgl.a</B>)</P>
+
+<P>FORTRAN (<B>libfgl.a</B>)</P>
+
+<H3><A NAME="A143X9246"></A>C Syntax</H3>
+<PRE><A NAME="A143X9247"></A><B>void blendfunction(Int32 </B><A HREF="blendfunction.html#A143X924b"><I>sfactor</I></A><B>, Int32 </B><A HREF="blendfunction.html#A143X924c"><I>dfactor</I></A><B>)</B></PRE>
+
+<H3><A NAME="A28C01077d"></A>FORTRAN Syntax</H3>
+<PRE><A NAME="A28C01077e"></A><B>SUBROUTINE BLENDF(</B><I>sfactor</I><B>, </B><I>dfactor</I><B>)</B>
+<B>INTEGER*4 </B><I>sfactor</I><B>, </B><I>dfactor</I></PRE>
+
+<H3><A NAME="A143X9248"></A>Description</H3>
+<P><A NAME="E1B0588559ceb"></A>In <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>, the system draws 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P06fd">pixels</A> using a function that blends the current (destination) RGBA values of the pixel with the RGBA values to be superimposed on that pixel (the source values). </P>
+
+<P><A NAME="E1B0588667ceb"></A>Most often, blending is simple: the source RGBA values replace the destination RGBA values of the pixel. However, if a colored transparent
+ <!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0702">primitive</A> is drawn on top of another primitive, then the RGBA values of the new primitive must be blended with the RGBA values of the underlying primitive. (The transparency or opacity of a primitive can be stored as an alpha value.) </P>
+
+<P><A NAME="E1B0588774ceb"></A>To determine the blended RGBA values of a pixel when drawing in RGB mode, the system uses the following functions:</P>
+<PRE><A NAME="A139X91ed4"></A>Rblended = (Rsource * sfactor) + (Rdestination * dfactor) 
+Gblended = (Gsource * sfactor) + (Gdestination * dfactor)
+Bblended = (Bsource * sfactor) + (Bdestination * dfactor) 
+Ablended = (Asource * sfactor) + (Adestination * dfactor)</PRE>
+
+<P><A NAME="E1B0588940ceb"></A>where R is a red value, G is a green value, B is a blue value, and A is an alpha value.  Blending is available with or without z-buffer mode. Blending works properly only in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0743">RGB mode</A>.  In 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A25P03e3">color map mode</A>, the results are unpredictable. </P>
+
+<P><A NAME="E1B0589050ceb"></A>Blending is effectively deactivated by setting the <A HREF="blendfunction.html#A143X924b"><I>sfactor</I></A> parameter to BF_ONE  and  <A HREF="blendfunction.html#A143X924c"><I>dfactor</I></A> to BF_ZERO (the default values). RGB mode fill rates are significantly higher when blending is effectively deactivated.</P>
+
+<P><A NAME="E1B0589159ceb"></A>By default, the destination RGBA values are read from the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P051c">front buffer</A> in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A27P01c">single buffer mode</A> and from the 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P051c">back buffer</A> in 
+<!--gl32prgd:--><A HREF="../gl32prgd/specialterms.html#A26P0474">double buffer mode</A>. If the front buffer is not enabled in single buffer mode, the RGBA values are taken from the z-buffer. If the back buffer is not enabled in double buffer mode, the RGBA values are taken from the front buffer (if possible) or from the z-buffer. These default values can be changed with the <A HREF="readsource.html#A142X9cc0"><B>readsource</B></A> subroutine.</P>
+
+<P><A NAME="E1B0589267ceb"></A>Blending factors use RGBA values converted to percentages of maximum value (255 in current hardware). To improve performance, conversion calculations are approximate. However, 0 converts exactly to 0.0, and maximum value converts exactly to 1.0.</P>
+
+<TABLE BORDER="2"><TR VALIGN="TOP" ALIGN="LEFT"><TD COLSPAN="2"><B>Symbolic Constants</B></TD>
+
+<TD><BR></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD><B>C</B></TD>
+
+<TD><B>FORTRAN</B></TD>
+
+<TD><B>Description</B></TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BF_ZERO</TD>
+
+<TD>BFZERO</TD>
+
+<TD>0</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BF_ONE</TD>
+
+<TD>BFONE</TD>
+
+<TD>1</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BF_DC</TD>
+
+<TD>BFDC</TD>
+
+<TD>(destination RGBA)/(maximum value)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BF_SC</TD>
+
+<TD>BFSC</TD>
+
+<TD>(source RGBA)/(maximum value)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BF_MDC</TD>
+
+<TD>BFMDC</TD>
+
+<TD>1 - (destination RGBA)/(maximum value)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BF_MSC</TD>
+
+<TD>BFMSC</TD>
+
+<TD>1 - (source RGBA)/(maximum value)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BF_SA</TD>
+
+<TD>BFSA</TD>
+
+<TD>(source alpha)/(maximum value)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BF_MSA</TD>
+
+<TD>BFMSA</TD>
+
+<TD>1 - (source alpha)/(maximum value)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BF_DA</TD>
+
+<TD>BFDA</TD>
+
+<TD>(destination alpha)/(maximum value)</TD></TR>
+
+<TR VALIGN="TOP" ALIGN="LEFT"><TD>BF_MDA</TD>
+
+<TD>BFMDA</TD>
+
+<TD>1 - (destination alpha)/(maximum value)</TD></TR></TABLE>
+
+<H3><A NAME="A143X924a"></A>Parameters</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X924b"></A><I>sfactor </I></TD>
+<TD>  Specifies a symbolic constant that identifies the blending factor by which to scale contributions from source (incoming) pixel RGBA (red, green, blue, alpha) values.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A143X924c"></A><I>dfactor </I></TD>
+<TD>  Specifies a symbolic constant that identifies the blending factor by which to scale contributions from destination (current) pixel RGBA values.</TD></TR></TABLE>
+
+<H3><A NAME="A143X925a"></A>Implementation Specifics</H3>
+<P><A NAME="E1B0589756ceb"></A>This subroutine is part of GL in the AIXwindows Environment/6000 Version 1, Release 2 with AIXwindows/3D Feature.</P>
+
+<P><A NAME="A3CBCE1E731bolt"></A>The POWERgraphics GXT1000 supports source alpha blending. However, the GXT1000 does not support destination alpha blending. Destination blending is available using OpenGL.</P>
+
+<P><A NAME="E1B0589936ceb"></A>When rendering semi-transparent polygons, it is recommended that z-buffering should be enabled, with the the z compare function set to ZF_LESS. Because the POWERgraphics GTO graphics adapter always renders "fat" triangles (that is, non-point sampled triangles whose upper and left edges are one pixel wider than those of a point-sampled triangle), the edges of bordering triangles are drawn twice, and thus double-blended, unless z-buffering is used to eliminate the double-rendering of edges. The POWERgraphics GTO graphics adapter forms all polygons into triangles; thus, the internal form of the polygon's edges become visible unless z-buffering is used to eliminate the edges.</P>
+
+<P><A NAME="E1B058A046ceb"></A>The POWERgraphics GTO graphics adapter supports transparency by implementing a limited subset of the <B>blendfunction</B> subroutine functionality. The BF_SA and BF_MSA alpha-blending modes are supported when used in combination.</P>
+
+<P><A NAME="E1B058A164ceb"></A>Semi-transparent lines and polygons are supported (this class includes circles, arcs, spline curves and NURBS surfaces); semi transparent blits (including raster text) are not supported. The alpha-blending factor must be a constant for the entire primitive; the interpolation of alpha values from vertex to vertex is not supported. Alpha values can be set with the <B>cpack</B>, <B>c4[isf]</B>, or<B> lmdef</B> subroutines.</P>
+
+<H3><A NAME="A78C11e2"></A>Files</H3>
+<TABLE><TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11e3"></A><B>/usr/include/gl/gl.h</B></TD>
+<TD>  Contains C language constant and variable type definitions for GL.</TD></TR>
+
+<TR VALIGN="TOP"><TD NOWRAP="NOWRAP"><A NAME="A78C11e4"></A><B>/usr/include/gl/fgl.h</B></TD>
+<TD>  Contains FORTRAN constant and variable type definitions for GL.</TD></TR></TABLE>
+
+<H3><A NAME="A143X9260"></A>Related Information</H3>
+<P><A NAME="E1B058A485ceb"></A>Specifying RGBA color with a single, packed 32-bit integer using the <A HREF="cpack.html#A143X9284"><B>cpack</B></A> subroutine.</P>
+
+<P><A NAME="E1B058A597ceb"></A>Specifying the source for pixels to be read with the <A HREF="readsource.html#A142X9cc0"><B>readsource</B></A> subroutine.</P>
+
+<P><A NAME="E1B058A704ceb"></A><!--gl32prgd:--><A HREF="../gl32prgd/writemasks.html#writemasks.html">Writemasks and Logical Operations</A>, and Working in <!--gl32prgd:--><A HREF="../gl32prgd/workcolor.html#workcolor.html">Color Map and RGB Modes</A>.</P><hr><center>
+[  <a href="blanktime.html">Previous</a>  |
+<a href="blink.html">Next</a>  |
+<A href="../gl32prgd/toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../../aixgen/topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="../../../../../../../cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+
