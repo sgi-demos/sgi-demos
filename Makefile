@@ -1,5 +1,6 @@
+include ./platform.mk
 
-.PHONY: all
+.PHONY: all clean
 
 all:
 	make -C insect
@@ -12,3 +13,6 @@ all:
 	make -C flight
 	make -C colortest
 	make -C gltest
+
+clean:
+	cd ./demo_bin && rm -rf ./* && cd ..
