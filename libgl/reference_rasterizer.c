@@ -20,9 +20,9 @@ static int zbuffer_enabled;
 
 typedef uint16_t z_t;
 
-static unsigned char pixel_colors[DISPLAY_HEIGHT][DISPLAY_WIDTH][4];
+static unsigned char pixel_colors[YMAXSCREEN + 1][XMAXSCREEN + 1][4];
 static unsigned char *hwfb = NULL;
-static z_t pixel_depths[DISPLAY_HEIGHT][DISPLAY_WIDTH];
+static z_t pixel_depths[YMAXSCREEN + 1][XMAXSCREEN + 1];
 static const int Z_SHIFT = 16;
 
 static float min(float a, float b)
