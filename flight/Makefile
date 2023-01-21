@@ -7,11 +7,10 @@ SRC =	main.c uflight.c land1.c land2.c meters.c density.c \
 		c150.c b747.c f15.c f16.c f18.c flight.c \
 		p38.c f16w.c p38w.c mat.c \
 		udpbrdcst.c xasin.c xatable.c savecolors.c
-LIBGL_SRC=../libgl/gl.c ../libgl/vector.c $(RASTERIZER_SRCS) $(EVENTS_SRCS)
+
 $(APP): $(SRC) udpbrdcst.h $(LIBGL_SRC)
-	cc $(OPT_LEVEL) -g -I../sys_include -I../demo_include \
-		-Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value \
-		-Wno-return-type \
+	$(CC) $(OPT_LEVEL) $(DEMO_INC) \
+		$(DEMO_WARN_OFF) \
 		-DNETWORKING=1 \
 		-o $(APP) $(SRC) $(LIBGL_SRC) -lm
 
@@ -22,4 +21,5 @@ run_no_network: $(APP)
 	$(APP)
 
 clean:
-	rm -rf $(APP)*
+	rm -f $(APP)
+	rm -rf $(APP).dSYM

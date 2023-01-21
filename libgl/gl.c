@@ -2163,7 +2163,7 @@ dopup() enters a loop:
     return leaf item value
 */
 
-int32_t defpup(char *menu)
+int32_t defpup(char *menu, ...)
 {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 
@@ -3136,6 +3136,37 @@ void lookat(Coord viewx,Coord viewy, Coord viewz, Coord pointx, Coord pointy, Co
 }
 
 void lsetdepth() {
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void depthcue(Boolean enable)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+int32_t getgdesc (int32_t inquiry)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    return 0;
+}
+
+void lshaderange (Colorindex lowin, Colorindex highin, long znear, long zfar)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void qreset ()
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void smoothline (long mode)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void zsource (long src)
+{
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 

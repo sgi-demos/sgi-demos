@@ -378,6 +378,16 @@
 #define	QFULL		535	/* queue was filled */
 #define	PIECECHANGE	536	/* change in the window pieces */
 #define WINCLOSE	537	/* window close */
+#define QREADERROR      538    /* qread error */
+#define WINFREEZE       539    /* user wants process in this win to shut up */
+#define WINTHAW         540    /* user wants process in this win to go again */
+#define REDRAWICONIC    541    /* used to signal redraw as an icon */
+#define WINQUIT         542    /* signal from user that app is to go away */
+#define DEPTHCHANGE     543    /* window stacking order changed */
+#define WINSHUT         546    /* window shutdown */
+#define DRAWOVERLAY     547    /* overlay planes have been damaged */
+#define VIDEO           548    /* video notification */
+
 
 /* the extended keyboard */
 

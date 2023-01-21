@@ -1,0 +1,17 @@
+.PHONY: clean run
+
+include ../platform.mk
+
+EMAPP=insect.html
+SRC=insect.c mat.c parts.c
+
+$(EMAPP): $(SRC) insect.h $(LIBGL_SRC)
+	$(EMCC) \
+		$(DEMO_WARN_OFF_EM) \
+		$(DEMO_INC) $(SRC) $(LIBGL_SRC) -o $(EMAPP)
+
+run: $(EMAPP)
+	emrun $(EMAPP)
+
+clean:
+	rm $(EMAPP)

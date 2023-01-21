@@ -161,11 +161,11 @@ extern void	defbasis();
 extern void	defcursor(int32_t index, uint16_t *cursor);
 extern void	deflinestyle(int32_t index, Linestyle pattern);
 extern void	defpattern(int32_t index, int size, Pattern16 mask);
-extern int32_t     defpup(char *menu);
+extern int32_t     defpup(char *menu, ...);
 extern void	defrasterfont();
 extern void	delobj(Object obj);
 extern void	deltag();
-extern void	depthcue();
+extern void	depthcue(Boolean enable);
 extern void	devport();
 extern int32_t	dopup(int32_t pup);
 extern int32_t	dopupbut();
@@ -206,6 +206,7 @@ extern void	getdepth();
 extern void	getdev();
 extern int32_t	getdisplaymode();
 extern int32_t	getfont();
+extern int32_t getgdesc (int32_t inquiry);
 extern void	getgpos();
 extern int32_t	getheight();
 extern int32_t	gethitcode();
@@ -258,6 +259,7 @@ extern void	loadmatrix(Matrix m);
 extern void	loadname();
 extern void	lookat(Coord viewx, Coord viewy, Coord viewz, Coord pointx, Coord pointy, Coord pointz, Angle twist);
 extern void	lsbackup();
+extern void lshaderange (Colorindex lowin, Colorindex highin, long znear, long zfar);
 extern void	lsrepeat();
 extern void	makeobj();
 extern void	maketag();
@@ -409,6 +411,7 @@ extern Boolean	setslowcom();
 extern void	setvaluator(Device device, int init, int min, int max);
 extern void	shaderange();
 extern void	singlebuffer();
+extern void smoothline (long mode);
 extern void	spclos();
 extern void	splf();
 extern void	splf2();
@@ -457,6 +460,7 @@ extern void	xfpti();
 extern void	xfpts();
 extern void	zbuffer(int enable);
 extern void	zclear();
+extern void zsource (long src);
 
 extern void glcompat(int32_t mode, int32_t value);
 extern void shademodel(int32_t mode);
@@ -483,10 +487,6 @@ extern void zfunction(int func);
 extern void czclear(int color, int depth);
 
 extern void gl_sincos(Angle angle, float *s, float *c);
-
-// Added by LK because demos needed it. I don't know what the real values should be.
-#define GLC_OLDPOLYGON 2001
-#define WINQUIT 2002
 
 // Materials
 #define DEFMATERIAL 0
@@ -539,6 +539,124 @@ extern void gl_sincos(Angle angle, float *s, float *c);
 #define FLAT 0
 #define GOURAUD 1
 
-#define ZF_GEQUAL 6
+/* defines for zfunction() */
+#define ZF_NEVER        0
+#define ZF_LESS         1
+#define ZF_EQUAL        2
+#define ZF_LEQUAL       3
+#define ZF_GREATER      4
+#define ZF_NOTEQUAL     5
+#define ZF_GEQUAL       6
+#define ZF_ALWAYS       7
+    
+/* defines for zsource() */
+#define ZSRC_DEPTH      0
+#define ZSRC_COLOR      1
+
+/* defines for getgdesc() */
+#define GD_XPMAX                0
+#define GD_YPMAX                1
+#define GD_XMMAX                2
+#define GD_YMMAX                3
+#define GD_ZMIN                 4
+#define GD_ZMAX                 5
+#define GD_BITS_NORM_SNG_RED    6
+#define GD_BITS_NORM_SNG_GREEN  7
+#define GD_BITS_NORM_SNG_BLUE   8
+#define GD_BITS_NORM_DBL_RED    9
+#define GD_BITS_NORM_DBL_GREEN  10
+#define GD_BITS_NORM_DBL_BLUE   11
+#define GD_BITS_NORM_SNG_CMODE  12
+#define GD_BITS_NORM_DBL_CMODE  13
+#define GD_BITS_NORM_SNG_MMAP   14
+#define GD_BITS_NORM_DBL_MMAP   15
+#define GD_BITS_NORM_ZBUFFER    16
+#define GD_BITS_OVER_SNG_CMODE  17
+#define GD_BITS_UNDR_SNG_CMODE  18
+#define GD_BITS_PUP_SNG_CMODE   19
+#define GD_BITS_NORM_SNG_ALPHA  21 
+#define GD_BITS_NORM_DBL_ALPHA  22
+#define GD_BITS_CURSOR          23
+#define GD_OVERUNDER_SHARED     24
+#define GD_BLEND                25
+#define GD_CIFRACT              26
+#define GD_CROSSHAIR_CINDEX     27
+#define GD_DITHER               28
+#define GD_LINESMOOTH_CMODE     30
+#define GD_LINESMOOTH_RGB       31
+#define GD_LOGICOP              33
+#define GD_NSCRNS               35
+#define GD_NURBS_ORDER          36
+#define GD_NBLINKS              37
+#define GD_NVERTEX_POLY         39
+#define GD_PATSIZE_64           40
+#define GD_PNTSMOOTH_CMODE      41
+#define GD_PNTSMOOTH_RGB        42
+#define GD_PUP_TO_OVERUNDER     43
+#define GD_READSOURCE           44
+#define GD_READSOURCE_ZBUFFER   48
+#define GD_STEREO               50
+#define GD_SUBPIXEL_LINE        51
+#define GD_SUBPIXEL_PNT         52
+#define GD_SUBPIXEL_POLY        53
+#define GD_TRIMCURVE_ORDER      54
+#define GD_WSYS                 55
+#define GD_ZDRAW_GEOM           57
+#define GD_ZDRAW_PIXELS         58
+#define GD_SCRNTYPE             61
+#define GD_TEXTPORT             62
+#define GD_NMMAPS               63
+#define GD_FRAMEGRABBER         64
+#define GD_TIMERHZ              66
+#define GD_DBBOX                67
+#define GD_AFUNCTION            68
+#define GD_ALPHA_OVERUNDER      69
+#define GD_BITS_ACBUF           70
+#define GD_BITS_ACBUF_HW        71
+#define GD_BITS_STENCIL         72
+#define GD_CLIPPLANES           73
+#define GD_FOGVERTEX            74
+#define GD_LIGHTING_TWOSIDE     76
+#define GD_POLYMODE             77
+#define GD_POLYSMOOTH           78
+#define GD_SCRBOX               79
+#define GD_TEXTURE              80
+#define GD_FOGPIXEL             81
+#define GD_TEXTURE_PERSP        82
+#define GD_MUXPIPES             83
+#define GD_MULTISAMPLE          84
+#define GD_TEXTURE_3D           85
+#define GD_TEXTURE_LUT          86
+#define GD_TEXTURE_SHARP        87
+#define GD_TEXTURE_DETAIL       88
+#define GD_STEREO_IN_WINDOW     89
+#define GD_BLENDCOLOR           90
+#define GD_LIGHTING_SPOTLIGHT   91
+#define GD_LIGHTING_ATT2        92
+#define GD_AFUNCTION_MODES      93
+#define GD_TEXTURE_MEMORY_SIZE  94
+#define GD_IS_IGLOO             95
+#define GD_NOLIMIT              -2
+#define GD_WSYS_NONE            0
+#define GD_WSYS_4S              1
+#define GD_SCRNTYPE_WM          0
+#define GD_SCRNTYPE_NOWM        1
+
+/* defines for glcompat */
+#define GLC_OLDPOLYGON          0
+#define GLC_ZRANGEMAP           1
+#define GLC_MQUEUERATE          2
+#define GLC_SOFTATTACH          3
+#define GLC_MANAGEBG            4
+#define GLC_SLOWMAPCOLORS       5
+#define GLC_INPUTCHANGEBUG      6
+#define GLC_NOBORDERBUG         7
+#define GLC_SET_VSYNC           8
+#define GLC_GET_VSYNC           9
+#define GLC_VSYNC_SLEEP         10
+#define GLC_FORCECIMAP          11
+#define GLC_TABLETSCALE         12
+#define GLC_NODESTALPHA         13
+#define GLC_COMPATRATE          15
 
 #endif // GLDEF

@@ -60,6 +60,7 @@ extern void matrix4x4f_mult_vec4f(const matrix4x4f m, const vec4f in, vec4f out)
 extern void vec3f_mult_matrix4x4f(const vec3f in, const matrix4x4f m, vec3f out);
 extern void vec4f_mult_matrix4x4f(const vec4f in, const matrix4x4f m, vec4f out);
 extern float *matrix4x4f_stack_top(matrix4x4f_stack *m);
+extern float *matrix4x4f_stack_get_inverse(matrix4x4f_stack *stack);
 extern void matrix4x4f_stack_init(matrix4x4f_stack *m);
 extern int matrix4x4f_stack_push(matrix4x4f_stack *stack);
 extern int matrix4x4f_stack_pop(matrix4x4f_stack *stack);
@@ -72,6 +73,5 @@ extern float *viewport_stack_top(viewport_stack_t *stack);
 extern void vec3ub_set(vec3ub v, uint8_t x, uint8_t y, uint8_t z);
 extern float vec3f_length(vec3f i1);
 extern float vec4f_length(vec4f i1);
-
 
 #endif /* __VECTOR_H__ */

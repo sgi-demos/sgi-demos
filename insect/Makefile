@@ -3,23 +3,16 @@
 include ../platform.mk
 
 APP=$(BIN_DIR)/insect
-EMAPP=insect.html
 SRC=insect.c mat.c parts.c
 
-$(EMAPP): $(SRC) insect.h $(LIBGL_SRC)
-	$(EMCC) -std=c90 \
-		-Wno-implicit-function-declaration \
-		-Wno-unused-value \
-		-Wno-return-type \
-		-Wno-int-conversion \
-		-Wno-gcc-compat \
-		-Wno-implicit-int \
-		-Wno-deprecated-non-prototype \
-		-I../sys_include -I../demo_include \
-		$(SRC) $(LIBGL_SRC) -o $(EMAPP)
+$(APP): $(SRC) insect.h $(LIBGL_SRC)
+	$(CC) $(OPT_LEVEL) $(DEMO_INC) \
+		$(DEMO_WARN_OFF) \
+		-o $(APP) $(SRC) $(LIBGL_SRC) -lm
 
-run: $(EMAPP)
-	emrun $(EMAPP)
+run: $(APP)
+	$(APP)
 
 clean:
-	rm -f $(EMAPP)
+	rm -f $(APP)
+	rm -rf $(APP).dSYM
