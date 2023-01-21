@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>sunflower.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="setshade_c.html">Previous</a>  |
+<a href="text_c.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="/cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c9a6"></A>sunflower.c Example C Language Program
+</H2>
+<A NAME="INDEX2443" REL="I1" TITLE="sunflower.c example program (GL)"></A>
+<A NAME="INDEX2444" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2445" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2446" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2447" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2448" REL="I2" TITLE="sunflower"></A>
+<A NAME="INDEX2449" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2450" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2451" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2452" REL="I3" TITLE="sunflower"></A>
+<PRE><A NAME="A64EB96685ttay"></A>/*
+sunflower.c</PRE>
+<PRE><A NAME="A64EB96870ttay"></A>Make a sunflower-like pattern out of circles.
+    Usage: sunflower &lt;&lt;nseeds> &lt;&lt;seedsize> &lt;&lt;growth>
+Try "sunflower 400.05 1.1"</PRE>
+<PRE><A NAME="A64EB97020ttay"></A>Paul Haeberli - 1984
+*/</PRE>
+<PRE><A NAME="A64EB97190ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h>
+#include &lt;stdio.h>
+#include &lt;math.h></PRE>
+<PRE><A NAME="A64EB97337ttay"></A>int seeds = 0;</PRE>
+<PRE><A NAME="A64EB97513ttay"></A>main(argc,argv)
+int argc;
+char **argv;
+{
+&nbsp;&nbsp;&nbsp;int nseeds;
+&nbsp;&nbsp;&nbsp;float seedsize, grow;
+&nbsp;&nbsp;&nbsp;short val;    </PRE>
+<PRE><A NAME="A64EB97694ttay"></A>&nbsp;&nbsp;&nbsp;if (argc&lt;4) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    "Usage: sunflower &lt;nseeds> &lt;seedsize> &lt;growth>\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(1);
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB97998ttay"></A>&nbsp;&nbsp;&nbsp;nseeds = atoi(argv[1]);
+&nbsp;&nbsp;&nbsp;seedsize = atof(argv[2]);
+&nbsp;&nbsp;&nbsp;grow = atof(argv[3]);    
+&nbsp;&nbsp;&nbsp;prefposition(XMAXSCREEN/4,XMAXSCREEN*3/4,YMAXSCREEN/4,
+&nbsp;&nbsp;&nbsp;    YMAXSCREEN*3/4);
+&nbsp;&nbsp;&nbsp;winopen("sunflower");
+     &nbsp;&nbsp;&nbsp;singlebuffer();
+     &nbsp;&nbsp;&nbsp;zbuffer (FALSE); 
+        cmode();
+ &nbsp;&nbsp;&nbsp;gconfig (); 
+&nbsp;&nbsp;&nbsp;makeframe();
+&nbsp;&nbsp;&nbsp;sunflower(nseeds,seedsize,grow);
+&nbsp;&nbsp;&nbsp;while (1) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (qread(&amp;val) == REDRAW)  {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;makeframe();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sunflower(nseeds,seedsize,grow);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB98141ttay"></A>}</PRE>
+<PRE><A NAME="A64EB98307ttay"></A>sunflower(nseeds,seedsize,grow)
+int nseeds;
+float seedsize, grow;
+{</PRE>
+<PRE><A NAME="A64EB98462ttay"></A>&nbsp;&nbsp;&nbsp;float rad = 20.0;
+&nbsp;&nbsp;&nbsp;int parity = 0;    </PRE>
+<PRE><A NAME="A64EB98664ttay"></A>&nbsp;&nbsp;&nbsp;scale(10.0,10.0,0.0);
+&nbsp;&nbsp;&nbsp;pushmatrix();
+&nbsp;&nbsp;&nbsp;while (rad &lt; 100.0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate(1800/nseeds,'z');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scale(grow,grow,0.0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;makering(nseeds,seedsize);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rad = rad * grow;
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB98812ttay"></A>&nbsp;&nbsp;&nbsp;popmatrix();
+}</PRE>
+<PRE><A NAME="A64EB98976ttay"></A>makering(nseeds,seedsize)
+int nseeds;
+float seedsize;
+{
+&nbsp;&nbsp;&nbsp;int i;</PRE>
+<PRE><A NAME="A64EB99162ttay"></A>&nbsp;&nbsp;&nbsp;for (i=0; i&lt;nseeds; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pushmatrix();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rotate((i*3600)/nseeds,'z');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drawseed(seedsize);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;popmatrix();
+&nbsp;&nbsp;&nbsp;}</PRE>
+<PRE><A NAME="A64EB99305ttay"></A>}</PRE>
+<PRE><A NAME="A64EB99474ttay"></A>drawseed(seedsize)
+float seedsize;
+{
+&nbsp;&nbsp;&nbsp;seeds++;
+&nbsp;&nbsp;&nbsp;circ(1.0,0.0,seedsize);
+}</PRE>
+<PRE><A NAME="A64EB99621ttay"></A>makeframe()
+{</PRE>
+<PRE><A NAME="A64EB99776ttay"></A>&nbsp;&nbsp;&nbsp;int xsize, ysize;
+&nbsp;&nbsp;&nbsp;float aspect;    </PRE>
+<PRE><A NAME="A64EB99973ttay"></A>&nbsp;&nbsp;&nbsp;reshapeviewport();
+&nbsp;&nbsp;&nbsp;getsize(&amp;xsize,&amp;ysize);
+&nbsp;&nbsp;&nbsp;color(7);
+&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;color(0);
+&nbsp;&nbsp;&nbsp;aspect = xsize/(float)ysize;
+&nbsp;&nbsp;&nbsp;ortho2(-50.0,50.0,-50.0/aspect,50.0/aspect);
+}</PRE>
+
+<H3><A NAME="A201C11a4"></A>Related Information</H3><hr><center>
+[  <a href="setshade_c.html">Previous</a>  |
+<a href="text_c.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="/cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

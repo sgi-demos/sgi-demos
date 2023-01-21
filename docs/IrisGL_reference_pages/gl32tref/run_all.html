@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>run_all Example C Language Program
+ 
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="prompt_c.html">Previous</a>  |
+<a href="scrn_rotate_c.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="/cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A64F300992ttay"></A>run_all Example C Language Program
+ </H2>
+<A NAME="INDEX2410" REL="I1" TITLE="run_all example program (GL)"></A>
+<A NAME="INDEX2411" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2412" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2413" REL="I3" TITLE="run_all"></A>
+<A NAME="INDEX2414" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2415" REL="I2" TITLE="run_all"></A>
+<A NAME="INDEX2416" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64F301172ttay"></A>set +x
+typeset temp
+for dude in *
+do
+&nbsp;&nbsp;&nbsp;typeset temp2=${temp%.c*}
+&nbsp;&nbsp;&nbsp;echo "Executing: $temp2"
+&nbsp;&nbsp;&nbsp;$temp2
+done</PRE>
+
+<hr><center>
+[  <a href="prompt_c.html">Previous</a>  |
+<a href="scrn_rotate_c.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="/cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

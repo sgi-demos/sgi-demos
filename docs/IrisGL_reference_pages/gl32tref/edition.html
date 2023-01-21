@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>First Edition (October 1994)
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="trademarks.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="/cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+
+<H1><A NAME="A3CFC157003janb"></A>First Edition (October 1994)</H1>
+
+<P><A NAME="A3CFC157015janb"></A>This edition of <I>GL3.2 Version 4 for AIX: Graphics Library (GL) Technical Reference</I> applies to the GL3.2 Version 4.1 for AIX Licensed Programs and to all subsequent releases of this product until otherwise indicated in new releases or technical newsletters.</P>
+
+<P><A NAME="A3CFC157026janb"></A><B>The following paragraph does not apply to the United Kingdom or any country where such provisions are inconsistent with local law:</B> INTERNATIONAL BUSINESS MACHINES CORPORATION PROVIDES THIS MANUAL "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. Some states do not allow disclaimer of express or implied warranties in certain transactions; therefore, this statement may not apply to you.</P>
+
+<P><A NAME="A3CFC157038janb"></A>IBM does not warrant that the contents of this publication or the accompanying source code examples, whether individually or as one or more groups, will meet your requirements or that the publication or the accompanying source code examples are error-free.</P>
+
+<P><A NAME="A3CFC157049janb"></A>This publication could include technical inaccuracies or typographical errors. Changes are periodically made to the information herein; these changes will be incorporated in new editions of the publication. IBM may make improvements and/or changes in the product(s) and/or the program(s) described in this publication at any time.</P>
+
+<P><A NAME="A3CFC157061janb"></A>It is possible that this publication may contain references to, or information about, IBM products (machines and programs), programming, or services that are not announced in your country. Such references or information must not be construed to mean that IBM intends to announce such IBM products, programming, or services in your country. Any reference to an IBM licensed program in this publication is not intended to state or imply that you can use only IBM's licensed program. You can use any functionally equivalent program instead.</P>
+
+<P><A NAME="A3CFC157072janb"></A>Requests for copies of this publication and for technical information about IBM products should be made to your IBM Authorized Dealer or your IBM Marketing Representative.</P>
+
+<P><A NAME="A3CFC157083janb"></A>A reader's comment form is provided at the back of this publication. If the form has been removed, address comments to IBM Corporation, Internal Zip 9630, 11400 Burnet Road, Austin, Texas 78758-3493. To send comments electronically, use this commercial internet address: <SAMP>aix6kpub@austin.ibm.com</SAMP>. IBM may use or distribute whatever information you supply in any way it believes appropriate without incurring any obligation to you.</P>
+
+<P><A NAME="A3CFC157094janb"></A>IBM is a registered trademark of International Business Machines Corporation.</P>
+
+<P><A NAME="A3CFC157105janb"></A>(C) Copyright Adobe Systems, Inc., 1984, 1987.</P>
+
+<P><A NAME="A3CFC157116janb"></A>(C)  Copyright X/Open Company Limited, 1988. All Rights Reserved. </P>
+
+<P><A NAME="A3CFC157126janb"></A>(C)  Copyright IXI Limited, 1989. All rights reserved. </P>
+
+<P><A NAME="A3CFC157137janb"></A>(C)  Copyright AT&amp;T, 1984, 1985, 1986, 1987, 1988, 1989. All rights reserved. </P>
+
+<P><A NAME="A3CFC157147janb"></A>(C)  Silicon Graphics, Inc., 1988. All rights reserved. </P>
+
+<P><A NAME="A3CFC157159janb"></A>Use, duplication or disclosure of the SOFTWARE by the Government is subject to restrictions as set forth in FAR 52.227-19(c)(2) or subparagraph (c)(1)(li) of the Rights in Technical Data and Computer SOFTWARE clause at SFARS 252.227-7013, and/or in similar or successor clauses in the FAR, or the DOD or NASA FAR Supplement. Unpublished rights reserved under the Copyright Laws of the United States. Contractor/manufacturer is SILICON GRAPHICS, INC., 2011 N. Shoreline Blvd., Mountain View, CA 94039-7311.</P>
+
+<P><A NAME="A3CFC157170janb"></A>(C)  Copyright Carnegie Mellon, 1988. All rights reserved. </P>
+
+<P><A NAME="A3CFC157180janb"></A>(C) Copyright Stanford University, 1988. All rights reserved.</P>
+
+<P><A NAME="A3CFC157192janb"></A>Permission to use, copy, modify, and distribute this program for any purpose and without fee is hereby granted, provided that this copyright and permission notice appear on all copies and supporting documentation, the name of Carnegie Mellon and Stanford University not be used in advertising or publicity pertaining to distribution of the program without specific prior permission, and notice be given in supporting documentation that copying and distribution is by permission of Carnegie Mellon and Stanford University. Carnegie Mellon and Stanford University make no representations about the suitability of this software for any purpose. It is provided "as is" without express or implied warranty.</P>
+
+<P><A NAME="A3CFC157203janb"></A>(C) Copyright Sun Microsystems, Inc., 1985, 1986, 1987, 1988. All rights reserved.</P>
+
+<P><A NAME="A3CFC157214janb"></A>The Network File System (NFS) was developed by Sun Microsystems, Inc.</P>
+
+<P><A NAME="A3CFC157226janb"></A>This software and documentation is based in part on the Fourth Berkeley Software Distribution under license from The Regents of the University of California. We acknowledge the following institutions for their role in its development: the Electrical Engineering and Computer Sciences Department at the Berkeley Campus.</P>
+
+<P><A NAME="A3CFC157237janb"></A>The Rand MH Message Handling System was developed by the Rand Corporation and the University of California.</P>
+
+<P><A NAME="A3CFC157248janb"></A>Portions of the code and documentation described in this book were derived from code and documentation developed under the auspices of the Regents of the University of California and have been acquired and modified under the provisions that the following copyright notice and permission notice appear:</P>
+
+<P><A NAME="A3CFC157258janb"></A>(C) Copyright Regents of the University of California, 1986, 1987. All rights reserved. </P>
+
+<P><A NAME="A3CFC157269janb"></A>Redistribution and use in source and binary forms are permitted provided that this notice is preserved and that due credit is given to the University of California at Berkeley. The name of the University may not be used to endorse or promote products derived from this software without specific prior written permission. This software is provided "as is" without express or implied warranty.</P>
+
+<P><A NAME="A3CFC157281janb"></A>Portions of the code and documentation described in this book were derived from code and documentation developed by Massachusetts Institute of Technology, Cambridge, Massachusetts, and Digital Equipment Corporation, Maynard, Massachusetts, and have been acquired and modified under the provision that the following copyright notice and permission notice appear:</P>
+
+<P><A NAME="A3CFC157291janb"></A>(C) Copyright Digital Equipment Corporation, 1985, 1988. All rights reserved. </P>
+
+<P><A NAME="A3CFC157302janb"></A>(C) Copyright 1985, 1986, 1987, 1988 Massachusetts Institute of Technology. All rights reserved.</P>
+
+<P><A NAME="A3CFC157313janb"></A>Permission to use, copy, modify, and distribute this program and its documentation for any purpose and without fee is hereby granted, provided that this copyright, permission, and disclaimer notice appear on all copies and supporting documentation; the name of M.I.T. or Digital not be used in advertising or publicity pertaining to distribution of the program without specific prior permission. M.I.T. and Digital make no representations about the suitability of this software for any purpose. It is provided "as is" without express or implied warranty.</P>
+
+<P><A NAME="A3CFC157324janb"></A>(C) Copyright INTERACTIVE Systems Corporation 1984. All rights reserved.</P>
+
+<P><A NAME="A3CFC157335janb"></A>(C) Copyright 1989, Open Software Foundation, Inc. All rights reserved.</P>
+
+<P><A NAME="A3CFC157346janb"></A>(C) Copyright 1987, 1988, 1989, Hewlett-Packard Company. All rights reserved.</P>
+
+<P><A NAME="A3CFC157356janb"></A>(C) Copyright 1988 Microsoft Corporation. All rights reserved.</P>
+
+<P><A NAME="A3CFC157367janb"></A>(C) Copyright Graphic Software Systems Incorporated, 1984, 1990. All rights reserved.</P>
+
+<P><A NAME="A3CFC157378janb"></A>(C) Copyright Micro Focus, Ltd., 1987, 1990. All rights reserved.</P>
+
+<P><A NAME="A3CFC157389janb"></A>(C) Copyright Paul Milazzo, 1984, 1985. All rights reserved.</P>
+
+<P><A NAME="A3CFC157399janb"></A>(C) Copyright EG Pup User Process, Paul Kirton, and ISI, 1984. All rights reserved.</P>
+
+<P><A NAME="A3CFC157410janb"></A>(C) Copyright Apollo Computer, Inc., 1987. All rights reserved.</P>
+
+<P><A NAME="A3CFC157421janb"></A>(C) Copyright TITN, Inc., 1984, 1989. All rights reserved.</P>
+
+<P><A NAME="A3CFC157432janb"></A>This software is derived in part from the ISO Development Environment (ISODE). IBM acknowledges source author Marshall Rose and the following institutions for their role in its development: The Northrup Corporation and The Wollongong Group.</P>
+
+<P><A NAME="A3CFC157443janb"></A>However, the following copyright notice protects this documentation under the Copyright laws of the United States and other countries which prohibit such actions as, but not limited to, copying, distributing, modifying, and making derivative works.</P>
+
+<P><A NAME="A3CFC157454janb"></A>(C) Copyright International Business Machines Corporation 1994. All rights reserved.</P>
+
+<P><A NAME="A3CFC157465janb"></A>Notice to U.S. Government Users - Documentation Related to Restricted Rights - Use, duplication or disclosure is subject to restrictions set forth in GSA ADP Schedule Contract with IBM Corporation.</P><hr><center>
+[  <a href="trademarks.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="/cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

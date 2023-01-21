@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>doily.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="depthcue_c.html">Previous</a>  |
+<a href="doublebuff_c.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="/cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c90f"></A>doily.c Example C Language Program
+</H2>
+<A NAME="INDEX2268" REL="I1" TITLE="doily.c example program (GL)"></A>
+<A NAME="INDEX2269" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2270" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2271" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2272" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2273" REL="I2" TITLE="doily"></A>
+<A NAME="INDEX2274" REL="I3" TITLE="drawing"></A>
+<A NAME="INDEX2275" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2276" REL="I2" TITLE="drawing"></A>
+<A NAME="INDEX2277" REL="I3" TITLE="doily"></A>
+<PRE><A NAME="A64EA63093ttay"></A>/*
+doily.c:</PRE>
+<PRE><A NAME="A64EA63299ttay"></A>Draws a doily depending on how many points you give
+it (range is
+currently set between 3..100).  point count is equivale
+nt to how
+many line segments make up the circle's edge.
+*/</PRE>
+<PRE><A NAME="A64EA63462ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h>
+#include &lt;math.h></PRE>
+<PRE><A NAME="A64EA63612ttay"></A>#define PI 3.1415926535</PRE>
+<PRE><A NAME="A64EA63762ttay"></A>float points[100][2];</PRE>
+<PRE><A NAME="A64EA63918ttay"></A>main(argc, argv)
+int argc;
+char *argv[];
+{</PRE>
+<PRE><A NAME="A64EA64131ttay"></A>  int val,dev;
+  long numpts;            /* First figure out how many points there are. */</PRE>
+<PRE><A NAME="A64EA64303ttay"></A>  if (argc != 2) {
+    printf("Usage: %s &lt;point_count>\n", argv[0]);
+    exit(0);
+  }</PRE>
+<PRE><A NAME="A64EA64518ttay"></A>  numpts = atoi(argv[1]); /* convert argument to internal format */
+  if (numpts > 100) {
+    printf("Too many points\n");
+    exit(0);
+  }
+  else if (numpts &lt; 3) {
+    printf("Too few points\n"); exit(0);
+  }</PRE>
+<PRE><A NAME="A64EA64764ttay"></A>  initialize(numpts);    
+  while (TRUE) {       
+    if (qtest()) {           
+      dev = qread(&amp;val);           
+      if (dev == ESCKEY) {
+        gexit();
+        exit(0);
+      }
+      else if (dev == REDRAW) {
+        reshapeviewport();
+        drawdoily(numpts);
+      }
+    }
+  }</PRE>
+<PRE><A NAME="A64EA64906ttay"></A>}</PRE>
+<PRE><A NAME="A64EA65060ttay"></A>initialize(numpts)
+long numpts;
+{</PRE>
+<PRE><A NAME="A64EA65266ttay"></A>  int gid;
+  long i;    /* Now get the x and y coordinates of numpts equally-
+              * spaced points around the unit circle.
+              */
+  for (i = 0; i &lt; numpts; i++) {</PRE>
+<PRE><A NAME="A64EA66741ttay"></A>    points[i][0] = cos((i*2.0*PI)/numpts);
+    points[i][1] = sin((i*2.0*PI)/numpts);
+  }
+  keepaspect(1,1);
+  prefposition(XMAXSCREEN/4,XMAXSCREEN*3/4,YMAXSCREEN/4,
+      YMAXSCREEN*3/4);
+  gid = winopen("doily");    
+  qdevice(ESCKEY);
+  qdevice(REDRAW);
+  qenter(REDRAW,gid);    
+  ortho2(-1.2, 1.2, -1.2, 1.2);</PRE>
+<PRE><A NAME="A64EA66883ttay"></A>}</PRE>
+<PRE><A NAME="A64EA67037ttay"></A>drawdoily(numpts)
+long numpts;
+{</PRE>
+<PRE><A NAME="A64EA67184ttay"></A>  long i,j;    </PRE>
+<PRE><A NAME="A64EA67396ttay"></A>  color(BLACK);
+  clear();
+  color(RED);    
+  for (i = 0; i &lt; numpts; i++)
+    for (j = i+1; j &lt; numpts; j++) {
+      move2(points[i][0], points[i][1]);
+      draw2(points[j][0], points[j][1]);
+    }</PRE>
+<PRE><A NAME="A64EA67538ttay"></A>}</PRE>
+<PRE><A NAME="A64EA67694ttay"></A>/*
+  Changes:
+  - exit(); to exit(1);
+*/</PRE>
+
+<H3><A NAME="A200C116d"></A>Related Information</H3>
+<P><A NAME="E1D77FF465ceb"></A>The <A HREF="keepaspect.html#A142X91896"><B>keepaspect</B></A> subroutine<A HREF="A142X91896" REL="PAGENUM"></A>, <A HREF="prefposition.html#A142X9164f"><B>prefposition</B></A> subroutine<A HREF="A142X9164f" REL="PAGENUM"></A>.</P>
+
+<hr><center>
+[  <a href="depthcue_c.html">Previous</a>  |
+<a href="doublebuff_c.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="/cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

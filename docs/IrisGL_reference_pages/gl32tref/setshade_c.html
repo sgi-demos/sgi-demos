@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>setshade.c Example C Language Program
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="select1_c.html">Previous</a>  |
+<a href="sunflower_c.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="/cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A16C0c988"></A>setshade.c Example C Language Program
+</H2>
+<A NAME="INDEX2436" REL="I1" TITLE="setshade.c example program (GL)"></A>
+<A NAME="INDEX2437" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2438" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2439" REL="I3" TITLE="move-draw style"></A>
+<A NAME="INDEX2440" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2441" REL="I2" TITLE="move-draw style"></A>
+<A NAME="INDEX2442" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64EB7E149ttay"></A>/*
+Example setshade.c:</PRE>
+<PRE><A NAME="A64EB7E324ttay"></A>Moves a smooth-shaded polygon in and out of the graphics port.
+Press LEFTMOUSE to exit.
+*/</PRE>
+<PRE><A NAME="A64EB7E480ttay"></A>#include &lt;gl/gl.h>
+#include &lt;gl/device.h></PRE>
+<PRE><A NAME="A64EB7E637ttay"></A>main()
+{    
+  unsigned short i;
+  Coord x;</PRE>
+<PRE><A NAME="A64EB7F025ttay"></A>  prefposition(XMAXSCREEN/4,XMAXSCREEN*3/4,YMAXSCREEN/4,YMAXSCREEN*3/4);
+  winopen("setshade/clip test");
+  doublebuffer();
+  gconfig();
+  get_cmap();
+  for (i=0; i&lt;128; i++)
+    mapcolor(128+i, 2*i, 0, 2*i);
+  makeobj(1);
+  color(128+127);
+  pmv2i(100,-100);
+  color(128+0);
+  pdr2i(100,100);
+  color(128+127);
+  pdr2i(-100,100);
+  color(128+0);
+  pdr2i(-100,-100);
+  pclos();
+  closeobj();
+  while (!getbutton(LEFTMOUSE)) {
+    for (x = -150.0; x &lt; 150.0; x++) {
+      color(CYAN);
+      clear();
+      pushmatrix();
+      translate(x,150.0,0.0);
+      rotate(300,'z');
+      callobj(1);
+      popmatrix();
+      swapbuffers();
+      if (getbutton(LEFTMOUSE))
+        break;
+    }</PRE>
+<PRE><A NAME="A64EB7F256ttay"></A>    for (x=150.0; x>-150.0; x--) {
+      color(CYAN);
+      clear();
+      pushmatrix();
+      translate(x,150.0,0.0);
+      rotate(300,'z');
+      callobj(1);
+      popmatrix();
+      swapbuffers();
+      if (getbutton(LEFTMOUSE))
+        break;
+    }</PRE>
+<PRE><A NAME="A64EB7F411ttay"></A>  }
+  restore_cmap();
+  gexit();
+}</PRE>
+<PRE><A NAME="A64EB7F566ttay"></A>#define lo_end 128
+#define hi_end 255</PRE>
+<PRE><A NAME="A64EB7F732ttay"></A>static Int16 CarrayR[hi_end+1], CarrayG[hi_end+1], CarrayB[hi_end+1];</PRE>
+<PRE><A NAME="A64EB7F879ttay"></A>get_cmap()
+{</PRE>
+<PRE><A NAME="A64EB80045ttay"></A>  getmcolors ((Int16)lo_end,(Int16)hi_end, CarrayR, CarrayG, CarrayB);</PRE>
+<PRE><A NAME="A64EB80188ttay"></A>}</PRE>
+<PRE><A NAME="A64EB80337ttay"></A>restore_cmap()
+{</PRE>
+<PRE><A NAME="A64EB80503ttay"></A>  mapcolors ((Int16)lo_end,(Int16)hi_end, CarrayR, CarrayG, CarrayB);</PRE>
+<PRE><A NAME="A64EB80645ttay"></A>}</PRE>
+<PRE><A NAME="A64EB80896ttay"></A>/*
+  Changes:
+  - This needed the pclos() call after defining the polygon
+  - The mapcolor were changed to mapcolors
+  - The getmcolor were changed to getmcolors
+  - The mapcolors needs casting to an integer
+  - loop constructs removed from restore_cmap and get_cmap
+  - the index variable was removed
+*/</PRE>
+
+<H3><A NAME="A201C11a1"></A>Related Information</H3><hr><center>
+[  <a href="select1_c.html">Previous</a>  |
+<a href="sunflower_c.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="../gl32prgd/specialterms.html">| Glossary</A>  
+ <A HREF="../topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="/cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+

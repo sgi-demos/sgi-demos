@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+<TITLE>makefile Example C Language Program 
+ 
+</TITLE>
+</HEAD>
+
+<body bgcolor="#fcfbf0">
+<center>
+[  <a href="localatten_c.html">Previous</a>  |
+<a href="octahedron_c.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="specialterms.html">| Glossary</A>  
+ <A HREF="../topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="cgi-bin/ds_form-config=-usr-share-man-info-en_US-a_doc_lib-data-base.cfg.html" TARGET="_top"></A>  ]
+<hr>
+<font color="#a62a2a" size="+2">
+<i>GL3.2 for AIX: Graphics Library (GL) Technical Reference</i></font>
+</center>
+<hr size=3 noshade>
+<H2><A NAME="A64F00F344ttay"></A>makefile Example C Language Program 
+ </H2>
+<A NAME="INDEX2338" REL="I1" TITLE="makefile example program (GL)"></A>
+<A NAME="INDEX2339" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2340" REL="I2" TITLE="example programs"></A>
+<A NAME="INDEX2341" REL="I3" TITLE="makefile"></A>
+<A NAME="INDEX2342" REL="I1" TITLE="GL"></A>
+<A NAME="INDEX2343" REL="I2" TITLE="makefile"></A>
+<A NAME="INDEX2344" REL="I3" TITLE="example program"></A>
+<PRE><A NAME="A64F00F598ttay"></A>all: aliasback aliasfore antialias backface boxcirc circuit
+colored curve1 curve2 curve3 curved cylinder1 cylinder2 depthcue
+doily doublebuff draw font3 gammaramp iobounce local octahedron
+overlay paint patch1 pick1 plate popup prompt screenrotate
+select1 setshade sunflower text tpbig vlsi worms xfonts zbuffer1
+zbuffer2 zoing</PRE>
+<PRE><A NAME="A64F00F779ttay"></A>aliasback.o:&nbsp;&nbsp;&nbsp;aliasback.c
+&nbsp;&nbsp;&nbsp;cc -g -c aliasback.c
+aliasback:&nbsp;&nbsp;&nbsp;aliasback.o
+&nbsp;&nbsp;&nbsp;cc -g -o aliasback aliasback.o -lm -lgl</PRE>
+<PRE><A NAME="A64F00F961ttay"></A>aliasfore.o:&nbsp;&nbsp;&nbsp;aliasfore.c
+&nbsp;&nbsp;&nbsp;cc -g -c aliasfore.c
+aliasfore:&nbsp;&nbsp;&nbsp;aliasfore.o
+&nbsp;&nbsp;&nbsp;cc -g -o aliasfore aliasfore.o -lm -lgl</PRE>
+<PRE><A NAME="A64F010142ttay"></A>antialias.o:&nbsp;&nbsp;&nbsp;antialias.c
+&nbsp;&nbsp;&nbsp;cc -g -c antialias.c
+antialias:&nbsp;&nbsp;&nbsp;antialias.o
+&nbsp;&nbsp;&nbsp;cc -g -o antialias antialias.o -lm -lgl</PRE>
+<PRE><A NAME="A64F010324ttay"></A>backface.o:&nbsp;&nbsp;&nbsp;backface.c
+&nbsp;&nbsp;&nbsp;cc -g -c backface.c
+backface:&nbsp;&nbsp;&nbsp;backface.o
+&nbsp;&nbsp;&nbsp;cc -g -o backface backface.o -lm -lgl</PRE>
+<PRE><A NAME="A64F010502ttay"></A>boxcirc.o:&nbsp;&nbsp;&nbsp;boxcirc.c
+&nbsp;&nbsp;&nbsp;cc -g -c boxcirc.c
+boxcirc:&nbsp;&nbsp;&nbsp;boxcirc.o
+&nbsp;&nbsp;&nbsp;cc -g -o boxcirc boxcirc.o -lm -lgl</PRE>
+<PRE><A NAME="A64F010679ttay"></A>circuit.o:&nbsp;&nbsp;&nbsp;circuit.c
+&nbsp;&nbsp;&nbsp;cc -g -c circuit.c
+circuit:&nbsp;&nbsp;&nbsp;circuit.o
+&nbsp;&nbsp;&nbsp;cc -g -o circuit circuit.o -lm -lgl</PRE>
+<PRE><A NAME="A64F010856ttay"></A>colored.o:&nbsp;&nbsp;&nbsp;colored.c
+&nbsp;&nbsp;&nbsp;cc -g -c colored.c
+colored:&nbsp;&nbsp;&nbsp;colored.o
+&nbsp;&nbsp;&nbsp;cc -g -o colored colored.o -lm -lgl</PRE>
+<PRE><A NAME="A64F011031ttay"></A>curve1.o:&nbsp;&nbsp;&nbsp;curve1.c
+&nbsp;&nbsp;&nbsp;cc -g -c curve1.c
+curve1:&nbsp;&nbsp;&nbsp;curve1.o
+&nbsp;&nbsp;&nbsp;cc -g -o curve1 curve1.o -lm -lgl</PRE>
+<PRE><A NAME="A64F011205ttay"></A>curve2.o:&nbsp;&nbsp;&nbsp;curve2.c
+&nbsp;&nbsp;&nbsp;cc -g -c curve2.c
+curve2:&nbsp;&nbsp;&nbsp;curve2.o
+&nbsp;&nbsp;&nbsp;cc -g -o curve2 curve2.o -lm -lgl</PRE>
+<PRE><A NAME="A64F011380ttay"></A>curve3.o:&nbsp;&nbsp;&nbsp;curve3.c
+&nbsp;&nbsp;&nbsp;cc -g -c curve3.c
+curve3:&nbsp;&nbsp;&nbsp;curve3.o
+&nbsp;&nbsp;&nbsp;cc -g -o curve3 curve3.o -lm -lgl</PRE>
+<PRE><A NAME="A64F011554ttay"></A>curved.o:&nbsp;&nbsp;&nbsp;curved.c
+&nbsp;&nbsp;&nbsp;cc -g -c curved.c
+curved:&nbsp;&nbsp;&nbsp;curved.o
+&nbsp;&nbsp;&nbsp;cc -g -o curved curved.o -lm -lgl</PRE>
+<PRE><A NAME="A64F011736ttay"></A>cylinder1.o:&nbsp;&nbsp;&nbsp;cylinder1.c
+&nbsp;&nbsp;&nbsp;cc -g -c cylinder1.c
+cylinder1:&nbsp;&nbsp;&nbsp;cylinder1.o
+&nbsp;&nbsp;&nbsp;cc -g -o cylinder1 cylinder1.o -lm -lgl</PRE>
+<PRE><A NAME="A64F011916ttay"></A>cylinder2.o:&nbsp;&nbsp;&nbsp;cylinder2.c
+&nbsp;&nbsp;&nbsp;cc -g -c cylinder2.c
+cylinder2:&nbsp;&nbsp;&nbsp;cylinder2.o
+&nbsp;&nbsp;&nbsp;cc -g -o cylinder2 cylinder2.o -lm -lgl</PRE>
+<PRE><A NAME="A64F012095ttay"></A>depthcue.o:&nbsp;&nbsp;&nbsp;depthcue.c
+&nbsp;&nbsp;&nbsp;cc -g -c depthcue.c
+depthcue:&nbsp;&nbsp;&nbsp;depthcue.o
+&nbsp;&nbsp;&nbsp;cc -g -o depthcue depthcue.o -lm -lgl</PRE>
+<PRE><A NAME="A64F012268ttay"></A>doily.o:&nbsp;&nbsp;&nbsp;doily.c
+&nbsp;&nbsp;&nbsp;cc -g -c doily.c
+doily:&nbsp;&nbsp;&nbsp;doily.o
+&nbsp;&nbsp;&nbsp;cc -g -o doily doily.o -lm -lgl</PRE>
+<PRE><A NAME="A64F012452ttay"></A>doublebuff.o:&nbsp;&nbsp;&nbsp;doublebuff.c
+&nbsp;&nbsp;&nbsp;cc -g -c doublebuff.c
+doublebuff:&nbsp;&nbsp;&nbsp;doublebuff.o
+&nbsp;&nbsp;&nbsp;cc -g -o doublebuff doublebuff.o -lm -lgl</PRE>
+<PRE><A NAME="A64F012621ttay"></A>draw.o:&nbsp;&nbsp;&nbsp;draw.c
+&nbsp;&nbsp;&nbsp;cc -g -c draw.c
+draw:&nbsp;&nbsp;&nbsp;draw.o
+&nbsp;&nbsp;&nbsp;cc -g -o draw draw.o -lm -lgl</PRE>
+<PRE><A NAME="A64F012793ttay"></A>font3.o:&nbsp;&nbsp;&nbsp;font3.c
+&nbsp;&nbsp;&nbsp;cc -g -c font3.c
+font3:&nbsp;&nbsp;&nbsp;font3.o
+&nbsp;&nbsp;&nbsp;cc -g -o font3 font3.o -lm -lgl</PRE>
+<PRE><A NAME="A64F012974ttay"></A>gammaramp.o:&nbsp;&nbsp;&nbsp;gammaramp.c
+&nbsp;&nbsp;&nbsp;cc -g -c gammaramp.c
+gammaramp:&nbsp;&nbsp;&nbsp;gammaramp.o
+&nbsp;&nbsp;&nbsp;cc -g -o gammaramp gammaramp.o -lm -lgl</PRE>
+<PRE><A NAME="A64F013153ttay"></A>iobounce.o:&nbsp;&nbsp;&nbsp;iobounce.c
+&nbsp;&nbsp;&nbsp;cc -g -c iobounce.c
+iobounce:&nbsp;&nbsp;&nbsp;iobounce.o
+&nbsp;&nbsp;&nbsp;cc -g -o iobounce iobounce.o -lm -lgl</PRE>
+<PRE><A NAME="A64F013326ttay"></A>local.o:&nbsp;&nbsp;&nbsp;local.c
+&nbsp;&nbsp;&nbsp;cc -g -c local.c
+local:&nbsp;&nbsp;&nbsp;local.o
+&nbsp;&nbsp;&nbsp;cc -g -o local local.o -lm -lgl</PRE>
+<PRE><A NAME="A64F013510ttay"></A>octahedron.o:&nbsp;&nbsp;&nbsp;octahedron.c
+&nbsp;&nbsp;&nbsp;cc -g -c octahedron.c
+octahedron:&nbsp;&nbsp;&nbsp;octahedron.o
+&nbsp;&nbsp;&nbsp;cc -g -o octahedron octahedron.o -lm -lgl</PRE>
+<PRE><A NAME="A64F013685ttay"></A>overlay.o:&nbsp;&nbsp;&nbsp;overlay.c
+&nbsp;&nbsp;&nbsp;cc -g -c overlay.c
+overlay:&nbsp;&nbsp;&nbsp;overlay.o
+&nbsp;&nbsp;&nbsp;cc -g -o overlay overlay.o -lm -lgl</PRE>
+<PRE><A NAME="A64F013857ttay"></A>paint.o:&nbsp;&nbsp;&nbsp;paint.c
+&nbsp;&nbsp;&nbsp;cc -g -c paint.c
+paint:&nbsp;&nbsp;&nbsp;paint.o
+&nbsp;&nbsp;&nbsp;cc -g -o paint paint.o -lm -lgl</PRE>
+<PRE><A NAME="A64F014031ttay"></A>patch1.o:&nbsp;&nbsp;&nbsp;patch1.c
+&nbsp;&nbsp;&nbsp;cc -g -c patch1.c
+patch1:&nbsp;&nbsp;&nbsp;patch1.o
+&nbsp;&nbsp;&nbsp;cc -g -o patch1 patch1.o -lm -lgl</PRE>
+<PRE><A NAME="A64F014203ttay"></A>pick1.o:&nbsp;&nbsp;&nbsp;pick1.c
+&nbsp;&nbsp;&nbsp;cc -g -c pick1.c
+pick1:&nbsp;&nbsp;&nbsp;pick1.o
+&nbsp;&nbsp;&nbsp;cc -g -o pick1 pick1.o -lm -lgl</PRE>
+<PRE><A NAME="A64F014375ttay"></A>plate.o:&nbsp;&nbsp;&nbsp;plate.c
+&nbsp;&nbsp;&nbsp;cc -g -c plate.c
+plate:&nbsp;&nbsp;&nbsp;plate.o
+&nbsp;&nbsp;&nbsp;cc -g -o plate plate.o -lm -lgl</PRE>
+<PRE><A NAME="A64F014547ttay"></A>popup.o:&nbsp;&nbsp;&nbsp;popup.c
+&nbsp;&nbsp;&nbsp;cc -g -c popup.c
+popup:&nbsp;&nbsp;&nbsp;popup.o
+&nbsp;&nbsp;&nbsp;cc -g -o popup popup.o -lm -lgl</PRE>
+<PRE><A NAME="A64F014722ttay"></A>prompt.o:&nbsp;&nbsp;&nbsp;prompt.c
+&nbsp;&nbsp;&nbsp;cc -g -c prompt.c
+prompt:&nbsp;&nbsp;&nbsp;prompt.o
+&nbsp;&nbsp;&nbsp;cc -g -o prompt prompt.o -lm -lgl</PRE>
+<PRE><A NAME="A64F014910ttay"></A>screenrotate.o:&nbsp;&nbsp;&nbsp;screenrotate.c
+&nbsp;&nbsp;&nbsp;cc -g -c screenrotate.c
+screenrotate:&nbsp;&nbsp;&nbsp;screenrotate.o
+&nbsp;&nbsp;&nbsp;cc -g -o screenrotate screenrotate.o -lm -lgl</PRE>
+<PRE><A NAME="A64F015086ttay"></A>select1.o:&nbsp;&nbsp;&nbsp;select1.c
+&nbsp;&nbsp;&nbsp;cc -g -c select1.c
+select1:&nbsp;&nbsp;&nbsp;select1.o
+&nbsp;&nbsp;&nbsp;cc -g -o select1 select1.o -lm -lgl</PRE>
+<PRE><A NAME="A64F015266ttay"></A>setshade.o:&nbsp;&nbsp;&nbsp;setshade.c
+&nbsp;&nbsp;&nbsp;cc -g -c setshade.c
+setshade:&nbsp;&nbsp;&nbsp;setshade.o
+&nbsp;&nbsp;&nbsp;cc -g -o setshade setshade.o -lm -lgl</PRE>
+<PRE><A NAME="A64F015449ttay"></A>sunflower.o:&nbsp;&nbsp;&nbsp;sunflower.c
+&nbsp;&nbsp;&nbsp;cc -g -c sunflower.c
+sunflower:&nbsp;&nbsp;&nbsp;sunflower.o
+&nbsp;&nbsp;&nbsp;cc -g -o sunflower sunflower.o -lm -lgl</PRE>
+<PRE><A NAME="A64F015618ttay"></A>text.o:&nbsp;&nbsp;&nbsp;text.c
+&nbsp;&nbsp;&nbsp;cc -g -c text.c
+text:&nbsp;&nbsp;&nbsp;text.o
+&nbsp;&nbsp;&nbsp;cc -g -o text text.o -lm -lgl</PRE>
+<PRE><A NAME="A64F015790ttay"></A>tpbig.o:&nbsp;&nbsp;&nbsp;tpbig.c
+&nbsp;&nbsp;&nbsp;cc -g -c tpbig.c
+tpbig:&nbsp;&nbsp;&nbsp;tpbig.o
+&nbsp;&nbsp;&nbsp;cc -g -o tpbig tpbig.o -lm -lgl</PRE>
+<PRE><A NAME="A64F015959ttay"></A>vlsi.o:&nbsp;&nbsp;&nbsp;vlsi.c
+&nbsp;&nbsp;&nbsp;cc -g -c vlsi.c
+vlsi:&nbsp;&nbsp;&nbsp;vlsi.o
+&nbsp;&nbsp;&nbsp;cc -g -o vlsi vlsi.o -lm -lgl</PRE>
+<PRE><A NAME="A64F016130ttay"></A>worms.o:&nbsp;&nbsp;&nbsp;worms.c
+&nbsp;&nbsp;&nbsp;cc -g -c worms.c
+worms:&nbsp;&nbsp;&nbsp;worms.o
+&nbsp;&nbsp;&nbsp;cc -g -o worms worms.o -lm -lgl</PRE>
+<PRE><A NAME="A64F016306ttay"></A>xfonts.o:&nbsp;&nbsp;&nbsp;xfonts.c
+&nbsp;&nbsp;&nbsp;cc -g -c xfonts.c
+xfonts:&nbsp;&nbsp;&nbsp;xfonts.o
+&nbsp;&nbsp;&nbsp;cc -g -o xfonts xfonts.o -lm -lgl -lX11</PRE>
+<PRE><A NAME="A64F016485ttay"></A>zbuffer1.o:&nbsp;&nbsp;&nbsp;zbuffer1.c
+&nbsp;&nbsp;&nbsp;cc -g -c zbuffer1.c
+zbuffer1:&nbsp;&nbsp;&nbsp;zbuffer1.o
+&nbsp;&nbsp;&nbsp;cc -g -o zbuffer1 zbuffer1.o -lm -lgl</PRE>
+<PRE><A NAME="A64F016663ttay"></A>zbuffer2.o:&nbsp;&nbsp;&nbsp;zbuffer2.c
+&nbsp;&nbsp;&nbsp;cc -g -c zbuffer2.c
+zbuffer2:&nbsp;&nbsp;&nbsp;zbuffer2.o
+&nbsp;&nbsp;&nbsp;cc -g -o zbuffer2 zbuffer2.o -lm -lgl</PRE>
+<PRE><A NAME="A64F016834ttay"></A>zoing.o:&nbsp;&nbsp;&nbsp;zoing.c
+&nbsp;&nbsp;&nbsp;cc -g -c zoing.c
+zoing:&nbsp;&nbsp;&nbsp;zoing.o
+&nbsp;&nbsp;&nbsp;cc -g -o zoing zoing.o -lm -lgl</PRE>
+
+<H3><A NAME="A64F1A0542ttay"></A>Related Information</H3><hr><center>
+[  <a href="localatten_c.html">Previous</a>  |
+<a href="octahedron_c.html">Next</a>  |
+<A HREF="toc.html" TARGET="_parent">Contents</A>  
+ <A HREF="specialterms.html">| Glossary</A>  
+ <A HREF="../topnav/topnav.html" TARGET="_top"></A>  
+ <A HREF="/cgi-bin/ds_form?config=/usr/share/man/info/en_US/a_doc_lib/data/base.cfg" TARGET="_top"></A>  ]
+</center></BODY>
+
+</HTML>
+
+
