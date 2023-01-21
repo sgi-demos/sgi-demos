@@ -9,5 +9,5 @@ BIN_DIR = ../demo_bin
 OPT_NONE = -O0 -g
 OPT_TWO = -DNDEBUG -O2 -g
 OPT_LEVEL = $(OPT_NONE)
-EMCC = emcc -std=c90
+EMCC = emcc -std=c90 --emrun
 CC = cc -std=c90

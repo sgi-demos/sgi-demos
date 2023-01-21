@@ -2,17 +2,20 @@
 
 include ../platform.mk
 
-APP=$(BIN_DIR)/insect
+APP=insect
+EMAPP=$(APP).html
 SRC=insect.c mat.c parts.c
 
-$(APP): $(SRC) insect.h $(LIBGL_SRC)
-	$(CC) $(OPT_LEVEL) $(DEMO_INC) \
-		$(DEMO_WARN_OFF) \
-		-o $(APP) $(SRC) $(LIBGL_SRC) -lm
+$(EMAPP): $(SRC) insect.h $(LIBGL_SRC)
+	$(EMCC) \
+		$(DEMO_WARN_OFF_EM) \
+		$(DEMO_INC) $(SRC) $(LIBGL_SRC) \
+		-s WASM=0 -o $(EMAPP)
 
-run: $(APP)
-	$(APP)
+run: $(EMAPP)
+	emrun $(EMAPP)
 
 clean:
-	rm -f $(APP)
-	rm -rf $(APP).dSYM
+	rm -f $(EMAPP)
+	rm -f $(APP).js
+	rm -f $(APP).wasm

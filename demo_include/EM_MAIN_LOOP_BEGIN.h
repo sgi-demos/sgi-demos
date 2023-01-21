@@ -8,12 +8,20 @@
    Longer term, look into web/WASM worker in which the demo can happily run with source unmmodified,
    with events communicated to it from the main Emscripten thread via shared memory. For now though,
    we just want to get some old SGI pixels in the browser.
+
+    arg = User-defined data
+    fps = Use browser's requestAnimationFrame (recommended)
+    simulate_infinite_loop = Throw an exception in order to stop execution of the caller
+
 */
 #define while \
-    emscripten_set_main_loop_arg(&mainLoop, NULL, 0, 0); \
+    void *arg = NULL; \
+    int fps = 0; \
+    int simulate_infinite_loop = FALSE; \
+    emscripten_set_main_loop_arg(&mainLoop, arg, fps, simulate_infinite_loop); \
 } \
 \
-void mainLoop() \
+void mainLoop(void *arg) \
 { \
     static short dev; \
     static short val; \
