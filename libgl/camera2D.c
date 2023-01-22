@@ -1,12 +1,9 @@
-//#include <algorithm>
-//#include <SDL.h>
-//#include <SDL_opengles2.h>
 #include "camera2D.h"
 
 #define false 0
 #define true 1
 
-static const int cInitWidth = 800, cInitHeight = 480;
+static const int cWinWidth = 800, cWinHeight = 480;
 static const float cZoomMin = 0.1, cZoomMax = 10.0f;
 
 typedef struct {
@@ -24,12 +21,12 @@ static Camera2D activeCam = (Camera2D)
 { 
     .updated    = true, 
     .winResized = true, 
-    .winSize    = (Size2D) { .width = cInitWidth, .height = cInitHeight },
-    .viewport   = (Vec2D) { .x = cInitWidth, .y = cInitHeight },
-    .basePan    = (Vec2D) { .x = 0.0, .y = 0.0 },
-    .pan        = (Vec2D) { .x = 0.0, .y = 0.0 },
+    .winSize    = (Size2D){ cWinWidth, cWinHeight },
+    .viewport   = (Vec2D) { cWinWidth, cWinHeight },
+    .basePan    = (Vec2D) { 0.0, 0.0 },
+    .pan        = (Vec2D) { 0.0, 0.0 },
     .zoom       = 1.0,
-    .aspect     = cInitWidth / (float)cInitHeight
+    .aspect     = cWinWidth / (float)cWinHeight
 };
    
 bool cam2DUpdated()
@@ -46,21 +43,23 @@ bool cam2DWindowResized()
     return resized;
 }
 
-Size2D cam2DWindowSize() { return activeCam.winSize; }
-Vec2D cam2DViewport() { return activeCam.viewport; }
-Vec2D cam2DBasePan() { return activeCam.basePan; }
-Vec2D cam2DPan() { return activeCam.pan; }
-float cam2DZoom() { return activeCam.zoom; }
-float cam2DAspect() { return activeCam.aspect; }
+Size2D cam2DWindowSize(){ return activeCam.winSize; }
+Vec2D cam2DViewport()   { return activeCam.viewport; }
+Vec2D cam2DBasePan()    { return activeCam.basePan; }
+Vec2D cam2DPan()        { return activeCam.pan; }
+float cam2DZoom()       { return activeCam.zoom; }
+float cam2DAspect()     { return activeCam.aspect; }
 
-void cam2DSetWindowSize(int width, int height)
+void cam2DSetWindowSize(Size2D winSize)
 {
-    if (activeCam.winSize.width != width || activeCam.winSize.height != height)
+    if (activeCam.winSize.width != winSize.width || 
+        activeCam.winSize.height != winSize.height)
     {
         activeCam.winResized = true;
-        activeCam.winSize = (Size2D) { .width = 0, .height = 0 };
-        activeCam.viewport = (Vec2D) { .x = (float)width, .y = (float)height };
-        cam2DSetAspect(width / (float)height);
+        activeCam.winSize = winSize; 
+        activeCam.viewport = (Vec2D) { .x = (float)winSize.width, 
+                                       .y = (float)winSize.height };
+        cam2DSetAspect(winSize.width / (float)winSize.height);
     }
 }
 
@@ -108,39 +107,39 @@ void cam2DSetBasePan ()
 }
 
 // Convert from normalized window coords (x,y) in ([0.0, 1.0], [1.0, 0.0]) to device coords ([-1.0, 1.0], [-1.0,1.0])
-void cam2DNormWindowToDevice (float normWinX, float normWinY, float* deviceX, float* deviceY)
+void cam2DNormWindowToDevice (Vec2D normWin, Vec2D* device)
 {
-    *deviceX = (normWinX - 0.5f) * 2.0f;
-    *deviceY = (1.0f - normWinY - 0.5f) * 2.0f;
+    device->x = (normWin.x - 0.5f) * 2.0f;
+    device->y = (1.0f - normWin.y - 0.5f) * 2.0f;
 }
 
 // Convert from window coords (x,y) in ([0, winSize.width], [winSize.height, 0]) to device coords ([-1.0, 1.0], [-1.0,1.0])
-void cam2DWindowToDevice (int winX, int winY, float* deviceX, float* deviceY)
+void cam2DWindowToDevice (Pixel2D win, Vec2D* device)
 {
-    cam2DNormWindowToDevice(winX / (float)activeCam.winSize.width,  
-                            winY / (float)activeCam.winSize.height,
-                            deviceX, deviceY);
+    Vec2D normWin = { win.x / (float)activeCam.winSize.width,  
+                      win.y / (float)activeCam.winSize.height };
+    cam2DNormWindowToDevice(normWin, device);
 }
 
 // Convert from device coords ([-1.0, 1.0], [-1.0,1.0]) to world coords ([-inf, inf], [-inf, inf])
-void cam2DDeviceToWorld (float deviceX, float deviceY, float* worldX, float* worldY)
+void cam2DDeviceToWorld (Vec2D device, Vec2D* world)
 {
-    *worldX = deviceX / activeCam.zoom - activeCam.pan.x;
-    *worldY = deviceY / activeCam.aspect / activeCam.zoom - activeCam.pan.y;
+    world->x = device.x / activeCam.zoom - activeCam.pan.x;
+    world->y = device.y / activeCam.aspect / activeCam.zoom - activeCam.pan.y;
 }
 
 // Convert from window coords (x,y) in ([0, windowWidth], [windowHeight, 0]) to world coords ([-inf, inf], [-inf, inf])
-void cam2DWindowToWorld(int winX, int winY, float* worldX, float* worldY)
+void cam2DWindowToWorld(Pixel2D win, Vec2D* world)
 {
-    float deviceX, deviceY;
-    cam2DWindowToDevice(winX, winY, &deviceX, &deviceY);   
-    cam2DDeviceToWorld(deviceX, deviceY, worldX, worldY);
+    Vec2D device; 
+    cam2DWindowToDevice(win, &device);   
+    cam2DDeviceToWorld(device, world);
 }
 
 // Convert from normalized window coords (x,y) in in ([0.0, 1.0], [1.0, 0.0]) to world coords ([-inf, inf], [-inf, inf])
-void cam2DNormWindowToWorld(float normWinX, float normWinY, float* worldX, float* worldY)
+void cam2DNormWindowToWorld(Vec2D normWin, Vec2D* world)
 {
-    float deviceX, deviceY;
-    cam2DNormWindowToDevice(normWinX, normWinY, &deviceX, &deviceY);
-    cam2DDeviceToWorld(deviceX, deviceY, worldX, worldY);
+    Vec2D device; 
+    cam2DNormWindowToDevice(normWin, &device);
+    cam2DDeviceToWorld(device, world);
 }

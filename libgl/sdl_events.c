@@ -1,15 +1,14 @@
-//#include <algorithm>
 #include <SDL.h>
 #include <SDL_opengles2.h>
 #include "sdl_events.h"
 #include "camera2D.h"
 
-// #define SDL_EVENTS_DEBUG
 #define false 0
 #define true 1
 
 static const float cMouseWheelZoomDelta = 0.05;
-static const float cPinchZoomThreshold = 0.001, cPinchScale = 8.0;
+static const float cPinchZoomThreshold = 0.001, 
+                   cPinchScale = 8.0;
 
 typedef struct
 {
@@ -19,20 +18,20 @@ typedef struct
 
     // Mouse input
     bool mouseButtonDown;
-    int mouseButtonDownX, mouseButtonDownY;
-    int mousePositionX, mousePositionY;
+    Pixel2D mouseButtonDownCoord;
+    Pixel2D mousePosition;
 
     // Finger input
     bool fingerDown;
-    float fingerDownX, fingerDownY;
+    Vec2D fingerDownCoord;
     long long fingerDownId;
 
     // Pinch input
     bool pinch;
 
-} SDLEventHandler;
+} SDLEventState;
 
-static SDLEventHandler events = (SDLEventHandler)
+static SDLEventState events = (SDLEventState)
 {
     // Window
     .pWindow = NULL,
@@ -40,22 +39,22 @@ static SDLEventHandler events = (SDLEventHandler)
  
     // Mouse input
     .mouseButtonDown = false,
-    .mouseButtonDownX = 0, .mouseButtonDownY = 0,
-    .mousePositionX = 0, .mousePositionY = 0,
+    .mouseButtonDownCoord = {0, 0},
+    .mousePosition = {0, 0},
 
     // Finger input
     .fingerDown = false,
-    .fingerDownX = 0.0, .fingerDownY = 0.0,
+    .fingerDownCoord = {0.0, 0.0},
     .fingerDownId = 0,
 
     // Pinch input
     .pinch = false
 };
 
-void windowResizeEvent(int width, int height)
+void windowResizeEvent(Size2D winSize)
 {
-    glViewport(0, 0, width, height);
-    cam2DSetWindowSize(width, height);
+    glViewport(0, 0, winSize.width, winSize.height);
+    cam2DSetWindowSize(winSize);
 }
 
 void sdlEventsInit(const char* windowTitle)
@@ -80,7 +79,7 @@ void sdlEventsInit(const char* windowTitle)
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     // Initialize viewport
-    windowResizeEvent(cam2DWindowSize().width, cam2DWindowSize().height);
+    windowResizeEvent(cam2DWindowSize());
 }
 
 void sdlEventsSwapWindow()
@@ -90,59 +89,59 @@ void sdlEventsSwapWindow()
 
 void zoomEventMouse(bool mouseWheelDown)
 {                
-    float preZoomWorldX, preZoomWorldY;
-    cam2DWindowToWorld(events.mousePositionX, events.mousePositionY, &preZoomWorldX, &preZoomWorldY);
+    Vec2D preZoomWorld;
+    cam2DWindowToWorld(events.mousePosition, &preZoomWorld);
 
     // Zoom by scaling up/down in 0.05 increments 
     float zoomDelta = mouseWheelDown ? -cMouseWheelZoomDelta : cMouseWheelZoomDelta;
     cam2DSetZoomDelta(zoomDelta);
 
     // Zoom to point: Keep the world coords under events.mouse position the same before and after the zoom
-    float postZoomWorldX, postZoomWorldY;
-    cam2DWindowToWorld(events.mousePositionX, events.mousePositionY, &postZoomWorldX, &postZoomWorldY);
-    Vec2D deltaWorld = { postZoomWorldX - preZoomWorldX, postZoomWorldY - preZoomWorldY };
+    Vec2D postZoomWorld;
+    cam2DWindowToWorld(events.mousePosition, &postZoomWorld);
+    Vec2D deltaWorld = { postZoomWorld.x - preZoomWorld.x, postZoomWorld.y - preZoomWorld.y };
     cam2DSetPanDelta (deltaWorld);
 }
 
-void zoomEventPinch (float pinchDist, float pinchX, float pinchY)
+void zoomEventPinch (float pinchDist, Vec2D pinchCoord)
 {
-    float preZoomWorldX, preZoomWorldY;
-    cam2DWindowToWorld(pinchX, pinchY, &preZoomWorldX, &preZoomWorldY);
+    Vec2D preZoomWorld;
+    cam2DNormWindowToWorld(pinchCoord, &preZoomWorld);
 
-    // Zoom in/out by positive/negative events.pinch distance
+    // Zoom in/out by positive/negative pinch distance
     float zoomDelta = pinchDist * cPinchScale;
     cam2DSetZoomDelta(zoomDelta);
 
     // Zoom to point: Keep the world coords under events.pinch position the same before and after the zoom
-    float postZoomWorldX, postZoomWorldY;
-    cam2DWindowToWorld(pinchX, pinchY, &postZoomWorldX, &postZoomWorldY);
-    Vec2D deltaWorld = { postZoomWorldX - preZoomWorldX, postZoomWorldY - preZoomWorldY };
+    Vec2D postZoomWorld;
+    cam2DNormWindowToWorld(pinchCoord, &postZoomWorld);
+    Vec2D deltaWorld = { postZoomWorld.x - preZoomWorld.x, postZoomWorld.y - preZoomWorld.y };
     cam2DSetPanDelta (deltaWorld);
 }
 
-void panEventMouse(int x, int y)
+void panEventMouse(Pixel2D mousePos)
 { 
-     int deltaX = cam2DWindowSize().width / 2 + (x - events.mouseButtonDownX),
-         deltaY = cam2DWindowSize().height / 2 + (y - events.mouseButtonDownY);
+    Pixel2D delta = { cam2DWindowSize().width / 2 + (mousePos.x - events.mouseButtonDownCoord.x),
+                      cam2DWindowSize().height / 2 + (mousePos.y - events.mouseButtonDownCoord.y) };
 
-    float deviceX, deviceY;
-    cam2DWindowToDevice(deltaX,  deltaY, &deviceX, &deviceY);
+    Vec2D device;
+    cam2DWindowToDevice(delta, &device);
 
-    Vec2D pan = { cam2DBasePan().x + deviceX / cam2DZoom(), 
-                  cam2DBasePan().y + deviceY / cam2DZoom() / cam2DAspect() };
+    Vec2D pan = { cam2DBasePan().x + device.x / cam2DZoom(), 
+                  cam2DBasePan().y + device.y / cam2DZoom() / cam2DAspect() };
     cam2DSetPan(pan);
 }
 
-void panEventFinger(float x, float y)
+void panEventFinger(Vec2D fingerCoord)
 { 
-    float deltaX = 0.5f + (x - events.fingerDownX),
-          deltaY = 0.5f + (y - events.fingerDownY);
+    Vec2D delta = { 0.5f + (fingerCoord.x - events.fingerDownCoord.x),
+                    0.5f + (fingerCoord.y - events.fingerDownCoord.y) };
 
-    float deviceX, deviceY;
-    cam2DWindowToDevice(deltaX,  deltaY, &deviceX, &deviceY);
+    Vec2D device;
+    cam2DNormWindowToDevice(delta, &device);
 
-    Vec2D pan = { cam2DBasePan().x + deviceX / cam2DZoom(), 
-                  cam2DBasePan().y + deviceY / cam2DZoom() / cam2DAspect() };
+    Vec2D pan = { cam2DBasePan().x + device.x / cam2DZoom(), 
+                  cam2DBasePan().y + device.y / cam2DZoom() / cam2DAspect() };
     cam2DSetPan(pan);
 }
 
@@ -162,8 +161,8 @@ void sdlEventsProcess()
                 if (event.window.windowID == events.windowID
                     && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
                 {
-                    int width = event.window.data1, height = event.window.data2;
-                    windowResizeEvent(width, height);
+                    Size2D winSize = { event.window.data1, event.window.data2 };
+                    windowResizeEvent(winSize);
                 }
                 break;
             }
@@ -173,9 +172,6 @@ void sdlEventsProcess()
                 // SDL_MOUSEWHEEL regression? 
                 // m->y no longer reliable (often y is 0 when events.mouse wheel is spun up or down), use m->preciseY instead
                 SDL_MouseWheelEvent *m = (SDL_MouseWheelEvent*)&event;
-            	#ifdef EVENTS_DEBUG
-                	printf ("SDL_MOUSEWHEEL= x,y=%d,%d preciseX,preciseY=%f,%f\n", m->x, m->y, m->preciseX, m->preciseY);
-            	#endif
             	bool mouseWheelDown = (m->preciseY < 0.0);
             	zoomEventMouse(mouseWheelDown);
             	break;
@@ -184,10 +180,9 @@ void sdlEventsProcess()
             case SDL_MOUSEMOTION: 
             {
                 SDL_MouseMotionEvent *m = (SDL_MouseMotionEvent*)&event;
-                events.mousePositionX = m->x;
-                events.mousePositionY = m->y;
+                events.mousePosition = (Pixel2D) { (int)m->x, (int)m->y };
                 if (events.mouseButtonDown && !events.fingerDown && !events.pinch)
-                    panEventMouse(events.mousePositionX, events.mousePositionY);
+                    panEventMouse(events.mousePosition);
                 break;
             }
 
@@ -197,8 +192,8 @@ void sdlEventsProcess()
                 if (m->button == SDL_BUTTON_LEFT && !events.fingerDown && !events.pinch)
                 {
                     events.mouseButtonDown = true;
-                    events.mouseButtonDownX = m->x;
-                    events.mouseButtonDownY = m->y;
+                    events.mouseButtonDownCoord = 
+                        (Pixel2D) { (int)m->x, (int)m->y };
                     cam2DSetBasePan();
                 }
                 break;
@@ -219,7 +214,10 @@ void sdlEventsProcess()
 
                     // Finger down and finger moving must match
                     if (m->fingerId == events.fingerDownId)
-                        panEventFinger(m->x, m->y);
+                    {
+                        Vec2D fingerCoord = (Vec2D) {m->x, m->y};
+                        panEventFinger(fingerCoord);
+                    }
                 }
                 break;
 
@@ -232,10 +230,8 @@ void sdlEventsProcess()
                     else
                     {
                         SDL_TouchFingerEvent *m = (SDL_TouchFingerEvent*)&event;
-
                         events.fingerDown = true;
-                        events.fingerDownX = m->x;
-                        events.fingerDownY = m->y;
+                        events.fingerDownCoord = (Vec2D) { m->x, m->y };
                         events.fingerDownId = m->fingerId;
                         cam2DSetBasePan();
                     }
@@ -250,7 +246,8 @@ void sdlEventsProcess()
                     events.pinch = true;
                     events.fingerDown = false;
                     events.mouseButtonDown = false;
-                    zoomEventPinch(m->dDist, m->x, m->y);
+                    Vec2D pinchCoord = (Vec2D) { m->x, m->y };
+                    zoomEventPinch(m->dDist, pinchCoord);
                 }
                 break;
             }
@@ -260,12 +257,5 @@ void sdlEventsProcess()
                 events.pinch = false;
                 break;
         }
-
-        #ifdef SDL_EVENTS_DEBUG
-            printf ("event=%d events.mousePos=%d,%d events.mouseButtonDown=%d events.fingerDown=%d events.pinch=%d aspect=%f window=%dx%d\n", 
-                    event.type, events.mousePositionX, events.mousePositionY, events.mouseButtonDown, events.fingerDown, events.pinch, 
-                    cam2DAspect(), cam2DWindowSize().width, cam2DWindowSize().height);      
-            printf ("    zoom=%f pan=%f,%f\n", cam2DZoom(), cam2Dpan().x, cam2Dpan().x);
-        #endif
     }
 }
