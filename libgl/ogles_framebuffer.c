@@ -219,8 +219,15 @@ void initTexture()
 
     // Create grey checkerboard image with yellow border
     int bitsPerPixel = 32;
+    SDL_Surface* bgImage = SDL_CreateRGBSurface(0, 800, 480, bitsPerPixel, 0, 0, 0, 0);
+    unsigned int* bgImagePixels = (unsigned int*)bgImage->pixels;
+    extern unsigned char *gl_framebuffer;
+    memcpy(bgImagePixels, gl_framebuffer, 800*480*4);
+
+#if 0
     SDL_Surface* bgImage = SDL_CreateRGBSurface(0, winWidth, winHeight, bitsPerPixel, 0, 0, 0, 0);
     unsigned int* bgImagePixels = (unsigned int*)bgImage->pixels;
+    
     for (int y = 0; y < bgImage->h; ++y)
         for (int x = 0; x < bgImage->w; ++x)
         {
@@ -238,6 +245,7 @@ void initTexture()
                     bgImagePixels[i] = 0xff808080; // dark grey
             }
         }
+#endif
 
     // OpenGLES requires power of 2 dimension textures, so create the smallest
     // power of 2 image that fits the background image, along with 1 texel border
@@ -290,6 +298,28 @@ void initTexture()
     SDL_FreeSurface (bgImage); 
 }
 
+void updateTexture()
+{
+	if (0)
+	{
+        static unsigned char grayLevel = 0;
+        unsigned int* texPixels = (unsigned int*)bgImageTexture->pixels;
+        memset(texPixels, grayLevel, bgImageTexture->w * bgImageTexture->h * bgImageTexture->format->BytesPerPixel);
+
+        GLint level = 0, xoffset = 0, yoffset = 0;
+        GLsizei width = bgImageTexture->w, height = bgImageTexture->h;
+        GLenum format = GL_RGBA, type = GL_UNSIGNED_BYTE;
+        const GLvoid * data = texPixels;
+
+        glBindTexture(GL_TEXTURE_2D, textureObj);
+        glTexSubImage2D(GL_TEXTURE_2D, level, xoffset, yoffset, width, height, format, type, data);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        grayLevel = (grayLevel + 10) % 255;
+	}
+}
+
+
 void redraw()
 {
     // Clear screen
@@ -319,7 +349,7 @@ void main_loop(void* main_loop_arg)
     sdlEventsProcess();
 
     // Re-initialize texture if window resized
-    if (cam2DWindowResized())
+    //if (cam2DWindowResized())
         initTexture();
 
     // Update shader if camera changed

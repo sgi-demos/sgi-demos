@@ -11,6 +11,8 @@
 
 static const int32_t DISPLAY_WIDTH = XMAXSCREEN + 1;
 static const int32_t DISPLAY_HEIGHT = YMAXSCREEN + 1;
+
+static int gen_ppm_frame_files = 0;
 static int snap_vertices = 0;
 
 static float the_linewidth;
@@ -21,7 +23,7 @@ static int zbuffer_enabled;
 typedef uint16_t z_t;
 
 static unsigned char pixel_colors[YMAXSCREEN + 1][XMAXSCREEN + 1][4];
-static unsigned char *hwfb = NULL;
+unsigned char *gl_framebuffer = &pixel_colors[0][0][0];
 static z_t pixel_depths[YMAXSCREEN + 1][XMAXSCREEN + 1];
 static const int Z_SHIFT = 16;
 
@@ -214,13 +216,8 @@ void rasterizer_swap()
 {
     static int frame = 0;
 
-    if(hwfb != NULL) {
-
-	    memcpy(hwfb, pixel_colors, DISPLAY_WIDTH * DISPLAY_HEIGHT * 4);
-        printf("Swapped (copied) HW framebuffer %dx%d frame %d\n",DISPLAY_WIDTH, DISPLAY_HEIGHT, frame);
-
-    } else {
-
+    if (gen_ppm_frame_files) 
+    {
         char name[128];
         sprintf(name, "frame%04d.ppm", frame);
         FILE *fp = fopen(name, "wb");
@@ -238,16 +235,13 @@ void rasterizer_swap()
 
 int32_t rasterizer_winopen(char *title)
 {
-    // In-memory framebuffer by default, USE_FRAMEPPMFILES to output each frame to .ppm file
-    if(getenv("USE_FRAMEPPMFILES") == NULL) {
-        if (hwfb != NULL)
-            free(hwfb);
-        hwfb = (unsigned char *)malloc(DISPLAY_WIDTH * DISPLAY_HEIGHT * 4 * sizeof(unsigned char *));
-        printf("Created HW framebuffer %dx%d\n",DISPLAY_WIDTH,DISPLAY_HEIGHT);
-    }
-
     rasterizer_clear(0, 0, 0);
     rasterizer_zclear(0xffffffff);
+
+    if(getenv("GEN_FRAME_PPM_FILES") != NULL) {
+        gen_ppm_frame_files = 1;
+        printf("Generating .PPM file for each frame\n");
+    }
 
     if(getenv("SNAP_VERTICES") != NULL) {
         snap_vertices = 1;
