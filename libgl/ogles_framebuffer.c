@@ -292,9 +292,6 @@ void initTexture()
 
 void redraw()
 {
-    //static int frameCt = 0;
-    //printf("INFO: frame %d\n", frameCt++);
-
     // Clear screen
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -317,7 +314,7 @@ void redraw()
     sdlEventsSwapWindow();
 }
 
-void mainLoop(void* mainLoopArg) 
+void main_loop(void* main_loop_arg) 
 {    
     sdlEventsProcess();
 
@@ -329,31 +326,36 @@ void mainLoop(void* mainLoopArg)
     if (cam2DUpdated())
         updateShader();
 
-    // childMainLoop(mainLoopArg);
+    // Run child main loop
+    extern void child_main_loop(void *main_loop_arg);
+    child_main_loop(main_loop_arg);
 
     redraw();
 }
 
 int main(int argc, char** argv)
 {
+    // Initialize SDL window
     sdlEventsInit("SGI demo");
 
-    // Initialize graphics
+    // Initialize OGLES graphics
     initShaders();
     initGeometry();
     initTexture();
 
-    // Start the main loop
-    void* mainLoopArg = NULL; // User-defined data
+    // Run child main
+    child_main(argc, argv);
 
-#ifdef __EMSCRIPTEN__
-    int fps = 0; // Use browser's requestAnimationFrame to determine FPS (recommended)
-    int simulate_infinite_loop = 0; // Throw an exception in order to stop execution of the caller
-    emscripten_set_main_loop_arg(mainLoop, mainLoopArg, fps, simulate_infinite_loop);
-#else
-    while(true) 
-        mainLoop(mainLoopArg);
-#endif
+    // Start the main loop
+    void* main_loop_arg = NULL; // User-defined data to pass to main_loop() and child_main_loop()
+    #ifdef __EMSCRIPTEN__
+        int fps = 0; // Set to 0 to use browser's requestAnimationFrame (Emscripten recommended)
+        int simulate_infinite_loop = 0; // Throw an exception in order to stop execution of the caller
+        emscripten_set_main_loop_arg(main_loop, main_loop_arg, fps, simulate_infinite_loop);
+    #else
+        while(true) 
+            main_loop(main_loop_arg);
+    #endif
 
     freeTexture();
     return 0;

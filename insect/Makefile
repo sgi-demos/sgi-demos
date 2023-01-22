@@ -6,11 +6,12 @@ APP=insect
 EMAPP=$(APP).html
 SRC=insect.c mat.c parts.c
 
-$(EMAPP): $(SRC) insect.h $(LIBGL_SRC)
+$(EMAPP): $(SRC) insect.h $(LIBGL_SRC) $(EM_SRC)
 	$(EMCC) \
 		$(DEMO_WARN_OFF_EM) \
-		$(DEMO_INC) $(SRC) $(LIBGL_SRC) \
-		-s WASM=0 -o $(EMAPP)
+		$(DEMO_INC) $(SRC) $(LIBGL_SRC) $(EM_SRC) \
+		-s WASM=0 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s FULL_ES2=1 \
+		-o $(EMAPP)
 
 run: $(EMAPP)
 	emrun $(EMAPP)

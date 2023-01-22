@@ -1,6 +1,7 @@
 RASTERIZER_SRCS = ../libgl/reference_rasterizer.c
 EVENTS_SRCS = ../libgl/dummy_events.c
 LIBGL_SRC = ../libgl/gl.c ../libgl/vector.c $(RASTERIZER_SRCS) $(EVENTS_SRCS)
+EM_SRC = ../libgl/camera2D.c ../libgl/sdl_events.c ../libgl/ogles_framebuffer.c
 LIBGL_INC = -I../sys_include
 DEMO_INC = $(LIBGL_INC) -I../demo_include
 DEMO_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat

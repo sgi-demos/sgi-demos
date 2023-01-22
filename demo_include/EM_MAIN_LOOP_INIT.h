@@ -1,21 +1,18 @@
 /* 
-    Stub emscripten_set_main_loop_arg() as preperation for running in Emscrpiten.
-    This takes place of the forever loops in the demos, with Emscripten calling 
-    into the demo's event loop whenever a new input, redraw, etc. event occurs.   
+    Declare child main, main loop, and child main loop.  Child main will be called
+    by main, to allow child app to set up before its loop.  Main loop is the Emscripten
+    main event/redraw loop. This takes place of the forever loops in the child apps, 
+    with Emscripten calling into the child app's event loop whenever a new input, 
+    redraw, etc. event occurs.   
 */
 #ifndef EM_MAIN_LOOP_INIT
-
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#endif
-
 #define EM_MAIN_LOOP_INIT
-void mainLoop(void *arg);
-// typedef void (*em_arg_callback_func)(void*);
-// void emscripten_set_main_loop_arg(em_arg_callback_func func, void *arg, int fps, int simulate_infinite_loop)
-// {
-//     while(TRUE)
-//         func(arg);
-// }
+
+// main loop of parent app (Emscripten main loop)
+extern void main_loop(void *arg);
+
+// main and main loop for child app
+extern int child_main (int argc, char* argv[]); // Will be called by main()
+extern void child_main_loop(void *arg);         // Will be called by main_loop()
 
 #endif
