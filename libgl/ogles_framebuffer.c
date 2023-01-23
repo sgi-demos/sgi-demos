@@ -217,35 +217,36 @@ void initTexture()
     winWidth = min(winWidth, maxTextureSize);
     winHeight = min(winHeight, maxTextureSize);
 
-    // Create grey checkerboard image with yellow border
     int bitsPerPixel = 32;
-    SDL_Surface* bgImage = SDL_CreateRGBSurface(0, 800, 480, bitsPerPixel, 0, 0, 0, 0);
-    unsigned int* bgImagePixels = (unsigned int*)bgImage->pixels;
-    extern unsigned char *gl_framebuffer;
-    memcpy(bgImagePixels, gl_framebuffer, 800*480*4);
 
-#if 0
-    SDL_Surface* bgImage = SDL_CreateRGBSurface(0, winWidth, winHeight, bitsPerPixel, 0, 0, 0, 0);
-    unsigned int* bgImagePixels = (unsigned int*)bgImage->pixels;
-    
-    for (int y = 0; y < bgImage->h; ++y)
-        for (int x = 0; x < bgImage->w; ++x)
-        {
-            const int i = x+y*bgImage->w;
-            if (y == 0 || x == 0 || y == bgImage->h-1 || x == bgImage->w - 1)
-                bgImagePixels[i] = 0xff00ffff; // yellow
-            else 
+    #ifdef TEST_OGLES_FRAMEBUFFER
+        // Create grey checkerboard image with yellow border
+        SDL_Surface* bgImage = SDL_CreateRGBSurface(0, winWidth, winHeight, bitsPerPixel, 0, 0, 0, 0);
+        unsigned int* bgImagePixels = (unsigned int*)bgImage->pixels;
+        
+        for (int y = 0; y < bgImage->h; ++y)
+            for (int x = 0; x < bgImage->w; ++x)
             {
-                const int checkerSize = 100, halfChecker = checkerSize / 2,
-                        yMod = y % checkerSize, xMod = x % checkerSize;
-                if ((yMod < halfChecker && xMod < halfChecker) 
-                    || (yMod >= halfChecker && xMod >= halfChecker))
-                    bgImagePixels[i] = 0xffc4c4c4; // light grey
-                else
-                    bgImagePixels[i] = 0xff808080; // dark grey
+                const int i = x+y*bgImage->w;
+                if (y == 0 || x == 0 || y == bgImage->h-1 || x == bgImage->w - 1)
+                    bgImagePixels[i] = 0xff00ffff; // yellow
+                else 
+                {
+                    const int checkerSize = 100, halfChecker = checkerSize / 2,
+                            yMod = y % checkerSize, xMod = x % checkerSize;
+                    if ((yMod < halfChecker && xMod < halfChecker) 
+                        || (yMod >= halfChecker && xMod >= halfChecker))
+                        bgImagePixels[i] = 0xffc4c4c4; // light grey
+                    else
+                        bgImagePixels[i] = 0xff808080; // dark grey
+                }
             }
-        }
-#endif
+    #else
+        SDL_Surface* bgImage = SDL_CreateRGBSurface(0, 800, 480, bitsPerPixel, 0, 0, 0, 0);
+        unsigned int* bgImagePixels = (unsigned int*)bgImage->pixels;
+        extern unsigned char *gl_framebuffer;
+        memcpy(bgImagePixels, gl_framebuffer, 800*480*4);
+    #endif
 
     // OpenGLES requires power of 2 dimension textures, so create the smallest
     // power of 2 image that fits the background image, along with 1 texel border
@@ -282,8 +283,8 @@ void initTexture()
     GLenum glError = glGetError();
     if (glError != GL_NO_ERROR)
         printf("ERROR: Texture %d (%dx%d) not built, error code %d\n", textureObj, bgImageTexture->w, bgImageTexture->h, glError);
-    else
-        printf("OK: Texture %d (%dx%d) built.\n", textureObj, bgImageTexture->w, bgImageTexture->h);
+    //else
+    //    printf("OK: Texture %d (%dx%d) built.\n", textureObj, bgImageTexture->w, bgImageTexture->h);
 
     // Unbind texture
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -338,13 +339,23 @@ void redraw()
     sdlEventsSwapWindow();
 }
 
+#ifdef TEST_OGLES_FRAMEBUFFER
+int child_main (int argc, char* argv[]) { return 0; }
+void child_main_loop(void *main_loop_arg) {}
+#endif
+
 void main_loop(void* main_loop_arg) 
 {    
     sdlEventsProcess();
 
-    // Re-initialize texture if window resized
-    //if (cam2DWindowResized())
+    #ifdef TEST_OGLES_FRAMEBUFFER
+        // Re-initialize texture if window resized
+        if (cam2DWindowResized())
+            initTexture();
+    #else
+        // Update texture every frame from child app's framebuffer
         initTexture();
+    #endif
 
     // Update shader if camera changed
     if (cam2DUpdated())

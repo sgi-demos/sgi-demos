@@ -1,10 +1,9 @@
-.PHONY: clean run copy_cmd_to_mmc
+.PHONY: clean run
 
 include ../platform.mk
 
 APP=$(BIN_DIR)/logo
 SRC=light.c logo.c 
-LIBGL_SRC=../libgl/gl.c ../libgl/vector.c $(RASTERIZER_SRCS) $(EVENTS_SRCS)
 
 $(APP): $(SRC) light.h $(LIBGL_SRC)
 	$(CC) $(OPT_LEVEL) $(DEMO_INC) \
@@ -17,15 +16,3 @@ run: $(APP)
 clean:
 	rm -f $(APP)
 	rm -rf $(APP).dSYM
-
-# See the ../NOTES file.
-cmd.bin: cmd.txt ../tools/convert_command_dump.py
-	python ../tools/convert_command_dump.py < cmd.txt > cmd.bin
-
-copy_cmd_to_mmc: cmd.bin
-	mkdir -p mmc
-	sudo mount /dev/mmcblk0p1 mmc
-	sudo cp cmd.bin mmc/logo.bin
-	ls -l mmc/logo.bin
-	sudo umount mmc
-	rmdir mmc

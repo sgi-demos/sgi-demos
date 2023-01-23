@@ -36,6 +36,8 @@
 #include "vector.h"
 #include "rasterizer.h"
 #include "events.h"
+#include "camera2D.h"
+#include "sdl_events.h"
 
 #ifndef M_PI
 #define M_PI 3.141596
@@ -179,6 +181,11 @@ static float unitclamp(float v)
 }
 
 static float clamp(float v, float low, float high)
+{
+    return v > high ? high : (v < low ? low : v);
+}
+
+static int iclamp(int v, int low, int high)
 {
     return v > high ? high : (v < low ? low : v);
 }
@@ -1421,9 +1428,17 @@ Tag gentag() {
     abort();
 }
 
-Boolean getbutton(int button) { 
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+Boolean getbutton(int button) {
+    // ugly hack, promise this is just temporary
+    if (button == LEFTMOUSE)
+        return *sdlLeftMouse;
+
+    static int warned = 0; if(!warned) { printf("%s semi-implemented\n", __FUNCTION__); warned = 1; }
     return 0;
+    // if (getbutton (LEFTSHIFTKEY)) {
+    // else if (getbutton (CTRLKEY)) {
+    // else if (getbutton (LEFTMOUSE)) {
+    // if (getbutton (MIDDLEMOUSE)) {
 }
 
 void getmcolor(Colorindex index, int16_t *red, int16_t *green, int16_t *blue) { 
@@ -1455,8 +1470,13 @@ void getsize(int32_t *width, int32_t *height) {
 }
 
 int32_t getvaluator(int32_t device) { 
-    TRACEF("%d", device);
+    switch (device)
+    {
+        case MOUSEX: return iclamp(sdlMousePos->x, 0, DISPLAY_WIDTH);
+        case MOUSEY: return iclamp(DISPLAY_HEIGHT - sdlMousePos->y, 0, DISPLAY_HEIGHT);
+    }   
 
+    TRACEF("%d", device);
     return events_get_valuator(device);
 }
 
@@ -1814,6 +1834,14 @@ void fetch_event_queue(int blocking) {
 int32_t qread(uint16_t *val) { 
     TRACE();
 
+    // ugly hack, promise this is just temporary
+    if (*sdlKeyDown == 'F')
+    {
+        *sdlKeyDown = 0;
+        *val = 1;
+        return FKEY;
+    }
+
     while (input_queue_length == 0) {
         // Blocking read.
         fetch_event_queue(TRUE);
@@ -1831,6 +1859,11 @@ int32_t qread(uint16_t *val) {
 // Doesn't change the queue.
 int32_t qtest() { 
     TRACE();
+
+    // ugly hack, promise this is just temporary
+    if (*sdlKeyDown == 'F') {
+        return 1;
+    }
 
     if (input_queue_length == 0) {
         // Non-blocking read.
