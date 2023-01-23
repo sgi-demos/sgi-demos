@@ -1430,9 +1430,13 @@ Tag gentag() {
 
 Boolean getbutton(int button) {
     // ugly hack, promise this is just temporary
-    if (button == LEFTMOUSE)
-        return *sdlLeftMouse;
-
+    switch (button)
+    {
+        case LEFTMOUSE:   return *sdlLeftMouse;
+        case MIDDLEMOUSE: return *sdlMiddleMouse;
+        case RIGHTMOUSE:  return *sdlRightMouse;
+    }
+    
     static int warned = 0; if(!warned) { printf("%s semi-implemented\n", __FUNCTION__); warned = 1; }
     return 0;
     // if (getbutton (LEFTSHIFTKEY)) {
@@ -1472,8 +1476,24 @@ void getsize(int32_t *width, int32_t *height) {
 int32_t getvaluator(int32_t device) { 
     switch (device)
     {
-        case MOUSEX: return iclamp(sdlMousePos->x, 0, DISPLAY_WIDTH);
-        case MOUSEY: return iclamp(DISPLAY_HEIGHT - sdlMousePos->y, 0, DISPLAY_HEIGHT);
+        case MOUSEX: {
+            // For now, window and framebuffer dimensions may differ, so convert
+            // window mouse coords to framebuffer coords
+            int offsetX = cam2DWindowSize().width / 2 - DISPLAY_WIDTH / 2;
+            int32_t fbPos = sdlMousePos->x - offsetX;
+            int32_t posClamped = iclamp(fbPos, 1, DISPLAY_WIDTH-1);
+            //printf("MOUSEX: fbPos %d posClamped %d\n", fbPos, posClamped);
+            return posClamped;
+        }
+        case MOUSEY: {
+            // For now, window and framebuffer dimensions may differ, so convert
+            // window mouse coords to framebuffer coords.  Also, invert mouse y.
+            int offsetY = cam2DWindowSize().height / 2 - DISPLAY_HEIGHT / 2;
+            int32_t fbPos = cam2DWindowSize().height - sdlMousePos->y - offsetY;
+            int32_t posClamped = iclamp(fbPos, 1, DISPLAY_HEIGHT-1);
+            //printf("MOUSEY: fbPos %d posClamped %d\n", fbPos, posClamped);
+            return posClamped;
+        }
     }   
 
     TRACEF("%d", device);

@@ -18,7 +18,9 @@ typedef struct
 
     // Mouse input
     bool leftMouseButtonDown;
-    Pixel2D mouseButtonDownCoord;
+    bool middleMouseButtonDown;
+    bool rightMouseButtonDown;
+    Pixel2D leftMouseButtonDownCoord;
     Pixel2D mousePosition;
 
     // Finger input
@@ -42,7 +44,9 @@ static SDLEventState sdlEvents = (SDLEventState)
  
     // Mouse input
     .leftMouseButtonDown = false,
-    .mouseButtonDownCoord = {0, 0},
+    .middleMouseButtonDown = false,
+    .rightMouseButtonDown = false,
+    .leftMouseButtonDownCoord = {0, 0},
     .mousePosition = {0, 0},
 
     // Finger input
@@ -58,6 +62,8 @@ static SDLEventState sdlEvents = (SDLEventState)
 };
 
 bool* sdlLeftMouse = &sdlEvents.leftMouseButtonDown;
+bool* sdlMiddleMouse = &sdlEvents.middleMouseButtonDown;
+bool* sdlRightMouse = &sdlEvents.rightMouseButtonDown;
 Pixel2D* sdlMousePos = &sdlEvents.mousePosition;
 char* sdlKeyDown = &sdlEvents.keyDown;
 
@@ -131,8 +137,8 @@ void zoomEventPinch (float pinchDist, Vec2D pinchCoord)
 
 void panEventMouse(Pixel2D mousePos)
 { 
-    Pixel2D delta = { cam2DWindowSize().width / 2 + (mousePos.x - sdlEvents.mouseButtonDownCoord.x),
-                      cam2DWindowSize().height / 2 + (mousePos.y - sdlEvents.mouseButtonDownCoord.y) };
+    Pixel2D delta = { cam2DWindowSize().width / 2 + (mousePos.x - sdlEvents.leftMouseButtonDownCoord.x),
+                      cam2DWindowSize().height / 2 + (mousePos.y - sdlEvents.leftMouseButtonDownCoord.y) };
 
     Vec2D device;
     cam2DWindowToDevice(delta, &device);
@@ -219,12 +225,23 @@ void sdlEventsProcess()
 
             case SDL_MOUSEBUTTONDOWN: 
             {
-                SDL_MouseButtonEvent *m = (SDL_MouseButtonEvent*)&event;
-                if (m->button == SDL_BUTTON_LEFT && !sdlEvents.fingerDown && !sdlEvents.pinch)
+                if (!sdlEvents.fingerDown && !sdlEvents.pinch)
                 {
-                    sdlEvents.leftMouseButtonDown = true;
-                    sdlEvents.mouseButtonDownCoord = (Pixel2D) { (int)m->x, (int)m->y };
-                    cam2DSetBasePan();
+                    SDL_MouseButtonEvent *m = (SDL_MouseButtonEvent*)&event;
+                    switch (m->button)                   
+                    {
+                        case SDL_BUTTON_LEFT:
+                            sdlEvents.leftMouseButtonDown = true;
+                            sdlEvents.leftMouseButtonDownCoord = (Pixel2D) { (int)m->x, (int)m->y };
+                            cam2DSetBasePan();
+                            break;
+                        case SDL_BUTTON_MIDDLE:
+                            sdlEvents.middleMouseButtonDown = true;
+                            break;
+                        case SDL_BUTTON_RIGHT:
+                            sdlEvents.rightMouseButtonDown = true;
+                            break;
+                    }
                 }
                 break;
             }
@@ -232,8 +249,12 @@ void sdlEventsProcess()
             case SDL_MOUSEBUTTONUP: 
             {
                 SDL_MouseButtonEvent *m = (SDL_MouseButtonEvent*)&event;
-                if (m->button == SDL_BUTTON_LEFT)
-                    sdlEvents.leftMouseButtonDown = false;
+                switch (m->button)                   
+                {
+                    case SDL_BUTTON_LEFT:   sdlEvents.leftMouseButtonDown = false;   break;
+                    case SDL_BUTTON_MIDDLE: sdlEvents.middleMouseButtonDown = false; break;
+                    case SDL_BUTTON_RIGHT:  sdlEvents.rightMouseButtonDown = false;  break;
+                }
                 break;
             }
 

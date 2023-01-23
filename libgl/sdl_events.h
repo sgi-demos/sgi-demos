@@ -2,6 +2,8 @@
     Window and input event handling
 */
 extern bool* sdlLeftMouse;
+extern bool* sdlMiddleMouse;
+extern bool* sdlRightMouse;
 extern Pixel2D* sdlMousePos;
 extern char* sdlKeyDown;
 
