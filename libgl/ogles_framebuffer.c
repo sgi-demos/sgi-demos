@@ -300,6 +300,7 @@ void initTexture()
 
 void updateTexture()
 {
+    // TBD: Use subtexture updates instead of rebuilding texture every frame
 	if (0)
 	{
         static unsigned char grayLevel = 0;
@@ -325,20 +326,13 @@ void redraw()
     // Clear screen
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Draw the background quad VBO with texture bound and image texture shader
+    // Draw the quad VBO with texture bound and image texture shader
     glBindTexture(GL_TEXTURE_2D, textureObj);
     glUseProgram(quadShaderProgram);
     glBindBuffer(GL_ARRAY_BUFFER, quadVbo);
     glVertexAttribPointer(positionAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindTexture(GL_TEXTURE_2D, 0);
-
-    // Draw the foreground triangle VBO with a colorful shader
-    // No depth buffering here - triangle is in front by virtue of being drawn after quad
-    glUseProgram(triShaderProgram);
-    glBindBuffer(GL_ARRAY_BUFFER, triangleVbo);
-    glVertexAttribPointer(positionAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
     
     // Swap front/back framebuffers
     sdlEventsSwapWindow();
@@ -366,7 +360,7 @@ void main_loop(void* main_loop_arg)
 int main(int argc, char** argv)
 {
     // Initialize SDL window
-    sdlEventsInit("SGI demo");
+    sdlEventsInit("Insect");
 
     // Initialize OGLES graphics
     initShaders();
