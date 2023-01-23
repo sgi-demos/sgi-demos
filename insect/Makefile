@@ -3,7 +3,7 @@
 include ../platform.mk
 
 APP=insect
-EMAPP=$(APP).html
+EMAPP=$(APP).js
 SRC=insect.c mat.c parts.c
 
 $(EMAPP): $(SRC) insect.h $(LIBGL_SRC) $(EM_SRC)
@@ -14,9 +14,8 @@ $(EMAPP): $(SRC) insect.h $(LIBGL_SRC) $(EM_SRC)
 	-o $(EMAPP)
 
 run: $(EMAPP)
-	emrun $(EMAPP)
+	emrun $(APP).html
 
 clean:
 	rm -f $(EMAPP)
-	rm -f $(APP).js
 	rm -f $(APP).wasm
