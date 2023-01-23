@@ -3,7 +3,7 @@
 include ../platform.mk
 
 APP=insect
-EMAPP=$(APP).js
+EMAPP=$(APP).html
 SRC=insect.c mat.c parts.c
 
 $(EMAPP): $(SRC) insect.h $(LIBGL_SRC) $(EM_SRC)
