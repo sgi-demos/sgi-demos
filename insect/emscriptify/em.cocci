@@ -15,6 +15,8 @@
 // cproto -a orig_ansi.c
 // spatch --sp-file em.cocci orig_ansi.c -o orig_ansi_em.c && cat orig_ansi_em.c
 //
+// Semantic patch (see https://coccinelle.gitlabpages.inria.fr/website/papers/ols07-padioleau.pdf):
+//
 @@
 identifier argc, argv;
 @@
