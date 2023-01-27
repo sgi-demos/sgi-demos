@@ -4,6 +4,11 @@
 // To use coccinelle to rename/modify functions, first must convert 
 // functions from K&R to ANSI format using cproto -a (cproto -t to reverse).  
 //
+// Help:
+// https://teuben.github.io/nemo/man_html/cproto.l.html
+// https://coccinelle.gitlabpages.inria.fr/website/papers/ols07-padioleau.pdf
+// https://coccinelle.gitlabpages.inria.fr/website/docs/main_grammar.pdf
+//
 // Install:
 //
 // brew install cproto
@@ -15,7 +20,7 @@
 // cproto -a orig_ansi.c
 // spatch --sp-file em.cocci orig_ansi.c -o orig_ansi_em.c && cat orig_ansi_em.c
 //
-// Semantic patch (see https://coccinelle.gitlabpages.inria.fr/website/papers/ols07-padioleau.pdf):
+// Semantic patch:
 //
 @@
 identifier argc, argv;

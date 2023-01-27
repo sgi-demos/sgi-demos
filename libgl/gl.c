@@ -1432,9 +1432,12 @@ Boolean getbutton(int button) {
     // ugly hack, promise this is just temporary
     switch (button)
     {
-        case LEFTMOUSE:   return *sdlLeftMouse;
-        case MIDDLEMOUSE: return *sdlMiddleMouse;
-        case RIGHTMOUSE:  return *sdlRightMouse;
+        case LEFTMOUSE:         return *sdlLeftMouse;
+        case MIDDLEMOUSE:       return *sdlMiddleMouse;
+        case RIGHTMOUSE:        return *sdlRightMouse;
+        case LEFTSHIFTKEY:      return *sdlLeftShift;
+        case RIGHTSHIFTKEY:     return *sdlRightShift;
+        case CTRLKEY:           return *sdlLeftCtrl || *sdlRightCtrl;
     }
     
     static int warned = 0; if(!warned) { printf("%s semi-implemented\n", __FUNCTION__); warned = 1; }

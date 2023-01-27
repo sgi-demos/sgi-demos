@@ -6,6 +6,10 @@ extern bool* sdlMiddleMouse;
 extern bool* sdlRightMouse;
 extern Pixel2D* sdlMousePos;
 extern char* sdlKeyDown;
+extern bool *sdlLeftShift;
+extern bool *sdlRightShift;
+extern bool *sdlLeftCtrl;
+extern bool *sdlRightCtrl;
 
 extern void sdlEventsInit(const char* windowTitle);
 extern void sdlEventsProcess();
