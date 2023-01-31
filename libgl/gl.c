@@ -2745,7 +2745,7 @@ void pnts(Scoord x, Scoord y, Scoord z) {
     pnt(x, y, z);
 }
 
-void keepaspect() {
+void keepaspect(int32_t x, int32_t y) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
@@ -3191,7 +3191,7 @@ void lookat(Coord viewx,Coord viewy, Coord viewz, Coord pointx, Coord pointy, Co
     matrix4x4f_stack_mult(current_stack, (float *)m);
 }
 
-void lsetdepth() {
+void lsetdepth(int32_t near, int32_t far) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
