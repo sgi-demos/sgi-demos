@@ -9087,9 +9087,6 @@ var ___dl_seterr = Module["___dl_seterr"] = createExportWrapper("__dl_seterr");
 var _fflush = Module["_fflush"] = createExportWrapper("fflush");
 
 /** @type {function(...*):?} */
-var _fileno = Module["_fileno"] = createExportWrapper("fileno");
-
-/** @type {function(...*):?} */
 var _emscripten_stack_init = Module["_emscripten_stack_init"] = function() {
   return (_emscripten_stack_init = Module["_emscripten_stack_init"] = Module["asm"]["emscripten_stack_init"]).apply(null, arguments);
 };
