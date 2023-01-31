@@ -2,17 +2,22 @@
 
 include ../platform.mk
 
-APP=$(BIN_DIR)/jello
-SRC=jello.c 
+APP=jello
+EMAPP=./web/$(APP).html
+SRC=jello.c
 
-$(APP): $(SRC) $(LIBGL_SRC)
-	$(CC) $(OPT_LEVEL) $(DEMO_INC) \
-		$(DEMO_WARN_OFF) \
-		-o $(APP) $(SRC) $(LIBGL_SRC) -lm
+$(EMAPP): $(SRC) $(LIBGL_SRC) $(EM_SRC)
+	$(EMCC) \
+	-D_POSIX_C_SOURCE=199309L \
+	$(DEMO_WARN_OFF_EM) \
+	$(DEMO_INC) $(SRC) $(LIBGL_SRC) $(EM_SRC) \
+	-s WASM=1 -s USE_SDL=2 -s FULL_ES2=1 \
+	-o $(EMAPP)
 
-run: $(APP)
-	$(APP)
+run: $(EMAPP)
+	cd web && emrun $(EMAPP)
 
 clean:
-	rm -f $(APP)
-	rm -rf $(APP).dSYM
+	rm -f ./web/$(APP).html
+	rm -f ./web/$(APP).js
+	rm -f ./web/$(APP).wasm

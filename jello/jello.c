@@ -10,6 +10,8 @@
 #include <device.h>
 #include <time.h>
 
+#include "EM_MAIN_LOOP_INIT.h"
+
 #define X 0
 #define Y 1
 #define Z 2
@@ -274,7 +276,9 @@ void get_tilt(short *tiltx, short *tilty)
     *tilty = YMAXSCREEN * (getvaluator(DIAL0) - tilt_left) / (tilt_right - tilt_left);
 }
 
+#include "EM_MAIN_BEGIN.h"
 main (argc, argv)
+#include "EM_MAIN_END.h"
 int	argc;
 char	*argv[];
 {
@@ -305,7 +309,9 @@ char	*argv[];
 	started = 1;
     }
 
-    while(TRUE) {
+    #include "EM_MAIN_LOOP_BEGIN.h"
+    while (TRUE) {
+    #include "EM_MAIN_LOOP_END.h"
 
 	while(qtest()) {
 	    dev=qread(&val);
