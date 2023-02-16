@@ -32,6 +32,7 @@
 #include <gl.h>
 #include <device.h>
 #include <signal.h>
+#include <SDL.h>
 #include "basic_types.h"
 #include "vector.h"
 #include "rasterizer.h"
@@ -1428,26 +1429,6 @@ Tag gentag() {
     abort();
 }
 
-Boolean getbutton(int button) {
-    // ugly hack, promise this is just temporary
-    switch (button)
-    {
-        case LEFTMOUSE:         return *sdlLeftMouse;
-        case MIDDLEMOUSE:       return *sdlMiddleMouse;
-        case RIGHTMOUSE:        return *sdlRightMouse;
-        case LEFTSHIFTKEY:      return *sdlLeftShift;
-        case RIGHTSHIFTKEY:     return *sdlRightShift;
-        case CTRLKEY:           return *sdlLeftCtrl || *sdlRightCtrl;
-    }
-    
-    static int warned = 0; if(!warned) { printf("%s semi-implemented\n", __FUNCTION__); warned = 1; }
-    return 0;
-    // if (getbutton (LEFTSHIFTKEY)) {
-    // else if (getbutton (CTRLKEY)) {
-    // else if (getbutton (LEFTMOUSE)) {
-    // if (getbutton (MIDDLEMOUSE)) {
-}
-
 void getmcolor(Colorindex index, int16_t *red, int16_t *green, int16_t *blue) { 
     TRACEF("%d", index);
 
@@ -1476,31 +1457,56 @@ void getsize(int32_t *width, int32_t *height) {
     *height = DISPLAY_HEIGHT;
 }
 
+Boolean getbutton(int button) {
+
+    if (button >= RIGHTMOUSE && button <= LEFTMOUSE)
+    {
+        unsigned char buttonState = sdlMouseButtonState();
+        switch (button)
+        {
+            case LEFTMOUSE:   return buttonState & SDL_BUTTON_LMASK;
+            case MIDDLEMOUSE: return buttonState & SDL_BUTTON_MMASK;
+            case RIGHTMOUSE:  return buttonState & SDL_BUTTON_RMASK;
+            default:          return 0;
+        }
+    }
+    
+    unsigned char* keyArray = sdlGetKeyboardState();
+    switch (button)
+    {
+        case LEFTSHIFTKEY:  return keyArray[SDL_SCANCODE_LSHIFT];
+        case RIGHTSHIFTKEY: return keyArray[SDL_SCANCODE_RSHIFT];
+        case CTRLKEY:       return keyArray[SDL_SCANCODE_LCTRL] || keyArray[SDL_SCANCODE_RCTRL];
+        default:            return 0;
+    }  
+}
+
+// valuator = device with continuous input, like a mouse or dial
 int32_t getvaluator(int32_t device) { 
+    TRACEF("%d", device);
+    int32_t val = events_get_valuator(device);
+
     switch (device)
     {
         case MOUSEX: {
             // For now, window and framebuffer dimensions may differ, so convert
             // window mouse coords to framebuffer coords
             int offsetX = cam2DWindowSize().width / 2 - DISPLAY_WIDTH / 2;
-            int32_t fbPos = sdlMousePos->x - offsetX;
+            int32_t fbPos = val - offsetX;
             int32_t posClamped = iclamp(fbPos, 1, DISPLAY_WIDTH-1);
-            //printf("MOUSEX: fbPos %d posClamped %d\n", fbPos, posClamped);
             return posClamped;
         }
         case MOUSEY: {
             // For now, window and framebuffer dimensions may differ, so convert
             // window mouse coords to framebuffer coords.  Also, invert mouse y.
             int offsetY = cam2DWindowSize().height / 2 - DISPLAY_HEIGHT / 2;
-            int32_t fbPos = cam2DWindowSize().height - sdlMousePos->y - offsetY;
+            int32_t fbPos = cam2DWindowSize().height - val - offsetY;
             int32_t posClamped = iclamp(fbPos, 1, DISPLAY_HEIGHT-1);
-            //printf("MOUSEY: fbPos %d posClamped %d\n", fbPos, posClamped);
             return posClamped;
         }
-    }   
+    }  
 
-    TRACEF("%d", device);
-    return events_get_valuator(device);
+    return val;
 }
 
 void setvaluator(Device device, int init, int min, int max) {
@@ -1885,7 +1891,7 @@ int32_t qtest() {
 
     // ugly hack, promise this is just temporary
     if (*sdlKeyDown == 'F') {
-        return 1;
+        return FKEY;
     }
 
     if (input_queue_length == 0) {

@@ -14,3 +14,9 @@ extern bool *sdlRightCtrl;
 extern void sdlEventsInit(const char* windowTitle);
 extern void sdlEventsProcess();
 extern void sdlEventsSwapWindow();
+
+extern int sdlMousePosX();
+extern int sdlMousePosY();
+extern unsigned char sdlMouseButtonState();
+extern unsigned char* sdlGetKeyboardState();
+extern int sdlPeepEvents();

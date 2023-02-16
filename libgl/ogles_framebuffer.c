@@ -6,7 +6,7 @@
 #endif
 
 #include <SDL.h>
-#include <SDL_image.h>
+//#include <SDL_image.h>
 #include <SDL_opengles2.h>
 
 #include "camera2D.h"
