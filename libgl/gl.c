@@ -81,7 +81,6 @@ static int current_pattern = 0;
 static int zbuffer_enabled = 0;
 static int backface_enabled = 0;
 
-#define INPUT_QUEUE_SIZE 128
 static uint32_t input_queue_device[INPUT_QUEUE_SIZE];
 static uint16_t input_queue_val[INPUT_QUEUE_SIZE];
 // The next time that needs to be read:
@@ -1816,14 +1815,6 @@ void fetch_event_queue(int blocking) {
 int32_t qread(uint16_t *val) { 
     TRACE();
 
-    // // ugly hack, promise this is just temporary
-    // if (*sdlKeyDown == 'F')
-    // {
-    //     *sdlKeyDown = 0;
-    //     *val = 1;
-    //     return FKEY;
-    // }
-
     while (input_queue_length == 0) {
         // Blocking read.
         fetch_event_queue(TRUE);
@@ -1839,13 +1830,8 @@ int32_t qread(uint16_t *val) {
 // Returns the device number of the first entry.
 // Returns 0 if the event queue is empty.
 // Doesn't change the queue.
-int32_t qtest() { 
+int32_t qtest() {
     TRACE();
-
-    // // ugly hack, promise this is just temporary
-    // if (*sdlKeyDown == 'F') {
-    //     return FKEY;
-    // }
 
     if (input_queue_length == 0) {
         // Non-blocking read.

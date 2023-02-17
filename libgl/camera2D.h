@@ -1,11 +1,12 @@
-/*
-    Camera2D - pan, zoom, and window resizing
-*/
+//
+//  Camera2D - pan, zoom, and window resizing
+//
 typedef short bool;
 typedef struct { int width; int height; } Size2D;
 typedef struct { int x; int y; } Pixel2D;
 typedef struct { float x; float y; } Vec2D;
 
+// camera properties get/set
 extern bool cam2DUpdated();
 extern bool cam2DWindowResized();
 
@@ -24,8 +25,8 @@ extern void cam2DSetZoom(float zoom);
 extern void cam2DSetZoomDelta(float zoomDelta);
 extern void cam2DSetAspect(float aspect);
 
-extern void cam2DNormWindowToDevice(Vec2D normWin, Vec2D* device);
-extern void cam2DWindowToDevice(Pixel2D win, Vec2D* device);
-extern void cam2DDeviceToWorld(Vec2D device, Vec2D* world); 
-extern void cam2DWindowToWorld(Pixel2D win, Vec2D* world);
-extern void cam2DNormWindowToWorld(Vec2D normWin, Vec2D* world);
+// zoom/pan camera from mouse and touch events
+extern void cam2DZoomEventMouse(bool mouseWheelDown, Pixel2D mousePosition);
+extern void cam2DZoomEventPinch(float pinchDist, Vec2D pinchCoord);
+extern void cam2DPanEventMouse(Pixel2D mousePos, Pixel2D mouseButtonDownCoord);
+extern void cam2DPanEventFinger(Vec2D fingerCoord, Vec2D fingerDownCoord);

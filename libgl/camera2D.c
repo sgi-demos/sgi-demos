@@ -5,6 +5,8 @@
 
 static const int cWinWidth = 800, cWinHeight = 480;
 static const float cZoomMin = 0.1, cZoomMax = 10.0f;
+static const float cMouseWheelZoomDelta = 0.05;
+static const float cPinchScale = 8.0;
 
 typedef struct {
     bool    updated;
@@ -142,4 +144,62 @@ void cam2DNormWindowToWorld(Vec2D normWin, Vec2D* world)
     Vec2D device; 
     cam2DNormWindowToDevice(normWin, &device);
     cam2DDeviceToWorld(device, world);
+}
+
+void cam2DZoomEventMouse(bool mouseWheelDown, Pixel2D mousePosition)
+{
+    Vec2D preZoomWorld;
+    cam2DWindowToWorld(mousePosition, &preZoomWorld);
+
+    // Zoom by scaling up/down in 0.05 increments
+    float zoomDelta = mouseWheelDown ? -cMouseWheelZoomDelta : cMouseWheelZoomDelta;
+    cam2DSetZoomDelta(zoomDelta);
+
+    // Zoom to point: Keep the world coords under mouse position the same before and after the zoom
+    Vec2D postZoomWorld;
+    cam2DWindowToWorld(mousePosition, &postZoomWorld);
+    Vec2D deltaWorld = {postZoomWorld.x - preZoomWorld.x, postZoomWorld.y - preZoomWorld.y};
+    cam2DSetPanDelta(deltaWorld);
+}
+
+void cam2DZoomEventPinch(float pinchDist, Vec2D pinchCoord)
+{
+    Vec2D preZoomWorld;
+    cam2DNormWindowToWorld(pinchCoord, &preZoomWorld);
+
+    // Zoom in/out by positive/negative pinch distance
+    float zoomDelta = pinchDist * cPinchScale;
+    cam2DSetZoomDelta(zoomDelta);
+
+    // Zoom to point: Keep the world coords under sdlEvents.pinch position the same before and after the zoom
+    Vec2D postZoomWorld;
+    cam2DNormWindowToWorld(pinchCoord, &postZoomWorld);
+    Vec2D deltaWorld = {postZoomWorld.x - preZoomWorld.x, postZoomWorld.y - preZoomWorld.y};
+    cam2DSetPanDelta(deltaWorld);
+}
+
+void cam2DPanEventMouse(Pixel2D mousePos, Pixel2D mouseButtonDownCoord)
+{
+    Pixel2D delta = {cam2DWindowSize().width / 2 + (mousePos.x - mouseButtonDownCoord.x),
+                     cam2DWindowSize().height / 2 + (mousePos.y - mouseButtonDownCoord.y)};
+
+    Vec2D device;
+    cam2DWindowToDevice(delta, &device);
+
+    Vec2D pan = {cam2DBasePan().x + device.x / cam2DZoom(),
+                 cam2DBasePan().y + device.y / cam2DZoom() / cam2DAspect()};
+    cam2DSetPan(pan);
+}
+
+void cam2DPanEventFinger(Vec2D fingerCoord, Vec2D fingerDownCoord)
+{
+    Vec2D delta = {0.5f + (fingerCoord.x - fingerDownCoord.x),
+                   0.5f + (fingerCoord.y - fingerDownCoord.y)};
+
+    Vec2D device;
+    cam2DNormWindowToDevice(delta, &device);
+
+    Vec2D pan = {cam2DBasePan().x + device.x / cam2DZoom(),
+                 cam2DBasePan().y + device.y / cam2DZoom() / cam2DAspect()};
+    cam2DSetPan(pan);
 }

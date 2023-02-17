@@ -2,6 +2,7 @@
 #define __EVENT_SERVICE_H__
 
 #include "basic_types.h"
+#define INPUT_QUEUE_SIZE 128
 
 int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height);
 
