@@ -12,16 +12,16 @@ unsigned char sdlMouseButtonState();
 unsigned char* sdlGetKeyboardState();
 int sdlPeepEvents();
 
-typedef struct event {
+typedef struct gl_event {
     int32_t device;
     int16_t val;
     // union here for other events like keys
-} event;
+} gl_event;
 
 static uint32_t tied_valuators[2048][2];
 static uint32_t device_queued[2048];
 
-static event input_queue[INPUT_QUEUE_SIZE];
+static gl_event input_queue[INPUT_QUEUE_SIZE];
 // The next item that needs to be read:
 static int input_queue_head = 0;
 // The number of items in the queue (tail = (head + length) % len):
@@ -36,7 +36,7 @@ static void emulateEscapeWithTapClose()
 {
     // // Only Home button for now, which is mapped to ESC.
     // int home_button;
-    // event ev;
+    // gl_event ev;
     
     // // libawesome will queue up two transitions per frame, so read the button
     // // twice to get those.
@@ -61,7 +61,7 @@ static void emulateMouseWithTouch()
     // float z;
 
     // TouchscreenEvent e;
-    // event ev;
+    // gl_event ev;
     // int drained = 0;
     // while((e = touchscreen_read(&x, &y, &z)) != TOUCHSCREEN_IDLE) {
 	// drained ++;
@@ -235,7 +235,7 @@ void events_qdevice(int32_t device)
     device_queued[device] = device;
 }
 
-static void enqueue_event(event *e)
+static void enqueue_event(gl_event *e)
 {
     if (input_queue_length == INPUT_QUEUE_SIZE) {
         printf("Input queue overflow.");
@@ -284,24 +284,6 @@ void events_tie(int32_t button, int32_t val1, int32_t val2)
     tied_valuators[button][1] = val2;
 }
 
-
-
-    // qread
-    // // ugly hack, promise this is just temporary
-    // if (*sdlKeyDown == 'F')
-    // {
-    //     *sdlKeyDown = 0;
-    //     *val = 1;
-    //     return FKEY;
-    // }
-
-    // qtest
-    // // ugly hack, promise this is just temporary
-    // if (*sdlKeyDown == 'F') {
-    //     return FKEY;
-    // }
-
-
 	// 	if(device_queued[LEFTMOUSE]) {
 	// 	    ev.device = LEFTMOUSE;
 	// 	    ev.val = 1;
@@ -315,6 +297,21 @@ void events_tie(int32_t button, int32_t val1, int32_t val2)
 	// 	    }
 	// 	}
 
+    // insect inputs
+    //
+    // qdevice (INPUTCHANGE);
+    // qdevice (REDRAW);
+    // qdevice (ESCKEY);
+    // qdevice (CTRLKEY);
+    // qdevice (FKEY);
+    // qdevice (LEFTMOUSE);
+    // qdevice (MIDDLEMOUSE);
+
+    // qdevice (LEFTARROWKEY);
+    // qdevice (RIGHTARROWKEY);
+    // qdevice (DOWNARROWKEY);
+    // qdevice (UPARROWKEY);
+    // qdevice (WINQUIT);
 
 typedef struct
 {
@@ -441,6 +438,7 @@ void sdlEventsProcess()
             {
                 case SDLK_ESCAPE:
                 {
+                    // Go to previous page, or if none, to demo home page
                     const char *exit_js =
                         "if (document.referrer) {                                   "
                         "     window.history.back();                                "
@@ -460,7 +458,17 @@ void sdlEventsProcess()
                     // alphanumeric input
                     const char *keyName = SDL_GetKeyName(event.key.keysym.sym);
                     if (strlen(keyName) == 1)
+                    {
                         sdlEvents.keyDown = keyName[0];
+
+                        if (sdlEvents.keyDown == 'F' && device_queued[FKEY])
+                        {
+                            gl_event ev;
+                            ev.device = FKEY;
+                            ev.val = 1; //1 or FKEY?
+                            enqueue_event(&ev);
+                        }
+                    }
                 }
             }
             break;

@@ -1,12 +1,11 @@
-/*
-    OpenGLES framebuffer - displays an image in the center of the window
-*/
+//
+//  OpenGLES framebuffer - displays an image in the center of the window
+//
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
 
 #include <SDL.h>
-//#include <SDL_image.h>
 #include <SDL_opengles2.h>
 
 #include "camera2D.h"
@@ -39,7 +38,7 @@ const GLchar* quadVertexSource =
     "    gl_Position.x *= imageSize.x;                          \n"
     "    gl_Position.y *= imageSize.y;                          \n"
     "                                                           \n"
-    "    // Translate to lower left viewport                    \n"
+    "    // Center image in viewport                            \n"
     "    gl_Position.x -= imageSize.x / 2.0 + 1.0;              \n"
     "    gl_Position.y -= imageSize.y / 2.0 + 1.0;              \n"
     "                                                           \n"
@@ -63,50 +62,16 @@ const GLchar* quadFragmentSource =
     "    gl_FragColor = texture2D(texSampler, texCoord);        \n"
     "}                                                          \n";
 
-// Colorful triangle vertex & fragment shaders
-GLuint triShaderProgram = 0;
-const GLchar* triVertexSource =
-    "uniform vec2 pan;                             \n"
-    "uniform float zoom;                           \n"
-    "uniform float aspect;                         \n"
-    "attribute vec4 position;                      \n"
-    "varying vec3 color;                           \n"
-    "void main()                                   \n"
-    "{                                             \n"
-    "    gl_Position = vec4(position.xyz, 1.0);    \n"
-    "    gl_Position.xy += pan;                    \n"
-    "    gl_Position.xy *= zoom;                   \n"
-    "    gl_Position.y *= aspect;                  \n"
-    "    color = gl_Position.xyz + vec3(0.5);      \n"
-    "}                                             \n";
-
-const GLchar* triFragmentSource =
-    "precision mediump float;                     \n"
-    "varying vec3 color;                          \n"
-    "void main()                                  \n"
-    "{                                            \n"
-    "    gl_FragColor = vec4 ( color, 1.0 );      \n"
-    "}                                            \n";
-
 void updateShader()
 {
-    float viewport[2], pan[2], zoom, aspect;
+    float viewport[2];
     viewport[0] = cam2DViewport().x;
     viewport[1] = cam2DViewport().y;
-    pan[0] = cam2DPan().x;
-    pan[1] = cam2DPan().y;
-    zoom = cam2DZoom();
-    aspect = cam2DAspect();
     
     glUseProgram(quadShaderProgram);
     glUniform2fv(shaderViewport, 1, viewport);
     glUniform2fv(shaderImageSize, 1, imageSize);
     glUniform2fv(shaderTexSize, 1, texSize);
-
-    glUseProgram(triShaderProgram);
-    glUniform2fv(shaderPan, 1, pan);
-    glUniform1f(shaderZoom, zoom); 
-    glUniform1f(shaderAspect, aspect);
 }
 
 GLuint initShader(const GLchar* vertexSource, const GLchar* fragmentSource)
@@ -136,23 +101,18 @@ void initShaders()
 {
     // Compile & link shaders
     quadShaderProgram = initShader(quadVertexSource, quadFragmentSource);
-    triShaderProgram = initShader(triVertexSource, triFragmentSource);
 
-    // Get shader variables and initalize them
+    // Get shader variables and initialize them
     shaderViewport = glGetUniformLocation(quadShaderProgram, "viewport");
     shaderImageSize = glGetUniformLocation(quadShaderProgram, "imageSize");
     shaderTexSize = glGetUniformLocation(quadShaderProgram, "texSize");
 
-    shaderPan = glGetUniformLocation(triShaderProgram, "pan");
-    shaderZoom = glGetUniformLocation(triShaderProgram, "zoom");    
-    shaderAspect = glGetUniformLocation(triShaderProgram, "aspect");
-    
     updateShader();
 }
 
 void initGeometry()
 {
-   // Create vertex buffer objects and copy vertex data into them
+   // Create vertex buffer object and copy vertex data into them
     glGenBuffers(1, &quadVbo);
     glBindBuffer(GL_ARRAY_BUFFER, quadVbo);
     float quadVertices[] = 
@@ -163,16 +123,6 @@ void initGeometry()
         1.0f, 0.0f, 0.0f
     };
     glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
-
-    glGenBuffers(1, &triangleVbo);
-    glBindBuffer(GL_ARRAY_BUFFER, triangleVbo);
-    float triangleVertices[] = 
-    {
-        0.0f, 0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f
-    };
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);  
  }
 
 int min(int x, int y)
@@ -283,8 +233,8 @@ void initTexture()
     GLenum glError = glGetError();
     if (glError != GL_NO_ERROR)
         printf("ERROR: Texture %d (%dx%d) not built, error code %d\n", textureObj, bgImageTexture->w, bgImageTexture->h, glError);
-    //else
-    //    printf("OK: Texture %d (%dx%d) built.\n", textureObj, bgImageTexture->w, bgImageTexture->h);
+    else
+        printf("OK: Texture %d (%dx%d) built.\n", textureObj, bgImageTexture->w, bgImageTexture->h);
 
     // Unbind texture
     glBindTexture(GL_TEXTURE_2D, 0);
