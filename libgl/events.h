@@ -3,9 +3,10 @@
 
 #include "basic_types.h"
 
-int32_t events_winopen(char *title);
+int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height);
 
 int32_t events_get_valuator(int32_t device);
+Boolean events_get_button(int32_t button);
 void events_qdevice(int32_t device);
 int32_t events_qread_start(int blocking);
 int32_t events_qread_continue(int16_t *value);

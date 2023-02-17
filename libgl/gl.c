@@ -32,13 +32,10 @@
 #include <gl.h>
 #include <device.h>
 #include <signal.h>
-#include <SDL.h>
 #include "basic_types.h"
 #include "vector.h"
 #include "rasterizer.h"
 #include "events.h"
-#include "camera2D.h"
-#include "sdl_events.h"
 
 #ifndef M_PI
 #define M_PI 3.141596
@@ -186,10 +183,7 @@ static float clamp(float v, float low, float high)
     return v > high ? high : (v < low ? low : v);
 }
 
-static int iclamp(int v, int low, int high)
-{
-    return v > high ? high : (v < low ? low : v);
-}
+
 
 
 //------------------------------------------------------------------------
@@ -422,7 +416,7 @@ void project_vertex(lit_vertex *lv, screen_vertex *sv)
 
     sv->x = clamp(xw, 0, DISPLAY_WIDTH - 1) * SCREEN_VERTEX_V2_SCALE;
     sv->y = clamp(yw, 0, DISPLAY_HEIGHT - 1) * SCREEN_VERTEX_V2_SCALE;
-    sv->z = zw * 0xffffffff;
+    sv->z = (uint32_t)zw * 0xffffffff; // XXX cast to rid of implicit int to float conversion warning, no idea if that's right
     sv->r = unitclamp(lv->color[0]) * 255;
     sv->g = unitclamp(lv->color[1]) * 255;
     sv->b = unitclamp(lv->color[2]) * 255;
@@ -1458,55 +1452,14 @@ void getsize(int32_t *width, int32_t *height) {
 }
 
 Boolean getbutton(int button) {
-
-    if (button >= RIGHTMOUSE && button <= LEFTMOUSE)
-    {
-        unsigned char buttonState = sdlMouseButtonState();
-        switch (button)
-        {
-            case LEFTMOUSE:   return buttonState & SDL_BUTTON_LMASK;
-            case MIDDLEMOUSE: return buttonState & SDL_BUTTON_MMASK;
-            case RIGHTMOUSE:  return buttonState & SDL_BUTTON_RMASK;
-            default:          return 0;
-        }
-    }
-    
-    unsigned char* keyArray = sdlGetKeyboardState();
-    switch (button)
-    {
-        case LEFTSHIFTKEY:  return keyArray[SDL_SCANCODE_LSHIFT];
-        case RIGHTSHIFTKEY: return keyArray[SDL_SCANCODE_RSHIFT];
-        case CTRLKEY:       return keyArray[SDL_SCANCODE_LCTRL] || keyArray[SDL_SCANCODE_RCTRL];
-        default:            return 0;
-    }  
+    TRACEF("%d", button);
+    return events_get_button(button);
 }
 
 // valuator = device with continuous input, like a mouse or dial
 int32_t getvaluator(int32_t device) { 
     TRACEF("%d", device);
-    int32_t val = events_get_valuator(device);
-
-    switch (device)
-    {
-        case MOUSEX: {
-            // For now, window and framebuffer dimensions may differ, so convert
-            // window mouse coords to framebuffer coords
-            int offsetX = cam2DWindowSize().width / 2 - DISPLAY_WIDTH / 2;
-            int32_t fbPos = val - offsetX;
-            int32_t posClamped = iclamp(fbPos, 1, DISPLAY_WIDTH-1);
-            return posClamped;
-        }
-        case MOUSEY: {
-            // For now, window and framebuffer dimensions may differ, so convert
-            // window mouse coords to framebuffer coords.  Also, invert mouse y.
-            int offsetY = cam2DWindowSize().height / 2 - DISPLAY_HEIGHT / 2;
-            int32_t fbPos = cam2DWindowSize().height - val - offsetY;
-            int32_t posClamped = iclamp(fbPos, 1, DISPLAY_HEIGHT-1);
-            return posClamped;
-        }
-    }  
-
-    return val;
+    return events_get_valuator(device);
 }
 
 void setvaluator(Device device, int init, int min, int max) {
@@ -1863,13 +1816,13 @@ void fetch_event_queue(int blocking) {
 int32_t qread(uint16_t *val) { 
     TRACE();
 
-    // ugly hack, promise this is just temporary
-    if (*sdlKeyDown == 'F')
-    {
-        *sdlKeyDown = 0;
-        *val = 1;
-        return FKEY;
-    }
+    // // ugly hack, promise this is just temporary
+    // if (*sdlKeyDown == 'F')
+    // {
+    //     *sdlKeyDown = 0;
+    //     *val = 1;
+    //     return FKEY;
+    // }
 
     while (input_queue_length == 0) {
         // Blocking read.
@@ -1889,10 +1842,10 @@ int32_t qread(uint16_t *val) {
 int32_t qtest() { 
     TRACE();
 
-    // ugly hack, promise this is just temporary
-    if (*sdlKeyDown == 'F') {
-        return FKEY;
-    }
+    // // ugly hack, promise this is just temporary
+    // if (*sdlKeyDown == 'F') {
+    //     return FKEY;
+    // }
 
     if (input_queue_length == 0) {
         // Non-blocking read.
@@ -2081,7 +2034,7 @@ int32_t winopen(char *title) {
     rasterizer_pattern(0);
     rasterizer_setpattern(patterns[0]);
 
-    int events_window = events_winopen(title);
+    int events_window = events_winopen(title, DISPLAY_WIDTH, DISPLAY_HEIGHT);
     // XXX if we made a multi-window system, we'd tie "rasterizer_window"
     // and "events_window" together so we could pass the right identifier
     // to window functions.  But we are fullscreen and no demo we care

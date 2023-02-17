@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <SDL_opengles2.h>
+#include <gl.h>
 #include <device.h>
 #include "camera2D.h"
 #include "sdl_events.h"
@@ -16,10 +17,13 @@ static uint32_t device_queued[2048];
 
 #define INPUT_QUEUE_SIZE 128
 static event input_queue[INPUT_QUEUE_SIZE];
-// The next time that needs to be read:
+// The next item that needs to be read:
 static int input_queue_head = 0;
 // The number of items in the queue (tail = (head + length) % len):
 static int input_queue_length = 0;
+
+// Framebuffer size may not be the same as window size
+Size2D frame_size;
 
 static void enqueue_event(event *e)
 {
@@ -112,12 +116,12 @@ static void emulateMouseWithTouch()
     // }
 }
 
-static float theta_x_smoothed, theta_y_smoothed;
-static const float decay = .95;
+// static float theta_x_smoothed, theta_y_smoothed;
+// static const float decay = .95;
 
-bool isDial(int32_t device)
+static bool isDial(int32_t device)
 {
-    // yep these better be continuous, but IrisGL API is locked in stone forever more
+    // Safe! IrisGL API is never changing again
     return device >= DIAL0 && device <= DIAL8; 
 }
 
@@ -171,20 +175,65 @@ int32_t emulateDialsWithTilt(int32_t device)
     return 0;
 }
 
+static int iclamp(int v, int low, int high)
+{
+    return v > high ? high : (v < low ? low : v);
+}
 
 int32_t events_get_valuator(int32_t device)
 {
-    emulateMouseWithTouch(); // TBD
+    // emulateMouseWithTouch(); // TBD
 
-    if (device == MOUSEX)
-        return sdlMousePosX();
-    else if (device == MOUSEY)
-        return sdlMousePosY();
-    else if (isDial(device))
-        return emulateDialsWithTilt(device); // TBD
-    else
-	    printf("warning: unimplemented evaluator %d\n", device);
+    switch (device)
+    {
+        case MOUSEX: {
+            // For now, window and framebuffer dimensions may differ, so convert
+            // window mouse coords to framebuffer coords
+            int offsetX = cam2DWindowSize().width / 2 - frame_size.width / 2;
+            int32_t fbPos = sdlMousePosX() - offsetX;
+            int32_t posClamped = iclamp(fbPos, 1, frame_size.width - 1);
+            return posClamped;
+        }
+        case MOUSEY: {
+            // For now, window and framebuffer dimensions may differ, so convert
+            // window mouse coords to framebuffer coords.  Also, invert mouse y.
+            int offsetY = cam2DWindowSize().height / 2 - frame_size.height / 2;
+            int32_t fbPos = cam2DWindowSize().height - sdlMousePosY() - offsetY;
+            int32_t posClamped = iclamp(fbPos, 1, frame_size.height - 1);
+            return posClamped;
+        }
+        default: {
+            if (isDial(device))
+                return emulateDialsWithTilt(device); // TBD
+        }
+    }  
+
+    printf("warning: unimplemented evaluator %d\n", device);
     return 0;
+}
+
+Boolean events_get_button(int32_t button) {
+
+    if (button >= RIGHTMOUSE && button <= LEFTMOUSE)
+    {
+        unsigned char buttonState = sdlMouseButtonState();
+        switch (button)
+        {
+            case LEFTMOUSE:   return buttonState & SDL_BUTTON_LMASK;
+            case MIDDLEMOUSE: return buttonState & SDL_BUTTON_MMASK;
+            case RIGHTMOUSE:  return buttonState & SDL_BUTTON_RMASK;
+            default:          return 0;
+        }
+    }
+    
+    unsigned char* keyArray = sdlGetKeyboardState();
+    switch (button)
+    {
+        case LEFTSHIFTKEY:  return keyArray[SDL_SCANCODE_LSHIFT];
+        case RIGHTSHIFTKEY: return keyArray[SDL_SCANCODE_RSHIFT];
+        case CTRLKEY:       return keyArray[SDL_SCANCODE_LCTRL] || keyArray[SDL_SCANCODE_RCTRL];
+        default:            return 0;
+    }  
 }
 
 void events_qdevice(int32_t device)
@@ -194,8 +243,8 @@ void events_qdevice(int32_t device)
 
 uint32_t event_qread_start(int blocking)
 {
-    emulateMouseWithTouch();
-    emulateEscapeWithTapClose();
+    // emulateMouseWithTouch();
+    // emulateEscapeWithTapClose();
     return input_queue_length;
 }
 
@@ -208,12 +257,16 @@ int32_t events_qread_continue(int16_t *value)
     return device;
 }
 
-int32_t events_winopen(char *title)
+int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height)
 {
-    //emulateDialsWithTilt();
-    //accelerometer_read(&theta_y_smoothed, &theta_x_smoothed);   
-    emulateMouseWithTouch();
-    emulateEscapeWithTapClose();
+    // emulateDialsWithTilt();
+    // accelerometer_read(&theta_y_smoothed, &theta_x_smoothed);   
+    // emulateMouseWithTouch();
+    // emulateEscapeWithTapClose();
+
+    frame_size.width = frame_width;
+    frame_size.height = frame_height;
+
     return 0;
 }
 
