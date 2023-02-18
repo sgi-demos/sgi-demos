@@ -1,5 +1,4 @@
 #include <SDL.h>
-#include <SDL_opengles2.h>
 #include <gl.h>
 #include <device.h>
 #include "camera2D.h"
@@ -284,18 +283,7 @@ void events_tie(int32_t button, int32_t val1, int32_t val2)
     tied_valuators[button][1] = val2;
 }
 
-	// 	if(device_queued[LEFTMOUSE]) {
-	// 	    ev.device = LEFTMOUSE;
-	// 	    ev.val = 1;
-	// 	    enqueue_event(&ev);
-	// 	    for(int j = 0; j < 2; j++) {
-	// 		if(tied_valuators[LEFTMOUSE][j]) {
-	// 		    ev.device = tied_valuators[LEFTMOUSE][j];
-	// 		    ev.val = events_get_valuator(tied_valuators[LEFTMOUSE][j]);
-	// 		    enqueue_event(&ev);
-	// 		}
-	// 	    }
-	// 	}
+
 
     // insect inputs
     //
@@ -575,20 +563,46 @@ void sdlEventsProcess()
             if (!sdlEvents.fingerDown && !sdlEvents.pinch)
             {
                 SDL_MouseButtonEvent *m = (SDL_MouseButtonEvent *)&event;
+                
+                gl_event ev;
                 switch (m->button)
                 {
                 case SDL_BUTTON_LEFT:
                     sdlEvents.leftMouseButtonDown = true;
                     sdlEvents.leftMouseButtonDownCoord = (Pixel2D){(int)m->x, (int)m->y};
                     cam2DSetBasePan();
+                    ev.device = LEFTMOUSE;
                     break;
                 case SDL_BUTTON_MIDDLE:
                     sdlEvents.middleMouseButtonDown = true;
+                    ev.device = MIDDLEMOUSE;
                     break;
                 case SDL_BUTTON_RIGHT:
                     sdlEvents.rightMouseButtonDown = true;
+                    ev.device = RIGHTMOUSE;
                     break;
                 }
+
+                // convert SDL mouse button event to GL and add it to GL event queue
+                if (device_queued[ev.device]) 
+                {
+                    ev.val = 1;
+                    enqueue_event(&ev);
+
+                    // tied valuators is typically used for capturing mouse x and/or
+                    // y position at the time when a mouse button is pressed, and 
+                    // emitting those as mouse position x and y events right after
+                    // the mouse button event in the GL event queue
+                    for (int j = 0; j < 2; j++) 
+                    {
+                        if (tied_valuators[ev.device][j]) {
+                            ev.device = tied_valuators[ev.device][j];
+                            ev.val = events_get_valuator(tied_valuators[ev.device][j]);
+                            enqueue_event(&ev);
+                        }
+                    }
+                }
+
             }
             break;
         }
