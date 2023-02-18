@@ -601,7 +601,7 @@ createobjects () {
     makeobj (viewit = genobj ());
     window (-8.0, 8.0, -8.0 * 0.75, 8.0 * 0.75, 10.0, 135.0);
     maketag (windowtag = gentag ());
-    perspective (800, (float)XMAXSCREEN/YMAXSCREEN, 0.01, 131072.);
+    perspective (800, (4./ 3.), 0.01, 131072.);
     maketag (cthetatag = gentag ());
     rotate (ctheta, 'x');
     maketag (cphitag = gentag ());
