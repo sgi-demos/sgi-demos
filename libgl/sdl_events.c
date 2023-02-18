@@ -334,19 +334,13 @@ typedef struct
     // Pinch input
     bool pinch;
 
-    // Keyboard input
-    char keyDown;
-    bool leftShift;
-    bool rightShift;
-    bool leftCtrl;
-    bool rightCtrl;
-
 } SDLEventState;
 
 #define false 0
 #define true 1
 
-static SDLEventState sdlEvents = (SDLEventState){
+static SDLEventState sdlEvents = (SDLEventState)
+{
     // Window
     .pWindow = NULL,
     .windowID = 0,
@@ -365,13 +359,6 @@ static SDLEventState sdlEvents = (SDLEventState){
 
     // Pinch input
     .pinch = false,
-
-    // Keyboard input
-    .keyDown = 0,
-    .leftShift = false,
-    .rightShift = false,
-    .leftCtrl = false,
-    .rightCtrl = false
 };
 
 void
@@ -409,6 +396,105 @@ void sdlEventsInit(const char *windowTitle)
 void sdlEventsSwapWindow()
 {
     SDL_GL_SwapWindow(sdlEvents.pWindow);
+}
+
+static int32_t sdl_to_gl_key(int32_t sdl_key)
+{
+    #define GL_KEY_COUNT 78
+    static int32_t sdl_to_gl_key_map[GL_KEY_COUNT][2] = {
+        {SDLK_0,            ZEROKEY},
+        {SDLK_1,            ONEKEY},
+        {SDLK_2,            TWOKEY},
+        {SDLK_3,            THREEKEY},
+        {SDLK_4,            FOURKEY},
+        {SDLK_5,            FIVEKEY},
+        {SDLK_6,            SIXKEY},
+        {SDLK_7,            SEVENKEY},
+        {SDLK_8,            EIGHTKEY},
+        {SDLK_9,            NINEKEY},
+        {SDLK_a,            AKEY},
+        {SDLK_b,            BKEY},
+        {SDLK_BACKQUOTE,    ACCENTGRAVEKEY},
+        {SDLK_BACKSLASH,    BACKSLASHKEY},
+        {SDLK_BACKSPACE,    BACKSPACEKEY},
+        {SDLK_c,            CKEY},
+        {SDLK_CAPSLOCK,     CAPSLOCKKEY},
+        {SDLK_COMMA,        COMMAKEY},
+        {SDLK_d,            DKEY},
+        {SDLK_DELETE,       DELKEY},
+        {SDLK_DOWN,         DOWNARROWKEY},
+        {SDLK_e,            EKEY},
+        {SDLK_EQUALS,       EQUALKEY},
+        {SDLK_ESCAPE,       ESCKEY},
+        {SDLK_f,            FKEY},
+        {SDLK_g,            GKEY},
+        {SDLK_h,            HKEY},
+        {SDLK_i,            IKEY},
+        {SDLK_j,            JKEY},
+        {SDLK_k,            KKEY},
+        {SDLK_KP_0,         PAD0},
+        {SDLK_KP_1,         PAD1},
+        {SDLK_KP_2,         PAD2},
+        {SDLK_KP_3,         PAD3},
+        {SDLK_KP_4,         PAD4},
+        {SDLK_KP_5,         PAD5},
+        {SDLK_KP_6,         PAD6},
+        {SDLK_KP_7,         PAD7},
+        {SDLK_KP_8,         PAD8},
+        {SDLK_KP_9,         PAD9},
+        {SDLK_KP_COMMA,     PADCOMMA},
+        {SDLK_KP_ENTER,     PADENTER},
+        {SDLK_KP_MINUS,     PADMINUS},
+        {SDLK_KP_PERIOD,    PADPERIOD},
+        {SDLK_l,            LKEY},
+        {SDLK_LCTRL,        CTRLKEY},
+        {SDLK_LEFT,         LEFTARROWKEY},
+        {SDLK_LEFTBRACKET,  LEFTBRACKETKEY},
+        {SDLK_LSHIFT,       LEFTSHIFTKEY},
+        {SDLK_m,            MKEY},
+        {SDLK_MINUS,        MINUSKEY},
+        {SDLK_n,            NKEY},
+        {SDLK_o,            OKEY},
+        {SDLK_p,            PKEY},
+        {SDLK_PERIOD,       PERIODKEY},
+        {SDLK_q,            QKEY},
+        {SDLK_QUOTE,        QUOTEKEY},
+        {SDLK_r,            RKEY},
+        {SDLK_RETURN,       RETKEY},
+        {SDLK_RETURN2,      LINEFEEDKEY},
+        {SDLK_RIGHT,        RIGHTARROWKEY},
+        {SDLK_RIGHTBRACKET, RIGHTBRACKETKEY},
+        {SDLK_RSHIFT,       RIGHTSHIFTKEY},
+        {SDLK_s,            SKEY},
+        {SDLK_SCROLLLOCK,   NOSCRLKEY},
+        {SDLK_SEMICOLON,    SEMICOLONKEY},
+        {SDLK_SLASH,        VIRGULEKEY},
+        {SDLK_SPACE,        SPACEKEY},
+        {SDLK_STOP,         BREAKKEY},
+        {SDLK_t,            TKEY},
+        {SDLK_TAB,          TABKEY},
+        {SDLK_u,            UKEY},
+        {SDLK_UP,           UPARROWKEY},
+        {SDLK_v,            VKEY},
+        {SDLK_w,            WKEY},
+        {SDLK_x,            XKEY},
+        {SDLK_y,            YKEY},
+        {SDLK_z,            ZKEY}
+        // {SDLK_UNDEFINED,    SETUPKEY},
+        // {SDLK_UNDEFINED,    PADPF2},
+        // {SDLK_UNDEFINED,    PADPF1},
+        // {SDLK_UNDEFINED,    PADPF4},
+        // {SDLK_UNDEFINED,    PADPF3},
+    };
+
+    // linear search key map, if this turns out to be a performance issue, we
+    // can sort the SDLK_ keys by numeric value to directly index the GL key
+    for (int i = 0; i < GL_KEY_COUNT; ++i)
+    {
+        if (sdl_to_gl_key_map[i][0] == sdl_key)
+            return sdl_to_gl_key_map[i][1];
+    }
+    return 0;
 }
 
 void sdlEventsProcess()
@@ -449,46 +535,17 @@ void sdlEventsProcess()
                     emscripten_run_script(exit_js);
                     break; // as if
                 }
-                case SDLK_LSHIFT : sdlEvents.leftShift = true; break;
-                case SDLK_RSHIFT : sdlEvents.rightShift = true; break;
-                case SDLK_LCTRL : sdlEvents.leftCtrl = true; break; 
-                case SDLK_RCTRL : sdlEvents.rightCtrl = true; break; 
-                default: 
+                
+                default:
                 {
-                    // alphanumeric input
-                    const char *keyName = SDL_GetKeyName(event.key.keysym.sym);
-                    if (strlen(keyName) == 1)
+                    // convert SDL key event to GL and add it to GL event queue
+                    gl_event ev;
+                    ev.device = sdl_to_gl_key(event.key.keysym.sym);
+                    if (ev.device > 0 && device_queued[ev.device])
                     {
-                        sdlEvents.keyDown = keyName[0];
-
-                        if (sdlEvents.keyDown == 'F' && device_queued[FKEY])
-                        {
-                            gl_event ev;
-                            ev.device = FKEY;
-                            ev.val = 1; //1 or FKEY?
-                            enqueue_event(&ev);
-                        }
+                        ev.val = 1; 
+                        enqueue_event(&ev);
                     }
-                }
-            }
-            break;
-        }
-
-        case SDL_KEYUP:
-        {
-            switch (event.key.keysym.sym)
-            {
-                case SDLK_LSHIFT : sdlEvents.leftShift = false; break;
-                case SDLK_RSHIFT : sdlEvents.rightShift = false; break;
-                case SDLK_LCTRL  : sdlEvents.leftCtrl = false; break; 
-                case SDLK_RCTRL  : sdlEvents.rightCtrl = false; break; 
-                default: 
-                {
-                    // alphanumeric input
-                    const char *keyName = SDL_GetKeyName(event.key.keysym.sym);
-                    if (strlen(keyName) == 1)
-                        if (sdlEvents.keyDown == keyName[0])
-                            sdlEvents.keyDown = 0;
                 }
             }
             break;
