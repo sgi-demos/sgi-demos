@@ -14,17 +14,13 @@ int sdlPeepEvents();
 typedef struct gl_event {
     int32_t device;
     int16_t val;
-    // union here for other events like keys
 } gl_event;
 
-static uint32_t tied_valuators[2048][2];
 static uint32_t device_queued[2048];
-
+static uint32_t tied_valuators[2048][2];
 static gl_event input_queue[INPUT_QUEUE_SIZE];
-// The next item that needs to be read:
-static int input_queue_head = 0;
-// The number of items in the queue (tail = (head + length) % len):
-static int input_queue_length = 0;
+static int input_queue_head = 0;    // The next item that needs to be read
+static int input_queue_length = 0;  // The number of items in the queue (tail = (head + length) % len):
 
 // Framebuffer size may not be the same as window size
 Size2D frame_size;
@@ -168,9 +164,36 @@ int32_t emulateDialsWithTilt(int32_t device)
     return 0;
 }
 
-static int iclamp(int v, int low, int high)
+static int clamp(int v, int low, int high)
 {
     return v > high ? high : (v < low ? low : v);
+}
+
+static Boolean would_clamp(int v, int low, int high)
+{
+    return v < low || v > high;
+}
+
+int32_t sdl_to_gl_mouse_x()
+{
+    // For now, SDL window and GL framebuffer dimensions may differ, so convert
+    // SDL window mouse coords to GL framebuffer coords
+    int32_t offsetX = cam2DWindowSize().width / 2 - frame_size.width / 2;
+    return sdlMousePosX() - offsetX;
+}
+
+int32_t sdl_to_gl_mouse_y()
+{
+    // For now, SDL window and GL framebuffer dimensions may differ, so convert
+    // SDL window mouse coords to GL framebuffer coords, including inverting y
+    int32_t offsetY = cam2DWindowSize().height / 2 - frame_size.height / 2;
+    return cam2DWindowSize().height - sdlMousePosY() - offsetY;
+}
+
+Boolean mouse_inside_gl_framebuffer()
+{
+    return !would_clamp(sdl_to_gl_mouse_x(), 1, frame_size.width - 1) 
+        && !would_clamp(sdl_to_gl_mouse_y(), 1, frame_size.height - 1);
 }
 
 int32_t events_get_valuator(int32_t device)
@@ -179,29 +202,128 @@ int32_t events_get_valuator(int32_t device)
 
     switch (device)
     {
-        case MOUSEX: {
-            // For now, window and framebuffer dimensions may differ, so convert
-            // window mouse coords to framebuffer coords
-            int offsetX = cam2DWindowSize().width / 2 - frame_size.width / 2;
-            int32_t fbPos = sdlMousePosX() - offsetX;
-            int32_t posClamped = iclamp(fbPos, 1, frame_size.width - 1);
-            return posClamped;
-        }
-        case MOUSEY: {
-            // For now, window and framebuffer dimensions may differ, so convert
-            // window mouse coords to framebuffer coords.  Also, invert mouse y.
-            int offsetY = cam2DWindowSize().height / 2 - frame_size.height / 2;
-            int32_t fbPos = cam2DWindowSize().height - sdlMousePosY() - offsetY;
-            int32_t posClamped = iclamp(fbPos, 1, frame_size.height - 1);
-            return posClamped;
-        }
+        case MOUSEX: return clamp(sdl_to_gl_mouse_x(), 1, frame_size.width - 1);
+        case MOUSEY: return clamp(sdl_to_gl_mouse_y(), 1, frame_size.height - 1);
         default: {
-            if (isDial(device))
-                return emulateDialsWithTilt(device); // TBD
+            //if (isDial(device))
+            //    return emulateDialsWithTilt(device); // TBD
         }
     }  
 
     printf("warning: unimplemented evaluator %d\n", device);
+    return 0;
+}
+
+
+#define GL_KEY_COUNT 78
+static int32_t sdl_to_gl_key_map[GL_KEY_COUNT][3] = {
+    {SDLK_0,            ZEROKEY},
+    {SDLK_1,            ONEKEY},
+    {SDLK_2,            TWOKEY},
+    {SDLK_3,            THREEKEY},
+    {SDLK_4,            FOURKEY},
+    {SDLK_5,            FIVEKEY},
+    {SDLK_6,            SIXKEY},
+    {SDLK_7,            SEVENKEY},
+    {SDLK_8,            EIGHTKEY},
+    {SDLK_9,            NINEKEY},
+    {SDLK_a,            AKEY},
+    {SDLK_b,            BKEY},
+    {SDLK_BACKQUOTE,    ACCENTGRAVEKEY},
+    {SDLK_BACKSLASH,    BACKSLASHKEY},
+    {SDLK_BACKSPACE,    BACKSPACEKEY},
+    {SDLK_c,            CKEY},
+    {SDLK_CAPSLOCK,     CAPSLOCKKEY},
+    {SDLK_COMMA,        COMMAKEY},
+    {SDLK_d,            DKEY},
+    {SDLK_DELETE,       DELKEY},
+    {SDLK_DOWN,         DOWNARROWKEY},
+    {SDLK_e,            EKEY},
+    {SDLK_EQUALS,       EQUALKEY},
+    {SDLK_ESCAPE,       ESCKEY},
+    {SDLK_f,            FKEY},
+    {SDLK_g,            GKEY},
+    {SDLK_h,            HKEY},
+    {SDLK_i,            IKEY},
+    {SDLK_j,            JKEY},
+    {SDLK_k,            KKEY},
+    {SDLK_KP_0,         PAD0},
+    {SDLK_KP_1,         PAD1},
+    {SDLK_KP_2,         PAD2},
+    {SDLK_KP_3,         PAD3},
+    {SDLK_KP_4,         PAD4},
+    {SDLK_KP_5,         PAD5},
+    {SDLK_KP_6,         PAD6},
+    {SDLK_KP_7,         PAD7},
+    {SDLK_KP_8,         PAD8},
+    {SDLK_KP_9,         PAD9},
+    {SDLK_KP_COMMA,     PADCOMMA},
+    {SDLK_KP_ENTER,     PADENTER},
+    {SDLK_KP_MINUS,     PADMINUS},
+    {SDLK_KP_PERIOD,    PADPERIOD},
+    {SDLK_l,            LKEY},
+    {SDLK_LCTRL,        CTRLKEY},
+    {SDLK_LEFT,         LEFTARROWKEY},
+    {SDLK_LEFTBRACKET,  LEFTBRACKETKEY},
+    {SDLK_LSHIFT,       LEFTSHIFTKEY},
+    {SDLK_m,            MKEY},
+    {SDLK_MINUS,        MINUSKEY},
+    {SDLK_n,            NKEY},
+    {SDLK_o,            OKEY},
+    {SDLK_p,            PKEY},
+    {SDLK_PERIOD,       PERIODKEY},
+    {SDLK_q,            QKEY},
+    {SDLK_QUOTE,        QUOTEKEY},
+    {SDLK_r,            RKEY},
+    {SDLK_RETURN,       RETKEY},
+    {SDLK_RETURN2,      LINEFEEDKEY},
+    {SDLK_RIGHT,        RIGHTARROWKEY},
+    {SDLK_RIGHTBRACKET, RIGHTBRACKETKEY},
+    {SDLK_RSHIFT,       RIGHTSHIFTKEY},
+    {SDLK_s,            SKEY},
+    {SDLK_SCROLLLOCK,   NOSCRLKEY},
+    {SDLK_SEMICOLON,    SEMICOLONKEY},
+    {SDLK_SLASH,        VIRGULEKEY},
+    {SDLK_SPACE,        SPACEKEY},
+    {SDLK_STOP,         BREAKKEY},
+    {SDLK_t,            TKEY},
+    {SDLK_TAB,          TABKEY},
+    {SDLK_u,            UKEY},
+    {SDLK_UP,           UPARROWKEY},
+    {SDLK_v,            VKEY},
+    {SDLK_w,            WKEY},
+    {SDLK_x,            XKEY},
+    {SDLK_y,            YKEY},
+    {SDLK_z,            ZKEY}
+    // {SDLK_UNDEFINED,    SETUPKEY},
+    // {SDLK_UNDEFINED,    PADPF2},
+    // {SDLK_UNDEFINED,    PADPF1},
+    // {SDLK_UNDEFINED,    PADPF4},
+    // {SDLK_UNDEFINED,    PADPF3},
+};
+
+// linear search key map, if this turns out to be a performance issue, we
+// can sort the SDLK_ keys by numeric value to directly index the GL key
+
+// get SDL scancode from GL key
+static SDL_Scancode gl_to_sdl_scancode(int32_t gl_key)
+{
+    for (int i = 0; i < GL_KEY_COUNT; ++i)
+    {
+        if (sdl_to_gl_key_map[i][1] == gl_key)
+            return SDL_GetScancodeFromKey(sdl_to_gl_key_map[i][0]);
+    }
+    return 0;
+}
+
+// get GL key from SDL keycode
+static int32_t sdl_keycode_to_gl(int32_t sdl_keycode)
+{
+    for (int i = 0; i < GL_KEY_COUNT; ++i)
+    {
+        if (sdl_to_gl_key_map[i][0] == sdl_keycode)
+            return sdl_to_gl_key_map[i][1];
+    }
     return 0;
 }
 
@@ -222,10 +344,18 @@ Boolean events_get_button(int32_t button) {
     unsigned char* keyArray = sdlGetKeyboardState();
     switch (button)
     {
-        case LEFTSHIFTKEY:  return keyArray[SDL_SCANCODE_LSHIFT];
-        case RIGHTSHIFTKEY: return keyArray[SDL_SCANCODE_RSHIFT];
-        case CTRLKEY:       return keyArray[SDL_SCANCODE_LCTRL] || keyArray[SDL_SCANCODE_RCTRL];
-        default:            return 0;
+        case CTRLKEY: 
+            return keyArray[SDL_SCANCODE_LCTRL] || keyArray[SDL_SCANCODE_RCTRL];
+            
+        default:  
+        {
+            // Map SDL_SCANCODE to GL device
+            SDL_Scancode sdl_scancode = gl_to_sdl_scancode(button);
+            if (sdl_scancode != 0)
+                return keyArray[sdl_scancode];
+            else
+                return 0;
+        }
     }  
 }
 
@@ -282,24 +412,6 @@ void events_tie(int32_t button, int32_t val1, int32_t val2)
     tied_valuators[button][0] = val1;
     tied_valuators[button][1] = val2;
 }
-
-
-
-    // insect inputs
-    //
-    // qdevice (INPUTCHANGE);
-    // qdevice (REDRAW);
-    // qdevice (ESCKEY);
-    // qdevice (CTRLKEY);
-    // qdevice (FKEY);
-    // qdevice (LEFTMOUSE);
-    // qdevice (MIDDLEMOUSE);
-
-    // qdevice (LEFTARROWKEY);
-    // qdevice (RIGHTARROWKEY);
-    // qdevice (DOWNARROWKEY);
-    // qdevice (UPARROWKEY);
-    // qdevice (WINQUIT);
 
 typedef struct
 {
@@ -386,105 +498,6 @@ void sdlEventsSwapWindow()
     SDL_GL_SwapWindow(sdlEvents.pWindow);
 }
 
-static int32_t sdl_to_gl_key(int32_t sdl_key)
-{
-    #define GL_KEY_COUNT 78
-    static int32_t sdl_to_gl_key_map[GL_KEY_COUNT][2] = {
-        {SDLK_0,            ZEROKEY},
-        {SDLK_1,            ONEKEY},
-        {SDLK_2,            TWOKEY},
-        {SDLK_3,            THREEKEY},
-        {SDLK_4,            FOURKEY},
-        {SDLK_5,            FIVEKEY},
-        {SDLK_6,            SIXKEY},
-        {SDLK_7,            SEVENKEY},
-        {SDLK_8,            EIGHTKEY},
-        {SDLK_9,            NINEKEY},
-        {SDLK_a,            AKEY},
-        {SDLK_b,            BKEY},
-        {SDLK_BACKQUOTE,    ACCENTGRAVEKEY},
-        {SDLK_BACKSLASH,    BACKSLASHKEY},
-        {SDLK_BACKSPACE,    BACKSPACEKEY},
-        {SDLK_c,            CKEY},
-        {SDLK_CAPSLOCK,     CAPSLOCKKEY},
-        {SDLK_COMMA,        COMMAKEY},
-        {SDLK_d,            DKEY},
-        {SDLK_DELETE,       DELKEY},
-        {SDLK_DOWN,         DOWNARROWKEY},
-        {SDLK_e,            EKEY},
-        {SDLK_EQUALS,       EQUALKEY},
-        {SDLK_ESCAPE,       ESCKEY},
-        {SDLK_f,            FKEY},
-        {SDLK_g,            GKEY},
-        {SDLK_h,            HKEY},
-        {SDLK_i,            IKEY},
-        {SDLK_j,            JKEY},
-        {SDLK_k,            KKEY},
-        {SDLK_KP_0,         PAD0},
-        {SDLK_KP_1,         PAD1},
-        {SDLK_KP_2,         PAD2},
-        {SDLK_KP_3,         PAD3},
-        {SDLK_KP_4,         PAD4},
-        {SDLK_KP_5,         PAD5},
-        {SDLK_KP_6,         PAD6},
-        {SDLK_KP_7,         PAD7},
-        {SDLK_KP_8,         PAD8},
-        {SDLK_KP_9,         PAD9},
-        {SDLK_KP_COMMA,     PADCOMMA},
-        {SDLK_KP_ENTER,     PADENTER},
-        {SDLK_KP_MINUS,     PADMINUS},
-        {SDLK_KP_PERIOD,    PADPERIOD},
-        {SDLK_l,            LKEY},
-        {SDLK_LCTRL,        CTRLKEY},
-        {SDLK_LEFT,         LEFTARROWKEY},
-        {SDLK_LEFTBRACKET,  LEFTBRACKETKEY},
-        {SDLK_LSHIFT,       LEFTSHIFTKEY},
-        {SDLK_m,            MKEY},
-        {SDLK_MINUS,        MINUSKEY},
-        {SDLK_n,            NKEY},
-        {SDLK_o,            OKEY},
-        {SDLK_p,            PKEY},
-        {SDLK_PERIOD,       PERIODKEY},
-        {SDLK_q,            QKEY},
-        {SDLK_QUOTE,        QUOTEKEY},
-        {SDLK_r,            RKEY},
-        {SDLK_RETURN,       RETKEY},
-        {SDLK_RETURN2,      LINEFEEDKEY},
-        {SDLK_RIGHT,        RIGHTARROWKEY},
-        {SDLK_RIGHTBRACKET, RIGHTBRACKETKEY},
-        {SDLK_RSHIFT,       RIGHTSHIFTKEY},
-        {SDLK_s,            SKEY},
-        {SDLK_SCROLLLOCK,   NOSCRLKEY},
-        {SDLK_SEMICOLON,    SEMICOLONKEY},
-        {SDLK_SLASH,        VIRGULEKEY},
-        {SDLK_SPACE,        SPACEKEY},
-        {SDLK_STOP,         BREAKKEY},
-        {SDLK_t,            TKEY},
-        {SDLK_TAB,          TABKEY},
-        {SDLK_u,            UKEY},
-        {SDLK_UP,           UPARROWKEY},
-        {SDLK_v,            VKEY},
-        {SDLK_w,            WKEY},
-        {SDLK_x,            XKEY},
-        {SDLK_y,            YKEY},
-        {SDLK_z,            ZKEY}
-        // {SDLK_UNDEFINED,    SETUPKEY},
-        // {SDLK_UNDEFINED,    PADPF2},
-        // {SDLK_UNDEFINED,    PADPF1},
-        // {SDLK_UNDEFINED,    PADPF4},
-        // {SDLK_UNDEFINED,    PADPF3},
-    };
-
-    // linear search key map, if this turns out to be a performance issue, we
-    // can sort the SDLK_ keys by numeric value to directly index the GL key
-    for (int i = 0; i < GL_KEY_COUNT; ++i)
-    {
-        if (sdl_to_gl_key_map[i][0] == sdl_key)
-            return sdl_to_gl_key_map[i][1];
-    }
-    return 0;
-}
-
 void sdlEventsProcess()
 {
     SDL_Event event;
@@ -528,8 +541,8 @@ void sdlEventsProcess()
                 {
                     // convert SDL key event to GL and add it to GL event queue
                     gl_event ev;
-                    ev.device = sdl_to_gl_key(event.key.keysym.sym);
-                    if (ev.device > 0 && device_queued[ev.device])
+                    ev.device = sdl_keycode_to_gl(event.key.keysym.sym);
+                    if (ev.device != 0 && device_queued[ev.device])
                     {
                         ev.val = 1; 
                         enqueue_event(&ev);
@@ -551,6 +564,16 @@ void sdlEventsProcess()
 
         case SDL_MOUSEMOTION:
         {
+            // detect INPUTCHANGE events if client wants them
+            // 0 = motion out of window, 1 = motion into window
+            // also? 0 = window lost focus, 1 = window gained focus
+            // gl_event ev;
+            // ev.device = sdl_to_gl_key(event.key.keysym.sym);
+            // if (ev.device > 0 && device_queued[ev.device])
+            // {
+            //     ev.val = 1; 
+            //     enqueue_event(&ev);
+
             SDL_MouseMotionEvent *m = (SDL_MouseMotionEvent *)&event;
             sdlEvents.mousePosition = (Pixel2D){(int)m->x, (int)m->y};
             if (sdlEvents.leftMouseButtonDown && !sdlEvents.fingerDown && !sdlEvents.pinch)
