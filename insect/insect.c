@@ -8,7 +8,6 @@
 */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <gl.h>
 #include <math.h>
 #include <device.h>
@@ -17,6 +16,7 @@
 
 #include "EM_MAIN_LOOP_INIT.h"
 
+/* begin Emscripten emcc crashes on -fcommon, so must fwd define */
 Object screen,viewit,shadow,body,hip[6],thigh[6],shin[6],kneeball[6];
 Object body_shadow,hip_shadow,thigh_shadow,shin_shadow,kneeball_shadow;
 
@@ -43,6 +43,7 @@ Coord k3[6][3];
 Coord b7[12][3];
 Coord b8[12][3];
 Icoord scr[4][2];
+/* end Emscripten emcc crashes on -fcommon, so must fwd define */
 
 Linestyle ls = 0xaaaa;
 
@@ -59,11 +60,6 @@ float   light[3],
         theta = PI / 4.0;
 Angle ctheta = -900, cphi, cvtheta, cvphi;
 float   fabso ();
-
-static const short tilt_horiz_center = 0;
-static const short tilt_horiz_span = 200;
-static const short tilt_vert_center = 320;
-static const short tilt_vert_span = 200;
 
 /*	main routine -- handle tokens of window manager
 		-- display shadow and insect
@@ -82,11 +78,12 @@ long wsizex, wsizey;
 long pikx, piky;
 
 #include "EM_MAIN_BEGIN.h"
-int main (argc, argv)
+main (argc, argv)
 #include "EM_MAIN_END.h"
 int	argc;
 char	*argv[];
 {
+ 
     int     i,
             j,
             k;
@@ -94,7 +91,7 @@ char	*argv[];
             val;
     Boolean attached;
 
-    follow = TRUE;
+    follow = FALSE;
 	{
 		char *t, *strrchr();
 		winopen((t=strrchr(argv[0], '/')) != NULL ? t+1 : argv[0]);
@@ -108,7 +105,7 @@ char	*argv[];
 
     shademodel(FLAT);
 
-    defpattern (HALFTONE, 16, (uint16_t *) halftone);
+    defpattern (HALFTONE, 16, halftone);
     deflinestyle (HALFTONE, ls);
     getlightvector ();
 
@@ -146,11 +143,6 @@ char	*argv[];
     qdevice (FKEY);
     qdevice (LEFTMOUSE);
     qdevice (MIDDLEMOUSE);
-
-    qdevice (LEFTARROWKEY);
-    qdevice (RIGHTARROWKEY);
-    qdevice (DOWNARROWKEY);
-    qdevice (UPARROWKEY);
 
 /* Queue WINQUIT to restore color map after program -
 new for ECLIPSE 8 bit machine  */
@@ -237,13 +229,7 @@ new for ECLIPSE 8 bit machine  */
 			follow = !follow;
 		    }
 		    break;
-
-                case LEFTARROWKEY: printf("left\n"); break;
-                case RIGHTARROWKEY: printf("right\n"); break;
-                case DOWNARROWKEY: printf("down\n"); break;
-                case UPARROWKEY: printf("up\n"); break;
 	    }
-            swapbuffers();
 	}
 	if (attached) {
 
@@ -668,30 +654,18 @@ move_insect () {
     mx = ((float)pikx - (float)worgx) / halfwinx - 1.0;
     my = ((float)piky - (float)worgy) / halfwiny - 1.0;
 
-    /* Use accelerometer to move insect. */
-    {
-	float dx = (getvaluator(DIAL0) - tilt_horiz_center) / (float) tilt_horiz_span;
-	float dy = (getvaluator(DIAL1) - tilt_vert_center) / (float) tilt_vert_span;
-	if (dx < -0.5) dx = -0.5;
-	if (dx > 0.5) dx = 0.5;
-	if (dy < -0.5) dy = -0.5;
-	if (dy > 0.5) dy = 0.5;
-	mx += dx;
-	my -= dy;
-    }
-
     gl_sincos (cphi, &s, &c);
     dx = mx * c + my * s;
     dy = -mx * s + my * c;
     mx = dx;
     my = dy;
 
-    px += mx / (float) (RES_INT);
-    py += my / (float) (RES_INT);
+    px += mx / (float) (RES);
+    py += my / (float) (RES);
 
     if (follow) {
-	cx -= mx / (float) (RES_INT);
-	cy -= my / (float) (RES_INT);
+	cx -= mx / (float) (RES);
+	cy -= my / (float) (RES);
     }
 
     dr = sqrt (mx * mx + my * my);
@@ -699,9 +673,9 @@ move_insect () {
     dy = my / dr;
 
     for (i = 0; i < 6; i++) {
-	lx = legx[i] - (float) (RES_INT / 2);
-	ly = legy[i] - (float) (RES_INT / 2);
-	lr = (float) (RES_INT / 2);
+	lx = legx[i] - (float) (RES / 2);
+	ly = legy[i] - (float) (RES / 2);
+	lr = (float) (RES / 2);
 	lx = lx / lr;
 	ly = ly / lr;
 	dmx = (dx - lx);

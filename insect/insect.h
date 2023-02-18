@@ -2,8 +2,8 @@
 #define HALFTONE 1
 #define PI 3.1415926536
 	/*  resolution of movement  */
-#define RES_INT 30
-#define RES_FLOAT 30.0
+#define RES 30
+#define RES_FLOAT 30.0 /* RES.0 macro expansion does not work with modern compilers */
 	/*  stuff for making body  */
 #define SIN30 (0.5)
 #define COS30 (0.866025404)
@@ -25,6 +25,7 @@
 #define ECLIPSE8_NCOLORS 10
 #define ECLIPSE8_SKYBLUE 3
 
+/* begin Emscripten emcc crashes on -fcommon, so must declare extern */
 extern Object screen,viewit,shadow,body,hip[6],thigh[6],shin[6],kneeball[6];
 extern Object body_shadow,hip_shadow,thigh_shadow,shin_shadow,kneeball_shadow;
 
@@ -80,4 +81,4 @@ extern Coord k3[6][3];
 extern Coord b7[12][3];
 extern Coord b8[12][3];
 extern Icoord scr[4][2];
-
+/* end Emscripten emcc crashes on -fcommon, so must declare extern */
