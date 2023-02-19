@@ -1319,20 +1319,20 @@ void clear() {
 
     // The clear() command must only clear the viewport. Use a slow rectangle when it's
     // not full-screen.
-    if (is_full_viewport()) {
+    // if (is_full_viewport()) {
         // Full screen, we can use the optimized version.
         rasterizer_clear(current_color[0] * 255.0,
                 current_color[1] * 255.0,
                 current_color[2] * 255.0);
-    } else {
-        // Partial viewport, draw polygon. This uses the current color.
-        bgnpolygon();
-        pdr_(0, 0, 0);
-        pdr_(0, 1, 0);
-        pdr_(1, 1, 0);
-        pdr_(1, 0, 0);
-        endpolygon();
-    }
+    // } else {
+    //     // Partial viewport, draw polygon. This uses the current color.
+    //     bgnpolygon();
+    //     pdr_(0, 0, 0);
+    //     pdr_(0, 1, 0);
+    //     pdr_(1, 1, 0);
+    //     pdr_(1, 0, 0);
+    //     endpolygon();
+    // }
 }
 
 void closeobj() { 
@@ -1783,7 +1783,7 @@ void qdevice(int32_t device) {
 
         case INPUTCHANGE:
             // Tell app that this window has received input focus
-            //enqueue_device(INPUTCHANGE, 1);
+            enqueue_device(INPUTCHANGE, 1);
             break;
     }
 }
@@ -2406,6 +2406,8 @@ void pup_draw(pup *p, int menu_left, int menu_top, int selected)
 }
 
 int32_t dopup(int32_t pup_index) {
+
+    return 0; // TODO: Locks up in browser currently.  Fix it, and with original SGI font.
 
     // Save previous drawing state
     int old_zbuffer = zbuffer_enabled;

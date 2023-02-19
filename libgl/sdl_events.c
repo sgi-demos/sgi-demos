@@ -241,8 +241,6 @@ int32_t sdl_to_gl_mouse_y()
 
 bool mouse_inside_framebuffer()
 {
-    printf ("sdl_to_gl_mouse %d, %d\n", sdl_to_gl_mouse_x(), sdl_to_gl_mouse_y());
-
     return !would_clamp(sdl_to_gl_mouse_x(), 1, sdlEvents.frameSize.width - 1) 
         && !would_clamp(sdl_to_gl_mouse_y(), 1, sdlEvents.frameSize.height - 1);
 }
@@ -597,9 +595,9 @@ void sdlEventsProcess()
         {
             if (!sdlEvents.fingerDown && !sdlEvents.pinch)
             {
-                SDL_MouseButtonEvent *m = (SDL_MouseButtonEvent *)&event;
-                
+                SDL_MouseButtonEvent *m = (SDL_MouseButtonEvent *)&event;               
                 gl_event ev;
+
                 switch (m->button)
                 {
                 case SDL_BUTTON_LEFT:
@@ -628,12 +626,14 @@ void sdlEventsProcess()
                     // y position at the time when a mouse button is pressed, and 
                     // emitting those as mouse position x and y events right after
                     // the mouse button event in the GL event queue
-                    for (int j = 0; j < 2; j++) 
+                    gl_event tied_ev;
+                    for (int j = 0; j < 2; ++j) 
                     {
-                        if (tied_valuators[ev.device][j]) {
-                            ev.device = tied_valuators[ev.device][j];
-                            ev.val = events_get_valuator(tied_valuators[ev.device][j]);
-                            enqueue_event(&ev);
+                        if (tied_valuators[ev.device][j])
+                        {
+                            tied_ev.device = tied_valuators[ev.device][j];
+                            tied_ev.val = events_get_valuator(tied_valuators[ev.device][j]);
+                            enqueue_event(&tied_ev);
                         }
                     }
                 }
@@ -645,18 +645,41 @@ void sdlEventsProcess()
         case SDL_MOUSEBUTTONUP:
         {
             SDL_MouseButtonEvent *m = (SDL_MouseButtonEvent *)&event;
+            gl_event ev;
+
             switch (m->button)
             {
             case SDL_BUTTON_LEFT:
                 sdlEvents.leftMouseButtonDown = false;
+                ev.device = LEFTMOUSE;
                 break;
             case SDL_BUTTON_MIDDLE:
                 sdlEvents.middleMouseButtonDown = false;
+                ev.device = MIDDLEMOUSE;
                 break;
             case SDL_BUTTON_RIGHT:
                 sdlEvents.rightMouseButtonDown = false;
+                ev.device = RIGHTMOUSE;
                 break;
             }
+            // convert SDL mouse button event to GL and add it to GL event queue
+            if (devices_queued[ev.device]) 
+            {
+                ev.val = 0;
+                enqueue_event(&ev);
+
+                gl_event tied_ev;
+                for (int j = 0; j < 2; ++j) 
+                {
+                    if (tied_valuators[ev.device][j])
+                    {
+                        tied_ev.device = tied_valuators[ev.device][j];
+                        tied_ev.val = events_get_valuator(tied_valuators[ev.device][j]);
+                        enqueue_event(&tied_ev);
+                    }
+                }
+            }
+
             break;
         }
 

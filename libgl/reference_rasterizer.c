@@ -181,7 +181,7 @@ void pixel(int x, int y, float bary[3], void *data)
         pixel_colors[DISPLAY_HEIGHT - 1 - y][x][0] = r;
         pixel_colors[DISPLAY_HEIGHT - 1 - y][x][1] = g;
         pixel_colors[DISPLAY_HEIGHT - 1 - y][x][2] = b;
-        pixel_depths[DISPLAY_HEIGHT - 1 - y][x] = z;
+        //pixel_depths[DISPLAY_HEIGHT - 1 - y][x] = z; // TODO: Z buffering is messed up in jello, disable writes temporarily
     }
 }
 
@@ -258,7 +258,6 @@ void rasterizer_zbuffer(int enable)
 
 void rasterizer_zclear(uint32_t z)
 {
-    z = 0xffff; // XXX fpgasim does this
     for(int j = 0; j < DISPLAY_HEIGHT; j++)
         for(int i = 0; i < DISPLAY_WIDTH; i++)
             pixel_depths[j][i] = z;

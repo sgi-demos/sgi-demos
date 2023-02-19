@@ -3,13 +3,9 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <gl.h>
 #include <math.h>
 #include <device.h>
-#include <time.h>
-
 #include "EM_MAIN_LOOP_INIT.h"
 
 #define X 0
@@ -55,19 +51,13 @@ short dev, val;
 int active;
 long gid;
 
-short mx, my, omx, omy;
-
-short ory2, orx2;
+short mx, my, omx, omy, nmx, nmy;
 
 float dt = 0.5;
 float dw = 0.9;
 float damp = 0.3;
 float fric = 0.3;
 float dist = 15.0;
-
-static int esc_pressed = 0;
-static int esc_long_press = 0;
-static struct timespec esc_press_time;
 
 typedef struct atom_struct {
 
@@ -148,9 +138,6 @@ typedef struct thing_struct {
 
 } Thing;
 
-static double diff_timespecs(struct timespec *t1, struct timespec *t2) {
-    return (t1->tv_sec - t2->tv_sec) + (t1->tv_nsec - t2->tv_nsec)/1000000000.0;
-}
 
 Conec *new_conec(next, a1, a2)
 Conec *next;
@@ -219,7 +206,7 @@ Atom *a1, *a2, *a3;
     new->vertex[1] = a2;
     new->vertex[2] = a3;
 
-    return new;
+    return(new);
 }
 
 Poly *new_polygon() {
@@ -259,23 +246,6 @@ int display_mode=4;
 
 int menu, surface_menu;
 
-void reorient(short ax, short ay);
-
-short tilt_left = -200;
-short tilt_right = 200;
-short tilt_forward = 650;
-short tilt_back = 150;
-static const short tilt_horiz_center = 0;
-static const short tilt_horiz_span = 200;
-static const short tilt_vert_center = 320;
-static const short tilt_vert_span = 200;
-
-void get_tilt(short *tiltx, short *tilty)
-{
-    *tiltx = XMAXSCREEN * (getvaluator(DIAL1) - tilt_forward) / (tilt_back - tilt_forward) ;
-    *tilty = YMAXSCREEN * (getvaluator(DIAL0) - tilt_left) / (tilt_right - tilt_left);
-}
-
 #include "EM_MAIN_BEGIN.h"
 main (argc, argv)
 #include "EM_MAIN_END.h"
@@ -284,7 +254,6 @@ char	*argv[];
 {
  
     int i, j;
-    int started = 0;
 
 	if (argc != 1)
 	{
@@ -292,22 +261,6 @@ char	*argv[];
 		exit(1);
 	}
     initialize(argv[0]);
-
-    // XXX grantham
-    get_tilt(&orx2, &ory2);
-
-    if (!started) {
-	grav = -0.008;
-	damp = 0.995;
-	light_vector[X] = view[0][1];
-	light_vector[Y] = view[1][1];
-	light_vector[Z] = view[2][1];
-
-	grav_vec[X] = light_vector[X] * grav;
-	grav_vec[Y] = light_vector[Y] * grav;
-	grav_vec[Z] = light_vector[Z] * grav;
-	started = 1;
-    }
 
     #include "EM_MAIN_LOOP_BEGIN.h"
     while (TRUE) {
@@ -327,25 +280,13 @@ char	*argv[];
 		    break;
 
 		case ESCKEY :
-			if (val) {
-			    // Keep track of when it was pressed.
-			    esc_pressed = 1;
-			    esc_long_press = 0;
-			    clock_gettime(CLOCK_MONOTONIC, &esc_press_time);
-			} else {
-			    // If this wasn't long-held, exit.
-			    if (!esc_long_press) {
-				gexit();
-				exit(0);
-			    }
-
-			    esc_pressed = 0;
+			if (!val) {
+			    gexit(); exit(0);
 			}
 		    break;
 
 		case LEFTMOUSE :
 		    if (val) {
-                        if (!started) {
                             grav = -0.008;
                             damp = 0.995;
                             light_vector[X] = view[0][1];
@@ -355,16 +296,6 @@ char	*argv[];
                             grav_vec[X] = light_vector[X] * grav;
                             grav_vec[Y] = light_vector[Y] * grav;
                             grav_vec[Z] = light_vector[Z] * grav;
-                            started = 1;
-                        }
-		    }
-
-                    if (val) {
-			qread(&omx); qread(&omy);
-			function = REORIENT;
-		    } else {
-			function = 0;
-			get_tilt(&orx2, &ory2);
 		    }
 
 		    break;
@@ -398,53 +329,14 @@ char	*argv[];
 
 	switch(function) {
 
-	    case REORIENT: {
-		short nmx = getvaluator(MOUSEX);
-		short nmy = getvaluator(MOUSEY);
-
-		short ax = (nmx-omx)*2;
-		short ay = (omy-nmy)*2;
-
-		omx=nmx; omy=nmy;
-
-		reorient(ax, ay);
+	    case REORIENT:
+		reorient();
 		break;
 	    }
-
-	    default : {
-		short rx2, ry2;
-
-		get_tilt(&rx2, &ry2);
-
-		short ax = (ry2 - ory2) / 2;
-		short ay = (orx2 - rx2) / 2;
-
-		orx2 = rx2;
-		ory2 = ry2;
-
-		// Don't use tilt, we use it for gravity.
-		ax = 0;
-		ay = 0;
-
-		reorient(ax, ay);
-		break;
-	    }
-	}
 
 	draw_everything();
 	iterate();
 
-	// See if ESC is being held down.
-	if (esc_pressed) {
-	    struct timespec now;
-	    clock_gettime(CLOCK_MONOTONIC, &now);
-	    double elapsed = diff_timespecs(&now, &esc_press_time);
-	    if (elapsed > 0.5) {
-		// If ESC is hold for more than half a second, reset the physics.
-		reset_jello();
-		esc_long_press = 1;
-	    }
-	}
     }
 }
 
@@ -474,7 +366,7 @@ char *name;
 
     zbuffer(TRUE);
     lsetdepth(0x0, 0x7fffff);
-    perspective(400, (float)XMAXSCREEN/YMAXSCREEN, dist-(HEIGHT*1.74), dist+(HEIGHT*1.74));
+    perspective(400, 5.0/4.0, dist-(HEIGHT*1.74), dist+(HEIGHT*1.74));
     translate(0.0, 0.0, -dist);
     RGBcolor(0, 0, 0);
     clear(); swapbuffers(); clear();
@@ -483,12 +375,11 @@ char *name;
     qdevice(REDRAW);
     qdevice(ESCKEY);
     qdevice(LEFTMOUSE);
-    tie(LEFTMOUSE, MOUSEX, MOUSEY);
     qdevice(MIDDLEMOUSE);
     tie(MIDDLEMOUSE, MOUSEX, MOUSEY);
     qdevice(RIGHTMOUSE);
 
-    defpattern(HALFTONE, 16, (uint16_t *) halftone);
+    defpattern(HALFTONE, 16, halftone);
 
     for (k=0; k<6; k++)
 	for (i=0; i<4; i++)
@@ -639,7 +530,7 @@ Atom *atom;
 		atom->acc[X] = grav_vec[X];
 		atom->acc[Y] = grav_vec[Y];
 		atom->acc[Z] = grav_vec[Z];
-	    } while ((atom = atom->next) != NULL);
+	    } while (atom = atom->next);
 	}
 }
 
@@ -685,7 +576,7 @@ Conec *conec;
 		conec->tu->acc[Y] += ay;
 		conec->tu->acc[Z] += az;
 
-	} while ((conec = conec->next) != NULL);
+	} while (conec = conec->next);
 }
 
 
@@ -730,7 +621,7 @@ Atom *atom;
 	    atom->vel[Y] *= fric;
 	}
 
-    } while ((atom = atom->next) != NULL);
+    } while (atom = atom->next);
 }
 
 
@@ -749,7 +640,7 @@ Atom *atom;
 		atom->vel[Z] *= damp;
 
 
-	    } while ((atom = atom->next) != NULL);
+	    } while (atom = atom->next);
 	}
 }
 
@@ -764,7 +655,7 @@ Atom *atom;
 		atom->pos[Y] += atom->vel[Y];
 		atom->pos[Z] += atom->vel[Z];
 
-	    } while ((atom = atom->next) != NULL);
+	    } while (atom = atom->next);
 	}
 }
 
@@ -775,7 +666,8 @@ draw_everything()
 
     swapbuffers();
     RGBcolor(0, 0, 0);
-    czclear(0, 0xFFFFFFFF);
+    clear();
+    zclear();
 
     pushmatrix();
     multmatrix(view);
@@ -813,14 +705,18 @@ draw_jello()
 }
 
 
-void reorient(short ax, short ay)
+reorient()
 {
+	nmx = getvaluator(MOUSEX);
+	nmy = getvaluator(MOUSEY);
+
 	pushmatrix();
 
 	loadmatrix(ident_matrix);
 
-	rotate((Angle) ax, 'y');
-	rotate((Angle) ay, 'x');
+	rotate((Angle) (nmx-omx)*2, 'y');
+	rotate((Angle) (omy-nmy)*2, 'x');
+
 
 	multmatrix(view);
 
@@ -830,18 +726,13 @@ void reorient(short ax, short ay)
 	light_vector[Y] = view[1][1];
 	light_vector[Z] = view[2][1];
 
-        // Compute gravity.
-	{
-	    float ax = getvaluator(DIAL5) / 256.0;
-	    float ay = getvaluator(DIAL6) / 256.0;
-	    float az = getvaluator(DIAL7) / 256.0;
-
-	    grav_vec[X] = (view[X][0]*ax + view[X][1]*ay + view[X][2]*az)*grav*2;
-	    grav_vec[Y] = (view[Y][0]*ax + view[Y][1]*ay + view[Y][2]*az)*grav*2;
-	    grav_vec[Z] = (view[Z][0]*ax + view[Z][1]*ay + view[Z][2]*az)*grav*2;
-	}
+	grav_vec[X] = light_vector[X] * grav;
+	grav_vec[Y] = light_vector[Y] * grav;
+	grav_vec[Z] = light_vector[Z] * grav;
 
 	popmatrix();
+
+	omx=nmx; omy=nmy;
 }
 
 
@@ -1072,7 +963,7 @@ reset_jello() {
     grav_vec[X] = 0.0;
     grav_vec[Y] = 0.0;
     grav_vec[Z] = 0.0;
-    damp = 0.995;
+    damp = 0.3;
 
     build_icosahedron();
 }
@@ -1139,7 +1030,7 @@ find_surface()
 
 	do {
 	    if (conec->from == atom || conec->tu == atom) i++;
-	} while ((conec = conec->next) != NULL);
+	} while (conec = conec->next);
 
 	if (i<12) {
 	    atom->surf = surface_atoms;
@@ -1148,35 +1039,35 @@ find_surface()
 	    atom->center = TRUE;
 	}
 
-    } while ((atom = atom->next) != NULL);
+    } while (atom = atom->next);
 
     a1 = surface_atoms;
 
     do {
 
 	a2 = a1;
-	while ((a2 = a2->surf) != NULL) {
+	while (a2 = a2->surf) {
 
 	    a3 = a2;
-	    while ((a3 = a3->surf) != NULL) {
+	    while (a3 = a3->surf) {
 
 		c1 = jello_conec;
 		do {
 
-		    if ((c1->from==a1 && c1->tu==a2) ||
-			(c1->tu==a1 && c1->from==a2)) {
+		    if (c1->from==a1 && c1->tu==a2 || 
+			c1->tu==a1 && c1->from==a2) {
 
 			c2 = jello_conec;
 			do {
 
-			    if ((c2->from==a2 && c2->tu==a3) ||
-				(c2->tu==a2 && c2->from==a3)) {
+			    if (c2->from==a2 && c2->tu==a3 ||
+				c2->tu==a2 && c2->from==a3) {
 
 				c3 = jello_conec;
 				do {
 
-				    if ((c3->from==a3 && c3->tu==a1) ||
-					(c3->tu==a3 && c3->from==a1)) {
+				    if (c3->from==a3 && c3->tu==a1 ||
+					c3->tu==a3 && c3->from==a1) {
 
 					triangle =
 					new_triangle(triangle, a1,
@@ -1184,15 +1075,15 @@ find_surface()
 
 					face_right(triangle);
 				    }
-				} while ((c3=c3->next) != NULL);
+				} while (c3=c3->next);
 			    }
-			} while ((c2=c2->next) != NULL);
+			} while (c2=c2->next);
 		    }
-		} while ((c1=c1->next) != NULL);
+		} while (c1=c1->next);
 	    }
 	}
 
-    } while ((a1 = a1->surf) != NULL);
+    } while (a1 = a1->surf);
 
     surface_triangles = triangle;
 }
@@ -1205,7 +1096,7 @@ Atom *atom;
 
 	if (atom) do {
 	    pnt(atom->pos[X], atom->pos[Y], atom->pos[Z]);
-	} while ((atom = atom->next) != NULL);
+	} while (atom = atom->next);
 
 }
 
@@ -1217,7 +1108,7 @@ Atom *atom;
 
 	if (atom) do {
 	    pnt(atom->pos[X], atom->pos[Y], atom->pos[Z]);
-	} while ((atom = atom->surf) != NULL);
+	} while (atom = atom->surf);
 
 }
 
@@ -1269,7 +1160,7 @@ Triangle *triangle;
 
 	polf(3, polygon);
 
-    } while ((triangle=triangle->next) != NULL);
+    } while (triangle=triangle->next);
 
 }
 
@@ -1299,7 +1190,7 @@ Triangle *triangle;
 
 	pclos();
 
-    } while ((triangle=triangle->next) != NULL);
+    } while (triangle=triangle->next);
 
     setpattern(0);
 }
@@ -1343,7 +1234,7 @@ Triangle *triangle;
 
 	pclos();
 
-    } while ((triangle=triangle->next) != NULL);
+    } while (triangle=triangle->next);
 
 }
 
@@ -1363,7 +1254,7 @@ Conec *conec;
 	     conec->tu->pos[Y],
 	     conec->tu->pos[Z]);
 
-    } while ((conec = conec->next) != NULL);
+    } while (conec = conec->next);
 }
 
 
