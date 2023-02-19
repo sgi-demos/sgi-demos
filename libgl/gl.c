@@ -1772,8 +1772,8 @@ static int devices_queued[2048];
 // We're interested in events from this device.
 void qdevice(int32_t device) { 
     TRACEF("%d", device);
-
     devices_queued[device] = 1;
+    events_qdevice(device);
 
     switch (device) {
         case REDRAW:
@@ -1783,19 +1783,14 @@ void qdevice(int32_t device) {
 
         case INPUTCHANGE:
             // Tell app that this window has received input focus
-            enqueue_device(INPUTCHANGE, 1);
-            break;
-
-        default:
-            // Send the device to the server.
-            events_qdevice(device);
+            //enqueue_device(INPUTCHANGE, 1);
             break;
     }
 }
 
 void unqdevice(Device device) {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
     devices_queued[device] = 0;
+    events_unqdevice(device);
 }
 
 // XXX event_qread_start

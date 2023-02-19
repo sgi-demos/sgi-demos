@@ -192,10 +192,11 @@ void initTexture()
                 }
             }
     #else
-        SDL_Surface* bgImage = SDL_CreateRGBSurface(0, 800, 480, bitsPerPixel, 0, 0, 0, 0);
+        Size2D fbSize = sdlGetFramebufferSize();
+        SDL_Surface* bgImage = SDL_CreateRGBSurface(0, fbSize.width, fbSize.height, bitsPerPixel, 0, 0, 0, 0);
         unsigned int* bgImagePixels = (unsigned int*)bgImage->pixels;
         extern unsigned char *gl_framebuffer;
-        memcpy(bgImagePixels, gl_framebuffer, 800*480*4);
+        memcpy(bgImagePixels, gl_framebuffer, fbSize.width*fbSize.height*4);
     #endif
 
     // OpenGLES requires power of 2 dimension textures, so create the smallest
@@ -233,8 +234,8 @@ void initTexture()
     GLenum glError = glGetError();
     if (glError != GL_NO_ERROR)
         printf("ERROR: Texture %d (%dx%d) not built, error code %d\n", textureObj, bgImageTexture->w, bgImageTexture->h, glError);
-    else
-        printf("OK: Texture %d (%dx%d) built.\n", textureObj, bgImageTexture->w, bgImageTexture->h);
+    //else
+    //    printf("OK: Texture %d (%dx%d) built.\n", textureObj, bgImageTexture->w, bgImageTexture->h);
 
     // Unbind texture
     glBindTexture(GL_TEXTURE_2D, 0);

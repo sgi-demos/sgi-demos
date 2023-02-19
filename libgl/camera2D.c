@@ -3,7 +3,7 @@
 #define false 0
 #define true 1
 
-static const int cWinWidth = 800, cWinHeight = 480;
+static const int cWinWidth = 900, cWinHeight = 600;
 static const float cZoomMin = 0.1, cZoomMax = 10.0f;
 static const float cMouseWheelZoomDelta = 0.05;
 static const float cPinchScale = 8.0;

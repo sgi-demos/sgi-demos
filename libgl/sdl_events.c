@@ -16,14 +16,63 @@ typedef struct gl_event {
     int16_t val;
 } gl_event;
 
-static uint32_t device_queued[2048];
+static uint32_t devices_queued[2048];
 static uint32_t tied_valuators[2048][2];
 static gl_event input_queue[INPUT_QUEUE_SIZE];
 static int input_queue_head = 0;    // The next item that needs to be read
 static int input_queue_length = 0;  // The number of items in the queue (tail = (head + length) % len):
 
-// Framebuffer size may not be the same as window size
-Size2D frame_size;
+#define false 0
+#define true 1
+
+typedef struct
+{
+    // Window
+    SDL_Window* pWindow;
+    Uint32 windowID;
+    Size2D frameSize; // Framebuffer size may not be the same as window size
+
+    // Mouse input
+    bool leftMouseButtonDown;
+    bool middleMouseButtonDown;
+    bool rightMouseButtonDown;
+    Pixel2D leftMouseButtonDownCoord;
+    Pixel2D mousePosition;
+    bool mouseInsideFramebuffer;
+
+    // Finger input
+    bool fingerDown;
+    Vec2D fingerDownCoord;
+    long long fingerDownId;
+
+    // Pinch input
+    bool pinch;
+
+} SDLEventState;
+
+static SDLEventState sdlEvents = (SDLEventState)
+{
+    // Window
+    .pWindow = NULL,
+    .windowID = 0,
+    .frameSize = {640, 480},
+
+    // Mouse input
+    .leftMouseButtonDown = false,
+    .middleMouseButtonDown = false,
+    .rightMouseButtonDown = false,
+    .leftMouseButtonDownCoord = {0, 0},
+    .mousePosition = {0, 0},
+    .mouseInsideFramebuffer = false,
+
+    // Finger input
+    .fingerDown = false,
+    .fingerDownCoord = {0.0, 0.0},
+    .fingerDownId = 0,
+
+    // Pinch input
+    .pinch = false,
+};
 
 // TBD - for desktop, have an escape key; for mobile, probably will have a window title bar with X to close window
 //       which user can tap, and this can enqueue an ESCKEY event here
@@ -38,7 +87,7 @@ static void emulateEscapeWithTapClose()
     // for (int i = 0; i < 2; i++) {
     //     home_button = awesome_get_home_button();
     //     if(home_button != home_button_previous) {
-    //         if(device_queued[ESCKEY]) {
+    //         if(devices_queued[ESCKEY]) {
     //         ev.device = ESCKEY;
     //         ev.val = home_button;
     //         enqueue_event(&ev);
@@ -66,7 +115,7 @@ static void emulateMouseWithTouch()
 	// 	// "natural," originally-developed orientation
 	// 	mousex = 800 - 1 - x;
 	// 	mousey = y; // GL valuator MOUSEY is 0 at bottom
-	// 	if(device_queued[LEFTMOUSE]) {
+	// 	if(devices_queued[LEFTMOUSE]) {
 	// 	    ev.device = LEFTMOUSE;
 	// 	    ev.val = 1;
 	// 	    enqueue_event(&ev);
@@ -85,7 +134,7 @@ static void emulateMouseWithTouch()
 	// 	mousey = y; // GL valuator MOUSEY is 0 at bottom
 	// 	break;
 	//     case TOUCHSCREEN_STOP:
-	// 	if(device_queued[LEFTMOUSE]) {
+	// 	if(devices_queued[LEFTMOUSE]) {
 	// 	    ev.device = LEFTMOUSE;
 	// 	    ev.val = 0;
 	// 	    enqueue_event(&ev);
@@ -178,7 +227,7 @@ int32_t sdl_to_gl_mouse_x()
 {
     // For now, SDL window and GL framebuffer dimensions may differ, so convert
     // SDL window mouse coords to GL framebuffer coords
-    int32_t offsetX = cam2DWindowSize().width / 2 - frame_size.width / 2;
+    int32_t offsetX = cam2DWindowSize().width / 2 - sdlEvents.frameSize.width / 2;
     return sdlMousePosX() - offsetX;
 }
 
@@ -186,14 +235,16 @@ int32_t sdl_to_gl_mouse_y()
 {
     // For now, SDL window and GL framebuffer dimensions may differ, so convert
     // SDL window mouse coords to GL framebuffer coords, including inverting y
-    int32_t offsetY = cam2DWindowSize().height / 2 - frame_size.height / 2;
+    int32_t offsetY = cam2DWindowSize().height / 2 - sdlEvents.frameSize.height / 2;
     return cam2DWindowSize().height - sdlMousePosY() - offsetY;
 }
 
-Boolean mouse_inside_gl_framebuffer()
+bool mouse_inside_framebuffer()
 {
-    return !would_clamp(sdl_to_gl_mouse_x(), 1, frame_size.width - 1) 
-        && !would_clamp(sdl_to_gl_mouse_y(), 1, frame_size.height - 1);
+    printf ("sdl_to_gl_mouse %d, %d\n", sdl_to_gl_mouse_x(), sdl_to_gl_mouse_y());
+
+    return !would_clamp(sdl_to_gl_mouse_x(), 1, sdlEvents.frameSize.width - 1) 
+        && !would_clamp(sdl_to_gl_mouse_y(), 1, sdlEvents.frameSize.height - 1);
 }
 
 int32_t events_get_valuator(int32_t device)
@@ -202,8 +253,8 @@ int32_t events_get_valuator(int32_t device)
 
     switch (device)
     {
-        case MOUSEX: return clamp(sdl_to_gl_mouse_x(), 1, frame_size.width - 1);
-        case MOUSEY: return clamp(sdl_to_gl_mouse_y(), 1, frame_size.height - 1);
+        case MOUSEX: return clamp(sdl_to_gl_mouse_x(), 1, sdlEvents.frameSize.width - 1);
+        case MOUSEY: return clamp(sdl_to_gl_mouse_y(), 1, sdlEvents.frameSize.height - 1);
         default: {
             //if (isDial(device))
             //    return emulateDialsWithTilt(device); // TBD
@@ -213,7 +264,6 @@ int32_t events_get_valuator(int32_t device)
     printf("warning: unimplemented evaluator %d\n", device);
     return 0;
 }
-
 
 #define GL_KEY_COUNT 78
 static int32_t sdl_to_gl_key_map[GL_KEY_COUNT][3] = {
@@ -346,7 +396,7 @@ Boolean events_get_button(int32_t button) {
     {
         case CTRLKEY: 
             return keyArray[SDL_SCANCODE_LCTRL] || keyArray[SDL_SCANCODE_RCTRL];
-            
+
         default:  
         {
             // Map SDL_SCANCODE to GL device
@@ -361,7 +411,12 @@ Boolean events_get_button(int32_t button) {
 
 void events_qdevice(int32_t device)
 {
-    device_queued[device] = device;
+    devices_queued[device] = device;
+}
+
+void events_unqdevice(int32_t device)
+{
+    devices_queued[device] = 0;
 }
 
 static void enqueue_event(gl_event *e)
@@ -397,9 +452,10 @@ int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height)
     // accelerometer_read(&theta_y_smoothed, &theta_x_smoothed);   
     // emulateMouseWithTouch();
     // emulateEscapeWithTapClose();
+    Size2D frameSize = { frame_width, frame_height };
+    sdlEvents.frameSize = frameSize;
 
-    frame_size.width = frame_width;
-    frame_size.height = frame_height;
+    // tell app mouse is in middle of framebuffer, even if it isn't?
 
     return 0;
 }
@@ -413,56 +469,7 @@ void events_tie(int32_t button, int32_t val1, int32_t val2)
     tied_valuators[button][1] = val2;
 }
 
-typedef struct
-{
-    // Window
-    SDL_Window* pWindow;
-    Uint32 windowID;
-
-    // Mouse input
-    bool leftMouseButtonDown;
-    bool middleMouseButtonDown;
-    bool rightMouseButtonDown;
-    Pixel2D leftMouseButtonDownCoord;
-    Pixel2D mousePosition;
-
-    // Finger input
-    bool fingerDown;
-    Vec2D fingerDownCoord;
-    long long fingerDownId;
-
-    // Pinch input
-    bool pinch;
-
-} SDLEventState;
-
-#define false 0
-#define true 1
-
-static SDLEventState sdlEvents = (SDLEventState)
-{
-    // Window
-    .pWindow = NULL,
-    .windowID = 0,
-
-    // Mouse input
-    .leftMouseButtonDown = false,
-    .middleMouseButtonDown = false,
-    .rightMouseButtonDown = false,
-    .leftMouseButtonDownCoord = {0, 0},
-    .mousePosition = {0, 0},
-
-    // Finger input
-    .fingerDown = false,
-    .fingerDownCoord = {0.0, 0.0},
-    .fingerDownId = 0,
-
-    // Pinch input
-    .pinch = false,
-};
-
-void
-windowResizeEvent(Size2D winSize)
+void windowResizeEvent(Size2D winSize)
 {
     glViewport(0, 0, winSize.width, winSize.height);
     cam2DSetWindowSize(winSize);
@@ -542,7 +549,7 @@ void sdlEventsProcess()
                     // convert SDL key event to GL and add it to GL event queue
                     gl_event ev;
                     ev.device = sdl_keycode_to_gl(event.key.keysym.sym);
-                    if (ev.device != 0 && device_queued[ev.device])
+                    if (ev.device != 0 && devices_queued[ev.device])
                     {
                         ev.val = 1; 
                         enqueue_event(&ev);
@@ -564,15 +571,20 @@ void sdlEventsProcess()
 
         case SDL_MOUSEMOTION:
         {
-            // detect INPUTCHANGE events if client wants them
-            // 0 = motion out of window, 1 = motion into window
-            // also? 0 = window lost focus, 1 = window gained focus
-            // gl_event ev;
-            // ev.device = sdl_to_gl_key(event.key.keysym.sym);
-            // if (ev.device > 0 && device_queued[ev.device])
-            // {
-            //     ev.val = 1; 
-            //     enqueue_event(&ev);
+            // detect when mouse transits into or out of framebuffer for INPUTCHANGE events
+            // TODO: also perhaps when window loses/gains focus? 
+            bool mouseInsideFB = mouse_inside_framebuffer();
+            if (mouseInsideFB != sdlEvents.mouseInsideFramebuffer) 
+            {
+                sdlEvents.mouseInsideFramebuffer = mouseInsideFB;
+                if (devices_queued[INPUTCHANGE])
+                {
+                    gl_event ev;
+                    ev.device = INPUTCHANGE;
+                    ev.val = mouseInsideFB;
+                    enqueue_event(&ev);
+                }
+            }
 
             SDL_MouseMotionEvent *m = (SDL_MouseMotionEvent *)&event;
             sdlEvents.mousePosition = (Pixel2D){(int)m->x, (int)m->y};
@@ -607,7 +619,7 @@ void sdlEventsProcess()
                 }
 
                 // convert SDL mouse button event to GL and add it to GL event queue
-                if (device_queued[ev.device]) 
+                if (devices_queued[ev.device]) 
                 {
                     ev.val = 1;
                     enqueue_event(&ev);
@@ -737,4 +749,9 @@ Uint8* sdlGetKeyboardState()
     //SDL_PumpEvents();
     const Uint8* keys = SDL_GetKeyboardState(NULL);
     return (unsigned char*)keys;
+}
+
+Size2D sdlGetFramebufferSize()
+{
+    return sdlEvents.frameSize;
 }
