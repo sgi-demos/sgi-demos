@@ -1,8 +1,5 @@
 #include "camera2D.h"
 
-#define false 0
-#define true 1
-
 static const int cWinWidth = 900, cWinHeight = 600;
 static const float cZoomMin = 0.1, cZoomMax = 10.0f;
 static const float cMouseWheelZoomDelta = 0.05;
@@ -171,7 +168,7 @@ void cam2DZoomEventPinch(float pinchDist, Vec2D pinchCoord)
     float zoomDelta = pinchDist * cPinchScale;
     cam2DSetZoomDelta(zoomDelta);
 
-    // Zoom to point: Keep the world coords under sdlEvents.pinch position the same before and after the zoom
+    // Zoom to point: Keep the world coords under pinch position the same before and after the zoom
     Vec2D postZoomWorld;
     cam2DNormWindowToWorld(pinchCoord, &postZoomWorld);
     Vec2D deltaWorld = {postZoomWorld.x - preZoomWorld.x, postZoomWorld.y - preZoomWorld.y};

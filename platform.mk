@@ -10,6 +10,7 @@ BIN_DIR = ../demo_bin
 OPT_ZERO = -O0 -g
 OPT_TWO = -DNDEBUG -O2 -g
 OPT_LEVEL = $(OPT_ZERO)
-EMCC = emcc -std=c90 --emrun
 CC = cc
-OLDCC = cc -std=c90
+CC_OLD_CODE = $(CC) -std=c90
+EMCC = emcc --emrun
+EMCC_OLD_CODE = $(EMCC) -std=c90

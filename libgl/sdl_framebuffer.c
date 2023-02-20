@@ -16,8 +16,8 @@ SDL_Texture * pFramebuffer = NULL;
 SDL_Texture * initTexture()
 {
     // Create grey checkerboard surface with yellow border
-    int winWidth = cam2DWindowSize().width,
-        winHeight = cam2DWindowSize().height;
+    int winWidth = sdlWindowSize().width,
+        winHeight = sdlWindowSize().height;
     int bitsPerPixel = 32;
 
     SDL_Surface* pSurface = SDL_CreateRGBSurface(0, winWidth, winHeight, bitsPerPixel, 0, 0, 0, 0);
@@ -58,7 +58,7 @@ void redraw()
 
     SDL_RenderCopy(sdlRenderer(), pFramebuffer, NULL, NULL);
 
-    sdlEventsPresent();
+    sdlPresent();
 }
 
 #ifndef SDL_CHILD_MAIN
@@ -72,7 +72,7 @@ extern void child_main_loop(void *main_loop_arg);
 
 void main_loop(void* main_loop_arg) 
 {    
-    sdlEventsProcess();
+    sdlProcessEvents();
 
     // Run child main loop
     child_main_loop(main_loop_arg);
@@ -83,7 +83,7 @@ void main_loop(void* main_loop_arg)
 int main(int argc, char** argv)
 {
     // Initialize SDL window
-    sdlEventsInit("sgi-demos-sdl");
+    sdlInit("sgi-demos-sdl");
 
     pFramebuffer = initTexture();
 

@@ -48,9 +48,9 @@ typedef struct
     // Pinch input
     bool pinch;
 
-} SDLEventState;
+} SDLState;
 
-static SDLEventState sdlEvents = (SDLEventState)
+static SDLState sdlState = (SDLState)
 {
     // Window
     .pWindow = NULL,
@@ -227,7 +227,7 @@ int32_t sdl_to_gl_mouse_x()
 {
     // For now, SDL window and GL framebuffer dimensions may differ, so convert
     // SDL window mouse coords to GL framebuffer coords
-    int32_t offsetX = cam2DWindowSize().width / 2 - sdlEvents.frameSize.width / 2;
+    int32_t offsetX = sdlWindowSize().width / 2 - sdlState.frameSize.width / 2;
     return sdlMousePosX() - offsetX;
 }
 
@@ -235,14 +235,14 @@ int32_t sdl_to_gl_mouse_y()
 {
     // For now, SDL window and GL framebuffer dimensions may differ, so convert
     // SDL window mouse coords to GL framebuffer coords, including inverting y
-    int32_t offsetY = cam2DWindowSize().height / 2 - sdlEvents.frameSize.height / 2;
-    return cam2DWindowSize().height - sdlMousePosY() - offsetY;
+    int32_t offsetY = sdlWindowSize().height / 2 - sdlState.frameSize.height / 2;
+    return sdlWindowSize().height - sdlMousePosY() - offsetY;
 }
 
 bool mouse_inside_framebuffer()
 {
-    return !would_clamp(sdl_to_gl_mouse_x(), 1, sdlEvents.frameSize.width - 1) 
-        && !would_clamp(sdl_to_gl_mouse_y(), 1, sdlEvents.frameSize.height - 1);
+    return !would_clamp(sdl_to_gl_mouse_x(), 1, sdlState.frameSize.width - 1) 
+        && !would_clamp(sdl_to_gl_mouse_y(), 1, sdlState.frameSize.height - 1);
 }
 
 int32_t events_get_valuator(int32_t device)
@@ -251,8 +251,8 @@ int32_t events_get_valuator(int32_t device)
 
     switch (device)
     {
-        case MOUSEX: return clamp(sdl_to_gl_mouse_x(), 1, sdlEvents.frameSize.width - 1);
-        case MOUSEY: return clamp(sdl_to_gl_mouse_y(), 1, sdlEvents.frameSize.height - 1);
+        case MOUSEX: return clamp(sdl_to_gl_mouse_x(), 1, sdlState.frameSize.width - 1);
+        case MOUSEY: return clamp(sdl_to_gl_mouse_y(), 1, sdlState.frameSize.height - 1);
         default: {
             //if (isDial(device))
             //    return emulateDialsWithTilt(device); // TBD
@@ -451,7 +451,7 @@ int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height)
     // emulateMouseWithTouch();
     // emulateEscapeWithTapClose();
     Size2D frameSize = { frame_width, frame_height };
-    sdlEvents.frameSize = frameSize;
+    sdlState.frameSize = frameSize;
 
     // tell app mouse is in middle of framebuffer, even if it isn't?
 
@@ -473,15 +473,15 @@ void windowResizeEvent(Size2D winSize)
     cam2DSetWindowSize(winSize);
 }
 
-void sdlEventsInit(const char *windowTitle)
+void sdlInit(const char *windowTitle)
 {
     // Create SDL window
-    sdlEvents.pWindow =
+    sdlState.pWindow =
         SDL_CreateWindow(windowTitle,
                          SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                         cam2DWindowSize().width, cam2DWindowSize().height,
+                         sdlWindowSize().width, sdlWindowSize().height,
                          SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
-    sdlEvents.windowID = SDL_GetWindowID(sdlEvents.pWindow);
+    sdlState.windowID = SDL_GetWindowID(sdlState.pWindow);
 
     // Create OpenGLES 2 context on SDL window
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
@@ -489,21 +489,21 @@ void sdlEventsInit(const char *windowTitle)
     SDL_GL_SetSwapInterval(1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-    SDL_GLContext glc = SDL_GL_CreateContext(sdlEvents.pWindow);
+    SDL_GLContext glc = SDL_GL_CreateContext(sdlState.pWindow);
 
     // Set clear color to black
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     // Initialize viewport
-    windowResizeEvent(cam2DWindowSize());
+    windowResizeEvent(sdlWindowSize());
 }
 
-void sdlEventsPresent()
+void sdlPresent()
 {
-    SDL_GL_SwapWindow(sdlEvents.pWindow);
+    SDL_GL_SwapWindow(sdlState.pWindow);
 }
 
-void sdlEventsProcess()
+void sdlProcessEvents()
 {
     SDL_Event event;
     while (SDL_PollEvent(&event))
@@ -516,7 +516,7 @@ void sdlEventsProcess()
 
         case SDL_WINDOWEVENT:
         {
-            if (event.window.windowID == sdlEvents.windowID && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+            if (event.window.windowID == sdlState.windowID && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
             {
                 Size2D winSize = {event.window.data1, event.window.data2};
                 windowResizeEvent(winSize);
@@ -560,10 +560,10 @@ void sdlEventsProcess()
         case SDL_MOUSEWHEEL:
         {
             // SDL_MOUSEWHEEL regression?
-            // m->y no longer reliable (often y is 0 when sdlEvents.mouse wheel is spun up or down), use m->preciseY instead
+            // m->y no longer reliable (often y is 0 when sdlState.mouse wheel is spun up or down), use m->preciseY instead
             SDL_MouseWheelEvent *m = (SDL_MouseWheelEvent *)&event;
             bool mouseWheelDown = (m->preciseY < 0.0);
-            cam2DZoomEventMouse(mouseWheelDown, sdlEvents.mousePosition);
+            cam2DZoomEventMouse(mouseWheelDown, sdlState.mousePosition);
             break;
         }
 
@@ -572,9 +572,9 @@ void sdlEventsProcess()
             // detect when mouse transits into or out of framebuffer for INPUTCHANGE events
             // TODO: also perhaps when window loses/gains focus? 
             bool mouseInsideFB = mouse_inside_framebuffer();
-            if (mouseInsideFB != sdlEvents.mouseInsideFramebuffer) 
+            if (mouseInsideFB != sdlState.mouseInsideFramebuffer) 
             {
-                sdlEvents.mouseInsideFramebuffer = mouseInsideFB;
+                sdlState.mouseInsideFramebuffer = mouseInsideFB;
                 if (devices_queued[INPUTCHANGE])
                 {
                     gl_event ev;
@@ -585,15 +585,15 @@ void sdlEventsProcess()
             }
 
             SDL_MouseMotionEvent *m = (SDL_MouseMotionEvent *)&event;
-            sdlEvents.mousePosition = (Pixel2D){(int)m->x, (int)m->y};
-            if (sdlEvents.leftMouseButtonDown && !sdlEvents.fingerDown && !sdlEvents.pinch)
-                cam2DPanEventMouse(sdlEvents.mousePosition, sdlEvents.leftMouseButtonDownCoord);
+            sdlState.mousePosition = (Pixel2D){(int)m->x, (int)m->y};
+            if (sdlState.leftMouseButtonDown && !sdlState.fingerDown && !sdlState.pinch)
+                cam2DPanEventMouse(sdlState.mousePosition, sdlState.leftMouseButtonDownCoord);
             break;
         }
 
         case SDL_MOUSEBUTTONDOWN:
         {
-            if (!sdlEvents.fingerDown && !sdlEvents.pinch)
+            if (!sdlState.fingerDown && !sdlState.pinch)
             {
                 SDL_MouseButtonEvent *m = (SDL_MouseButtonEvent *)&event;               
                 gl_event ev;
@@ -601,17 +601,17 @@ void sdlEventsProcess()
                 switch (m->button)
                 {
                 case SDL_BUTTON_LEFT:
-                    sdlEvents.leftMouseButtonDown = true;
-                    sdlEvents.leftMouseButtonDownCoord = (Pixel2D){(int)m->x, (int)m->y};
+                    sdlState.leftMouseButtonDown = true;
+                    sdlState.leftMouseButtonDownCoord = (Pixel2D){(int)m->x, (int)m->y};
                     cam2DSetBasePan();
                     ev.device = LEFTMOUSE;
                     break;
                 case SDL_BUTTON_MIDDLE:
-                    sdlEvents.middleMouseButtonDown = true;
+                    sdlState.middleMouseButtonDown = true;
                     ev.device = MIDDLEMOUSE;
                     break;
                 case SDL_BUTTON_RIGHT:
-                    sdlEvents.rightMouseButtonDown = true;
+                    sdlState.rightMouseButtonDown = true;
                     ev.device = RIGHTMOUSE;
                     break;
                 }
@@ -650,15 +650,15 @@ void sdlEventsProcess()
             switch (m->button)
             {
             case SDL_BUTTON_LEFT:
-                sdlEvents.leftMouseButtonDown = false;
+                sdlState.leftMouseButtonDown = false;
                 ev.device = LEFTMOUSE;
                 break;
             case SDL_BUTTON_MIDDLE:
-                sdlEvents.middleMouseButtonDown = false;
+                sdlState.middleMouseButtonDown = false;
                 ev.device = MIDDLEMOUSE;
                 break;
             case SDL_BUTTON_RIGHT:
-                sdlEvents.rightMouseButtonDown = false;
+                sdlState.rightMouseButtonDown = false;
                 ev.device = RIGHTMOUSE;
                 break;
             }
@@ -684,31 +684,31 @@ void sdlEventsProcess()
         }
 
         case SDL_FINGERMOTION:
-            if (sdlEvents.fingerDown)
+            if (sdlState.fingerDown)
             {
                 SDL_TouchFingerEvent *m = (SDL_TouchFingerEvent *)&event;
 
                 // Finger down and finger moving must match
-                if (m->fingerId == sdlEvents.fingerDownId)
+                if (m->fingerId == sdlState.fingerDownId)
                 {
                     Vec2D fingerCoord = (Vec2D){m->x, m->y};
-                    cam2DPanEventFinger(fingerCoord, sdlEvents.fingerDownCoord);
+                    cam2DPanEventFinger(fingerCoord, sdlState.fingerDownCoord);
                 }
             }
             break;
 
         case SDL_FINGERDOWN:
-            if (!sdlEvents.pinch)
+            if (!sdlState.pinch)
             {
                 // Finger already down means multiple fingers, which is handled by multigesture event
-                if (sdlEvents.fingerDown)
-                    sdlEvents.fingerDown = false;
+                if (sdlState.fingerDown)
+                    sdlState.fingerDown = false;
                 else
                 {
                     SDL_TouchFingerEvent *m = (SDL_TouchFingerEvent *)&event;
-                    sdlEvents.fingerDown = true;
-                    sdlEvents.fingerDownCoord = (Vec2D){m->x, m->y};
-                    sdlEvents.fingerDownId = m->fingerId;
+                    sdlState.fingerDown = true;
+                    sdlState.fingerDownCoord = (Vec2D){m->x, m->y};
+                    sdlState.fingerDownId = m->fingerId;
                     cam2DSetBasePan();
                 }
             }
@@ -720,9 +720,9 @@ void sdlEventsProcess()
             SDL_MultiGestureEvent *m = (SDL_MultiGestureEvent *)&event;
             if (m->numFingers == 2 && fabs(m->dDist) >= cPinchZoomThreshold)
             {
-                sdlEvents.pinch = true;
-                sdlEvents.fingerDown = false;
-                sdlEvents.leftMouseButtonDown = false;
+                sdlState.pinch = true;
+                sdlState.fingerDown = false;
+                sdlState.leftMouseButtonDown = false;
                 Vec2D pinchCoord = (Vec2D){m->x, m->y};
                 cam2DZoomEventPinch(m->dDist, pinchCoord);
             }
@@ -730,8 +730,8 @@ void sdlEventsProcess()
         }
 
         case SDL_FINGERUP:
-            sdlEvents.fingerDown = false;
-            sdlEvents.pinch = false;
+            sdlState.fingerDown = false;
+            sdlState.pinch = false;
             break;
         }
     }
@@ -774,7 +774,12 @@ Uint8* sdlGetKeyboardState()
     return (unsigned char*)keys;
 }
 
-Size2D sdlGetFramebufferSize()
+Size2D sdlFramebufferSize()
 {
-    return sdlEvents.frameSize;
+    return sdlState.frameSize;
+}
+
+Size2D sdlWindowSize()
+{
+    return cam2DWindowSize();
 }

@@ -1,11 +1,11 @@
 //
-//  Window and input event handling
+//  SDL window and input event handling
 //
-#define false 0
-#define true 1
+#include "geom_types.h"
 
-extern void sdlEventsInit(const char* windowTitle);
-extern void sdlEventsProcess();
-extern void sdlEventsPresent();
+extern void sdlInit(const char* windowTitle);
 extern SDL_Renderer* sdlRenderer();
-extern Size2D sdlGetFramebufferSize();
+extern Size2D sdlWindowSize();
+extern Size2D sdlFramebufferSize();
+extern void sdlProcessEvents();
+extern void sdlPresent();

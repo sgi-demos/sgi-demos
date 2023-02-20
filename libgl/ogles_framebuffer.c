@@ -158,8 +158,8 @@ void initTexture()
     freeTexture();
 
     // Create background image at size of window
-    int winWidth = cam2DWindowSize().width,
-        winHeight = cam2DWindowSize().height;
+    int winWidth = sdlWindowSize().width,
+        winHeight = sdlWindowSize().height;
 
     // Don't exceed max GL texture size
     GLint maxTextureSize = 256;
@@ -192,7 +192,7 @@ void initTexture()
                 }
             }
     #else
-        Size2D fbSize = sdlGetFramebufferSize();
+        Size2D fbSize = sdlFramebufferSize();
         SDL_Surface* bgImage = SDL_CreateRGBSurface(0, fbSize.width, fbSize.height, bitsPerPixel, 0, 0, 0, 0);
         unsigned int* bgImagePixels = (unsigned int*)bgImage->pixels;
         extern unsigned char *gl_framebuffer;
@@ -287,7 +287,7 @@ void redraw()
     glBindTexture(GL_TEXTURE_2D, 0);
     
     // Swap front/back framebuffers
-    sdlEventsPresent();
+    sdlPresent();
 }
 
 #ifdef TEST_OGLES_FRAMEBUFFER
@@ -297,7 +297,7 @@ void child_main_loop(void *main_loop_arg) {}
 
 void main_loop(void* main_loop_arg) 
 {    
-    sdlEventsProcess();
+    sdlProcessEvents();
 
     #ifdef TEST_OGLES_FRAMEBUFFER
         // Re-initialize texture if window resized
@@ -322,7 +322,7 @@ void main_loop(void* main_loop_arg)
 int main(int argc, char** argv)
 {
     // Initialize SDL window
-    sdlEventsInit("sgi-demos");
+    sdlInit("sgi-demos");
 
     // Initialize OGLES graphics
     initShaders();

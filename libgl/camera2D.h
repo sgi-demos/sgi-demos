@@ -1,10 +1,7 @@
 //
 //  Camera2D - pan, zoom, and window resizing
 //
-typedef short bool;
-typedef struct { int width; int height; } Size2D;
-typedef struct { int x; int y; } Pixel2D;
-typedef struct { float x; float y; } Vec2D;
+#include "geom_types.h"
 
 // camera properties get/set
 extern bool cam2DUpdated();

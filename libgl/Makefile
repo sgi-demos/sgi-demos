@@ -2,18 +2,24 @@
 
 include ../platform.mk
 
-APP=sdl_framebuffer
+APP=$(BIN_DIR)/sdl_framebuffer
 EMAPP=$(APP).html
-SRC=sdl_framebuffer.c sdl_events.c camera2D.c
+SRC=sdl_framebuffer.c sdl_events.c
+
+all: $(APP) $(EMAPP)
+
+$(APP): $(SRC) 
+	$(CC) $(OPT_LEVEL) $(SRC) -F/Library/Frameworks -framework SDL2 -o $(APP)
 
 $(EMAPP): $(SRC)
-	emcc $(SRC) \
-		-s USE_SDL=2 -s USE_SDL_IMAGE=2 -s FULL_ES2=1 -DTEST_OGLES_FRAMEBUFFER=1 -o $(EMAPP)
+	$(EMCC) $(SRC) -s USE_SDL=2 -o $(EMAPP)
 
-run: $(EMAPP)
-	emrun $(EMAPP)
+run: $(APP) $(EMAPP)
+	$(APP) && $(EMAPP)
 
 clean:
+	rm -f $(APP)
+	rm -rf $(APP).dSYM
 	rm -f $(EMAPP)
 	rm -f $(APP).js
 	rm -f $(APP).wasm
