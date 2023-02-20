@@ -2,9 +2,9 @@
 
 include ../platform.mk
 
-APP=ogles_framebuffer
+APP=sdl_framebuffer
 EMAPP=$(APP).html
-SRC=ogles_framebuffer.c sdl_events.c camera2D.c
+SRC=sdl_framebuffer.c sdl_events.c camera2D.c
 
 $(EMAPP): $(SRC)
 	emcc $(SRC) \

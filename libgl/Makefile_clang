@@ -1,0 +1,18 @@
+.PHONY: clean run
+
+include ../platform.mk
+
+APP=sdl_framebuffer
+SRC=sdl_framebuffer.c sdl_events.c camera2D.c
+
+
+$(APP): $(SRC) 
+	$(CC) $(OPT_LEVEL) \
+		 $(SRC) -F/Library/Frameworks -framework SDL2 -lm -o $(APP)
+
+run: $(APP)
+	$(APP)
+
+clean:
+	rm -f $(APP)
+	rm -rf $(APP).dSYM

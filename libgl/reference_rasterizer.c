@@ -181,7 +181,7 @@ void pixel(int x, int y, float bary[3], void *data)
         pixel_colors[DISPLAY_HEIGHT - 1 - y][x][0] = r;
         pixel_colors[DISPLAY_HEIGHT - 1 - y][x][1] = g;
         pixel_colors[DISPLAY_HEIGHT - 1 - y][x][2] = b;
-        //pixel_depths[DISPLAY_HEIGHT - 1 - y][x] = z; // TODO: Z buffering is messed up in jello, disable writes temporarily
+        pixel_depths[DISPLAY_HEIGHT - 1 - y][x] = z;
     }
 }
 

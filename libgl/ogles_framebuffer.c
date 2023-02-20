@@ -287,7 +287,7 @@ void redraw()
     glBindTexture(GL_TEXTURE_2D, 0);
     
     // Swap front/back framebuffers
-    sdlEventsSwapWindow();
+    sdlEventsPresent();
 }
 
 #ifdef TEST_OGLES_FRAMEBUFFER
