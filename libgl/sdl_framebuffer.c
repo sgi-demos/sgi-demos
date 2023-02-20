@@ -8,7 +8,6 @@
 #include <SDL2/SDL.h>
 #endif
 
-#include "camera2D.h"
 #include "sdl_events.h"
 
 SDL_Texture * pFramebuffer = NULL;
@@ -80,7 +79,7 @@ void main_loop(void* main_loop_arg)
     redraw();
 }
 
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
     // Initialize SDL window
     sdlInit("sgi-demos-sdl");

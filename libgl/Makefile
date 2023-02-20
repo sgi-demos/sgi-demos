@@ -15,7 +15,7 @@ $(EMAPP): $(SRC)
 	$(EMCC) $(SRC) -s USE_SDL=2 -o $(EMAPP)
 
 run: $(APP) $(EMAPP)
-	$(APP) && $(EMAPP)
+	$(APP) && emrun $(EMAPP)
 
 clean:
 	rm -f $(APP)

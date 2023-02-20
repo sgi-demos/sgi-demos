@@ -1,4 +1,11 @@
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
 #include <SDL.h>
+#include <SDL_opengles2.h>
+#else
+#include <SDL2/SDL.h>
+#endif
+
 #include <gl.h>
 #include <device.h>
 #include "camera2D.h"
@@ -19,11 +26,8 @@ typedef struct gl_event {
 static uint32_t devices_queued[2048];
 static uint32_t tied_valuators[2048][2];
 static gl_event input_queue[INPUT_QUEUE_SIZE];
-static int input_queue_head = 0;    // The next item that needs to be read
-static int input_queue_length = 0;  // The number of items in the queue (tail = (head + length) % len):
-
-#define false 0
-#define true 1
+static uint32_t input_queue_head = 0;    // The next item that needs to be read
+static uint32_t input_queue_length = 0;  // The number of items in the queue (tail = (head + length) % len):
 
 typedef struct
 {
@@ -422,13 +426,13 @@ static void enqueue_event(gl_event *e)
     if (input_queue_length == INPUT_QUEUE_SIZE) {
         printf("Input queue overflow.");
     } else {
-        int tail = (input_queue_head + input_queue_length) % INPUT_QUEUE_SIZE;
+        uint32_t tail = (input_queue_head + input_queue_length) % INPUT_QUEUE_SIZE;
         input_queue[tail] = *e;
         input_queue_length++;
     }
 }
 
-uint32_t event_qread_start(int blocking)
+uint32_t events_qread_start(int blocking)
 {
     // emulateMouseWithTouch();
     // emulateEscapeWithTapClose();
@@ -782,4 +786,14 @@ Size2D sdlFramebufferSize()
 Size2D sdlWindowSize()
 {
     return cam2DWindowSize();
+}
+
+Vec2D sdlViewport()   
+{ 
+    return cam2DViewport();
+}
+
+bool sdlViewChanged()
+{
+    return cam2DUpdated();
 }

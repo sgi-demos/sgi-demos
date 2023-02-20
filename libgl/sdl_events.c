@@ -58,6 +58,11 @@ Size2D sdlWindowSize()
     return sdlState.winSize;
 }
 
+Vec2D sdlViewport()   
+{ 
+    return (Vec2D) { .x = (float)sdlState.winSize.width, .y = (float)sdlState.winSize.height };
+}
+
 Size2D sdlFramebufferSize()
 {
     return sdlState.winSize;
@@ -68,6 +73,23 @@ void sdlPresent()
     SDL_RenderPresent(sdlState.pRenderer);
 }
 
+void sdlExitApp()
+{
+    #ifdef __EMSCRIPTEN__
+        // Go to previous page, or if none, to demo home page
+        const char *exit_js =
+            "if (document.referrer) {                                   "
+            "     window.history.back();                                "
+            "}                                                          "
+            "else {                                                     "
+            "    window.location.href = 'https://sgi-demos.github.io';  "
+            "}                                                          ";
+        emscripten_run_script(exit_js);
+    #else
+        exit(0);
+    #endif
+}
+
 void sdlProcessEvents()
 {
     SDL_Event event;
@@ -75,10 +97,6 @@ void sdlProcessEvents()
     {
         switch (event.type)
         {
-            case SDL_QUIT:
-                exit(0);
-            break;
-
             case SDL_WINDOWEVENT:
             {
                 if (event.window.windowID == sdlState.windowID && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
@@ -88,19 +106,19 @@ void sdlProcessEvents()
             }
             break;
 
+            case SDL_QUIT:
+                sdlExitApp();
+            break;
+
             case SDL_KEYDOWN:
             {
                 switch (event.key.keysym.sym)
                 {
-                    case SDLK_ESCAPE:
-                    {
-                        exit(0);
-                    }
+                    case SDLK_ESCAPE: 
+                        sdlExitApp(); 
                     break;
                     
                     default:
-                    {
-                    }
                     break;
                 }
             }
@@ -176,4 +194,9 @@ Uint8* sdlGetKeyboardState()
     //SDL_PumpEvents();
     const Uint8* keys = SDL_GetKeyboardState(NULL);
     return (unsigned char*)keys;
+}
+
+bool sdlViewChanged()
+{
+    return false; // TBD
 }

@@ -3,12 +3,12 @@
 //
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
-#endif
-
 #include <SDL.h>
 #include <SDL_opengles2.h>
+#else
+#include <SDL2/SDL.h>
+#endif
 
-#include "camera2D.h"
 #include "sdl_events.h"
 
 // Geometry
@@ -64,10 +64,8 @@ const GLchar* quadFragmentSource =
 
 void updateShader()
 {
-    float viewport[2];
-    viewport[0] = cam2DViewport().x;
-    viewport[1] = cam2DViewport().y;
-    
+    float viewport[2] = {sdlViewport().x, sdlViewport().y};
+   
     glUseProgram(quadShaderProgram);
     glUniform2fv(shaderViewport, 1, viewport);
     glUniform2fv(shaderImageSize, 1, imageSize);
@@ -293,6 +291,9 @@ void redraw()
 #ifdef TEST_OGLES_FRAMEBUFFER
 int child_main (int argc, char* argv[]) { return 0; }
 void child_main_loop(void *main_loop_arg) {}
+#else
+extern int child_main (int argc, char* argv[]);
+extern void child_main_loop(void *main_loop_arg);
 #endif
 
 void main_loop(void* main_loop_arg) 
@@ -308,8 +309,8 @@ void main_loop(void* main_loop_arg)
         initTexture();
     #endif
 
-    // Update shader if camera changed
-    if (cam2DUpdated())
+    // Update shader if view changed
+    if (sdlViewChanged())
         updateShader();
 
     // Run child main loop

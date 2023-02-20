@@ -12,5 +12,5 @@ OPT_TWO = -DNDEBUG -O2 -g
 OPT_LEVEL = $(OPT_ZERO)
 CC = cc
 CC_OLD_CODE = $(CC) -std=c90
-EMCC = emcc --emrun
-EMCC_OLD_CODE = $(EMCC) -std=c90
+EMCC = emcc
+EMCC_OLD_CODE = emcc -std=c90

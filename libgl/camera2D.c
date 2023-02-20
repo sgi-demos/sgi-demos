@@ -9,7 +9,6 @@ typedef struct {
     bool    updated;
     bool    winResized;
     Size2D  winSize;
-    Vec2D   viewport;
     Vec2D   basePan;
     Vec2D   pan;
     float   zoom;
@@ -21,7 +20,6 @@ static Camera2D activeCam = (Camera2D)
     .updated    = true, 
     .winResized = true, 
     .winSize    = (Size2D){ cWinWidth, cWinHeight },
-    .viewport   = (Vec2D) { cWinWidth, cWinHeight },
     .basePan    = (Vec2D) { 0.0, 0.0 },
     .pan        = (Vec2D) { 0.0, 0.0 },
     .zoom       = 1.0,
@@ -43,7 +41,12 @@ bool cam2DWindowResized()
 }
 
 Size2D cam2DWindowSize(){ return activeCam.winSize; }
-Vec2D cam2DViewport()   { return activeCam.viewport; }
+
+Vec2D cam2DViewport()   
+{ 
+    return (Vec2D) { .x = (float)activeCam.winSize.width, .y = (float)activeCam.winSize.height };
+}
+
 Vec2D cam2DBasePan()    { return activeCam.basePan; }
 Vec2D cam2DPan()        { return activeCam.pan; }
 float cam2DZoom()       { return activeCam.zoom; }
@@ -56,8 +59,6 @@ void cam2DSetWindowSize(Size2D winSize)
     {
         activeCam.winResized = true;
         activeCam.winSize = winSize; 
-        activeCam.viewport = (Vec2D) { .x = (float)winSize.width, 
-                                       .y = (float)winSize.height };
         cam2DSetAspect(winSize.width / (float)winSize.height);
     }
 }

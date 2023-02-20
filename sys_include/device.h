@@ -327,21 +327,13 @@
 /* valuators */
 
 #define SGIRESERVED	256	/* 0+VALOFFSET */
-// Alice 4: Accelerator horizontal (out of 3600 tenths of a degree).
 #define DIAL0		257	/* 1+VALOFFSET */
-// Alice 4: Accelerator vertical (out of 3600 tenths of a degree).
 #define DIAL1		258	/* 2+VALOFFSET */
-// Alice 4: Gyro X in degress per second (dps) in 16.16 fixed point format.
 #define DIAL2		259	/* 3+VALOFFSET */
-// Alice 4: Gyro Y in degress per second (dps) in 16.16 fixed point format.
 #define DIAL3		260	/* 4+VALOFFSET */
-// Alice 4: Gyro Z in degress per second (dps) in 16.16 fixed point format.
 #define DIAL4		261	/* 5+VALOFFSET */
-// Alice 4: Accelerator X (-256 to 256).
 #define DIAL5		262	/* 6+VALOFFSET */
-// Alice 4: Accelerator Y (-256 to 256).
 #define DIAL6		263	/* 7+VALOFFSET */
-// Alice 4: Accelerator Z (-256 to 256).
 #define DIAL7		264	/* 8+VALOFFSET */
 #define DIAL8		265	/* 9+VALOFFSET */
 #define MOUSEX		266	/* 10+VALOFFSET */

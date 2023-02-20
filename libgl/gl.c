@@ -22,7 +22,7 @@
 //      zbuffer
 //      zclear
 
-// Alice 4 libgl implementation.
+// software libgl implementation - fork of Alice 4
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -680,7 +680,7 @@ void process_tmesh(int32_t n, world_vertex *worldverts)
 	    static screen_vertex triangle[3];
 	    triangle[0] = screenverts[0];
 
-	    for(i = 0; i < r - 2; i++) {
+	    for(int i = 0; i < r - 2; i++) {
 		triangle[1] = screenverts[i + 1];
 		triangle[2] = screenverts[i + 2];
 		if(!backface_enabled || (ccw ^ !backface_cull(triangle)))
@@ -712,14 +712,14 @@ void process_polygon(int32_t n, world_vertex *worldverts)
         n = r;
     }
 
-    for(i = 0; i < n; i++)
+    for(int i = 0; i < n; i++)
         project_vertex(&vp[i], &screenverts[i]);
  
     // XXX break into a single draw of TRIANGLES instead of a single function call per triangle:
     static screen_vertex triangle[3];
     triangle[0] = screenverts[0];
 
-    for(i = 0; i < n - 2; i++) {
+    for(int i = 0; i < n - 2; i++) {
         triangle[1] = screenverts[i + 1];
         triangle[2] = screenverts[i + 2];
 	if(!backface_enabled || !backface_cull(triangle))
@@ -1793,10 +1793,10 @@ void unqdevice(Device device) {
     events_unqdevice(device);
 }
 
-// XXX event_qread_start
-// XXX event_qread_continue
+// XXX events_qread_start
+// XXX events_qread_continue
 void fetch_event_queue(int blocking) {
-    int count = event_qread_start(blocking);
+    int count = events_qread_start(blocking);
 
     // First is number of events.
     for (int i = 0; i < count; i++) {
@@ -2296,7 +2296,7 @@ void draw_screen_aarect_filled(int r, int g, int b, float left, float top, float
     static screen_vertex triangle[3];
     triangle[0] = q[0];
 
-    for(i = 0; i < 2; i++) {
+    for(int i = 0; i < 2; i++) {
         triangle[1] = q[i + 1];
         triangle[2] = q[i + 2];
 	if(!backface_enabled || !backface_cull(triangle))
@@ -2394,7 +2394,7 @@ void pup_draw(pup *p, int menu_left, int menu_top, int selected)
     draw_screen_aarect_outline(0, 0, 0, items_outline_left, items_outline_top, items_outline_right, items_outline_bottom);
     draw_screen_aarect_filled(255, 255, 255, items_fill_left, items_fill_top, items_fill_right, items_fill_bottom);
     int item_top = items_pane_top;
-    for(i = 0; i < p->item_count; i++) {
+    for(int i = 0; i < p->item_count; i++) {
         if(i == selected) {
             draw_screen_aarect_filled(0, 0, 0, items_fill_left + 1, item_top + 2, items_fill_right - 1, item_top - font_height - 2);
             draw_screen_string(255, 255, 255, items_pane_left, item_top - font_height, p->items[i].item);
@@ -2956,6 +2956,7 @@ void n3f(float n[3]) {
 
 int32_t newpup() {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    return 0;
 }
 
 void prefposition() {
@@ -3059,6 +3060,7 @@ void v3f(float v[3]) {
 
 int32_t winattach() {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    return 0;
 }
 
 void winconstraints() {
@@ -3269,6 +3271,7 @@ void feedback() {
 
 int32_t endfeedback() {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    return 0;
 }
 
 void writemask(Colorindex mask) {
@@ -3364,7 +3367,7 @@ void poly(int n, Coord p[][3]) {
         vec3f_set(worldverts[i].normal, 1, 0, 0);
     }
 
-    for(i = 0; i < polygon_vert_count; i++) {
+    for(int i = 0; i < polygon_vert_count; i++) {
         process_line(&worldverts[i], &worldverts[(i + 1) % polygon_vert_count]);
     }
 }
@@ -3461,7 +3464,8 @@ void czclear(int color, int depth) {
 
 int gversion(char *version)
 {
-    strcpy(version, "ALICE4_0");
+    strcpy(version, "GITHUB.COM/SGI-DEMOS");
+    return 0;
 }
 
 
@@ -3472,9 +3476,9 @@ static void init_gl_state()
     if(getenv("TRACE_GL") != NULL)
         trace_functions = 1;
 #endif
-
-    for(int i = 0; i < MAX_PATTERNS; i++)
-        for(int j = 0; j < 16; j++)
+    int i,j;
+    for(i = 0; i < MAX_PATTERNS; i++)
+        for(j = 0; j < 16; j++)
             patterns[i][j] = 0xffff;
 
     matrix4x4f_stack_init(&modelview_stack);
