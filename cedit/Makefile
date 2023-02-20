@@ -2,11 +2,11 @@
 
 include ../platform.mk
 
-APP=ideas
+APP=cedit
 EMAPP=./web/$(APP).html
-SRC= a.c b.c d.c draw_holder.c draw_lamp.c draw_logo.c draw_logo_line.c draw_logo_shadow.c e.c f.c h.c i.c m.c n.c o.c p.c r.c s.c t.c track.c w.c
+SRC=cedit.c
 
-$(EMAPP): $(SRC) objects.h $(LIBGL_SRC) $(EM_SRC)
+$(EMAPP): $(SRC) $(LIBGL_SRC) $(EM_SRC)
 	$(EMCC) \
 	$(DEMO_WARN_OFF_EM) \
 	$(DEMO_INC) $(SRC) $(LIBGL_SRC) $(EM_SRC) \

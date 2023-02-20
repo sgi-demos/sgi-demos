@@ -2,10 +2,13 @@
 #include <gl.h>
 #include <math.h>
 #include <device.h>
+#include "EM_MAIN_LOOP_INIT.h"
 
 #define PI 3.1415926536
 #define NRAMPB 832
+#define NRAMPB_FLT 832.0
 #define NRAMPE 1023
+#define NRAMPE_FLT 1023.0
 #define DRAMPB 768
 #define DRAMPE 831
 #define CRAMPB 700
@@ -275,8 +278,9 @@ antialias_mode() {
 
 long gid;
 
-
+#include "EM_MAIN_BEGIN.h"
 main (argc, argv)
+#include "EM_MAIN_END.h"
 int	argc;
 char	*argv[];
 {
@@ -284,25 +288,17 @@ char	*argv[];
 	int i;
 	int r=100, g=255, b=255;
 
+
 	sdepth = 5.0/4.0 * grid;
 
 	{
 		char *t, *strrchr();
-		if (getgdesc(GD_BITS_NORM_SNG_RED) == 0)
-		{
-			system("inform 'Your system must support RGB mode to run newave'");
-   	 		exit(1);
-		}
-		if (getgdesc(GD_BITS_NORM_DBL_CMODE) < 12) {
-			system("inform 'Your system must support 890 color entries to run newave'");
+		gid=winopen((t=strrchr(argv[0], '/')) != NULL ? t+1 : argv[0]);
+		if (getplanes() < 12) {
+			fprintf(stderr, "%s needs at least 12 bitplanes\n",t);
+			gexit();
 			exit(1);
 		}
-		if (getgdesc(GD_BITS_NORM_ZBUFFER) == 0)
-		{
-		 	system("inform 'Your system must have a z-buffer to run newave'");
-		 	exit(1);
-		}
-		gid=winopen((t=strrchr(argv[0], '/')) != NULL ? t+1 : argv[0]);
 	}
 
 	save_colors();
@@ -345,12 +341,12 @@ char	*argv[];
 
 	killmenu = defpup("Really? %t|yes|no");
 
-    display_menu = defpup("Display Type %t|normal %f|depthcued %f|flat shaded %f|gouraud shaded %f|top view %f|antialias %f", normal_mode, depthcued_mode, flat_shaded_mode, gouraud_shaded_mode, top_mode, antialias_mode );
+display_menu = defpup("Display Type %t|normal %f|depthcued %f|flat shaded %f|gouraud shaded %f|top view %f|antialias %f", normal_mode, depthcued_mode, flat_shaded_mode, gouraud_shaded_mode, top_mode, antialias_mode );
 
-    speed_menu = defpup("Speed %t|weak|medium|strong");
-    grid_menu = defpup("Grid Size %t|small|medium|large");
+speed_menu = defpup("Speed %t|weak|medium|strong");
+grid_menu = defpup("Grid Size %t|small|medium|large");
 
-    menu=defpup("WAVE %t|edit|go|reverse|display menu|spring menu|grid menu|reset|kill");
+menu=defpup("WAVE %t|edit|go|reverse|display menu|spring menu|grid menu|reset|kill");
 
 	doublebuffer();
 	gconfig();	
@@ -367,14 +363,15 @@ char	*argv[];
 	qdevice(REDRAW);
 	qdevice(ESCKEY);
 	qdevice(WINQUIT);
-	qdevice(WINSHUT);
 	qdevice(RIGHTMOUSE);
 	qdevice(LEFTMOUSE);
 	qdevice(MIDDLEMOUSE);
 	tie (MIDDLEMOUSE, MOUSEX, MOUSEY);
 	tie (LEFTMOUSE, MOUSEX, MOUSEY);
 
-	while(TRUE) {
+ 	#include "EM_MAIN_LOOP_BEGIN.h"
+    while(TRUE) {
+	#include "EM_MAIN_LOOP_END.h"
 
 		while(qtest()) {
 			dev=qread(&val);
@@ -442,9 +439,9 @@ char	*argv[];
 					    yorig, yorig+ysize-1);
 					} else {
 					    setvaluator(MOUSEX, nmx,
-					    0, getgdesc(GD_XPMAX));
+					    0, XMAXSCREEN);
 					    setvaluator(MOUSEY, nmy,
-					    0, getgdesc(GD_YPMAX));
+					    0, YMAXSCREEN);
 					}
 					break;
 			}
@@ -837,7 +834,7 @@ gouraud_shade() {
 	c = dot(vertvec[i][j], light);
 	if (c<0.0) c=0.0;
 
-	c=(((float)(NRAMPE))-((float)(NRAMPE))) * c + ((float)(NRAMPE));
+	c=(NRAMPE_FLT-NRAMPB_FLT) * c + (NRAMPB_FLT);
 
 	colur[i][j] = c;
 
@@ -1026,7 +1023,7 @@ float pts[][3];
     c = dot(norm,light);
     if (c<0.0) c=0.0;
 
-    c = (((float)(NRAMPE)) - ((float)(NRAMPE))) * c + (((float)(NRAMPE)));
+    c = (NRAMPE_FLT - NRAMPB_FLT) * c + (NRAMPB_FLT);
 
     return((int)c);
 }
@@ -1076,7 +1073,7 @@ float pts[][3];
     c = dot(norm,light);
     if (c<0.0) c=0.0;
 
-    c = (((float)(NRAMPE))-((float)(NRAMPE))) * c + ((float)(NRAMPE));
+    c = (NRAMPE_FLT-NRAMPB_FLT) * c + NRAMPB_FLT;
 
     return(c);
 }

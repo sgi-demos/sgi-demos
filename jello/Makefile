@@ -8,7 +8,6 @@ SRC=jello.c
 
 $(EMAPP): $(SRC) $(LIBGL_SRC) $(EM_SRC)
 	$(EMCC) \
-	-D_POSIX_C_SOURCE=199309L \
 	$(DEMO_WARN_OFF_EM) \
 	$(DEMO_INC) $(SRC) $(LIBGL_SRC) $(EM_SRC) \
 	-s WASM=1 -s USE_SDL=2 -s FULL_ES2=1 \

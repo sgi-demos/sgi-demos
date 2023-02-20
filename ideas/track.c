@@ -2,10 +2,9 @@
 #include <device.h>
 #include <math.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <time.h>
 #include "objects.h"
+
+#include "EM_MAIN_LOOP_INIT.h"
 
 #define X 0
 #define Y 1
@@ -13,8 +12,6 @@
 
 #define DEG *3.14159265359/180.0
 #define RAD *180.0/3.14159265359
-
-#define ASPECT ((float) (XMAXSCREEN + 1) / (float) (YMAXSCREEN + 1))
 
 float idmat[4][4] = {
     {1.0, 0.0, 0.0, 0.0},
@@ -95,6 +92,8 @@ short halftone[] = { 0xeeee, 0xffff, 0xbbbb, 0xffff,
 
 short dev, val;
 
+static float time=0.0;
+
 float tmplight[] = {
     POSITION, 0.0, 0.0, 0.0, 0.0, LMNULL
 };
@@ -107,6 +106,7 @@ float tv[4][4] = {
 };
 
 #define TABLERES 12
+#define TABLERES_FLT 12.0
 
 float pcr, pcg, pcb, pca;
 
@@ -124,9 +124,9 @@ vector paper_points[4] = {
 };
 
 float dot(vector, vector);
-void draw_table(float current_time);
 
 #define TIME 15
+#define TIME_FLT 15.0
 
 vector light_pos_ctl[] = {
 
@@ -262,30 +262,21 @@ parameter *view_from_spline, *view_to_spline,
 
 parameter *calc_spline_params(vector *, int);
 
-static double diff_timespecs(struct timespec *t1, struct timespec *t2) {
-    return (t1->tv_sec - t2->tv_sec) + (t1->tv_nsec - t2->tv_nsec)/1000000000.0;
-}
-
-static struct timespec animation_start_time;
-static void reset_animation() {
-    clock_gettime(CLOCK_MONOTONIC, &animation_start_time);
-}
-
 double a3, a4;
 
-main(argc, argv)
+#include "EM_MAIN_BEGIN.h"
+main (argc, argv)
+#include "EM_MAIN_END.h"
 int	argc;
 char	*argv[];
 {
     float x, y, z, c;
-    float current_time = 0.0;
-    float previous_time;
-
 
     initialize(argv[0]);
-    reset_animation();
 
+    #include "EM_MAIN_LOOP_BEGIN.h"
     while (TRUE) {
+    #include "EM_MAIN_LOOP_END.h"
 
 	while(qtest()) {
 
@@ -302,31 +293,25 @@ char	*argv[];
 		    exit(0);
 
 		case LEFTMOUSE:
-		    if (!val) reset_animation();
+		    if (!val) time=0.0;
 		    break;
 
 	    }
 	}
 
-	// Advance time.
-	previous_time = current_time;
-	{
-	    struct timespec now;
-	    clock_gettime(CLOCK_MONOTONIC, &now);
-	    current_time = diff_timespecs(&now, &animation_start_time)*0.7;
-	    if (current_time > TIME - 3.0) {
-		current_time = TIME - 3.001;
-	    }
-	}
-	if ((int) current_time != (int) previous_time && 0) {
-	    printf("time = %d\n", (int) current_time);
-	}
 
-	calc_spline(view_from, view_from_spline, current_time);
-	calc_spline(view_to, view_to_spline, current_time);
-	calc_spline(light_pos, light_pos_spline, current_time);
-	calc_spline(logo_pos, logo_pos_spline, current_time);
-	calc_spline(logo_rot, logo_rot_spline, current_time);
+	calc_spline(view_from, view_from_spline, time);
+	calc_spline(view_to, view_to_spline, time);
+	calc_spline(light_pos, light_pos_spline, time);
+	calc_spline(logo_pos, logo_pos_spline, time);
+	calc_spline(logo_rot, logo_rot_spline, time);
+
+/*if ( (int)(time+0.012) != (int)time )
+printf("time = %d\n", (int)time+1);*/
+
+	if ( (time+=0.019)>(TIME_FLT)-3.0) time = TIME_FLT-3.001;
+
+/*	else time=0.0; */
 
 	tmplight[1] = light_pos[X]-logo_pos[X];
 	tmplight[2] = light_pos[Y]-logo_pos[Y];
@@ -341,11 +326,11 @@ char	*argv[];
 
 	mmode(MSINGLE);
 
-	perspective(150, ASPECT, 0.5, 20.0);
+	perspective(450, 5.0/4.0, 0.5, 20.0);
 	lookat(view_from[X], view_from[Y], view_from[Z],
 	       view_to[X], view_to[Y], view_to[Z], 0);
 
-	if (view_from[Y] > 0.0) draw_table(current_time);
+	if (view_from[Y] > 0.0) draw_table();
 
 	zbuffer(FALSE);
 
@@ -409,7 +394,7 @@ char	*argv[];
 	zbuffer(TRUE);
 
 	mmode(MVIEWING);
-	perspective(150, ASPECT, 0.5, 20.0);
+	perspective(450, 5.0/4.0, 0.5, 20.0);
 	loadmatrix(idmat);
 	lookat(view_from[X], view_from[Y], view_from[Z],
 	       view_to[X], view_to[Y], view_to[Z], 0);
@@ -517,7 +502,7 @@ char *title;
     logo_pos_spline = calc_spline_params(logo_pos_ctl, TIME);
     logo_rot_spline = calc_spline_params(logo_rot_ctl, TIME);
 
-    perspective(150, ASPECT, 0.5, 20.0);
+    perspective(450, 5.0/4.0, 0.5, 20.0);
 
     mmode(MVIEWING);
 }
@@ -527,17 +512,17 @@ build_table() {
 
     float i, j;
 
-    for (j=0.0; j<=TABLERES; j+=1.0) {
-	for (i=0.0; i<=TABLERES; i+=1.0) {
-	    table_points[(int)j][(int)i][Z] = (i-TABLERES/2.0)/2.0;
-	    table_points[(int)j][(int)i][X] = (j-TABLERES/2.0)/2.0;
+    for (j=0.0; j<=TABLERES_FLT; j+=1.0) {
+	for (i=0.0; i<=TABLERES_FLT; i+=1.0) {
+	    table_points[(int)j][(int)i][Z] = (i-TABLERES_FLT/2.0)/2.0;
+	    table_points[(int)j][(int)i][X] = (j-TABLERES_FLT/2.0)/2.0;
 	    table_points[(int)j][(int)i][Y] = 0.0;
 	}
     }
 }
 
 
-void draw_table(float current_time) {
+draw_table() {
 
     float x, z, c;
     int i, j;
@@ -562,8 +547,8 @@ void draw_table(float current_time) {
 	    if ((c = dot(lv, ov))<0.0) c = 0.0;
 	    c = c * c * c * lv[Y] * 255.0;
 /* fade */
-	    if ((current_time>TIME-5.0) && (current_time<TIME-3.0)) 
-		c *= 1.0 - (current_time-(TIME-5.0)) * 0.5;
+	    if ((time>TIME-5.0) && (time<TIME-3.0)) 
+		c *= 1.0 - (time-(TIME-5.0)) * 0.5;
 
 	    tablecolors[j][i] = (int)c;
 	}
@@ -603,8 +588,8 @@ void draw_table(float current_time) {
 	if ((c = dot(lv, ov))<0.0) c = 0.0;
 	c = c * c * c * lv[Y];
 /* fade */
-	    if ((current_time>TIME-5.0) && (current_time<TIME-3.0)) 
-		c *= 1.0 - (current_time-(TIME-5.0)) * 0.5;
+	    if ((time>TIME-5.0) && (time<TIME-3.0)) 
+		c *= 1.0 - (time-(TIME-5.0)) * 0.5;
 
 	pcr = c * 255; pcg = c * 255; pcb = c * 200;
 	pca += c;
@@ -633,8 +618,8 @@ void draw_table(float current_time) {
 
     scale(0.015, 0.015, 0.015);
 
-    if (current_time>TIME-5.0) {
-	c = (current_time-(TIME-5.0))/2.0;
+    if (time>TIME_FLT-5.0) {
+	c = (time-(TIME_FLT-5.0))/2.0;
 	RGBcolor((int)(c*255.0), (int)(c*255.0), (int)(c*255.0));
     } else RGBcolor(0, 0, 0);
 

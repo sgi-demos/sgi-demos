@@ -22,5 +22,8 @@ void child_main_loop(void *arg) \
     static Boolean attached; \
     static int started = 1; \
     static int i; \
-\
+    static float x, y, z, c; \
+    static float current_time = 0.0; \
+    static float previous_time; \
+	static int r=100, g=255, b=255; \
     if
