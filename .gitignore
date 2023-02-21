@@ -1,5 +1,5 @@
 .DS_Store
 Thumbs.db
 .vscode
-./**/bin/*.dSYM
-./**/**/*.o
+*.dSYM
+*.o

@@ -1,4 +1,4 @@
 APPNAME=arena
 APPDEFS=-DNETWORKING=1
-include ../make_demo.mk
-include ../run_networked.mk
+include ../Make/make_demo.mk
+include ../Make/run_networked.mk

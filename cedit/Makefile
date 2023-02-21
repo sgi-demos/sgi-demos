@@ -1,2 +1,2 @@
 APPNAME=cedit
-include ../make_demo.mk
+include ../Make/make_demo.mk
