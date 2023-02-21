@@ -1,7 +1,5 @@
-bin
 .DS_Store
 Thumbs.db
-*.dSYM
 .vscode
-demo_bin
-*.o
+./**/bin/*.dSYM
+./**/**/*.o
