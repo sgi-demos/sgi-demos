@@ -48,32 +48,12 @@ void sdlInit(const char *windowTitle)
     sdlState.pRenderer = SDL_CreateRenderer(sdlState.pWindow, -1, 0);
 }
 
-SDL_Renderer* sdlRenderer()
-{
-    return sdlState.pRenderer;
-}
-
-Size2D sdlWindowSize()
-{
-    return sdlState.winSize;
-}
-
-Vec2D sdlViewport()   
-{ 
-    return (Vec2D) { .x = (float)sdlState.winSize.width, .y = (float)sdlState.winSize.height };
-}
-
-Size2D sdlFramebufferSize()
-{
-    return sdlState.winSize;
-}
-
 void sdlPresent()
 {
     SDL_RenderPresent(sdlState.pRenderer);
 }
 
-void sdlExitApp()
+void exitApp()
 {
     #ifdef __EMSCRIPTEN__
         // Go to previous page, or if none, to demo home page
@@ -107,7 +87,7 @@ void sdlProcessEvents()
             break;
 
             case SDL_QUIT:
-                sdlExitApp();
+                exitApp();
             break;
 
             case SDL_KEYDOWN:
@@ -115,7 +95,7 @@ void sdlProcessEvents()
                 switch (event.key.keysym.sym)
                 {
                     case SDLK_ESCAPE: 
-                        sdlExitApp(); 
+                        exitApp(); 
                     break;
                     
                     default:
@@ -199,4 +179,39 @@ Uint8* sdlGetKeyboardState()
 bool sdlViewChanged()
 {
     return false; // TBD
+}
+
+SDL_Renderer* sdlRenderer()
+{
+    return sdlState.pRenderer;
+}
+
+Size2D sdlFramebufferSize()
+{
+    return sdlState.winSize;
+}
+
+unsigned char* sdlFramebuffer()
+{
+    return NULL;
+}
+
+Size2D sdlWindowSize()
+{
+    return sdlState.winSize;
+}
+
+Vec2D sdlViewport()   
+{ 
+    return (Vec2D) { .x = (float)sdlState.winSize.width, .y = (float)sdlState.winSize.height };
+}
+
+int sdlWindowToFramebufferOffsetX()
+{
+    return 0;
+}
+
+int sdlWindowToFramebufferOffsetY()
+{
+    return 0;
 }

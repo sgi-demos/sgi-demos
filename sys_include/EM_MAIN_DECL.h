@@ -5,8 +5,8 @@
     with Emscripten calling into the child app's event loop whenever a new input, 
     redraw, etc. event occurs.   
 */
-#ifndef EM_MAIN_LOOP_INIT
-#define EM_MAIN_LOOP_INIT
+#ifndef EM_MAIN_DECL
+#define EM_MAIN_DECL
 
 // main loop of parent app (Emscripten main loop)
 extern void main_loop(void *arg);

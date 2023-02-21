@@ -4,7 +4,7 @@
 #include "basic_types.h"
 #define INPUT_QUEUE_SIZE 128
 
-extern int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height);
+extern int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height, unsigned char* framebuffer);
 
 extern int32_t events_get_valuator(int32_t device);
 extern Boolean events_get_button(int32_t button);

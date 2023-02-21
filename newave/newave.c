@@ -2,7 +2,7 @@
 #include <gl.h>
 #include <math.h>
 #include <device.h>
-#include "EM_MAIN_LOOP_INIT.h"
+#include "EM_MAIN_DECL.h"
 
 #define PI 3.1415926536
 #define NRAMPB 832

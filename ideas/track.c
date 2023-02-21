@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "objects.h"
 
-#include "EM_MAIN_LOOP_INIT.h"
+#include "EM_MAIN_DECL.h"
 
 #define X 0
 #define Y 1

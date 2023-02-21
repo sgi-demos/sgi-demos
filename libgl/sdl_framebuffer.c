@@ -7,12 +7,12 @@
 #else
 #include <SDL2/SDL.h>
 #endif
-
 #include "sdl_events.h"
+#include "EM_MAIN_DEFN.h"
 
-SDL_Texture * pFramebuffer = NULL;
+static SDL_Texture * pFramebuffer = NULL;
 
-SDL_Texture * initTexture()
+void buildTexture()
 {
     // Create grey checkerboard surface with yellow border
     int winWidth = sdlWindowSize().width,
@@ -39,44 +39,46 @@ SDL_Texture * initTexture()
                     surfacePixels[i] = 0xff808080; // dark grey
             }
         }
-
+    
     // Create texture from surface
-    return SDL_CreateTextureFromSurface(sdlRenderer(), pSurface);
+    pFramebuffer = SDL_CreateTextureFromSurface(sdlRenderer(), pSurface);
+    SDL_FreeSurface(pSurface);
 }
 
-void redraw()
+void updateTexture()
 {
-    //SDL_RenderClear(renderer);
-
-    // if (pixels)
-    // {
-    //     SDL_Rect rect = ;
-    //     int pitch = ;
-    //     SDL_UpdateTexture(framebuffer, rect, pixels, pitch);
-    // }
-
-    SDL_RenderCopy(sdlRenderer(), pFramebuffer, NULL, NULL);
-
-    sdlPresent();
+    if (sdlFramebuffer())
+    {
+        unsigned char* pixels = sdlFramebuffer();
+        Size2D fbSize = sdlFramebufferSize();
+        SDL_Rect rect = (SDL_Rect){ .x = sdlWindowToFramebufferOffsetX(), .y = sdlWindowToFramebufferOffsetY(), 
+                                    .w = fbSize.width, .h = fbSize.height };
+        int pitch = fbSize.width * 4;
+        SDL_UpdateTexture(pFramebuffer, &rect, pixels, pitch);
+    }
 }
 
-#ifndef SDL_CHILD_MAIN
-#define SDL_CHILD_MAIN
-int child_main (int argc, char* argv[]) { return 0; }
-void child_main_loop(void *main_loop_arg) {}
-#else
-extern int child_main (int argc, char* argv[]);
-extern void child_main_loop(void *main_loop_arg);
-#endif
+void freeTexture()
+{
+    // Free existing SDL image and GL texture
+    if (pFramebuffer)
+    {
+        SDL_DestroyTexture(pFramebuffer);
+        pFramebuffer = NULL;
+    }
+}
 
 void main_loop(void* main_loop_arg) 
 {    
     sdlProcessEvents();
 
-    // Run child main loop
+    // Run child main loop - let child process events and redraw
     child_main_loop(main_loop_arg);
 
-    redraw();
+    // Redraw
+    updateTexture();
+    SDL_RenderCopy(sdlRenderer(), pFramebuffer, NULL, NULL);
+    sdlPresent();
 }
 
 int main(int argc, char* argv[])
@@ -84,7 +86,7 @@ int main(int argc, char* argv[])
     // Initialize SDL window
     sdlInit("sgi-demos-sdl");
 
-    pFramebuffer = initTexture();
+    buildTexture();
 
     // Run child main
     child_main(argc, argv);
@@ -93,12 +95,13 @@ int main(int argc, char* argv[])
     void* main_loop_arg = NULL; // User-defined data to pass to main_loop() and child_main_loop()
     #ifdef __EMSCRIPTEN__
         int fps = 0; // Set to 0 to use browser's requestAnimationFrame (recommended)
-        int simulate_infinite_loop = 0; // Throw an exception in order to stop execution of the caller
+        int simulate_infinite_loop = 1;
         emscripten_set_main_loop_arg(main_loop, main_loop_arg, fps, simulate_infinite_loop);
     #else
         while(true) 
             main_loop(main_loop_arg);
     #endif
 
+    freeTexture();
     return 0;
 }

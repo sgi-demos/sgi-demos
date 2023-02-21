@@ -12,7 +12,7 @@
 #include "port.h"
 #include "stdio.h"
 
-#include "EM_MAIN_LOOP_INIT.h"
+#include "EM_MAIN_DECL.h"
 
 float or = -1.0;
 float og = -1.0;

@@ -14,7 +14,7 @@
 #include <democolors.c>
 #include "insect.h"
 
-#include "EM_MAIN_LOOP_INIT.h"
+#include "EM_MAIN_DECL.h"
 
 /* begin Emscripten emcc crashes on -fcommon, so must fwd define */
 Object screen,viewit,shadow,body,hip[6],thigh[6],shin[6],kneeball[6];

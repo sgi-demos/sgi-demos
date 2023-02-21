@@ -5,262 +5,347 @@
 #else
 #include <SDL2/SDL.h>
 #endif
+#include "sdl_events.h"
 
 #include <gl.h>
 #include <device.h>
-#include "camera2D.h"
-#include "sdl_events.h"
 #include "events.h"
 
-int sdlMousePosX();
-int sdlMousePosY();
-unsigned char sdlMouseButtonState();
-unsigned char* sdlGetKeyboardState();
-int sdlPeepEvents();
-
-typedef struct gl_event {
-    int32_t device;
-    int16_t val;
-} gl_event;
-
-static uint32_t devices_queued[2048];
-static uint32_t tied_valuators[2048][2];
-static gl_event input_queue[INPUT_QUEUE_SIZE];
-static uint32_t input_queue_head = 0;    // The next item that needs to be read
-static uint32_t input_queue_length = 0;  // The number of items in the queue (tail = (head + length) % len):
+//#define SDL_GL_FRAMEBUFFER
 
 typedef struct
 {
     // Window
     SDL_Window* pWindow;
     Uint32 windowID;
-    Size2D frameSize; // Framebuffer size may not be the same as window size
+    Size2D winSize;
+    Size2D frameSize; // Framebuffer size may differ from window size
+    unsigned char* pFramebuffer;
+    SDL_Renderer* pRenderer;
 
     // Mouse input
-    bool leftMouseButtonDown;
-    bool middleMouseButtonDown;
-    bool rightMouseButtonDown;
-    Pixel2D leftMouseButtonDownCoord;
     Pixel2D mousePosition;
     bool mouseInsideFramebuffer;
 
-    // Finger input
-    bool fingerDown;
-    Vec2D fingerDownCoord;
-    long long fingerDownId;
-
-    // Pinch input
-    bool pinch;
-
 } SDLState;
 
-static SDLState sdlState = (SDLState)
+SDLState sdlState = (SDLState)
 {
     // Window
     .pWindow = NULL,
     .windowID = 0,
-    .frameSize = {640, 480},
+    .winSize = {880, 560},
+    .frameSize = {800, 480},
+    .pFramebuffer = NULL,
+    .pRenderer = NULL,
 
     // Mouse input
-    .leftMouseButtonDown = false,
-    .middleMouseButtonDown = false,
-    .rightMouseButtonDown = false,
-    .leftMouseButtonDownCoord = {0, 0},
     .mousePosition = {0, 0},
-    .mouseInsideFramebuffer = false,
-
-    // Finger input
-    .fingerDown = false,
-    .fingerDownCoord = {0.0, 0.0},
-    .fingerDownId = 0,
-
-    // Pinch input
-    .pinch = false,
+    .mouseInsideFramebuffer = false
 };
 
-// TBD - for desktop, have an escape key; for mobile, probably will have a window title bar with X to close window
-//       which user can tap, and this can enqueue an ESCKEY event here
-static void emulateEscapeWithTapClose()
+typedef struct gl_event {
+    int32_t device;
+    int16_t val;
+} gl_event;
+uint32_t devices_queued[2048];
+uint32_t tied_valuators[2048][2];
+gl_event input_queue[INPUT_QUEUE_SIZE];
+uint32_t input_queue_head = 0;    // The next item that needs to be read
+uint32_t input_queue_length = 0;  // The number of items in the queue (tail = (head + length) % len):
+int32_t sdl_keycode_to_gl(int32_t sdl_keycode);
+void enqueue_event(gl_event *e);
+
+void sdlInit(const char *windowTitle)
 {
-    // // Only Home button for now, which is mapped to ESC.
-    // int home_button;
-    // gl_event ev;
-    
-    // // libawesome will queue up two transitions per frame, so read the button
-    // // twice to get those.
-    // for (int i = 0; i < 2; i++) {
-    //     home_button = awesome_get_home_button();
-    //     if(home_button != home_button_previous) {
-    //         if(devices_queued[ESCKEY]) {
-    //         ev.device = ESCKEY;
-    //         ev.val = home_button;
-    //         enqueue_event(&ev);
-    //         }
-    //         home_button_previous = home_button;
-    //     }
-    // }
+    // Create SDL window
+    #ifdef SDL_GL_FRAMEBUFFER
+        sdlState.pWindow =
+            SDL_CreateWindow(windowTitle,
+                            SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                            sdlState.winSize.width, sdlState.winSize.height,
+                            SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
+
+        // Create OpenGLES 2 context on SDL window
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+        SDL_GL_SetSwapInterval(1);
+        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+        SDL_GLContext glc = SDL_GL_CreateContext(sdlState.pWindow);
+
+        // Set clear color to black
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    #else
+        sdlState.pWindow =
+            SDL_CreateWindow(windowTitle,
+                                SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                                sdlState.winSize.width, sdlState.winSize.height,
+                                SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
+        sdlState.windowID = SDL_GetWindowID(sdlState.pWindow);
+        sdlState.pRenderer = SDL_CreateRenderer(sdlState.pWindow, -1, 0);  // SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC    
+    #endif
+
+    sdlState.windowID = SDL_GetWindowID(sdlState.pWindow);
+
+    // Initialize viewport
+    void windowResizeEvent(Size2D winSize);
+    windowResizeEvent(sdlState.winSize);
 }
 
-// TBD - For mobile, translate touch events into mouse events, and push those mouse events onto the queue
-//       NOTE: may not need this, as touch events are already translated into mouse events by SDL
-static void emulateMouseWithTouch()
+void sdlPresent()
 {
-    // int x, y;
-    // float z;
-
-    // TouchscreenEvent e;
-    // gl_event ev;
-    // int drained = 0;
-    // while((e = touchscreen_read(&x, &y, &z)) != TOUCHSCREEN_IDLE) {
-	// drained ++;
-	// switch(e) {
-	//     case TOUCHSCREEN_START:
-	// 	// N.B. The devices is rotated 180 degrees from it's
-	// 	// "natural," originally-developed orientation
-	// 	mousex = 800 - 1 - x;
-	// 	mousey = y; // GL valuator MOUSEY is 0 at bottom
-	// 	if(devices_queued[LEFTMOUSE]) {
-	// 	    ev.device = LEFTMOUSE;
-	// 	    ev.val = 1;
-	// 	    enqueue_event(&ev);
-	// 	    for(int j = 0; j < 2; j++) {
-	// 		if(tied_valuators[LEFTMOUSE][j]) {
-	// 		    ev.device = tied_valuators[LEFTMOUSE][j];
-	// 		    ev.val = events_get_valuator(tied_valuators[LEFTMOUSE][j]);
-	// 		    enqueue_event(&ev);
-	// 		}
-	// 	    }
-	// 	}
-	// 	break;
-	//     case TOUCHSCREEN_DRAG:
-	//     	// XXX device is rotated 180 degrees
-	// 	mousex = 800 - 1 - x;
-	// 	mousey = y; // GL valuator MOUSEY is 0 at bottom
-	// 	break;
-	//     case TOUCHSCREEN_STOP:
-	// 	if(devices_queued[LEFTMOUSE]) {
-	// 	    ev.device = LEFTMOUSE;
-	// 	    ev.val = 0;
-	// 	    enqueue_event(&ev);
-	// 	    for(int j = 0; j < 2; j++) {
-	// 		if(tied_valuators[LEFTMOUSE][j]) {
-	// 		    ev.device = tied_valuators[LEFTMOUSE][j];
-	// 		    ev.val = events_get_valuator(tied_valuators[LEFTMOUSE][j]);
-	// 		    enqueue_event(&ev);
-	// 		}
-	// 	    }
-	// 	}
-	// 	break;
-	//     case TOUCHSCREEN_IDLE:
-	//     default:
-	// 	break;
-	// }
-    // }
+    #ifdef SDL_GL_FRAMEBUFFER
+        SDL_GL_SwapWindow(sdlState.pWindow);
+    #else
+        SDL_RenderPresent(sdlState.pRenderer);
+    #endif
 }
 
-// static float theta_x_smoothed, theta_y_smoothed;
-// static const float decay = .95;
-
-static bool isDial(int32_t device)
+void windowResizeEvent(Size2D winSize)
 {
-    // Safe! IrisGL API is never changing again
-    return device >= DIAL0 && device <= DIAL8; 
+    #ifdef SDL_GL_FRAMEBUFFER
+        glViewport(0, 0, winSize.width, winSize.height);
+    #endif
+    sdlState.winSize = winSize;
 }
 
-// TBD - For mobile, map dials to tilt; for desktop, probably have a floating emulator window to simulate the dials
-int32_t emulateDialsWithTilt(int32_t device)
+void exitEvent()
 {
-    // if(device == DIAL0 || device == DIAL1) 
-    // {
-    //     float theta_x, theta_y, value;
-    
-    //     accelerometer_read(&theta_y, &theta_x);
-    //     // N.B. The devices is rotated 180 degrees from its "natural,"
-    //     // originally-developed orientation
-    //     theta_y = -theta_y;
-    //     theta_x = -theta_x;
-
-    //     theta_x_smoothed = theta_x_smoothed * decay + theta_x * (1 - decay);
-    //     theta_y_smoothed = theta_y_smoothed * decay + theta_y * (1 - decay);
-
-    //     if(device == DIAL0)
-    //         value = theta_x_smoothed / (2 * M_PI) * 3600;
-    //     else /* device == DIAL1 */
-    //         value = theta_y_smoothed / (2 * M_PI) * 3600;
-
-    //     return value;
-    // } 
-    // else if(device == DIAL2 || device == DIAL3 || device == DIAL4) 
-    // {
-    //     if (gyro_reads == 0) {
-    //         // Get the data from the real device.
-    //         while (!gyro_ready()) {
-    //         // Wait.
-    //         }
-
-    //         gyro_read(&gyro_dx, &gyro_dy, &gyro_dz);
-    //     }
-
-    //     gyro_reads = (gyro_reads + 1) % 3;
-
-    //     switch (device) {
-    //         case DIAL2: return gyro_dx;
-    //         case DIAL3: return gyro_dy;
-    //         case DIAL4: return gyro_dz;
-    //     }
-    // } 
-    // else if(device == DIAL5) return accelerometer_read_x();
-    // else if(device == DIAL6) return accelerometer_read_y();
-    // else if(device == DIAL7) return accelerometer_read_z();
-    //  
-    printf("warning: unimplemented dial/tilt %d\n", device);
-    return 0;
+    #ifdef __EMSCRIPTEN__
+        // Go to previous page, or if none, to demo home page
+        const char *exit_js =
+            "if (document.referrer) {                                   "
+            "     window.history.back();                                "
+            "}                                                          "
+            "else {                                                     "
+            "    window.location.href = 'https://sgi-demos.github.io';  "
+            "}                                                          ";
+        emscripten_run_script(exit_js);
+    #else
+        exit(0);
+    #endif
 }
 
-static int clamp(int v, int low, int high)
+void mouseMotionEvent()
+{
+    // detect when mouse transits into or out of framebuffer for INPUTCHANGE events
+    // TODO: also perhaps when window loses/gains focus? 
+    bool sdlMouseInsideFramebuffer();
+    bool mouseInsideFB = sdlMouseInsideFramebuffer();
+    if (mouseInsideFB != sdlState.mouseInsideFramebuffer) 
+    {
+        sdlState.mouseInsideFramebuffer = mouseInsideFB;
+        if (devices_queued[INPUTCHANGE])
+        {
+            gl_event ev;
+            ev.device = INPUTCHANGE;
+            ev.val = mouseInsideFB;
+            enqueue_event(&ev);
+        }
+    }
+}
+
+void keyDownEvent(int sdl_keycode)
+{
+    if (sdl_keycode == SDLK_ESCAPE)
+        exitEvent();
+    else 
+    {
+        // convert SDL key event to GL and add it to GL event queue
+        gl_event ev;
+        ev.device = sdl_keycode_to_gl(sdl_keycode);
+        if (ev.device != 0 && devices_queued[ev.device])
+        {
+            ev.val = 1; 
+            enqueue_event(&ev);
+        }
+    }
+}
+
+void mouseButtonEvent(int sdlButton, bool buttonDown)
+{
+    gl_event ev;
+
+    switch (sdlButton)
+    {
+        case SDL_BUTTON_LEFT:   ev.device = LEFTMOUSE;      break;
+        case SDL_BUTTON_MIDDLE: ev.device = MIDDLEMOUSE;    break;
+        case SDL_BUTTON_RIGHT:  ev.device = RIGHTMOUSE;     break;
+        default: ev.device = NULLDEV;
+    }
+
+    // convert SDL mouse button event to GL and add it to GL event queue
+    if (ev.device != NULLDEV && devices_queued[ev.device]) 
+    {
+        ev.val = buttonDown;
+        enqueue_event(&ev);
+
+        // tied valuators is typically used for capturing mouse x and/or
+        // y position at the time when a mouse button is pressed, and 
+        // emitting those as mouse position x and y events right after
+        // the mouse button event in the GL event queue
+        gl_event tied_ev;
+        for (int j = 0; j < 2; ++j) 
+        {
+            if (tied_valuators[ev.device][j])
+            {
+                tied_ev.device = tied_valuators[ev.device][j];
+                tied_ev.val = events_get_valuator(tied_valuators[ev.device][j]);
+                enqueue_event(&tied_ev);
+            }
+        }
+    }
+}
+
+void sdlProcessEvents()
+{
+    SDL_Event event;
+    while (SDL_PollEvent(&event))
+    {
+        switch (event.type)
+        {
+            case SDL_QUIT:
+                exitEvent();
+                break;
+
+            case SDL_WINDOWEVENT:
+                if (event.window.windowID == sdlState.windowID && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+                    windowResizeEvent((Size2D){event.window.data1, event.window.data2});
+                break;
+
+            case SDL_KEYDOWN:
+                keyDownEvent(event.key.keysym.sym);
+                break;
+
+            case SDL_MOUSEMOTION:
+                mouseMotionEvent();
+                break;
+
+            case SDL_MOUSEBUTTONDOWN:
+                mouseButtonEvent(((SDL_MouseButtonEvent *)&event)->button, true);
+                break;
+
+            case SDL_MOUSEBUTTONUP:
+                mouseButtonEvent(((SDL_MouseButtonEvent *)&event)->button, false);
+                break;
+        }
+    }
+}
+
+int sdlMousePosX()
+{
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    return x;
+}
+
+int sdlMousePosY()
+{
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    return y;
+}
+
+unsigned char sdlMouseButtonState()
+{
+    int x, y;
+    return SDL_GetMouseState(&x, &y);    
+}
+
+int sdlPeepEvents()
+{
+    SDL_Event event;
+    int count = SDL_PeepEvents(&event, 1, SDL_PEEKEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT);
+    return count;
+}
+
+Uint8* sdlGetKeyboardState()
+{
+    const Uint8* keys = SDL_GetKeyboardState(NULL);
+    return (unsigned char*)keys;
+}
+
+bool sdlViewChanged()
+{
+    return true; // TBD
+}
+
+SDL_Renderer* sdlRenderer()
+{
+    return sdlState.pRenderer;
+}
+
+Size2D sdlFramebufferSize()
+{
+    return sdlState.frameSize;
+}
+
+unsigned char* sdlFramebuffer()
+{
+    return sdlState.pFramebuffer;
+}
+
+Size2D sdlWindowSize()
+{
+    return sdlState.winSize;
+}
+
+Vec2D sdlViewport()   
+{ 
+    return (Vec2D) { .x = (float)sdlState.winSize.width, .y = (float)sdlState.winSize.height };
+}
+
+int clamp(int v, int low, int high)
 {
     return v > high ? high : (v < low ? low : v);
 }
 
-static Boolean would_clamp(int v, int low, int high)
+Boolean would_clamp(int v, int low, int high)
 {
     return v < low || v > high;
 }
 
-int32_t sdl_to_gl_mouse_x()
+int sdlWindowToFramebufferOffsetX()
 {
-    // For now, SDL window and GL framebuffer dimensions may differ, so convert
-    // SDL window mouse coords to GL framebuffer coords
-    int32_t offsetX = sdlWindowSize().width / 2 - sdlState.frameSize.width / 2;
-    return sdlMousePosX() - offsetX;
+    return sdlWindowSize().width / 2 - sdlFramebufferSize().width / 2;
 }
 
-int32_t sdl_to_gl_mouse_y()
+int sdlWindowToFramebufferOffsetY()
 {
-    // For now, SDL window and GL framebuffer dimensions may differ, so convert
-    // SDL window mouse coords to GL framebuffer coords, including inverting y
-    int32_t offsetY = sdlWindowSize().height / 2 - sdlState.frameSize.height / 2;
-    return sdlWindowSize().height - sdlMousePosY() - offsetY;
+    return sdlWindowSize().height / 2 - sdlFramebufferSize().height / 2;
 }
 
-bool mouse_inside_framebuffer()
+int sdlMouseWindowToFramebufferX()
 {
-    return !would_clamp(sdl_to_gl_mouse_x(), 1, sdlState.frameSize.width - 1) 
-        && !would_clamp(sdl_to_gl_mouse_y(), 1, sdlState.frameSize.height - 1);
+    // For now, window and framebuffer dimensions may differ, so convert
+    // window mouse coords to framebuffer coords
+    return sdlMousePosX() - sdlWindowToFramebufferOffsetX();
 }
+
+int sdlMouseWindowToFramebufferY()
+{
+    // For now, window and framebuffer dimensions may differ, so convert
+    // window mouse coords to framebuffer coords, including inverting y
+    return sdlWindowSize().height - sdlMousePosY() - sdlWindowToFramebufferOffsetY();
+}
+
+bool sdlMouseInsideFramebuffer()
+{
+    return !would_clamp(sdlMouseWindowToFramebufferX(), 1, sdlState.frameSize.width - 1) 
+        && !would_clamp(sdlMouseWindowToFramebufferY(), 1, sdlState.frameSize.height - 1);
+}
+
+//
+// GL event queue implementation
+//
 
 int32_t events_get_valuator(int32_t device)
 {
-    // emulateMouseWithTouch(); // TBD
-
     switch (device)
     {
-        case MOUSEX: return clamp(sdl_to_gl_mouse_x(), 1, sdlState.frameSize.width - 1);
-        case MOUSEY: return clamp(sdl_to_gl_mouse_y(), 1, sdlState.frameSize.height - 1);
-        default: {
-            //if (isDial(device))
-            //    return emulateDialsWithTilt(device); // TBD
-        }
+        case MOUSEX: return clamp(sdlMouseWindowToFramebufferX(), 1, sdlState.frameSize.width - 1);
+        case MOUSEY: return clamp(sdlMouseWindowToFramebufferY(), 1, sdlState.frameSize.height - 1);
     }  
 
     printf("warning: unimplemented evaluator %d\n", device);
@@ -268,7 +353,7 @@ int32_t events_get_valuator(int32_t device)
 }
 
 #define GL_KEY_COUNT 78
-static int32_t sdl_to_gl_key_map[GL_KEY_COUNT][3] = {
+int32_t sdl_to_gl_key_map[GL_KEY_COUNT][3] = {
     {SDLK_0,            ZEROKEY},
     {SDLK_1,            ONEKEY},
     {SDLK_2,            TWOKEY},
@@ -358,7 +443,7 @@ static int32_t sdl_to_gl_key_map[GL_KEY_COUNT][3] = {
 // can sort the SDLK_ keys by numeric value to directly index the GL key
 
 // get SDL scancode from GL key
-static SDL_Scancode gl_to_sdl_scancode(int32_t gl_key)
+SDL_Scancode gl_to_sdl_scancode(int32_t gl_key)
 {
     for (int i = 0; i < GL_KEY_COUNT; ++i)
     {
@@ -369,7 +454,7 @@ static SDL_Scancode gl_to_sdl_scancode(int32_t gl_key)
 }
 
 // get GL key from SDL keycode
-static int32_t sdl_keycode_to_gl(int32_t sdl_keycode)
+int32_t sdl_keycode_to_gl(int32_t sdl_keycode)
 {
     for (int i = 0; i < GL_KEY_COUNT; ++i)
     {
@@ -421,11 +506,12 @@ void events_unqdevice(int32_t device)
     devices_queued[device] = 0;
 }
 
-static void enqueue_event(gl_event *e)
+void enqueue_event(gl_event *e)
 {
     if (input_queue_length == INPUT_QUEUE_SIZE) {
         printf("Input queue overflow.");
-    } else {
+    } 
+    else {
         uint32_t tail = (input_queue_head + input_queue_length) % INPUT_QUEUE_SIZE;
         input_queue[tail] = *e;
         input_queue_length++;
@@ -434,8 +520,6 @@ static void enqueue_event(gl_event *e)
 
 uint32_t events_qread_start(int blocking)
 {
-    // emulateMouseWithTouch();
-    // emulateEscapeWithTapClose();
     return input_queue_length;
 }
 
@@ -448,352 +532,15 @@ int32_t events_qread_continue(int16_t *value)
     return device;
 }
 
-int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height)
+int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height, unsigned char* framebuffer)
 {
-    // emulateDialsWithTilt();
-    // accelerometer_read(&theta_y_smoothed, &theta_x_smoothed);   
-    // emulateMouseWithTouch();
-    // emulateEscapeWithTapClose();
-    Size2D frameSize = { frame_width, frame_height };
-    sdlState.frameSize = frameSize;
-
-    // tell app mouse is in middle of framebuffer, even if it isn't?
-
+    sdlState.frameSize = (Size2D) { frame_width, frame_height };
+    sdlState.pFramebuffer = framebuffer;
     return 0;
 }
 
 void events_tie(int32_t button, int32_t val1, int32_t val2)
 {
-    // XXX this maybe should be allowed to happen in libgl
-    // XXX except that network_events is probably more efficient handling
-    // XXX tie() itself...
     tied_valuators[button][0] = val1;
     tied_valuators[button][1] = val2;
-}
-
-void windowResizeEvent(Size2D winSize)
-{
-    glViewport(0, 0, winSize.width, winSize.height);
-    cam2DSetWindowSize(winSize);
-}
-
-void sdlInit(const char *windowTitle)
-{
-    // Create SDL window
-    sdlState.pWindow =
-        SDL_CreateWindow(windowTitle,
-                         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                         sdlWindowSize().width, sdlWindowSize().height,
-                         SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
-    sdlState.windowID = SDL_GetWindowID(sdlState.pWindow);
-
-    // Create OpenGLES 2 context on SDL window
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-    SDL_GL_SetSwapInterval(1);
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-    SDL_GLContext glc = SDL_GL_CreateContext(sdlState.pWindow);
-
-    // Set clear color to black
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-    // Initialize viewport
-    windowResizeEvent(sdlWindowSize());
-}
-
-void sdlPresent()
-{
-    SDL_GL_SwapWindow(sdlState.pWindow);
-}
-
-void sdlProcessEvents()
-{
-    SDL_Event event;
-    while (SDL_PollEvent(&event))
-    {
-        switch (event.type)
-        {
-        case SDL_QUIT:
-            exit(0);
-            break;
-
-        case SDL_WINDOWEVENT:
-        {
-            if (event.window.windowID == sdlState.windowID && event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
-            {
-                Size2D winSize = {event.window.data1, event.window.data2};
-                windowResizeEvent(winSize);
-            }
-            break;
-        }
-
-        case SDL_KEYDOWN:
-        {
-            switch (event.key.keysym.sym)
-            {
-                case SDLK_ESCAPE:
-                {
-                    // Go to previous page, or if none, to demo home page
-                    const char *exit_js =
-                        "if (document.referrer) {                                   "
-                        "     window.history.back();                                "
-                        "}                                                          "
-                        "else {                                                     "
-                        "    window.location.href = 'https://sgi-demos.github.io';  "
-                        "}                                                          ";
-                    emscripten_run_script(exit_js);
-                    break; // as if
-                }
-                
-                default:
-                {
-                    // convert SDL key event to GL and add it to GL event queue
-                    gl_event ev;
-                    ev.device = sdl_keycode_to_gl(event.key.keysym.sym);
-                    if (ev.device != 0 && devices_queued[ev.device])
-                    {
-                        ev.val = 1; 
-                        enqueue_event(&ev);
-                    }
-                }
-            }
-            break;
-        }
-
-        case SDL_MOUSEWHEEL:
-        {
-            // SDL_MOUSEWHEEL regression?
-            // m->y no longer reliable (often y is 0 when sdlState.mouse wheel is spun up or down), use m->preciseY instead
-            SDL_MouseWheelEvent *m = (SDL_MouseWheelEvent *)&event;
-            bool mouseWheelDown = (m->preciseY < 0.0);
-            cam2DZoomEventMouse(mouseWheelDown, sdlState.mousePosition);
-            break;
-        }
-
-        case SDL_MOUSEMOTION:
-        {
-            // detect when mouse transits into or out of framebuffer for INPUTCHANGE events
-            // TODO: also perhaps when window loses/gains focus? 
-            bool mouseInsideFB = mouse_inside_framebuffer();
-            if (mouseInsideFB != sdlState.mouseInsideFramebuffer) 
-            {
-                sdlState.mouseInsideFramebuffer = mouseInsideFB;
-                if (devices_queued[INPUTCHANGE])
-                {
-                    gl_event ev;
-                    ev.device = INPUTCHANGE;
-                    ev.val = mouseInsideFB;
-                    enqueue_event(&ev);
-                }
-            }
-
-            SDL_MouseMotionEvent *m = (SDL_MouseMotionEvent *)&event;
-            sdlState.mousePosition = (Pixel2D){(int)m->x, (int)m->y};
-            if (sdlState.leftMouseButtonDown && !sdlState.fingerDown && !sdlState.pinch)
-                cam2DPanEventMouse(sdlState.mousePosition, sdlState.leftMouseButtonDownCoord);
-            break;
-        }
-
-        case SDL_MOUSEBUTTONDOWN:
-        {
-            if (!sdlState.fingerDown && !sdlState.pinch)
-            {
-                SDL_MouseButtonEvent *m = (SDL_MouseButtonEvent *)&event;               
-                gl_event ev;
-
-                switch (m->button)
-                {
-                case SDL_BUTTON_LEFT:
-                    sdlState.leftMouseButtonDown = true;
-                    sdlState.leftMouseButtonDownCoord = (Pixel2D){(int)m->x, (int)m->y};
-                    cam2DSetBasePan();
-                    ev.device = LEFTMOUSE;
-                    break;
-                case SDL_BUTTON_MIDDLE:
-                    sdlState.middleMouseButtonDown = true;
-                    ev.device = MIDDLEMOUSE;
-                    break;
-                case SDL_BUTTON_RIGHT:
-                    sdlState.rightMouseButtonDown = true;
-                    ev.device = RIGHTMOUSE;
-                    break;
-                }
-
-                // convert SDL mouse button event to GL and add it to GL event queue
-                if (devices_queued[ev.device]) 
-                {
-                    ev.val = 1;
-                    enqueue_event(&ev);
-
-                    // tied valuators is typically used for capturing mouse x and/or
-                    // y position at the time when a mouse button is pressed, and 
-                    // emitting those as mouse position x and y events right after
-                    // the mouse button event in the GL event queue
-                    gl_event tied_ev;
-                    for (int j = 0; j < 2; ++j) 
-                    {
-                        if (tied_valuators[ev.device][j])
-                        {
-                            tied_ev.device = tied_valuators[ev.device][j];
-                            tied_ev.val = events_get_valuator(tied_valuators[ev.device][j]);
-                            enqueue_event(&tied_ev);
-                        }
-                    }
-                }
-
-            }
-            break;
-        }
-
-        case SDL_MOUSEBUTTONUP:
-        {
-            SDL_MouseButtonEvent *m = (SDL_MouseButtonEvent *)&event;
-            gl_event ev;
-
-            switch (m->button)
-            {
-            case SDL_BUTTON_LEFT:
-                sdlState.leftMouseButtonDown = false;
-                ev.device = LEFTMOUSE;
-                break;
-            case SDL_BUTTON_MIDDLE:
-                sdlState.middleMouseButtonDown = false;
-                ev.device = MIDDLEMOUSE;
-                break;
-            case SDL_BUTTON_RIGHT:
-                sdlState.rightMouseButtonDown = false;
-                ev.device = RIGHTMOUSE;
-                break;
-            }
-            // convert SDL mouse button event to GL and add it to GL event queue
-            if (devices_queued[ev.device]) 
-            {
-                ev.val = 0;
-                enqueue_event(&ev);
-
-                gl_event tied_ev;
-                for (int j = 0; j < 2; ++j) 
-                {
-                    if (tied_valuators[ev.device][j])
-                    {
-                        tied_ev.device = tied_valuators[ev.device][j];
-                        tied_ev.val = events_get_valuator(tied_valuators[ev.device][j]);
-                        enqueue_event(&tied_ev);
-                    }
-                }
-            }
-
-            break;
-        }
-
-        case SDL_FINGERMOTION:
-            if (sdlState.fingerDown)
-            {
-                SDL_TouchFingerEvent *m = (SDL_TouchFingerEvent *)&event;
-
-                // Finger down and finger moving must match
-                if (m->fingerId == sdlState.fingerDownId)
-                {
-                    Vec2D fingerCoord = (Vec2D){m->x, m->y};
-                    cam2DPanEventFinger(fingerCoord, sdlState.fingerDownCoord);
-                }
-            }
-            break;
-
-        case SDL_FINGERDOWN:
-            if (!sdlState.pinch)
-            {
-                // Finger already down means multiple fingers, which is handled by multigesture event
-                if (sdlState.fingerDown)
-                    sdlState.fingerDown = false;
-                else
-                {
-                    SDL_TouchFingerEvent *m = (SDL_TouchFingerEvent *)&event;
-                    sdlState.fingerDown = true;
-                    sdlState.fingerDownCoord = (Vec2D){m->x, m->y};
-                    sdlState.fingerDownId = m->fingerId;
-                    cam2DSetBasePan();
-                }
-            }
-            break;
-
-        case SDL_MULTIGESTURE:
-        {
-            static const float cPinchZoomThreshold = 0.001;
-            SDL_MultiGestureEvent *m = (SDL_MultiGestureEvent *)&event;
-            if (m->numFingers == 2 && fabs(m->dDist) >= cPinchZoomThreshold)
-            {
-                sdlState.pinch = true;
-                sdlState.fingerDown = false;
-                sdlState.leftMouseButtonDown = false;
-                Vec2D pinchCoord = (Vec2D){m->x, m->y};
-                cam2DZoomEventPinch(m->dDist, pinchCoord);
-            }
-            break;
-        }
-
-        case SDL_FINGERUP:
-            sdlState.fingerDown = false;
-            sdlState.pinch = false;
-            break;
-        }
-    }
-}
-
-int sdlMousePosX()
-{
-    //SDL_PumpEvents();
-    int x, y;
-    SDL_GetMouseState(&x, &y);
-    return x;
-}
-int sdlMousePosY()
-{
-    //SDL_PumpEvents();
-    int x, y;
-    SDL_GetMouseState(&x, &y);
-    return y;
-}
-
-unsigned char sdlMouseButtonState()
-{
-    //SDL_PumpEvents();
-    int x, y;
-    return SDL_GetMouseState(&x, &y);    
-}
-
-int sdlPeepEvents()
-{
-    //SDL_PumpEvents();
-    SDL_Event event;
-    int count = SDL_PeepEvents(&event, 1, SDL_PEEKEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT);
-    return count;
-}
-
-Uint8* sdlGetKeyboardState()
-{
-    //SDL_PumpEvents();
-    const Uint8* keys = SDL_GetKeyboardState(NULL);
-    return (unsigned char*)keys;
-}
-
-Size2D sdlFramebufferSize()
-{
-    return sdlState.frameSize;
-}
-
-Size2D sdlWindowSize()
-{
-    return cam2DWindowSize();
-}
-
-Vec2D sdlViewport()   
-{ 
-    return cam2DViewport();
-}
-
-bool sdlViewChanged()
-{
-    return cam2DUpdated();
 }

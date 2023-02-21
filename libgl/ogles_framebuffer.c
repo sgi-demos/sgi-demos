@@ -8,8 +8,8 @@
 #else
 #include <SDL2/SDL.h>
 #endif
-
 #include "sdl_events.h"
+#include "EM_MAIN_DEFN.h"
 
 // Geometry
 GLuint triangleVbo = 0;
@@ -167,7 +167,14 @@ void initTexture()
 
     int bitsPerPixel = 32;
 
-    #ifdef TEST_OGLES_FRAMEBUFFER
+    #ifdef EM_CHILD_MAIN
+        // Copy GL framebuffer into image
+        Size2D fbSize = sdlFramebufferSize();
+        SDL_Surface* bgImage = SDL_CreateRGBSurface(0, fbSize.width, fbSize.height, bitsPerPixel, 0, 0, 0, 0);
+        unsigned int* bgImagePixels = (unsigned int*)bgImage->pixels;
+        unsigned char* pFramebuffer = sdlFramebuffer();
+        memcpy(bgImagePixels, pFramebuffer, fbSize.width*fbSize.height*4);       
+    #else
         // Create grey checkerboard image with yellow border
         SDL_Surface* bgImage = SDL_CreateRGBSurface(0, winWidth, winHeight, bitsPerPixel, 0, 0, 0, 0);
         unsigned int* bgImagePixels = (unsigned int*)bgImage->pixels;
@@ -189,12 +196,6 @@ void initTexture()
                         bgImagePixels[i] = 0xff808080; // dark grey
                 }
             }
-    #else
-        Size2D fbSize = sdlFramebufferSize();
-        SDL_Surface* bgImage = SDL_CreateRGBSurface(0, fbSize.width, fbSize.height, bitsPerPixel, 0, 0, 0, 0);
-        unsigned int* bgImagePixels = (unsigned int*)bgImage->pixels;
-        extern unsigned char *gl_framebuffer;
-        memcpy(bgImagePixels, gl_framebuffer, fbSize.width*fbSize.height*4);
     #endif
 
     // OpenGLES requires power of 2 dimension textures, so create the smallest
@@ -270,7 +271,6 @@ void updateTexture()
 	}
 }
 
-
 void redraw()
 {
     // Clear screen
@@ -288,25 +288,16 @@ void redraw()
     sdlPresent();
 }
 
-#ifdef TEST_OGLES_FRAMEBUFFER
-int child_main (int argc, char* argv[]) { return 0; }
-void child_main_loop(void *main_loop_arg) {}
-#else
-extern int child_main (int argc, char* argv[]);
-extern void child_main_loop(void *main_loop_arg);
-#endif
-
 void main_loop(void* main_loop_arg) 
 {    
     sdlProcessEvents();
 
-    #ifdef TEST_OGLES_FRAMEBUFFER
-        // Re-initialize texture if window resized
+    #ifdef EM_CHILD_MAIN
+        // Update texture every frame from child app's framebuffer
+        initTexture();        // Re-initialize texture if window resized
+    #else
         if (cam2DWindowResized())
             initTexture();
-    #else
-        // Update texture every frame from child app's framebuffer
-        initTexture();
     #endif
 
     // Update shader if view changed
@@ -336,8 +327,8 @@ int main(int argc, char** argv)
     // Start the main loop
     void* main_loop_arg = NULL; // User-defined data to pass to main_loop() and child_main_loop()
     #ifdef __EMSCRIPTEN__
-        int fps = 0; // Set to 0 to use browser's requestAnimationFrame (Emscripten recommended)
-        int simulate_infinite_loop = 0; // Throw an exception in order to stop execution of the caller
+        int fps = 0; // Set to 0 to use browser's requestAnimationFrame (recommended)
+        int simulate_infinite_loop = 1;
         emscripten_set_main_loop_arg(main_loop, main_loop_arg, fps, simulate_infinite_loop);
     #else
         while(true) 

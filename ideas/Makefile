@@ -1,22 +1,2 @@
-.PHONY: clean run
-
-include ../platform.mk
-
-APP=ideas
-EMAPP=./web/$(APP).html
-SRC= a.c b.c d.c draw_holder.c draw_lamp.c draw_logo.c draw_logo_line.c draw_logo_shadow.c e.c f.c h.c i.c m.c n.c o.c p.c r.c s.c t.c track.c w.c
-
-$(EMAPP): $(SRC) objects.h $(LIBGL_SRC) $(EM_SRC)
-	$(EMCC) \
-	$(DEMO_WARN_OFF_EM) \
-	$(DEMO_INC) $(SRC) $(LIBGL_SRC) $(EM_SRC) \
-	-s WASM=1 -s USE_SDL=2 -s FULL_ES2=1 \
-	-o $(EMAPP)
-
-run: $(EMAPP)
-	cd web && emrun $(EMAPP)
-
-clean:
-	rm -f ./web/$(APP).html
-	rm -f ./web/$(APP).js
-	rm -f ./web/$(APP).wasm
+APPNAME=ideas
+include ../make_demo.mk

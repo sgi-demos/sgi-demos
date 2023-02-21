@@ -2015,7 +2015,8 @@ int32_t winopen(char *title) {
     rasterizer_pattern(0);
     rasterizer_setpattern(patterns[0]);
 
-    int events_window = events_winopen(title, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+    extern unsigned char *gl_framebuffer; // from reference_rasterizer.c
+    int events_window = events_winopen(title, DISPLAY_WIDTH, DISPLAY_HEIGHT, gl_framebuffer);
     // XXX if we made a multi-window system, we'd tie "rasterizer_window"
     // and "events_window" together so we could pass the right identifier
     // to window functions.  But we are fullscreen and no demo we care

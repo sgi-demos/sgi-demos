@@ -1,5 +1,3 @@
-include ./platform.mk
-
 .PHONY: all clean
 
 all:
@@ -18,4 +16,16 @@ all:
 	make -C newave
 
 clean:
-	cd ./demo_bin && rm -rf ./* && cd ..
+	make clean -C insect
+	make clean -C arena
+	make clean -C logo
+	make clean -C bounce
+	make clean -C jello
+	make clean -C buttonfly
+	make clean -C ideas
+	make clean -C flight
+	make clean -C colortest
+	make clean -C gltest
+	make clean -C bench
+	make clean -C sunflower
+	make clean -C newave
