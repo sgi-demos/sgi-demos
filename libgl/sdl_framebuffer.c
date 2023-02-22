@@ -15,11 +15,9 @@ static SDL_Texture * pFramebuffer = NULL;
 void buildTexture()
 {
     // Create grey checkerboard surface with yellow border
-    int winWidth = sdlWindowSize().width,
-        winHeight = sdlWindowSize().height;
     int bitsPerPixel = 32;
 
-    SDL_Surface* pSurface = SDL_CreateRGBSurface(0, winWidth, winHeight, bitsPerPixel, 0, 0, 0, 0);
+    SDL_Surface* pSurface = SDL_CreateRGBSurface(0, sdlFramebufferSize().width, sdlFramebufferSize().height, bitsPerPixel, 0, 0, 0, 0);
     unsigned int* surfacePixels = (unsigned int*)pSurface->pixels;
     
     for (int y = 0; y < pSurface->h; ++y)
@@ -51,10 +49,10 @@ void updateTexture()
     {
         unsigned char* pixels = sdlFramebuffer();
         Size2D fbSize = sdlFramebufferSize();
-        SDL_Rect rect = (SDL_Rect){ .x = sdlWindowToFramebufferOffsetX(), .y = sdlWindowToFramebufferOffsetY(), 
+        SDL_Rect rect = (SDL_Rect){ .x = 0, .y = 0, 
                                     .w = fbSize.width, .h = fbSize.height };
         int pitch = fbSize.width * 4;
-        SDL_UpdateTexture(pFramebuffer, &rect, pixels, pitch);
+        SDL_UpdateTexture(pFramebuffer, NULL, pixels, pitch);
     }
 }
 
@@ -68,17 +66,27 @@ void freeTexture()
     }
 }
 
+void redraw()
+{
+    SDL_SetRenderDrawColor(sdlRenderer(), 0, 0, 0, 0);
+    SDL_RenderClear(sdlRenderer());
+
+    // update SDL framebuffer texture
+    updateTexture();
+    SDL_Rect destRect = (SDL_Rect){ .x = sdlWindowToFramebufferOffsetX(), .y = sdlWindowToFramebufferOffsetY(), 
+                                   sdlFramebufferSize().width, sdlFramebufferSize().height };
+    SDL_RenderCopy(sdlRenderer(), pFramebuffer, NULL, &destRect);
+    sdlPresent();
+}
+
 void main_loop(void* main_loop_arg) 
 {    
     sdlProcessEvents();
 
-    // Run child main loop - let child process events and redraw
+    // Run child main loop - let child process events and redraw its stuff
     child_main_loop(main_loop_arg);
 
-    // Redraw
-    updateTexture();
-    SDL_RenderCopy(sdlRenderer(), pFramebuffer, NULL, NULL);
-    sdlPresent();
+    redraw();
 }
 
 int main(int argc, char* argv[])

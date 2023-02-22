@@ -25,10 +25,10 @@ static uint16_t the_pattern[16];
 static int pattern_enabled = 0;
 static int zbuffer_enabled;
 
-typedef uint16_t z_t;
-
 static unsigned char pixel_colors[YMAXSCREEN + 1][XMAXSCREEN + 1][4];
 unsigned char *gl_framebuffer = &pixel_colors[0][0][0];
+
+typedef uint16_t z_t;
 static z_t pixel_depths[YMAXSCREEN + 1][XMAXSCREEN + 1];
 static const int Z_SHIFT = 16; // Shift 32-bit Z into 16-bit Z? Should we just 'upgrade' GL to 32-bit Z since we computed it?
 

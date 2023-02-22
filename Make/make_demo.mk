@@ -12,9 +12,12 @@ all: $(APP) $(EMAPP)
 
 $(BIN_DIR):
 	mkdir -p $@
+	echo *.o > $@/.gitignore
+	echo *.dSYM >> $@/.gitignore
 
 $(WEB_DIR):
 	mkdir -p $@
+	echo *.o > $@/.gitignore
 
 $(OBJS): $(BIN_DIR)/%.o: %.c $(HDRS) | $(BIN_DIR)
 	$(OLD_CODE_CC) $(OPT_LEVEL) $(OLD_CODE_WARN_OFF) $(LIBGL_INC) $(DEMO_INC) $(APPDEFS) $< -c -o $@
