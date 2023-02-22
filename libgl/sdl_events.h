@@ -1,6 +1,7 @@
 //
 //  SDL window and input event handling
 //
+#include "basic_types.h"
 #include "geom_types.h"
 
 extern void sdlInit(const char* windowTitle);

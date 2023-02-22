@@ -415,7 +415,7 @@ void project_vertex(lit_vertex *lv, screen_vertex *sv)
 
     sv->x = clamp(xw, 0, DISPLAY_WIDTH - 1) * SCREEN_VERTEX_V2_SCALE;
     sv->y = clamp(yw, 0, DISPLAY_HEIGHT - 1) * SCREEN_VERTEX_V2_SCALE;
-    sv->z = (uint32_t)zw * 0xffffffff; // XXX cast to rid of implicit int to float conversion warning, no idea if that's right
+    sv->z = zw * 0xffffffff; // NOTE: ****Must link with -lm or else this always returns zero***
     sv->r = unitclamp(lv->color[0]) * 255;
     sv->g = unitclamp(lv->color[1]) * 255;
     sv->b = unitclamp(lv->color[2]) * 255;
@@ -1319,20 +1319,20 @@ void clear() {
 
     // The clear() command must only clear the viewport. Use a slow rectangle when it's
     // not full-screen.
-    // if (is_full_viewport()) {
+    if (is_full_viewport()) {
         // Full screen, we can use the optimized version.
         rasterizer_clear(current_color[0] * 255.0,
                 current_color[1] * 255.0,
                 current_color[2] * 255.0);
-    // } else {
-    //     // Partial viewport, draw polygon. This uses the current color.
-    //     bgnpolygon();
-    //     pdr_(0, 0, 0);
-    //     pdr_(0, 1, 0);
-    //     pdr_(1, 1, 0);
-    //     pdr_(1, 0, 0);
-    //     endpolygon();
-    // }
+    } else {
+        // Partial viewport, draw polygon. This uses the current color.
+        bgnpolygon();
+        pdr_(0, 0, 0);
+        pdr_(0, 1, 0);
+        pdr_(1, 1, 0);
+        pdr_(1, 0, 0);
+        endpolygon();
+    }
 }
 
 void closeobj() { 
@@ -1772,8 +1772,8 @@ static int devices_queued[2048];
 // We're interested in events from this device.
 void qdevice(int32_t device) { 
     TRACEF("%d", device);
+
     devices_queued[device] = 1;
-    events_qdevice(device);
 
     switch (device) {
         case REDRAW:
@@ -1784,6 +1784,11 @@ void qdevice(int32_t device) {
         case INPUTCHANGE:
             // Tell app that this window has received input focus
             enqueue_device(INPUTCHANGE, 1);
+            break;
+
+        default:
+            // Send the device to the server.
+            events_qdevice(device);
             break;
     }
 }
@@ -3477,9 +3482,9 @@ static void init_gl_state()
     if(getenv("TRACE_GL") != NULL)
         trace_functions = 1;
 #endif
-    int i,j;
-    for(i = 0; i < MAX_PATTERNS; i++)
-        for(j = 0; j < 16; j++)
+
+    for(int i = 0; i < MAX_PATTERNS; i++)
+        for(int j = 0; j < 16; j++)
             patterns[i][j] = 0xffff;
 
     matrix4x4f_stack_init(&modelview_stack);
@@ -3495,17 +3500,17 @@ static void init_gl_state()
     the_viewport[4] = 0.0;
     the_viewport[5] = 1.0;
 
-    for(i = 0; i < MAX_MATERIALS; i++)
+    for(int i = 0; i < MAX_MATERIALS; i++)
         material_init(&materials[i]);
-    for(i = 0; i < MAX_LIGHTS; i++)
+    for(int i = 0; i < MAX_LIGHTS; i++)
         light_init(&lights[i]);
-    for(i = 0; i < MAX_LMODELS; i++)
+    for(int i = 0; i < MAX_LMODELS; i++)
         lmodel_init(&lmodels[i]);
 
-    for(i = 0; i < MAX_LIGHTS; i++)
+    for(int i = 0; i < MAX_LIGHTS; i++)
         lights_bound[i] = NULL;
 
-    for(i = 0; i < CIRCLE_SEGMENTS; i++) {
+    for(int i = 0; i < CIRCLE_SEGMENTS; i++) {
         float a = i * M_PI * 2 / CIRCLE_SEGMENTS;
         circle_verts[i][0] = cos(a);
         circle_verts[i][1] = sin(a);
@@ -3520,7 +3525,7 @@ static void init_gl_state()
     vec3ub_set(colormap[CYAN], 0, 255, 255);
     vec3ub_set(colormap[WHITE], 255, 255, 255);
 
-    for(i = 0; i < MAX_PUPS; i++)
+    for(int i = 0; i < MAX_PUPS; i++)
         pup_init(pups + i);
 
     signal(SIGWINCH, sigwinch);

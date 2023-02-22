@@ -13,6 +13,10 @@ typedef uint16_t vec3us[3];
 typedef uint16_t vec4us[4];
 typedef uint8_t vec3ub[3];
 typedef uint8_t vec4ub[4];
+typedef uint8_t bool;
+
+#define false 0
+#define true 1
 
 typedef struct screen_vertex
 {
