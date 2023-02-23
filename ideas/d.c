@@ -38,7 +38,7 @@ float d_data[][2] = {
 
 };
 
-void draw_d() {
+draw_d() {
 
     bgntmesh();
 	v2f(d_data[0]);

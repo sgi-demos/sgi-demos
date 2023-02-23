@@ -28,9 +28,13 @@ static int zbuffer_enabled;
 static unsigned char pixel_colors[YMAXSCREEN + 1][XMAXSCREEN + 1][4];
 unsigned char *gl_framebuffer = &pixel_colors[0][0][0];
 
+// Shift 32-bit Z into 16-bit Z? 
 typedef uint16_t z_t;
+static const int Z_SHIFT = 16; 
+// Should we just 'upgrade' GL to 32-bit Z since we computed it?
+//typedef uint32_t z_t;
+//static const int Z_SHIFT = 0; 
 static z_t pixel_depths[YMAXSCREEN + 1][XMAXSCREEN + 1];
-static const int Z_SHIFT = 16; // Shift 32-bit Z into 16-bit Z? Should we just 'upgrade' GL to 32-bit Z since we computed it?
 
 static float min(float a, float b)
 {

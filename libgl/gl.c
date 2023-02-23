@@ -415,7 +415,7 @@ void project_vertex(lit_vertex *lv, screen_vertex *sv)
 
     sv->x = clamp(xw, 0, DISPLAY_WIDTH - 1) * SCREEN_VERTEX_V2_SCALE;
     sv->y = clamp(yw, 0, DISPLAY_HEIGHT - 1) * SCREEN_VERTEX_V2_SCALE;
-    sv->z = zw * 0xffffffff; // NOTE: ****Must link with -lm or else this always returns zero***
+    sv->z = zw * (double)0xffffffff; // NOTE: ****Must link with -lm or else this always returns zero***
     sv->r = unitclamp(lv->color[0]) * 255;
     sv->g = unitclamp(lv->color[1]) * 255;
     sv->b = unitclamp(lv->color[2]) * 255;

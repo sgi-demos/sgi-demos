@@ -50,7 +50,7 @@ static float a_data[][2] = {
 
 };
 
-void draw_a() {
+draw_a() {
 
     bgntmesh();
 	v2f(a_data[0]);
