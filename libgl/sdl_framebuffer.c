@@ -79,14 +79,24 @@ void redraw()
     sdlPresent();
 }
 
+const int SCREEN_FPS = 30;
+const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 void main_loop(void* main_loop_arg) 
-{    
+{   
+    Uint32 startTicks = SDL_GetTicks();
+
     sdlProcessEvents();
 
     // Run child main loop - let child process events and redraw its stuff
     child_main_loop(main_loop_arg);
 
     redraw();
+
+    Uint32 frameTicks = SDL_GetTicks() - startTicks;
+    if( frameTicks < SCREEN_TICKS_PER_FRAME )
+    {
+        SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks );
+    }    
 }
 
 int main(int argc, char* argv[])
