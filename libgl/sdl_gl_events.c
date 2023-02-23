@@ -22,6 +22,7 @@ typedef struct
     Size2D frameSize; // Framebuffer size may differ from window size
     unsigned char* pFramebuffer;
     SDL_Renderer* pRenderer;
+    char windowTitle[128];
 
     // Mouse input
     Pixel2D mousePosition;
@@ -38,6 +39,7 @@ SDLState sdlState = (SDLState)
     .frameSize = {800, 480},
     .pFramebuffer = NULL,
     .pRenderer = NULL,
+    .windowTitle = {"sgi-demos"},
 
     // Mouse input
     .mousePosition = {0, 0},
@@ -58,10 +60,13 @@ void enqueue_event(gl_event *e);
 
 void sdlInit(const char *windowTitle)
 {
+    if (windowTitle)
+        strlcpy(sdlState.windowTitle, windowTitle, sizeof(sdlState.windowTitle));
+
     // Create SDL window
     #ifdef SDL_GL_FRAMEBUFFER
         sdlState.pWindow =
-            SDL_CreateWindow(windowTitle,
+            SDL_CreateWindow(sdlState.windowTitle,
                             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                             sdlState.winSize.width, sdlState.winSize.height,
                             SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
@@ -78,10 +83,10 @@ void sdlInit(const char *windowTitle)
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     #else
         sdlState.pWindow =
-            SDL_CreateWindow(windowTitle,
-                                SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                sdlState.winSize.width, sdlState.winSize.height,
-                                SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
+            SDL_CreateWindow(sdlState.windowTitle,
+                             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                             sdlState.winSize.width, sdlState.winSize.height,
+                             SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
         sdlState.windowID = SDL_GetWindowID(sdlState.pWindow);
         sdlState.pRenderer = SDL_CreateRenderer(sdlState.pWindow, -1, 0);  // SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC    
     #endif
@@ -534,6 +539,14 @@ int32_t events_qread_continue(int16_t *value)
 
 int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height, unsigned char* framebuffer)
 {
+    strlcpy(sdlState.windowTitle, title, sizeof(sdlState.windowTitle));
+
+#ifndef __EMSCRIPTEN__
+    // Emscripten sets window title to 'this.program' if SDL_SetWindowTitle is called
+    if (sdlState.pWindow)
+        SDL_SetWindowTitle(sdlState.pWindow, sdlState.windowTitle);
+#endif
+
     sdlState.frameSize = (Size2D) { frame_width, frame_height };
     sdlState.pFramebuffer = framebuffer;
     return 0;

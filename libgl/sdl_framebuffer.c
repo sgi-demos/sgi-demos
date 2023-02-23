@@ -102,7 +102,7 @@ void main_loop(void* main_loop_arg)
 int main(int argc, char* argv[])
 {
     // Initialize SDL window
-    sdlInit("sgi-demos-sdl");
+    sdlInit(NULL);
 
     buildTexture();
 
