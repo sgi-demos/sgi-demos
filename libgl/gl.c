@@ -2167,6 +2167,8 @@ dopup() enters a loop:
 
 int32_t defpup(char *menu, ...)
 {
+    return 1; // TBD, temporarily disabled
+
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 
     int which = 0;

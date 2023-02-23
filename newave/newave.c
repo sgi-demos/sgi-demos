@@ -177,8 +177,7 @@ resetpoints()
 	{
 		force[i][j]=0.0;
 		veloc[i][j]=0.0;
-		/*posit[i][j]=0.0;*/
-        posit[i][j]= (i==j && i == grid/2) ? grid*0.01 : 0.0; /* middle spike */
+		posit[i][j]=0.0;
 		vertvec[i][j][X]=0.0;
 		vertvec[i][j][Y]=0.0;
 		vertvec[i][j][Z]=0.0;
@@ -323,8 +322,7 @@ char	*argv[];
 	makerange(CRAMPB+48, CRAMPB+53, 0, 0, 255, 255, 0, 255);
 	makerange(CRAMPB+54, CRAMPB+58, 0, 0, 255, 0, 255, 255);
 	makerange(CRAMPB+59, CRAMPB+63, 0, 255, 0, 0, 255, 255);
-	/* lsetdepth(0x00, 0x7fffff); */
-	lsetdepth(0x00,(getgdesc(GD_ZMAX)));
+	lsetdepth(0x00, 0x7fffff);
 	zbuffer(TRUE);
 
 	for (i=0; i<32; i++) {

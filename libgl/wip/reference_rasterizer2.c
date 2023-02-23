@@ -124,8 +124,9 @@ static void flush()
 
 void rasterizer_swap()
 {
-    // nothing for rasterizer to do with swap, except that swap marks the end 
-    // of the frame, so the rasterizer can dump info about the frame here
+    // copy back to front color buffer
+    // memcpy(c_front_buffer, c_back_buffer, sizeof(c_front_buffer));
+
     if (gen_ppm_frame_files) 
     {
         uint8_t rgb_pixel[3];

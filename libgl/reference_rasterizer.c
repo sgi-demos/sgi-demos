@@ -25,8 +25,9 @@ static uint16_t the_pattern[16];
 static int pattern_enabled = 0;
 static int zbuffer_enabled;
 
-static unsigned char pixel_colors[YMAXSCREEN + 1][XMAXSCREEN + 1][4];
-unsigned char *gl_framebuffer = &pixel_colors[0][0][0];
+static unsigned char c_back_buffer[YMAXSCREEN + 1][XMAXSCREEN + 1][4];
+static unsigned char c_front_buffer[YMAXSCREEN + 1][XMAXSCREEN + 1][4];
+unsigned char *gl_framebuffer = &c_front_buffer[0][0][0];
 
 // Shift 32-bit Z into 16-bit Z? 
 typedef uint16_t z_t;
@@ -34,7 +35,7 @@ static const int Z_SHIFT = 16;
 // Should we just 'upgrade' GL to 32-bit Z since we computed it?
 //typedef uint32_t z_t;
 //static const int Z_SHIFT = 0; 
-static z_t pixel_depths[YMAXSCREEN + 1][XMAXSCREEN + 1];
+static z_t z_buffer[YMAXSCREEN + 1][XMAXSCREEN + 1];
 
 static float min(float a, float b)
 {
@@ -186,11 +187,11 @@ void pixel(int x, int y, float bary[3], void *data)
 
     z_t z = z_ >> Z_SHIFT;
 
-    if(!zbuffer_enabled || (z < pixel_depths[DISPLAY_HEIGHT - 1 - y][x])) {
-        pixel_colors[DISPLAY_HEIGHT - 1 - y][x][RED_BYTE] = r;
-        pixel_colors[DISPLAY_HEIGHT - 1 - y][x][GREEN_BYTE] = g;
-        pixel_colors[DISPLAY_HEIGHT - 1 - y][x][BLUE_BYTE] = b;
-        pixel_depths[DISPLAY_HEIGHT - 1 - y][x] = z;
+    if(!zbuffer_enabled || (z < z_buffer[DISPLAY_HEIGHT - 1 - y][x])) {
+        c_back_buffer[DISPLAY_HEIGHT - 1 - y][x][RED_BYTE] = r;
+        c_back_buffer[DISPLAY_HEIGHT - 1 - y][x][GREEN_BYTE] = g;
+        c_back_buffer[DISPLAY_HEIGHT - 1 - y][x][BLUE_BYTE] = b;
+        z_buffer[DISPLAY_HEIGHT - 1 - y][x] = z;
     }
 }
 
@@ -198,9 +199,9 @@ void rasterizer_clear(uint8_t r, uint8_t g, uint8_t b)
 {
     for(int j = 0; j < DISPLAY_HEIGHT; j++)
         for(int i = 0; i < DISPLAY_WIDTH; i++) {
-            pixel_colors[j][i][RED_BYTE] = r;
-            pixel_colors[j][i][GREEN_BYTE] = g;
-            pixel_colors[j][i][BLUE_BYTE] = b;
+            c_back_buffer[j][i][RED_BYTE] = r;
+            c_back_buffer[j][i][GREEN_BYTE] = g;
+            c_back_buffer[j][i][BLUE_BYTE] = b;
         }
 }
 
@@ -223,8 +224,10 @@ void rasterizer_pattern(int enable)
 
 void rasterizer_swap()
 {
-    static int frame = 0;
+    // copy back to front color buffer
+    memcpy(c_front_buffer, c_back_buffer, sizeof(c_front_buffer));
 
+    static int frame = 0;
     if (gen_ppm_frame_files) 
     {
         unsigned char rgb_pixel[3];
@@ -235,9 +238,9 @@ void rasterizer_swap()
             for(int j = 0; j < DISPLAY_HEIGHT; j++) {
                 for(int i = 0; i < DISPLAY_WIDTH; i++) {
                     // PPM expects RGB format
-                    rgb_pixel[0] = pixel_colors[j][i][RED_BYTE];
-                    rgb_pixel[1] = pixel_colors[j][i][GREEN_BYTE];
-                    rgb_pixel[2] = pixel_colors[j][i][BLUE_BYTE];                   
+                    rgb_pixel[0] = c_back_buffer[j][i][RED_BYTE];
+                    rgb_pixel[1] = c_back_buffer[j][i][GREEN_BYTE];
+                    rgb_pixel[2] = c_back_buffer[j][i][BLUE_BYTE];                   
                     fwrite(rgb_pixel, 1, 3, fp);
                 }
             }
@@ -274,7 +277,7 @@ void rasterizer_zclear(uint32_t z)
 {
     for(int j = 0; j < DISPLAY_HEIGHT; j++)
         for(int i = 0; i < DISPLAY_WIDTH; i++)
-            pixel_depths[j][i] = z;
+            z_buffer[j][i] = z;
 }
 
 void rasterizer_czclear(uint8_t r, uint8_t g, uint8_t b, uint32_t z)
@@ -421,9 +424,9 @@ void draw_line(screen_vertex *v0, screen_vertex *v1)
             for(int i = 0; i < count; i++) {
                 for(int j = 0; j <= the_linewidth; j++) {
                     int k = (y - 256 * the_linewidth / 2) / 256 + j;
-                    pixel_colors[DISPLAY_HEIGHT - 1 - k][x][RED_BYTE] = 255;
-                    pixel_colors[DISPLAY_HEIGHT - 1 - k][x][GREEN_BYTE] = 255;
-                    pixel_colors[DISPLAY_HEIGHT - 1 - k][x][BLUE_BYTE] = 255;
+                    c_back_buffer[DISPLAY_HEIGHT - 1 - k][x][RED_BYTE] = 255;
+                    c_back_buffer[DISPLAY_HEIGHT - 1 - k][x][GREEN_BYTE] = 255;
+                    c_back_buffer[DISPLAY_HEIGHT - 1 - k][x][BLUE_BYTE] = 255;
                 }
                 y += dy/count;
                 x += dp;
@@ -438,9 +441,9 @@ void draw_line(screen_vertex *v0, screen_vertex *v1)
             for(int i = 0; i < count; i++) {
                 for(int j = 0; j <= the_linewidth; j++) {
                     int k = (x - 256 * the_linewidth / 2) / 256 + j;
-                    pixel_colors[DISPLAY_HEIGHT - 1 - y][k][RED_BYTE] = 255;
-                    pixel_colors[DISPLAY_HEIGHT - 1 - y][k][GREEN_BYTE] = 255;
-                    pixel_colors[DISPLAY_HEIGHT - 1 - y][k][BLUE_BYTE] = 255;
+                    c_back_buffer[DISPLAY_HEIGHT - 1 - y][k][RED_BYTE] = 255;
+                    c_back_buffer[DISPLAY_HEIGHT - 1 - y][k][GREEN_BYTE] = 255;
+                    c_back_buffer[DISPLAY_HEIGHT - 1 - y][k][BLUE_BYTE] = 255;
                 }
                 y += dp;
                 x += dx/count;
