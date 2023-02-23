@@ -79,7 +79,7 @@ void redraw()
     sdlPresent();
 }
 
-const int SCREEN_FPS = 30;
+const int SCREEN_FPS = 25;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 void main_loop(void* main_loop_arg) 
 {   
