@@ -1,3 +1,0 @@
-#!/bin/sh
-cd ./demos/buttonfly
-./buttonfly menu_demos menu_secret

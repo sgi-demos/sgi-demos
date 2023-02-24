@@ -32,7 +32,7 @@ $(EMOBJS): $(WEB_DIR)/%.o: %.c $(HDRS) | $(WEB_DIR)
 	$(OLD_CODE_EMCC) $(OPT_LEVEL) $(OLD_CODE_WARN_OFF_EM) $(LIBGL_INC) $(DEMO_INC) $(APPDEFS) $< -c -o $@
 
 $(EMAPP): $(EMOBJS) $(LIBGL_SRC)
-	$(EMCC) $(OPT_LEVEL) -Wno-deprecated-non-prototype $(LIBGL_INC) $(EMOBJS) -D EM_CHILD_MAIN $(LIBGL_SRC) $(APPLIBS) -s USE_SDL=2 -s WASM=1 -lm -o $@
+	$(EMCC) $(OPT_LEVEL) -Wno-deprecated-non-prototype $(LIBGL_INC) $(EMOBJS) -D EM_CHILD_MAIN $(LIBGL_SRC) $(APPLIBS) -s USE_SDL=2 -s WASM=1 $(EMLNKR) -lm -o $@
 	@echo
 	@echo BUILT: $@
 	@echo

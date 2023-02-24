@@ -123,8 +123,12 @@ find_update()
 	{
 		if (*scan->flag)
 		{
-		    (*scan->ufunc)(scan->arg);
+			printf ("calling scan->ufunc\n");
+		    //(*scan->ufunc)(scan->arg);
+			void (*func2)() = scan->ufunc;
+			(*func2)(); 
 		    updated = 1;
+			printf ("called scan->ufunc\n");
 		}
 	}
 
@@ -140,11 +144,11 @@ event_inputchange(void *unused1, int unused2)
 }
 
 void
-find_event()
+find_event(void)
 {
     event_p scan;
 	short	s;
-
+	printf ("find_event\n");
     device = qread(&s);
 	state = s;
     for (scan = event_list; scan; scan = scan->next)
@@ -153,7 +157,14 @@ find_event()
 			&& ((scan->device == ANY) ||(device == scan->device))
 			&& ((scan->state == ANY) || (state == scan->state)))
 		{
-		    (*scan->func)(scan->arg, state);
+			printf ("calling scan->func\n");
+			if (scan->func == &event_inputchange)
+	    		(*scan->func)(scan->arg, state);
+			else {
+				void (*func2)() = scan->func;
+				(*func2)(); 
+			}
+			printf ("called scan->func\n");
 		}
 	}
 }

@@ -1,14 +1,14 @@
 Jello
-	../jello/bin/jello
+	/jello/web/jello_full.html
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0
 
 Insect
-	../insect/bin/insect
+	/insect/web/insect_full.html
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0
 
 Ideas
-	../ideas/bin/ideas
+	/ideas/web/ideas_full.html
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0

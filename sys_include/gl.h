@@ -343,7 +343,7 @@ extern void	pushname();
 extern void	pushviewport();
 extern void	qdevice(Device device);
 extern void	qenter(int16_t qtype, int16_t value);
-extern int32_t	qread();
+extern int32_t	qread(short *val);
 extern void	qreset();
 extern int32_t	qtest();
 extern void	rcapture();

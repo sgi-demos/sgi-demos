@@ -1812,7 +1812,7 @@ void fetch_event_queue(int blocking) {
 }
 
 // If the queue is empty, qread() blocks.
-int32_t qread(uint16_t *val) { 
+int32_t qread(short *val) { 
     TRACE();
 
     while (input_queue_length == 0) {
@@ -2444,7 +2444,7 @@ int32_t dopup(int32_t pup_index) {
         swapbuffers();
 
         if(qtest() != 0) {
-            uint16_t val;
+            short val;
             int32_t device = qread(&val);
             switch(device) {
                 case LEFTARROWKEY:

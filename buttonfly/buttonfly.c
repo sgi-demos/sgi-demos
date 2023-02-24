@@ -59,7 +59,9 @@ char	*argv[];
 
     rootbutton = new_button("");
     selected = rootbutton;
+
     parse_args(argc, argv);
+
     selected = NULL;
 
     keepaspect(5, 4);
@@ -170,6 +172,7 @@ char **argv;
 		{
 			fprintf(stderr, "%s: can't find default file .menu\n",
 				argv[0]);
+			printf("%s: can't find default file .menu\n",argv[0]);
 			exit(1);
 		}
 		current_buttons = load_buttons(fp);
