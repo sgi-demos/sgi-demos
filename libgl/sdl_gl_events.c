@@ -525,6 +525,8 @@ void enqueue_event(gl_event *e)
 
 uint32_t events_qread_start(int blocking)
 {
+    if (blocking)
+        sdlProcessEvents();
     return input_queue_length;
 }
 

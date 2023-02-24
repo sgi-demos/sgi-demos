@@ -12,5 +12,5 @@ CC = cc
 EMCC = emcc
 OLD_CODE_CC = $(CC) -std=c90
 OLD_CODE_EMCC = $(EMCC) -std=c90
-OLD_CODE_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat -Wno-pointer-sign -Wno-int-conversion
+OLD_CODE_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat -Wno-pointer-sign -Wno-int-conversion -Wno-out-of-scope-function -Wno-format-extra-args
 OLD_CODE_WARN_OFF_EM = $(OLD_CODE_WARN_OFF) -Wno-deprecated-non-prototype

@@ -1770,7 +1770,7 @@ static int devices_queued[2048];
 
 /* XXX event_get_qdevice() */
 // We're interested in events from this device.
-void qdevice(int32_t device) { 
+void qdevice(Device device) { 
     TRACEF("%d", device);
 
     devices_queued[device] = 1;
@@ -2529,7 +2529,7 @@ void endpolygon() {
     end_polygon();
 }
 
-void freepup() {
+void freepup(int32_t popup) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
@@ -2967,11 +2967,11 @@ int32_t newpup() {
     return 0;
 }
 
-void prefposition() {
+void prefposition(int32_t x1, int32_t x2, int32_t y1, int32_t y2) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
-void qenter() {
+void qenter(int16_t qtype, int16_t value) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
@@ -3080,7 +3080,7 @@ int32_t winget() {
     return 1;
 }
 
-void winposition() {
+void winposition(int32_t x1, int32_t x2, int32_t y1, int32_t y2) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 

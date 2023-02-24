@@ -1,0 +1,7 @@
+APPDEPS=parser.tab.c parser.tab.h
+
+$(APPDEPS): parser.y
+	bison --defines parser.y
+
+clean:
+	rm -f $(APPDEPS)

@@ -1,17 +1,14 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdlib.h> // RAND_MAX
 #include <gl.h>
 #include <math.h>
 #include <device.h>
-#include <time.h>
 #include "event.h"
 #include "bartfont.h"
 #include "buttonfly.h"
 #include "data.h"
 
-// Stop at the slow frame in the animation so we can analyze it.
-#define BLOCK_AT_SLOW_FRAME 0
+#include "EM_MAIN_DECL.h"
 
 #define X 0
 #define Y 1
@@ -26,13 +23,10 @@ int flyoutflag = 0;
 int selectflag = 0;
 int exitflag = 0;
 
-static int esc_pressed = 0;
-static struct timespec esc_press_time;
-
 button_struct *load_buttons(), *which_button();
 extern button_struct *new_button(char *);
 
-button_struct *current_buttons=NULL, *selected=NULL, *secret_buttons=NULL;
+button_struct *current_buttons=NULL, *selected=NULL;
 
 path_struct *path=NULL;
 
@@ -51,20 +45,18 @@ float tv[4][4] = {
     {0.0, 0.0, 0.0, 0.0},
 };
 
-void bf_redraw(), bf_exit(), bf_selecting(), bf_deselect();
-void bf_quick(), bf_fly(), do_popup(), toggle_window();
-void bf_escdown(), bf_escup();
-void flyindraw(), flyoutdraw(), selectdraw();
-void parse_args(), doclear();
 
-static double diff_timespecs(struct timespec *t1, struct timespec *t2) {
-    return (t1->tv_sec - t2->tv_sec) + (t1->tv_nsec - t2->tv_nsec)/1000000000.0;
-}
-
+#include "EM_MAIN_BEGIN.h"
 main (argc, argv)
+#include "EM_MAIN_END.h"
 int	argc;
 char	*argv[];
 {
+    void bf_redraw(), bf_exit(), bf_selecting();
+    void bf_quick(), bf_fly(), do_popup(), toggle_window();
+    void flyindraw(), flyoutdraw(), selectdraw();
+    void parse_args(), doclear();
+
     rootbutton = new_button("");
     selected = rootbutton;
     parse_args(argc, argv);
@@ -105,9 +97,7 @@ char	*argv[];
 	add_event(ANY, REDRAW, ANY, bf_redraw, 0);
 
     qdevice(ESCKEY);
-	add_event(ANY, ESCKEY, DOWN, bf_escdown, 0);
-	add_event(ANY, ESCKEY, UP, bf_escup, 0);
-
+	add_event(ANY, ESCKEY, UP, bf_exit, 0);
 	qdevice(WINQUIT);
 	add_event(ANY, WINQUIT, ANY, bf_exit, 0);
 
@@ -125,10 +115,8 @@ char	*argv[];
 	tie(RIGHTMOUSE, MOUSEX, MOUSEY);
 	add_event(ANY, RIGHTMOUSE, DOWN, do_popup, 0);
 
-#if 0  // LK: We don't want windowed mode.
     qdevice(SPACEKEY);
 	add_event(ANY, SPACEKEY, UP, toggle_window, 0);
-#endif
 
 	add_update(&flyinflag, flyindraw, 0);
 	add_update(&flyoutflag, flyoutdraw, 0);
@@ -136,7 +124,7 @@ char	*argv[];
 
     mmode(MPROJECTION);
 
-    perspective(450, (float)XMAXSCREEN/YMAXSCREEN, THICK, 9.0);
+    perspective(450, 5.0/4.0, THICK, 9.0);
     translate(0.0, 0.0, -5.0/4.0);
 
     mmode(MVIEWING);
@@ -148,44 +136,44 @@ char	*argv[];
     draw_buttons(current_buttons);
     swapbuffers();
 
-	while(exitflag == FALSE)
+    #include "EM_MAIN_LOOP_BEGIN.h"
+	while(exitflag == FALSE) 
 	{
+    #include "EM_MAIN_LOOP_END.h"
 		event();
 	}
-	gexit();
-	exit(0);
+	// gexit();
+	// exit(0);
 }
 
-button_struct *load_buttons_from_file(char *program_name, char *filename)
-{
-    button_struct *buttons;
-    FILE *fp;
-
-    if ((fp = fopen(filename, "r")) == NULL) {
-        fprintf(stderr, "%s: can't open file %s\n",
-                program_name, filename);
-        exit(1);
-    }
-    buttons = load_buttons(fp);
-    fclose(fp);
-
-    return buttons;
-}
 
 void parse_args(argc, argv)
 int argc;
 char **argv;
 {
-    if (argc>3) {
-        fprintf(stderr, "usage: %s [infile] [secretfile]\n", argv[0]);
+    if (argc>2) {
+		fprintf(stderr, "usage: %s [infile]\n", argv[0]);
         exit(1);
-    } else if (argc == 3) {
-        current_buttons = load_buttons_from_file(argv[0], argv[1]);
-        secret_buttons = load_buttons_from_file(argv[0], argv[2]);
     } else if (argc == 2) {
-        current_buttons = load_buttons_from_file(argv[0], argv[1]);
+		FILE *fp;
+		if ((fp = fopen(argv[1], "r")) == NULL)
+		{
+			fprintf(stderr, "%s: can't open file %s\n",
+				argv[0], argv[1]);
+			exit(1);
+		}
+		current_buttons = load_buttons(fp);
+		fclose(fp);
     } else {
-        current_buttons = load_buttons_from_file(argv[0], ".menu");
+		FILE *fp;
+		if ((fp = fopen(".menu", "r")) == NULL)
+		{
+			fprintf(stderr, "%s: can't find default file .menu\n",
+				argv[0]);
+			exit(1);
+		}
+		current_buttons = load_buttons(fp);
+		fclose(fp);
     }
 }
 
@@ -238,47 +226,6 @@ void bf_quick()
 	bf_redraw();
 }
 
-void bf_escdown()
-{
-    // Keep track of when Esc is pressed so we can see how long it was pressed.
-    if (!esc_pressed) {
-        esc_pressed = 1;
-        clock_gettime(CLOCK_MONOTONIC, &esc_press_time);
-    }
-}
-
-void bf_escup()
-{
-    // See how long Esc was pressed.
-    struct timespec now;
-    clock_gettime(CLOCK_MONOTONIC, &now);
-    double elapsed = diff_timespecs(&now, &esc_press_time);
-    if (elapsed > 1 && secret_buttons != NULL) {
-        // Show secret menu.
-	selectflag = flyinflag = flyoutflag = FALSE;
-        add_button_to_path(current_buttons, secret_buttons);
-        current_buttons = secret_buttons;
-	bf_redraw();
-    } else {
-        bf_deselect();
-    }
-    esc_pressed = 0;
-}
-
-void bf_deselect()
-{
-    if (path) {
-	path_struct *step;
-	flyoutflag = TRUE;
-	selected = path->button;
-	current_buttons = path->current_buttons;
-	step = path;
-	path = path->back;
-	free(step);
-	if (path) curbackcolor=path->button->backcolor;
-	else curbackcolor=rootbutton->backcolor;
-    }
-}
 
 void bf_fly()
 {
@@ -387,7 +334,7 @@ short mx, my;
 	menu = newpup();
 
 	if (b != rootbutton) {
-		sprintf(t, "Do It");
+		sprintf(t, "Do It", i);
 	        addtopup(menu, t);
 	}
 
@@ -411,10 +358,7 @@ short mx, my;
 		for (num=0, scan=b->popup; num != (i-2);
 		     num++, scan=scan->next)
 		;	/* Keep on scanning... */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
 		system(scan->action);
-#pragma GCC diagnostic pop
 	}
 }
 
@@ -432,9 +376,7 @@ void selectdraw()
 void flyindraw()
 {
 	static float t = 1.0;
-	if (t > 0.2 || !BLOCK_AT_SLOW_FRAME) {
 	    t -= 0.02;
-	}
 	if (t<=0.0) {
 	    current_buttons = selected->forward;
 	    selected=NULL;
@@ -502,10 +444,7 @@ button_struct *selected;
 	/* Now, do action */
 	if ((selected->action != NULL) && !needpipe)
 	{
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
 		system(selected->action);
-#pragma GCC diagnostic pop
 	}
 	/* Ok, now build submenus if we can */
 	if (fp != NULL)
@@ -526,7 +465,7 @@ button_struct *buttons;
 
     if (buttons) do {
 	if (buttons!=selected) draw_button(buttons);
-    } while((buttons=buttons->next) != 0);
+    } while(buttons=buttons->next);
 }
 
 
@@ -714,7 +653,7 @@ char *str;
 
 	    i=0;
 
-	    while ((j=chrtbl[*str][i][0]) != 0) {
+	    while (j=chrtbl[*str][i][0]) {
 
 		switch (j) {
 
@@ -739,33 +678,31 @@ button_struct *button;
 {
 
     RGBcolor(200, 200, 200);
-    RGBcolor(255, 255, 255);
 
     scale(-0.015, 0.015, 0.015);
 
-    // linewidth(sizex*3/1000 + 1);
-    linewidth((sizex*3/1000 + 1) * 800 / 1280);
+    linewidth(sizex*3/1000 + 1);
 
     switch (button->wc) {
 
 	case 1:
-	    move2i(-6 * (long)strlen(button->name[0])/2, -4);
+	    move2i(-6 * strlen(button->name[0])/2, -4);
 	    stroke(button->name[0]);
 	    break;
 
 	case 2:
-	    move2i(-6 * (long)strlen(button->name[0])/2, 1);
+	    move2i(-6 * strlen(button->name[0])/2, 1);
 	    stroke(button->name[0]);
-	    move2i(-6 * (long)strlen(button->name[1])/2, -9);
+	    move2i(-6 * strlen(button->name[1])/2, -9);
 	    stroke(button->name[1]);
 	    break;
 
 	case 3:
-	    move2i(-6 * (long)strlen(button->name[0])/2, 6);
+	    move2i(-6 * strlen(button->name[0])/2, 6);
 	    stroke(button->name[0]);
-	    move2i(-6 * (long)strlen(button->name[1])/2, -4);
+	    move2i(-6 * strlen(button->name[1])/2, -4);
 	    stroke(button->name[1]);
-	    move2i(-6 * (long)strlen(button->name[2])/2, -14);
+	    move2i(-6 * strlen(button->name[2])/2, -14);
 	    stroke(button->name[2]);
 	    break;
     }
@@ -796,7 +733,7 @@ int mx, my;
 	    return (button);
 	}
 
-    } while ((button = button->next) != 0);
+    } while (button = button->next);
 
     return(NULL);
 }

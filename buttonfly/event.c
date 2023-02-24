@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <device.h>
+#include <gl.h>
 #include "event.h"
 
 

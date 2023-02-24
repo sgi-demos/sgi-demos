@@ -1,0 +1,30 @@
+Logo
+	../logo/logo
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Jello
+	../jello/jello
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Insect
+	../insect/insect
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Bounce
+	cat m_bounce*
+	.menu. -
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Arena
+	../arena/arena
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Ideas
+	../ideas/ideas
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
