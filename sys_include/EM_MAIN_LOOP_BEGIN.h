@@ -21,7 +21,8 @@ void child_main_loop(void *arg) \
     static short val; \
     static Boolean attached; \
     static int started = 1; \
-    static int i; \
+    static int i,j; \
+	double dx, dy, dz; \
     static float x, y, z, c; \
     static float current_time = 0.0; \
     static float previous_time; \

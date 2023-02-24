@@ -12,6 +12,8 @@
 #include <device.h>
 #include "light.h"
 
+#include "EM_MAIN_DECL.h"
+
 // See the ../NOTES file:
 #undef STOP_AFTER_ANIMATION
 
@@ -131,7 +133,9 @@ void get_tilt(short *tiltx, short *tilty)
 #define MAIN main
 #endif
 
-MAIN (argc, argv)
+#include "EM_MAIN_BEGIN.h"
+main (argc, argv)
+#include "EM_MAIN_END.h"
 int	argc;
 char	*argv[];
 {
@@ -143,7 +147,10 @@ char	*argv[];
 
 	get_tilt(&orx2, &ory2);
 
+    #include "EM_MAIN_LOOP_BEGIN.h"
 	while(TRUE) {
+	#include "EM_MAIN_LOOP_END.h"
+
 
 		while(qtest()) {
 			dev=qread(&val);

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Buttonfly</title>
+        <style>
+            .fullwindow {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                margin: 0px;
+                border: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                display: block;
+            }
+        </style>
+    </head>
+    <body style="background-color: #FFFFFF;">
+        <canvas class = "fullwindow" id="canvas" oncontextmenu="event.preventDefault()"/>
+        <script type="text/javascript">
+            var Module = {};
+            Module.canvas = document.getElementById('canvas');
+        </script>
+        <script async type="text/javascript" src="./buttonfly.js"></script>
+    </body>
+</html>
+
