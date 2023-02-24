@@ -5,6 +5,8 @@
 #include "gl.h"
 #include "device.h"
 
+#include "EM_MAIN_DECL.h"
+
 #define UDIV 12
 #define VDIV 12
 
@@ -218,7 +220,9 @@ void get_tilt(short *tiltx, short *tilty)
 }
 
 
-main(argc, argv)
+#include "EM_MAIN_BEGIN.h"
+main (argc, argv)
+#include "EM_MAIN_END.h"
 int argc;
 char **argv;
 {
@@ -227,7 +231,7 @@ char **argv;
 		int i;
 
 		for (i=0; argv[1][i] != '/' && argv[1][i] != '\0'; i++);
-		if (argv[1][i] != '/') {
+		if (0 && argv[1][i] != '/') {
 			strcpy(ofile, "/usr/demos/data/models/");
 			strcat(ofile, argv[1]);
 		} else
@@ -260,7 +264,9 @@ char **argv;
 	loadmatrix(ident4);
 	translate(0.0, 0.0, -EYEZ);
 
+    #include "EM_MAIN_LOOP_BEGIN.h"
 	while(1)  {
+	#include "EM_MAIN_LOOP_END.h"
 		calcbox();
 		if (!freeze)
 			calcball();
@@ -356,7 +362,7 @@ drawimage()
 initialize(argv)
 char **argv;
 {
-	int time();
+	long time();
 	void srand();
 
 	{	/* Open window with name of executable */
