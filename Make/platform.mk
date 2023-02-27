@@ -1,3 +1,12 @@
+UNAME:=$(shell uname -s)
+ifeq ($(UNAME),Linux)
+    SDL_LIB=-lSDL2
+else
+    ifeq ($(UNAME),Darwin)
+        SDL_LIB=-F/Library/Frameworks -framework SDL2
+    endif
+endif
+
 RASTERIZER_SRCS = ../libgl/reference_rasterizer.c ../libgl/sdl_framebuffer.c
 EVENTS_SRCS = ../libgl/sdl_gl_events.c
 LIBGL_SRC = ../libgl/gl.c ../libgl/vector.c $(RASTERIZER_SRCS) $(EVENTS_SRCS)
