@@ -83,6 +83,11 @@ const int SCREEN_FPS = 25;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 void main_loop(void* main_loop_arg) 
 {   
+    #ifdef MAIN_LOOP_DEBUG
+    static int main_loop_count = 0;
+    printf("main_loop BEGIN %d\n",++main_loop_count);
+    #endif
+
     Uint32 startTicks = SDL_GetTicks();
 
     sdlProcessEvents();
@@ -97,6 +102,10 @@ void main_loop(void* main_loop_arg)
     {
         SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks );
     }    
+
+    #ifdef MAIN_LOOP_DEBUG
+    printf("main_loop END %d\n",main_loop_count);
+    #endif
 }
 
 int main(int argc, char* argv[])

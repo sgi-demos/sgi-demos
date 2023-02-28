@@ -23,7 +23,7 @@ typedef struct event_s
 typedef struct update_s
 {
     int *flag;
-	void (*ufunc)(void *);
+	void (*ufunc)();
 	char *arg;
     struct update_s *next;
 } update_t, *update_p;
@@ -71,7 +71,7 @@ char *arg;
 void
 add_update(flag, ufunc, arg)
 int	*flag;
-void (*ufunc)(void *);
+void (*ufunc)();
 char *arg;
 {
     update_p	new_guy;
@@ -123,12 +123,8 @@ find_update()
 	{
 		if (*scan->flag)
 		{
-			printf ("calling scan->ufunc\n");
-		    //(*scan->ufunc)(scan->arg);
-			void (*func2)() = scan->ufunc;
-			(*func2)(); 
+		    (*scan->ufunc)();
 		    updated = 1;
-			printf ("called scan->ufunc\n");
 		}
 	}
 
@@ -148,7 +144,6 @@ find_event(void)
 {
     event_p scan;
 	short	s;
-	printf ("find_event\n");
     device = qread(&s);
 	state = s;
     for (scan = event_list; scan; scan = scan->next)
@@ -157,14 +152,12 @@ find_event(void)
 			&& ((scan->device == ANY) ||(device == scan->device))
 			&& ((scan->state == ANY) || (state == scan->state)))
 		{
-			printf ("calling scan->func\n");
 			if (scan->func == &event_inputchange)
 	    		(*scan->func)(scan->arg, state);
 			else {
 				void (*func2)() = scan->func;
 				(*func2)(); 
 			}
-			printf ("called scan->func\n");
 		}
 	}
 }

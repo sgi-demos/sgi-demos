@@ -12,10 +12,10 @@ EMAPP=$(EMAPPNAME).html
 all: $(APP) $(EMAPP)
 
 $(APP): $(SRC) 
-	$(CC) $(OPT_LEVEL) $(LIBGL_INC) $(SRC) -F/Library/Frameworks -framework SDL2 -o $(APP)
+	$(CC) $(OPT) -D MAIN_LOOP_DEBUG $(LIBGL_INC) $(SRC) -F/Library/Frameworks -framework SDL2 -o $(APP)
 
 $(EMAPP): $(SRC)
-	$(EMCC) $(OPT_LEVEL) $(LIBGL_INC) $(SRC) -s USE_SDL=2 -o $(EMAPP)
+	$(EMCC) $(EM_OPT) -D MAIN_LOOP_DEBUG $(LIBGL_INC) $(SRC) -s USE_SDL=2 -o $(EMAPP)
 
 run: $(APP) $(EMAPP)
 	$(APP) && emrun $(EMAPP)

@@ -15,11 +15,14 @@ DEMO_INC = -I../demo_include
 BIN_DIR = ./bin
 WEB_DIR = ./web
 OPT_ZERO = -O0 -g
+EM_OPT_ZERO = -O0 -g -g3 -gsource-map 
 OPT_TWO = -DNDEBUG -O2
-OPT_LEVEL = $(OPT_ZERO)
+OPT = $(OPT_TWO)
+EM_OPT = $(EM_OPT_ZERO)
+
 CC = cc
-EMCC = emcc
+EMCC = emcc -s ASSERTIONS=2 -s SAFE_HEAP=1 -s SAFE_HEAP_LOG -s STACK_OVERFLOW_CHECK=2 -s DEMANGLE_SUPPORT=1 -s WASM=1 
 OLD_CODE_CC = $(CC) -std=c90
 OLD_CODE_EMCC = $(EMCC) -std=c90
-OLD_CODE_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat -Wno-pointer-sign -Wno-int-conversion -Wno-out-of-scope-function -Wno-format-extra-args
+OLD_CODE_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat -Wno-pointer-sign -Wno-int-conversion -Wno-out-of-scope-function -Wno-format-extra-args -Wno-unused-command-line-argument 
 OLD_CODE_WARN_OFF_EM = $(OLD_CODE_WARN_OFF) -Wno-deprecated-non-prototype
