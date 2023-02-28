@@ -5,17 +5,12 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <gl.h>
 #include <math.h>
 #include <device.h>
 #include "light.h"
 
 #include "EM_MAIN_DECL.h"
-
-// See the ../NOTES file:
-#undef STOP_AFTER_ANIMATION
 
 #define X 0
 #define Y 1
@@ -36,11 +31,6 @@ short dev, val;
 int active=TRUE;
 long gid;
 
-// In degrees.
-double twist = 0;
-double horiz = 0;
-double vert = 0;
-
 float ident_matrix[4][4] = {
 	{1.0, 0.0, 0.0, 0.0},
 	{0.0, 1.0, 0.0, 0.0},
@@ -57,8 +47,6 @@ float view[4][4] = {
 
 float tmp[4][4];
 short mx, my, omx, omy, nmx, nmy;
-
-short ory2, orx2;
 
 int bend_left(), bend_right(), bend_forward(), move_single(), move_double();
 
@@ -110,28 +98,6 @@ Poly *elbow, *double_cylinder, *single_cylinder;
 int function=0;
 #define REORIENT 1
 
-void reorient(short ax, short ay);
-
-short tilt_left = -200;
-short tilt_right = 200;
-short tilt_forward = 650;
-short tilt_back = 150;
-
-void get_tilt(short *tiltx, short *tilty)
-{
-    if (0) {
-        *tiltx = XMAXSCREEN * (getvaluator(DIAL1) - tilt_forward) / (tilt_back - tilt_forward) ;
-        *tilty = YMAXSCREEN * (getvaluator(DIAL0) - tilt_left) / (tilt_right - tilt_left);
-    } else {
-	*tiltx = 0;
-	*tilty = 0;
-    }
-}
-
-
-#ifndef MAIN
-#define MAIN main
-#endif
 
 #include "EM_MAIN_BEGIN.h"
 main (argc, argv)
@@ -141,13 +107,10 @@ char	*argv[];
 {
 
 	int i, j;
-	double dx, dy, dz;
 
 	initialize(argv[0]);
 
-	get_tilt(&orx2, &ory2);
-
-    #include "EM_MAIN_LOOP_BEGIN.h"
+	#include "EM_MAIN_LOOP_BEGIN.h"
 	while(TRUE) {
 	#include "EM_MAIN_LOOP_END.h"
 
@@ -190,45 +153,13 @@ char	*argv[];
 
 		switch(function) {
 
-		    case REORIENT: {
-
-			reorient(nmx-omx, omy-nmy);
+		case REORIENT:
+			reorient();
 			break;
 		    }
-
-		    default : {
-			short rx2, ry2;
-
-			get_tilt(&rx2, &ry2);
-
-			short ax = (ry2 - ory2) / 2;
-			short ay = (orx2 - rx2) / 2;
-
-			orx2 = rx2;
-			ory2 = ry2;
-
-			reorient(ax, ay);
-			break;
-		    }
-		}
 
 		omx=nmx; 
 		omy=nmy;
-
-		// Gyro. These are in degrees per second.
-		dx = getvaluator(DIAL2) / 65536.0;
-		dy = getvaluator(DIAL3) / 65536.0;
-		dz = getvaluator(DIAL4) / 65536.0;
-
-		// Assume 50 FPS.
-		horiz -= dx/50;
-		vert -= dy/50;
-		// twist -= dz/50; // Disable, it breaks the "object in a box" model.
-
-		// Slowly go back to normal.
-		horiz *= 0.99;
-		vert *= 0.99;
-		twist *= 0.99;
 
 		draw_everything();
 
@@ -286,10 +217,11 @@ draw_everything() {
 
 
 	RGBcolor(0, 0, 0);
-	czclear(0, 0xFFFFFFFF);
+	clear();
+	zclear();
 
 	mmode(MPROJECTION);
-	perspective(350, (float)XMAXSCREEN/YMAXSCREEN, 34, 72);
+	perspective(350, 5.0/4.0, 34, 72);
 
 	mmode(MVIEWING);
 
@@ -297,16 +229,7 @@ draw_everything() {
 	lmbind(LIGHT0, OVER_LIGHT);
 	lmbind(LIGHT1, UNDER_LIGHT);
 
-	// We moved the lookat() call for gyro, but be sure it looks like it did
-	// when no gyro is being done.
-	double orig_offset = 30;
-	double new_offset = 5;
-	double difference = sqrt(orig_offset*orig_offset*3) - sqrt(new_offset*new_offset*3);
-	translate(0, 0, -difference);
-	rotate((int) (horiz*10 + 0.5), 'y');
-	rotate((int) (vert*10 + 0.5), 'x');
-
-	lookat(-new_offset, new_offset, new_offset, 0.0, 0.0, 0.0, (int) (twist*10 + 0.5));
+	lookat(-30.0, 30.0, 30.0, 0.0, 0.0, 0.0, 0);
 
 	multmatrix(view);
 
@@ -317,10 +240,6 @@ draw_everything() {
 	draw_thing(logo);
 
 	mmode(MSINGLE);
-
-#ifdef STOP_AFTER_ANIMATION
-	int finished = joint == JOINT;
-#endif
 
 	if (joint>JOINT) {
 
@@ -336,12 +255,6 @@ draw_everything() {
 	}
 
 	swapbuffers();
-
-#ifdef STOP_AFTER_ANIMATION
-	if (finished) {
-	    exit(0);
-	}
-#endif
 }
 
 
@@ -464,26 +377,25 @@ move_single() {
 	translate(0.0, 0.0, -s_cyl);
 }
 
-void reorient(short ax, short ay)
-{
+
+reorient() {
+
+
 	pushmatrix();
 
 	loadmatrix(ident_matrix);
 
-	rotate(-450, 'y');
+	rotate((Angle) (nmx-omx), 'y');
+	rotate((Angle) (omy-nmy), 'x');
 
-	rotate((Angle) ax, 'y');
-	rotate((Angle) ay, 'x');
-
-	rotate(450, 'y');
 
 	multmatrix(view);
 
 	getmatrix(view);
 
 	popmatrix();
-}
 
+}
 
 print_matrix(m)
 float m[4][4];
@@ -537,7 +449,7 @@ Poly *polygon;
 	lmbind(MATERIAL, MAT_LOGO);
 	lighting(TRUE);
 
-	while((polygon=polygon->next) != NULL) {
+	while(polygon=polygon->next) {
 		bgnpolygon();
 		for (i=0; i<polygon->n; i++) {
 			n3f(&polygon->norm[i*3]);
