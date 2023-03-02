@@ -368,7 +368,7 @@ printf("time = %d\n", (int)time+1);*/
 	    c = 1.0 - (logo_pos[Y])/0.33;
 	    RGBcolor((int)(255.0*pca*c),
 		     (int)(255.0*pca*c),
-		     (int)(200.0*pca*c), 0);
+		     (int)(200.0*pca*c));
 	} else {
 	    RGBcolor(0, 0, 0);
 	}
