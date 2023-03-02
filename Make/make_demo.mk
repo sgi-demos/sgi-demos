@@ -29,10 +29,10 @@ $(APP): $(OBJS) $(LIBGL_SRC)
 	@echo
 
 $(EMOBJS): $(WEB_DIR)/%.o: %.c $(HDRS) | $(WEB_DIR)
-	$(OLD_CODE_EMCC) $(EM_OPT) --source-map-base $(EMAPPNAME) $(OLD_CODE_WARN_OFF_EM) $(LIBGL_INC) $(DEMO_INC) $(APPDEFS) $< -c -o $@
+	$(OLD_CODE_EMCC) $(EM_OPT) $(OLD_CODE_WARN_OFF_EM) $(LIBGL_INC) $(DEMO_INC) $(APPDEFS) $< -c -o $@
 
 $(EMAPP): $(EMOBJS) $(LIBGL_SRC)
-	$(EMCC) $(EM_OPT) --source-map-base $(EMAPPNAME) -Wno-deprecated-non-prototype $(LIBGL_INC) $(APPDEFS) $(EMOBJS) -D EM_CHILD_MAIN $(LIBGL_SRC) $(APPLIBS) -s USE_SDL=2 $(EMLNKR) -lm -o $@
+	$(EMCC) $(EM_OPT) $(LIBGL_INC) $(APPDEFS) $(EMOBJS) -D EM_CHILD_MAIN $(LIBGL_SRC) $(APPLIBS) -s USE_SDL=2 $(EMLNKR) -lm -o $@
 	@echo
 	@echo BUILT: $@
 	@echo

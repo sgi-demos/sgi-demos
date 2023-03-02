@@ -85,7 +85,8 @@ void main_loop(void* main_loop_arg)
 {   
     #ifdef MAIN_LOOP_DEBUG
     static int main_loop_count = 0;
-    printf("main_loop BEGIN %d\n",++main_loop_count);
+    if (main_loop_count % SCREEN_FPS == 0)
+        printf("main_loop BEGIN %d\n",main_loop_count);
     #endif
 
     Uint32 startTicks = SDL_GetTicks();
@@ -104,7 +105,9 @@ void main_loop(void* main_loop_arg)
     }    
 
     #ifdef MAIN_LOOP_DEBUG
-    printf("main_loop END %d\n",main_loop_count);
+    if (main_loop_count % SCREEN_FPS == 0)
+        printf("main_loop END %d\n",main_loop_count);
+    ++main_loop_count;
     #endif
 }
 

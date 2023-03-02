@@ -48,12 +48,7 @@ void sdlInit(const char *windowTitle)
     sdlState.pRenderer = SDL_CreateRenderer(sdlState.pWindow, -1, 0);
 }
 
-void sdlPresent()
-{
-    SDL_RenderPresent(sdlState.pRenderer);
-}
-
-void exitApp()
+static void exitApp()
 {
     #ifdef __EMSCRIPTEN__
         // Go to previous page, or if none, to demo home page
@@ -138,62 +133,14 @@ void sdlProcessEvents()
     }
 }
 
-int sdlMousePosX()
+void sdlPresent()
 {
-    //SDL_PumpEvents();
-    int x, y;
-    SDL_GetMouseState(&x, &y);
-    return x;
-}
-
-int sdlMousePosY()
-{
-    //SDL_PumpEvents();
-    int x, y;
-    SDL_GetMouseState(&x, &y);
-    return y;
-}
-
-unsigned char sdlMouseButtonState()
-{
-    //SDL_PumpEvents();
-    int x, y;
-    return SDL_GetMouseState(&x, &y);    
-}
-
-int sdlPeepEvents()
-{
-    //SDL_PumpEvents();
-    SDL_Event event;
-    int count = SDL_PeepEvents(&event, 1, SDL_PEEKEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT);
-    return count;
-}
-
-Uint8* sdlGetKeyboardState()
-{
-    //SDL_PumpEvents();
-    const Uint8* keys = SDL_GetKeyboardState(NULL);
-    return (unsigned char*)keys;
-}
-
-bool sdlViewChanged()
-{
-    return false; // TBD
+    SDL_RenderPresent(sdlState.pRenderer);
 }
 
 SDL_Renderer* sdlRenderer()
 {
     return sdlState.pRenderer;
-}
-
-Size2D sdlFramebufferSize()
-{
-    return sdlState.winSize;
-}
-
-unsigned char* sdlFramebuffer()
-{
-    return NULL;
 }
 
 Size2D sdlWindowSize()
@@ -204,6 +151,16 @@ Size2D sdlWindowSize()
 Vec2D sdlViewport()   
 { 
     return (Vec2D) { .x = (float)sdlState.winSize.width, .y = (float)sdlState.winSize.height };
+}
+
+Size2D sdlFramebufferSize()
+{
+    return sdlState.winSize;
+}
+
+unsigned char* sdlFramebuffer()
+{
+    return NULL;
 }
 
 int sdlWindowToFramebufferOffsetX()

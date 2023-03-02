@@ -3,7 +3,7 @@
 include ../Make/platform.mk
 
 APPNAME=sdl_framebuffer
-SRC=sdl_framebuffer.c sdl_events.c
+SRC=sdl_framebuffer.c sdl_gl_events.c
 
 APP=$(BIN_DIR)/$(APPNAME)
 EMAPPNAME=$(WEB_DIR)/$(APPNAME)
@@ -12,7 +12,7 @@ EMAPP=$(EMAPPNAME).html
 all: $(APP) $(EMAPP)
 
 $(APP): $(SRC) 
-	$(CC) $(OPT) -D MAIN_LOOP_DEBUG $(LIBGL_INC) $(SRC) -F/Library/Frameworks -framework SDL2 -o $(APP)
+	$(CC) $(OPT) -D MAIN_LOOP_DEBUG $(LIBGL_INC) $(SRC) $(SDL_LIB) -o $(APP)
 
 $(EMAPP): $(SRC)
 	$(EMCC) $(EM_OPT) -D MAIN_LOOP_DEBUG $(LIBGL_INC) $(SRC) -s USE_SDL=2 -o $(EMAPP)
