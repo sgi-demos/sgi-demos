@@ -361,6 +361,7 @@ short mx, my;
 		for (num=0, scan=b->popup; num != (i-2);
 		     num++, scan=scan->next)
 		;	/* Keep on scanning... */
+		printf("scanning %s\n",scan->title);
 		system(scan->action);
 	}
 }
@@ -447,6 +448,7 @@ button_struct *selected;
 	/* Now, do action */
 	if ((selected->action != NULL) && !needpipe)
 	{
+		printf("do action %s\n",selected->name[0]);
 		system(selected->action);
 	}
 	/* Ok, now build submenus if we can */
@@ -686,26 +688,37 @@ button_struct *button;
 
     linewidth(sizex*3/1000 + 1);
 
+	// https://github.com/emscripten-core/emscripten/issues/18882
+	Icoord x0_bad = -6 * strlen(button->name[0])/2;
+
+	int nameLen[3];
+	Icoord x[3];
+	for (int i = 0; i < button->wc && i < 3; ++i) 
+	{
+		nameLen[i] = strlen(button->name[i]);
+		x[i] = -6 * nameLen[i]/2;
+	}
+
     switch (button->wc) {
 
 	case 1:
-	    move2i(-6 * strlen(button->name[0])/2, -4);
+	    move2i(x[0], -4);
 	    stroke(button->name[0]);
 	    break;
 
 	case 2:
-	    move2i(-6 * strlen(button->name[0])/2, 1);
+	    move2i(x[0], 1);
 	    stroke(button->name[0]);
-	    move2i(-6 * strlen(button->name[1])/2, -9);
+	    move2i(x[1], -9);
 	    stroke(button->name[1]);
 	    break;
 
 	case 3:
-	    move2i(-6 * strlen(button->name[0])/2, 6);
+	    move2i(x[0], 6);
 	    stroke(button->name[0]);
-	    move2i(-6 * strlen(button->name[1])/2, -4);
+	    move2i(x[1], -4);
 	    stroke(button->name[1]);
-	    move2i(-6 * strlen(button->name[2])/2, -14);
+	    move2i(x[2], -14);
 	    stroke(button->name[2]);
 	    break;
     }
