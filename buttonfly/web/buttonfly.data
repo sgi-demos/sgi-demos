@@ -1,19 +1,19 @@
 Jello
-	/jello/web/jello_full.html
+	jello/web/jello_full.html
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0
 
 Insect
-	/insect/web/insect_full.html
+	insect/web/insect_full.html
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0
 
 Ideas
-	/ideas/web/ideas_full.html
+	ideas/web/ideas_full.html
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0
 
 Logo
-	/ideas/web/logo_full.html
+	logo/web/logo_full.html
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0

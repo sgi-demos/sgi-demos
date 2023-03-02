@@ -9,6 +9,7 @@
 #include "data.h"
 
 #include "EM_MAIN_DECL.h"
+#include "EM_SYSTEM.h"
 
 #define X 0
 #define Y 1
@@ -361,7 +362,6 @@ short mx, my;
 		for (num=0, scan=b->popup; num != (i-2);
 		     num++, scan=scan->next)
 		;	/* Keep on scanning... */
-		printf("scanning %s\n",scan->title);
 		system(scan->action);
 	}
 }
@@ -448,7 +448,6 @@ button_struct *selected;
 	/* Now, do action */
 	if ((selected->action != NULL) && !needpipe)
 	{
-		printf("do action %s\n",selected->name[0]);
 		system(selected->action);
 	}
 	/* Ok, now build submenus if we can */

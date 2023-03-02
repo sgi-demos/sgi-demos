@@ -168,7 +168,6 @@ static void exitEvent()
 {
     #ifdef __EMSCRIPTEN__
         // Go to previous page, or if none, to demo home page
-        // TODO: window.location.href = 'https://sgi-demos.github.io';
         const char *exit_js =
             "if (document.referrer) {                                   "
             "     window.history.back();                                "

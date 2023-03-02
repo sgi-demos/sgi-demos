@@ -14,8 +14,8 @@ BIN_DIR = ./bin
 WEB_DIR = ./web
 OPT_ZERO = -O0 -g
 OPT_TWO = -DNDEBUG -O2
-OPT = $(OPT_ZERO)
-EM_OPT = $(OPT_ZERO)
+OPT = $(OPT_TWO)
+EM_OPT = $(OPT_TWO)
 
 CC = cc -fsanitize=undefined
 EMCC = emcc -s WASM=1 -fsanitize=undefined -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK=2
