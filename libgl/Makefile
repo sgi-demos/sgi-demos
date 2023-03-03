@@ -13,9 +13,15 @@ all: $(APP) $(EMAPP)
 
 $(APP): $(SRC) 
 	$(CC) $(OPT) -D MAIN_LOOP_DEBUG $(LIBGL_INC) $(SRC) $(SDL_LIB) -o $(APP)
-
+	@echo
+	@echo BUILT: $@
+	@echo
+	
 $(EMAPP): $(SRC)
 	$(EMCC) $(EM_OPT) -D MAIN_LOOP_DEBUG $(LIBGL_INC) $(SRC) -s USE_SDL=2 -o $(EMAPP)
+	@echo
+	@echo BUILT: $@
+	@echo
 
 run: $(APP) $(EMAPP)
 	$(APP) && emrun $(EMAPP)
