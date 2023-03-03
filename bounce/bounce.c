@@ -45,7 +45,6 @@ float wallnorm[3] = {
 
 int rx, ry;
 int orx, ory;
-short   ory2, orx2;
 
 float ballscale;
 float ballsize;
@@ -208,16 +207,6 @@ void reorient(short ax, short ay)
 	popmatrix();
 }
 
-short tilt_left = -200;
-short tilt_right = 200;
-short tilt_forward = 650;
-short tilt_back = 150;
-
-void get_tilt(short *tiltx, short *tilty)
-{
-    *tiltx = XMAXSCREEN * (getvaluator(DIAL1) - tilt_forward) / (tilt_back - tilt_forward) ;
-    *tilty = YMAXSCREEN * (getvaluator(DIAL0) - tilt_left) / (tilt_right - tilt_left);
-}
 
 
 #include "EM_MAIN_BEGIN.h"
@@ -245,8 +234,6 @@ char **argv;
 	ballscale = 1.0 - ballsize;
 
 	initialize(argv);
-
-	get_tilt(&orx2, &ory2);
 
 	make_menu();
 
@@ -362,7 +349,7 @@ drawimage()
 initialize(argv)
 char **argv;
 {
-	long time();
+	unsigned long long time();
 	void srand();
 
 	{	/* Open window with name of executable */
@@ -541,15 +528,6 @@ calcbox()
     	// mousex = 0 -> ry = 50
 	// mousex = 800 -> ry = 850
 	ry = 50 + 800*getvaluator(MOUSEX)/XMAXSCREEN;
-
-	int tilt_left = -200;
-	int tilt_right = 200;
-	int tilt_forward = 650;
-	int tilt_back = 150;
-	int rx2 = XMAXSCREEN * (getvaluator(DIAL1) - tilt_forward) / (tilt_back - tilt_forward) ;
-	int ry2 = YMAXSCREEN * (getvaluator(DIAL0) - tilt_left) / (tilt_right - tilt_left);
-	rx = -800*rx2/YMAXSCREEN - 50;
-	ry = 50 + 800*ry2/XMAXSCREEN;
 }
 
 
@@ -594,7 +572,6 @@ check_q()
 			    function = REORIENT;
 			} else {
 			    function = 0;
-			    get_tilt(&orx2, &ory2);
 			}
                         break;
 		case REDRAW:
@@ -666,21 +643,7 @@ check_q()
 		break;
 	    }
 
-	    default : {
-		short rx2, ry2;
-
-		get_tilt(&rx2, &ry2);
-
-		short ax = (ry2 - ory2) / 2;
-		short ay = (orx2 - rx2) / 2;
-
-		orx2 = rx2;
-		ory2 = ry2;
-
-		reorient(ax, ay);
-		break;
-	    }
-	}
+    }
 }
 
 

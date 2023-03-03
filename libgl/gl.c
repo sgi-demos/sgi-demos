@@ -404,7 +404,9 @@ void project_vertex(lit_vertex *lv, screen_vertex *sv)
 
     sv->x = clamp(xw, 0, DISPLAY_WIDTH - 1) * SCREEN_VERTEX_V2_SCALE;
     sv->y = clamp(yw, 0, DISPLAY_HEIGHT - 1) * SCREEN_VERTEX_V2_SCALE;
-    sv->z = zw * (double)0xffffffff; // NOTE: ****Must link with -lm or else this always returns zero***
+    sv->z = clamp(zw * (float)0xFFFFFFFF, // NOTE: ****Must link with -lm or else this always returns zero***
+                  0.0, 
+                  (float)0xFFFFFF7F); // largest float <= UINT_MAX; 
     sv->r = unitclamp(lv->color[0]) * 255;
     sv->g = unitclamp(lv->color[1]) * 255;
     sv->b = unitclamp(lv->color[2]) * 255;
@@ -1356,7 +1358,7 @@ void defpattern(int index, int size, Pattern16 mask) {
 }
 
 void doublebuffer() { 
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    // doublebuffer always enabled for now, more work here when/if singlebuffer is implemented
 }
 
 void editobj(Object obj) { 
@@ -1373,7 +1375,10 @@ void frontbuffer(Boolean enable) {
 }
 
 void gconfig() { 
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    // Nothing to do here really. It's to be called after configuring:
+    // 1. overlay/underlay (not supported)
+    // 2. RGB vs. color map (only RGB supported)
+    // 3. single vs. double buffer (only double buffer supported)
 }
 
 Object genobj() { 
@@ -2030,7 +2035,7 @@ void RGBcolor(int r, int g, int b) {
 }
 
 void RGBmode() {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    // RGB mode always enabled, so nothing to do here until/unless colormap mode is implemented
 }
 
 void ringbell() {
@@ -3436,7 +3441,6 @@ void zfunction(int func) {
 
 // XXX display list
 void czclear(int color, int depth) {
-    static int warned = 0; if(!warned) { printf("%s partially unimplemented\n", __FUNCTION__); warned = 1; }
     TRACE();
     rasterizer_czclear((color >> 16) & 0xff, (color >>  8) & 0xff, (color >>  0) & 0xff, depth);
 

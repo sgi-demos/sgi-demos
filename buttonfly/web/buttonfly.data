@@ -17,3 +17,8 @@ Logo
 	logo/web/logo_full.html
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0
+
+Bounce
+	bounce/web/bounce_full.html
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0

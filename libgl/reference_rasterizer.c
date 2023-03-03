@@ -32,6 +32,7 @@ unsigned char *gl_framebuffer = &c_front_buffer[0][0][0];
 // Shift 32-bit Z into 16-bit Z? 
 typedef uint16_t z_t;
 static const int Z_SHIFT = 16; 
+static const unsigned int Z_MAX = 0xffffffff;
 // Should we just 'upgrade' GL to 32-bit Z since we computed it?
 //typedef uint32_t z_t;
 //static const int Z_SHIFT = 0; 
@@ -180,10 +181,10 @@ void pixel(int x, int y, float bary[3], void *data)
             return;
     }
 
-    uint8_t r = bary[0] * s[0].r + bary[1] * s[1].r + bary[2] * s[2].r;
-    uint8_t g = bary[0] * s[0].g + bary[1] * s[1].g + bary[2] * s[2].g;
-    uint8_t b = bary[0] * s[0].b + bary[1] * s[1].b + bary[2] * s[2].b;
-    uint32_t z_ = (bary[0] * s[0].z + bary[1] * s[1].z + bary[2] * s[2].z);
+    uint8_t r = (uint8_t)clamp(bary[0] * s[0].r + bary[1] * s[1].r + bary[2] * s[2].r, 0.0, UCHAR_MAX);
+    uint8_t g = (uint8_t)clamp(bary[0] * s[0].g + bary[1] * s[1].g + bary[2] * s[2].g, 0.0, UCHAR_MAX);
+    uint8_t b = (uint8_t)clamp(bary[0] * s[0].b + bary[1] * s[1].b + bary[2] * s[2].b, 0.0, UCHAR_MAX);
+    uint32_t z_ = (uint32_t)clamp(bary[0] * s[0].z + bary[1] * s[1].z + bary[2] * s[2].z, 0.0, (float)0xFFFFFF7F); // largest float <= UINT_MAX
 
     z_t z = z_ >> Z_SHIFT;
 
@@ -253,7 +254,7 @@ void rasterizer_swap()
 int32_t rasterizer_winopen(char *title)
 {
     rasterizer_clear(0, 0, 0);
-    rasterizer_zclear(0xffffffff);
+    rasterizer_zclear(Z_MAX);
 
     if(getenv("GEN_FRAME_PPM_FILES") != NULL) {
         gen_ppm_frame_files = 1;
