@@ -189,7 +189,7 @@ var REMOTE_PACKAGE_SIZE = metadata['remote_package_size'];
     }
 
     }
-    loadPackage({"files": [{"filename": "/.menu", "start": 0, "end": 381}], "remote_package_size": 381});
+    loadPackage({"files": [{"filename": "/.menu", "start": 0, "end": 100}, {"filename": "/.menu_demos", "start": 100, "end": 481}], "remote_package_size": 481});
 
   })();
 

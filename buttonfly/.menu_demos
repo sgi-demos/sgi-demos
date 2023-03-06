@@ -1,0 +1,24 @@
+Jello
+	../jello/bin/jello
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Insect
+	../insect/bin/insect
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Ideas
+	../ideas/bin/ideas
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Logo
+	../logo/bin/logo
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Bounce
+	../bounce/bin/bounce ../bounce/x29.bin
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0

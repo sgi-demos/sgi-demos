@@ -1,8 +1,4 @@
-Silicon Graphics
-	.menu. .menu_demos
-	.backcolor. .1 .1 .1
-	.color. .9 .5 .9
-	.highcolor. 1.0 .7 1.0Jello
+Jello
 	jello/web/jello_full.html
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0

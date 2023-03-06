@@ -1,24 +1,5 @@
-Jello
-	jello/web/jello_full.html
-	.color. .9 .5 .9
-	.highcolor. 1.0 .7 1.0
-
-Insect
-	insect/web/insect_full.html
-	.color. .9 .5 .9
-	.highcolor. 1.0 .7 1.0
-
-Ideas
-	ideas/web/ideas_full.html
-	.color. .9 .5 .9
-	.highcolor. 1.0 .7 1.0
-
-Logo
-	logo/web/logo_full.html
-	.color. .9 .5 .9
-	.highcolor. 1.0 .7 1.0
-
-Bounce
-	bounce/web/bounce_full.html
+Silicon Graphics
+	.menu. .menu_demos
+	.backcolor. .1 .1 .1
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0
