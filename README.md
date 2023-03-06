@@ -1,7 +1,7 @@
 ## SGI demos from long ago, running in your browser [today](https://sgi-demos.github.io).
 _Old problems require modern solutions._ 
 
-This is the original SGI demo source, compiled for the web using Emscripten and SDL2.  Rendering is done using an IRIS GL software rasterizer from the [Alice 4 project](https://lkesteloot.github.io/alice/alice4/libgl.html).  Event handling is done by SDL2, with events translated into GL's event system.  Each demo is a separate web page, with its own Javascript + WASM compiled by Emscripten from the original C/C++ source.
+This is the original SGI demo source code, compiled for the web using Emscripten and SDL2.  Rendering is done using an IRIS GL software rasterizer from the [Alice 4 project](https://lkesteloot.github.io/alice/alice4/libgl.html).  Event handling is done by SDL2, with events translated into GL's event system.  Each demo is a separate web page, with its own Javascript + WASM compiled by Emscripten from the original C/C++ source.  Minimal modifications have been made to the original source in order to run in the browser and to work with compilers 35 years newer.
 
 Working demos:
 - [Buttonfly](https://sgi-demos.github.io/)
@@ -27,4 +27,4 @@ Credits:
 - Everyone who worked at [SGI](https://en.wikipedia.org/wiki/Silicon_Graphics), for the eye candy and the baller computers.
 - The [Alice 4 folks](https://lkesteloot.github.io/alice/alice4/), for the inspiration and the GL implementation.
 - [Emscripten](https://emscripten.org) and [SDL](https://www.libsdl.org) teams, for making a web port possible.
-- [Internet Archive](archive.org/search?query=sgi&and%5B%5D=mediatype%3A%22software%22), [Bitsavers](bitsavers.org/bits/SGI/mips/cd/), [WinWorld](winworldpc.com/search?q=irix), [IRIXNet](irixnet.org/files.html), and others for saving the history.
+- [Internet Archive](archive.org/search?query=sgi&and%5B%5D=mediatype%3A%22software%22), [Bitsavers](bitsavers.org/bits/SGI/mips/cd/), [WinWorld](winworldpc.com/search?q=irix), [IRIXNet](irixnet.org/files.html), and others, for saving the history.
