@@ -24,7 +24,7 @@
 
 #define GRID 21	    /* largest possible grid size */
 
-int grid = 17;
+int grid = GRID;
 float dt = 0.004;
 
 Angle dtheta=0, dphi=0;
@@ -177,7 +177,9 @@ resetpoints()
 	{
 		force[i][j]=0.0;
 		veloc[i][j]=0.0;
-		posit[i][j]=0.0;
+		//posit[i][j]=0.0;
+		//posit[i][j]=(float)(i == j && i != 0 && j != grid-1)/32.0; // diagonal wave
+		posit[i][j]=(float)(i == j && i == grid/2)/10.0; // middle spike
 		vertvec[i][j][X]=0.0;
 		vertvec[i][j][Y]=0.0;
 		vertvec[i][j][Z]=0.0;
@@ -429,6 +431,7 @@ menu=defpup("WAVE %t|edit|go|reverse|display menu|spring menu|grid menu|reset|ki
 					}
 					break;
 				case LEFTMOUSE:
+					resetpoints();
 					qread(&nmx); qread(&nmy);
 					if (editing=val) {
 					    setvaluator(MOUSEX, nmx,
@@ -646,7 +649,7 @@ getvertvec()
 
 doscreen()
 {
-	printf ("draw grid\n");
+
 	register int i,j;
 
 	rotate(-450, 'z');
