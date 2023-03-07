@@ -367,7 +367,7 @@ menu=defpup("WAVE %t|edit|go|reverse|display menu|spring menu|grid menu|reset|ki
 	tie (MIDDLEMOUSE, MOUSEX, MOUSEY);
 	tie (LEFTMOUSE, MOUSEX, MOUSEY);
 
- 	#include "EM_MAIN_LOOP_BEGIN.h"
+ 	#include "EM_MAIN_LOOP2_BEGIN.h"
     while(TRUE) {
 	#include "EM_MAIN_LOOP_END.h"
 
@@ -646,7 +646,7 @@ getvertvec()
 
 doscreen()
 {
-
+	printf ("draw grid\n");
 	register int i,j;
 
 	rotate(-450, 'z');

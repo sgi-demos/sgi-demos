@@ -3,6 +3,8 @@
         "em_main_loop_begin.h": "c",
         "em_main_begin.h": "c",
         "em_main_end.h": "c",
-        "em_main_decl.h": "c"
+        "em_main_decl.h": "c",
+        "em_main_loop_end.h": "c",
+        "em_main_loop2_begin.h": "c"
     }
 }

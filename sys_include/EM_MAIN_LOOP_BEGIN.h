@@ -19,7 +19,6 @@ void child_main_loop(void *arg) \
 { \
     static short dev; \
     static short val; \
-    static Boolean attached; \
     static int started = 1; \
     static int i,j; \
 	double dx, dy, dz; \
