@@ -12,7 +12,7 @@ Working demos:
 - [Logo](https://sgi-demos.github.io/sgi-demos/logo/web/logo_full.html)
 
 Next up:
-- Newave
+- [Newave](https://sgi-demos.github.io/sgi-demos/newave/web/newave_full.html) (semi-functional)
 - Flight
 - Electropaint
 
