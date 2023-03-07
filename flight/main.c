@@ -26,10 +26,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include "flight.h"
+#include "EM_MAIN_DECL.h"
 
 Plane planes[MAX_PLANES];
 
+#include "EM_MAIN_BEGIN.h"
 int main (int argc, char **argv)
+#include "EM_MAIN_END.h"
 {
 	flight(argc,argv);
 }

@@ -501,11 +501,14 @@ default:
     else thrust = max_throttle;
     if (on_ground || landing_gear_stuck>0)
     then qenter (KEYBD,'l');	/* put wheels down	*/
-
+
     /****************************************************************
      *	Main loop
      ****************************************************************/
-    while (1) {
+#include "EM_MAIN_LOOP_BEGIN.h"
+    while (1) 
+#include "EM_MAIN_LOOP_END.h"
+	{
 	/* read all queue entries	*/
 	if (dials) check_dials(); 
         while (qtest ()) {

@@ -1934,11 +1934,10 @@ void shademodel(int mode) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
-// XXX rasterizer_swap
 void swapbuffers() {
     TRACE();
-
     rasterizer_swap();
+    events_set_framebuffer(rasterizer_frontbuffer());
 }
 
 void translate(Coord x, Coord y, Coord z) {
@@ -2000,8 +1999,8 @@ int winopen(char *title) {
     rasterizer_pattern(0);
     rasterizer_setpattern(patterns[0]);
 
-    extern unsigned char *gl_framebuffer; // from reference_rasterizer.c
-    int events_window = events_winopen(title, DISPLAY_WIDTH, DISPLAY_HEIGHT, gl_framebuffer);
+    int events_window = events_winopen(title, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+    events_set_framebuffer(rasterizer_frontbuffer());
     // XXX if we made a multi-window system, we'd tie "rasterizer_window"
     // and "events_window" together so we could pass the right identifier
     // to window functions.  But we are fullscreen and no demo we care

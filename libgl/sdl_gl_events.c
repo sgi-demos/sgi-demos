@@ -527,7 +527,7 @@ int32_t events_qread_continue(int16_t *value)
     return device;
 }
 
-int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height, unsigned char* framebuffer)
+int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height)
 {
     strlcpy(sdlState.windowTitle, title, sizeof(sdlState.windowTitle));
 
@@ -538,8 +538,12 @@ int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height, u
 #endif
 
     sdlState.frameSize = (Size2D) { frame_width, frame_height };
-    sdlState.pFramebuffer = framebuffer;
     return 0;
+}
+
+void events_set_framebuffer(unsigned char* framebuffer)
+{
+    sdlState.pFramebuffer = framebuffer;
 }
 
 void events_tie(int32_t button, int32_t val1, int32_t val2)

@@ -11,9 +11,10 @@ Working demos:
 - [Jello](https://sgi-demos.github.io/sgi-demos/jello/web/jello_full.html)
 - [Logo](https://sgi-demos.github.io/sgi-demos/logo/web/logo_full.html)
 
-Work in progress:
+Next up:
 - Newave
 - Flight
+- Electropaint
 
 To do:
 - More demos, _all the demos_: IRIS GL (WIP), OpenGL, GLUT, Inventor, Performer (all TBD)

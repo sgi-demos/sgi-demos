@@ -14,6 +14,7 @@
 #include "flight.h"
 // #include "iconize.h"
 #include <stdio.h>
+#include "EM_MAIN_DECL.h"
 
 short debug,hud,threat_mode;		/* debug flag		*/
 int dist_for_lines;			/* distance to draw building lines */
@@ -29,8 +30,9 @@ float tps = 20.0;
 int tps = 20;
 #endif
 
-
+#include "EM_MAIN_BEGIN.h"
 main (argc,argv)
+#include "EM_MAIN_END.h"
     int argc;
     char *argv[];
 {
@@ -104,11 +106,14 @@ start:
     qdevice(WINQUIT);	/* in case of quit while an icon */
     qenter(REDRAW);
     qenter (KEYBD,'t');
-
+
     /****************************************************************
     /*	Main loop
     /****************************************************************/
-    while (1) {
+#include "EM_MAIN_LOOP_BEGIN.h"
+    while (1) 
+#include "EM_MAIN_LOOP_END.h"	
+	{
 	/* read all queue entries	*/
         while (qtest ()) {
 	    type = qread (&val);

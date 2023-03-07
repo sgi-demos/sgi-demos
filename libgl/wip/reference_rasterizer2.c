@@ -45,7 +45,7 @@ static int pattern_enabled = 0;
 static int zbuffer_enabled = 0;
 
 static uint8_t c_buffer[WIDTH*HEIGHT*4];
-uint8_t *gl_framebuffer = (uint8_t *)&c_buffer;
+uint8_t *gl_backbuffer = (uint8_t *)&c_buffer;
 
 ////////// network_rasterizer.c
 
