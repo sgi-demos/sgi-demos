@@ -33,6 +33,7 @@ $(EMOBJS): $(WEB_DIR)/%.o: %.c $(HDRS) | $(WEB_DIR)
 
 $(EMAPP): $(EMOBJS) $(LIBGL_SRC)
 	$(EMCC) $(EM_OPT) $(LIBGL_INC) $(APPDEFS) $(EMOBJS) -D EM_CHILD_MAIN $(LIBGL_SRC) $(APPLIBS) $(EM_SDL_LIB) $(EMLNKR) -lm -o $@
+	$(APPCMDS)
 	@echo
 	@echo BUILT: $@
 	@echo
