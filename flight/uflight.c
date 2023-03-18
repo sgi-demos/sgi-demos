@@ -12,10 +12,9 @@
 
 /*	UFLIGHT.C	*/
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "flight.h"
+#define PLANE_BIT 0x80000000	/* used to flag a plane pointer	*/
 #define TYPE_BUILDING 0
 #define TYPE_MOUNTAIN 1
 #define TYPE_THREAT 2

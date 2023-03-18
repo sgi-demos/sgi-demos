@@ -13,11 +13,10 @@
 #include "flight.h"
 #include <stdio.h>
 
-/*
+#ifdef FLIGHT_ORIG
 #define PID_ID(p) (*(long *) &((p) -> header.zmsg[12]))
 #define REC_SIZE(p) (sizeof(*p)-sizeof(struct zmsg)+sizeof(PID_ID(p)))
-*/
-
+#else
 #define PID_ID(p) ((p)->planeid)
 #define REC_SIZE(p) sizeof(*p)
 
@@ -25,6 +24,7 @@
 int zinit() { return -1; }
 int zrecv() { return 0; }
 void zsend() {}
+#endif
 
 char *infile,*outfile;
 static FILE *inf, *outf;

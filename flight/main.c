@@ -22,9 +22,7 @@
  *									  *
  **************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdlib.h> // NULL
 #include "flight.h"
 #include "EM_MAIN_DECL.h"
 
