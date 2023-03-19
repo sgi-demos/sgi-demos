@@ -22,7 +22,7 @@ To do:
 - Run GL demo in its own WASM worker, to avoid slicing up the code for SDL's event loop
 - Arbitrary window size
 - Popup menus
-- Touch controls
+- Mouse and keyboard simulator for touch devices
 - Man pages
 
 Credits:
