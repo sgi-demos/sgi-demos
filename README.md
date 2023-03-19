@@ -19,6 +19,7 @@ Next up:
 To do:
 - More demos, _all the demos_: IRIS GL (WIP), OpenGL, GLUT, Inventor, Performer (all TBD)
 - GPU rendering via WebGL
+- Run GL demo in its own WASM worker, to avoid slicing up the code for SDL's event loop
 - Arbitrary window size
 - Popup menus
 - Touch controls
