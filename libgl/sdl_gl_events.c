@@ -219,7 +219,10 @@ static void keyDownEvent(int sdl_keycode)
                 if (strlen(assKey) == 1)
                 {
                     ev.device = KEYBD;
-                    ev.val = tolower(assKey[0]);
+                    if (events_get_button(LEFTSHIFTKEY) || events_get_button(RIGHTSHIFTKEY))
+                        ev.val = assKey[0];
+                    else
+                        ev.val = tolower(assKey[0]);        
                     enqueue_event(&ev);
                 }
             }
