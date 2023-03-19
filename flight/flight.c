@@ -517,7 +517,7 @@ flight (argc,argv)
 	{
 	/* read all queue entries	*/
 	if (dials) check_dials(); 
-        while (qtest ()) {
+    while (qtest ()) {
 	    type = qread (&val);
 	    if (type == KEYBD) {
 		switch (val) {

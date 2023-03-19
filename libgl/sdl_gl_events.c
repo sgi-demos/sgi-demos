@@ -1,5 +1,6 @@
 //#define SDL_GL_FRAMEBUFFER
 
+#include <ctype.h>
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #include <SDL.h>
@@ -70,7 +71,7 @@ static void windowResizeEvent(Size2D winSize)
 }
 
 void sdlInit(const char *windowTitle)
-{
+{  
     if (windowTitle)
         strlcpy(sdlState.windowTitle, windowTitle, sizeof(sdlState.windowTitle));
 
@@ -208,10 +209,20 @@ static void keyDownEvent(int sdl_keycode)
         // convert SDL key event to GL and add it to GL event queue
         gl_event ev;
         ev.device = sdl_keycode_to_gl(sdl_keycode);
-        if (ev.device != 0 && sdl_devices_queued[ev.device])
+        if (ev.device != 0 && (sdl_devices_queued[ev.device] || sdl_devices_queued[KEYBD]))
         {
-            ev.val = 1; 
+            ev.val = 1;
             enqueue_event(&ev);
+            if (sdl_devices_queued[KEYBD])
+            {
+                const char* assKey = SDL_GetKeyName(sdl_keycode);
+                if (strlen(assKey) == 1)
+                {
+                    ev.device = KEYBD;
+                    ev.val = tolower(assKey[0]);
+                    enqueue_event(&ev);
+                }
+            }
         }
     }
 }
@@ -348,7 +359,7 @@ int32_t events_get_valuator(int32_t device)
 }
 
 #define GL_KEY_COUNT 78
-static int32_t sdl_to_gl_key_map[GL_KEY_COUNT][3] = {
+static int32_t sdl_to_gl_key_map[GL_KEY_COUNT][2] = {
     {SDLK_0,            ZEROKEY},
     {SDLK_1,            ONEKEY},
     {SDLK_2,            TWOKEY},
