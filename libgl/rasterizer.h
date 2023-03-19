@@ -18,6 +18,7 @@ void rasterizer_draw(uint32_t type, uint32_t count, screen_vertex *v); // count 
 void rasterizer_bitmap(uint32_t width, uint32_t rowbytes, uint32_t height, screen_vertex *sv, uint8_t *bits);
 void rasterizer_setpattern(uint16_t pattern[16]);
 void rasterizer_pattern(int enable);
+void rasterizer_cbuffer_draw(int enable_front, int enable_back);
 void rasterizer_zbuffer(int enable);
 void rasterizer_linewidth(float w);
 

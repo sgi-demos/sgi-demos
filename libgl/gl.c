@@ -73,6 +73,8 @@ static vec4f current_position = {0.0f, 0.0f, 0.0f, 1.0};
 static vec4f current_character_position = {0.0f, 0.0f, 0.0f, 1.0f};
 static int current_font = 0;
 static int current_pattern = 0;
+static int backbuffer_draw_enabled = 1;
+static int frontbuffer_draw_enabled = 0;
 static int zbuffer_enabled = 0;
 static int backface_enabled = 0;
 static int the_linewidth = 1;
@@ -1371,7 +1373,13 @@ void editobj(Object obj) {
 }
 
 void frontbuffer(Boolean enable) { 
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    frontbuffer_draw_enabled = enable;
+    rasterizer_cbuffer_draw(frontbuffer_draw_enabled, backbuffer_draw_enabled);    
+}
+
+void backbuffer(Boolean enable) { 
+    backbuffer_draw_enabled = enable;
+    rasterizer_cbuffer_draw(frontbuffer_draw_enabled, backbuffer_draw_enabled);    
 }
 
 void gconfig() { 
@@ -1998,6 +2006,7 @@ int winopen(char *title) {
     rasterizer_zbuffer(zbuffer_enabled);
     rasterizer_pattern(0);
     rasterizer_setpattern(patterns[0]);
+    rasterizer_cbuffer_draw(frontbuffer_draw_enabled, backbuffer_draw_enabled);
 
     int events_window = events_winopen(title, DISPLAY_WIDTH, DISPLAY_HEIGHT);
     events_set_framebuffer(rasterizer_frontbuffer());

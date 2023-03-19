@@ -26,4 +26,5 @@ void child_main_loop(void *arg) \
     static float current_time = 0.0; \
     static float previous_time; \
 	static int r=100, g=255, b=255; \
+    static Boolean attached; \
     if

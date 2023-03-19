@@ -115,7 +115,7 @@ extern void	arci();
 extern void	arcfs();
 extern void	arcs();
 extern void	attachcursor();
-extern void	backbuffer();
+extern void	backbuffer(Boolean enable);
 extern void	backface(int enable);
 extern void	bbox2();
 extern void	bbox2i();

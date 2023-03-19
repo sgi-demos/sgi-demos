@@ -9,6 +9,7 @@ all:
 	make -C bounce
 	make -C logo
 	make -C newave
+	make -C flight
 
 clean:
 	make clean -C libgl
@@ -19,3 +20,4 @@ clean:
 	make clean -C bounce
 	make clean -C logo
 	make clean -C newave
+	make clean -C flight

@@ -978,9 +978,9 @@ broadcast ("retracted my landing gear while on the ground");
 	    on_ground = FALSE;
 	}
 	else if (pp -> y < .5) {		/* check for on the ground */
-	    if (IN_BOX (pp,-800.0,100.0, -9500.0,1000.0) || 
+	    if ((IN_BOX (pp,-800.0,100.0, -9500.0,1000.0) || 
 		IN_BOX (pp,100.0,1300.0, -2500.0,-1500.0) || 
-		IN_BOX (pp,-2300.0,-800.0, -4900.0,-2000.0))
+		IN_BOX (pp,-2300.0,-800.0, -4900.0,-2000.0)))
 	    if (!on_ground) {			/* and not on ground before */
 		int rating,nm;
 
@@ -1015,8 +1015,8 @@ broadcast ("retracted my landing gear while on the ground");
 		rebuild_status ();
 	    } else;
 	    else {
-		make_crash ("You crashed into the swamps");
-		broadcast ("crashed into the swamps");
+		// make_crash ("You crashed into the swamps");
+		// broadcast ("crashed into the swamps");
 	    }
 	    ptw[3][1] = pp -> y = 0.0;
 	    on_ground = TRUE;

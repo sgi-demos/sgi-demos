@@ -23,15 +23,18 @@ static int snap_vertices = 0;
 static float the_linewidth;
 static uint16_t the_pattern[16];
 static int pattern_enabled = 0;
-static int zbuffer_enabled;
 
 // double color buffers
-static unsigned char c_buffer_1[YMAXSCREEN + 1][XMAXSCREEN + 1][4];
-static unsigned char c_buffer_2[YMAXSCREEN + 1][XMAXSCREEN + 1][4];
-static unsigned char (*gl_backbuffer)[YMAXSCREEN + 1][XMAXSCREEN + 1][4] = &c_buffer_1;  // render to back buffer
-static unsigned char (*gl_frontbuffer)[YMAXSCREEN + 1][XMAXSCREEN + 1][4] = &c_buffer_2; // display from front buffer
+static int backbuffer_draw_enabled = 1;
+static int frontbuffer_draw_enabled = 0;
+typedef unsigned char color_buffer_t[YMAXSCREEN + 1][XMAXSCREEN + 1][4];
+static color_buffer_t c_buffer_1;
+static color_buffer_t c_buffer_2;
+static color_buffer_t *gl_backbuffer = &c_buffer_1;  // render to back buffer
+static color_buffer_t *gl_frontbuffer = &c_buffer_2; // display from front buffer
 
 // z buffer
+static int zbuffer_enabled = 0;
 typedef uint16_t z_t;
 static const int Z_SHIFT = 16; // Shift computed 32-bit Z into 16-bit Z buffer 
 static const unsigned int Z_MAX = 0xffffffff;
@@ -172,6 +175,16 @@ void triRast(float v0[2], float v1[2], float v2[2], int viewport[4],
     }
 }
 
+void set_buffer_pixel(int draw_enabled, color_buffer_t* buffer, int y, int x, uint8_t r, uint8_t g, uint8_t b)
+{                  
+    if (draw_enabled) 
+    {
+        (*buffer)[y][x][RED_BYTE] = r;
+        (*buffer)[y][x][GREEN_BYTE] = g;
+        (*buffer)[y][x][BLUE_BYTE] = b;
+    }
+}
+
 void pixel(int x, int y, float bary[3], void *data)
 {
     screen_vertex *s = (screen_vertex *)data;
@@ -188,25 +201,32 @@ void pixel(int x, int y, float bary[3], void *data)
     uint8_t b = (uint8_t)clamp(bary[0] * s[0].b + bary[1] * s[1].b + bary[2] * s[2].b, 0.0, UCHAR_MAX);
     uint32_t z_ = (uint32_t)clamp(bary[0] * s[0].z + bary[1] * s[1].z + bary[2] * s[2].z, 0.0, (float)0xFFFFFF7F); // largest float <= UINT_MAX
 
-    //z_t z = z_ >> Z_SHIFT;
     z_t z = z_ >> Z_SHIFT;
+    int buffer_y = DISPLAY_HEIGHT - 1 - y;
 
-    if(!zbuffer_enabled || (z < z_buffer[DISPLAY_HEIGHT - 1 - y][x])) {
-        (*gl_backbuffer)[DISPLAY_HEIGHT - 1 - y][x][RED_BYTE] = r;
-        (*gl_backbuffer)[DISPLAY_HEIGHT - 1 - y][x][GREEN_BYTE] = g;
-        (*gl_backbuffer)[DISPLAY_HEIGHT - 1 - y][x][BLUE_BYTE] = b;
-        z_buffer[DISPLAY_HEIGHT - 1 - y][x] = z;
+    if(!zbuffer_enabled || (z < z_buffer[buffer_y][x])) {
+        set_buffer_pixel(backbuffer_draw_enabled, gl_backbuffer, buffer_y, x, r, g, b);
+        set_buffer_pixel(frontbuffer_draw_enabled, gl_frontbuffer, buffer_y, x, r, g, b);
+        z_buffer[buffer_y][x] = z;
+    }
+}
+
+void clear_buffer(int draw_enabled, color_buffer_t* buffer, uint8_t r, uint8_t g, uint8_t b)
+{
+    if (draw_enabled) {    
+        for(int j = 0; j < DISPLAY_HEIGHT; j++)
+            for(int i = 0; i < DISPLAY_WIDTH; i++) {
+                (*buffer)[j][i][RED_BYTE] = r;
+                (*buffer)[j][i][GREEN_BYTE] = g;
+                (*buffer)[j][i][BLUE_BYTE] = b;
+            }
     }
 }
 
 void rasterizer_clear(uint8_t r, uint8_t g, uint8_t b)
 {
-    for(int j = 0; j < DISPLAY_HEIGHT; j++)
-        for(int i = 0; i < DISPLAY_WIDTH; i++) {
-            (*gl_backbuffer)[j][i][RED_BYTE] = r;
-            (*gl_backbuffer)[j][i][GREEN_BYTE] = g;
-            (*gl_backbuffer)[j][i][BLUE_BYTE] = b;
-        }
+    clear_buffer(backbuffer_draw_enabled, gl_backbuffer, r, g, b);
+    clear_buffer(frontbuffer_draw_enabled, gl_frontbuffer, r, g, b);
 }
 
 void rasterizer_linewidth(float w)
@@ -234,7 +254,7 @@ unsigned char* rasterizer_frontbuffer()
 void rasterizer_swap()
 {
     // swap back buffer (buffer being rasterized) and front buffer (buffer being displayed)
-    unsigned char (*_gl_backbuffer)[YMAXSCREEN + 1][XMAXSCREEN + 1][4] = gl_backbuffer; gl_backbuffer = gl_frontbuffer; gl_frontbuffer = _gl_backbuffer;
+    color_buffer_t *_gl_backbuffer = gl_backbuffer; gl_backbuffer = gl_frontbuffer; gl_frontbuffer = _gl_backbuffer;
 
     // optionally dump frames to ppm files
     static int frame = 0;
@@ -276,6 +296,12 @@ int32_t rasterizer_winopen(char *title)
     }
 
     return 1;
+}
+
+void rasterizer_cbuffer_draw(int enable_front, int enable_back)
+{
+    frontbuffer_draw_enabled = enable_front;
+    backbuffer_draw_enabled = enable_back;
 }
 
 void rasterizer_zbuffer(int enable)
@@ -434,9 +460,9 @@ void draw_line(screen_vertex *v0, screen_vertex *v1)
             for(int i = 0; i < count; i++) {
                 for(int j = 0; j <= the_linewidth; j++) {
                     int k = (y - 256 * the_linewidth / 2) / 256 + j;
-                    (*gl_backbuffer)[DISPLAY_HEIGHT - 1 - k][x][RED_BYTE] = 255;
-                    (*gl_backbuffer)[DISPLAY_HEIGHT - 1 - k][x][GREEN_BYTE] = 255;
-                    (*gl_backbuffer)[DISPLAY_HEIGHT - 1 - k][x][BLUE_BYTE] = 255;
+                    int buffer_y = DISPLAY_HEIGHT - 1 - k;
+                    set_buffer_pixel(backbuffer_draw_enabled, gl_backbuffer, buffer_y, x, 255, 255, 255);
+                    set_buffer_pixel(frontbuffer_draw_enabled, gl_frontbuffer, buffer_y, x, 255, 255, 255);
                 }
                 y += dy/count;
                 x += dp;
@@ -448,12 +474,13 @@ void draw_line(screen_vertex *v0, screen_vertex *v1)
             int count = abs(v1->y / SCREEN_VERTEX_V2_SCALE - v0->y / SCREEN_VERTEX_V2_SCALE);
             int x = v0->x * 256 / SCREEN_VERTEX_V2_SCALE;
             int y = v0->y / SCREEN_VERTEX_V2_SCALE;
+            int buffer_y = DISPLAY_HEIGHT - 1 - y;
+
             for(int i = 0; i < count; i++) {
                 for(int j = 0; j <= the_linewidth; j++) {
                     int k = (x - 256 * the_linewidth / 2) / 256 + j;
-                    (*gl_backbuffer)[DISPLAY_HEIGHT - 1 - y][k][RED_BYTE] = 255;
-                    (*gl_backbuffer)[DISPLAY_HEIGHT - 1 - y][k][GREEN_BYTE] = 255;
-                    (*gl_backbuffer)[DISPLAY_HEIGHT - 1 - y][k][BLUE_BYTE] = 255;
+                    set_buffer_pixel(backbuffer_draw_enabled, gl_backbuffer, buffer_y, k, 255, 255, 255);
+                    set_buffer_pixel(frontbuffer_draw_enabled, gl_frontbuffer, buffer_y, k, 255, 255, 255);
                 }
                 y += dp;
                 x += dx/count;
