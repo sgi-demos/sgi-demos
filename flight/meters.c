@@ -535,15 +535,7 @@ static char *numbers[] = {
 	"90","91","92","93","94","95","96","97","98","99","100" 
 };
 
-
-void
-draw_hud (p,tick,vx,vy,vz,vv,mach,gf,wheels,flaps,spoilers,autop,fuel,thrust)
-    Plane p;
-    int tick;
-    float vx,vy,vz;
-    int vv;
-    float mach,gf;
-    int wheels,flaps,spoilers,autop,fuel,thrust;
+void draw_hud (Plane p, int tick, float vx, float vy, float vz, int vv, float mach, float gf, int wheels, int flaps, int spoilers, int autop, int fuel, int thrust)
 {
     char buf[32];
     int a,i,x,y;

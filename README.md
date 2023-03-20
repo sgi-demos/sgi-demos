@@ -13,11 +13,11 @@ Working demos:
 
 Next up:
 - [Newave](https://sgi-demos.github.io/sgi-demos/newave/web/newave_full.html) (semi-functional)
-- Flight
+- [Flight](https://sgi-demos.github.io/sgi-demos/flight/web/flight_full.html) (semi-functional)
 - Electropaint
 
 To do:
-- More demos, _all the demos_: IRIS GL (WIP), OpenGL, GLUT, Inventor, Performer (all TBD)
+- More demos, _all the demos_. WIP: IRIS GL, TBD: OpenGL, GLUT, Inventor, Performer
 - GPU rendering via WebGL
 - Run GL demo in its own WASM worker, to avoid slicing up the code for SDL's event loop
 - Arbitrary window size

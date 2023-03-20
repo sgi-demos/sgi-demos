@@ -12,6 +12,7 @@
 
 /* contains init and help stuff		*/
 #include "flight.h"
+extern void redraw_screen ();
 
 static Cursor bcursor = {
 	0xffff,0xffff,0xffff,0xe007,

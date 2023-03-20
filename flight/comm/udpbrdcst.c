@@ -15,8 +15,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include "udpbrdcst.h"
-
-
+   
 static struct sockaddr_in  hostaddr;
 
 /*

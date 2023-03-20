@@ -19,6 +19,12 @@
 #include <signal.h>
 // #include <psio.h>
 
+extern void make_crash (char *msg);
+extern void draw_hud (Plane p, int tick, float vx, float vy, float vz, int vv, float mach, float gf, int wheels, int flaps, int spoilers, int autop, int fuel, int thrust);
+extern void make_meters ();
+extern void redraw_screen ();
+extern void map_daynight(int daytime);
+
 #ifdef _4D
 int int_tps = 20;
 float tps = 20.0;
@@ -1748,7 +1754,7 @@ calculate_time (name)
 
 
 #ifndef DOGFIGHT
-broadcast () {}
+broadcast (char *msg) {}
 
 draw_messages () {}
 
