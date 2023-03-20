@@ -178,7 +178,7 @@ static char usage[] = "Usage: flight [-dhz]\n";
 	exit (0);
     }
     eye_x = -1950.0;
-    eye_y = 400.0;
+    eye_y = 400.0  +1000.0; /* XXXX Extra high tower for debugging purposes */
     eye_z = -3150.0;
 
     fps_knots = tps * (3600.0/6082.0);
@@ -241,7 +241,7 @@ void set_start_location(StartLocation location)
 		break; //goto mstart;
 	case RUNWAY: //start1:					/* end of runway start		*/
 		pp -> x = 0.0;
-		pp -> y = START_Y + 1000; // LK
+		pp -> y = START_Y;
 		pp -> z = -500.0;
 		azimuth = 0;
 		vz = 0.0;
@@ -749,7 +749,17 @@ broadcast ("retracted my landing gear while on the ground");
 		else if (type == RIGHTARROWKEY && view_switch == PLANE_VIEW) {
 		    view_angle -= 900;
 		    if (view_angle < -1800) then view_angle += 3600;
-		}	/* and ignore any other types	*/
+		}	
+        else if (view_switch == TOWER_VIEW) {
+            /* extra view controls from tower view */
+            switch(type) {
+                case LEFTARROWKEY: 	eye_x -= 100; break;
+                case RIGHTARROWKEY: eye_x += 100; break;
+                case UPARROWKEY:	eye_z += 100; break;
+                case DOWNARROWKEY:  eye_z -= 100; break;
+			}
+		}
+		/* and ignore any other types	*/
 	    }
 	}		/* of while qtest	*/
 
@@ -978,9 +988,9 @@ broadcast ("retracted my landing gear while on the ground");
 	    on_ground = FALSE;
 	}
 	else if (pp -> y < .5) {		/* check for on the ground */
-	    if ((IN_BOX (pp,-800.0,100.0, -9500.0,1000.0) || 
+	    if (IN_BOX (pp,-800.0,100.0, -9500.0,1000.0) || 
 		IN_BOX (pp,100.0,1300.0, -2500.0,-1500.0) || 
-		IN_BOX (pp,-2300.0,-800.0, -4900.0,-2000.0)))
+		IN_BOX (pp,-2300.0,-800.0, -4900.0,-2000.0))
 	    if (!on_ground) {			/* and not on ground before */
 		int rating,nm;
 
@@ -1015,6 +1025,7 @@ broadcast ("retracted my landing gear while on the ground");
 		rebuild_status ();
 	    } else;
 	    else {
+        // XXXX No swamps for debugging purposes
 		// make_crash ("You crashed into the swamps");
 		// broadcast ("crashed into the swamps");
 	    }

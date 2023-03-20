@@ -644,7 +644,11 @@ static int backface_cull(const screen_vertex* s)
 }
 
 void process_tmesh(int n, world_vertex *worldverts)
-{
+{   
+    // early return when building display list 
+    if (n == 0)
+        return;
+    
     int ccw = 1;
 
     static lit_vertex litverts[POLY_MAX];
@@ -693,6 +697,10 @@ void process_polygon(int n, world_vertex *worldverts)
     static lit_vertex *vp;
     static screen_vertex screenverts[POLY_MAX];
 
+    // early return when building display list 
+    if (n == 0)
+        return;
+        
     for(int i = 0; i < n; i++)
         transform_and_light_vertex(&worldverts[i], &litverts[i]);
 
@@ -3295,11 +3303,12 @@ void curorigin(short index, short xorigin, short yorigin) {
 }
 
 void rectf_(Coord x1, Coord y1, Coord x2, Coord y2) {
-    pmv_(x1, y1, 0);
+    bgnpolygon();
+    pdr_(x1, y1, 0);
     pdr_(x1, y2, 0);
     pdr_(x2, y2, 0);
     pdr_(x2, y1, 0);
-    end_polygon();
+    endpolygon();
 }
 
 void rect_(Coord x1, Coord y1, Coord x2, Coord y2) {
