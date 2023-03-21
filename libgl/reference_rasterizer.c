@@ -53,169 +53,11 @@ static float clamp(float v, float low, float high)
     return v > high ? high : (v < low ? low : v);
 }
 
-float triArea2f(float v0[2], float v1[2], float v2[2])
-{
-    float      s, a, b, c;
-    float      av[2], bv[2], cv[2];
-
-    /*
-     * faster area calculation?  length of cross product / 2? */
-    av[0] = v1[0] - v0[0];
-    av[1] = v1[1] - v0[1];
-
-    bv[0] = v2[0] - v1[0];
-    bv[1] = v2[1] - v1[1];
-
-    cv[0] = v0[0] - v2[0];
-    cv[1] = v0[1] - v2[1];
-
-    a = sqrt(av[0] * av[0] + av[1] * av[1]);
-    b = sqrt(bv[0] * bv[0] + bv[1] * bv[1]);
-    c = sqrt(cv[0] * cv[0] + cv[1] * cv[1]);
-
-    s = (a + b + c) / 2;
-    return sqrt(s * (s - a) * (s - b) * (s - c));
-}
-
-void calcBaryCoords2f(float v0[2], float v1[2], float v2[2], float p[2],
-    float *a, float *b, float *c)
-{
-    float area;
-    area = triArea2f(v0, v1, v2);
-    *a = triArea2f(v1, v2, p) / area;
-    *b = triArea2f(v2, v0, p) / area;
-    *c = triArea2f(v0, v1, p) / area;
-}
-
-typedef void (*pixelFunc)(int x, int y, float bary[3], void *data);
-
-void boxi2DClear(int bbox[4])
-{
-    bbox[0] = INT_MAX;
-    bbox[1] = INT_MIN;
-    bbox[2] = INT_MAX;
-    bbox[3] = INT_MIN;
-}
-
-void boxi2DGrow(int bbox[4], float *v)
-{
-    if(floor(v[0]) < bbox[0]) bbox[0] = floor(v[0]);
-    if(ceil(v[0]) > bbox[1]) bbox[1] = ceil(v[0]);
-    if(floor(v[1]) < bbox[2]) bbox[2] = floor(v[1]);
-    if(ceil(v[1]) > bbox[3]) bbox[3] = ceil(v[1]);
-}
-
-void boxi2DIsect(int bb1[4], int bb2[4], int r[4])
-{
-    r[0] = (bb1[0] < bb2[0]) ? bb1[0] : bb1[0];
-    r[1] = (bb1[1] > bb2[1]) ? bb1[1] : bb1[1];
-    r[2] = (bb1[2] < bb2[2]) ? bb1[2] : bb1[2];
-    r[3] = (bb1[3] > bb2[3]) ? bb1[3] : bb1[3];
-}
-
-float evalHalfPlane(float v0[2], float v1[2], float v2[2], float x, float y)
-{
-    float n[2];
-
-    n[0] = - (v1[1] - v0[1]);
-    n[1] = v1[0] - v0[0];
-
-    return ((x - v0[0]) * n[0] + (y - v0[1]) * n[1]) / 
-        ((v2[0] - v0[0]) * n[0] + (v2[1] - v0[1]) * n[1]);
-}
-
-void calcHalfPlaneDiffs(float v0[2], float v1[2], float v2[2],
-    float *dx, float *dy)
-{
-    *dx = evalHalfPlane(v0, v1, v2, 1, 0) - evalHalfPlane(v0, v1, v2, 0, 0);
-    *dy = evalHalfPlane(v0, v1, v2, 0, 1) - evalHalfPlane(v0, v1, v2, 0, 0);
-}
-
-void triRast(float v0[2], float v1[2], float v2[2], int viewport[4],
-    void *data, pixelFunc doPixel)
-{
-    int bbox[4];
-    int i, j;
-    float bary[3];
-    float dxa, dxb, dxc;
-    float dya, dyb, dyc;
-    float rowa, rowb, rowc;
-
-    boxi2DClear(bbox);
-    boxi2DGrow(bbox, v0);
-    boxi2DGrow(bbox, v1);
-    boxi2DGrow(bbox, v2);
-    boxi2DIsect(bbox, viewport, bbox);
-
-    calcHalfPlaneDiffs(v1, v2, v0, &dxa, &dya);
-    rowa = evalHalfPlane(v1, v2, v0, bbox[0] + 0.5f, bbox[2] + 0.5f);
-
-    calcHalfPlaneDiffs(v2, v0, v1, &dxb, &dyb);
-    rowb = evalHalfPlane(v2, v0, v1, bbox[0] + 0.5f, bbox[2] + 0.5f);
-
-    calcHalfPlaneDiffs(v0, v1, v2, &dxc, &dyc);
-    rowc = evalHalfPlane(v0, v1, v2, bbox[0] + 0.5f, bbox[2] + 0.5f);
-
-    for(j = bbox[2]; j < bbox[3]; j++) {
-        bary[0] = rowa;
-        bary[1] = rowb;
-        bary[2] = rowc;
-	for(i = bbox[0]; i < bbox[1]; i++) {
-	    if((bary[0] > -0.001 && bary[0] < 1.001f) &&
-	        (bary[1] > -0.001 && bary[1] < 1.001f) &&
-	        (bary[2] > -0.001 && bary[2] < 1.001f))
-		    doPixel(i, j, bary, data);
-	    bary[0] += dxa;
-	    bary[1] += dxb;
-	    bary[2] += dxc;
-	}
-	rowa += dya;
-	rowb += dyb;
-	rowc += dyc;
-    }
-}
-
-void set_buffer_pixel(int draw_enabled, color_buffer_t* buffer, int y, int x, uint8_t r, uint8_t g, uint8_t b)
-{                  
-    if (draw_enabled) 
-    {
-        (*buffer)[y][x][RED_BYTE] = r;
-        (*buffer)[y][x][GREEN_BYTE] = g;
-        (*buffer)[y][x][BLUE_BYTE] = b;
-    }
-}
-
-void pixel(int x, int y, float bary[3], void *data)
-{
-    screen_vertex *s = (screen_vertex *)data;
-
-    if(pattern_enabled) {
-        int px = x % 16;
-        int py = y % 16;
-        if(!(the_pattern[py] & (1 << px)))
-            return;
-    }
-
-    uint8_t r = (uint8_t)clamp(bary[0] * s[0].r + bary[1] * s[1].r + bary[2] * s[2].r, 0.0, UCHAR_MAX);
-    uint8_t g = (uint8_t)clamp(bary[0] * s[0].g + bary[1] * s[1].g + bary[2] * s[2].g, 0.0, UCHAR_MAX);
-    uint8_t b = (uint8_t)clamp(bary[0] * s[0].b + bary[1] * s[1].b + bary[2] * s[2].b, 0.0, UCHAR_MAX);
-    uint32_t z_ = (uint32_t)clamp(bary[0] * s[0].z + bary[1] * s[1].z + bary[2] * s[2].z, 0.0, (float)0xFFFFFF7F); // largest float <= UINT_MAX
-
-    z_t z = z_ >> Z_SHIFT;
-    int buffer_y = DISPLAY_HEIGHT - 1 - y;
-
-    if(!zbuffer_enabled || (z < z_buffer[buffer_y][x])) {
-        set_buffer_pixel(backbuffer_draw_enabled, gl_backbuffer, buffer_y, x, r, g, b);
-        set_buffer_pixel(frontbuffer_draw_enabled, gl_frontbuffer, buffer_y, x, r, g, b);
-        z_buffer[buffer_y][x] = z;
-    }
-}
-
-void clear_buffer(int draw_enabled, color_buffer_t* buffer, uint8_t r, uint8_t g, uint8_t b)
+static void clear_buffer(int draw_enabled, color_buffer_t* buffer, uint8_t r, uint8_t g, uint8_t b)
 {
     if (draw_enabled) {    
-        for(int j = 0; j < DISPLAY_HEIGHT; j++)
-            for(int i = 0; i < DISPLAY_WIDTH; i++) {
+        for (int j = 0; j < DISPLAY_HEIGHT; j++)
+            for (int i = 0; i < DISPLAY_WIDTH; i++) {
                 (*buffer)[j][i][RED_BYTE] = r;
                 (*buffer)[j][i][GREEN_BYTE] = g;
                 (*buffer)[j][i][BLUE_BYTE] = b;
@@ -265,8 +107,8 @@ void rasterizer_swap()
         sprintf(name, "frame%04d.ppm", frame);
         FILE *fp = fopen(name, "wb");
         fprintf(fp, "P6 %d %d 255\n", DISPLAY_WIDTH, DISPLAY_HEIGHT);
-            for(int j = 0; j < DISPLAY_HEIGHT; j++) {
-                for(int i = 0; i < DISPLAY_WIDTH; i++) {
+            for (int j = 0; j < DISPLAY_HEIGHT; j++) {
+                for (int i = 0; i < DISPLAY_WIDTH; i++) {
                     // PPM expects RGB format
                     rgb_pixel[0] = (*gl_backbuffer)[j][i][RED_BYTE];
                     rgb_pixel[1] = (*gl_backbuffer)[j][i][GREEN_BYTE];
@@ -285,12 +127,12 @@ int32_t rasterizer_winopen(char *title)
     rasterizer_clear(0, 0, 0);
     rasterizer_zclear(Z_MAX);
 
-    if(getenv("GEN_FRAME_PPM_FILES") != NULL) {
+    if (getenv("GEN_FRAME_PPM_FILES") != NULL) {
         gen_ppm_frame_files = 1;
         printf("Generating .PPM file for each frame\n");
     }
 
-    if(getenv("SNAP_VERTICES") != NULL) {
+    if (getenv("SNAP_VERTICES") != NULL) {
         snap_vertices = 1;
         printf("Vertex values in X and Y will be rounded to nearest pixel corner\n");
     }
@@ -311,8 +153,8 @@ void rasterizer_zbuffer(int enable)
 
 void rasterizer_zclear(uint32_t z)
 {
-    for(int j = 0; j < DISPLAY_HEIGHT; j++)
-        for(int i = 0; i < DISPLAY_WIDTH; i++)
+    for (int j = 0; j < DISPLAY_HEIGHT; j++)
+        for (int i = 0; i < DISPLAY_WIDTH; i++)
             z_buffer[j][i] = z;
 }
 
@@ -322,10 +164,87 @@ void rasterizer_czclear(uint8_t r, uint8_t g, uint8_t b, uint32_t z)
     rasterizer_clear(r, g, b);
 }
 
-void screen_vertex_offset_with_clamp(screen_vertex* v, float dx, float dy)
+static void boxi2DClear(int bbox[4])
 {
-    v->x = clamp(v->x + dx * SCREEN_VERTEX_V2_SCALE, 0, (DISPLAY_WIDTH - 1) * SCREEN_VERTEX_V2_SCALE);
-    v->y = clamp(v->y + dy * SCREEN_VERTEX_V2_SCALE, 0, (DISPLAY_HEIGHT - 1) * SCREEN_VERTEX_V2_SCALE);
+    bbox[0] = INT_MAX;
+    bbox[1] = INT_MIN;
+    bbox[2] = INT_MAX;
+    bbox[3] = INT_MIN;
+}
+
+static void boxi2DGrow(int bbox[4], float *v)
+{
+    if (floor(v[0]) < bbox[0]) bbox[0] = floor(v[0]);
+    if (ceil(v[0]) > bbox[1]) bbox[1] = ceil(v[0]);
+    if (floor(v[1]) < bbox[2]) bbox[2] = floor(v[1]);
+    if (ceil(v[1]) > bbox[3]) bbox[3] = ceil(v[1]);
+}
+
+static void boxi2DIsect(int bb1[4], int bb2[4], int r[4])
+{
+    r[0] = (bb1[0] < bb2[0]) ? bb1[0] : bb1[0];
+    r[1] = (bb1[1] > bb2[1]) ? bb1[1] : bb1[1];
+    r[2] = (bb1[2] < bb2[2]) ? bb1[2] : bb1[2];
+    r[3] = (bb1[3] > bb2[3]) ? bb1[3] : bb1[3];
+}
+
+static float evalHalfPlane(float v0[2], float v1[2], float v2[2], float x, float y)
+{
+    float n[2];
+
+    n[0] = - (v1[1] - v0[1]);
+    n[1] = v1[0] - v0[0];
+
+    return ((x - v0[0]) * n[0] + (y - v0[1]) * n[1]) / 
+        ((v2[0] - v0[0]) * n[0] + (v2[1] - v0[1]) * n[1]);
+}
+
+static void calcHalfPlaneDiffs(float v0[2], float v1[2], float v2[2],
+    float *dx, float *dy)
+{
+    *dx = evalHalfPlane(v0, v1, v2, 1, 0) - evalHalfPlane(v0, v1, v2, 0, 0);
+    *dy = evalHalfPlane(v0, v1, v2, 0, 1) - evalHalfPlane(v0, v1, v2, 0, 0);
+}
+
+static void set_buffer_pixel(int draw_enabled, color_buffer_t* buffer, int y, int x, uint8_t r, uint8_t g, uint8_t b)
+{                  
+    if (draw_enabled) 
+    {
+        (*buffer)[y][x][RED_BYTE] = r;
+        (*buffer)[y][x][GREEN_BYTE] = g;
+        (*buffer)[y][x][BLUE_BYTE] = b;
+    }
+}
+
+static z_t sz_to_zbuffer(float screenz)
+{
+    uint32_t z_ = (uint32_t)clamp(screenz, 0.0, (float)0xFFFFFF7F); // largest float <= UINT_MAX
+    z_t z = z_ >> Z_SHIFT;
+    return z;
+}
+
+static void triPixel(int x, int y, float bary[3], screen_vertex s[3])
+{
+    if (pattern_enabled) {
+        int px = x % 16;
+        int py = y % 16;
+        if (!(the_pattern[py] & (1 << px)))
+            return;
+    }
+
+    uint8_t r = (uint8_t)clamp(bary[0] * s[0].r + bary[1] * s[1].r + bary[2] * s[2].r, 0.0, UCHAR_MAX);
+    uint8_t g = (uint8_t)clamp(bary[0] * s[0].g + bary[1] * s[1].g + bary[2] * s[2].g, 0.0, UCHAR_MAX);
+    uint8_t b = (uint8_t)clamp(bary[0] * s[0].b + bary[1] * s[1].b + bary[2] * s[2].b, 0.0, UCHAR_MAX);
+
+    z_t z = sz_to_zbuffer(bary[0] * s[0].z + bary[1] * s[1].z + bary[2] * s[2].z);
+
+    int buffer_y = DISPLAY_HEIGHT - 1 - y;
+
+    if (!zbuffer_enabled || (z < z_buffer[buffer_y][x])) {
+        set_buffer_pixel(backbuffer_draw_enabled, gl_backbuffer, buffer_y, x, r, g, b);
+        set_buffer_pixel(frontbuffer_draw_enabled, gl_frontbuffer, buffer_y, x, r, g, b);
+        z_buffer[buffer_y][x] = z;
+    }
 }
 
 static void draw_screen_triangle(screen_vertex *s0, screen_vertex *s1, screen_vertex *s2)
@@ -339,7 +258,7 @@ static void draw_screen_triangle(screen_vertex *s0, screen_vertex *s1, screen_ve
     v1[1] = s1->y / (float)SCREEN_VERTEX_V2_SCALE;
     v2[0] = s2->x / (float)SCREEN_VERTEX_V2_SCALE;
     v2[1] = s2->y / (float)SCREEN_VERTEX_V2_SCALE;
-    if(snap_vertices) {
+    if (snap_vertices) {
         v0[0] = floor(v0[0]);
         v0[1] = floor(v0[1]);
         v1[0] = floor(v1[0]);
@@ -348,31 +267,71 @@ static void draw_screen_triangle(screen_vertex *s0, screen_vertex *s1, screen_ve
         v2[1] = floor(v2[1]);
     }
     static int viewport[4] = {0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT};
-    screen_vertex s[3];
-    s[0] = *s0;
-    s[1] = *s1;
-    s[2] = *s2;
-    triRast(v0, v1, v2, viewport, s, pixel);
+    screen_vertex s[3] = {*s0, *s1, *s2};
+
+    int bbox[4];
+    int i, j;
+    float bary[3];
+    float dxa, dxb, dxc;
+    float dya, dyb, dyc;
+    float rowa, rowb, rowc;
+
+    boxi2DClear(bbox);
+    boxi2DGrow(bbox, v0);
+    boxi2DGrow(bbox, v1);
+    boxi2DGrow(bbox, v2);
+    boxi2DIsect(bbox, viewport, bbox);
+
+    calcHalfPlaneDiffs(v1, v2, v0, &dxa, &dya);
+    rowa = evalHalfPlane(v1, v2, v0, bbox[0] + 0.5f, bbox[2] + 0.5f);
+
+    calcHalfPlaneDiffs(v2, v0, v1, &dxb, &dyb);
+    rowb = evalHalfPlane(v2, v0, v1, bbox[0] + 0.5f, bbox[2] + 0.5f);
+
+    calcHalfPlaneDiffs(v0, v1, v2, &dxc, &dyc);
+    rowc = evalHalfPlane(v0, v1, v2, bbox[0] + 0.5f, bbox[2] + 0.5f);
+
+    for (j = bbox[2]; j < bbox[3]; j++) {
+        bary[0] = rowa;
+        bary[1] = rowb;
+        bary[2] = rowc;
+        for (i = bbox[0]; i < bbox[1]; i++) {
+            if ((bary[0] > -0.001 && bary[0] < 1.001f) &&
+                (bary[1] > -0.001 && bary[1] < 1.001f) &&
+                (bary[2] > -0.001 && bary[2] < 1.001f))
+                triPixel(i, j, bary, s);
+            bary[0] += dxa;
+            bary[1] += dxb;
+            bary[2] += dxc;
+        }
+        rowa += dya;
+        rowb += dyb;
+        rowc += dyc;
+    }
 }
 
+static void screen_vertex_offset_with_clamp(screen_vertex* v, float dx, float dy)
+{
+    v->x = clamp(v->x + dx * SCREEN_VERTEX_V2_SCALE, 0, (DISPLAY_WIDTH - 1) * SCREEN_VERTEX_V2_SCALE);
+    v->y = clamp(v->y + dy * SCREEN_VERTEX_V2_SCALE, 0, (DISPLAY_HEIGHT - 1) * SCREEN_VERTEX_V2_SCALE);
+}
 
-// In hardware may have to repack to do FPGA's rowbytes
 void rasterizer_bitmap(uint32_t width, uint32_t rowbytes, uint32_t height, screen_vertex *sv, uint8_t *bits)
 {
     screen_vertex s[4];
 
-    for(int j = 0; j < height; j++) {
+    for (int j = 0; j < height; j++) {
         int prevbit = 0;
         int count;
-        for(int i = 0; i < width; i++) {
+        for (int i = 0; i < width; i++) {
             int bit = (bits[j * rowbytes + i / 8] >> (7 - i % 8)) & 1;
 
-            if(bit) {
+            if (bit) {
 
-                if(!prevbit && bit) {
+                if (!prevbit && bit) {
                     // Previous bit was 0 and this bit is 1, so start a
                     // run
-                    for(int k = 0; k < 4; k++) {
+                    for (int k = 0; k < 4; k++) {
                         s[k] = *sv; // Copy color
                         s[k].x = sv->x + SCREEN_VERTEX_V2_SCALE * i;
                         s[k].y = sv->y + (height - j - 1) * SCREEN_VERTEX_V2_SCALE;
@@ -387,13 +346,12 @@ void rasterizer_bitmap(uint32_t width, uint32_t rowbytes, uint32_t height, scree
                 // Add this bit to current run
                 count++;
 
-            } else if(prevbit) {
+            } else if (prevbit) {
 
                 // The previous bit was 1 and this bit is 0, so
                 // finish the run
                 screen_vertex_offset_with_clamp(&s[2], count, 1);
                 screen_vertex_offset_with_clamp(&s[3], count, 0);
-// XXX rasterizer_draw()
                 draw_screen_triangle(&s[0], &s[1], &s[2]);
                 draw_screen_triangle(&s[2], &s[3], &s[0]);
             }
@@ -401,92 +359,67 @@ void rasterizer_bitmap(uint32_t width, uint32_t rowbytes, uint32_t height, scree
             prevbit = bit;
         }
 
-        if(prevbit) {
+        if (prevbit) {
             // the end of the row was a 1 bit, so finish run
             screen_vertex_offset_with_clamp(&s[2], count, 1);
             screen_vertex_offset_with_clamp(&s[3], count, 0);
-// XXX rasterizer_draw()
             draw_screen_triangle(&s[0], &s[1], &s[2]);
             draw_screen_triangle(&s[2], &s[3], &s[0]);
         }
     }
 }
 
-void draw_line(screen_vertex *v0, screen_vertex *v1)
+static void draw_point(screen_vertex *sv)
 {
-    if(1) {
-        float dx = (v1->x - v0->x);
-        float dy = (v1->y - v0->y);
-        float d = sqrt(dx * dx + dy * dy);
+    screen_vertex s = *sv;
 
-        if(d == 0.0) {
-            // XXX should draw point if the line is too short
-            return;
-        }
-
-        screen_vertex q[4];
-        q[0] = *v0;
-        q[1] = *v0;
-        q[2] = *v1;
-        q[3] = *v1;
-
-        if(fabs(dx) > fabs(dy)) {
-            screen_vertex_offset_with_clamp(&q[0], 0, -the_linewidth * .5);
-            screen_vertex_offset_with_clamp(&q[1], 0,  the_linewidth * .5);
-            screen_vertex_offset_with_clamp(&q[2], 0,  the_linewidth * .5);
-            screen_vertex_offset_with_clamp(&q[3], 0, -the_linewidth * .5);
-        } else {
-            screen_vertex_offset_with_clamp(&q[0], -the_linewidth * .5, 0);
-            screen_vertex_offset_with_clamp(&q[1],  the_linewidth * .5, 0);
-            screen_vertex_offset_with_clamp(&q[2],  the_linewidth * .5, 0);
-            screen_vertex_offset_with_clamp(&q[3], -the_linewidth * .5, 0);
-        }
-
-        draw_screen_triangle(&q[0], &q[1], &q[2]);
-        draw_screen_triangle(&q[2], &q[3], &q[0]);
-
-    } else {
-        // XXX Ignores line width
-
-        int dx = (v1->x - v0->x) * 256 / SCREEN_VERTEX_V2_SCALE;
-        int dy = (v1->y - v0->y) * 256 / SCREEN_VERTEX_V2_SCALE;
-
-        if(abs(dx) > abs(dy)) {
-
-            int dp = (v0->x < v1->x) ? 1 : -1;
-            int count = abs(v1->x / SCREEN_VERTEX_V2_SCALE - v0->x / SCREEN_VERTEX_V2_SCALE);
-            int x = v0->x / SCREEN_VERTEX_V2_SCALE;
-            int y = v0->y * 256 / SCREEN_VERTEX_V2_SCALE;
-            for(int i = 0; i < count; i++) {
-                for(int j = 0; j <= the_linewidth; j++) {
-                    int k = (y - 256 * the_linewidth / 2) / 256 + j;
-                    int buffer_y = DISPLAY_HEIGHT - 1 - k;
-                    set_buffer_pixel(backbuffer_draw_enabled, gl_backbuffer, buffer_y, x, 255, 255, 255);
-                    set_buffer_pixel(frontbuffer_draw_enabled, gl_frontbuffer, buffer_y, x, 255, 255, 255);
-                }
-                y += dy/count;
-                x += dp;
-            }
-
-        } else {
-
-            int dp = (v0->y < v1->y) ? 1 : -1;
-            int count = abs(v1->y / SCREEN_VERTEX_V2_SCALE - v0->y / SCREEN_VERTEX_V2_SCALE);
-            int x = v0->x * 256 / SCREEN_VERTEX_V2_SCALE;
-            int y = v0->y / SCREEN_VERTEX_V2_SCALE;
-            int buffer_y = DISPLAY_HEIGHT - 1 - y;
-
-            for(int i = 0; i < count; i++) {
-                for(int j = 0; j <= the_linewidth; j++) {
-                    int k = (x - 256 * the_linewidth / 2) / 256 + j;
-                    set_buffer_pixel(backbuffer_draw_enabled, gl_backbuffer, buffer_y, k, 255, 255, 255);
-                    set_buffer_pixel(frontbuffer_draw_enabled, gl_frontbuffer, buffer_y, k, 255, 255, 255);
-                }
-                y += dp;
-                x += dx/count;
-            }
-        }
+    float v[2];
+    v[0] = s.x / (float)SCREEN_VERTEX_V2_SCALE;
+    v[1] = s.y / (float)SCREEN_VERTEX_V2_SCALE;
+    if (snap_vertices) {
+        v[0] = floor(v[0]);
+        v[1] = floor(v[1]);
     }
+    
+    int x = clamp(v[0], 0, DISPLAY_WIDTH);
+    int y = clamp(v[1], 0, DISPLAY_HEIGHT);
+    z_t z = sz_to_zbuffer(s.z);
+
+    int buffer_y = DISPLAY_HEIGHT - 1 - y;
+    if (!zbuffer_enabled || (z < z_buffer[buffer_y][x])) {
+        set_buffer_pixel(backbuffer_draw_enabled, gl_backbuffer, buffer_y, x, s.r, s.g, s.b);
+        set_buffer_pixel(frontbuffer_draw_enabled, gl_frontbuffer, buffer_y, x, s.r, s.g, s.b);
+        z_buffer[buffer_y][x] = z;
+    }
+}
+
+static void draw_line(screen_vertex *v0, screen_vertex *v1)
+{
+    float dx = (v1->x - v0->x);
+    float dy = (v1->y - v0->y);
+    float d = sqrt(dx * dx + dy * dy);
+
+    if (d == 0.0) {
+        draw_point(v0);
+        return;
+    }
+
+    screen_vertex q[4] = {*v0, *v0, *v1, *v1};
+
+    if (fabs(dx) > fabs(dy)) {
+        screen_vertex_offset_with_clamp(&q[0], 0, -the_linewidth * .5);
+        screen_vertex_offset_with_clamp(&q[1], 0,  the_linewidth * .5);
+        screen_vertex_offset_with_clamp(&q[2], 0,  the_linewidth * .5);
+        screen_vertex_offset_with_clamp(&q[3], 0, -the_linewidth * .5);
+    } else {
+        screen_vertex_offset_with_clamp(&q[0], -the_linewidth * .5, 0);
+        screen_vertex_offset_with_clamp(&q[1],  the_linewidth * .5, 0);
+        screen_vertex_offset_with_clamp(&q[2],  the_linewidth * .5, 0);
+        screen_vertex_offset_with_clamp(&q[3], -the_linewidth * .5, 0);
+    }
+
+    draw_screen_triangle(&q[0], &q[1], &q[2]);
+    draw_screen_triangle(&q[2], &q[3], &q[0]);
 }
 
 void rasterizer_draw(uint32_t type, uint32_t count, screen_vertex *screenverts)
@@ -494,15 +427,16 @@ void rasterizer_draw(uint32_t type, uint32_t count, screen_vertex *screenverts)
     int i;
     switch(type) {
         case DRAW_POINTS:
-            fprintf(stderr, "POINTS not implemented\n");
+            for (i = 0; i < count; ++i)
+                draw_point(&screenverts[i]);
             break;
         case DRAW_LINES:
-            for(i = 0; i < count / 2; i++) { 
+            for (i = 0; i < count / 2; i++) { 
                 draw_line(&screenverts[i * 2 + 0], &screenverts[i * 2 + 1]);
             }
             break;
         case DRAW_TRIANGLES:
-            for(i = 0; i < count / 3; i++)
+            for (i = 0; i < count / 3; i++)
                 draw_screen_triangle(&screenverts[i * 3], &screenverts[i * 3 + 1], &screenverts[i * 3 + 2]);
             break;
     }

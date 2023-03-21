@@ -1,24 +1,15 @@
 // make all implemented functions have trace
 // make all tracefunctions look like C-ish
-// All i functions call f functions
 // RECORD macro checks display list mode, make, store object...?
 // fix all int usage
 // make trace() function
 // consistent function start
 // Need display-listing:
 //      reshapeviewport?
-//      draw
 //      swapbuffers?
-//      pmv
-//      pmv2i
-//      pdr
-//      pdr2i
 //      linewidth
-//      move
 //      rdr2i
 //      rmv2i
-//      rectf
-//      recti
 //      zbuffer
 //      zclear
 
@@ -58,6 +49,32 @@ const int trace_functions = 0;
 static int trace_network = 0;
 static int trace_indent = 0;
 
+void trace_func(const char *func, const char *fmt, ...)
+{
+    va_list args;
+    static char dummy[512];
+    char *dp = dummy;
+
+    if(!trace_functions)
+        return;
+
+    for(int i = 0 ; i < trace_indent; i++)
+        *dp++ = ' ';
+
+    dp = stpcpy(dp, func);
+    *dp++ = '(';
+
+    va_start(args, fmt);
+    dp += vsprintf(dp, fmt, args);
+    va_end(args);
+
+    dp = stpcpy(dp, ");\n");
+    
+    fputs(dummy, stdout);
+}
+
+#define TRACEF(fmt, ...) trace_func(__FUNCTION__, fmt, __VA_ARGS__)
+#define TRACE() trace_func(__FUNCTION__, "")
 
 //----------------------------------------------------------------------------
 // GL state
@@ -332,32 +349,17 @@ void transform_and_light_vertex(world_vertex *wv, lit_vertex *lv)
     vec3f normal;
 
     matrix4x4f_mult_vec4f_(matrix4x4f_stack_top(&modelview_stack), wv->coord, tv);
-    // matrix4x4f_print("modelview", matrix4x4f_stack_top(&modelview_stack));
+
     if(lighting_enabled) {
         vec3f_mult_matrix4x4f(wv->normal, matrix4x4f_stack_get_inverse(&modelview_stack), normal);
-
         if(normalize_enabled)
             vec3f_normalize(normal, normal);
-
-#if 0
-        if(color_material_enabled) {
-            // XXX color_material mode
-            vec4f_copy(current_material.diffuse, lv->color);
-            vec4f_copy(current_material.ambient, lv->color);
-        }
-#endif
-    
         light_vertex(material_bound, tv, normal, lv->color);
     } else {
         vec4f_copy(lv->color, wv->color);
     }
 
-    /// XXX could multiply mv and p together?
     matrix4x4f_mult_vec4f_(matrix4x4f_stack_top(&projection_stack), tv, lv->coord);
-    // matrix4x4f_print("projection", matrix4x4f_stack_top(&projection_stack));
-    // vec4f_print("Object", wv->coord);
-    // vec4f_print("World", tv);
-    // vec4f_print("Lit", lv->coord);
 }
 
 void screen_vertex_set_color(screen_vertex *sv, unsigned short r, unsigned short g, unsigned short b, unsigned short a)
@@ -395,14 +397,12 @@ void project_vertex(lit_vertex *lv, screen_vertex *sv)
     xndc = lv->coord[0] / lv->coord[3];
     yndc = lv->coord[1] / lv->coord[3];
     zndc = lv->coord[2] / lv->coord[3];
-    // printf("ndc: %g %g %g\n", xndc, yndc, zndc);
 
     float xw, yw, zw;
     // XXX could pre-compute half width and height
     xw = viewport_width / 2.0 * xndc + (the_viewport[0] + viewport_width / 2.0);
     yw = viewport_height / 2.0 * yndc + (the_viewport[2] + viewport_height / 2.0);
     zw = (the_viewport[5] - the_viewport[4]) / 2.0 * zndc + (the_viewport[5] + the_viewport[4]) / 2.0;
-    // printf("Viewport: %g %g\n", xw, yw);
 
     sv->x = clamp(xw, 0, DISPLAY_WIDTH - 1) * SCREEN_VERTEX_V2_SCALE;
     sv->y = clamp(yw, 0, DISPLAY_HEIGHT - 1) * SCREEN_VERTEX_V2_SCALE;
@@ -609,6 +609,24 @@ int clip_polygon(int n, lit_vertex *input, lit_vertex *output)
     return n;
 }
 
+void process_point(world_vertex *wv)
+{
+    static lit_vertex litvert;
+    static screen_vertex screenvert;
+
+    int save_lighting = lighting_enabled;
+    lighting_enabled = 0;
+
+    transform_and_light_vertex(wv, &litvert);
+
+    if (classify_vertex(litvert.coord) == CLIP_ALL_IN) {
+        project_vertex(&litvert, &screenvert);
+        rasterizer_draw(DRAW_POINTS, 1, &screenvert);    
+    }
+
+    lighting_enabled = save_lighting;  
+}
+
 void process_line(world_vertex *wv0, world_vertex *wv1)
 {
     static lit_vertex litverts[2], *vp;
@@ -644,11 +662,7 @@ static int backface_cull(const screen_vertex* s)
 }
 
 void process_tmesh(int n, world_vertex *worldverts)
-{   
-    // early return when building display list 
-    if (n == 0)
-        return;
-    
+{     
     int ccw = 1;
 
     static lit_vertex litverts[POLY_MAX];
@@ -725,7 +739,7 @@ void process_polygon(int n, world_vertex *worldverts)
         triangle[1] = screenverts[i + 1];
         triangle[2] = screenverts[i + 2];
 	if(!backface_enabled || !backface_cull(triangle))
-            rasterizer_draw(DRAW_TRIANGLES, 3, triangle);
+        rasterizer_draw(DRAW_TRIANGLES, 3, triangle);
     }
 }
 
@@ -746,16 +760,12 @@ typedef struct dl_element
     enum object_type
     {
         SETPATTERN,
-        DRAWI,
         DRAW,
-        MOVEI,
         MOVE,
-        PCLOS,
-        PDRI,
-        PMVI,
         TAG,
         CALLOBJ,
         COLOR,
+        PNT,
         POLF,
         POLY,
         CLEAR,
@@ -790,8 +800,6 @@ typedef struct dl_element
         V4F,
         MMODE,
         LMBIND,
-        MOVE2I,
-        DRAW2I,
         CMOV2I,
         CHARSTR,
         WRITEMASK,
@@ -808,24 +816,8 @@ typedef struct dl_element
         } draw;
 
         struct {
-            Icoord x, y, z;
-        } drawi;
-
-        struct {
             Coord x, y, z;
         } move;
-
-        struct {
-            Icoord x, y, z;
-        } movei;
-
-        struct {
-            Icoord x, y, z;
-        } pdri;
-
-        struct {
-            Icoord x, y, z;
-        } pmvi;
 
         struct {
             Coord left, right, bottom, top;
@@ -834,14 +826,6 @@ typedef struct dl_element
         struct {
             char *str;
         } charstr;
-
-        struct {
-            Icoord x, y;
-        } draw2i;
-
-        struct {
-            Icoord x, y;
-        } move2i;
 
         struct {
             Icoord x, y;
@@ -899,6 +883,10 @@ typedef struct dl_element
         struct {
             Colorindex color;
         } color;
+
+        struct {
+            Coord x, y, z;
+        } pnt;
 
         struct {
             int n;
@@ -1026,32 +1014,6 @@ dl_element *element_next_in_object(enum object_type t)
     return e;
 }
 
-void trace_func(const char *func, const char *fmt, ...)
-{
-    va_list args;
-    static char dummy[512];
-    char *dp = dummy;
-
-    if(!trace_functions)
-        return;
-
-    for(int i = 0 ; i < trace_indent; i++)
-        *dp++ = ' ';
-
-    dp = stpcpy(dp, func);
-    *dp++ = '(';
-
-    va_start(args, fmt);
-    dp += vsprintf(dp, fmt, args);
-    va_end(args);
-
-    dp = stpcpy(dp, ");\n");
-    
-    fputs(dummy, stdout);
-}
-
-#define TRACEF(fmt, ...) trace_func(__FUNCTION__, fmt, __VA_ARGS__)
-#define TRACE() trace_func(__FUNCTION__, "")
 
 //----------------------------------------------------------------------------
 // GL API calls
@@ -1072,23 +1034,8 @@ void callobj(Object obj) {
             case DRAW:
                 draw(p->draw.x, p->draw.y, p->draw.z);
                 break;
-            case DRAWI:
-                drawi(p->drawi.x, p->drawi.y, p->drawi.z);
-                break;
             case MOVE:
                 move(p->move.x, p->move.y, p->move.z);
-                break;
-            case MOVEI:
-                movei(p->movei.x, p->movei.y, p->movei.z);
-                break;
-            case PDRI:
-                pdri(p->pdri.x, p->pdri.y, p->pdri.z);
-                break;
-            case PMVI:
-                pmvi(p->pmvi.x, p->pmvi.y, p->pmvi.z);
-                break;
-            case PCLOS:
-                pclos();
                 break;
             case LMBIND:
                 lmbind(p->lmbind.target, p->lmbind.index);
@@ -1219,6 +1166,9 @@ void callobj(Object obj) {
             case ROTATE:
                 rotate(p->rotate.angle, p->rotate.axis);
                 break;
+            case PNT:
+                pnt(p->pnt.x, p->pnt.y, p->pnt.z);
+                break;                
             case POLY:
                 poly(p->poly.n, p->poly.p);
                 break;
@@ -1242,12 +1192,6 @@ void callobj(Object obj) {
                 break;
             case CMOV2I:
                 cmov2i(p->cmov2i.x, p->cmov2i.y);
-                break;
-            case DRAW2I:
-                draw2i(p->draw2i.x, p->draw2i.y);
-                break;
-            case MOVE2I:
-                move2i(p->move2i.x, p->move2i.y);
                 break;
             case TAG:
                 TRACEF("%d", p->tag.tag);
@@ -1281,16 +1225,6 @@ void backface(int enable) {
     backface_enabled = enable;
 }
 
-void pdr_(Coord x, Coord y, Coord z) {
-    vec3f p;
-
-    p[0] = x;
-    p[1] = y;
-    p[2] = z;
-
-    v3f(p);
-}
-
 // Whether the viewport is the full screen.
 static int is_full_viewport() {
     return the_viewport[0] == 0 && the_viewport[1] == XMAXSCREEN &&
@@ -1315,10 +1249,10 @@ void clear() {
     } else {
         // Partial viewport, draw polygon. This uses the current color.
         bgnpolygon();
-        pdr_(0, 0, 0);
-        pdr_(0, 1, 0);
-        pdr_(1, 1, 0);
-        pdr_(1, 0, 0);
+        pdri(0, 0, 0);
+        pdri(0, 1, 0);
+        pdri(1, 1, 0);
+        pdri(1, 0, 0);
         endpolygon();
     }
 }
@@ -1584,7 +1518,6 @@ void perspective(Angle fovy_, float aspect, Coord near, Coord far) {
         matrix4x4f_stack_load(current_stack, m);
 }
 
-// XXX display list
 void ortho2(Coord left, Coord right, Coord bottom, Coord top) {
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(ORTHO2);
@@ -2070,11 +2003,6 @@ void reset_vertex_list()
     polygon_vert_count = 0;
 }
 
-void end_polygon()
-{
-    process_polygon(polygon_vert_count, polygon_verts);
-}
-
 void bgntmesh() {
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(BGNTMESH);
@@ -2303,7 +2231,7 @@ void draw_screen_aarect_filled(int r, int g, int b, float left, float top, float
     for(int i = 0; i < 2; i++) {
         triangle[1] = q[i + 1];
         triangle[2] = q[i + 2];
-	if(!backface_enabled || !backface_cull(triangle))
+	    if(!backface_enabled || !backface_cull(triangle))
             rasterizer_draw(DRAW_TRIANGLES, 3, triangle);
     }
 }
@@ -2522,11 +2450,15 @@ void endpolygon() {
 
     if(trace_functions) printf("%*sendpolygon(); /* %d verts */\n", trace_indent, "", polygon_vert_count);
 
-    end_polygon();
+    process_polygon(polygon_vert_count, polygon_verts);
 }
 
 void freepup(int popup) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void drawmode(int drawmode) {
+    static int warned = 0; if(!warned) { printf("%s not unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
 void draw_(Coord x, Coord y, Coord z) {
@@ -2557,25 +2489,6 @@ void draw(Coord x, Coord y, Coord z) {
     }
 
     TRACEF("%f, %f, %f", x, y, z);
-
-    draw_(x, y, z);
-}
-
-void drawmode(int drawmode) {
-    static int warned = 0; if(!warned) { printf("%s not unimplemented\n", __FUNCTION__); warned = 1; }
-}
-
-void drawi(Icoord x, Icoord y, Icoord z) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(DRAWI);
-        e->drawi.x = x;
-        e->drawi.y = y;
-        e->drawi.z = z;
-        return;
-    }
-
-    TRACEF("%d, %d, %d", x, y, z);
-
     draw_(x, y, z);
 }
 
@@ -2583,112 +2496,109 @@ void draw2(Coord x, Coord y) {
     draw(x, y, 0);
 }
 
-void draw2s(Scoord x, Scoord y) {
-    draw2(x, y);
+void drawi(Icoord x, Icoord y, Icoord z) {
+    draw(x, y, z);
+}
+
+void draw2i(Icoord x, Icoord y) {
+    draw(x, y, 0);
 }
 
 void draws(Scoord x, Scoord y, Scoord z) {
     draw(x, y, z);
 }
 
-void draw2i(Icoord x, Icoord y) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(DRAW2I);
-        e->draw2i.x = x;
-        e->draw2i.y = y;
-        return;
-    }
-
-    TRACEF("%d, %d", x, y);
-
-    draw_(x, y, 0);
+void draw2s(Scoord x, Scoord y) {
+    draw(x, y, 0);
 }
 
-void pclos() {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(PCLOS);
-        return;
-    }
-    if(trace_functions) printf("%*spclos(); /* %d verts */\n", trace_indent, "", polygon_vert_count);
-
-    end_polygon();
-}
-
-void pmv_(Coord x, Coord y, Coord z) {
-    reset_vertex_list();
-    pdr_(x, y, z);
-}
-
-void pmv(Coord x, Coord y, Coord z) {
-    TRACEF("%f, %f", x, y);
-    pmv_(x, y, z);
-}
-
-void pmv2i(Icoord x, Icoord y) {
-    TRACEF("%d, %d", x, y);
-    pmv_(x, y, 0);
-}
-
-void pmvi(Icoord x, Icoord y, Icoord z) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(PMVI);
-        e->pmvi.x = x;
-        e->pmvi.y = y;
-        e->pmvi.z = z;
-        return;
-    }
-
-    TRACEF("%d, %d", x, y);
-
-    pmv_(x, y, z);
+void pdr_(Coord x, Coord y, Coord z) {
+    vec3f p = {x, y, z};
+    v3f(p);
 }
 
 void pdr(Coord x, Coord y, Coord z) {
-    TRACEF("%f, %f, %f", x, y, z);
     pdr_(x, y, z);
 }
 
 void pdr2i(Icoord x, Icoord y) {
-    TRACEF("%d, %d", x, y);
     pdr_(x, y, 0);
 }
 
 void pdri(Icoord x, Icoord y, Icoord z) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(PDRI);
-        e->pdri.x = x;
-        e->pdri.y = y;
-        e->pdri.z = z;
-        return;
-    }
-
-    TRACEF("%d, %d, %d", x, y, z);
-
     pdr_(x, y, z);
 }
 
-void pnt(Coord x, Coord y, Coord z) {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+void pclos() {
+    endpolygon();
+}
+
+void pmv_(Coord x, Coord y, Coord z) {
+    bgnpolygon();
+    pdr_(x, y, z);
+}
+
+void pmv(Coord x, Coord y, Coord z) {
+    pmv_(x, y, z);
+}
+
+void pmv2 (Coord x, Coord y) {
+    pmv_(x, y, 0);
+}
+
+void pmvi(Icoord x, Icoord y, Icoord z) {
+    pmv_(x, y, z);
+}
+
+void pmv2i(Icoord x, Icoord y) {
+    pmv_(x, y, 0);
+}
+
+void pmvs (Scoord x, Scoord y, Scoord z)
+{
+    pmv_(x, y, z);
+}
+
+void pmv2s (Scoord x, Scoord y)
+{
+    pmv_(x, y, 0);   
+}
+
+void pnt(Coord x, Coord y, Coord z) 
+{
+    if(cur_ptr_to_nextptr != NULL) {
+        dl_element *e = element_next_in_object(PNT);
+        e->pnt.x = x;
+        e->pnt.y = y;
+        e->pnt.z = z;
+        return;
+    }
+    
+    static world_vertex wv;
+    vec4f_set(wv.coord, x, y, z, 1.0); 
+    vec4f_copy(wv.color, current_color);
+
+    process_point(&wv);
 }
 
 void pnt2(Coord x, Coord y) {
     pnt(x, y, 0);
 }
 
-void pnt2i(Icoord x, Icoord y) {
-    pnt2(x, y);
-}
-
-void pnt2s(Scoord x, Scoord y) {
-    pnt2(x, y);
-}
-
 void pnti(Icoord x, Icoord y, Icoord z) {
     pnt(x, y, z);
 }
 
+void pnt2i(Icoord x, Icoord y) {
+    pnt(x, y, 0);
+}
+
 void pnts(Scoord x, Scoord y, Scoord z) {
     pnt(x, y, z);
+}
+
+void pnt2s(Scoord x, Scoord y) {
+    pnt(x, y, 0);
 }
 
 void keepaspect(int x, int y) {
@@ -2907,43 +2817,24 @@ void move(Coord x, Coord y, Coord z) {
     vec4f_set(current_position, x, y, z, 1.0);
 }
 
-void moves(Scoord x, Scoord y, Scoord z) {
-    move(x, y, z);
-}
-
 void move2(Coord x, Coord y) {
     move(x, y, 0);
 }
 
+void moves(Scoord x, Scoord y, Scoord z) {
+    move(x, y, z);
+}
+
 void move2s(Scoord x, Scoord y) {
-    move2(x, y);
+    move(x, y, 0);
 }
 
 void movei(Icoord x, Icoord y, Icoord z) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(MOVEI);
-        e->movei.x = x;
-        e->movei.y = y;
-        e->movei.z = z;
-        return;
-    }
-
-    TRACEF("%d, %d, %d", x, y, z);
-
-    vec4f_set(current_position, x, y, z, 1.0);
+    move(x, y, z);
 }
 
 void move2i(Icoord x, Icoord y) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(MOVE2I);
-        e->move2i.x = x;
-        e->move2i.y = y;
-        return;
-    }
-
-    TRACEF("%d, %d", x, y);
-
-    vec4f_set(current_position, x, y, 0.0f, 1.0f);
+    move(x, y, 0);
 }
 
 void n3f(float n[3]) {
@@ -3037,10 +2928,7 @@ void v4f(float v[4]) {
 }
 
 void v2f(float v[2]) {
-    float v_[3];
-    v_[0] = v[0];
-    v_[1] = v[1];
-    v_[2] = 0.0;
+    float v_[3] = {v[0], v[1], 0.0};
     v3f(v_);
 }
 
@@ -3238,7 +3126,7 @@ void circi(Icoord x, Icoord y, Icoord r) {
 }
 
 void circfs(Scoord x, Scoord y, Scoord r) {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    circi(x, y, r);
 }
 
 void cmov2i(Icoord x, Icoord y) {
@@ -3321,32 +3209,26 @@ void rect_(Coord x1, Coord y1, Coord x2, Coord y2) {
 }
 
 void rectf(Coord x1, Coord y1, Coord x2, Coord y2) {
-    TRACEF("%f, %f, %f, %f", x1, y1, x2, y2);
     rectf_(x1, y1, x2, y2);
 }
 
 void rectfi(Icoord x1, Icoord y1, Icoord x2, Icoord y2) {
-    TRACEF("%d, %d, %d, %d", x1, y1, x2, y2);
     rectf_(x1, y1, x2, y2);
 }
 
 void rectfs(Scoord x1, Scoord y1, Scoord x2, Scoord y2) {
-    TRACEF("%d, %d, %d, %d", x1, y1, x2, y2);
     rectf_(x1, y1, x2, y2);
 }
 
 void rect(Coord x1, Coord y1, Coord x2, Coord y2) {
-    TRACEF("%d, %d, %d, %d", x1, y1, x2, y2);
     rect_(x1, y1, x2, y2);
 }
 
 void recti(Icoord x1, Icoord y1, Icoord x2, Icoord y2) {
-    TRACEF("%d, %d, %d, %d", x1, y1, x2, y2);
     rect_(x1, y1, x2, y2);
 }
 
 void rects(Scoord x1, Scoord y1, Scoord x2, Scoord y2) {
-    TRACEF("%d, %d, %d, %d", x1, y1, x2, y2);
     rect_(x1, y1, x2, y2);
 }
 

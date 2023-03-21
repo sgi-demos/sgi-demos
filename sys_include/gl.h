@@ -1,15 +1,15 @@
 #ifndef GLDEF	/* Release 2.3 */
 #define GLDEF
 /**************************************************************************
- *									  *
- * 		 Copyright (C) 1984, Silicon Graphics, Inc.		  *
- *									  *
+ *                                                                        *
+ *       Copyright (C) 1984, Silicon Graphics, Inc.                       *
+ *                                                                        *
  *  These coded instructions, statements, and computer programs  contain  *
  *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
  *  are protected by Federal copyright law.  They  may  not be disclosed  *
  *  to  third  parties  or copied or duplicated in any form, in whole or  *
  *  in part, without the prior written consent of Silicon Graphics, Inc.  *
- *									  *
+ *                                                                        *
  **************************************************************************/
 
 #include <stdint.h>
@@ -35,7 +35,7 @@
 /* names for colors in color map loaded by ginit() */
 
 #define BLACK		0
-#define RED		1
+#define RED		    1
 #define GREEN		2
 #define YELLOW		3
 #define BLUE		4
@@ -278,7 +278,7 @@ extern void	multimap();
 extern void	multmatrix(Matrix m);
 extern int	newpup();
 extern void	newtag();
-extern void     noborder();
+extern void noborder();
 extern void	noise();
 extern void	noport();
 extern void	objdelete();
@@ -305,11 +305,11 @@ extern void	perspective(Angle fovy_, float aspect, Coord near, Coord far);
 extern void	pick();
 extern void	picksize();
 extern void	pmv(Coord x, Coord y, Coord z);
-extern void	pmv2();
+extern void	pmv2(Coord x, Coord y);
 extern void	pmv2i(Icoord x, Icoord y);
-extern void	pmv2s();
+extern void	pmv2s(Scoord x, Scoord y);
 extern void	pmvi(Icoord x, Icoord y, Icoord z);
-extern void	pmvs();
+extern void	pmvs(Scoord x, Scoord y, Scoord z);
 extern void	pnt(Coord x, Coord y, Coord z);
 extern void	pnt2(Coord x, Coord y);
 extern void	pnt2i(Icoord x, Icoord y);
