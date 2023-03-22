@@ -12,8 +12,8 @@ Working demos:
 - [Logo](https://sgi-demos.github.io/sgi-demos/logo/web/logo_full.html)
 
 Next up:
-- [Newave](https://sgi-demos.github.io/sgi-demos/newave/web/newave_full.html) (semi-functional)
-- [Flight](https://sgi-demos.github.io/sgi-demos/flight/web/flight_full.html) (semi-functional)
+- [Newave](https://sgi-demos.github.io/sgi-demos/newave/web/newave_full.html) (WIP: no mesh editing, no popup menus, only wireframe)
+- [Flight](https://sgi-demos.github.io/sgi-demos/flight/web/flight_full.html) (WIP: cockpit glitches, planes too slow, among other things)
 - Electropaint
 
 To do:
