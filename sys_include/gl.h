@@ -139,6 +139,7 @@ extern void	clearhitcode();
 extern void	clkoff();
 extern void	clkon();
 extern void	closeobj();
+extern void	cmode();
 extern void	cmov();
 extern void	cmov2();
 extern void	cmov2i(Icoord x, Icoord y);

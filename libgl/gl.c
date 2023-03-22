@@ -95,6 +95,7 @@ static int frontbuffer_draw_enabled = 0;
 static int zbuffer_enabled = 0;
 static int backface_enabled = 0;
 static int the_linewidth = 1;
+static int rgb_mode = 0;
 
 static int matrix_mode = MSINGLE;
 static matrix4x4f_stack modelview_stack;
@@ -1245,7 +1246,8 @@ void clear() {
         // Full screen, we can use the optimized version.
         rasterizer_clear(current_color[0] * 255.0,
                 current_color[1] * 255.0,
-                current_color[2] * 255.0);
+                current_color[2] * 255.0,
+                current_color_index);
     } else {
         // Partial viewport, draw polygon. This uses the current color.
         bgnpolygon();
@@ -1262,6 +1264,57 @@ void closeobj() {
     cur_ptr_to_nextptr = NULL;
 }
 
+// Possible SGI hardware bit plane capabilities:
+//
+// For colormap mode (cmode()), getplanes() <= 12-bit:
+// 4-bit, 16 colors
+// 8-bit, 256 colors    ---> "new for ECLIPSE 8 bit"
+// 12-bit, 4096 colors
+//
+// For RGB mode (RGBmode()), getplanes() >= 12-bit required:
+// 12-bit, dithered RGB 444
+// 24-bit, RGB 888
+//
+// cmode (4 or 8 bit) used by: arena, insect
+// cmode (8 or 12 bit) used by: flight (does *not* work with 24 bitplanes, due to use of 1 << getplanes() into a short)
+// RGBmode used by: bounce, buttonfly, ideas, jello, logo (exit on getplanes() < 12)
+//
+// Color index apps had to save and restore the current color map, since customizing it
+// would customize the colors for other apps too. Imagine the entire desktop changing 
+// simultaneously to the same set of colors as the currently running app.
+//
+int getplanes() { 
+    TRACE();
+    return 24;
+}
+
+void cmode() {
+    rgb_mode = 0;
+    rasterizer_rgbmode(rgb_mode);
+}
+
+void RGBmode() {
+    rgb_mode = 1;
+    rasterizer_rgbmode(rgb_mode);
+}
+
+void RGBcolor(int r, int g, int b) {
+    if(cur_ptr_to_nextptr != NULL) {
+        dl_element *e = element_next_in_object(RGBCOLOR);
+        e->rgbcolor.r = r;
+        e->rgbcolor.g = g;
+        e->rgbcolor.b = b;
+        return;
+    }
+
+    TRACEF("%d, %d, %d", r, g, b);
+
+    current_color[0] = r / 255.0;
+    current_color[1] = g / 255.0;
+    current_color[2] = b / 255.0;
+    current_color[3] = 1.0;
+}
+
 void color(Colorindex color) { 
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(COLOR);
@@ -1275,6 +1328,27 @@ void color(Colorindex color) {
     for(int i = 0; i < 3; i++)
         current_color[i] = colormap[color][i] / 255.0;
     // XXX alpha in color map?
+}
+
+int getcolor()
+{
+    return current_color_index;
+}
+
+void writemask(Colorindex mask) {
+    if(cur_ptr_to_nextptr != NULL) {
+        dl_element *e = element_next_in_object(WRITEMASK);
+        e->writemask.mask = mask;
+        return;
+    }
+
+    TRACEF("%u", mask);
+
+    current_writemask = mask;
+}
+
+int getwritemask() {
+    return current_writemask;
 }
 
 void deflinestyle(int index, Linestyle pattern) { 
@@ -1366,12 +1440,6 @@ void getorigin(long *x, long *y) {
 
     *x = 0;
     *y = 0;
-}
-
-int getplanes() { 
-    TRACE();
-
-    return 24;
 }
 
 void getsize(long *width, long *height) { 
@@ -1964,27 +2032,6 @@ void noborder() {
 
 void winpop() {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
-}
-
-void RGBcolor(int r, int g, int b) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(RGBCOLOR);
-        e->rgbcolor.r = r;
-        e->rgbcolor.g = g;
-        e->rgbcolor.b = b;
-        return;
-    }
-
-    TRACEF("%d, %d, %d", r, g, b);
-
-    current_color[0] = r / 255.0;
-    current_color[1] = g / 255.0;
-    current_color[2] = b / 255.0;
-    current_color[3] = 1.0;
-}
-
-void RGBmode() {
-    // RGB mode always enabled, so nothing to do here until/unless colormap mode is implemented
 }
 
 void ringbell() {
@@ -3166,18 +3213,6 @@ int endfeedback() {
     return 0;
 }
 
-void writemask(Colorindex mask) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(WRITEMASK);
-        e->writemask.mask = mask;
-        return;
-    }
-
-    TRACEF("%u", mask);
-
-    current_writemask = mask;
-}
-
 void setcursor(short index, Colorindex color, Colorindex writemask) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
@@ -3341,7 +3376,7 @@ void zfunction(int func) {
 // XXX display list
 void czclear(int color, int depth) {
     TRACE();
-    rasterizer_czclear((color >> 16) & 0xff, (color >>  8) & 0xff, (color >>  0) & 0xff, depth);
+    rasterizer_czclear((color >> 16) & 0xff, (color >>  8) & 0xff, (color >>  0) & 0xff, color, depth);
 
     if (!is_full_viewport()) {
         static int warned = 0; if(!warned) { printf("Partial czclear() unimplemented\n"); warned = 1; }

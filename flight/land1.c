@@ -131,7 +131,7 @@ init_graphics (name)
 #else
     winattach();
 #endif
-    bitplanes = getplanes();
+    bitplanes = 8; // getplanes();
 
     wm_allplanes = (1 << bitplanes) - 1;
     writemask (wm_allplanes);

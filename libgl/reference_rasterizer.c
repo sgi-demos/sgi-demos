@@ -23,15 +23,20 @@ static int snap_vertices = 0;
 static float the_linewidth;
 static uint16_t the_pattern[16];
 static int pattern_enabled = 0;
+static int rgb_mode = 0; // color map mode by default
 
 // double color buffers
 static int backbuffer_draw_enabled = 1;
 static int frontbuffer_draw_enabled = 0;
-typedef unsigned char color_buffer_t[YMAXSCREEN + 1][XMAXSCREEN + 1][4];
+typedef unsigned char color_buffer_t[YMAXSCREEN + 1][XMAXSCREEN + 1][4]; // uchar = 8 bits = 1 byte * 800 * 480 * 4 = 1.53M * 2 = 3.06M
 static color_buffer_t c_buffer_1;
 static color_buffer_t c_buffer_2;
 static color_buffer_t *gl_backbuffer = &c_buffer_1;  // render to back buffer
 static color_buffer_t *gl_frontbuffer = &c_buffer_2; // display from front buffer
+
+typedef unsigned short color_index_buffer_t[YMAXSCREEN + 1][XMAXSCREEN + 1]; // short = 16 bits = 2 bytes * 800 * 480 = 640K * 2 = 1.28M
+static color_index_buffer_t ci_buffer_1;
+static color_index_buffer_t ci_buffer_2;
 
 // z buffer
 static int zbuffer_enabled = 0;
@@ -53,7 +58,7 @@ static float clamp(float v, float low, float high)
     return v > high ? high : (v < low ? low : v);
 }
 
-static void clear_buffer(int draw_enabled, color_buffer_t* buffer, uint8_t r, uint8_t g, uint8_t b)
+static void clear_cbuffer(int draw_enabled, color_buffer_t* buffer, uint8_t r, uint8_t g, uint8_t b)
 {
     if (draw_enabled) {    
         for (int j = 0; j < DISPLAY_HEIGHT; j++)
@@ -65,10 +70,10 @@ static void clear_buffer(int draw_enabled, color_buffer_t* buffer, uint8_t r, ui
     }
 }
 
-void rasterizer_clear(uint8_t r, uint8_t g, uint8_t b)
+void rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
 {
-    clear_buffer(backbuffer_draw_enabled, gl_backbuffer, r, g, b);
-    clear_buffer(frontbuffer_draw_enabled, gl_frontbuffer, r, g, b);
+    clear_cbuffer(backbuffer_draw_enabled, gl_backbuffer, r, g, b);
+    clear_cbuffer(frontbuffer_draw_enabled, gl_frontbuffer, r, g, b);
 }
 
 void rasterizer_linewidth(float w)
@@ -124,7 +129,7 @@ void rasterizer_swap()
 
 int32_t rasterizer_winopen(char *title)
 {
-    rasterizer_clear(0, 0, 0);
+    rasterizer_clear(0, 0, 0, 0);
     rasterizer_zclear(Z_MAX);
 
     if (getenv("GEN_FRAME_PPM_FILES") != NULL) {
@@ -138,6 +143,11 @@ int32_t rasterizer_winopen(char *title)
     }
 
     return 1;
+}
+
+void rasterizer_rgbmode(int enable)
+{
+    rgb_mode = enable;
 }
 
 void rasterizer_cbuffer_draw(int enable_front, int enable_back)
@@ -158,10 +168,10 @@ void rasterizer_zclear(uint32_t z)
             z_buffer[j][i] = z;
 }
 
-void rasterizer_czclear(uint8_t r, uint8_t g, uint8_t b, uint32_t z)
+void rasterizer_czclear(uint8_t r, uint8_t g, uint8_t b, short color_index, uint32_t z)
 {
     rasterizer_zclear(z);
-    rasterizer_clear(r, g, b);
+    rasterizer_clear(r, g, b, color_index);
 }
 
 static void boxi2DClear(int bbox[4])
