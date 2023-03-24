@@ -794,6 +794,8 @@ typedef struct dl_element
         ENDCLOSEDLINE,
         BGNTMESH,
         ENDTMESH,
+        BGNPOINT,
+        ENDPOINT,
         C3F,
         C3I,
         N3F,
@@ -1083,6 +1085,12 @@ void callobj(Object obj) {
             case BGNCLOSEDLINE:
                 bgnclosedline();
                 break;
+            case ENDPOINT:
+                endpoint();
+                break;
+            case BGNPOINT:
+                bgnpoint();
+                break;                
             case RGBCOLOR:
                 RGBcolor(
                     p->rgbcolor.r,
@@ -1846,6 +1854,10 @@ int qtest() {
     }
 }
 
+void qenter(short qtype, short value) {   
+    enqueue_device(qtype, value);
+}
+
 void viewport(Screencoord left, Screencoord right, Screencoord bottom, Screencoord top)
 {
     if(cur_ptr_to_nextptr != NULL) {
@@ -2072,6 +2084,18 @@ void bgnline() {
     reset_vertex_list();
 }
 
+void bgnpoint()
+{
+    if(cur_ptr_to_nextptr != NULL) {
+        dl_element *e = element_next_in_object(BGNPOINT);
+        return;
+    }
+
+    TRACE();
+
+    reset_vertex_list();
+}
+
 void bgnclosedline() {
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(BGNCLOSEDLINE);
@@ -2105,6 +2129,16 @@ void c3i(int c[3]) {
     TRACEF("%d, %d, %d", c[0], c[1], c[2]);
 
     vec4f_set(current_color, c[0] / 255.0, c[1] / 255.0, c[2] / 255.0, 1.0f);
+}
+
+void cpack(unsigned int pack)
+{
+    // cpack(0xFF004080); 
+    // sets red to 0x80, green to 0x40, blue to 0x0, and alpha to 0xFF
+    int c[3] = { (pack & 0x000000ff),
+                 (pack & 0x0000ff00) >> 8,
+                 (pack & 0x00ff0000) >> 16};
+    c3i(c);
 }
 
 void c3f(float c[3]) {
@@ -2450,6 +2484,20 @@ int dopup(int pup_index) {
     zbuffer(old_zbuffer);
 
     return thepup->items[selected].value;
+}
+
+void endpoint()
+{
+    if(cur_ptr_to_nextptr != NULL) {
+        dl_element *e = element_next_in_object(ENDPOINT);
+        return;
+    }
+
+    if(trace_functions) printf("%*sendpoint(); /* %d verts */\n", trace_indent, "", polygon_vert_count);
+
+    for(int i = 0; i < polygon_vert_count; i++) {
+        process_point(&polygon_verts[i]);
+    }
 }
 
 void endline() {
@@ -2905,10 +2953,6 @@ void prefposition(int x1, int x2, int y1, int y2) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
-void qenter(short qtype, short value) {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
-}
-
 void rdr2i(Icoord dx, Icoord dy) {
     TRACEF("%d, %d", dx, dy);
 
@@ -3085,7 +3129,15 @@ void depthcue(Boolean enable)
 
 int getgdesc (int inquiry)
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    switch(inquiry)
+    {
+        case GD_BITS_NORM_SNG_RED:
+        case GD_BITS_NORM_SNG_GREEN:
+        case GD_BITS_NORM_SNG_BLUE:
+            return 8;       
+    }
+
+    static int warned = 0; if(!warned) { printf("%s %d unimplemented\n", __FUNCTION__, inquiry); warned = 1; }
     return 0;
 }
 
@@ -3222,6 +3274,36 @@ void defcursor(int index, short *cursor) {
 }
 
 void curorigin(short index, short xorigin, short yorigin) {
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void sbox(Coord x1, Coord y1, Coord x2, Coord y2)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void sboxi(Icoord x1, Icoord y1, Icoord x2, Icoord y2)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void sboxs(Scoord x1, Scoord y1, Scoord x2, Scoord y2)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void sboxf(Coord x1, Coord y1, Coord x2, Coord y2)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void sboxfi(Icoord x1, Icoord y1, Icoord x2, Icoord y2)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void sboxfs(Scoord x1, Scoord y1, Scoord x2, Scoord y2)
+{
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 

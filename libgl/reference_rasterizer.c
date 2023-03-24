@@ -28,15 +28,15 @@ static int rgb_mode = 0; // color map mode by default
 // double color buffers
 static int backbuffer_draw_enabled = 1;
 static int frontbuffer_draw_enabled = 0;
-typedef unsigned char color_buffer_t[YMAXSCREEN + 1][XMAXSCREEN + 1][4]; // uchar = 8 bits = 1 byte * 800 * 480 * 4 = 1.53M * 2 = 3.06M
-static color_buffer_t c_buffer_1;
-static color_buffer_t c_buffer_2;
-static color_buffer_t *gl_backbuffer = &c_buffer_1;  // render to back buffer
-static color_buffer_t *gl_frontbuffer = &c_buffer_2; // display from front buffer
+typedef unsigned char color_buffer_t[YMAXSCREEN + 1][XMAXSCREEN + 1][4]; 
+static color_buffer_t c_buffer[2]; // uchar = 8 bits = 1 byte * 800 * 480 * 4 = 1.53M * 2 = 3.06M
+static color_buffer_t *gl_c_backbuffer = &(c_buffer[0]);  // render to back buffer
+static color_buffer_t *gl_c_frontbuffer = &(c_buffer[1]); // display from front buffer
 
-typedef unsigned short color_index_buffer_t[YMAXSCREEN + 1][XMAXSCREEN + 1]; // short = 16 bits = 2 bytes * 800 * 480 = 640K * 2 = 1.28M
-static color_index_buffer_t ci_buffer_1;
-static color_index_buffer_t ci_buffer_2;
+typedef unsigned short color_index_buffer_t[YMAXSCREEN + 1][XMAXSCREEN + 1]; 
+static color_index_buffer_t ci_buffer[2]; // short = 16 bits = 2 bytes * 800 * 480 = 640K * 2 = 1.28M
+static color_index_buffer_t *gl_ci_backbuffer = &(ci_buffer[0]);  // render to back buffer
+static color_index_buffer_t *gl_ci_frontbuffer = &(ci_buffer[1]); // display from front buffer
 
 // z buffer
 static int zbuffer_enabled = 0;
@@ -46,7 +46,7 @@ static const unsigned int Z_MAX = 0xffffffff;
 // Should we just 'upgrade' GL to 32-bit Z since we computed it?
 //typedef uint32_t z_t;
 //static const int Z_SHIFT = 0; 
-static z_t z_buffer[YMAXSCREEN + 1][XMAXSCREEN + 1];
+static z_t z_buffer[YMAXSCREEN + 1][XMAXSCREEN + 1]; // z_t = 16 bits = 2 bytes * 800 * 480 = 640K
 
 static float min(float a, float b)
 {
@@ -70,10 +70,20 @@ static void clear_cbuffer(int draw_enabled, color_buffer_t* buffer, uint8_t r, u
     }
 }
 
+static void clear_cibuffer(int draw_enabled, color_index_buffer_t* buffer, short color_index)
+{
+    // if (draw_enabled)
+    //     memset_pattern16(buffer, &color_index, DISPLAY_HEIGHT * DISPLAY_WIDTH);
+}
+
 void rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
 {
-    clear_cbuffer(backbuffer_draw_enabled, gl_backbuffer, r, g, b);
-    clear_cbuffer(frontbuffer_draw_enabled, gl_frontbuffer, r, g, b);
+    clear_cbuffer(backbuffer_draw_enabled, gl_c_backbuffer, r, g, b);
+    clear_cbuffer(frontbuffer_draw_enabled, gl_c_frontbuffer, r, g, b);
+    if (!rgb_mode) {
+        clear_cibuffer(backbuffer_draw_enabled, gl_ci_backbuffer, color_index);
+        clear_cibuffer(frontbuffer_draw_enabled, gl_ci_frontbuffer, color_index);
+    }
 }
 
 void rasterizer_linewidth(float w)
@@ -95,13 +105,13 @@ void rasterizer_pattern(int enable)
 
 unsigned char* rasterizer_frontbuffer()
 {
-    return (unsigned char*)gl_frontbuffer;
+    return (unsigned char*)gl_c_frontbuffer;
 }
 
 void rasterizer_swap()
 {
     // swap back buffer (buffer being rasterized) and front buffer (buffer being displayed)
-    color_buffer_t *_gl_backbuffer = gl_backbuffer; gl_backbuffer = gl_frontbuffer; gl_frontbuffer = _gl_backbuffer;
+    color_buffer_t *_gl_backbuffer = gl_c_backbuffer; gl_c_backbuffer = gl_c_frontbuffer; gl_c_frontbuffer = _gl_backbuffer;
 
     // optionally dump frames to ppm files
     static int frame = 0;
@@ -115,9 +125,9 @@ void rasterizer_swap()
             for (int j = 0; j < DISPLAY_HEIGHT; j++) {
                 for (int i = 0; i < DISPLAY_WIDTH; i++) {
                     // PPM expects RGB format
-                    rgb_pixel[0] = (*gl_backbuffer)[j][i][RED_BYTE];
-                    rgb_pixel[1] = (*gl_backbuffer)[j][i][GREEN_BYTE];
-                    rgb_pixel[2] = (*gl_backbuffer)[j][i][BLUE_BYTE];                   
+                    rgb_pixel[0] = (*gl_c_backbuffer)[j][i][RED_BYTE];
+                    rgb_pixel[1] = (*gl_c_backbuffer)[j][i][GREEN_BYTE];
+                    rgb_pixel[2] = (*gl_c_backbuffer)[j][i][BLUE_BYTE];                   
                     fwrite(rgb_pixel, 1, 3, fp);
                 }
             }
@@ -251,8 +261,8 @@ static void triPixel(int x, int y, float bary[3], screen_vertex s[3])
     int buffer_y = DISPLAY_HEIGHT - 1 - y;
 
     if (!zbuffer_enabled || (z < z_buffer[buffer_y][x])) {
-        set_buffer_pixel(backbuffer_draw_enabled, gl_backbuffer, buffer_y, x, r, g, b);
-        set_buffer_pixel(frontbuffer_draw_enabled, gl_frontbuffer, buffer_y, x, r, g, b);
+        set_buffer_pixel(backbuffer_draw_enabled, gl_c_backbuffer, buffer_y, x, r, g, b);
+        set_buffer_pixel(frontbuffer_draw_enabled, gl_c_frontbuffer, buffer_y, x, r, g, b);
         z_buffer[buffer_y][x] = z;
     }
 }
@@ -397,8 +407,8 @@ static void draw_point(screen_vertex *sv)
 
     int buffer_y = DISPLAY_HEIGHT - 1 - y;
     if (!zbuffer_enabled || (z < z_buffer[buffer_y][x])) {
-        set_buffer_pixel(backbuffer_draw_enabled, gl_backbuffer, buffer_y, x, s.r, s.g, s.b);
-        set_buffer_pixel(frontbuffer_draw_enabled, gl_frontbuffer, buffer_y, x, s.r, s.g, s.b);
+        set_buffer_pixel(backbuffer_draw_enabled, gl_c_backbuffer, buffer_y, x, s.r, s.g, s.b);
+        set_buffer_pixel(frontbuffer_draw_enabled, gl_c_frontbuffer, buffer_y, x, s.r, s.g, s.b);
         z_buffer[buffer_y][x] = z;
     }
 }
