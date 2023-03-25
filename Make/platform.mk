@@ -24,5 +24,5 @@ CC = cc $(EXTRA_DEBUG)
 EMCC = emcc -s WASM=1 -s PRECISE_F32=1
 OLD_CODE_CC = $(CC) -std=c90 
 OLD_CODE_EMCC = $(EMCC) -std=c90
-OLD_CODE_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat -Wno-pointer-sign -Wno-int-conversion -Wno-out-of-scope-function -Wno-format-extra-args -Wno-unused-command-line-argument -Wno-comment
+OLD_CODE_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat -Wno-pointer-sign -Wno-int-conversion -Wno-out-of-scope-function -Wno-format-extra-args -Wno-unused-command-line-argument -Wno-comment $(OLD_CODE_WARN_OFF_EXTRA)
 OLD_CODE_WARN_OFF_EM = $(OLD_CODE_WARN_OFF) -Wno-deprecated-non-prototype

@@ -799,7 +799,6 @@ typedef struct dl_element
         C3F,
         C3I,
         N3F,
-        V3F,
         V4F,
         MMODE,
         LMBIND,
@@ -850,10 +849,6 @@ typedef struct dl_element
         struct {
             float v[4];
         } v4f;
-
-        struct {
-            float v[3];
-        } v3f;
 
         struct {
             float n[3];
@@ -1017,6 +1012,7 @@ dl_element *element_next_in_object(enum object_type t)
     return e;
 }
 
+static enum object_type bgn_object_type;
 
 //----------------------------------------------------------------------------
 // GL API calls
@@ -1048,9 +1044,6 @@ void callobj(Object obj) {
                 break;
             case V4F:
                 v4f(p->v4f.v);
-                break;
-            case V3F:
-                v3f(p->v3f.v);
                 break;
             case C3I:
                 c3i(p->c3i.c);
@@ -2063,6 +2056,8 @@ void reset_vertex_list()
 }
 
 void bgntmesh() {
+    bgn_object_type = BGNTMESH;
+
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(BGNTMESH);
         return;
@@ -2074,6 +2069,8 @@ void bgntmesh() {
 }
 
 void bgnline() {
+    bgn_object_type = BGNLINE;
+
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(BGNLINE);
         return;
@@ -2086,6 +2083,8 @@ void bgnline() {
 
 void bgnpoint()
 {
+    bgn_object_type = BGNPOINT;
+
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(BGNPOINT);
         return;
@@ -2097,6 +2096,8 @@ void bgnpoint()
 }
 
 void bgnclosedline() {
+    bgn_object_type = BGNCLOSEDLINE;
+
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(BGNCLOSEDLINE);
         return;
@@ -2108,6 +2109,8 @@ void bgnclosedline() {
 }
 
 void bgnpolygon() {
+    bgn_object_type = BGNPOLYGON;
+
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(BGNPOLYGON);
         return;
@@ -3001,6 +3004,16 @@ void tie(int button, int val1, int val2) {
 }
 
 void v4f(float v[4]) {
+
+    if(polygon_vert_count > POLY_MAX - 2) {
+        if (bgn_object_type == BGNPOINT) {
+            endpoint();
+            bgnpoint();
+        }
+        else
+            abort();
+    }
+
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(V4F);
         vec4f_copy(e->v4f.v, v);
@@ -3009,8 +3022,6 @@ void v4f(float v[4]) {
 
     TRACEF("%f, %f, %f, %f", v[0], v[1], v[2], v[3]);
 
-    if(polygon_vert_count > POLY_MAX - 2)
-        abort();
     world_vertex *wv = polygon_verts + polygon_vert_count;
     vec4f_copy(wv->coord, v);
     vec4f_copy(wv->color, current_color);
@@ -3018,27 +3029,14 @@ void v4f(float v[4]) {
     polygon_vert_count++;
 }
 
-void v2f(float v[2]) {
-    float v_[3] = {v[0], v[1], 0.0};
-    v3f(v_);
+void v3f(float v[3]) {
+    float v_[4] = {v[0], v[1], v[2], 1.0f};
+    v4f(v_);
 }
 
-void v3f(float v[3]) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(V3F);
-        vec3f_copy(e->v3f.v, v);
-        return;
-    }
-
-    TRACEF("%f, %f, %f", v[0], v[1], v[2]);
-
-    if(polygon_vert_count > POLY_MAX - 2)
-        abort();
-    world_vertex *wv = polygon_verts + polygon_vert_count;
-    vec4f_set(wv->coord, v[0], v[1], v[2], 1.0f);
-    vec4f_copy(wv->color, current_color);
-    vec3f_copy(wv->normal, current_normal);
-    polygon_vert_count++;
+void v2f(float v[2]) {
+    float v_[4] = {v[0], v[1], 0.0, 1.0f};
+    v4f(v_);
 }
 
 int winattach() {
