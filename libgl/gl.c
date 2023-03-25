@@ -20,9 +20,9 @@
 #include <string.h>
 #include <math.h>
 #include <stdarg.h>
+#include <signal.h>
 #include <gl.h>
 #include <device.h>
-#include <signal.h>
 #include "basic_types.h"
 #include "vector.h"
 #include "rasterizer.h"
@@ -3275,36 +3275,6 @@ void curorigin(short index, short xorigin, short yorigin) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
-void sbox(Coord x1, Coord y1, Coord x2, Coord y2)
-{
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
-}
-
-void sboxi(Icoord x1, Icoord y1, Icoord x2, Icoord y2)
-{
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
-}
-
-void sboxs(Scoord x1, Scoord y1, Scoord x2, Scoord y2)
-{
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
-}
-
-void sboxf(Coord x1, Coord y1, Coord x2, Coord y2)
-{
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
-}
-
-void sboxfi(Icoord x1, Icoord y1, Icoord x2, Icoord y2)
-{
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
-}
-
-void sboxfs(Scoord x1, Scoord y1, Scoord x2, Scoord y2)
-{
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
-}
-
 void rectf_(Coord x1, Coord y1, Coord x2, Coord y2) {
     bgnpolygon();
     pdr_(x1, y1, 0);
@@ -3345,6 +3315,59 @@ void recti(Icoord x1, Icoord y1, Icoord x2, Icoord y2) {
 
 void rects(Scoord x1, Scoord y1, Scoord x2, Scoord y2) {
     rect_(x1, y1, x2, y2);
+}
+
+static int bgn_screen_aligned()
+{
+    pushviewport();
+    viewport (0,XMAXSCREEN,0,YMAXSCREEN);
+
+    int prev_matrix_mode = matrix_mode;
+    mmode(MPROJECTION);
+    pushmatrix();
+    ortho2 (-0.5, XMAXSCREEN+0.5, -0.5, YMAXSCREEN+0.5);
+    return prev_matrix_mode;
+}
+
+static void end_screen_aligned(int prev_matrix_mode)
+{
+    popmatrix();
+    mmode(prev_matrix_mode);
+    popviewport();
+}
+
+void sbox(Coord x1, Coord y1, Coord x2, Coord y2)
+{
+    int prev_matrix_mode = bgn_screen_aligned();
+    rect_(x1, y1, x2, y2);
+    end_screen_aligned(prev_matrix_mode);
+}
+
+void sboxi(Icoord x1, Icoord y1, Icoord x2, Icoord y2)
+{
+    sbox(x1, y1, x2, y2);
+}
+
+void sboxs(Scoord x1, Scoord y1, Scoord x2, Scoord y2)
+{
+    sbox(x1, y1, x2, y2);
+}
+
+void sboxf(Coord x1, Coord y1, Coord x2, Coord y2)
+{
+    int prev_matrix_mode = bgn_screen_aligned();
+    rectf_(x1, y1, x2, y2);
+    end_screen_aligned(prev_matrix_mode);
+}
+
+void sboxfi(Icoord x1, Icoord y1, Icoord x2, Icoord y2)
+{
+    sboxf(x1, y1, x2, y2);
+}
+
+void sboxfs(Scoord x1, Scoord y1, Scoord x2, Scoord y2)
+{
+    sboxf(x1, y1, x2, y2);
 }
 
 void poly(int n, Coord p[][3]) {
