@@ -6,16 +6,15 @@ This is the original SGI demo source code, compiled for the web using Emscripten
 Working demos:
 - [Buttonfly](https://sgi-demos.github.io/)
 - [Bounce](https://sgi-demos.github.io/sgi-demos/bounce/web/bounce_full.html)
+- [Ideas](https://sgi-demos.github.io/sgi-demos/ideas/web/ideas_full.html)
 - [Insect](https://sgi-demos.github.io/sgi-demos/insect/web/insect_full.html)
 - [Logo](https://sgi-demos.github.io/sgi-demos/logo/web/logo_full.html)
 - [Twilight](https://sgi-demos.github.io/sgi-demos/twilight/web/twilight_full.html)
 
 Work in progress demos:
-- [Jello](https://sgi-demos.github.io/sgi-demos/jello/web/jello_full.html) (lighting is not quite right)
-- [Ideas](https://sgi-demos.github.io/sgi-demos/ideas/web/ideas_full.html) (z-fighting issue in middle of demo)
+- [Jello](https://sgi-demos.github.io/sgi-demos/jello/web/jello_full.html) (jello shading is too dark)
 - [Newave](https://sgi-demos.github.io/sgi-demos/newave/web/newave_full.html) (no mesh editing, no popup menus, only wireframe)
 - [Flight](https://sgi-demos.github.io/sgi-demos/flight/web/flight_full.html) (cockpit glitches, planes too slow, night mode 'shimmers')
-
 
 Next up:
 - Electropaint
