@@ -574,9 +574,18 @@ draw_table() {
 	endtmesh();
     }
 
+    /* Below causes z-fighting briefly for paper on table, as logo rises out of table.
+       Yet multiple versions of ideas (IRIS GL and OpenGL) enable zbuffer  here, and it
+       apparently works without z-fighting.  Disabling it does not seem to cause any visual
+       issues however, and I don't see why it is necessary since zbuffer remains off when 
+       logo is enitrely below or entirely above the table.  So I'm disabling this until 
+       further insight.  sgi-demos 3/25/23
+    */
+    /*
     if (logo_pos[Y]>-0.33 && logo_pos[Y]<0.33) {
 	zbuffer(TRUE);
     }
+    */
 
     pca = 0.0;
     bgnpolygon();
