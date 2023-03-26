@@ -1,2 +1,0 @@
-/* restore main() */
-#undef main

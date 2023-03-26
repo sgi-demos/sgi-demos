@@ -13,8 +13,7 @@
 #include <device.h>
 #include <democolors.c>
 #include "insect.h"
-
-#include "EM_MAIN_DECL.h"
+#include "EM_CHILD_APP.h"
 
 /* begin Emscripten emcc crashes on -fcommon, so must fwd define */
 Object screen,viewit,shadow,body,hip[6],thigh[6],shin[6],kneeball[6];
@@ -77,9 +76,8 @@ long worgx, worgy;
 long wsizex, wsizey;
 long pikx, piky;
 
-#include "EM_MAIN_BEGIN.h"
+
 main (argc, argv)
-#include "EM_MAIN_END.h"
 int	argc;
 char	*argv[];
 {
@@ -169,9 +167,7 @@ new for ECLIPSE 8 bit machine  */
     draw_insect ();
     frontbuffer (FALSE);
 
-    #include "EM_MAIN_LOOP_BEGIN.h"
-    while (TRUE) {
-    #include "EM_MAIN_LOOP_END.h"
+    em_while (TRUE) {
 
 	while (qtest ()) {
 	    dev = qread (&val);

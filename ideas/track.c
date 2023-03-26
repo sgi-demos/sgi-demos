@@ -3,8 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "objects.h"
-
-#include "EM_MAIN_DECL.h"
+#include "EM_CHILD_APP.h"
 
 #define X 0
 #define Y 1
@@ -264,9 +263,7 @@ parameter *calc_spline_params(vector *, int);
 
 double a3, a4;
 
-#include "EM_MAIN_BEGIN.h"
-main (argc, argv)
-#include "EM_MAIN_END.h"
+main(argc, argv)
 int	argc;
 char	*argv[];
 {
@@ -274,9 +271,7 @@ char	*argv[];
 
     initialize(argv[0]);
 
-    #include "EM_MAIN_LOOP_BEGIN.h"
-    while (TRUE) {
-    #include "EM_MAIN_LOOP_END.h"
+    em_while (TRUE) {
 
 	while(qtest()) {
 

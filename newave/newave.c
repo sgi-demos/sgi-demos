@@ -2,7 +2,7 @@
 #include <gl.h>
 #include <math.h>
 #include <device.h>
-#include "EM_MAIN_DECL.h"
+#include "EM_CHILD_APP.h"
 
 #define PI 3.1415926536
 #define NRAMPB 832
@@ -24,7 +24,7 @@
 
 #define GRID 21	    /* largest possible grid size */
 
-int grid = GRID;
+int grid = 17;
 float dt = 0.004;
 
 Angle dtheta=0, dphi=0;
@@ -279,9 +279,8 @@ antialias_mode() {
 
 long gid;
 
-#include "EM_MAIN_BEGIN.h"
+
 main (argc, argv)
-#include "EM_MAIN_END.h"
 int	argc;
 char	*argv[];
 {
@@ -369,9 +368,7 @@ menu=defpup("WAVE %t|edit|go|reverse|display menu|spring menu|grid menu|reset|ki
 	tie (MIDDLEMOUSE, MOUSEX, MOUSEY);
 	tie (LEFTMOUSE, MOUSEX, MOUSEY);
 
- 	#include "EM_MAIN_LOOP2_BEGIN.h"
-    while(TRUE) {
-	#include "EM_MAIN_LOOP_END.h"
+    em_while(TRUE) {
 
 		while(qtest()) {
 			dev=qread(&val);
@@ -431,7 +428,7 @@ menu=defpup("WAVE %t|edit|go|reverse|display menu|spring menu|grid menu|reset|ki
 					}
 					break;
 				case LEFTMOUSE:
-					resetpoints();
+					resetpoints(); // not canon
 					qread(&nmx); qread(&nmy);
 					if (editing=val) {
 					    setvaluator(MOUSEX, nmx,

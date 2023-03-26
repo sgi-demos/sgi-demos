@@ -8,7 +8,7 @@
 #include <SDL2/SDL.h>
 #endif
 #include "sdl_events.h"
-#include "EM_MAIN_DEFN.h"
+#include "EM_CHILD_APP_DECL.h"
 
 static SDL_Texture * pFramebuffer = NULL;
 
@@ -94,7 +94,7 @@ void main_loop(void* main_loop_arg)
     sdlProcessEvents();
 
     // Run child main loop - let child process events and redraw its stuff
-    child_main_loop(main_loop_arg);
+    child_main_loop();
 
     redraw();
 
@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
     child_main(argc, argv);
 
     // Start the main loop
-    void* main_loop_arg = NULL; // User-defined data to pass to main_loop() and child_main_loop()
+    void* main_loop_arg = NULL;
     #ifdef __EMSCRIPTEN__
         int fps = 0; // Set to 0 to use browser's requestAnimationFrame (recommended)
         int simulate_infinite_loop = 1;

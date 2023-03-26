@@ -4,8 +4,7 @@
 #include "stdlib.h"
 #include "gl.h"
 #include "device.h"
-
-#include "EM_MAIN_DECL.h"
+#include "EM_CHILD_APP.h"
 
 #define UDIV 12
 #define VDIV 12
@@ -208,10 +207,7 @@ void reorient(short ax, short ay)
 }
 
 
-
-#include "EM_MAIN_BEGIN.h"
 main (argc, argv)
-#include "EM_MAIN_END.h"
 int argc;
 char **argv;
 {
@@ -251,9 +247,7 @@ char **argv;
 	loadmatrix(ident4);
 	translate(0.0, 0.0, -EYEZ);
 
-    #include "EM_MAIN_LOOP_BEGIN.h"
-	while(1)  {
-	#include "EM_MAIN_LOOP_END.h"
+	em_while(1)  {
 		calcbox();
 		if (!freeze)
 			calcball();

@@ -11,8 +11,7 @@
 #include "device.h"
 #include "port.h"
 #include "stdio.h"
-
-#include "EM_MAIN_DECL.h"
+#include "EM_CHILD_APP.h"
 
 float or = -1.0;
 float og = -1.0;
@@ -26,9 +25,7 @@ int xsize, ysize;
 float wx, wy;
 int menu;
 
-#include "EM_MAIN_BEGIN.h"
 main (argc,argv)
-#include "EM_MAIN_END.h"
 int argc;
 char **argv;
 {
@@ -42,9 +39,7 @@ char **argv;
     initmouse();
     cc = 16;
     makeframe();
-	#include "EM_MAIN_LOOP_BEGIN.h"
-    while (1) {
-    #include "EM_MAIN_LOOP_END.h"
+    em_while (1) {
 	checkmouse();
 	if (m3) {
 	    x = getvaluator(MOUSEX);

@@ -7,6 +7,14 @@
         "em_main_loop_end.h": "c",
         "em_main_loop2_begin.h": "c",
         "stdlib.h": "c",
-        "gl.h": "c"
-    }
+        "gl.h": "c",
+        "em_main_defn.h": "c",
+        "em_child_main.h": "c",
+        "em_system.h": "c",
+        "em_child_app_decl.h": "c",
+        "stdio.h": "c",
+        "em_child_app.h": "c",
+        "em_child_app_stub.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

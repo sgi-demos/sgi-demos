@@ -25,7 +25,11 @@ To do:
 - Run GL demo in its own WASM worker, to avoid slicing up the code for SDL's event loop
 - Arbitrary window size
 - Popup menus
-- Mouse and keyboard simulator for touch devices
+- Virtual mouse and keyboard:
+  - On always for touch devices
+  - On/off for mouse/keyboard devices, as hints
+  - Displayed as transparent virtual mouse and key pictures overlaid on demo
+  - Only display virtual keys and mouse functions used by the demo; use demo's qdevice() calls to determine this
 - Man pages
 
 Credits:

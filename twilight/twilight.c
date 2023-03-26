@@ -32,9 +32,8 @@
 #include <math.h>
 #include <gl.h>
 #include <device.h>
-#include "EM_MAIN_DECL.h"
-#define drand48() ((float)rand()/(float)(RAND_MAX))
-#define srand48(s) (srand(s+1))
+#include "EM_CHILD_APP.h"
+#include "EM_SYSTEM.h"
 
 /* prototypes */
 void draw_background(float x, float y, Boolean rgb_mode);
@@ -62,9 +61,7 @@ static Boolean rgb_mode;
 static short val;
 static long dev;
 
-#include "EM_MAIN_BEGIN.h"
 main (int argc, char* argv[])
-#include "EM_MAIN_END.h"
 {
 	// long gid, sizex, sizey;
 	// Boolean redraw_needed = FALSE;
@@ -88,9 +85,7 @@ main (int argc, char* argv[])
 		
 	qenter(REDRAW,gid);
 
-    #include "EM_MAIN_LOOP_BEGIN.h"
-	while (1)
-    #include "EM_MAIN_LOOP_END.h"
+	em_while (1)
 	{
 		if (redraw_needed)
 		{

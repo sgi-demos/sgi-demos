@@ -9,8 +9,7 @@
 #include <math.h>
 #include <device.h>
 #include "light.h"
-
-#include "EM_MAIN_DECL.h"
+#include "EM_CHILD_APP.h"
 
 #define X 0
 #define Y 1
@@ -99,9 +98,7 @@ int function=0;
 #define REORIENT 1
 
 
-#include "EM_MAIN_BEGIN.h"
 main (argc, argv)
-#include "EM_MAIN_END.h"
 int	argc;
 char	*argv[];
 {
@@ -110,10 +107,7 @@ char	*argv[];
 
 	initialize(argv[0]);
 
-	#include "EM_MAIN_LOOP_BEGIN.h"
-	while(TRUE) {
-	#include "EM_MAIN_LOOP_END.h"
-
+	em_while(TRUE) {
 
 		while(qtest()) {
 			dev=qread(&val);

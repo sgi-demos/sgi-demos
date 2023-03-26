@@ -24,13 +24,11 @@
 
 #include <stdlib.h> // NULL
 #include "flight.h"
-#include "EM_MAIN_DECL.h"
+#include "EM_CHILD_APP.h"
 
 Plane planes[MAX_PLANES];
 
-#include "EM_MAIN_BEGIN.h"
 int main (int argc, char **argv)
-#include "EM_MAIN_END.h"
 {
 	flight(argc,argv);
 }

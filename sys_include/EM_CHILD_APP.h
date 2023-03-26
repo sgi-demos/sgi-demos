@@ -1,7 +1,7 @@
 /* 
 
-   Redefine child app's infinite loop ("while (true)") to a separate child_main_loop() function 
-   because Emscripten is driving the bus.
+   Redefine child app's main() to child_main(), and its infinite event loop ("while (1)") to a 
+   separate child_main_loop() function, because Emscripten is driving the bus.
     
    This is going to be a bit ugly because variables declared before but used within the while loop
    will need to be redeclared or passed into the new child_main_loop() function.  So it will be done 
@@ -12,10 +12,15 @@
    now though, we just want to get some pixels in the browser.
 
 */
-#define while \
+
+// redefine main to child_main
+#define main child_main
+
+// redefine main loop to child_main_loop - change while(1) to em_while(1) in child app
+#define em_while(cond) \
 } \
 \
-void child_main_loop(void *arg) \
+void child_main_loop() \
 { \
     static short dev; \
     static short val; \
@@ -27,4 +32,5 @@ void child_main_loop(void *arg) \
     static float previous_time; \
 	static int r=100, g=255, b=255; \
     static Boolean attached; \
-    if
+    if((cond))
+

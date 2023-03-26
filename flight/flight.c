@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <signal.h>
 // #include <psio.h>
+#include "EM_CHILD_APP.h"
 
 extern void make_crash (char *msg);
 extern void draw_hud (Plane p, int tick, float vx, float vy, float vz, int vv, float mach, float gf, int wheels, int flaps, int spoilers, int autop, int fuel, int thrust);
@@ -517,9 +518,7 @@ flight (argc,argv)
     /****************************************************************
      *	Main loop
      ****************************************************************/
-#include "EM_MAIN_LOOP_BEGIN.h"
-    while (1) 
-#include "EM_MAIN_LOOP_END.h"
+    em_while(1)
 	{
 	/* read all queue entries	*/
 	if (dials) check_dials(); 

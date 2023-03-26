@@ -8,7 +8,7 @@
 #include "buttonfly.h"
 #include "data.h"
 
-#include "EM_MAIN_DECL.h"
+#include "EM_CHILD_APP.h"
 #include "EM_SYSTEM.h"
 
 #define X 0
@@ -47,9 +47,7 @@ float tv[4][4] = {
 };
 
 
-#include "EM_MAIN_BEGIN.h"
 main (argc, argv)
-#include "EM_MAIN_END.h"
 int	argc;
 char	*argv[];
 {
@@ -139,10 +137,8 @@ char	*argv[];
     draw_buttons(current_buttons);
     swapbuffers();
 
-    #include "EM_MAIN_LOOP_BEGIN.h"
-	while(exitflag == FALSE) 
+	em_while(exitflag == FALSE) 
 	{
-    #include "EM_MAIN_LOOP_END.h"
 		event();
 	}
 	// gexit();
