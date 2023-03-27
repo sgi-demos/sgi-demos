@@ -6,6 +6,7 @@
 #include <gl.h>
 #include <math.h>
 #include <device.h>
+#define EM_CHILD_APP_NAME EM_JELLO
 #include "EM_CHILD_APP.h"
 
 #define X 0

@@ -14,7 +14,9 @@
         "em_child_app_decl.h": "c",
         "stdio.h": "c",
         "em_child_app.h": "c",
-        "em_child_app_stub.h": "c"
+        "em_child_app_stub.h": "c",
+        "device.h": "c",
+        "math.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

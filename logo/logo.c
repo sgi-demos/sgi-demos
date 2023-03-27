@@ -9,6 +9,7 @@
 #include <math.h>
 #include <device.h>
 #include "light.h"
+#define EM_CHILD_APP_NAME EM_LOGO
 #include "EM_CHILD_APP.h"
 
 #define X 0

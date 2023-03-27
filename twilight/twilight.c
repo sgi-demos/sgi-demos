@@ -26,12 +26,11 @@
  * Howard Look
  */
 
-// #include <gl/gl.h>
-// #include <gl/device.h>
+#include <gl/gl.h>
+#include <gl/device.h>
 #include <stdlib.h>
 #include <math.h>
-#include <gl.h>
-#include <device.h>
+
 #include "EM_CHILD_APP.h"
 #include "EM_SYSTEM.h"
 

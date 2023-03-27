@@ -13,36 +13,8 @@
 #include <device.h>
 #include <democolors.c>
 #include "insect.h"
+#define EM_CHILD_APP_NAME EM_INSECT
 #include "EM_CHILD_APP.h"
-
-/* begin Emscripten emcc crashes on -fcommon, so must fwd define */
-Object screen,viewit,shadow,body,hip[6],thigh[6],shin[6],kneeball[6];
-Object body_shadow,hip_shadow,thigh_shadow,shin_shadow,kneeball_shadow;
-
-Tag cphitag,cthetatag,cposittag,windowtag;
-
-Angle knee[6];
-Angle hip_phi[6];
-Angle hip_theta[6];
-
-Coord sdepth;
-float glsin,glcos;
-float px,py;
-float light[3],phi,theta;
-Boolean legup[6];
-float legx[6],legy[6];
-
-float cx,cy,cz,cvx,cvy,cvz;
-float dmr[6],fr[6];
-Angle ctheta,cphi,cvtheta,cvphi;
-Boolean follow;
-
-Coord k2[6][3];
-Coord k3[6][3];
-Coord b7[12][3];
-Coord b8[12][3];
-Icoord scr[4][2];
-/* end Emscripten emcc crashes on -fcommon, so must fwd define */
 
 Linestyle ls = 0xaaaa;
 
@@ -538,8 +510,8 @@ getstuff () {
     px = 0.0;
     py = 0.0;
     for (i = 0; i < 6; i++) {
-	legx[i] = RES_FLOAT / 2.0 + (float) i;
-	legy[i] = RES_FLOAT / 2.0 + (float) i;
+	legx[i] = RESF / 2.0 + (float) i;
+	legy[i] = RESF / 2.0 + (float) i;
     }
 }
 
@@ -559,38 +531,38 @@ dolegs () {
             tr;
 
     for (leg = 0; leg < 6; leg++) {
-	gx = legx[leg] - RES_FLOAT / 2.0;
-	gy = legy[leg] - RES_FLOAT / 2.0;
-	ux = gx / (RES_FLOAT / 2.0);
-	uy = gy / (RES_FLOAT / 2.0);
+	gx = legx[leg] - RESF / 2.0;
+	gy = legy[leg] - RESF / 2.0;
+	ux = gx / (RESF / 2.0);
+	uy = gy / (RESF / 2.0);
 
 	switch (leg) {
 	    case 0: 
 		gx += 0.0;
-		gy += RES_FLOAT;
+		gy += RESF;
 		break;
 	    case 1: 
-		gx += (RES_FLOAT * 0.8660254);
-		gy += (RES_FLOAT * 0.5);
+		gx += (RESF * 0.8660254);
+		gy += (RESF * 0.5);
 		break;
 	    case 2: 
-		gx += (RES_FLOAT * 0.8660254);
-		gy += (RES_FLOAT * -0.5);
+		gx += (RESF * 0.8660254);
+		gy += (RESF * -0.5);
 		break;
 	    case 3: 
 		gx += 0.0;
-		gy += -RES_FLOAT;
+		gy += -RESF;
 		break;
 	    case 4: 
-		gx += (RES_FLOAT * -0.8660254);
-		gy += (RES_FLOAT * -0.5);;
+		gx += (RESF * -0.8660254);
+		gy += (RESF * -0.5);;
 		break;
 	    case 5: 
-		gx += (RES_FLOAT * -0.8660254);
-		gy += (RES_FLOAT * 0.5);
+		gx += (RESF * -0.8660254);
+		gy += (RESF * 0.5);
 		break;
 	}
-	r = sqrt ((gx * gx) + (gy * gy)) / RES_FLOAT;
+	r = sqrt ((gx * gx) + (gy * gy)) / RESF;
 	l = sqrt (1.0 + (r * r));
 	k = acos ((5.0 - (l * l)) / 4.0);
 

@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "objects.h"
+#define EM_CHILD_APP_NAME EM_IDEAS
 #include "EM_CHILD_APP.h"
 
 #define X 0

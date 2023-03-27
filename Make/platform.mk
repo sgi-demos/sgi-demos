@@ -9,7 +9,7 @@ endif
 EM_SDL_LIB=-s USE_SDL=2
 
 LIBGL_SRC = ../libgl/gl.c ../libgl/vector.c ../libgl/reference_rasterizer.c ../libgl/sdl_framebuffer.c ../libgl/sdl_gl_events.c
-LIBGL_INC = -I../sys_include
+LIBGL_INC = -I../ -I../gl
 DEMO_INC = -I../demo_include
 BIN_DIR = ./bin
 WEB_DIR = ./web

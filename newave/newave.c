@@ -2,6 +2,7 @@
 #include <gl.h>
 #include <math.h>
 #include <device.h>
+#define EM_CHILD_APP_NAME EM_NEWAVE
 #include "EM_CHILD_APP.h"
 
 #define PI 3.1415926536
