@@ -7,9 +7,9 @@
 
 #define PI 3.1415926536
 #define NRAMPB 832
-#define NRAMPB_FLT 832.0
+#define NRAMPBF 832.0
 #define NRAMPE 1023
-#define NRAMPE_FLT 1023.0
+#define NRAMPEF 1023.0
 #define DRAMPB 768
 #define DRAMPE 831
 #define CRAMPB 700
@@ -833,7 +833,7 @@ gouraud_shade() {
 	c = dot(vertvec[i][j], light);
 	if (c<0.0) c=0.0;
 
-	c=(NRAMPE_FLT-NRAMPB_FLT) * c + (NRAMPB_FLT);
+	c=(NRAMPEF-NRAMPBF) * c + (NRAMPBF);
 
 	colur[i][j] = c;
 
@@ -1022,7 +1022,7 @@ float pts[][3];
     c = dot(norm,light);
     if (c<0.0) c=0.0;
 
-    c = (NRAMPE_FLT - NRAMPB_FLT) * c + (NRAMPB_FLT);
+    c = (NRAMPEF - NRAMPBF) * c + (NRAMPBF);
 
     return((int)c);
 }
@@ -1072,7 +1072,7 @@ float pts[][3];
     c = dot(norm,light);
     if (c<0.0) c=0.0;
 
-    c = (NRAMPE_FLT-NRAMPB_FLT) * c + NRAMPB_FLT;
+    c = (NRAMPEF-NRAMPBF) * c + NRAMPBF;
 
     return(c);
 }

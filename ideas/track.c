@@ -106,7 +106,7 @@ float tv[4][4] = {
 };
 
 #define TABLERES 12
-#define TABLERES_FLT 12.0
+#define TABLERESF 12.0
 
 float pcr, pcg, pcb, pca;
 
@@ -126,7 +126,7 @@ vector paper_points[4] = {
 float dot(vector, vector);
 
 #define TIME 15
-#define TIME_FLT 15.0
+#define TIMEF 15.0
 
 vector light_pos_ctl[] = {
 
@@ -305,7 +305,7 @@ char	*argv[];
 /*if ( (int)(time+0.012) != (int)time )
 printf("time = %d\n", (int)time+1);*/
 
-	if ( (time+=0.019)>(TIME_FLT)-3.0) time = TIME_FLT-3.001;
+	if ( (time+=0.019)>(TIMEF)-3.0) time = TIMEF-3.001;
 
 /*	else time=0.0; */
 
@@ -508,10 +508,10 @@ build_table() {
 
     float i, j;
 
-    for (j=0.0; j<=TABLERES_FLT; j+=1.0) {
-	for (i=0.0; i<=TABLERES_FLT; i+=1.0) {
-	    table_points[(int)j][(int)i][Z] = (i-TABLERES_FLT/2.0)/2.0;
-	    table_points[(int)j][(int)i][X] = (j-TABLERES_FLT/2.0)/2.0;
+    for (j=0.0; j<=TABLERESF; j+=1.0) {
+	for (i=0.0; i<=TABLERESF; i+=1.0) {
+	    table_points[(int)j][(int)i][Z] = (i-TABLERESF/2.0)/2.0;
+	    table_points[(int)j][(int)i][X] = (j-TABLERESF/2.0)/2.0;
 	    table_points[(int)j][(int)i][Y] = 0.0;
 	}
     }
@@ -623,8 +623,8 @@ draw_table() {
 
     scale(0.015, 0.015, 0.015);
 
-    if (time>TIME_FLT-5.0) {
-	c = (time-(TIME_FLT-5.0))/2.0;
+    if (time>TIMEF-5.0) {
+	c = (time-(TIMEF-5.0))/2.0;
 	RGBcolor((int)(c*255.0), (int)(c*255.0), (int)(c*255.0));
     } else RGBcolor(0, 0, 0);
 

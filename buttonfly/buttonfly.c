@@ -58,9 +58,7 @@ char	*argv[];
 
     rootbutton = new_button("");
     selected = rootbutton;
-
     parse_args(argc, argv);
-
     selected = NULL;
 
     keepaspect(5, 4);
