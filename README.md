@@ -9,9 +9,9 @@ Working demos:
 - [Ideas](https://sgi-demos.github.io/sgi-demos/ideas/web/ideas_full.html)
 - [Insect](https://sgi-demos.github.io/sgi-demos/insect/web/insect_full.html)
 - [Logo](https://sgi-demos.github.io/sgi-demos/logo/web/logo_full.html)
-- [Twilight](https://sgi-demos.github.io/sgi-demos/twilight/web/twilight_full.html)
 
 Work in progress demos:
+- [Twilight](https://sgi-demos.github.io/sgi-demos/twilight/web/twilight_full.html) (colors differ between binary and web versions)
 - [Jello](https://sgi-demos.github.io/sgi-demos/jello/web/jello_full.html) (jello shading is too dark)
 - [Newave](https://sgi-demos.github.io/sgi-demos/newave/web/newave_full.html) (no mesh editing, no popup menus, only wireframe)
 - [Flight](https://sgi-demos.github.io/sgi-demos/flight/web/flight_full.html) (cockpit glitches, planes too slow, night mode 'shimmers', no network play)
