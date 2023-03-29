@@ -1,36 +1,79 @@
+Logo
+	../bounce/bin/bounce ../bounce/logo.bin
+
+X29
+	../bounce/bin/bounce ../bounce/x29.bin
+
+VW
+	../bounce/bin/bounce ../bounce/vw.bin
+
+Martini
+	../bounce/bin/bounce ../bounce/martini.bin
+
+Candlestick
+	../bounce/bin/bounce ../bounce/canstick.bin
+
+Doughnut
+	../bounce/bin/bounce ../bounce/doughnut.bin
+Bounce
+	cat menus/m_bounce
+	.menu. -
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Ideas
+	../ideas/bin/ideas
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Insect
+	../insect/bin/insect
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Logo
+	../logo/bin/logo
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Twilight
+	../twilight/bin/twilight
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+More Demos
+	cat menus/m_more_demos
+	.menu. -
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+Jello
+	../jello/bin/jello
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Newave
+	../newave/bin/newave
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Flight
+	../flight/bin/flight
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Arena
+	../arena/bin/arena
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
 	.backcolor. .1 .1 .1
 	.color. .64 .73 1.0
 	.highcolor. .86 .92 1.0
 Silicon Graphics
-	.menu. .menu_demos
+	.menu. menus/m_demos
 	.popup. Buttonfly %t
 	.popup. Information
 	/usr/demos/buttonfly.info
 	.popup. Manual
 	wsh -f Screen-Bold.15 -c /usr/demos/bin/manwsh 6 buttonfly
-	.color. .9 .5 .9
-	.highcolor. 1.0 .7 1.0
-Jello
-	jello/web/jello_full.html
-	.color. .9 .5 .9
-	.highcolor. 1.0 .7 1.0
-
-Insect
-	insect/web/insect_full.html
-	.color. .9 .5 .9
-	.highcolor. 1.0 .7 1.0
-
-Ideas
-	ideas/web/ideas_full.html
-	.color. .9 .5 .9
-	.highcolor. 1.0 .7 1.0
-
-Logo
-	logo/web/logo_full.html
-	.color. .9 .5 .9
-	.highcolor. 1.0 .7 1.0
-
-Bounce
-	bounce/web/bounce_full.html
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0

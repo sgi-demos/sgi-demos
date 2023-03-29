@@ -2,6 +2,7 @@
 
 all:
 	make -C libgl
+	make -C arena
 	make -C bounce
 	make -C buttonfly
 	make -C flight
@@ -14,6 +15,7 @@ all:
 
 clean:
 	make clean -C libgl
+	make clean -C arena
 	make clean -C bounce
 	make clean -C buttonfly
 	make clean -C flight

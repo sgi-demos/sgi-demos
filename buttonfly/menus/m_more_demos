@@ -3,22 +3,17 @@ Jello
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0
 
-Insect
-	../insect/bin/insect
+Newave
+	../newave/bin/newave
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0
 
-Ideas
-	../ideas/bin/ideas
+Flight
+	../flight/bin/flight
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0
 
-Logo
-	../logo/bin/logo
-	.color. .9 .5 .9
-	.highcolor. 1.0 .7 1.0
-
-Bounce
-	../bounce/bin/bounce ../bounce/x29.bin
+Arena
+	../arena/bin/arena
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0

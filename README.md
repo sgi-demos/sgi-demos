@@ -14,10 +14,11 @@ Working demos:
 Work in progress demos:
 - [Jello](https://sgi-demos.github.io/sgi-demos/jello/web/jello_full.html) (jello shading is too dark)
 - [Newave](https://sgi-demos.github.io/sgi-demos/newave/web/newave_full.html) (no mesh editing, no popup menus, only wireframe)
-- [Flight](https://sgi-demos.github.io/sgi-demos/flight/web/flight_full.html) (cockpit glitches, planes too slow, night mode 'shimmers')
+- [Flight](https://sgi-demos.github.io/sgi-demos/flight/web/flight_full.html) (cockpit glitches, planes too slow, night mode 'shimmers', no network play)
+- [Arena](https://sgi-demos.github.io/sgi-demos/arena/web/arena_full.html) (stuff?, no network play)
 
 Next up:
-- Electropaint
+- Electropaint, Cedit, any other IRIS GL demos I can find
 
 To do:
 - More demos, _all the demos_. WIP: IRIS GL, TBD: OpenGL, GLUT, Inventor, Performer

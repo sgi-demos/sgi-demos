@@ -163,11 +163,10 @@ char **argv;
 		fclose(fp);
     } else {
 		FILE *fp;
-		if ((fp = fopen(".menu", "r")) == NULL)
+		if ((fp = fopen("menus/menu", "r")) == NULL)
 		{
-			fprintf(stderr, "%s: can't find default file .menu\n",
-				argv[0]);
-			printf("%s: can't find default file .menu\n",argv[0]);
+			fprintf(stderr, "%s: can't find default file menus/menu\n",argv[0]);
+			printf("%s: can't find default file menus/menu\n",argv[0]);
 			exit(1);
 		}
 		current_buttons = load_buttons(fp);

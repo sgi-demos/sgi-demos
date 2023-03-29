@@ -1,18 +1,17 @@
 Logo
-	../bounce/bounce ../bounce/logo.bin
+	../bounce/bin/bounce ../bounce/logo.bin
 
 X29
-	../bounce/bounce ../bounce/x29.bin
+	../bounce/bin/bounce ../bounce/x29.bin
 
 VW
-	../bounce/bounce ../bounce/vw.bin
+	../bounce/bin/bounce ../bounce/vw.bin
 
 Martini
-	../bounce/bounce ../bounce/martini.bin
+	../bounce/bin/bounce ../bounce/martini.bin
 
 Candlestick
-	../bounce/bounce ../bounce/canstick.bin
+	../bounce/bin/bounce ../bounce/canstick.bin
 
 Doughnut
-	../bounce/bounce ../bounce/doughnut.bin
-
+	../bounce/bin/bounce ../bounce/doughnut.bin

@@ -8,6 +8,9 @@
 
 #include "arena.h"
 
+#define EM_CHILD_APP_NAME EM_ARENA
+#include "EM_CHILD_APP.h"
+
 int screen_size[2];
 
 char buf[80];
@@ -195,7 +198,7 @@ main(argc, argv)
 	starttime = times(&tbuf);
     }
 
-    while(1)
+    em_while(1)
     {
 	while (qtest())
 	{

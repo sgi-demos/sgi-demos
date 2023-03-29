@@ -46,6 +46,7 @@
 #define EM_LOGO         8
 #define EM_NEWAVE       9
 #define EM_TWILIGHT     10
+#define EM_ARENA        11
 
 #if EM_CHILD_APP_NAME == EM_INSECT
     #define EM_CHILD_APP_LOCALS static short dev,val; static Boolean attached;
@@ -55,6 +56,8 @@
     #define EM_CHILD_APP_LOCALS static int i,j;
 #elif EM_CHILD_APP_NAME == EM_IDEAS
     #define EM_CHILD_APP_LOCALS static float x, y, z, c;
+#elif EM_CHILD_APP_NAME == EM_ARENA
+    #define EM_CHILD_APP_LOCALS static int i,j; short val;
 #else
     #define EM_CHILD_APP_LOCALS
 #endif
