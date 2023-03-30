@@ -31,6 +31,7 @@ To do:
   - On/off for mouse/keyboard devices, as hints
   - Displayed as transparent virtual mouse and key pictures overlaid on demo
   - Only display virtual keys and mouse functions used by the demo; use demo's qdevice() calls to determine this
+- Description/history/context for each demo - can obtain descriptions from .Info slide files
 - Man pages
 
 Credits:
