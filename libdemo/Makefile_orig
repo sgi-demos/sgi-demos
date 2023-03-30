@@ -1,0 +1,23 @@
+# 
+# This makefile creates libdemo which is used to build demos 
+#
+include	${ROOT}/usr/include/make/commondefs
+
+IDBTAG = 	-idb "std.sw.demos"
+
+LCINCS =	-I. -I../../../include -I$(ROOT)/usr/include/gl
+LLDLIBS =	${ROOT}/usr/lib/libgl.a ${ROOT}/usr/lib/libm.a
+OPTIMIZER =	-O
+
+TARGETS  =		../libdemo.a
+CFILES = gamma.c getset.c colormod.c grey.c
+
+default: ${TARGETS}
+
+include ${COMMONRULES}
+
+sales install: default
+
+${TARGETS}:	${OBJECTS}
+	${AR} cvr $@ ${OBJECTS}
+	${RANLIB} $@

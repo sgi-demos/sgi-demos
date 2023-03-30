@@ -39,4 +39,4 @@ float getgamma();
 FILE *openipc();
 FILE *closeipc();
 
-#endif PORTDEF
+#endif /*PORTDEF*/

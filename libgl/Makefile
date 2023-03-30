@@ -6,8 +6,8 @@ APPNAME=sdl_framebuffer
 SRC=sdl_framebuffer.c sdl_gl_events.c
 
 APP=$(BIN_DIR)/$(APPNAME)
-EMAPPNAME=$(WEB_DIR)/$(APPNAME)
-EMAPP=$(EMAPPNAME).html
+EMAPP_NAME=$(WEB_DIR)/$(APPNAME)
+EMAPP=$(EMAPP_NAME).html
 
 all: $(APP) $(EMAPP)
 
@@ -29,4 +29,4 @@ run: $(APP) $(EMAPP)
 clean:
 	rm -f $(APP)
 	rm -rf $(APP).dSYM
-	rm -f $(EMAPP) $(EMAPPNAME).js $(EMAPPNAME).wasm
+	rm -f $(EMAPP) $(EMAPP_NAME).js $(EMAPP_NAME).wasm

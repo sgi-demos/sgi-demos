@@ -1,0 +1,20 @@
+
+LCINCS = -I../include -I${ROOT}/usr/include/gl2
+LCOPTS = -O -DUNIX -DIP2
+OBJS = turtle.o gamma.o getset.o colormod.o subview.o redraw.o \
+	getapixel.o ipc.o percent.o parse.o fontlib.o \
+	rectlib.o
+
+all: libport.a
+
+clean:
+	rm -f *.o *.a
+
+install: all
+
+libport.a: $(OBJS) 
+	ar cr libport.a $(OBJS)
+	ranlib libport.a
+
+.c.o:
+	cc $(LCINCS) $(LCOPTS) -c $<

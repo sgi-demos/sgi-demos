@@ -25,7 +25,7 @@ int xsize, ysize;
 float wx, wy;
 int menu;
 
-main (argc,argv)
+main(argc,argv)
 int argc;
 char **argv;
 {

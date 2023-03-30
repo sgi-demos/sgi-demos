@@ -5,6 +5,7 @@ all:
 	make -C arena
 	make -C bounce
 	make -C buttonfly
+	make -C cedit
 	make -C flight
 	make -C ideas
 	make -C insect
@@ -18,6 +19,7 @@ clean:
 	make clean -C arena
 	make clean -C bounce
 	make clean -C buttonfly
+	make clean -C cedit
 	make clean -C flight
 	make clean -C ideas
 	make clean -C insect

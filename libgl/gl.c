@@ -3554,3 +3554,29 @@ static void init_gl_state()
 
     memset(devices_queued, 0, sizeof(devices_queued));
 }
+
+int readpixels(short number, Colorindex colors[ ])
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    return 0;
+}
+int readRGB(short number, RGBvalue red[ ], RGBvalue green[ ], RGBvalue blue[ ])
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    return 0;
+}
+
+void pushattributes()
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void popattributes()
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void screenspace()
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
