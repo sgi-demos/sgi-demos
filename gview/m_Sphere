@@ -1,0 +1,5 @@
+Sphere
+	/usr/demos/bin/gview /usr/demos/data/gview/Sphere.gfo >/dev/null 2>&1
+	.popup. Gview %t
+	.popup. Information
+	/usr/demos/data/gview/Sphere.info

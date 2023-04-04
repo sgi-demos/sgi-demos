@@ -1,0 +1,538 @@
+"Location","String Value","String Representation","Data Type"
+"00000073"," .init","\" .init\"","ds"
+"0000009c",".rdata","\".rdata\"","ds"
+"000000c4",".data","\".data\"","ds"
+"0000013c",".sdata","\".sdata\"","ds"
+"000101c0","usage: gview [-[nfP]] [-m f.mat] [-M mat] [-l ct\,opt] [-F num] [-o msg] [-s s] [-t x\,y\,z] [-[RW] f.bin] [GFO files]","\"usage: gview [-[nfP]] [-m f.mat] [-M mat] [-l ct\,opt] [-F num] [-o msg] [-s s] [-t x\,y\,z] [-[RW] f.bin] [GFO files]\"","ds"
+"00010254","Options %t|Auto Advance On/Off|Exit","\"Options %t|Auto Advance On/Off|Exit\"","ds"
+"000102b8","using window size (%d %d)
+","\"using window size (%d %d)\n\"","ds"
+"000102d4","using scale (%g)
+","\"using scale (%g)\n\"","ds"
+"000102f4","using translate (%g %g %g)
+","\"using translate (%g %g %g)\n\"","ds"
+"00010310","mapping lines to closed lines
+","\"mapping lines to closed lines\n\"","ds"
+"00010330","display list filter %d enabled
+","\"display list filter %d enabled\n\"","ds"
+"00010350","%s: using %s sequence for movie
+","\"%s: using %s sequence for movie\n\"","ds"
+"00010380","%s: reading material file %s
+","\"%s: reading material file %s\n\"","ds"
+"000103a0","%s: cannot open %s for reading
+","\"%s: cannot open %s for reading\n\"","ds"
+"000103cc","%s: -W option will not work correctly for this display list
+","\"%s: -W option will not work correctly for this display list\n\"","ds"
+"0001040c","%s: reading input from stdin
+","\"%s: reading input from stdin\n\"","ds"
+"0001042c","%s: Warning: cannot open file %s
+","\"%s: Warning: cannot open file %s\n\"","ds"
+"00010450","%s: cannot open file %s
+","\"%s: cannot open file %s\n\"","ds"
+"0001046c","%s: reading file %s
+","\"%s: reading file %s\n\"","ds"
+"00010484","%s: %d items in polygon table
+","\"%s: %d items in polygon table\n\"","ds"
+"000104a4","%s: %d items in line table
+","\"%s: %d items in line table\n\"","ds"
+"000104c0","%s: %d items in point table
+","\"%s: %d items in point table\n\"","ds"
+"000104e0","%s: %d items in instance table
+","\"%s: %d items in instance table\n\"","ds"
+"00010500","reading in binary file...","\"reading in binary file...\"","ds"
+"0001051c","
+%s: cannot read from file %s
+","\"\n%s: cannot read from file %s\n\"","ds"
+"0001053c","%s: binary file read failed
+","\"%s: binary file read failed\n\"","ds"
+"0001055c","writing out binary file...","\"writing out binary file...\"","ds"
+"00010578","
+%s: cannot write to file %s
+","\"\n%s: cannot write to file %s\n\"","ds"
+"00010598","%s: could not find material %s
+","\"%s: could not find material %s\n\"","ds"
+"000105b8","using material %s
+","\"using material %s\n\"","ds"
+"000105cc","You need a zbufffer to run: %s
+","\"You need a zbufffer to run: %s\n\"","ds"
+"000105ec","%6.2lf frames/s\, ","\"%6.2lf frames/s\, \"","ds"
+"00010600","%9.2lf polygons/s\, ","\"%9.2lf polygons/s\, \"","ds"
+"00010614","%9.2lf lines/s
+","\"%9.2lf lines/s\n\"","ds"
+"00010624","%s: saving viewing to file %s
+","\"%s: saving viewing to file %s\n\"","ds"
+"00010644","SaveViewToFile: projection matrix
+","\"SaveViewToFile: projection matrix\n\"","ds"
+"00010668","%s: cannot open %s for writing
+","\"%s: cannot open %s for writing\n\"","ds"
+"00010688","%s: reading viewing from file %s
+","\"%s: reading viewing from file %s\n\"","ds"
+"000106ac","RestoreViewFromFile: projection matrix
+","\"RestoreViewFromFile: projection matrix\n\"","ds"
+"000106d4","%s: cannot open %s for reading
+","\"%s: cannot open %s for reading\n\"","ds"
+"000106f4","frame %03d","\"frame %03d\"","ds"
+"000108d0","DEFMATERIAL","\"DEFMATERIAL\"","ds"
+"000108dc","DEFLIGHT","\"DEFLIGHT\"","ds"
+"000108e8","DEFLMODEL","\"DEFLMODEL\"","ds"
+"000108f4","EMISSION","\"EMISSION\"","ds"
+"00010900","SPECULAR","\"SPECULAR\"","ds"
+"0001090c","SHININESS","\"SHININESS\"","ds"
+"00010918","COLORINDEXES","\"COLORINDEXES\"","ds"
+"00010928","POSITION","\"POSITION\"","ds"
+"00010934","LOCALVIEWER","\"LOCALVIEWER\"","ds"
+"00010940","ATTENUATION","\"ATTENUATION\"","ds"
+"0001094c","MatInitialize","\"MatInitialize\"","ds"
+"0001095c","MatInitialize","\"MatInitialize\"","ds"
+"0001096c","MatInitialize","\"MatInitialize\"","ds"
+"0001097c","DEFMATERIAL","\"DEFMATERIAL\"","ds"
+"00010988","DEFLIGHT","\"DEFLIGHT\"","ds"
+"00010994","DEFLMODEL","\"DEFLMODEL\"","ds"
+"000109a0","syntax error\, expected DEF...","\"syntax error\, expected DEF...\"","ds"
+"000109c0","MATERIAL","\"MATERIAL\"","ds"
+"000109cc","MatDefineAll: only 8 lights allowed
+","\"MatDefineAll: only 8 lights allowed\n\"","ds"
+"000109f4","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010a08","MatDefineAll","\"MatDefineAll\"","ds"
+"00010a18","MatDefineAll: deftype=%d","\"MatDefineAll: deftype=%d\"","ds"
+"00010a34","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010a48","AddString","\"AddString\"","ds"
+"00010a54","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010a68","AddFloat","\"AddFloat\"","ds"
+"00010a74","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010a88","AddMaterial","\"AddMaterial\"","ds"
+"00010a94","AddMaterial: deftype=%d","\"AddMaterial: deftype=%d\"","ds"
+"00010aac","syntax error\, premature EOF","\"syntax error\, premature EOF\"","ds"
+"00010ac8","syntax error\, premature EOF","\"syntax error\, premature EOF\"","ds"
+"00010ae4","syntax error\, premature EOF","\"syntax error\, premature EOF\"","ds"
+"00010b00","expected a keyword","\"expected a keyword\"","ds"
+"00010b14","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010b28","ParseDef: expected ok","\"ParseDef: expected ok\"","ds"
+"00010b40","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010b54","ParseDef: expected keyword","\"ParseDef: expected keyword\"","ds"
+"00010b70","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010b84","ParseDef","\"ParseDef\"","ds"
+"00010b90","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010ba4","ParseStmt","\"ParseStmt\"","ds"
+"00010bb0","ParseStmt: deftype=%d","\"ParseStmt: deftype=%d\"","ds"
+"00010bc8","syntax error","\"syntax error\"","ds"
+"00010bd8","premature EOF\, expected a float","\"premature EOF\, expected a float\"","ds"
+"00010bf8","expected a float","\"expected a float\"","ds"
+"00010c0c","this keyword not allowed here","\"this keyword not allowed here\"","ds"
+"00010c2c","keyword expected","\"keyword expected\"","ds"
+"00010c40","Error: file %s\, line %d\, char %d: %s
+","\"Error: file %s\, line %d\, char %d: %s\n\"","ds"
+"00010c68","*****: %s","\"*****: %s\"","ds"
+"00010c80","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010c94","CreateCell","\"CreateCell\"","ds"
+"00010ca0","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010cb4","CreateData","\"CreateData\"","ds"
+"00010cc0","SetupFilter: ALLOCN cullPolygonArray failed","\"SetupFilter: ALLOCN cullPolygonArray failed\"","ds"
+"00010cec","SetupFilter: ALLOCN cullDataArray failed","\"SetupFilter: ALLOCN cullDataArray failed\"","ds"
+"00010d18","SetupFilter: cullDataArray not quad-aligned (0x%x)
+","\"SetupFilter: cullDataArray not quad-aligned (0x%x)\n\"","ds"
+"00010d4c","Filter: only lighted or shaded polygons allowed
+","\"Filter: only lighted or shaded polygons allowed\n\"","ds"
+"00010d80","Filter: all polygons must be the same class
+","\"Filter: all polygons must be the same class\n\"","ds"
+"00010db0","FilterLightedPolygon: not a 4-sided polygon (ignored)
+","\"FilterLightedPolygon: not a 4-sided polygon (ignored)\n\"","ds"
+"00010de8","FilterLightedPolygon: bad filter mode
+","\"FilterLightedPolygon: bad filter mode\n\"","ds"
+"00010e10","FilterShadedPolygon: not a 4-sided polygon (ignored)
+","\"FilterShadedPolygon: not a 4-sided polygon (ignored)\n\"","ds"
+"00010e48","FilterShadedPolygon: bad case
+","\"FilterShadedPolygon: bad case\n\"","ds"
+"00010e70","
+Write...File: header:
+","\"\nWrite...File: header:\n\"","ds"
+"00010e88","	numInst=%d
+","\"\tnumInst=%d\n\"","ds"
+"00010e98","	polygonArraySize=%d
+","\"\tpolygonArraySize=%d\n\"","ds"
+"00010eb0","	dataArraySize=%d
+","\"\tdataArraySize=%d\n\"","ds"
+"00010ec4","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010ed8","Write...File: error on header","\"Write...File: error on header\"","ds"
+"00010ef8","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010f0c","Write...File","\"Write...File\"","ds"
+"00010f1c","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010f30","Write...File","\"Write...File\"","ds"
+"00010f40","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010f54","Write...File","\"Write...File\"","ds"
+"00010f64","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010f78","Write...File","\"Write...File\"","ds"
+"00010f88","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00010f9c","Read...File: error on header","\"Read...File: error on header\"","ds"
+"00010fbc","Read...File: not a GView binary file
+","\"Read...File: not a GView binary file\n\"","ds"
+"00010fe4","Read...File: bad version GView binary file
+","\"Read...File: bad version GView binary file\n\"","ds"
+"00011010","Read...File: struct Entity size mismatch
+","\"Read...File: struct Entity size mismatch\n\"","ds"
+"0001103c","Read...File: struct PolygonCell size mismatch
+","\"Read...File: struct PolygonCell size mismatch\n\"","ds"
+"0001106c","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011080","Read...File: bad header.numInst","\"Read...File: bad header.numInst\"","ds"
+"000110a0","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"000110b4","Read...File: error on instSizeTable","\"Read...File: error on instSizeTable\"","ds"
+"000110d8","Read...File: ALLOCN","\"Read...File: ALLOCN\"","ds"
+"000110ec","Read...File: ALLOCN","\"Read...File: ALLOCN\"","ds"
+"00011100","Read...File: ALLOCN","\"Read...File: ALLOCN\"","ds"
+"00011114","Read...File: dataArray not quad-aligned (0x%x)
+","\"Read...File: dataArray not quad-aligned (0x%x)\n\"","ds"
+"00011144","Read..File","\"Read..File\"","ds"
+"00011150","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011164","Read...File: error on Entity","\"Read...File: error on Entity\"","ds"
+"00011184","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011198","Read...File: bad pIndex(ep->datap)","\"Read...File: bad pIndex(ep->datap)\"","ds"
+"000111bc","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"000111d0","Read...File: error on polygonArray","\"Read...File: error on polygonArray\"","ds"
+"000111f4","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011208","Read...File: error on dataArray","\"Read...File: error on dataArray\"","ds"
+"00011228","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"0001123c","Read...File: bad pIndex(pp->nextp)","\"Read...File: bad pIndex(pp->nextp)\"","ds"
+"00011260","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011274","Read...File: dIndex","\"Read...File: dIndex\"","ds"
+"000112a0","	(line %d\, char %d)
+","\"\t(line %d\, char %d)\n\"","ds"
+"000112b8","	(lookahead token: %d)
+","\"\t(lookahead token: %d)\n\"","ds"
+"000113a0","instance","\"instance\"","ds"
+"000113ac","material","\"material\"","ds"
+"000113b8","reflectance","\"reflectance\"","ds"
+"000113c4","emission","\"emission\"","ds"
+"000113d0","smoothness","\"smoothness\"","ds"
+"000113dc","metalness","\"metalness\"","ds"
+"000113e8","translate","\"translate\"","ds"
+"000113f4","%s: identifier '%s' (line %d\, char %d) is not a keyword
+","\"%s: identifier '%s' (line %d\, char %d) is not a keyword\n\"","ds"
+"00011430","%s: bad real constant '%s' (line %d\, char %d)
+","\"%s: bad real constant '%s' (line %d\, char %d)\n\"","ds"
+"00011460","%s: bad integer constant '%s' (line %d\, char %d)
+","\"%s: bad integer constant '%s' (line %d\, char %d)\n\"","ds"
+"00011494","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"000114a8","GetSimpleToken: token too big","\"GetSimpleToken: token too big\"","ds"
+"000114c8","GetSimpleToken: c='%c' (%d)
+","\"GetSimpleToken: c='%c' (%d)\n\"","ds"
+"000114e8","a letter is not permitted within a number","\"a letter is not permitted within a number\"","ds"
+"00011514","reached EOF before end of comment","\"reached EOF before end of comment\"","ds"
+"00011538","reached EOF before end of comment","\"reached EOF before end of comment\"","ds"
+"0001155c","unexpected punctuation character","\"unexpected punctuation character\"","ds"
+"00011580","this character is not permitted","\"this character is not permitted\"","ds"
+"000115a0","
+ScanError: %s
+","\"\nScanError: %s\n\"","ds"
+"000115b0","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"000115c4","AddCPackDef","\"AddCPackDef\"","ds"
+"000115d0","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"000115f0","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011610","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011630","AddMaterialDef: unknown class %d
+","\"AddMaterialDef: unknown class %d\n\"","ds"
+"00011654","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011668","AddMaterialDef","\"AddMaterialDef\"","ds"
+"00011678","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"0001168c","AddRotateDef","\"AddRotateDef\"","ds"
+"0001169c","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"000116b0","AddScaleDef","\"AddScaleDef\"","ds"
+"000116bc","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"000116d0","AddTranslateDef","\"AddTranslateDef\"","ds"
+"000116e0","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"000116f4","AddPolygonDef: too few refs","\"AddPolygonDef: too few refs\"","ds"
+"00011710","AddPolygonDef: error (2nd ref) polygon %d
+","\"AddPolygonDef: error (2nd ref) polygon %d\n\"","ds"
+"0001173c","AddPolygonDef: error (gen failed) polygon %d
+","\"AddPolygonDef: error (gen failed) polygon %d\n\"","ds"
+"0001176c","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011780","AddPolygonDef","\"AddPolygonDef\"","ds"
+"00011790","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"000117a4","GenPolygonDef","\"GenPolygonDef\"","ds"
+"000117b4","GenPolygonDef: error (pp mods) polygon %d
+","\"GenPolygonDef: error (pp mods) polygon %d\n\"","ds"
+"000117e0","GenPolygonDef: error (pv mods) polygon %d
+","\"GenPolygonDef: error (pv mods) polygon %d\n\"","ds"
+"0001180c","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011820","GenPolygonDef: v sizeof","\"GenPolygonDef: v sizeof\"","ds"
+"00011838","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"0001184c","GenPolygonDef: n sizeof","\"GenPolygonDef: n sizeof\"","ds"
+"00011864","GenPolygonDef: bad class reference %d in polygon %d
+","\"GenPolygonDef: bad class reference %d in polygon %d\n\"","ds"
+"0001189c","AddPolygonDef: ALLOCN","\"AddPolygonDef: ALLOCN\"","ds"
+"000118b4","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"000118c8","AddPointDef: too many refs","\"AddPointDef: too many refs\"","ds"
+"000118e4","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"000118f8","AddPointDef: a point must have one vertex","\"AddPointDef: a point must have one vertex\"","ds"
+"00011924","AddPointDef: bad attribute (%d) for point %d","\"AddPointDef: bad attribute (%d) for point %d\"","ds"
+"00011954","AddPointDef: error (gen failed) point %d
+","\"AddPointDef: error (gen failed) point %d\n\"","ds"
+"00011980","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011994","AddPointDef","\"AddPointDef\"","ds"
+"000119a0","GenPointDef: bad modifier (%d) in point %d","\"GenPointDef: bad modifier (%d) in point %d\"","ds"
+"000119cc","v3f[%d] not defined","\"v3f[%d] not defined\"","ds"
+"000119e0","cpack[%d] not defined","\"cpack[%d] not defined\"","ds"
+"000119f8","n3f[%d] not defined","\"n3f[%d] not defined\"","ds"
+"00011a0c","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011a20","GenPointDef: traverse code assumes this","\"GenPointDef: traverse code assumes this\"","ds"
+"00011a48","AddPointDef: ALLOCN","\"AddPointDef: ALLOCN\"","ds"
+"00011a5c","AddLineDef: semantic error (1) in line[%d]","\"AddLineDef: semantic error (1) in line[%d]\"","ds"
+"00011a88","AddLineDef: semantic error (2) in line[%d]","\"AddLineDef: semantic error (2) in line[%d]\"","ds"
+"00011ab4","AddLineDef: semantic error (3) in line[%d]","\"AddLineDef: semantic error (3) in line[%d]\"","ds"
+"00011ae0","AddLineDef: semantic error (4) in line[%d]","\"AddLineDef: semantic error (4) in line[%d]\"","ds"
+"00011b0c","AddLineDef: error (gen failed) Line %d
+","\"AddLineDef: error (gen failed) Line %d\n\"","ds"
+"00011b34","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011b48","AddLineDef","\"AddLineDef\"","ds"
+"00011b54","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011b68","GenLineDef: v sizeof","\"GenLineDef: v sizeof\"","ds"
+"00011b80","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011b94","GenLineDef: n sizeof","\"GenLineDef: n sizeof\"","ds"
+"00011bac","AddLineDef: ALLOCN","\"AddLineDef: ALLOCN\"","ds"
+"00011bc0","GenGroupDef:","\"GenGroupDef:\"","ds"
+"00011bd0","GenGroupDef:","\"GenGroupDef:\"","ds"
+"00011be0","GenGroupDef:","\"GenGroupDef:\"","ds"
+"00011bf0","GenGroupDef:","\"GenGroupDef:\"","ds"
+"00011c00","GenGroupDef:","\"GenGroupDef:\"","ds"
+"00011c10","GenGroupDef:","\"GenGroupDef:\"","ds"
+"00011c20","GenGroupDef:","\"GenGroupDef:\"","ds"
+"00011c30","GenGroupDef:","\"GenGroupDef:\"","ds"
+"00011c40","GenGroupDef:","\"GenGroupDef:\"","ds"
+"00011c50","GenGroupDef:","\"GenGroupDef:\"","ds"
+"00011c60","GenGroupDef:","\"GenGroupDef:\"","ds"
+"00011c70","GenGroupDef: class %d not allowed here
+","\"GenGroupDef: class %d not allowed here\n\"","ds"
+"00011c98","AddGroupDef: error (gen failed) group %d
+","\"AddGroupDef: error (gen failed) group %d\n\"","ds"
+"00011cc4","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011cd8","AddGroupDef","\"AddGroupDef\"","ds"
+"00011ce4","AddInstanceDef: error (gen failed) instance %d
+","\"AddInstanceDef: error (gen failed) instance %d\n\"","ds"
+"00011d14","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011d28","AddInstanceDef","\"AddInstanceDef\"","ds"
+"00011d38","%s: cpack[%d] not defined","\"%s: cpack[%d] not defined\"","ds"
+"00011d54","%s: n3f[%d] not defined","\"%s: n3f[%d] not defined\"","ds"
+"00011d6c","%s: v3f[%d] not defined","\"%s: v3f[%d] not defined\"","ds"
+"00011d84","%s: material[%d] not defined","\"%s: material[%d] not defined\"","ds"
+"00011da4","%s: polygon[%d] not defined","\"%s: polygon[%d] not defined\"","ds"
+"00011dc0","%s: line[%d] not defined","\"%s: line[%d] not defined\"","ds"
+"00011ddc","%s: point[%d] not defined","\"%s: point[%d] not defined\"","ds"
+"00011df8","%s: group[%d] not defined","\"%s: group[%d] not defined\"","ds"
+"00011e14","GenRef: cannot reference class %d [%d]
+","\"GenRef: cannot reference class %d [%d]\n\"","ds"
+"00011e3c","GenDef1f:","\"GenDef1f:\"","ds"
+"00011e48","GenDef3f:","\"GenDef3f:\"","ds"
+"00011e60","SetupFuncTable: ALLOC","\"SetupFuncTable: ALLOC\"","ds"
+"00011e78","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011e8c","DrawGroup: bad funcIndex","\"DrawGroup: bad funcIndex\"","ds"
+"00011ea8","SetRotate: rotate not about x\, y\, or z axis
+","\"SetRotate: rotate not about x\, y\, or z axis\n\"","ds"
+"00011ee0","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011ef4","cistrequal: string is NULL","\"cistrequal: string is NULL\"","ds"
+"00011f10","ArrayAlloc: %s","\"ArrayAlloc: %s\"","ds"
+"00011f20","ArrayAlloc: %s","\"ArrayAlloc: %s\"","ds"
+"00011f30","SaveImage: saving image to %s
+","\"SaveImage: saving image to %s\n\"","ds"
+"00011f50","SaveImage: can't open image file %s
+","\"SaveImage: can't open image file %s\n\"","ds"
+"00011f78","SaveImage: malloc failed
+","\"SaveImage: malloc failed\n\"","ds"
+"00011f94","
+Assert failed: %s
+","\"\nAssert failed: %s\n\"","ds"
+"00011fa8","SaveImage: expected zsize==3","\"SaveImage: expected zsize==3\"","ds"
+"00011fc8","SaveImage: bad lrectread return value (%d)
+","\"SaveImage: bad lrectread return value (%d)\n\"","ds"
+"00012e07","'yacc stack overflow","\"'yacc stack overflow\"","ds"
+"00012e1c","syntax error","\"syntax error\"","ds"
+"00012e30","ListCreate","\"ListCreate\"","ds"
+"00012e40","ListInsert","\"ListInsert\"","ds"
+"00012e4c","ListInsertAfterPos","\"ListInsertAfterPos\"","ds"
+"00012e60","ListAppend","\"ListAppend\"","ds"
+"00012e70","ListFastSearch","\"ListFastSearch\"","ds"
+"00012e80","ERROR: %s: %s
+","\"ERROR: %s: %s\n\"","ds"
+"00012e90","compare function never returns TRUE","\"compare function never returns TRUE\"","ds"
+"00012fc0","ERROR: %s: %s
+","\"ERROR: %s: %s\n\"","ds"
+"00012fd0","out of memory!
+","\"out of memory!\n\"","ds"
+"00012fe0","iopen: read/write mode not supported
+","\"iopen: read/write mode not supported\n\"","ds"
+"00013008","iopen: can't open output file %s
+","\"iopen: can't open output file %s\n\"","ds"
+"0001302c","iopen: error on write of image header
+","\"iopen: error on write of image header\n\"","ds"
+"00013054","iopen: error on read of image header
+","\"iopen: error on read of image header\n\"","ds"
+"0001307c","iopen: bad magic in image file %x
+","\"iopen: bad magic in image file %x\n\"","ds"
+"000130a0","iopen: error on table alloc
+","\"iopen: error on table alloc\n\"","ds"
+"000130c0","iopen: error on read of rowstart
+","\"iopen: error on read of rowstart\n\"","ds"
+"000130e4","iopen: error on read of rowsize
+","\"iopen: error on read of rowsize\n\"","ds"
+"00013108","iopen: error on tmpbuf alloc %d
+","\"iopen: error on tmpbuf alloc %d\n\"","ds"
+"00013130","putrow: wierd bpp
+","\"putrow: wierd bpp\n\"","ds"
+"00013144","putrow: wierd bpp
+","\"putrow: wierd bpp\n\"","ds"
+"00013158","putrow: wierd image type
+","\"putrow: wierd image type\n\"","ds"
+"00013174","getrow: wierd bpp
+","\"getrow: wierd bpp\n\"","ds"
+"00013188","getrow: wierd bpp
+","\"getrow: wierd bpp\n\"","ds"
+"0001319c","getrow: wierd image type
+","\"getrow: wierd image type\n\"","ds"
+"000131c0","iflush: error on write of image header
+","\"iflush: error on write of image header\n\"","ds"
+"000131e8","iflush: error on write of rowstart
+","\"iflush: error on write of rowstart\n\"","ds"
+"0001320c","iflush: error on write of rowsize
+","\"iflush: error on write of rowsize\n\"","ds"
+"00013230","imglib: row number out of range
+","\"imglib: row number out of range\n\"","ds"
+"00013254","img_seek: wierd dim
+","\"img_seek: wierd dim\n\"","ds"
+"0001326c","img_seek: wierd dim
+","\"img_seek: wierd dim\n\"","ds"
+"00013284","img_seek: wierd image type
+","\"img_seek: wierd image type\n\"","ds"
+"000132a0","rle_compact: bad bpp: %d %d
+","\"rle_compact: bad bpp: %d %d\n\"","ds"
+"000132c0","rle_expand: bad bpp: %d %d
+","\"rle_expand: bad bpp: %d %d\n\"","ds"
+"000134e4","CHRCLASS","\"CHRCLASS\"","ds"
+"000134f0","/lib/chrclass/","\"/lib/chrclass/\"","ds"
+"00013ce0",": option requires an argument -- ","\": option requires an argument -- \"","ds"
+"00013d04",": illegal option -- ","\": illegal option -- \"","ds"
+"00013ee0","%s: %s
+","\"%s: %s\n\"","ds"
+"00013ef0","Default","\"Default\"","ds"
+"00013f1c","repeat","\"repeat\"","ds"
+"00013fa8","done.
+","\"done.\n\"","ds"
+"00013fb4","done.
+","\"done.\n\"","ds"
+"00014010","AMBIENT","\"AMBIENT\"","ds"
+"00014018","DIFFUSE","\"DIFFUSE\"","ds"
+"00014020","ALPHA","\"ALPHA\"","ds"
+"00014028","LCOLOR","\"LCOLOR\"","ds"
+"00014040","LIGHT","\"LIGHT\"","ds"
+"00014048","LMODEL","\"LMODEL\"","ds"
+"00014060","Filter","\"Filter\"","ds"
+"00014070","%s: %s
+","\"%s: %s\n\"","ds"
+"00014080","cpack","\"cpack\"","ds"
+"0001408c","polygon","\"polygon\"","ds"
+"00014098","lines","\"lines\"","ds"
+"000140ac","point","\"point\"","ds"
+"000140c4","group","\"group\"","ds"
+"000140cc","opacity","\"opacity\"","ds"
+"000140d4","rotate","\"rotate\"","ds"
+"000140dc","scale","\"scale\"","ds"
+"000140e4","scope","\"scope\"","ds"
+"00014110","GenRef:","\"GenRef:\"","ds"
+"00014170","no name","\"no name\"","ds"
+"00015020","/usr/lib/libgl_s","\"/usr/lib/libgl_s\"","ds"
+"00015060","/lib/libc_s","\"/lib/libc_s\"","ds"

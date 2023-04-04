@@ -1,0 +1,5 @@
+Simple Barcelona Pavillion
+	/usr/demos/bin/gview -f /usr/demos/data/gview/Barcelona.gfo >/dev/null 2>&1
+	.popup. Gview %t
+	.popup. Information
+	/usr/demos/data/gview/Barcelona.info
