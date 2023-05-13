@@ -1,0 +1,132 @@
+
+
+
+GGGGVVVVIIIIEEEEWWWW((((6666DDDD))))                      SSSSiiiilllliiiiccccoooonnnn GGGGrrrraaaapppphhhhiiiiccccssss                      GGGGVVVVIIIIEEEEWWWW((((6666DDDD))))
+
+
+
+NNNNAAAAMMMMEEEE
+     gview - viewer for radiosity data
+
+SSSSYYYYNNNNOOOOPPPPSSSSIIIISSSS
+     ggggvvvviiiieeeewwww [ ooooppppttttiiiioooonnnnssss ] ffffiiiilllleeeennnnaaaammmmeeee
+
+DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
+     _g_v_i_e_w is a viewer for data in 'gfo' format (the format the radiosity data
+     is  stored  in).  The default user interface is similar to the old 'spin'
+     program; using the '-f' option to get the fly-through interface is highly
+     recommended.   Moving  the  mouse left and right turns the viewpoint left
+     and right; moving the mouse forward looks down, and  pulling  back  looks
+     up.   In addition, the mouse buttons and keyboard also control your point
+     of view:
+
+     LLLLEEEEFFFFTTTT MMMMOOOOUUUUSSSSEEEEBBBBUUUUTTTTTTTTOOOONNNN
+                   moves forward
+
+     MMMMIIIIDDDDDDDDLLLLEEEE MMMMOOOOUUUUSSSSEEEEBBBBUUUUTTTTTTTTOOOONNNN
+                   move backwards
+
+     RRRRIIIIGGGGHHHHTTTT MMMMOOOOUUUUSSSSEEEEBBBBUUUUTTTTTTTTOOOONNNN
+                   The right mouse button has a menu on it; the 'Auto Advance'
+                   entry  does  nothing  unless  you are running in movie-loop
+                   mode (see Options, below).
+
+     ''''AAAA'''' KKKKEEEEYYYY       magnifys the view
+
+     ''''SSSS'''' KKKKEEEEYYYY       un-magnifys the view
+
+     ''''WWWW'''' KKKKEEEEYYYY       accelerates faster
+
+     ''''QQQQ'''' KKKKEEEEYYYY       accelerates slower
+
+     ''''XXXX'''' KKKKEEEEYYYY       chooses the x-axis to be the 'up' direction
+
+     ''''YYYY'''' KKKKEEEEYYYY       chooses the y-axis to be the 'up' direction
+
+     ''''ZZZZ'''' KKKKEEEEYYYY       chooses the z-axis to be the 'up' direction (the default)
+
+     ''''EEEESSSSCCCC'''' KKKKEEEEYYYY     exits the program
+
+OOOOPPPPTTTTIIIIOOOONNNNSSSS
+     ----nnnn            Do no graphics.  GView exits  before  doing  any  graphics.
+                   This  is  useful for checking syntax or converting files to
+                   binary.
+
+     ----ffff            Flying user interface.  Useful for radiosity environments.
+
+     ----PPPP            Occasionally print some performance statistics.
+
+
+
+
+
+Page 1                           Release 3.3                        April 1990
+
+
+
+
+
+
+GGGGVVVVIIIIEEEEWWWW((((6666DDDD))))                      SSSSiiiilllliiiiccccoooonnnn GGGGrrrraaaapppphhhhiiiiccccssss                      GGGGVVVVIIIIEEEEWWWW((((6666DDDD))))
+
+
+
+     ----mmmm ffffiiiilllleeee       Read named materials and lighting environment from  'file'.
+                   More than one file can be included if separated by commas.
+
+     ----MMMM mmmmaaaatttt        Make 'mat' the default material.  Normally 'Default' is the
+                   default material.
+
+     ----llll cccctttt,,,,mmmmooooddddeeee    Movie loop mode.  'Ct' is the number of  times  each  movie
+                   frame  is  shown.  A 'mode' of 0 means sequence forward.  A
+                   'mode' of 1 means sequence in a zigzag pattern.   "-l  1,1"
+                   is typical.
+
+     ----FFFF mmmmooooddddeeee       Enable display  list  filter.   This  option  converts  the
+                   display  list  to  a  format suitable for a binary file.  A
+                   'mode' of 1 causes the display list to be copied as is.  No
+                   other modes are implemented.
+
+     ----oooo ssssttttrrrr        Overlay a string 'str' above the display window.  A  string
+                   containing embedded blanks should be quoted.
+
+     ----RRRR ffff....bbbbiiiinnnn      Read a binary file.  Any GFO files are ignored.
+
+     ----WWWW ffff....bbbbiiiinnnn      Write a binary file.  The current display list is saved.
+
+     ----wwww xxxx,,,,yyyy        Set screen window size.  If only x is provided, the  window
+                   will be square.
+
+     ----tttt xxxx,,,,yyyy,,,,zzzz      Translate the origin of the data before it is displayed.
+
+     ----ssss ffffaaaaccccttttoooorrrr     Scale the data before it is displayed.
+
+     ----iiii ffff....rrrrggggbbbb      Save window to an image file f.rgb when the I key is hit.
+
+     ----VVVV ffffiiiilllleeee       Save viewing matrix to a file when the V key is hit.
+
+     ----vvvv ffffiiiilllleeee       Use viewing matrix from a file instead of interactive  con-
+                   trols.
+
+EEEEXXXXAAAAMMMMPPPPLLLLEEEESSSS
+     To create a binary file from a GFO file:  (no graphics will  occur,  just
+     conversion)
+     _g_v_i_e_w -_n -_F _1 -_W _f_i_l_e._b_i_n
+
+FFFFIIIILLLLEEEESSSS
+     /usr/demos/data/gview contains some radiosity file(s).
+
+HHHHAAAARRRRDDDDWWWWAAAARRRREEEE RRRREEEEQQQQUUUUIIIIRRRREEEEMMMMEEEENNNNTTTTSSSS
+     24 bitplanes and z-buffer
+
+
+
+
+
+
+
+
+Page 2                           Release 3.3                        April 1990
+
+
+

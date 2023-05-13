@@ -1,0 +1,40 @@
+#! /usr/demos/bin/slides
+.font 2 
+.back 0 0 130,clear 
+.size 100 1179 50 973 
+.margins 60 60 10 10 
+.back 100 100 200,clear 
+.sk 2 
+.color 230 120 0,center on,shadow on 4,fade off,wait off,under on
+Radiosity
+.under off,shadow on 1
+.color 114 212 70,fade off
+.font 1
+.sk 2 
+The radiosity method is based on thermal engineering techniques for determining
+the exchange of radiant energy between surfaces.  The method accurately computes
+the global illumination within a scene consisting of diffusely reflecting
+surfaces.  Unlike local illuminating methods such as Phong, the Radiosity method
+takes the geometry and material properties into account when computing the
+illumination at any given point.  Thus, effects such as shadows, indirect
+lighting, and color bleeding are readily achieved.  The result is the
+illumination of the environment independent of viewpoint, allowing realtime
+walk-throughs after performing the initial illumination calculations.  This
+interactive walk-through ability makes the Radiosity method well suited for
+applications such as architecture, industrial design, and animation.
+.sk 2
+The Radiosity method computes an equilibrium energy balance for visible energy
+in the environment.  To arrive at this equilibrium, the geometric relationships
+between every pair of surfaces in the environment must be computed.  Once these
+geometric relationships have been found, they are combined with the reflective
+values for each surface as well as the the emission values of light sources to
+form a large system of simultaneous equations.  For an environment consisting of
+N surfaces an N by N matrix must be formed and solved.  This project has
+exploited the power of the Silicon graphics workstation and graphics pipeline to
+accomplish this in minutes rather than hours.
+.sk 3
+.color 230 120 0
+.font 0
+.shadow on 1
+Hit the right mouse button to continue.
+.wait on
