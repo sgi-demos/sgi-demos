@@ -1293,9 +1293,9 @@ Triangle *triangle;
 }
 
 
-float plane_point_d(triangle, atom)
+float plane_point_d(triangle, pos)
 Triangle *triangle;
-Atom *atom;
+float *pos;
 {
     float v1[3], v2[3], norm[4], d, r;
 
@@ -1321,9 +1321,9 @@ Atom *atom;
 		triangle->vertex[0]->pos[Y] * norm[Y] +
 		triangle->vertex[0]->pos[Z] * norm[Z]);
 
-    d = norm[X] * atom->pos[X] + 
-	norm[Y] * atom->pos[Y] + 
-	norm[Z] * atom->pos[Z] + norm[W];
+    d = norm[X] * pos[X] + 
+	norm[Y] * pos[Y] + 
+	norm[Z] * pos[Z] + norm[W];
 
     if (d<0.0) {
 	triangle->norm[X] = -norm[X];
