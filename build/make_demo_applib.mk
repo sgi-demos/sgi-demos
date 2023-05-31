@@ -1,4 +1,4 @@
-include ../Make/platform.mk
+include ../build/platform.mk
 
 APP=$(BIN_DIR)/$(APPNAME)
 EMAPP_NAME=$(WEB_DIR)/$(APPNAME)

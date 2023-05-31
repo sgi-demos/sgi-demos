@@ -16,13 +16,13 @@ WEB_DIR = ./web
 OPT_ZERO = -O0 -g
 OPT_TWO = -DNDEBUG -O2
 OPT = $(OPT_ZERO)
-EM_OPT = $(OPT_TWO)
+EM_OPT = $(OPT_ZERO) 
 EXTRA_DEBUG = -fsanitize=undefined
 EM_EXTRA_DEBUG = $(EXTRA_DEBUG) -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK=2
 
 CC = cc $(EXTRA_DEBUG)
 EMCC = emcc -s WASM=1 -s PRECISE_F32=1
-OLD_CODE_CC = $(CC) -std=c90 
+OLD_CODE_CC = $(CC) -std=c90
 OLD_CODE_EMCC = $(EMCC) -std=c90
 OLD_CODE_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat -Wno-pointer-sign -Wno-int-conversion -Wno-out-of-scope-function -Wno-format-extra-args -Wno-unused-command-line-argument -Wno-comment $(OLD_CODE_WARN_OFF_EXTRA)
 EM_OLD_CODE_WARN_OFF = $(OLD_CODE_WARN_OFF) -Wno-deprecated-non-prototype
