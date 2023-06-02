@@ -19,7 +19,11 @@ $(WEB_DIR):
 	mkdir -p $@
 	echo *.o > $@/.gitignore
 
-$(OBJS): $(BIN_DIR)/%.o: %.c $(HDRS) | $(BIN_DIR)
+$(PATCH_DIR):
+	mkdir -p $@
+	cp $(SRC) $(HDRS) $@
+	
+$(OBJS): $(BIN_DIR)/%.o: $(PATCH_DIR)/%.c $(PATCH_DIR)/$(HDRS) | $(BIN_DIR)
 	$(OLD_CODE_CC) $(OPT) $(OLD_CODE_WARN_OFF) $(LIBGL_INC) $(DEMO_INC) $(APPDEFS) $< -c -o $@
 
 $(APP): $(OBJS) $(LIBGL_SRC)
@@ -28,7 +32,7 @@ $(APP): $(OBJS) $(LIBGL_SRC)
 	@echo BUILT: $@
 	@echo
 
-$(EMOBJS): $(WEB_DIR)/%.o: %.c $(HDRS) | $(WEB_DIR)
+$(EMOBJS): $(WEB_DIR)/%.o: $(PATCH_DIR)/%.c $(PATCH_DIR)/$(HDRS) | $(WEB_DIR)
 	$(OLD_CODE_EMCC) $(EM_OPT) $(EM_OLD_CODE_WARN_OFF) $(LIBGL_INC) $(DEMO_INC) $(APPDEFS) $< -c -o $@
 
 $(EMAPP): $(EMOBJS) $(LIBGL_SRC)

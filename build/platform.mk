@@ -13,6 +13,7 @@ LIBGL_INC = -I../ -I../gl
 DEMO_INC = -I../demo_include
 BIN_DIR = ./bin
 WEB_DIR = ./web
+PATCH_DIR = ./patch
 OPT_ZERO = -O0 -g
 OPT_TWO = -DNDEBUG -O2
 OPT = $(OPT_ZERO)

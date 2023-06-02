@@ -1,2 +1,2 @@
 APPNAME=insect
-include ../Make/make_demo.mk
+include ../build/make_demo.mk

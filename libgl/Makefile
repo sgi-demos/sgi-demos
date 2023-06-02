@@ -1,6 +1,6 @@
 .PHONY: clean run
 
-include ../Make/platform.mk
+include ../build/platform.mk
 
 APPNAME=sdl_framebuffer
 SRC=sdl_framebuffer.c sdl_gl_events.c
