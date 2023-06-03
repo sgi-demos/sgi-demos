@@ -6,7 +6,6 @@ EMAPP=$(EMAPPNAME).html
 SRC = $(wildcard *.c)
 HDRS = $(wildcard *.h)
 PATCH_SRC = $(patsubst %.c,$(PATCH_DIR)/%.c,$(SRC)) 
-PATCH_HDRS = $(patsubst %.h,$(PATCH_DIR)/%.h,$(HDRS))
 OBJS = $(patsubst %.c,$(BIN_DIR)/%.o,$(SRC))
 EMOBJS = $(patsubst %.c,$(WEB_DIR)/%.o,$(SRC))
 

@@ -5,12 +5,22 @@ EMLIBNAME=$(WEB_DIR)/$(LIBNAME)
 EMLIB=$(EMLIBNAME).a
 SRC = $(wildcard *.c)
 HDRS = $(wildcard *.h)
-PATCH_SRC = $(patsubst %.c,$(PATCH_DIR)/%.c,$(SRC)) 
-PATCH_HDRS = $(patsubst %.h,$(PATCH_DIR)/%.h,$(HDRS))
 OBJS = $(patsubst %.c,$(BIN_DIR)/%.o,$(SRC))
 EMOBJS = $(patsubst %.c,$(WEB_DIR)/%.o,$(SRC))
 
 all: $(LIB) $(EMLIB)
+
+ifeq ($(IS_OLD_CODE),yes)
+PATCH_SRC = $(patsubst %.c,$(PATCH_DIR)/%.c,$(SRC))
+SRC_DIR = $(PATCH_DIR)
+LIB_CC = $(OLD_CODE_CC) $(OPT) $(OLD_CODE_WARN_OFF)
+LIB_EMCC = $(OLD_CODE_EMCC) $(EM_OPT) $(EM_OLD_CODE_WARN_OFF)
+else
+PATCH_SRC =
+SRC_DIR = .
+LIB_CC = $(CC) $(OPT)
+LIB_EMCC = $(EMCC) $(EM_OPT)
+endif
 
 $(PATCH_DIR): $(SRC) $(HDRS)
 	mkdir -p $@
@@ -28,8 +38,8 @@ $(WEB_DIR): $(PATCH_SRC)
 	echo *.o > $@/.gitignore
 	echo *.a > $@/.gitignore
 
-$(OBJS): $(BIN_DIR)/%.o: $(PATCH_DIR)/%.c | $(BIN_DIR)
-	$(OLD_CODE_CC) $(OPT) $(OLD_CODE_WARN_OFF) $(LIBGL_INC) $(LIBDEMO_INC) $(LIBDEFS) $< -c -o $@
+$(OBJS): $(BIN_DIR)/%.o: $(SRC_DIR)/%.c | $(BIN_DIR)
+	$(LIB_CC) $(LIBGL_INC) $(LIBDEMO_INC) $(LIBDEFS) $< -c -o $@
 
 $(LIB): $(OBJS)
 	$(AR) $@ $(OBJS)
@@ -37,8 +47,8 @@ $(LIB): $(OBJS)
 	@echo BUILT: $@
 	@echo
 
-$(EMOBJS): $(WEB_DIR)/%.o: $(PATCH_DIR)/%.c | $(WEB_DIR) 
-	$(OLD_CODE_EMCC) $(EM_OPT) $(EM_OLD_CODE_WARN_OFF) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
+$(EMOBJS): $(WEB_DIR)/%.o: $(SRC_DIR)/%.c | $(WEB_DIR) 
+	$(LIB_EMCC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 
 $(EMLIB): $(EMOBJS)
 	$(EMAR) $@ $(EMOBJS)
