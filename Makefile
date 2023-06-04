@@ -1,5 +1,5 @@
 .PHONY: all clean
-DEMOS = libdemo libgl arena bounce buttonfly cedit flight ideas insect jello logo newave twilight
+DEMOS = libgl libdemo arena bounce buttonfly cedit flight ideas insect jello logo newave twilight
 
 all: $(DEMOS)
 	for file in $^ ; do make -C $${file} ; done

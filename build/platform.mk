@@ -6,14 +6,16 @@ else
         SDL_LIB=-F/Library/Frameworks -framework SDL2
     endif
 endif
-EM_SDL_LIB=-s USE_SDL=2
+EM_SDL_LIB =-s USE_SDL=2
 
-DEMO_LIB=../libdemo/bin/libdemo.a
-EM_DEMO_LIB=../libdemo/web/libdemo.a 
+GL_LIB = ../libgl/bin/libgl.a
+EM_GL_LIB = ../libgl/web/libgl.a 
+LIBGL_INC = -I../ -I../gl
+
+DEMO_LIB = ../libdemo/bin/libdemo.a
+EM_DEMO_LIB = ../libdemo/web/libdemo.a 
 LIBDEMO_INC = -I../demo_include
 
-LIBGL_SRC = ../libgl/gl.c ../libgl/vector.c ../libgl/reference_rasterizer.c ../libgl/sdl_framebuffer.c ../libgl/sdl_gl_events.c
-LIBGL_INC = -I../ -I../gl
 BIN_DIR = ./bin
 WEB_DIR = ./web
 PATCH_DIR = ./patch
@@ -24,8 +26,8 @@ EM_OPT = $(OPT_ZERO)
 EXTRA_DEBUG = -fsanitize=undefined
 EM_EXTRA_DEBUG = $(EXTRA_DEBUG) -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK=2
 
-AR = ar rvs
-EMAR = emar rvs
+AR = ar rvsc
+EMAR = emar rvsc
 CC = cc $(EXTRA_DEBUG)
 EMCC = emcc -s WASM=1 -s PRECISE_F32=1
 OLD_CODE_CC = $(CC) -std=c90

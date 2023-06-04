@@ -5,44 +5,56 @@ EMAPPNAME=$(WEB_DIR)/$(APPNAME)
 EMAPP=$(EMAPPNAME).html
 SRC = $(wildcard *.c)
 HDRS = $(wildcard *.h)
-PATCH_SRC = $(patsubst %.c,$(PATCH_DIR)/%.c,$(SRC)) 
+PATCH_SRC = $(patsubst %.c,$(PATCH_DIR)/%.c,$(SRC))
+PATCH_HDRS = $(patsubst %.h,$(PATCH_DIR)/%.h,$(HDRS))
 OBJS = $(patsubst %.c,$(BIN_DIR)/%.o,$(SRC))
 EMOBJS = $(patsubst %.c,$(WEB_DIR)/%.o,$(SRC))
 
 all: $(APP) $(EMAPP)
 
-$(DEMO_LIB):
+$(GL_LIB) $(EM_GL_LIB):
+	make -C ../libgl
+
+$(DEMO_LIB) $(EM_DEMO_LIB):
 	make -C ../libdemo
 
-$(PATCH_DIR): $(SRC) $(HDRS)
+$(PATCH_DIR):
 	mkdir -p $@
-	cp $(SRC) $(HDRS) $@
+	echo *.[ch] > $@/.gitignore
 
-$(PATCH_SRC): $(PATCH_DIR)
+$(PATCH_HDRS): $(PATCH_DIR)/%.h: ./%.h | $(PATCH_DIR)
+	cp -p $< $@
+	#cproto
+	#cocci
 
-$(BIN_DIR): $(PATCH_SRC)
+$(PATCH_SRC): $(PATCH_DIR)/%.c: ./%.c | $(PATCH_DIR)
+	cp -p $< $@
+	#cproto
+	#cocci
+
+$(BIN_DIR):
 	mkdir -p $@
-	echo *.o > $@/.gitignore
+	echo *.[oa] > $@/.gitignore
 	echo *.dSYM >> $@/.gitignore
 
-$(WEB_DIR): $(PATCH_SRC)
+$(WEB_DIR):
 	mkdir -p $@
 	echo *.o > $@/.gitignore
 
-$(OBJS): $(BIN_DIR)/%.o: $(PATCH_DIR)/%.c | $(BIN_DIR)
+$(OBJS): $(BIN_DIR)/%.o: $(PATCH_DIR)/%.c | $(BIN_DIR) $(PATCH_SRC) $(PATCH_HDRS)
 	$(OLD_CODE_CC) $(OPT) $(OLD_CODE_WARN_OFF) $(LIBGL_INC) $(LIBDEMO_INC) $(APPDEFS) $< -c -o $@
 
-$(APP): $(OBJS) $(LIBGL_SRC) $(DEMO_LIB)
-	$(CC) $(OPT) $(LIBGL_INC) $(OBJS) $(APPDEFS) -D EM_CHILD_APP $(LIBGL_SRC) $(DEMO_LIB) $(SDL_LIB) -lm -o $@
+$(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
+	$(CC) $(OPT) $(LIBGL_INC) $(OBJS) -D EM_CHILD_APP $(DEMO_LIB) $(GL_LIB) $(SDL_LIB) -lm -o $@
 	@echo
 	@echo BUILT: $@
 	@echo
 
-$(EMOBJS): $(WEB_DIR)/%.o: $(PATCH_DIR)/%.c | $(WEB_DIR) 
+$(EMOBJS): $(WEB_DIR)/%.o: $(PATCH_DIR)/%.c | $(WEB_DIR) $(PATCH_SRC) $(PATCH_HDRS)
 	$(OLD_CODE_EMCC) $(EM_OPT) $(EM_OLD_CODE_WARN_OFF) $(LIBGL_INC) $(LIBDEMO_INC) $(APPDEFS) $< -c -o $@
 
-$(EMAPP): $(EMOBJS) $(LIBGL_SRC) $(DEMO_LIB)
-	$(EMCC) $(EM_OPT) $(LIBGL_INC) $(APPDEFS) $(EMOBJS) -D EM_CHILD_APP $(LIBGL_SRC) $(EM_DEMO_LIB) $(EM_SDL_LIB) $(EMLNKR) -lm -o $@
+$(EMAPP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EMOBJS) 
+	$(EMCC) $(EM_OPT) $(LIBGL_INC) $(EMOBJS) -D EM_CHILD_APP $(EM_DEMO_LIB) $(EM_GL_LIB) $(EM_SDL_LIB) $(EMLNKR) -lm -o $@
 	$(APPCMDS)
 	@echo
 	@echo BUILT: $@
@@ -57,4 +69,4 @@ clean:
 	rm -f $(APP) $(OBJS)
 	rm -rf $(APP).dSYM
 	rm -f $(EMAPP) $(EMOBJS) $(EMAPPNAME).js $(EMAPPNAME).wasm
-	rm -rf $(PATCH_DIR)
+	rm -f $(PATCH_DIR)/*
