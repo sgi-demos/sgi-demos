@@ -17,7 +17,8 @@
         "em_child_app_stub.h": "c",
         "device.h": "c",
         "math.h": "c",
-        "CEDIT1991.C": "cpp"
+        "CEDIT1991.C": "cpp",
+        "string.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

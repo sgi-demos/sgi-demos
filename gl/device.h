@@ -435,4 +435,4 @@
 
 #define MENUBUTTON	RIGHTMOUSE /* THE menu button */
 
-#endif // DEVICEDEF
+#endif /* DEVICEDEF */

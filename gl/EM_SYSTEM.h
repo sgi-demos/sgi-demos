@@ -88,4 +88,10 @@ int strlen32(const char *s)
 #define drand48() ((float)rand()/(float)(RAND_MAX))
 #define srand48(s) (srand(s+1))
 
+// SGI        sizeof(long) == 4, sizeof(int) == 4, sizeof(size_t) == 4
+// Mac M1     sizeof(long) == 8, sizeof(int) == 4, sizeof(size_t) == 8  <--- Bad things happen mixing longs and ints
+// Mac Intel  ???
+
+//#define long int
+
 #endif // EM_SYSTEM_H

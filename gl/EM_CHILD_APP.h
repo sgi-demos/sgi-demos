@@ -1,6 +1,6 @@
 /* 
 
-   Redefine child app's main() to child_main(), and its infinite event loop ("while (1)") to a 
+   Redefine child apps main() to child_main(), and its infinite event loop ("while (1)") to a 
    separate child_main_loop() function, because Emscripten is driving the bus.
     
    This is going to be a bit ugly because variables declared before but used within the while loop
@@ -34,7 +34,7 @@
 
 */
 
-// re-define main's locals for child_main_loop, if used in child_main_loop
+// re-define main locals for child_main_loop, if used in child_main_loop
 #define EM_BOUNCE       0
 #define EM_BUTTONFLY    1
 #define EM_CEDIT        2

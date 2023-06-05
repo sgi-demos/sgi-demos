@@ -670,4 +670,4 @@ extern void gl_sincos(Angle angle, float *s, float *c);
 #define GLC_NODESTALPHA         13
 #define GLC_COMPATRATE          15
 
-#endif // GLDEF
+#endif /* GLDEF */
