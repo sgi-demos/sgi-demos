@@ -107,6 +107,8 @@ void sdlInit(const char *windowTitle)
 
     // Initialize viewport
     windowResizeEvent(sdlState.winSize);
+
+    SDL_StartTextInput();
 }
 
 static int mousePosX()
@@ -200,12 +202,13 @@ static void mouseMotionEvent()
     }
 }
 
-static void keyDownEvent(int sdl_keycode)
+static void keyDownEvent(int sdl_keycode, char *text)
 {
     if (sdl_keycode == SDLK_ESCAPE)
         exitEvent();
     else 
     {
+        //printf("sdl_keycode = %d, text = [%s]\n", sdl_keycode, text);
         // convert SDL key event to GL and add it to GL event queue
         gl_event ev;
         ev.device = sdl_keycode_to_gl(sdl_keycode);
@@ -215,14 +218,10 @@ static void keyDownEvent(int sdl_keycode)
             enqueue_event(&ev);
             if (sdl_devices_queued[KEYBD])
             {
-                const char* assKey = SDL_GetKeyName(sdl_keycode);
-                if (strlen(assKey) == 1)
+                if (strlen(text) == 1)
                 {
                     ev.device = KEYBD;
-                    if (events_get_button(LEFTSHIFTKEY) || events_get_button(RIGHTSHIFTKEY))
-                        ev.val = assKey[0];
-                    else
-                        ev.val = tolower(assKey[0]);        
+                    ev.val = text[0];
                     enqueue_event(&ev);
                 }
             }
@@ -268,6 +267,8 @@ static void mouseButtonEvent(int sdlButton, bool buttonDown)
 void sdlProcessEvents()
 {
     SDL_Event event;
+    char text[32] = "";
+    int keysym = 0;
     while (SDL_PollEvent(&event))
     {
         switch (event.type)
@@ -281,8 +282,19 @@ void sdlProcessEvents()
                     windowResizeEvent((Size2D){event.window.data1, event.window.data2});
                 break;
 
+            case SDL_TEXTINPUT:
+                memset(text, 0, sizeof(text));
+                strncpy(text, event.text.text, sizeof(text)-1);
+                //printf("SDL_TEXTINPUT text = [%s] keysym = [%d]\n", text, keysym);
+                if (strlen(SDL_GetKeyName(keysym)) == 1)
+                    keyDownEvent(keysym, text);
+                break;
+
             case SDL_KEYDOWN:
-                keyDownEvent(event.key.keysym.sym);
+                keysym = event.key.keysym.sym;
+                //printf("SDL_KEYDOWN keysym = %d\n", keysym);
+                if (strlen(SDL_GetKeyName(keysym)) > 1)
+                    keyDownEvent(keysym, "");
                 break;
 
             case SDL_MOUSEMOTION:
