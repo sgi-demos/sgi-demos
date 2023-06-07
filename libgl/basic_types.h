@@ -27,4 +27,4 @@ typedef struct screen_vertex
 
 #define SCREEN_VERTEX_V2_SCALE 32
 
-#endif // __BASIC_TYPES_H__
+#endif /* __BASIC_TYPES_H__ */

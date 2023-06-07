@@ -168,4 +168,4 @@ udp_warning()
     printf("them to a halt.  VAXes are known to have this problem.\n");
 }
 
-#endif // NETWORKING
+#endif /* NETWORKING */

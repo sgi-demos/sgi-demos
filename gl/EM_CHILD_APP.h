@@ -14,7 +14,7 @@
 */
 
 // redefine main to child_main
-#define main child_main
+//#define main child_main
 
 /*
 

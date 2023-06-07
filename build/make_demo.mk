@@ -38,9 +38,9 @@ $(PATCH_SRC): $(BIN_DIR)/%.c: ./%.c | $(BIN_DIR) $(PATCH_HDRS)
 	# convert k&r to ansi (-a) (but don't promote types (-p)) as prereq for spatch
 	cproto -a -p -I ../gl -I .. $@
 	# run preprocessor (-E) to expand all macros as prereq for spatch
-	#$(OLD_CODE_CC) -E $(OLD_CODE_WARN_OFF) $(LIBGL_INC) $(LIBDEMO_INC) $@ -o $@
+	$(OLD_CODE_CC) -E $(OLD_CODE_WARN_OFF) $(LIBGL_INC) $(LIBDEMO_INC) $@ -o $@
 	# patch:
-	#spatch --sp-file $(PATCH_MAIN_TO_CHILD) $@ -o $@
+	spatch --sp-file $(PATCH_MAIN_TO_CHILD) $@ -o $@
 
 $(EMPATCH_HDRS): $(WEB_DIR)/%.h: ./%.h | $(WEB_DIR)
 	cp -p $< $@
@@ -51,9 +51,9 @@ $(EMPATCH_SRC): $(WEB_DIR)/%.c: ./%.c | $(WEB_DIR) $(EMPATCH_HDRS)
 	# convert k&r to ansi (-a) (but don't promote types (-p)) as prereq for spatch
 	cproto -a -p -I ../gl -I .. $@
 	# run preprocessor (-E) to expand all macros as prereq for spatch
-	#$(OLD_CODE_EMCC) -E $(EM_OLD_CODE_WARN_OFF) $(LIBGL_INC) $(LIBDEMO_INC) $@ -o $@
+	$(OLD_CODE_EMCC) -E $(EM_OLD_CODE_WARN_OFF) $(LIBGL_INC) $(LIBDEMO_INC) $@ -o $@
 	# patch:
-	#spatch --sp-file $(PATCH_MAIN_TO_CHILD) $@ -o $@
+	spatch --sp-file $(PATCH_MAIN_TO_CHILD) $@ -o $@
 
 $(OBJS): $(BIN_DIR)/%.o: $(BIN_DIR)/%.c | $(BIN_DIR) $(PATCH_SRC) $(PATCH_HDRS)
 	$(OLD_CODE_CC) $(OPT) $(OLD_CODE_WARN_OFF) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@

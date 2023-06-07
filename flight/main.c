@@ -22,7 +22,7 @@
  *									  *
  **************************************************************************/
 
-#include <stdlib.h> // NULL
+#include <stdlib.h> /* NULL */
 #include "flight.h"
 #include "EM_CHILD_APP.h"
 

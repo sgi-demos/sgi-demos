@@ -30,6 +30,6 @@ extern int sendbroadcast(/* int socketfiledes, char *message,
 extern int recvbroadcast(/* int socketfiledes, char *messagebuf,
 			    int messagebuflen, int ignoreownflag */);
 
-#endif // NETWORKING
+#endif /* NETWORKING */
 
 #endif /* UDPBRDCSTDEF */

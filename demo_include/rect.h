@@ -36,4 +36,4 @@ Rect moveleftedge();
 Rect moverightedge();
 Rect screenarea();
 
-#endif // PORT_RECT
+#endif /* PORT_RECT */

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h> // RAND_MAX
+#include <stdlib.h> /* RAND_MAX */
 #include <gl.h>
 #include <math.h>
 #include <device.h>

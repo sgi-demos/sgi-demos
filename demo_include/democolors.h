@@ -58,4 +58,4 @@ extern int SINGLE2_SWIZZLE[2];
 extern int DOUBLE1_SWIZZLE[2];
 extern int DOUBLE2_SWIZZLE[2];
 
-#endif // DEMOCOLORDEF
+#endif /* DEMOCOLORDEF */

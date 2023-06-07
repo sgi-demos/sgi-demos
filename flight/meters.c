@@ -555,7 +555,7 @@ void draw_hud (Plane p, int tick, float vx, float vy, float vz, int vv, float ma
 	color (orange);
 	goto skipit;
     }
-#endif // DEBUG
+#endif /* DEBUG */
 
     editobj (CROSS_HAIRS);
 	objreplace (VV_EDIT);			/* vv marker		*/

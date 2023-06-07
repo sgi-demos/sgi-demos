@@ -171,4 +171,4 @@ recvbroadcast (broadcastsocket, message, messagelength, ignoreown)
 }
 
 
-#endif // NETWORKING
+#endif /* NETWORKING */

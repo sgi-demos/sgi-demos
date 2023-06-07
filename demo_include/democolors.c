@@ -62,4 +62,4 @@ int DOUBLE2_SWIZZLE[2] = {800+32+32+32+24, 19};
 
 int DITHERRAMPS = 256;
 
-#endif // DEMOCOLORDEF
+#endif /* DEMOCOLORDEF */

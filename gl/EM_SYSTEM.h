@@ -74,7 +74,7 @@ FILE *em_popen(const char *command, const char *mode)
 // Various workarounds for 1980s code
 // 
 
-// Private Eyes by Hall and Oates was the #1 song in the US on 9 Nov 1981, the day of SGI's founding
+// Private Eyes by Hall and Oates was the #1 song in the US on 9 Nov 1981, the day of SGI founding
 
 // Avoid promoting signed values to unsigned when mixing 
 // strlen() in arithmetic expressions
@@ -94,4 +94,4 @@ int strlen32(const char *s)
 
 //#define long int
 
-#endif // EM_SYSTEM_H
+#endif /* EM_SYSTEM_H */
