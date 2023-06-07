@@ -13,9 +13,9 @@
 #include "stdio.h"
 #include "EM_CHILD_APP.h"
 
-int drawsliders(int c, float r, float g, float b);
-int drawknob(float x, float old, float new, int c);
-int modmapcolor(int c, float r, float g, float b);
+int drawsliders();
+int drawknob();
+int modmapcolor();
 
 float or = -1.0;
 float og = -1.0;
@@ -36,7 +36,7 @@ char **argv;
     int i, j;
 
     if (argc>1)
-	setcolorsys(atoi(argv[1]));
+	    setcolorsys(atoi(argv[1]));
     keepaspect(1,1);
     winopen("cedit");
     menu = defpup("colorsys %t|rgb|cmy|hsv|hls");
@@ -159,7 +159,7 @@ checkmouse()
     short dev, val;
     int sel;
 
-    while (1) {
+    if (1) {
 	if (m1 != 0 || m2 != 0 || m3 != 0) {
 	    if (!qtest()) 
 		return;

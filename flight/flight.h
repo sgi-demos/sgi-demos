@@ -29,7 +29,7 @@
 	(llx <= p -> x && p -> x <= urx && llz <= p -> z && p -> z <= urz)
 
 extern short debug, bitplanes, dogfight, hud, threat_mode;
-extern Angle xasin (float r);
+extern Angle xasin ();
 extern int dist_for_lines;
 extern float eye_x, eye_y, eye_z;
 extern float (*my_ptw)[4];

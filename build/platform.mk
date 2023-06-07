@@ -3,7 +3,8 @@ ifeq ($(UNAME),Linux)
     SDL_LIB=-lSDL2
 else
     ifeq ($(UNAME),Darwin)
-        SDL_LIB=-F/Library/Frameworks -framework SDL2
+		SDL_INC=-F/Library/Frameworks
+        SDL_LIB=-framework SDL2
     endif
 endif
 EM_SDL_LIB =-s USE_SDL=2
@@ -16,9 +17,9 @@ DEMO_LIB = ../libdemo/bin/libdemo.a
 EM_DEMO_LIB = ../libdemo/web/libdemo.a 
 LIBDEMO_INC = -I../demo_include
 
+SRC_DIR = .
 BIN_DIR = ./bin
 WEB_DIR = ./web
-PATCH_DIR = ./patch
 OPT_ZERO = -O0 -g
 OPT_TWO = -DNDEBUG -O2
 OPT = $(OPT_ZERO)

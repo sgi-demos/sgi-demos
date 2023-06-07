@@ -20,14 +20,14 @@
 // #include <psio.h>
 #include "EM_CHILD_APP.h"
 
-extern void make_crash (char *msg);
+void make_crash ();
 extern void draw_hud (Plane p, int tick, float vx, float vy, float vz, int vv, float mach, float gf, int wheels, int flaps, int spoilers, int autop, int fuel, int thrust);
-extern void make_meters ();
-extern void redraw_screen ();
-extern void map_daynight(int daytime);
-extern int draw_buildings (float rx, float ry, float rz, int start_plane, int num_planes);
-extern int change_rudder (float rudder);
-extern int my_lookat (float vx, float vy, float vz, float px, float py, float pz);
+void make_meters ();
+void redraw_screen ();
+void map_daynight();
+int draw_buildings ();
+int change_rudder ();
+int my_lookat ();
 
 #ifdef _4D
 int int_tps = 20;
@@ -54,7 +54,7 @@ int sidewinders, rockets;		/* number of armaments		*/
 int number_planes;			/* number of planes in game	*/
 float eye_x, eye_y, eye_z;		/* eye position		*/
 float (*my_ptw)[4];			/* pointer to my matrix	*/
-extern float ro[], fuel_consump (float thrust, float half_mass);	/* air density table	*/
+extern float ro[], fuel_consump ();	/* air density table	*/
 
 
 int timeit;		/* TRUE if displaying timing info */

@@ -131,7 +131,7 @@ make_buildings ()
     makemtn (-55000,2500,15000, 4, mtn10);
 
     /* threat patches are in land2.c	*/
-    int makethreat (register int cx, register int cz, int col, float radius);
+    int makethreat ();
     makethreat (6000,14000,red,17000.0);
     makethreat (-20000,15000,red,10700.0);
     makethreat (3000,34000,red,2700.0);

@@ -12,8 +12,8 @@
 #define E_EDGE (lastx < (MAZE-WL))
 #define W_EDGE (lastx > WL)
 
-extern int intersect_NS(float x1, float x2, float z);
-extern int intersect_EW(float x, float z1, float z2);
+int intersect_NS();
+int intersect_EW();
 
 check_colision()
 {

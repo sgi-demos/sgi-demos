@@ -14,8 +14,8 @@
 
 #define CANNON_SPEED 800
 
-int m_intersect_NS (struct thing *mis, float x1, float x2, float z);
-int m_intersect_EW (struct thing *mis, float x, float z1, float z2);
+int m_intersect_NS ();
+int m_intersect_EW ();
 
 struct thing shots[MAXPLAYERS][3];
 struct thing *shot;

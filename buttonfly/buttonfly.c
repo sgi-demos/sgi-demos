@@ -15,8 +15,8 @@
 #define Y 1
 #define Z 2
 
-extern void do_buttons_menu(button_struct *b, short mx, short my);
-extern int draw_selected_button(button_struct *button, float t);
+void do_buttons_menu();
+int draw_selected_button();
 
 short dev,val;
 long originx, originy, sizex, sizey;
