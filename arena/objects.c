@@ -135,19 +135,19 @@ push_pos(pos)
 visible(x1, x2, x3, x4, z1, z2, z3, z4)
     float x1, x2, x3, x4, z1, z2, z3, z4;
 {
-    short fbbuf[20];
+    /*short fbbuf[20];
 
     feedback(fbbuf, 10);
-    {
+    {*/
 	pnt(x1, ypos, z1);
 	pnt(x2, ypos, z2);
 	pnt(x3, ypos, z3);
 	pnt(x4, ypos, z4);
-    }
-    if (1 || endfeedback(fbbuf))
+    /*}
+    if (1 || endfeedback(fbbuf))*/
 	return TRUE;
-    else
-	return FALSE;
+    /*else
+	return FALSE;*/
 }
 
 
@@ -172,9 +172,9 @@ draw_obj(list)
 visible_sect(sect)
     int sect;
 {
-    short fbbuf[20];
+    /*short fbbuf[20];
 
-    feedback(fbbuf, 10);
+    feedback(fbbuf, 10);*/
     switch(sect)
     {
 	case INMAZE:
@@ -243,10 +243,10 @@ visible_sect(sect)
 	default:
 	    break;
     }
-    if (1 || endfeedback(fbbuf))
+    /*if (endfeedback(fbbuf))*/
 	return TRUE;
-    else
-	return FALSE;
+    /*else
+	return FALSE;*/
 }
 
 

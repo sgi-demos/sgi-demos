@@ -41,7 +41,7 @@ void add_event(int, int, int, void (*fn)(void *, int), char *) ;
  * is active, and the last is an argument to be supplied to the
  * function.
  */
-void add_update(int *, void (*fn)(void *), char *) ;
+void add_update(int *, void (*fn)(void), char *) ;
 
 /*
  * Finally, when all updates and events have been added, repeatedly

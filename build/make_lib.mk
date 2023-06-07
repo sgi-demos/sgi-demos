@@ -32,11 +32,11 @@ all: $(LIB) $(EMLIB)
 
 $(BIN_DIR):
 	mkdir -p $@
-	echo *.[oa] > $@/.gitignore
+	echo "*.[oach]" > $@/.gitignore
 
 $(WEB_DIR):
 	mkdir -p $@
-	echo *.[oa] > $@/.gitignore
+	echo "*.[oach]" > $@/.gitignore
 
 $(PATCH_SRC): $(BIN_DIR)/%.c: ./%.c | $(BIN_DIR)
 	cp -p $< $@

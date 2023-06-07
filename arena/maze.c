@@ -83,7 +83,7 @@ short rrooms[MSIZ][MSIZ];	/* right visible maze rooms */
 short lrooms[MSIZ][MSIZ];	/* left visible maze rooms */
 short rrtop[MSIZ];		/* right visible maze rooms top*/
 short lrtop[MSIZ];		/* left visible maze rooms top*/
-visited[MSIZ*MSIZ];
+int visited[MSIZ*MSIZ];
 
 int f, b, l, r;
 int fw, bw, lw, rw;

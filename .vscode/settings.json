@@ -18,7 +18,8 @@
         "device.h": "c",
         "math.h": "c",
         "CEDIT1991.C": "cpp",
-        "string.h": "c"
+        "string.h": "c",
+        "arena.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

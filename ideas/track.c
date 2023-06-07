@@ -113,6 +113,8 @@ float pcr, pcg, pcb, pca;
 typedef float vector[3];
 typedef vector parameter[4];
 
+int calc_spline(vector v, parameter *params, float time);
+
 vector table_points[TABLERES+1][TABLERES+1];
 int tablecolors[TABLERES+1][TABLERES+1];
 

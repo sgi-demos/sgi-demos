@@ -21,6 +21,7 @@ Next up:
 - Electropaint, Cedit, any other IRIS GL demos I can find
 
 To do:
+- Rudimentary context for each demo: name, author, year (as text in lower corner)
 - More demos, _all the demos_. WIP: IRIS GL, TBD: OpenGL, GLUT, Inventor, Performer
 - GPU rendering via WebGL
 - Run GL demo in its own WASM worker, to avoid slicing up the code for SDL's event loop
@@ -31,7 +32,7 @@ To do:
   - On/off for mouse/keyboard devices, as hints
   - Displayed as transparent virtual mouse and key pictures overlaid on demo
   - Only display virtual keys and mouse functions used by the demo; use demo's qdevice() calls to determine this
-- Description/history/context for each demo - can obtain descriptions from .Info slide files
+- Description/history/context for each demo - can obtain some descriptions from .Info slide files
 - Man pages
 
 Credits:

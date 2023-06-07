@@ -13,6 +13,10 @@
 #include "stdio.h"
 #include "EM_CHILD_APP.h"
 
+int drawsliders(int c, float r, float g, float b);
+int drawknob(float x, float old, float new, int c);
+int modmapcolor(int c, float r, float g, float b);
+
 float or = -1.0;
 float og = -1.0;
 float ob = -1.0;

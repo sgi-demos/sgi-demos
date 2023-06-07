@@ -30,7 +30,7 @@ float   light[3],
         phi = PI / 4.0,
         theta = PI / 4.0;
 Angle ctheta = -900, cphi, cvtheta, cvphi;
-float   fabso ();
+
 
 /*	main routine -- handle tokens of window manager
 		-- display shadow and insect

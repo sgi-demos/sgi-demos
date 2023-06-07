@@ -1859,7 +1859,7 @@ make_mech(m, c1, c2)
 draw_mech(v)
     struct thing *v;
 {
-    short fbbuf[20];
+    /*short fbbuf[20];*/
     Mech *m;
 
     pushmatrix();
@@ -1867,7 +1867,7 @@ draw_mech(v)
     translate(v->xpos, v->ypos, -v->zpos);
     rotate(900-v->yrot, 'y');
 
-    feedback(fbbuf, 10);
+    /*feedback(fbbuf, 10); GL feedback() takes zero params?*/
 	move( 0.25, 0.0,  0.25);
 	draw(-0.25, 1.0, -0.25);
 	move(-0.25, 0.0,  0.25);
@@ -1876,8 +1876,8 @@ draw_mech(v)
 	draw(-0.25, 0.0, -0.25);
 	move(-0.25, 1.0,  0.25);
 	draw( 0.25, 0.0, -0.25);
-    if (1 || endfeedback(fbbuf))
-    {
+    /*if (endfeedback(fbbuf))
+    {*/
 	Matrix base_robot;
 	getmatrix(base_robot);
 
@@ -2033,7 +2033,7 @@ draw_mech(v)
 	    if (!(v->type & DEAD))
 		boom();
 	}
-    }
+    /*}*/
 
     popmatrix();
 }

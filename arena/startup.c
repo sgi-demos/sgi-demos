@@ -38,7 +38,7 @@ char *intro[] = {
 
 startup()
 {
-    int i;
+    short i;
 
 #ifdef SHOW_STARTUP_SCREEN
     color(BLUE);

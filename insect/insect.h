@@ -34,11 +34,18 @@ extern Angle knee[6];
 extern Angle hip_phi[6];
 extern Angle hip_theta[6];
 
-extern Angle degrees();
-extern float dot();
-extern float integer();
-extern float frac();
-extern float fabso();
+extern int sgn (float i);
+extern float integer(float x);
+extern float frac(float x);
+extern float fabso (float x);
+extern int reduce_index(short c);
+
+extern Angle degrees(float a);
+extern float dot (float vec1[3], float vec2[3]);
+
+int makerange (Colorindex a, Colorindex b, RGBvalue r1, RGBvalue r2, RGBvalue g1, RGBvalue g2, RGBvalue b1, RGBvalue b2);
+int savemap (short savearray[], Colorindex c1, Colorindex c2);
+int restoremap (short savearray[], Colorindex c1, Colorindex c2);
 
 extern Coord sdepth;
 extern float glsin,glcos;

@@ -15,6 +15,9 @@
 #define Y 1
 #define Z 2
 
+extern void do_buttons_menu(button_struct *b, short mx, short my);
+extern int draw_selected_button(button_struct *button, float t);
+
 short dev,val;
 long originx, originy, sizex, sizey;
 long s_originx, s_originy, s_sizex, s_sizey;
@@ -300,7 +303,6 @@ void  do_popup()
 {
 	short mx, my;
 	button_struct *b;
-	void do_buttons_menu();
 	
 	qread(&mx); qread(&my);
 	b = which_button(mx, my);

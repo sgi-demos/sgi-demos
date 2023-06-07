@@ -13,6 +13,7 @@
 /* contains init and help stuff		*/
 #include "flight.h"
 extern void redraw_screen ();
+extern int set_sun (float x, float y, float z);
 
 static Cursor bcursor = {
 	0xffff,0xffff,0xffff,0xe007,
