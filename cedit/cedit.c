@@ -23,9 +23,9 @@ float ob = -1.0;
 int cc = -1;
 float cr, cg, cb;
 int m1, m2, m3;
-int xorg, yorg;
+long xorg, yorg;
 int x, y;
-int xsize, ysize;
+long xsize, ysize;
 float wx, wy;
 int menu;
 

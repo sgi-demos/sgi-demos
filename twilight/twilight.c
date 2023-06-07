@@ -43,10 +43,10 @@ long star_color(float y, float max_y);
 #define NUM_SMALL_STARS 2500
 #define NUM_BIG_STARS 200
 
-/* colors */
-static long orange[] = {255,72,0};
-static long blueish[] = {0,110,189};
-static long black[] = {0,0,0};
+/* colors - c3i() takes ints */
+static int orange[] = {255,72,0};
+static int blueish[] = {0,110,189};
+static int black[] = {0,0,0};
 
 static unsigned short half[16] = {
 	0x5555, 0xAAAA,	0x5555, 0xAAAA,

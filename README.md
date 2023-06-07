@@ -10,28 +10,28 @@ Working demos:
 - [Insect](https://sgi-demos.github.io/sgi-demos/insect/web/insect_full.html)
 - [Jello](https://sgi-demos.github.io/sgi-demos/jello/web/jello_full.html)
 - [Logo](https://sgi-demos.github.io/sgi-demos/logo/web/logo_full.html)
+- [Twilight](https://sgi-demos.github.io/sgi-demos/twilight/web/twilight_full.html) 
 
 Work in progress demos:
-- [Twilight](https://sgi-demos.github.io/sgi-demos/twilight/web/twilight_full.html) (colors differ between binary and web versions)
+- [Flight](https://sgi-demos.github.io/sgi-demos/flight/web/flight_full.html) (cockpit glitches, planes too slow in web version, night mode 'shimmers', no network play)
 - [Newave](https://sgi-demos.github.io/sgi-demos/newave/web/newave_full.html) (no mesh editing, no popup menus, only wireframe)
-- [Flight](https://sgi-demos.github.io/sgi-demos/flight/web/flight_full.html) (cockpit glitches, planes too slow, night mode 'shimmers', no network play)
-- [Arena](https://sgi-demos.github.io/sgi-demos/arena/web/arena_full.html) (stuff?, no network play)
+- [Arena](https://sgi-demos.github.io/sgi-demos/arena/web/arena_full.html) (no network play)
 
 Next up:
 - Electropaint, Cedit, any other IRIS GL demos I can find
 
 To do:
-- Rudimentary context for each demo: name, author, year (as text in lower corner)
-- More demos, _all the demos_. WIP: IRIS GL, TBD: OpenGL, GLUT, Inventor, Performer
-- GPU rendering via WebGL
-- Run GL demo in its own WASM worker, to avoid slicing up the code for SDL's event loop
 - Arbitrary window size
+- Triangle rendering via OpenGLES/WebGL
 - Popup menus
+- Rudimentary context for each demo: name, author, year (as text in lower corner), code link
 - Virtual mouse and keyboard:
+  - Only display virtual keys and mouse functions used by the demo; use demo's qdevice() calls to determine this
+  - Displayed as transparent virtual mouse and key pictures overlaid on demo
   - On always for touch devices
   - On/off for mouse/keyboard devices, as hints
-  - Displayed as transparent virtual mouse and key pictures overlaid on demo
-  - Only display virtual keys and mouse functions used by the demo; use demo's qdevice() calls to determine this
+- More demos, _all the demos_. WIP: IRIS GL, TBD: OpenGL, GLUT, Inventor, Performer
+- Run GL demo in its own WASM worker, to avoid slicing up the code for SDL's event loop
 - Description/history/context for each demo - can obtain some descriptions from .Info slide files
 - Man pages
 
