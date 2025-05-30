@@ -31,6 +31,7 @@
     logo.c          2
     newave.c        0
     twilight.c      0
+    colortest.c     2
 
 */
 
@@ -47,6 +48,7 @@
 #define EM_NEWAVE       9
 #define EM_TWILIGHT     10
 #define EM_ARENA        11
+#define EM_COLORTEST    12
 
 #if EM_CHILD_APP_NAME == EM_INSECT
     #define EM_CHILD_APP_LOCALS static short dev,val; static Boolean attached;
@@ -58,6 +60,8 @@
     #define EM_CHILD_APP_LOCALS static float x, y, z, c;
 #elif EM_CHILD_APP_NAME == EM_ARENA
     #define EM_CHILD_APP_LOCALS static int i,j; short val;
+#elif EM_CHILD_APP_NAME == EM_COLORTEST
+    #define EM_CHILD_APP_LOCALS static float t = 0; static float r = 1.0;
 #else
     #define EM_CHILD_APP_LOCALS
 #endif

@@ -5,6 +5,9 @@
 #include <math.h>
 #include <device.h>
 
+#include "EM_CHILD_APP.h"
+#include "EM_SYSTEM.h"
+
 #define X 0
 #define Y 1
 #define Z 2
@@ -118,7 +121,7 @@ char	*argv[];
 {
     initialize(argv[0]);
 
-    while(TRUE) {
+    em_while(TRUE) {
 
         while(qtest()) {
             short val;

@@ -5,6 +5,7 @@
 #include "gl.h"
 #include "device.h"
 #include "EM_CHILD_APP.h"
+#include "EM_SYSTEM.h"
 
 #define UDIV 12
 #define VDIV 12
@@ -709,30 +710,17 @@ char *name;
 			exit(1);
 		}
 	}
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
 	fread(&magic,sizeof(int),1,inf);
-#pragma GCC diagnostic pop
-        magic = ntohl(magic);
+    magic = ntohl(magic);
 	if(magic != FASTMAGIC) {
 		fprintf(stderr,"readfast: bad magic in object file\n");
 		fclose(inf);
 		exit(1);
 	}
 	obj = (fastobj *)malloc(sizeof(fastobj));
-	obj->type = ntohl(obj->type);
-	obj->material = ntohl(obj->material);
-	obj->display = ntohl(obj->display);
-	obj->ablend = ntohl(obj->ablend);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
 	fread(&obj->npoints,sizeof(int),1,inf);
-#pragma GCC diagnostic pop
 	obj->npoints = ntohl(obj->npoints);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
 	fread(&obj->colors,sizeof(int),1,inf);
-#pragma GCC diagnostic pop
 	obj->colors = ntohl(obj->colors);
 
 	/*
