@@ -12,7 +12,7 @@
 
 static SDL_Texture * pFramebuffer = NULL;
 
-void buildTexture()
+void build_framebuffer_tex()
 {
     // Create grey checkerboard surface with yellow border
     int bitsPerPixel = 32;
@@ -43,7 +43,7 @@ void buildTexture()
     SDL_FreeSurface(pSurface);
 }
 
-void updateTexture()
+void update_framebuffer_tex()
 {
     if (sdlFramebuffer())
     {
@@ -56,7 +56,7 @@ void updateTexture()
     }
 }
 
-void freeTexture()
+void free_framebuffer_tex()
 {
     // Free existing SDL image and GL texture
     if (pFramebuffer)
@@ -71,10 +71,12 @@ void redraw()
     SDL_SetRenderDrawColor(sdlRenderer(), 0, 0, 0, 0);
     SDL_RenderClear(sdlRenderer());
 
-    // update SDL framebuffer texture
-    updateTexture();
-    SDL_Rect destRect = (SDL_Rect){ .x = sdlWindowToFramebufferOffsetX(), .y = sdlWindowToFramebufferOffsetY(), 
-                                   sdlFramebufferSize().width, sdlFramebufferSize().height };
+    update_framebuffer_tex();
+    SDL_Rect destRect = (SDL_Rect) {
+        .x = sdlWindowToFramebufferOffsetX(), 
+        .y = sdlWindowToFramebufferOffsetY(), 
+        sdlFramebufferSize().width, 
+        sdlFramebufferSize().height };
     SDL_RenderCopy(sdlRenderer(), pFramebuffer, NULL, &destRect);
     sdlPresent();
 }
@@ -116,7 +118,7 @@ int main(int argc, char* argv[])
     // Initialize SDL window
     sdlInit(NULL);
 
-    buildTexture();
+    build_framebuffer_tex();
 
     // Run child main
     child_main(argc, argv);
@@ -132,6 +134,6 @@ int main(int argc, char* argv[])
             main_loop(main_loop_arg);
     #endif
 
-    freeTexture();
+    free_framebuffer_tex();
     return 0;
 }
