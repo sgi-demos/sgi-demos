@@ -17,7 +17,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include "bsd_string.h" // includes <string.h>
 #include <math.h>
 #include <stdarg.h>
 #include <signal.h>
@@ -3549,8 +3549,8 @@ static void init_gl_state()
     for(int i = 0; i < MAX_PUPS; i++)
         pup_init(pups + i);
 
-    signal(SIGWINCH, sigwinch);
-    signal(SIGINFO, siginfo);
+    //signal(SIGWINCH, sigwinch); // window changed event callback, maybe for window resizing
+    //signal(SIGINFO, siginfo);   // status info event callback, Ctrl+T request for program info
 
     memset(devices_queued, 0, sizeof(devices_queued));
 }

@@ -17,6 +17,26 @@
             "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-x64",
             "configurationProvider": "ms-vscode.makefile-tools"
+        },
+        {
+            "name": "Windows",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}",
+                "${workspaceFolder}/gl",
+                "${workspaceFolder}/demo_include",
+                "C:/msys64/clang64/include",
+                "C:/msys64/clang64/include/SDL2"
+            ],
+            "defines": [
+                "_WIN32",
+                "WIN32"
+            ],
+            "compilerPath": "C:/msys64/clang64/bin/clang.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-clang-x64",
+            "configurationProvider": "ms-vscode.makefile-tools"
         }
     ],
     "version": 4

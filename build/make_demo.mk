@@ -25,9 +25,9 @@ $(WEB_DIR):
 	echo "*.[oach]" > $@/.gitignore
 
 $(OBJS): $(BIN_DIR)/%.o: $(SRC_DIR)/%.c | $(BIN_DIR) $(SRC) $(HDRS)
-	$(OLD_CODE_CC) $(OPT) $(OLD_CODE_WARN_OFF) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
+	$(OLD_CODE_CC) $(OPT) $(OLD_CODE_WARN_OFF) $(SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
-	$(CC) $(OPT) $(LIBGL_INC) $(OBJS) -D EM_CHILD_APP $(DEMO_LIB) $(GL_LIB) $(SDL_INC) $(SDL_LIB) -lm -o $@
+	$(CC) $(OPT) $(SHIM_INC) $(LIBGL_INC) $(OBJS) -D EM_CHILD_APP $(DEMO_LIB) $(GL_LIB) $(SDL_INC) $(SDL_LIB) -lm -o $@
 	@echo
 	@echo BUILT: $@
 	@echo

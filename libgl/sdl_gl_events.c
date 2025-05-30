@@ -1,6 +1,5 @@
 //#define SDL_GL_FRAMEBUFFER
 
-#include <ctype.h>
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #include <SDL.h>
@@ -73,7 +72,7 @@ static void windowResizeEvent(Size2D winSize)
 void sdlInit(const char *windowTitle)
 {  
     if (windowTitle)
-        strlcpy(sdlState.windowTitle, windowTitle, sizeof(sdlState.windowTitle));
+        strncpy(sdlState.windowTitle, windowTitle, sizeof(sdlState.windowTitle));
 
     // Create SDL window
     #ifdef SDL_GL_FRAMEBUFFER
@@ -99,7 +98,6 @@ void sdlInit(const char *windowTitle)
                              SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                              sdlState.winSize.width, sdlState.winSize.height,
                              SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
-        sdlState.windowID = SDL_GetWindowID(sdlState.pWindow);
         sdlState.pRenderer = SDL_CreateRenderer(sdlState.pWindow, -1, 0);  // SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC    
     #endif
 
@@ -555,7 +553,7 @@ int32_t events_qread_continue(int16_t *value)
 
 int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height)
 {
-    strlcpy(sdlState.windowTitle, title, sizeof(sdlState.windowTitle));
+    strncpy(sdlState.windowTitle, title, sizeof(sdlState.windowTitle));
 
 #ifndef __EMSCRIPTEN__
     // Emscripten sets window title to 'this.program' if SDL_SetWindowTitle is called

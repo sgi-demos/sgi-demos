@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <limits.h>
 #include <math.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/mman.h>
 #include <string.h>
 
 #include <gl.h>
