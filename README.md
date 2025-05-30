@@ -43,7 +43,7 @@ brew install SDL2
 brew install emscripten
 ```
 
-2. Then build:
+2. Build:
 ```bash
 git clone https://github.com/sgi-demos/sgi-demos.git
 cd sgi-demos
@@ -52,27 +52,29 @@ make
 
 ### Windows
 
-1. Install [MSYS2](https://www.msys2.org/) from cmd.exe, in order to get the clang compiler:
+1. Install [Winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) if you don't have it.
+   
+2. Install [MSYS2](https://www.msys2.org/) from cmd.exe, in order to get the clang compiler:
 ```bash
 winget install MSYS2.MSYS2
 setx PATH "%PATH%C:\msys64\clang64\bin"
 ```
 
-2. Then install clang toolchain and SDL2 in MSYS2 CLANG64 shell:
+3. Install clang toolchain and SDL2 in MSYS2 CLANG64 shell:
 ```bash
 pacman -Syu
 pacman -S base-devel mingw-w64-clang-x86_64-toolchain
 pacman -S mingw-w64-clang-x86_64-SDL2
 ```
 
-3. Cloning [emscripten](https://emscripten.org/docs/getting_started/downloads.html) from Github seems to work best with MSYS2.  Follow the default install directions, not the Windows directions! 
+4. Clone [emscripten](https://emscripten.org/docs/getting_started/downloads.html) from Github.  Cloning seems to work best with MSYS2 rather than using pacman.  Follow the default install directions, not the Windows directions! 
 
-4. Add this line to the `~/.bashrc` file in MSYS2 CLANG64 shell:
+5. Add this line to the `~/.bashrc` file in MSYS2 CLANG64 shell:
 ```bash
 source /path/to/emsdk/emsdk_env.sh
 ```
 
-5. Then build:
+6. Build:
 ```bash
 git clone https://github.com/sgi-demos/sgi-demos.git
 cd sgi-demos
