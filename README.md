@@ -12,26 +12,28 @@ This is the original SGI demo source code, compiled for the web using Emscripten
 - [Logo](https://sgi-demos.github.io/sgi-demos/logo/web/logo_full.html)
 - [Twilight](https://sgi-demos.github.io/sgi-demos/twilight/web/twilight_full.html) 
 
-Work in progress:
+## Somewhat working demos
 - [Flight](https://sgi-demos.github.io/sgi-demos/flight/web/flight_full.html) (cockpit glitches, planes too slow in web version, night mode 'shimmers', no network play)
 - [Newave](https://sgi-demos.github.io/sgi-demos/newave/web/newave_full.html) (no mesh editing, no popup menus, only wireframe)
 - [Arena](https://sgi-demos.github.io/sgi-demos/arena/web/arena_full.html) (no network play)
-- Electropaint, Cedit, any other IRIS GL demos I can find
+
 
 ## To do
+- Rendering via OpenGLES/WebGL (WIP)
 - Arbitrary window size
-- Triangle rendering via OpenGLES/WebGL
-- Popup menus
+- Run GL demo in its own WASM worker/thread, to avoid slicing up the code for SDL's event loop
+- Popup menus, including the classic SGI menu font
+- More demos, _all the demos_.
+  - Electropaint, Cedit, any other IRIS GL demos I can find
+  - Then OpenGL, GLUT, Inventor, Performer demos in no particular order
 - Rudimentary context for each demo: name, author, year (as text in lower corner), code link
 - Virtual mouse and keyboard:
   - Only display virtual keys and mouse functions used by the demo; use demo's qdevice() calls to determine this
   - Displayed as transparent virtual mouse and key pictures overlaid on demo
   - On always for touch devices
   - On/off for mouse/keyboard devices, as hints
-- More demos, _all the demos_. WIP: IRIS GL, TBD: OpenGL, GLUT, Inventor, Performer
-- Run GL demo in its own WASM worker, to avoid slicing up the code for SDL's event loop
 - Description/history/context for each demo - can obtain some descriptions from .Info slide files
-- Man pages
+- Man page live links
 
 ## Build instructions
 
