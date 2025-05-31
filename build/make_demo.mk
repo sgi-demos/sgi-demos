@@ -27,7 +27,7 @@ $(WEB_DIR):
 $(OBJS): $(BIN_DIR)/%.o: $(SRC_DIR)/%.c | $(BIN_DIR) $(SRC) $(HDRS)
 	$(OLD_CODE_CC) $(OPT) $(OLD_CODE_WARN_OFF) $(SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
-	$(CC) $(OPT) $(SHIM_INC) $(LIBGL_INC) $(OBJS) -D EM_CHILD_APP $(DEMO_LIB) $(GL_LIB) $(SDL_INC) $(SDL_LIB) -lm -o $@
+	$(CC) $(OPT) $(SHIM_INC) $(LIBGL_INC) $(OBJS) -D EM_CHILD_APP $(DEMO_LIB) $(GL_LIB) $(SDL_INC) $(SDL_LIBS) -lm -o $@
 	@echo
 	@echo BUILT: $@
 	@echo
@@ -35,7 +35,7 @@ $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
 $(EMOBJS): $(WEB_DIR)/%.o: $(SRC_DIR)/%.c | $(WEB_DIR) $(EM_SRC) $(EM_HDRS)
 	$(OLD_CODE_EMCC) $(EM_OPT) $(EM_OLD_CODE_WARN_OFF) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 $(EMAPP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EMOBJS) 
-	$(EMCC) $(EM_OPT) $(LIBGL_INC) $(EMOBJS) -D EM_CHILD_APP $(EM_DEMO_LIB) $(EM_GL_LIB) $(EM_SDL_LIB) $(EMPRELOAD) -lm -o $@
+	$(EMCC) $(EM_OPT) $(LIBGL_INC) $(EMOBJS) -D EM_CHILD_APP $(EM_DEMO_LIB) $(EM_GL_LIB) $(EM_SDL_LIBS) $(EMPRELOAD) -lm -o $@
 	$(APPCMDS)
 	@echo
 	@echo BUILT: $@

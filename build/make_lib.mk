@@ -45,7 +45,7 @@ $(LIB): $(OBJS)
 	@echo
 
 $(EMOBJS): $(WEB_DIR)/%.o: $(SRC_DIR)/%.c | $(WEB_DIR) $(EMPATCH_SRC) $(EMPATCH_HDRS)
-	$(LIB_EMCC) $(LIBGL_INC) $(LIBDEMO_INC) -D EM_CHILD_APP $(EM_SDL_LIB) $< -c -o $@
+	$(LIB_EMCC) $(LIBGL_INC) $(LIBDEMO_INC) -D EM_CHILD_APP $(EM_SDL_LIBS) $< -c -o $@
 $(EMLIB): $(EMOBJS)
 	$(EMAR) $@ $(EMOBJS)
 	@echo

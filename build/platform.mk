@@ -1,17 +1,17 @@
 UNAME:=$(shell uname -s)
 ifeq ($(UNAME),Darwin)
     SDL_INC=-F/Library/Frameworks
-    SDL_LIB=-framework SDL2
+    SDL_LIBS=-framework SDL2
 else ifeq ($(UNAME),Linux)
-    SDL_INC=
-    SDL_LIB=-lSDL2
+    SDL_INC=`sdl2-config --cflags`
+    SDL_LIBS=`sdl2-config --libs`
 else ifneq ($(findstring MINGW64_NT,$(UNAME)),)
-    SDL_INC=
-    SDL_LIB=-lSDL2 -lSDL2main
+    SDL_INC=`sdl2-config --cflags`
+    SDL_LIBS=`sdl2-config --libs`
 	SHIM_INC=-I../gl/shim
 endif
 
-EM_SDL_LIB =-s USE_SDL=2
+EM_SDL_LIBS =-s USE_SDL=2
 
 GL_LIB = ../libgl/bin/libgl.a
 EM_GL_LIB = ../libgl/web/libgl.a

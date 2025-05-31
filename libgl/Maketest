@@ -12,7 +12,7 @@ EMAPP=$(EMAPP_NAME).html
 all: $(APP) $(EMAPP)
 
 $(APP): $(SRC) 
-	$(CC) $(OPT) -D MAIN_LOOP_DEBUG $(LIBGL_INC) $(SRC) $(SDL_INC) $(SDL_LIB) -o $(APP)
+	$(CC) $(OPT) -D MAIN_LOOP_DEBUG $(LIBGL_INC) $(SRC) $(SDL_INC) $(SDL_LIBS) -o $(APP)
 	@echo
 	@echo BUILT: $@
 	@echo
