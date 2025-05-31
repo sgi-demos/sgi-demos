@@ -18,7 +18,10 @@
 #include "sdl_events.h"
 #include "EM_CHILD_APP_DECL.h"
 
-const int SCREEN_FPS = 60;
+// Simulate a decent SGI machine for the time, 60 fps is too fast for some demos (like ideas)
+// Also, in the 80s and 90s, we had less than 60 fps and we liked it
+const int SCREEN_FPS = 30; // TODO: Make this a per-demo option
+
 //#define SDL_GL_FRAMEBUFFER
 
 typedef struct
@@ -247,7 +250,8 @@ void redraw()
         printf("redraw OGL texture\n");
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT);
-        update_framebuffer_tex();
+
+        printf("draw OGL texture\n");
 
         SDL_GL_SwapWindow(sdlState.pWindow);
     #else    
@@ -277,18 +281,6 @@ void main_loop(void* main_loop_arg)
     redraw();
 
     endMaintainFPS(SCREEN_FPS, startTicks);
-
-    #ifdef MAIN_LOOP_DEBUG
-        static int main_loop_count = 0;
-        if (main_loop_count % SCREEN_FPS == 0)
-            printf("main_loop BEGIN %d\n",main_loop_count);
-    #endif
-
-    #ifdef MAIN_LOOP_DEBUG
-    if (main_loop_count % SCREEN_FPS == 0)
-        printf("main_loop END %d\n",main_loop_count);
-    ++main_loop_count;
-    #endif
 }
 
 int main(int argc, char* argv[])
