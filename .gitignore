@@ -2,3 +2,5 @@
 Thumbs.db
 *.dSYM
 *.o
+bin
+bin-*-*/

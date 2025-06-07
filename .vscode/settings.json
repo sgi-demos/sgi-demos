@@ -19,7 +19,9 @@
         "math.h": "c",
         "CEDIT1991.C": "c",
         "string.h": "c",
-        "geom_types.h": "c"
+        "geom_types.h": "c",
+        "sdl_events.h": "c",
+        "basic_types.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

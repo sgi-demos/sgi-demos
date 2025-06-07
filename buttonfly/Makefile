@@ -1,12 +1,14 @@
-APPNAME=buttonfly
-APPARGS=menu_demos
-APPCMDS=cp web/buttonfly.js web/buttonfly.wasm web/buttonfly.data ../../sgi-demos.github.io
-EMPRELOAD=--preload-file menus/menu --preload-file menus/m_demos --preload-file menus/m_more_demos --preload-file menus/m_bounce
+TARGETS = Make_parser Make_demo
 
-build_parser := $(shell $(MAKE) -f Make_parser)
+.PHONY: all clean Make_parser Make_demo
 
-include ../build/make_demo.mk
+all: $(TARGETS)
 
-clean_parser:
-	$(MAKE) -f Make_parser clean
-clean: clean_parser
+Make_parser:
+	make -f Make_parser
+
+Make_demo: Make_parser
+	make -f Make_demo
+
+clean:
+	for file in $(TARGETS) ; do make clean -f $${file} ; done

@@ -1,5 +1,5 @@
 //
-//  Provide a framebuffer for IRIS GL to draw into
+//  Provide an SDL framebuffer for IRIS GL to render into
 //
 //  Two types of framebuffers are provided:
 //  1. An SDL_texture is updated with IRIS GL's ref rasterizer buffer, and displayed using SDL_RenderCopy & SDL_RenderPresent
@@ -8,182 +8,189 @@
 //  The OpenGL texture framebuffer is a stepping stone towards having an OpenGL rasterizer, which opens up
 //  faster rendering -- especially important for arbitrary window sizes and texture mapping.
 //
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#endif
+#include <stdio.h>
 
 #include <SDL.h>
 #include <SDL_opengles2.h>
 
+#include "sdl_framebuffer.h"
 #include "sdl_events.h"
-#include "EM_CHILD_APP_DECL.h"
 
-//#define SDL_GL_FRAMEBUFFER
-
-// Framerate control:
-// - Simulate a decent SGI machine for the time, 60 fps is too fast for some demos (like ideas)
-// - Also, in the 80s and 90s, we had way less than 60 fps and we liked it!
-// - TODO: Make this a per-demo option
-const int SCREEN_FPS = 30; 
-
-#ifdef SDL_GL_FRAMEBUFFER
-    // Shader for displaying the framebuffer texture on a quad VBO which fills the viewport
-    GLuint framebufferShaderProg = 0;
-    GLuint framebufferQuadVBO       = 0;
-    GLuint framebufferQuadPosAttrib = 0;
-    GLuint framebufferTex           = 0;
-
-    // Size of the displayed framebuffer
-    GLfloat framebufferSize[2]      = {0.0f, 0.0f}; 
-
-    // Size of the framebuffer texture, likely larger than displayed framebuffer due to power of 2 dimensions
-    GLfloat framebufferTexSize[2]   = {0.0f, 0.0f};   
-
-    const GLchar* framebufferVertexSource =
-        "attribute vec4 position;                                       \n"
-        "varying vec2 texCoord;                                         \n"
-        "uniform vec2 viewport;                                         \n"
-        "uniform vec2 framebufferSize;                                  \n"
-        "uniform vec2 texSize;                                          \n"
-        "void main()                                                    \n"
-        "{                                                              \n"
-        "    // Scale to framebuffer size                               \n"
-        "    gl_Position = vec4(position.xyz, 1.0);                     \n"
-        "    gl_Position.x *= framebufferSize.x;                        \n"
-        "    gl_Position.y *= framebufferSize.y;                        \n"
-        "                                                               \n"
-        "    // Translate to framebuffer's lower left                   \n"
-        "    gl_Position.x -= framebufferSize.x / 2.0 + 1.0;            \n"
-        "    gl_Position.y -= framebufferSize.y / 2.0 + 1.0;            \n"
-        "                                                               \n"
-        "    // Ortho projection                                        \n"
-        "    gl_Position.x += 1.0;                                      \n"
-        "    gl_Position.x *= 2.0 / viewport.x;                         \n"
-        "    gl_Position.y += 1.0;                                      \n"
-        "    gl_Position.y *= 2.0 / viewport.y;                         \n"
-        "                                                               \n"
-        "    // Framebuffer subrectangle from overall texture           \n"
-        "    texCoord.x = position.x * framebufferSize.x / texSize.x;   \n"
-        "    texCoord.y = -position.y * framebufferSize.y / texSize.y;  \n"
-        "}                                                              \n";
-
-    const GLchar* framebufferFragmentSource =
-        "precision mediump float;                                       \n"
-        "varying vec2 texCoord;                                         \n"
-        "uniform sampler2D texSampler;                                  \n"
-        "void main()                                                    \n"
-        "{                                                              \n"
-        "    gl_FragColor = texture2D(texSampler, texCoord);            \n"
-        "}                                                              \n";
-
-    void updateShader(EventHandler& eventHandler)
-    {
-        glUseProgram(framebufferShaderProg);
-        glUniform2fv(shaderViewport, 1, camera.viewport());
-        glUniform2fv(shaderImageSize, 1, imageSize);
-        glUniform2fv(shaderTexSize, 1, texSize);
-    }
-
-    void initShader()
-    {
-        // Create and compile vertex shader
-        GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertexShader, 1, &framebufferVertexSource, NULL);
-        glCompileShader(vertexShader);
-
-        // Create and compile fragment shader
-        GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragmentShader, 1, &framebufferFragmentSource, NULL);
-        glCompileShader(fragmentShader);
-
-        // Link vertex and fragment shader into shader program
-        GLuint framebufferShaderProg = glCreateProgram();
-        glAttachShader(framebufferShaderProg, vertexShader);
-        glAttachShader(framebufferShaderProg, fragmentShader);
-        glBindAttribLocation(framebufferShaderProg, framebufferQuadPosAttrib, "position");
-        glEnableVertexAttribArray(framebufferQuadPosAttrib);
-        glLinkProgram(framebufferShaderProg);
-
-        // Get shader variables and initalize them
-        shaderViewport = glGetUniformLocation(framebufferShaderProg, "viewport");
-        shaderImageSize = glGetUniformLocation(framebufferShaderProg, "imageSize");
-        shaderTexSize = glGetUniformLocation(framebufferShaderProg, "texSize");
-
-        updateShader();
-    }
-
-    void initGeometry()
-    {
-        // Create vertex buffer objects and copy vertex data into them
-        glGenBuffers(1, &quadVbo);
-        glBindBuffer(GL_ARRAY_BUFFER, quadVbo);
-        GLfloat quadVertices[] = 
-        {
-            0.0f, 1.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f
-        };
-        glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
-    }
-
-#endif
+static bool useGLFramebuffer = false;
 
 typedef struct
 {
-    // Window
-    char windowTitle[128];
+    // SDL Window
+    char title[256];
     SDL_Window* pWindow;
     Uint32 windowID;
     Size2D windowSize;
 
-    // Framebuffer
-    Size2D framebufferSize;             // Framebuffer size may differ from window size
-    unsigned char* pFramebuffer;        // IRIS GL's framebuffer
-    #ifdef SDL_GL_FRAMEBUFFER
-        GLuint framebufferQuadShader;   // OGL's quad shader and VBO for displaying the texture
-        GLuint framebufferQuadVBO;      
-        GLuint framebufferTex;          // OGL's texture for displaying the framebuffer
-    #else
-        SDL_Texture * pFramebufferTex;  // SDL's texture for displaying the framebuffer
-    #endif
+    // Rendered framebuffer
+    Size2D size;                // Framebuffer size (<= window size)
+    unsigned char* pSrcPixels;  // Framebuffer source pixels
 
-    // Renderers
-    SDL_Renderer* pRenderer;
-    SDL_GLContext glContext;
+    // OGL framebuffer
+    GLuint  glShaderProg;       // Framebuffer shader
+    GLint   glShaderVpSize;     // Viewport size is same as window size
+    GLint   glShaderFbSize;      
+    GLint   glShaderTexSize;     
+    GLuint  glTex;              // Texture object for displaying the framebuffer
+    GLsizei glTexSize[2];       // Texture size >= framebuffer size (due to GLES 2^ texture reqmt)
+    GLuint  glQuadVBO;          // Quad geometry for displaying the texture
+    GLuint  glQuadPosAttrib;
 
-} SDLState;
+    SDL_GLContext glContext;    // OGL renderer context
 
-static SDLState sdlState = (SDLState)
+    // SDL framebuffer
+    SDL_Texture*  pSDLTex;      // Texture for displaying the framebuffer
+    SDL_Renderer* pSDLRenderer; // SDL renderer
+} SDLFramebuffer;
+
+static SDLFramebuffer fb = (SDLFramebuffer)
 {
-    // Window
-    .windowTitle = {"sgi-demos"},
+    .title = {"sgi-demos"},
     .pWindow = NULL,
     .windowID = 0,
     .windowSize = {880, 560},
 
-    // Framebuffer
-    .framebufferSize = {800, 480},
-    .pFramebuffer = NULL, 
-    .pFramebufferTex = NULL, 
+    .size = {800, 480},
+    .pSrcPixels = NULL, 
 
-    // Renderers
-    .pRenderer = NULL,
-    .glContext = NULL,   
+    // OGL framebuffer
+    .glShaderProg = 0,
+    .glShaderVpSize = 0,
+    .glShaderFbSize = 0,
+    .glShaderTexSize = 0,
+    .glTex = 0,
+    .glTexSize = {0, 0},
+    .glQuadVBO = 0,
+    .glQuadPosAttrib = 0,
+    .glContext = NULL,
+
+    // SDL framebuffer
+    .pSDLTex = NULL,
+    .pSDLRenderer = NULL,
 };
 
-void sdlInit(const char *windowTitle)
+// Shader for displaying the framebuffer texture on a quad which fills the viewport
+const GLchar* fbVertexSource =
+    "attribute vec4 position;                              \n"
+    "varying vec2 texCoord;                                \n"
+    "uniform vec2 vpSize;                                  \n"
+    "uniform vec2 fbSize;                                  \n"
+    "uniform vec2 texSize;                                 \n"
+    "void main()                                           \n"
+    "{                                                     \n"
+    "    // Scale to framebuffer size                      \n"
+    "    gl_Position = vec4(position.xyz, 1.0);            \n"
+    "    gl_Position.x *= fbSize.x;                        \n"
+    "    gl_Position.y *= fbSize.y;                        \n"
+    "                                                      \n"
+    "    // Translate to framebuffer's lower left          \n"
+    "    gl_Position.x -= fbSize.x / 2.0 + 1.0;            \n"
+    "    gl_Position.y -= fbSize.y / 2.0 + 1.0;            \n"
+    "                                                      \n"
+    "    // Ortho project                                  \n"
+    "    gl_Position.x += 1.0;                             \n"
+    "    gl_Position.x *= 2.0 / vpSize.x;                  \n"
+    "    gl_Position.y += 1.0;                             \n"
+    "    gl_Position.y *= 2.0 / vpSize.y;                  \n"
+    "                                                      \n"
+    "    // Framebuffer subrectangle from overall texture  \n"
+    "    texCoord.x = position.x * fbSize.x / texSize.x;   \n"
+    "    texCoord.y = -position.y * fbSize.y / texSize.y;  \n"
+    "}                                                     \n";
+
+const GLchar* fbFragmentSource =
+    "precision mediump float;                              \n"
+    "varying vec2 texCoord;                                \n"
+    "uniform sampler2D texSampler;                         \n"
+    "void main()                                           \n"
+    "{                                                     \n"
+    "    gl_FragColor = texture2D(texSampler, texCoord);   \n"
+    "}                                                     \n";
+
+void checkShaderBuilt(const char* shader_name, GLenum status, GLuint shader) 
+{
+    GLint success;
+    glGetShaderiv(shader, status, &success);
+    if (success)
+        printf("INFO: %s id %d build OK\n", shader_name, shader);
+    else
+        printf("ERROR: %s id %d build FAILED!\n", shader_name, shader);
+}
+
+void updateShaderVars()
+{
+    glUseProgram(fb.glShaderProg);
+
+    GLfloat windowSize[2] = {fb.windowSize.width, fb.windowSize.height};
+    glUniform2fv(fb.glShaderVpSize, 1, windowSize);
+    
+    GLfloat fbSize[2] = {fb.size.width, fb.size.height};
+    glUniform2fv(fb.glShaderFbSize, 1, fbSize);
+    
+    GLfloat texSize[2] = {fb.glTexSize[0], fb.glTexSize[1]};
+    glUniform2fv(fb.glShaderTexSize, 1, texSize);
+}
+
+void initShader()
+{
+    // Create and compile vertex shader
+    GLuint fbVertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(fbVertexShader, 1, &fbVertexSource, NULL);
+    glCompileShader(fbVertexShader);
+    checkShaderBuilt("fbVertexShader", GL_COMPILE_STATUS, fbVertexShader);
+
+    // Create and compile fragment shader
+    GLuint fbFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fbFragmentShader, 1, &fbFragmentSource, NULL);
+    glCompileShader(fbFragmentShader);
+    checkShaderBuilt("fbFragmentShader", GL_COMPILE_STATUS, fbFragmentShader);
+
+    // Link vertex and fragment shader into shader program
+    fb.glShaderProg = glCreateProgram();
+    glAttachShader(fb.glShaderProg, fbVertexShader);
+    glAttachShader(fb.glShaderProg, fbFragmentShader);
+    glBindAttribLocation(fb.glShaderProg, fb.glQuadPosAttrib, "position");
+    glEnableVertexAttribArray(fb.glQuadPosAttrib);
+    glLinkProgram(fb.glShaderProg);
+
+    // Get shader variables and initalize them
+    fb.glShaderVpSize  = glGetUniformLocation(fb.glShaderProg, "vpSize");
+    fb.glShaderFbSize  = glGetUniformLocation(fb.glShaderProg, "fbSize");
+    fb.glShaderTexSize = glGetUniformLocation(fb.glShaderProg, "texSize");
+    
+    updateShaderVars();
+}
+
+void initGeometry()
+{
+    // Create vertex buffer object and copy vertex data into them
+    glGenBuffers(1, &fb.glQuadVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, fb.glQuadVBO);
+    GLfloat quadVertices[] = 
+    {
+        0.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f
+    };
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+}
+
+void sdlInitWindow()
 {  
-    if (windowTitle)
-        strncpy(sdlState.windowTitle, windowTitle, sizeof(sdlState.windowTitle));
-
     // Create SDL window
-    #ifdef SDL_GL_FRAMEBUFFER
-        SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
-        SDL_version version;
-        SDL_GetVersion(&version);
-        printf("INFO: SDL version: %d.%d.%d\n", version.major, version.minor, version.patch);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+    SDL_version version;
+    SDL_GetVersion(&version);
+    printf("INFO: SDL version: %d.%d.%d\n", version.major, version.minor, version.patch);
 
+    // OpenGLES framebuffer
+    if (useGLFramebuffer) 
+    {
         // Init OpenGLES driver and context
         SDL_SetHint(SDL_HINT_OPENGL_ES_DRIVER, "1");
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_EGL, 1);
@@ -202,117 +209,104 @@ void sdlInit(const char *windowTitle)
         SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
         SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 
-        sdlState.pWindow = SDL_CreateWindow(
-            sdlState.windowTitle,
+        fb.pWindow = SDL_CreateWindow(
+            fb.title,
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-            sdlState.windowSize.width, sdlState.windowSize.height,
+            fb.windowSize.width, fb.windowSize.height,
             SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI
         );
 
-        sdlState.glContext = SDL_GL_CreateContext(sdlState.pWindow);
-    #else
-        sdlState.pWindow = SDL_CreateWindow(
-            sdlState.windowTitle,
+        fb.glContext = SDL_GL_CreateContext(fb.pWindow);
+
+        printf("INFO: GL vendor: %s\n", glGetString(GL_VENDOR));
+        printf("INFO: GL renderer: %s\n", glGetString(GL_RENDERER));
+        printf("INFO: GL version: %s\n", glGetString(GL_VERSION));
+
+        glDisable(GL_DEPTH_TEST);        
+        glClearColor(0, 0, 0, 0);
+        glViewport(0, 0, fb.windowSize.width, fb.windowSize.height);
+    }
+
+    // SDL framebuffer
+    else
+    {
+        fb.pWindow = SDL_CreateWindow(
+            fb.title,
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-            sdlState.windowSize.width, sdlState.windowSize.height,
+            fb.windowSize.width, fb.windowSize.height,
             SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
 
-        sdlState.pRenderer = SDL_CreateRenderer(sdlState.pWindow, -1, 0); // SDL_RENDERER_PRESENTVSYNC
-    #endif
+        fb.pSDLRenderer = SDL_CreateRenderer(fb.pWindow, -1, 0);
+        SDL_SetRenderDrawColor(fb.pSDLRenderer, 0, 0, 0, 0);
+    }
 
-    sdlState.windowID = SDL_GetWindowID(sdlState.pWindow);
-
-    // Initialize viewport
-    sdlWindowResizeEvent(sdlState.windowID, sdlState.windowSize);
-
+    fb.windowID = SDL_GetWindowID(fb.pWindow);
     SDL_StartTextInput();
 }
 
-
-void sdlWindowResizeEvent(Uint32 windowID, Size2D windowSize)
+void sdlResizeWindow(Uint32 windowID, Size2D windowSize)
 {
-    if (windowID == sdlState.windowID)
+    if (windowID == fb.windowID)
     {
-        sdlState.windowSize = windowSize;
-
-        #ifdef SDL_GL_FRAMEBUFFER
-            glViewport(0, 0, windowSize.width, windowSize.height);
-        #endif
-
-        // TODO: Make framebuffer and window size the same, and rebuild framebuffer texture here on resizes
+        // TODO: For now, framebuffer size is static.  Future: make framebuffer and
+        // window size the same, and rebuild framebuffer texture here on resizes (and
+        // communicate size change back to IRIS GL)
+        if (useGLFramebuffer)
+        {
+            fb.windowSize = windowSize;
+            glViewport(0, 0, fb.windowSize.width, fb.windowSize.height);
+            updateShaderVars();
+        }
     }
 }
-void sdlWindowOpen(char *title, int32_t frame_width, int32_t frame_height)
+
+void sdlOpenWindow(char *title, int32_t frameWidth, int32_t frameHeight)
 {
-    strncpy(sdlState.windowTitle, title, sizeof(sdlState.windowTitle));
+    strncpy(fb.title, title, sizeof(fb.title));
 
 #ifndef __EMSCRIPTEN__
-    // Emscripten sets window title to 'this.program' if SDL_SetWindowTitle is called
-    if (sdlState.pWindow)
-        SDL_SetWindowTitle(sdlState.pWindow, sdlState.windowTitle);
+    // Emscripten sets window title to 'this.program' on calling SDL_SetWindowTitle
+    if (fb.pWindow)
+        SDL_SetWindowTitle(fb.pWindow, fb.title);
 #endif
 
-    sdlState.framebufferSize = (Size2D) { frame_width, frame_height };
+    fb.size = (Size2D) { frameWidth, frameHeight };
+    
+    // how does the timing on this work, it needs to be called
+    // before sdlInitWindow so SDL framebuffer can be initialized at
+    // the correct size???
 }
 
-void sdlSetFramebuffer(unsigned char* framebuffer)
+void sdlSetFramebufferSource(unsigned char* pSrcPixels)
 {
-    sdlState.pFramebuffer = framebuffer;
+    fb.pSrcPixels = pSrcPixels;
 }
 
 static int clamp(int v, int low, int high)          { return v > high ? high : (v < low ? low : v); }
 static bool would_clamp(int v, int low, int high)   { return v < low || v > high; }
-static int windowToFramebufferOffsetX()             { return sdlState.windowSize.width / 2 - sdlState.framebufferSize.width / 2; }
-static int windowToFramebufferOffsetY()             { return sdlState.windowSize.height / 2 - sdlState.framebufferSize.height / 2; }
+static int windowToFramebufferOffsetX()             { return fb.windowSize.width / 2 - fb.size.width / 2; }
+static int windowToFramebufferOffsetY()             { return fb.windowSize.height / 2 - fb.size.height / 2; }
 static int framebufferX(int windowX)                { return windowX - windowToFramebufferOffsetX(); }
-static int framebufferY(int windowY)                { return sdlState.windowSize.height - windowY - windowToFramebufferOffsetY(); }
+static int framebufferY(int windowY)                { return fb.windowSize.height - windowY - windowToFramebufferOffsetY(); }
 
-int sdlClampToFramebufferX(int windowX)             { return clamp(framebufferX(windowX), 1, sdlState.framebufferSize.width - 1); }
-int sdlClampToFramebufferY(int windowY)             { return clamp(framebufferY(windowY), 1, sdlState.framebufferSize.height - 1); }
+int sdlClampToFramebufferX(int windowX)             { return clamp(framebufferX(windowX), 1, fb.size.width - 1); }
+int sdlClampToFramebufferY(int windowY)             { return clamp(framebufferY(windowY), 1, fb.size.height - 1); }
 
 bool sdlInsideFramebuffer(int windowX, int windowY)
 {
     // For now, window and framebuffer dimensions may differ, so convert
     // incoming window coords to framebuffer coords, including inverting y    
-    return !would_clamp(framebufferX(windowX), 1, sdlState.framebufferSize.width - 1) 
-        && !would_clamp(framebufferY(windowY), 1, sdlState.framebufferSize.height - 1);
+    return !would_clamp(framebufferX(windowX), 1, fb.size.width - 1) 
+        && !would_clamp(framebufferY(windowY), 1, fb.size.height - 1);
 }
 
-#ifdef SDL_GL_FRAMEBUFFER
-    int min(int x, int y) { return x < y ? x : y; }
-    int nextPowerOfTwo(int val) { int power = 1; while (power < val) power *= 2; return power; }
-#endif
-
-void init_framebuffer_tex()
+// Create grey checkerboard surface with yellow border for testing
+// NOTE: Caller must free returned surface when they are done with it!
+SDL_Surface* createTestSurface(int width, int height)
 {
-    #ifdef SDL_GL_FRAMEBUFFER
-        // Create background image at size of window
-        int winWidth = eventHandler.camera().windowSize().width,
-            winHeight = eventHandler.camera().windowSize().height,
-            bitsPerPixel = 32;
-
-        // Don't exceed max GL texture size
-        //
-        // Also may need to set WASM heap via -s TOTAL_MEMORY
-        //
-        // Framebuffer sizes:
-        // 5120x2880 57MB
-        // 3840x2160 32MB
-        // 2738x2048 22MB
-        // 1920x1080 8MB
-        // 1280x1024 5MB
-        //
-        GLint maxTextureSize = 256;
-        glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
-        int imageWidth = min(winWidth, maxTextureSize),
-            imageHeight = min(winHeight, maxTextureSize);
-        printf("INFO: window size=%dx%d  image size=%dx%d\n", winWidth, winHeight, imageWidth, imageHeight);
-    #endif
-
-    // Create grey checkerboard surface with yellow border
     const int bitsPerPixel = 32;
 
-    SDL_Surface* pSurface = SDL_CreateRGBSurface(0, sdlState.framebufferSize.width, sdlState.framebufferSize.height, bitsPerPixel, 0, 0, 0, 0);
+    SDL_Surface* pSurface = SDL_CreateRGBSurface(0, width, height, bitsPerPixel, 0, 0, 0, 0);
     unsigned int* surfacePixels = (unsigned int*)pSurface->pixels;
     
     for (int y = 0; y < pSurface->h; ++y)
@@ -332,26 +326,52 @@ void init_framebuffer_tex()
                     surfacePixels[i] = 0xff808080; // dark grey
             }
         }
-    
-    #ifdef SDL_GL_FRAMEBUFFER
+
+    return pSurface;
+}
+
+int min(int x, int y) { return x < y ? x : y; }
+int nextPowerOfTwo(int val) { int power = 1; while (power < val) power *= 2; return power; }
+
+void sdlInitFramebufferTexture()
+{
+    if (useGLFramebuffer) 
+    {
+        // Don't exceed max GL texture size
+        // - Also may need to increase WASM heap via -s TOTAL_MEMORY
+        // - Typical framebuffer sizes and memory usage:
+        //   5120x2880 57MB
+        //   3840x2160 32MB
+        //   2738x2048 22MB
+        //   1920x1080 8MB
+        //   1280x1024 5MB
+        GLint maxTextureSize = 256;
+        glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
+        int fbWidth = min(fb.size.width, maxTextureSize),
+            fbHeight = min(fb.size.height, maxTextureSize);
+        printf("INFO: framebuffer size=%dx%d  clamped framebuffer size=%dx%d\n", fb.size.width, fb.size.height, fbWidth, fbHeight);
+
+        // Create texture at size of framebuffer
+        SDL_Surface* fbTestImage = createTestSurface(fbWidth, fbHeight);
+
         // OpenGLES requires power of 2 dimension textures, so create the smallest
-        // power of 2 image that fits the background image, along with 1 texel border
-        int texWidth = nextPowerOfTwo(bgImage->w + 2),
-            texHeight = nextPowerOfTwo(bgImage->h + 2);
-        bgImageTexture = SDL_CreateRGBSurface(0, texWidth, texHeight, bitsPerPixel, 0, 0, 0, 0);
+        // power of 2 image that fits the framebuffer, along with 1 texel border
+        int bitsPerPixel = 32;
+        int texWidth = nextPowerOfTwo(fbTestImage->w + 2),
+            texHeight = nextPowerOfTwo(fbTestImage->h + 2);
+        SDL_Surface* fbTexture = SDL_CreateRGBSurface(0, texWidth, texHeight, bitsPerPixel, 0, 0, 0, 0);
 
-        // Clear the image and copy the background image into it, centered
-        unsigned int* texPixels = (unsigned int*)bgImageTexture->pixels;
-        memset(texPixels, 0x0, bgImageTexture->w * bgImageTexture->h * bgImageTexture->format->BytesPerPixel);
-        SDL_Rect destRect = {1, bgImageTexture->h - bgImage->h - 1, bgImage->w + 1, bgImageTexture->h - 1};
-        SDL_BlitSurface(bgImage, NULL, bgImageTexture, &destRect);
+        // Clear the texture and copy the initial checkerboard framebuffer into it, centered
+        unsigned int* texPixels = (unsigned int*)fbTexture->pixels;
+        memset(texPixels, 0x0, fbTexture->w * fbTexture->h * fbTexture->format->BytesPerPixel);
+        SDL_Rect destRect = {1, fbTexture->h - fbTestImage->h - 1, fbTestImage->w + 1, fbTexture->h - 1};
+        SDL_BlitSurface(fbTestImage, NULL, fbTexture, &destRect);
         
-        // Build GL texture
-        //
-
         // Generate a GL texture object and bind it as current
-        glGenTextures(1, &textureObj);
-        glBindTexture(GL_TEXTURE_2D, textureObj);
+        fb.glTexSize[0] = (GLsizei)fbTexture->w;
+        fb.glTexSize[1] = (GLsizei)fbTexture->h;
+        glGenTextures(1, &fb.glTex);
+        glBindTexture(GL_TEXTURE_2D, fb.glTex);
 
         // Set the GL texture's wrapping and stretching properties
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -362,142 +382,102 @@ void init_framebuffer_tex()
         // Upload SDL image to GL texture
         GLint level = 0, border = 0;
         glTexImage2D(GL_TEXTURE_2D, level, GL_RGBA, 
-                    bgImageTexture->w, bgImageTexture->h, 
-                    border, GL_RGBA, GL_UNSIGNED_BYTE, bgImageTexture->pixels);
+                     fb.glTexSize[0], fb.glTexSize[1], 
+                     border, GL_RGBA, GL_UNSIGNED_BYTE,
+                     fbTexture->pixels);
 
         // Check for errors
+        char texture_info[256];
+        snprintf(texture_info, sizeof(texture_info), "texture %d (%dx%d)", 
+            fb.glTex, fb.glTexSize[0], fb.glTexSize[1]);
         GLenum glError = glGetError();
-        if (glError != GL_NO_ERROR)
-            printf("ERROR: Texture %d (%dx%d) not built, error code %d\n", textureObj, bgImageTexture->w, bgImageTexture->h, glError);
+        if (glError == GL_NO_ERROR)
+            printf("OK: texture built %s\n", texture_info);
         else
-            printf("OK: Texture %d (%dx%d) built.\n", textureObj, bgImageTexture->w, bgImageTexture->h);
+            printf("ERROR: texture not built %s\n", texture_info);
 
         // Unbind texture
         glBindTexture(GL_TEXTURE_2D, 0);
 
-        // Update quad shader
-        imageSize[0] = (GLfloat)bgImage->w + 2;
-        imageSize[1] = (GLfloat)bgImage->h + 2;
-        texSize[0] = (GLfloat)bgImageTexture->w;
-        texSize[1] = (GLfloat)bgImageTexture->h;
-        updateShader(eventHandler);
-    #else
-        // Create texture from surface
-        sdlState.pFramebufferTex = SDL_CreateTextureFromSurface(sdlState.pRenderer, pSurface);
-    #endif
+        // Update shader with texture size
+        updateShaderVars();
 
-    SDL_FreeSurface(pSurface);
-}
-
-void update_framebuffer_tex()
-{
-    if (sdlState.pFramebuffer)
+        SDL_FreeSurface(fbTestImage);
+        SDL_FreeSurface(fbTexture);
+    }
+    else
     {
-        #ifdef SDL_GL_FRAMEBUFFER
-            printf("update OGL texture\n");
-        #else        
-            int pitch = sdlState.framebufferSize.width * 4;
-            SDL_UpdateTexture(sdlState.pFramebufferTex, NULL, sdlState.pFramebuffer, pitch);
-        #endif
+        // Create SDL texture from checkerboard surface
+        SDL_Surface* pSurface = createTestSurface(fb.size.width, fb.size.height);
+        fb.pSDLTex = SDL_CreateTextureFromSurface(fb.pSDLRenderer, pSurface);
+        SDL_FreeSurface(pSurface);
     }
 }
 
-void free_framebuffer_tex()
+void sdlUpdateFramebufferTexture()
 {
-    #ifdef SDL_GL_FRAMEBUFFER
-        if (textureObj > 0)
-        {
-            glDeleteTextures(1, &textureObj);
-            textureObj = 0;
-        }
-    #else
-        if (sdlState.pFramebufferTex)
-        {
-            SDL_DestroyTexture(sdlState.pFramebufferTex);
-            sdlState.pFramebufferTex = NULL;
-        }
-    #endif
-}
-
-Uint32 beginMaintainFPS()
-{
-    return SDL_GetTicks();
-}
-
-void endMaintainFPS(int fps, Uint32 startTicks)
-{
-    const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
-    Uint32 frameTicks = SDL_GetTicks() - startTicks;
-    if( frameTicks < SCREEN_TICKS_PER_FRAME )
+    if (fb.pSrcPixels)
     {
-        SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks );
-    }    
+        if (useGLFramebuffer) 
+        {
+            glBindTexture(GL_TEXTURE_2D, fb.glTex);
+            GLint level = 0, xoffset = 0, yoffset = 0;
+            glTexSubImage2D(GL_TEXTURE_2D, level, 
+                            xoffset, yoffset, 
+                            fb.size.width, fb.size.height, 
+                            GL_RGBA, GL_UNSIGNED_BYTE,
+                            fb.pSrcPixels);
+            // TODO: watch out for framebuffer exceeding gl texture size
+        }
+        else 
+        {       
+            int pitch = fb.size.width * 4;
+            SDL_UpdateTexture(fb.pSDLTex, NULL, fb.pSrcPixels, pitch);
+        }
+    }
 }
 
-void redraw()
+void sdlFreeFramebufferTexture()
 {
-    #ifdef SDL_GL_FRAMEBUFFER
-        glClearColor(0, 0, 0, 0);
-        glClear(GL_COLOR_BUFFER_BIT);
+    if (fb.glTex > 0)
+    {
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glDeleteTextures(1, &fb.glTex);
+        fb.glTex = 0;
+    }
+    
+    if (fb.pSDLTex)
+    {
+        SDL_DestroyTexture(fb.pSDLTex);
+        fb.pSDLTex = NULL;
+    }
+}
 
-        // Draw the background quad VBO with texture bound and image texture shader
-        glBindTexture(GL_TEXTURE_2D, textureObj);
-        glUseProgram(quadShaderProgram);
-        glBindBuffer(GL_ARRAY_BUFFER, quadVbo);
-        glVertexAttribPointer(positionAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
+void sdlRenderFramebufferTexture()
+{
+    // Draw the quad VBO with texture bound and use framebuffer shader
+    if (useGLFramebuffer)
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glBindTexture(GL_TEXTURE_2D, fb.glTex);
+        glUseProgram(fb.glShaderProg);
+        glBindBuffer(GL_ARRAY_BUFFER, fb.glQuadVBO);
+        glVertexAttribPointer(fb.glQuadPosAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         glBindTexture(GL_TEXTURE_2D, 0);
 
-        SDL_GL_SwapWindow(sdlState.pWindow);
-    #else    
-        SDL_SetRenderDrawColor(sdlState.pRenderer, 0, 0, 0, 0);
-        SDL_RenderClear(sdlState.pRenderer);
-
+        SDL_GL_SwapWindow(fb.pWindow);
+    }
+    else
+    {  
+        SDL_RenderClear(fb.pSDLRenderer);
         SDL_Rect destRect = (SDL_Rect) {
             .x = windowToFramebufferOffsetX(), 
             .y = windowToFramebufferOffsetY(), 
-            sdlState.framebufferSize.width, 
-            sdlState.framebufferSize.height };
-        SDL_RenderCopy(sdlState.pRenderer, sdlState.pFramebufferTex, NULL, &destRect);
-        SDL_RenderPresent(sdlState.pRenderer);
-    #endif
-}
+            fb.size.width, 
+            fb.size.height };
+        SDL_RenderCopy(fb.pSDLRenderer, fb.pSDLTex, NULL, &destRect);
 
-void main_loop(void* main_loop_arg) 
-{   
-    Uint32 startTicks = beginMaintainFPS();
-
-    sdlProcessEvents();
-
-    // Run child main loop - let child process events and redraw its stuff
-    child_main_loop();
-
-    update_framebuffer_tex();
-    redraw();
-
-    endMaintainFPS(SCREEN_FPS, startTicks);
-}
-
-int main(int argc, char* argv[])
-{
-    // Initialize SDL window
-    sdlInit(NULL);
-    init_framebuffer_tex();
-
-    // Run child main
-    child_main(argc, argv);
-
-    // Start the main loop
-    void* main_loop_arg = NULL;
-    #ifdef __EMSCRIPTEN__
-        int fps = 0; // Set to 0 to use browser's requestAnimationFrame (recommended)
-        int simulate_infinite_loop = 1;
-        emscripten_set_main_loop_arg(main_loop, main_loop_arg, fps, simulate_infinite_loop);
-    #else
-        while(true) 
-            main_loop(main_loop_arg);
-    #endif
-
-    free_framebuffer_tex();
-    return 0;
+        SDL_RenderPresent(fb.pSDLRenderer);
+    }
 }
