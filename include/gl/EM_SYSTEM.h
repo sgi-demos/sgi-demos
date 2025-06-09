@@ -35,7 +35,7 @@ int em_system(const char *command)
 
         // generate js to visit full path url
         char sys_js[256]; 
-        snprintf (sys_js, 256, "window.location.href = 'https://sgi-demos.github.io/sgi-demos/%s';",url); 
+        snprintf (sys_js, 256, "window.location.href = 'https://sgi-demos.github.io/sgi-demos/demos/%s';",url); 
         printf("sys_js = %s\n",sys_js);
 
         // run js
