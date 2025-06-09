@@ -1,0 +1,6 @@
+APPNAME=buttonfly
+APPARGS=menu_demos
+APPCMDS=cp $(WEB_DIR)/buttonfly.js $(WEB_DIR)/buttonfly.wasm $(WEB_DIR)/buttonfly.data ../../../sgi-demos.github.io
+EM_PRELOAD=--preload-file menus/menu --preload-file menus/m_demos --preload-file menus/m_more_demos --preload-file menus/m_bounce
+
+include ../../build/make_demo.mk

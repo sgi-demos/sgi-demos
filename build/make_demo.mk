@@ -1,4 +1,4 @@
-include ../build/platform.mk
+include ../../build/platform.mk
 
 APP = $(BIN_DIR)/$(APPNAME)
 EM_APPNAME = $(WEB_DIR)/$(APPNAME)
@@ -11,9 +11,9 @@ EM_OBJS = $(patsubst %.c,$(WEB_DIR)/%.o,$(SRC))
 all: $(APP) $(EM_APP)
 
 $(GL_LIB) $(EM_GL_LIB):
-	make -C ../libgl
+	make -C $(LIBS_DIR)/libgl
 $(DEMO_LIB) $(EM_DEMO_LIB):
-	make -C ../libdemo
+	make -C $(LIBS_DIR)/libdemo
 
 $(BIN_DIR):
 	mkdir -p $@
@@ -35,6 +35,7 @@ $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
 	ln -s $(BIN_DIR) ./bin
 	@echo
 	@echo BUILT: $@
+	@echo $(CUR_DIR)
 	@echo
 
 $(EM_OBJS): $(WEB_DIR)/%.o: $(SRC_DIR)/%.c | $(WEB_DIR) $(EM_SRC) $(EM_HDRS)
@@ -46,6 +47,7 @@ $(EM_APP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EM_OBJS)
 	$(APPCMDS)
 	@echo
 	@echo BUILT: $@
+	@echo $(CUR_DIR)
 	@echo
 
 .PHONY: run clean

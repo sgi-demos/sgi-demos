@@ -1,4 +1,4 @@
-include ../build/platform.mk
+include ../../build/platform.mk
 
 LIB = $(BIN_DIR)/$(LIBNAME).a
 EM_LIBNAME = $(WEB_DIR)/$(LIBNAME)

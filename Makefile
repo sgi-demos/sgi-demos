@@ -1,8 +1,17 @@
-.PHONY: all clean
-DEMOS = libgl libdemo arena bounce buttonfly cedit flight ideas insect jello logo newave twilight
+.PHONY: demos libs clean
 
-all: $(DEMOS)
-	for file in $^ ; do make -C $${file} ; done
+DEMOS_DIR = demos
+DEMOS = arena bounce buttonfly cedit flight ideas insect jello logo newave twilight
 
-clean: $(DEMOS)
-	for file in $^ ; do make clean -C $${file} ; done
+LIBS_DIR = libs
+LIBS = libgl libdemo
+
+demos:
+	for file in $(DEMOS) ; do make -C $(DEMOS_DIR)/$${file} ; done
+
+libs:
+	for file in $(LIBS) ; do make -C $(LIBS_DIR)/$${file}  ; done
+
+clean:
+	for file in $(LIBS) ; do make clean -C $(LIBS_DIR)/$${file} ; done
+	for file in $(DEMOS) ; do make clean -C $(DEMOS_DIR)/$${file} ; done
