@@ -248,12 +248,13 @@ void sdlResizeWindow(Uint32 windowID, Size2D windowSize)
 {
     if (windowID == fb.windowID)
     {
+        fb.windowSize = windowSize;
+        
         // TODO: For now, framebuffer size is static.  Future: make framebuffer and
         // window size the same, and rebuild framebuffer texture here on resizes (and
         // communicate size change back to IRIS GL)
         if (useGLFramebuffer)
         {
-            fb.windowSize = windowSize;
             glViewport(0, 0, fb.windowSize.width, fb.windowSize.height);
             updateShaderVars();
         }
