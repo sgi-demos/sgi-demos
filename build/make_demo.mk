@@ -32,7 +32,7 @@ $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
 	$(CC) $(OPT) $(SHIM_INC) $(LIBGL_INC) $(OBJS) -D EM_CHILD_APP $(DEMO_LIB) $(GL_LIB) \
 		$(SDL_INC) $(SDL_LIBS) $(GLES_INC) $(GLES_LIBS) $(GLES_LINK) -lm -o $@
 	$(call GLES_INSTALL)
-	ln -s $(BIN_DIR) ./bin
+	ln -sF $(BIN_DIR) ./bin
 	@echo
 	@echo BUILT: $@
 	@echo $(CUR_DIR)

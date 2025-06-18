@@ -21,7 +21,8 @@
         "string.h": "c",
         "geom_types.h": "c",
         "sdl_events.h": "c",
-        "basic_types.h": "c"
+        "basic_types.h": "c",
+        "*.backup": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

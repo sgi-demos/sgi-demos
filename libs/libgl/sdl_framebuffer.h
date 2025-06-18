@@ -4,7 +4,7 @@
 extern void sdlInitWindow();
 extern void sdlOpenWindow(char *title, int32_t frameWidth, int32_t frameHeight);
 extern void sdlSetFramebufferSource(unsigned char* pSrcPixels);
-extern void sdlResizeWindow(Uint32 windowID, Size2D windowSize);
+extern void sdlResizeWindow(Uint32 windowID);
 
 extern bool sdlInsideFramebuffer(int windowX, int windowY);
 extern int  sdlClampToFramebufferX(int windowX);

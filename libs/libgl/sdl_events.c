@@ -170,7 +170,7 @@ void sdlProcessEvents()
 
             case SDL_WINDOWEVENT:
                 if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
-                    sdlResizeWindow(event.window.windowID,(Size2D){event.window.data1, event.window.data2});
+                    sdlResizeWindow(event.window.windowID);
                 break;
 
             case SDL_TEXTINPUT:
