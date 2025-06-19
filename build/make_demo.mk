@@ -36,7 +36,6 @@ $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
 	@echo
 	@echo BUILT: $@
 	@echo $(CUR_DIR)
-	@echo
 
 $(EM_OBJS): $(WEB_DIR)/%.o: $(SRC_DIR)/%.c | $(WEB_DIR) $(EM_SRC) $(EM_HDRS)
 	$(OLD_CODE_EMCC) $(EM_OPT) $(EM_OLD_CODE_WARN_OFF) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
@@ -48,7 +47,6 @@ $(EM_APP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EM_OBJS)
 	@echo
 	@echo BUILT: $@
 	@echo $(CUR_DIR)
-	@echo
 
 .PHONY: run clean
 
@@ -59,4 +57,4 @@ clean:
 	rm -f $(APP) $(OBJS)
 	rm -rf $(APP).dSYM
 	rm -f $(EM_APP) $(EM_OBJS) $(EM_APPNAME).js $(EM_APPNAME).wasm $(EM_APPNAME).data
-	rm -f ./bin
+	rm -rf ./bin
