@@ -13,6 +13,9 @@ void rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index);
 void rasterizer_zclear(uint32_t z);
 void rasterizer_czclear(uint8_t r, uint8_t g, uint8_t b, short color_index, uint32_t z);
 void rasterizer_swap();
+void rasterizer_copy_front_to_back();
+void rasterizer_copy_back_to_front();
+
 unsigned char* rasterizer_frontbuffer();
 void rasterizer_draw(uint32_t type, uint32_t count, screen_vertex *v); // count is the number of primitives.
 void rasterizer_bitmap(uint32_t width, uint32_t rowbytes, uint32_t height, screen_vertex *sv, uint8_t *bits);

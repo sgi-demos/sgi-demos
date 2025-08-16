@@ -25,12 +25,12 @@ static int rgb_mode = 0; // color map mode by default
 // double color buffers
 static int backbuffer_draw_enabled = 1;
 static int frontbuffer_draw_enabled = 0;
-typedef unsigned char color_buffer_t[YMAXSCREEN + 1][XMAXSCREEN + 1][4]; 
+typedef unsigned char color_buffer_t[YMAXSCREEN + 1][XMAXSCREEN + 1][4];
 static color_buffer_t c_buffer[2]; // uchar = 8 bits = 1 byte * 800 * 480 * 4 = 1.53M * 2 = 3.06M
 static color_buffer_t *gl_c_backbuffer = &(c_buffer[0]);  // render to back buffer
 static color_buffer_t *gl_c_frontbuffer = &(c_buffer[1]); // display from front buffer
 
-typedef unsigned short color_index_buffer_t[YMAXSCREEN + 1][XMAXSCREEN + 1]; 
+typedef unsigned short color_index_buffer_t[YMAXSCREEN + 1][XMAXSCREEN + 1];
 static color_index_buffer_t ci_buffer[2]; // short = 16 bits = 2 bytes * 800 * 480 = 640K * 2 = 1.28M
 static color_index_buffer_t *gl_ci_backbuffer = &(ci_buffer[0]);  // render to back buffer
 static color_index_buffer_t *gl_ci_frontbuffer = &(ci_buffer[1]); // display from front buffer
@@ -38,11 +38,11 @@ static color_index_buffer_t *gl_ci_frontbuffer = &(ci_buffer[1]); // display fro
 // z buffer
 static int zbuffer_enabled = 0;
 typedef uint16_t z_t;
-static const int Z_SHIFT = 16; // Shift computed 32-bit Z into 16-bit Z buffer 
+static const int Z_SHIFT = 16; // Shift computed 32-bit Z into 16-bit Z buffer
 static const unsigned int Z_MAX = 0xffffffff;
 // Should we just 'upgrade' GL to 32-bit Z since we computed it?
 //typedef uint32_t z_t;
-//static const int Z_SHIFT = 0; 
+//static const int Z_SHIFT = 0;
 static z_t z_buffer[YMAXSCREEN + 1][XMAXSCREEN + 1]; // z_t = 16 bits = 2 bytes * 800 * 480 = 640K
 
 static float min(float a, float b)
@@ -57,7 +57,7 @@ static float clamp(float v, float low, float high)
 
 static void clear_cbuffer(int draw_enabled, color_buffer_t* buffer, uint8_t r, uint8_t g, uint8_t b)
 {
-    if (draw_enabled) {    
+    if (draw_enabled) {
         for (int j = 0; j < DISPLAY_HEIGHT; j++)
             for (int i = 0; i < DISPLAY_WIDTH; i++) {
                 (*buffer)[j][i][RED_BYTE] = r;
@@ -105,6 +105,16 @@ unsigned char* rasterizer_frontbuffer()
     return (unsigned char*)gl_c_frontbuffer;
 }
 
+void rasterizer_copy_front_to_back()
+{
+    memcpy(gl_c_backbuffer, gl_c_frontbuffer, sizeof(color_buffer_t));
+}
+
+void rasterizer_copy_back_to_front()
+{
+    memcpy(gl_c_frontbuffer, gl_c_backbuffer, sizeof(color_buffer_t));
+}
+
 void rasterizer_swap()
 {
     // swap back buffer (buffer being rasterized) and front buffer (buffer being displayed)
@@ -112,7 +122,7 @@ void rasterizer_swap()
 
     // optionally dump frames to ppm files
     static int frame = 0;
-    if (gen_ppm_frame_files) 
+    if (gen_ppm_frame_files)
     {
         unsigned char rgb_pixel[3];
         char name[128];
@@ -124,7 +134,7 @@ void rasterizer_swap()
                     // PPM expects RGB format
                     rgb_pixel[0] = (*gl_c_backbuffer)[j][i][RED_BYTE];
                     rgb_pixel[1] = (*gl_c_backbuffer)[j][i][GREEN_BYTE];
-                    rgb_pixel[2] = (*gl_c_backbuffer)[j][i][BLUE_BYTE];                   
+                    rgb_pixel[2] = (*gl_c_backbuffer)[j][i][BLUE_BYTE];
                     fwrite(rgb_pixel, 1, 3, fp);
                 }
             }
@@ -212,7 +222,7 @@ static float evalHalfPlane(float v0[2], float v1[2], float v2[2], float x, float
     n[0] = - (v1[1] - v0[1]);
     n[1] = v1[0] - v0[0];
 
-    return ((x - v0[0]) * n[0] + (y - v0[1]) * n[1]) / 
+    return ((x - v0[0]) * n[0] + (y - v0[1]) * n[1]) /
         ((v2[0] - v0[0]) * n[0] + (v2[1] - v0[1]) * n[1]);
 }
 
@@ -224,8 +234,8 @@ static void calcHalfPlaneDiffs(float v0[2], float v1[2], float v2[2],
 }
 
 static void set_buffer_pixel(int draw_enabled, color_buffer_t* buffer, int y, int x, uint8_t r, uint8_t g, uint8_t b)
-{                  
-    if (draw_enabled) 
+{
+    if (draw_enabled)
     {
         (*buffer)[y][x][RED_BYTE] = r;
         (*buffer)[y][x][GREEN_BYTE] = g;
@@ -397,7 +407,7 @@ static void draw_point(screen_vertex *sv)
         v[0] = floor(v[0]);
         v[1] = floor(v[1]);
     }
-    
+
     int x = clamp(v[0], 0, DISPLAY_WIDTH);
     int y = clamp(v[1], 0, DISPLAY_HEIGHT);
     z_t z = sz_to_zbuffer(s.z);
@@ -448,7 +458,7 @@ void rasterizer_draw(uint32_t type, uint32_t count, screen_vertex *screenverts)
                 draw_point(&screenverts[i]);
             break;
         case DRAW_LINES:
-            for (i = 0; i < count / 2; i++) { 
+            for (i = 0; i < count / 2; i++) {
                 draw_line(&screenverts[i * 2 + 0], &screenverts[i * 2 + 1]);
             }
             break;

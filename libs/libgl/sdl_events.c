@@ -43,7 +43,7 @@ static int mousePosY()
 static unsigned char mouseButtonState()
 {
     int x, y;
-    return SDL_GetMouseState(&x, &y);    
+    return SDL_GetMouseState(&x, &y);
 }
 
 static Uint8* getKeyboardState()
@@ -66,7 +66,7 @@ static void exitEvent()
             "     window.history.back();                                "
             "}                                                          "
             "else {                                                     "
-            "    window.location.href = 'https://sgi-demos.github.io';  " 
+            "    window.location.href = 'https://sgi-demos.github.io';  "
             "}                                                          ";
         emscripten_run_script(exit_js);
     #else
@@ -77,10 +77,10 @@ static void exitEvent()
 static void mouseMotionEvent()
 {
     // detect when mouse transits into or out of framebuffer for INPUTCHANGE events
-    // TODO: also perhaps when window loses/gains focus? 
+    // TODO: also perhaps when window loses/gains focus?
     static bool prevMouseInsideFramebuffer = false;
     bool mouseInsideFB = mouseInsideFramebuffer();
-    if (mouseInsideFB != prevMouseInsideFramebuffer) 
+    if (mouseInsideFB != prevMouseInsideFramebuffer)
     {
         prevMouseInsideFramebuffer = mouseInsideFB;
         if (sdl_devices_queued[INPUTCHANGE])
@@ -95,26 +95,21 @@ static void mouseMotionEvent()
 
 static void keyDownEvent(int sdl_keycode, char *text)
 {
-    if (sdl_keycode == SDLK_ESCAPE)
-        exitEvent();
-    else 
+    // convert SDL key event to GL and add it to GL event queue
+    //printf("sdl_keycode = %d, text = [%s]\n", sdl_keycode, text);
+    gl_event ev;
+    ev.device = sdl_keycode_to_gl(sdl_keycode);
+    if (ev.device != 0 && (sdl_devices_queued[ev.device] || sdl_devices_queued[KEYBD]))
     {
-        // convert SDL key event to GL and add it to GL event queue
-        //printf("sdl_keycode = %d, text = [%s]\n", sdl_keycode, text);
-        gl_event ev;
-        ev.device = sdl_keycode_to_gl(sdl_keycode);
-        if (ev.device != 0 && (sdl_devices_queued[ev.device] || sdl_devices_queued[KEYBD]))
+        ev.val = 1;
+        enqueue_event(&ev);
+        if (sdl_devices_queued[KEYBD])
         {
-            ev.val = 1;
-            enqueue_event(&ev);
-            if (sdl_devices_queued[KEYBD])
+            if (strlen(text) == 1)
             {
-                if (strlen(text) == 1)
-                {
-                    ev.device = KEYBD;
-                    ev.val = text[0];
-                    enqueue_event(&ev);
-                }
+                ev.device = KEYBD;
+                ev.val = text[0];
+                enqueue_event(&ev);
             }
         }
     }
@@ -133,17 +128,17 @@ static void mouseButtonEvent(int sdlButton, bool buttonDown)
     }
 
     // convert SDL mouse button event to GL and add it to GL event queue
-    if (ev.device != NULLDEV && sdl_devices_queued[ev.device]) 
+    if (ev.device != NULLDEV && sdl_devices_queued[ev.device])
     {
         ev.val = buttonDown;
         enqueue_event(&ev);
 
         // tied valuators is typically used for capturing mouse x and/or
-        // y position at the time when a mouse button is pressed, and 
+        // y position at the time when a mouse button is pressed, and
         // emitting those as mouse position x and y events right after
         // the mouse button event in the GL event queue
         gl_event tied_ev;
-        for (int j = 0; j < 2; ++j) 
+        for (int j = 0; j < 2; ++j)
         {
             if (sdl_tied_valuators[ev.device][j])
             {
@@ -203,6 +198,47 @@ void sdlProcessEvents()
     }
 }
 
+// Framerate control:
+// - Simulate a decent SGI machine for the time, 60 fps is too fast for some demos (like ideas)
+// - Also, in the 80s and 90s, we had less than 60 fps and we liked it!
+// - TODO: Make this a per-demo option
+const int SCREEN_FPS = 30;
+
+Uint32 beginMaintainFPS()
+{
+    return SDL_GetTicks();
+}
+
+void endMaintainFPS(int fps, Uint32 startTicks)
+{
+    const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
+    Uint32 frameTicks = SDL_GetTicks() - startTicks;
+    if (frameTicks < SCREEN_TICKS_PER_FRAME)
+    {
+        SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTicks);
+    }
+}
+
+void sdlRunEventLoop(void (*child_event_loop)())
+{
+    Uint32 startTicks = beginMaintainFPS();
+
+    // Translate input events into IRIS GL events
+    sdlProcessEvents();
+
+    // Run child event loop, if provided, so it can process events and redraw its stuff
+    if (child_event_loop != NULL)
+        child_event_loop();
+
+    // Update framebuffer texture with rendered pixels
+    sdlUpdateFramebufferTexture();
+
+    // Render framebuffer texture
+    sdlRenderFramebufferTexture();
+
+    endMaintainFPS(SCREEN_FPS, startTicks);
+}
+
 
 //
 // IRIS GL event queue
@@ -214,7 +250,7 @@ int32_t events_get_valuator(int32_t device)
     {
         case MOUSEX: return sdlClampToFramebufferX(mousePosX());
         case MOUSEY: return sdlClampToFramebufferY(mousePosY());
-    }  
+    }
 
     printf("warning: unimplemented evaluator %d\n", device);
     return 0;
@@ -345,14 +381,14 @@ Boolean events_get_button(int32_t button) {
             default:          return 0;
         }
     }
-    
+
     unsigned char* keyArray = getKeyboardState();
     switch (button)
     {
-        case CTRLKEY: 
+        case CTRLKEY:
             return keyArray[SDL_SCANCODE_LCTRL] || keyArray[SDL_SCANCODE_RCTRL];
 
-        default:  
+        default:
         {
             // Map SDL_SCANCODE to GL device
             SDL_Scancode sdl_scancode = gl_to_sdl_scancode(button);
@@ -361,7 +397,7 @@ Boolean events_get_button(int32_t button) {
             else
                 return 0;
         }
-    }  
+    }
 }
 
 void events_qdevice(int32_t device)
@@ -378,7 +414,7 @@ void enqueue_event(gl_event *e)
 {
     if (sdl_input_queue_length == INPUT_QUEUE_SIZE) {
         printf("Input queue overflow.");
-    } 
+    }
     else {
         uint32_t tail = (sdl_input_queue_head + sdl_input_queue_length) % INPUT_QUEUE_SIZE;
         sdl_input_queue[tail] = *e;
@@ -409,6 +445,12 @@ int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height)
 void events_set_framebuffer(unsigned char* framebuffer)
 {
     sdlSetFramebufferSource(framebuffer);
+}
+
+void events_run_event_loop()
+{
+    // run event loop without a child loop
+    sdlRunEventLoop(NULL);
 }
 
 void events_tie(int32_t button, int32_t val1, int32_t val2)

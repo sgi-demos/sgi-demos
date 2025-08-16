@@ -36,7 +36,7 @@
  *
  * In order to show a GL function trace, DON'T enable NDEBUG and
  * set TRACE_GL environment variable to anything.
- * 
+ *
  * If NDEBUG is defined or if TRACE_GL environment variable is not
  * set, you'll see no tracing.
  */
@@ -69,7 +69,7 @@ void trace_func(const char *func, const char *fmt, ...)
     va_end(args);
 
     dp = stpcpy(dp, ");\n");
-    
+
     fputs(dummy, stdout);
 }
 
@@ -247,7 +247,7 @@ void pup_set_title(pup *p, char *title)
 void pup_add(pup *p, char *item, int value, int submenu, int (*func)(int i))
 {
     pup_item *pi = p->items + p->item_count++;
-    
+
     if(item != NULL)
         pi->item = strdup(item);
     else
@@ -298,7 +298,7 @@ void light_vertex(material *mtl, vec4f coord, vec3f normal, vec4f color_)
             } else {
                 vec4f_subtract(l->position, coord, vertex_to_light);
                 attenuation = 1.0f / (
-                    lmodel_bound->attenuation[0] + 
+                    lmodel_bound->attenuation[0] +
                     lmodel_bound->attenuation[1] * vec4f_length(vertex_to_light)
                     );
             }
@@ -408,8 +408,8 @@ void project_vertex(lit_vertex *lv, screen_vertex *sv)
     sv->x = clamp(xw, 0, DISPLAY_WIDTH - 1) * SCREEN_VERTEX_V2_SCALE;
     sv->y = clamp(yw, 0, DISPLAY_HEIGHT - 1) * SCREEN_VERTEX_V2_SCALE;
     sv->z = clamp(zw * (float)0xFFFFFFFF, // NOTE: ****Must link with -lm or else this always returns zero***
-                  0.0, 
-                  (float)0xFFFFFF7F); // largest float <= UINT_MAX; 
+                  0.0,
+                  (float)0xFFFFFF7F); // largest float <= UINT_MAX;
     sv->r = unitclamp(lv->color[0]) * 255;
     sv->g = unitclamp(lv->color[1]) * 255;
     sv->b = unitclamp(lv->color[2]) * 255;
@@ -622,10 +622,10 @@ void process_point(world_vertex *wv)
 
     if (classify_vertex(litvert.coord) == CLIP_ALL_IN) {
         project_vertex(&litvert, &screenvert);
-        rasterizer_draw(DRAW_POINTS, 1, &screenvert);    
+        rasterizer_draw(DRAW_POINTS, 1, &screenvert);
     }
 
-    lighting_enabled = save_lighting;  
+    lighting_enabled = save_lighting;
 }
 
 void process_line(world_vertex *wv0, world_vertex *wv1)
@@ -656,14 +656,14 @@ static int backface_cull(const screen_vertex* s)
 {
     float area =
         /* .5 * */ // Don't bother multiplying by .5, only checking the sign.
-        s[0].x * s[1].y - s[1].x * s[0].y + 
-        s[1].x * s[2].y - s[2].x * s[1].y + 
+        s[0].x * s[1].y - s[1].x * s[0].y +
+        s[1].x * s[2].y - s[2].x * s[1].y +
         s[2].x * s[0].y - s[0].x * s[2].y;
     return (area < 0);
 }
 
 void process_tmesh(int n, world_vertex *worldverts)
-{     
+{
     int ccw = 1;
 
     static lit_vertex litverts[POLY_MAX];
@@ -712,10 +712,10 @@ void process_polygon(int n, world_vertex *worldverts)
     static lit_vertex *vp;
     static screen_vertex screenverts[POLY_MAX];
 
-    // early return when building display list 
+    // early return when building display list
     if (n == 0)
         return;
-        
+
     for(int i = 0; i < n; i++)
         transform_and_light_vertex(&worldverts[i], &litverts[i]);
 
@@ -731,7 +731,7 @@ void process_polygon(int n, world_vertex *worldverts)
 
     for(int i = 0; i < n; i++)
         project_vertex(&vp[i], &screenverts[i]);
- 
+
     // XXX break into a single draw of TRIANGLES instead of a single function call per triangle:
     static screen_vertex triangle[3];
     triangle[0] = screenverts[0];
@@ -928,7 +928,7 @@ typedef struct dl_element
         } loadmatrix;
 
         struct {
-            Angle fovy; 
+            Angle fovy;
             float aspect;
             Coord near, far;
         } perspective;
@@ -1017,7 +1017,7 @@ static enum object_type bgn_object_type;
 //----------------------------------------------------------------------------
 // GL API calls
 
-void callobj(Object obj) { 
+void callobj(Object obj) {
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(CALLOBJ);
         e->callobj.obj = obj;
@@ -1083,7 +1083,7 @@ void callobj(Object obj) {
                 break;
             case BGNPOINT:
                 bgnpoint();
-                break;                
+                break;
             case RGBCOLOR:
                 RGBcolor(
                     p->rgbcolor.r,
@@ -1170,7 +1170,7 @@ void callobj(Object obj) {
                 break;
             case PNT:
                 pnt(p->pnt.x, p->pnt.y, p->pnt.z);
-                break;                
+                break;
             case POLY:
                 poly(p->poly.n, p->poly.p);
                 break;
@@ -1233,7 +1233,7 @@ static int is_full_viewport() {
            the_viewport[2] == 0 && the_viewport[3] == YMAXSCREEN;
 }
 
-void clear() { 
+void clear() {
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(CLEAR);
         return;
@@ -1260,7 +1260,7 @@ void clear() {
     }
 }
 
-void closeobj() { 
+void closeobj() {
     TRACE();
     cur_ptr_to_nextptr = NULL;
 }
@@ -1281,10 +1281,10 @@ void closeobj() {
 // RGBmode used by: bounce, buttonfly, ideas, jello, logo (exit on getplanes() < 12)
 //
 // Color index apps had to save and restore the current color map, since customizing it
-// would customize the colors for other apps too. Imagine the entire desktop changing 
+// would customize the colors for other apps too. Imagine the entire desktop changing
 // simultaneously to the same set of colors as the currently running app.
 //
-int getplanes() { 
+int getplanes() {
     TRACE();
     return 24;
 }
@@ -1316,7 +1316,7 @@ void RGBcolor(int r, int g, int b) {
     current_color[3] = 1.0;
 }
 
-void color(Colorindex color) { 
+void color(Colorindex color) {
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(COLOR);
         e->color.color = color;
@@ -1352,7 +1352,7 @@ int getwritemask() {
     return current_writemask;
 }
 
-void deflinestyle(int index, Linestyle pattern) { 
+void deflinestyle(int index, Linestyle pattern) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
@@ -1376,11 +1376,11 @@ void defpattern(int index, int size, Pattern16 mask) {
     }
 }
 
-void doublebuffer() { 
+void doublebuffer() {
     // doublebuffer always enabled for now, more work here when/if singlebuffer is implemented
 }
 
-void editobj(Object obj) { 
+void editobj(Object obj) {
     TRACEF("%d", obj);
 
     cur_ptr_to_nextptr = &(objects[obj]);
@@ -1389,24 +1389,24 @@ void editobj(Object obj) {
     replace_mode = 0;
 }
 
-void frontbuffer(Boolean enable) { 
+void frontbuffer(Boolean enable) {
     frontbuffer_draw_enabled = enable;
-    rasterizer_cbuffer_draw(frontbuffer_draw_enabled, backbuffer_draw_enabled);    
+    rasterizer_cbuffer_draw(frontbuffer_draw_enabled, backbuffer_draw_enabled);
 }
 
-void backbuffer(Boolean enable) { 
+void backbuffer(Boolean enable) {
     backbuffer_draw_enabled = enable;
-    rasterizer_cbuffer_draw(frontbuffer_draw_enabled, backbuffer_draw_enabled);    
+    rasterizer_cbuffer_draw(frontbuffer_draw_enabled, backbuffer_draw_enabled);
 }
 
-void gconfig() { 
+void gconfig() {
     // Nothing to do here really. It's to be called after configuring:
     // 1. overlay/underlay (not supported)
     // 2. RGB vs. color map (only RGB supported)
     // 3. single vs. double buffer (only double buffer supported)
 }
 
-Object genobj() { 
+Object genobj() {
     for(int i = 0; i < OBJ_MAX; i++)
         if(!object_allocation[i]) {
             object_allocation[i] = 1;
@@ -1417,7 +1417,7 @@ Object genobj() {
     abort();
 }
 
-Tag gentag() { 
+Tag gentag() {
     for(int i = 0; i < OBJ_MAX; i++)
         if(!tag_allocation[i]) {
             tag_allocation[i] = 1;
@@ -1428,7 +1428,7 @@ Tag gentag() {
     abort();
 }
 
-void getmcolor(Colorindex index, short *red, short *green, short *blue) { 
+void getmcolor(Colorindex index, short *red, short *green, short *blue) {
     TRACEF("%d", index);
 
     *red = colormap[index][0];
@@ -1436,14 +1436,14 @@ void getmcolor(Colorindex index, short *red, short *green, short *blue) {
     *blue = colormap[index][2];
 }
 
-void getorigin(long *x, long *y) { 
+void getorigin(long *x, long *y) {
     TRACE();
 
     *x = 0;
     *y = 0;
 }
 
-void getsize(long *width, long *height) { 
+void getsize(long *width, long *height) {
     TRACE();
 
     *width = DISPLAY_WIDTH;
@@ -1456,7 +1456,7 @@ Boolean getbutton(int button) {
 }
 
 // valuator = device with continuous input, like a mouse or dial
-int getvaluator(int device) { 
+int getvaluator(int device) {
     TRACEF("%d", device);
     return events_get_valuator(device);
 }
@@ -1494,11 +1494,11 @@ void gl_sincos(Angle angle, float *s, float *c) {
     }
 }
 
-void gexit() { 
+void gexit() {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
-void makeobj(Object obj) { 
+void makeobj(Object obj) {
     TRACEF("%d", obj);
 
     if(objects[obj] != NULL) {
@@ -1509,7 +1509,7 @@ void makeobj(Object obj) {
     replace_mode = 0;
 }
 
-void maketag(Tag tag) { 
+void maketag(Tag tag) {
     TRACEF("%d", tag);
 
     if(cur_ptr_to_nextptr == NULL) {
@@ -1523,7 +1523,7 @@ void maketag(Tag tag) {
     element_insert(&cur_ptr_to_nextptr, e);
 }
 
-void mapcolor(Colorindex index, int red, int green, int blue) { 
+void mapcolor(Colorindex index, int red, int green, int blue) {
     // XXX insect only provides numbers ranging 0..255
     TRACEF("%d, %d, %d, %d", index, red, green, blue);
 
@@ -1532,7 +1532,7 @@ void mapcolor(Colorindex index, int red, int green, int blue) {
     colormap[index][2] = blue;
 }
 
-void multmatrix(Matrix m) { 
+void multmatrix(Matrix m) {
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(MULTMATRIX);
         memcpy(e->multmatrix.m, m, sizeof(Matrix));
@@ -1549,7 +1549,7 @@ void multmatrix(Matrix m) {
     matrix4x4f_stack_mult(current_stack, (float *)m);
 }
 
-void objreplace(Tag tag) { 
+void objreplace(Tag tag) {
     TRACEF("%d", tag);
 
     cur_ptr_to_nextptr = &(*ptrs_to_tagptrs[tag])->next;
@@ -1583,7 +1583,7 @@ void perspective(Angle fovy_, float aspect, Coord near, Coord far) {
     if(matrix_mode == MSINGLE) {
         matrix4x4f_stack_load(&projection_stack, m);
         matrix4x4f_stack_load(&modelview_stack, identity_4x4f);
-    } else 
+    } else
         matrix4x4f_stack_load(current_stack, m);
 }
 
@@ -1612,7 +1612,7 @@ void ortho2(Coord left, Coord right, Coord bottom, Coord top) {
     if(matrix_mode == MSINGLE) {
         matrix4x4f_stack_load(&projection_stack, m);
         matrix4x4f_stack_load(&modelview_stack, identity_4x4f);
-    } else 
+    } else
         matrix4x4f_stack_load(current_stack, m);
 }
 
@@ -1700,7 +1700,7 @@ void polf2s(int n, Scoord p[][2]) {
     free(np);
 }
 
-void popmatrix() { 
+void popmatrix() {
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(POPMATRIX);
         return;
@@ -1716,7 +1716,7 @@ void popmatrix() {
     }
 }
 
-void pushmatrix() { 
+void pushmatrix() {
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(PUSHMATRIX);
         return;
@@ -1772,7 +1772,7 @@ static int devices_queued[2048];
 
 /* XXX event_get_qdevice() */
 // We're interested in events from this device.
-void qdevice(Device device) { 
+void qdevice(Device device) {
     TRACEF("%d", device);
 
     devices_queued[device] = 1;
@@ -1814,7 +1814,7 @@ void fetch_event_queue() {
 }
 
 // If the queue is empty, qread() blocks.
-int qread(short *val) { 
+int qread(short *val) {
     TRACE();
 
     if (qtest())
@@ -1847,7 +1847,7 @@ int qtest() {
     }
 }
 
-void qenter(short qtype, short value) {   
+void qenter(short qtype, short value) {
     enqueue_device(qtype, value);
 }
 
@@ -1869,9 +1869,9 @@ void viewport(Screencoord left, Screencoord right, Screencoord bottom, Screencoo
     the_viewport[2] = bottom;
     the_viewport[3] = top;
 }
- 
+
 // XXX display-listable?
-void reshapeviewport() { 
+void reshapeviewport() {
     TRACE();
 
     long xsize, ysize;
@@ -1979,7 +1979,7 @@ void translate(Coord x, Coord y, Coord z) {
     matrix4x4f_stack_mult(current_stack, m);
 }
 
-void window(Coord left, Coord right, Coord bottom, Coord top, Coord near, Coord far) { 
+void window(Coord left, Coord right, Coord bottom, Coord top, Coord near, Coord far) {
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(WINDOW);
         e->window.left = left;
@@ -2128,7 +2128,7 @@ void c3i(int c[3]) {
             e->c3i.c[i] = c[i];
         return;
     }
-    
+
     TRACEF("%d, %d, %d", c[0], c[1], c[2]);
 
     vec4f_set(current_color, c[0] / 255.0, c[1] / 255.0, c[2] / 255.0, 1.0f);
@@ -2136,7 +2136,7 @@ void c3i(int c[3]) {
 
 void cpack(unsigned int pack)
 {
-    // cpack(0xFF004080); 
+    // cpack(0xFF004080);
     // sets red to 0x80, green to 0x40, blue to 0x0, and alpha to 0xFF
     int c[3] = { (pack & 0x000000ff),
                  (pack & 0x0000ff00) >> 8,
@@ -2150,7 +2150,7 @@ void c3f(float c[3]) {
         vec3f_copy(e->c3f.c, c);
         return;
     }
-    
+
     TRACEF("%f, %f, %f", c[0], c[1], c[2]);
 
     vec4f_set(current_color, c[0], c[1], c[2], 1.0f);
@@ -2175,10 +2175,6 @@ dopup() enters a loop:
 
 int defpup(char *menu, ...)
 {
-    return 1; // TBD, temporarily disabled
-
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
-
     int which = 0;
     while(pups[which].defd) {
         which++;
@@ -2198,7 +2194,7 @@ int defpup(char *menu, ...)
     while(menu3) {
         char *item = strsep(&menu3, "|");
         int is_title = 0;
-        
+
         int (*func)(int) = NULL;
         int value = -1;
         int submenu = -1;
@@ -2239,7 +2235,7 @@ int defpup(char *menu, ...)
             p++;
         }
         if(!is_title) {
-            if(value == -1) 
+            if(value == -1)
                 value = nextvalue++;
             pup_add(thepup, item, value, submenu, func);
         }
@@ -2262,7 +2258,7 @@ void siginfo(int s)
 
 const int menu_corner_top = YMAXSCREEN - 1 - 10;
 const int menu_corner_left = 10;
-const int menu_padding = 3; 
+const int menu_padding = 3;
 const int menu_item_separation = 2;
 const int menu_items_gap = 8;
 
@@ -2423,11 +2419,10 @@ void pup_draw(pup *p, int menu_left, int menu_top, int selected)
 
 int dopup(int pup_index) {
 
-    return 0; // TODO: Locks up in browser currently.  Fix it, and with original SGI font.
-
     // Save previous drawing state
     int old_zbuffer = zbuffer_enabled;
     zbuffer(0);
+    rasterizer_copy_front_to_back();
     vec4f previous_color;
     vec4f_copy(previous_color, current_color);
     vec4f_set(current_color, .1, .1, .1, 1);
@@ -2438,41 +2433,54 @@ int dopup(int pup_index) {
     int rarrow_queued = devices_queued[RIGHTARROWKEY];
     int uarrow_queued = devices_queued[UPARROWKEY];
     int darrow_queued = devices_queued[DOWNARROWKEY];
+    int esc_queued = devices_queued[ESCKEY];
+    int ret_queued = devices_queued[RETKEY];
 
     qdevice(LEFTARROWKEY);
     qdevice(RIGHTARROWKEY);
     qdevice(UPARROWKEY);
     qdevice(DOWNARROWKEY);
+    qdevice(ESCKEY);
+    qdevice(RETKEY);
 
     int selected = 0;
     int done = 0;
+
     while(!done) {
-        clear();
+        rasterizer_copy_back_to_front();
         pup_draw(thepup, menu_corner_left, menu_corner_top, selected);
-        swapbuffers();
+
+        // Run one SDL event loop:
+        // - GL's swapbuffers/qtest/qread require handing off to the SDL event loop
+        // - Demos' main loops use em_while() which makes their loop a child of SDL's event loop
+        // - Here, we are inside a demo loop, so we can't use em_while()
+        // - Rather, run the SDL event loop once, without a child loop, so screen can
+        //   update and SDL input events can be processed
+        events_run_event_loop();
 
         if(qtest() != 0) {
             short val;
             int device = qread(&val);
-            switch(device) {
-                case LEFTARROWKEY:
-                    if(val)
-                        return -1;
-                    break;
-                case RIGHTARROWKEY:
-                    if(val)
+            if (val) {
+                switch(device) {
+                    case ESCKEY:
                         done = 1;
-                    break;
-                case UPARROWKEY:
-                    if(val)
+                    case LEFTARROWKEY:
+                        selected = -1;
+                        break;
+                    case RETKEY:
+                    case RIGHTARROWKEY:
+                        done = 1;
+                        break;
+                    case UPARROWKEY:
                         if(selected > 0)
                             selected--;
-                    break;
-                case DOWNARROWKEY:
-                    if(val)
+                        break;
+                    case DOWNARROWKEY:
                         if(selected < thepup->item_count)
                             selected++;
-                    break;
+                        break;
+                }
             }
         }
     }
@@ -2481,12 +2489,18 @@ int dopup(int pup_index) {
     if(!rarrow_queued) unqdevice(RIGHTARROWKEY);
     if(!uarrow_queued) unqdevice(UPARROWKEY);
     if(!darrow_queued) unqdevice(DOWNARROWKEY);
+    if(!esc_queued) unqdevice(ESCKEY);
+    if(!ret_queued) unqdevice(RETKEY);
 
     // Restore previous drawing state
+    rasterizer_copy_back_to_front();
     vec4f_copy(current_color, previous_color);
     zbuffer(old_zbuffer);
 
-    return thepup->items[selected].value;
+    if (selected >= 0)
+        return thepup->items[selected].value;
+    else
+        return -1;
 }
 
 void endpoint()
@@ -2659,10 +2673,10 @@ void pmvs (Scoord x, Scoord y, Scoord z)
 
 void pmv2s (Scoord x, Scoord y)
 {
-    pmv_(x, y, 0);   
+    pmv_(x, y, 0);
 }
 
-void pnt(Coord x, Coord y, Coord z) 
+void pnt(Coord x, Coord y, Coord z)
 {
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(PNT);
@@ -2671,9 +2685,9 @@ void pnt(Coord x, Coord y, Coord z)
         e->pnt.z = z;
         return;
     }
-    
+
     static world_vertex wv;
-    vec4f_set(wv.coord, x, y, z, 1.0); 
+    vec4f_set(wv.coord, x, y, z, 1.0);
     vec4f_copy(wv.color, current_color);
 
     process_point(&wv);
@@ -3132,7 +3146,7 @@ int getgdesc (int inquiry)
         case GD_BITS_NORM_SNG_RED:
         case GD_BITS_NORM_SNG_GREEN:
         case GD_BITS_NORM_SNG_BLUE:
-            return 8;       
+            return 8;
     }
 
     static int warned = 0; if(!warned) { printf("%s %d unimplemented\n", __FUNCTION__, inquiry); warned = 1; }
@@ -3210,7 +3224,7 @@ void circi(Icoord x, Icoord y, Icoord r) {
     v1.coord[2] = 0.0;
     v1.coord[3] = 1.0;
 
-    for(int i = 0; i < CIRCLE_SEGMENTS; i++) {  
+    for(int i = 0; i < CIRCLE_SEGMENTS; i++) {
         v0.coord[0] = x + r * circle_verts[i][0];
         v0.coord[1] = y + r * circle_verts[i][1];
         v1.coord[0] = x + r * circle_verts[(i + 1) % CIRCLE_SEGMENTS][0];
@@ -3235,7 +3249,7 @@ void cmov2i(Icoord x, Icoord y) {
     }
 
     TRACEF("%d, %d", x, y);
-        
+
     vec4f c, p;
     vec4f_set(c, x, y, 0.0, 1.0);
     matrix4x4f_mult_vec4f(matrix4x4f_stack_top(&modelview_stack), c, p);

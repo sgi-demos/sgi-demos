@@ -10,13 +10,13 @@
             "name": "Debug demo",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/${relativeFileDirname}/bin/${relativeFileDirname}",
+            "program": "${workspaceFolder}/${relativeFileDirname}/bin/${fileBasenameNoExtension}",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/${relativeFileDirname}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "lldb"
-        }               
+        }
     ]
 }

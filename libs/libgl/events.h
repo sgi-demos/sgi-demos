@@ -18,5 +18,6 @@ extern int32_t events_qread_continue(int16_t *value);
 extern void events_tie(int32_t button, int32_t val1, int32_t val2);
 
 extern void events_set_framebuffer(unsigned char* framebuffer);
+extern void events_run_event_loop();
 
 #endif /* __EVENT_SERVICE_H__ */
