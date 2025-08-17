@@ -1,24 +1,24 @@
-/* 
+/*
 
-   Redefine child apps main() to child_main(), and its infinite event loop ("while (1)") to a 
-   separate child_main_loop() function, because Emscripten is driving the bus.
-    
+   Redefine demo apps main() to demo_main(), and its infinite event loop ("while (1)") to a
+   separate demo_main_loop() function, because Emscripten is driving the bus.
+
    This is going to be a bit ugly because variables declared before but used within the while loop
-   will need to be redeclared or passed into the new child_main_loop() function.  So it will be done 
-   on a case by case basis with each child app.
+   will need to be redeclared or passed into the new demo_main_loop() function.  So it will be done
+   on a case by case basis with each demo app.
 
-   Longer term, look into web/WASM worker in which the child app can happily run with source 
-   unmmodified, with events communicated to it from the main Emscripten thread via shared memory. For 
-   now though, we just want to get some pixels in the browser.
+   Longer term, look into WASM worker in which the demo app can happily run with source
+   unmmodified, with events communicated to it from the main Emscripten thread via thread-safe memory.
+   For now though, we just want to get some pixels in the browser.
 
 */
 
-// redefine main to child_main
-#define main child_main
+// redefine main to demo_main
+#define main demo_main
 
 /*
 
-    demo            # local vars in main(), used in child_main_loop
+    demo            # local vars in main(), used in demo_main_loop
     -----------     ----------------------
     bounce.c        0
     buttonfly.c     0
@@ -35,7 +35,7 @@
 
 */
 
-// re-define main locals for child_main_loop, if used in child_main_loop
+// re-define main locals for demo_main_loop, if used in demo_main_loop
 #define EM_BOUNCE       0
 #define EM_BUTTONFLY    1
 #define EM_CEDIT        2
@@ -66,11 +66,11 @@
     #define EM_CHILD_APP_LOCALS
 #endif
 
-// redefine main loop to child_main_loop - change while(1) to em_while(1) in child app
+// redefine main loop to demo_main_loop - change while(1) to em_while(1) in demo app
 #define em_while(cond) \
 } \
 \
-void child_main_loop() \
+void demo_main_loop() \
 { \
     EM_CHILD_APP_LOCALS \
     if((cond))

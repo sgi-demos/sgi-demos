@@ -12,9 +12,9 @@
 
 void main_loop(void* main_loop_arg)
 {
-    // Run IRIS GL demo's child_main_loop as a child of this loop,
+    // Run IRIS GL demo's demo_main_loop as a child of this loop,
     // so it can process events and redraw its stuff
-    sdlRunEventLoop(child_main_loop);
+    sdlRunEventLoop(demo_main_loop);
 }
 
 int main(int argc, char* argv[])
@@ -23,8 +23,8 @@ int main(int argc, char* argv[])
     sdlInitWindow();
     sdlInitFramebufferTexture();
 
-    // Run IRIS GL demo's child main
-    child_main(argc, argv);
+    // Run IRIS GL demo's demo main
+    demo_main(argc, argv);
 
     // Start the main event/redraw loop
     void* main_loop_arg = NULL;
