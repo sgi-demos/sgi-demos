@@ -6,12 +6,24 @@ DEMOS = arena bounce buttonfly cedit flight ideas insect jello logo newave twili
 LIBS_DIR = libs
 LIBS = libgl libdemo
 
-demos:
-	for file in $(DEMOS) ; do echo -e "\nBUILDING: $${file}\n" && make -C $(DEMOS_DIR)/$${file} ; done
+all:
+	for demo in $(DEMOS) ; do echo "\nBUILDING: $${demo}\n" && make -C $(DEMOS_DIR)/$${demo} ; done
+
+native:
+	for demo in $(DEMOS) ; do echo "\nBUILDING: $${demo}\n" && make native -C $(DEMOS_DIR)/$${demo} ; done
+
+em:
+	for demo in $(DEMOS) ; do echo "\nBUILDING: $${demo}\n" && make em -C $(DEMOS_DIR)/$${demo} ; done
 
 libs:
-	for file in $(LIBS) ; do echo -e "\nBUILDING: $${file}\n" && make -C $(LIBS_DIR)/$${file}  ; done
+	for lib in $(LIBS) ; do echo "\nBUILDING: $${lib}\n" && make -C $(LIBS_DIR)/$${lib} ; done
+
+libs-native:
+	for lib in $(LIBS) ; do echo "\nBUILDING: $${lib}\n" && make native -C $(LIBS_DIR)/$${lib} ; done
+
+libs-em:
+	for lib in $(LIBS) ; do echo "\nBUILDING: $${lib}\n" && make em -C $(LIBS_DIR)/$${lib} ; done
 
 clean:
-	for file in $(LIBS) ; do echo -e "\nCLEANING: $${file}\n" && make clean -C $(LIBS_DIR)/$${file} ; done
-	for file in $(DEMOS) ; do echo -e "\nCLEANING: $${file}\n" && make clean -C $(DEMOS_DIR)/$${file} ; done
+	for demo in $(DEMOS) ; do echo "\nCLEANING: $${demo}\n" && make clean -C $(DEMOS_DIR)/$${demo} ; done
+	for lib in $(LIBS) ; do echo "\nCLEANING: $${lib}\n" && make clean -C $(LIBS_DIR)/$${lib} ; done

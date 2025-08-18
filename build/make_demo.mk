@@ -8,12 +8,23 @@ SRC = $(wildcard *.c)
 OBJS = $(patsubst %.c,$(BIN_DIR)/%.o,$(SRC))
 EM_OBJS = $(patsubst %.c,$(WEB_DIR)/%.o,$(SRC))
 
-all: $(APP) $(EM_APP)
+all: native em
 
-$(GL_LIB) $(EM_GL_LIB):
-	make -C $(LIBS_DIR)/libgl
-$(DEMO_LIB) $(EM_DEMO_LIB):
-	make -C $(LIBS_DIR)/libdemo
+native: $(APP)
+
+em: $(EM_APP)
+
+$(GL_LIB):
+	make native -C $(LIBS_DIR)/libgl
+
+$(EM_GL_LIB):
+	make em -C $(LIBS_DIR)/libgl
+
+$(DEMO_LIB):
+	make native -C $(LIBS_DIR)/libdemo
+
+$(EM_DEMO_LIB):
+	make em -C $(LIBS_DIR)/libdemo
 
 $(BIN_DIR):
 	mkdir -p $@
@@ -40,7 +51,7 @@ $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
 $(EM_OBJS): $(WEB_DIR)/%.o: $(SRC_DIR)/%.c | $(WEB_DIR) $(EM_SRC) $(EM_HDRS)
 	$(OLD_CODE_EMCC) $(EM_OPT) $(EM_OLD_CODE_WARN_OFF) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 
-$(EM_APP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EM_OBJS) 
+$(EM_APP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EM_OBJS)
 	$(EMCC) $(EM_OPT) $(LIBGL_INC) $(EM_OBJS) -D EM_CHILD_APP $(EM_DEMO_LIB) $(EM_GL_LIB) \
 		$(EM_SDL_LIBS) $(EM_PRELOAD) -lm -o $@
 	$(APPCMDS)
@@ -48,10 +59,19 @@ $(EM_APP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EM_OBJS)
 	@echo BUILT: $@
 	@echo $(CUR_DIR)
 
-.PHONY: run clean
+.PHONY: all native em run run-native run-em clean
 
-run: $(APP) $(EM_APP)
+# Run both applications
+run: all
 	$(APP) $(APPARGS) && emrun $(EM_APP)
+
+# Run only the native application
+run-native: native
+	$(APP) $(APPARGS)
+
+# Run only the emscripten application
+run-em: em
+	emrun $(EM_APP)
 
 clean:
 	rm -f $(APP) $(OBJS)

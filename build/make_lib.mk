@@ -16,7 +16,11 @@ LIB_CC = $(CC) $(OPT)
 LIB_EMCC = $(EMCC) $(EM_OPT) -Wno-unused-command-line-argument
 endif
 
-all: $(LIB) $(EM_LIB)
+all: native em
+
+native: $(LIB)
+
+em: $(EM_LIB)
 
 $(BIN_DIR):
 	mkdir -p $@
@@ -26,7 +30,7 @@ $(BIN_DIR):
 $(WEB_DIR):
 	mkdir -p $@
 	echo "*.[oach]" > $@/.gitignore
-	
+
 $(OBJS): $(BIN_DIR)/%.o: $(SRC_DIR)/%.c | $(BIN_DIR)
 	$(LIB_CC) $(LIBGL_INC) $(LIBDEMO_INC) -D EM_CHILD_APP $(SDL_INC) $(GLES_INC) $< -c -o $@
 $(LIB): $(OBJS)
@@ -43,7 +47,7 @@ $(EM_LIB): $(EM_OBJS)
 	@echo BUILT: $@
 	@echo
 
-.PHONY: clean
+.PHONY: all native em clean
 
 clean:
 	rm -f $(LIB) $(OBJS)
