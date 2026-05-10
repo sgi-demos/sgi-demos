@@ -1,5 +1,5 @@
 # SGI demos from long ago, running in your browser [today](https://sgi-demos.github.io).
-_Old problems require modern solutions._ 
+_Old problems require modern solutions._
 
 This is the original SGI demo source code, compiled for the web using Emscripten and SDL2.  Rendering is done using an IRIS GL software rasterizer from the [Alice 4 project](https://lkesteloot.github.io/alice/alice4/libgl.html).  Event handling is done by SDL2, with events translated into GL's event system.  Each demo is a separate web page, with its own Javascript + WASM compiled by Emscripten from the original C/C++ source.  Minimal modifications have been made to the original source, in order to run in the browser and to work with compilers 35 years newer.
 
@@ -10,7 +10,7 @@ This is the original SGI demo source code, compiled for the web using Emscripten
 - [Insect](https://sgi-demos.github.io/sgi-demos/demos/insect/web/insect_full.html)
 - [Jello](https://sgi-demos.github.io/sgi-demos/demos/jello/web/jello_full.html)
 - [Logo](https://sgi-demos.github.io/sgi-demos/demos/logo/web/logo_full.html)
-- [Twilight](https://sgi-demos.github.io/sgi-demos/demos/twilight/web/twilight_full.html) 
+- [Twilight](https://sgi-demos.github.io/sgi-demos/demos/twilight/web/twilight_full.html)
 
 ## Somewhat working demos
 - [Flight](https://sgi-demos.github.io/sgi-demos/demos/flight/web/flight_full.html) (cockpit glitches, planes too slow in web version, night mode 'shimmers', no network play)
@@ -37,7 +37,7 @@ make
 ### Windows
 
 1. Install [Winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) if you don't have it.
-   
+
 2. Install [MSYS2](https://www.msys2.org/) from cmd.exe, in order to get the clang compiler:
 ```bash
 winget install MSYS2.MSYS2
@@ -51,7 +51,7 @@ pacman -S base-devel mingw-w64-clang-x86_64-toolchain
 pacman -S mingw-w64-clang-x86_64-SDL2
 ```
 
-4. Clone [emscripten](https://emscripten.org/docs/getting_started/downloads.html) from Github.  Cloning seems to work best with MSYS2 rather than using pacman.  Follow the default install directions, not the Windows directions! 
+4. Clone [emscripten](https://emscripten.org/docs/getting_started/downloads.html) from Github.  Cloning seems to work best with MSYS2 rather than using pacman.  Follow the default install directions, not the Windows directions!
 
 5. Add this line to the `~/.bashrc` file in MSYS2 CLANG64 shell:
 ```bash
@@ -66,11 +66,11 @@ make
 ```
 
 ## To do
+- Run GL demo with asyncify, to avoid slicing up the code for SDL's event loop
 - Rendering via OpenGLES/WebGL (WIP)
 - Arbitrary window size
 - Rudimentary context for each demo: name, author, year (as text in lower corner), code link
 - Popup/overlay help to show key/mouse input to try
-- Run GL demo in its own WASM worker/thread, to avoid slicing up the code for SDL's event loop
 - Popup menus, including the classic SGI menu font
 - More demos, _all the demos_.
   - Electropaint, Cedit, any other IRIS GL demos I can find

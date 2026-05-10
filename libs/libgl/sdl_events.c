@@ -74,6 +74,7 @@ static void exitEvent()
     #endif
 }
 
+// EVENT: mouse transited fb boundary, in or out
 static void mouseMotionEvent()
 {
     // detect when mouse transits into or out of framebuffer for INPUTCHANGE events
@@ -93,6 +94,7 @@ static void mouseMotionEvent()
     }
 }
 
+// EVENT: SDL keycode, string
 static void keyDownEvent(int sdl_keycode, char *text)
 {
     // convert SDL key event to GL and add it to GL event queue
@@ -115,6 +117,7 @@ static void keyDownEvent(int sdl_keycode, char *text)
     }
 }
 
+// EVENT: SDL mouse button, button up/down, mouse position
 static void mouseButtonEvent(int sdlButton, bool buttonDown)
 {
     gl_event ev;
@@ -133,8 +136,8 @@ static void mouseButtonEvent(int sdlButton, bool buttonDown)
         ev.val = buttonDown;
         enqueue_event(&ev);
 
-        // tied valuators is typically used for capturing mouse x and/or
-        // y position at the time when a mouse button is pressed, and
+        // tied valuators is used for capturing mouse x and/or y
+        // position at the time when a mouse button is pressed, and
         // emitting those as mouse position x and y events right after
         // the mouse button event in the GL event queue
         gl_event tied_ev;
@@ -244,6 +247,7 @@ void sdlRunEventLoop(void (*child_event_loop)())
 // IRIS GL event queue
 //
 
+// QUERY: SDL mouse position at any time
 int32_t events_get_valuator(int32_t device)
 {
     switch (device)
@@ -252,7 +256,7 @@ int32_t events_get_valuator(int32_t device)
         case MOUSEY: return sdlClampToFramebufferY(mousePosY());
     }
 
-    printf("warning: unimplemented evaluator %d\n", device);
+    printf("warning: unimplemented valuator %d\n", device);
     return 0;
 }
 
@@ -453,6 +457,10 @@ void events_run_event_loop()
     sdlRunEventLoop(NULL);
 }
 
+// usually:
+// button = LEFTMOUSE, MIDDLEMOUSE, RIGHTMOUSE
+// val1 = MOUSEX
+// val2 = MOUSEY
 void events_tie(int32_t button, int32_t val1, int32_t val2)
 {
     sdl_tied_valuators[button][0] = val1;

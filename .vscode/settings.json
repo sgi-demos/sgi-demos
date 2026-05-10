@@ -22,7 +22,9 @@
         "geom_types.h": "c",
         "sdl_events.h": "c",
         "basic_types.h": "c",
-        "*.backup": "c"
+        "*.backup": "c",
+        "vector": "cpp",
+        "iostream": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
