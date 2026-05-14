@@ -1,2 +1,2 @@
 APPNAME=twilight
-include ../../build/make_demo.mk
+include ../../makefiles/make_demo.mk
