@@ -155,16 +155,6 @@ These call sites all route through `events_frame_complete()`:
 | `qtest()` / `qread()` / `getbutton()` / `getvaluator()` | Throttled safety net (`yieldByEventQuery` in `sdl_events.c`). Demos like `twilight` don't call `swapbuffers` or `gflush` — they only poll input waiting for REDRAW events. To keep these demos from hanging the browser, every event-poll function yields when at least one frame budget has elapsed since the last yield. |
 | `dopup()` | Pop-up menu modal loop. Calls `events_frame_complete` directly, with no rasterizer swap, so the menu composited onto the front buffer is preserved across iterations. Currently disabled for web, pending testing and mouse pointer integration. |
 
-### Build considerations
-
-The Emscripten flags to enable demos to yield to the browser:
-
-```makefile
-EM_ASYNCIFY = -sASYNCIFY -sASYNCIFY_STACK_SIZE=65536
-```
-
-`-sASYNCIFY` instruments the call chain so `emscripten_sleep` can pause and resume the WebAssembly stack. `ASYNCIFY_STACK_SIZE=65536` allocates 64KB to hold the saved stack during a yield — probably generous enough for the demos, but can be expanded further if necessary. Asyncify increases WASM code size, but for 1980s-90s code running on 2026 hardware, this cost should be negligible.
-
 ## Build system
 
 Each demo has a short `Makefile`, specifying the APPNAME and any demo-specific build flags, e.g.:
@@ -176,6 +166,14 @@ include ../../makefiles/make_demo.mk
 ```
 
 `makefiles/make_demo.mk` builds both a native binary (`bin-$(OS)-$(HW)/$(APPNAME)`) and an Emscripten target (`web/$(APPNAME).html` + `.js` + `.wasm`). The shared logic, including platform detection, SDL/GLES paths, and the Asyncify flags, lives in `makefiles/platform.mk`.
+
+Emscripten flags to enable demos to yield to the browser:
+
+```makefile
+EM_ASYNCIFY = -sASYNCIFY -sASYNCIFY_STACK_SIZE=65536
+```
+
+`-sASYNCIFY` instruments the call chain so `emscripten_sleep` can pause and resume the WebAssembly stack. `ASYNCIFY_STACK_SIZE=65536` allocates 64KB to hold the saved stack during a yield — probably generous enough for the demos, but can be expanded further if necessary. Asyncify increases WASM code size, but for 1980s-90s code running on 2026 hardware, this cost should be negligible.
 
 ## Source modifications
 
