@@ -90,9 +90,9 @@ This matches the original IRIS GL convention: demos call `prefsize()` and `prefp
 ## Rasterization
 
 The IRIS GL implementation uses a software rasterizer forked from the [Alice 4](https://lkesteloot.github.io/alice/alice4/) project. It writes
-into a CPU-side framebuffer, which `sdl_framebuffer.c` then uploads as an OpenGLES2 texture and draws onto a quad in the SDL window each frame. An SDL texture rendering path is also available for reference/debugging purposes.
+into a CPU-side framebuffer, which `sdl_framebuffer.c` then uploads as an OpenGLES2 texture and draws onto a quad in the SDL window each frame. An alternate SDL texture rendering path is also available for reference/debugging against the OGLES2 path.
 
-The long-term rasterization goal however is to provide a true OpenGLES rasterizer (drawing directly to the GPU), which would unlock arbitrary window
+The long-term rasterization goal however, is to provide a true OpenGLES rasterizer (drawing directly to the GPU), which would unlock arbitrary window
 sizes and performant texture mapping. The framebuffer-texture path is a stepping stone as it isolates the rest of the system from how rasterization happens, so a future rasterizer swap touches one file.
 
 ## Event handling
@@ -193,12 +193,12 @@ Some demos require additional small fixes — usually for C90 strictness, for `-
 
 This project now has a relatively clean foundation for building out further in these main directions:
 
-- **OpenGLES implementation of IRIS GL rendering** Add a new `ogl_rasterizer.c` implementation of `rasterizer.h`, supplanting `reference_rasterizer.c` once it is fully working.  Use [IGL](https://github.com/sgi-demos/igl) as a starting point for this implementation.
+- **OpenGLES implementation of IRIS GL rendering** - Add a new `ogl_rasterizer.c` implementation of `rasterizer.h`, supplanting `reference_rasterizer.c` once it is fully working.  Use [IGL](https://github.com/sgi-demos/igl) as a starting point for this implementation.
 
-- **Complete the IrisGL demo set** Highlights here include the last IrisGL version of `flight`, `electropaint`, and `gview` (which is making progress in the reversing process - see `demos\gview`).
+- **Complete the IrisGL demo set** - Highlights here include the last IrisGL version of `flight`, `electropaint`, and `gview` (which is making progress in the reversing process - see `demos\gview`).
 
-- **Add OpenGL demos** This will require reworking some project structure since the project is currently IrisGL centric.  Use [GL4ES](https://github.com/sgi-demos/gl4es) and/or something similar, to translate old immediate-mode OpenGL calls to modern retained-mode OpenGL(ES2).
+- **Add OpenGL demos** - This will require reworking some project structure since the project is currently IrisGL centric.  Use [GL4ES](https://github.com/sgi-demos/gl4es) and/or something similar, to translate old immediate-mode OpenGL calls to modern retained-mode OpenGL(ES2).
 
-- **Add GLUT demos** GLUT does its own event handling, and Emscripten has a GLUT implementation already. However, it might be interesting to see if a more robust approach would be to provide an OpenGLES2/SDL2-based port of [FreeGLUT](https://github.com/freeglut/freeglut) and lean on Emscripten's SDL2 implementation and OpenGLES2-to-WebGL transpiling.
+- **Add GLUT demos** - GLUT does its own event handling, and Emscripten has a GLUT implementation already. However, it might be interesting to see if a more robust approach would be to provide an OpenGLES2/SDL2-based port of [FreeGLUT](https://github.com/freeglut/freeglut) and lean on Emscripten's SDL2 implementation and OpenGLES2-to-WebGL transpiling.
 
-- **Add Performer and Inventor demos** [Inventor](https://github.com/sgi-demos/sgi-inventor) already has many open source ports, and [Performer](https://github.com/sgi-demos/sgi-performer) could potentially be reversed via Ghidra and AI tools (Performer file format loader code is already open source). These scene-graph APIs sit on top of OpenGL; so the OpenGL rendering layer could be reused.
+- **Add Performer and Inventor demos** - [Inventor](https://github.com/sgi-demos/sgi-inventor) already has many open source ports, and [Performer](https://github.com/sgi-demos/sgi-performer) could potentially be reversed via Ghidra and AI tools (Performer file format loader code is already open source). These scene-graph APIs sit on top of OpenGL; so the OpenGL rendering layer could be reused.
