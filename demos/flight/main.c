@@ -24,7 +24,6 @@
 
 #include <stdlib.h> /* NULL */
 #include "flight.h"
-#include "EM_CHILD_APP.h"
 
 Plane planes[MAX_PLANES];
 
@@ -363,7 +362,7 @@ Plane find_closest_plane (myp)
 
     FOR_EACH_PLANE (p,pp)		/* for each plane	*/
     /* if its not me, not exploding, above 150 feet, not C150	*/
-    if (p != myp && p -> status > MEXPLODE && 
+    if (p != myp && p -> status > MEXPLODE &&
 	p -> y > 150.0 && p -> type != C150)
     {
 	dx = myp -> x - p -> x;		/* compute distance	*/

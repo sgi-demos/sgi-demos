@@ -40,7 +40,7 @@ $(OBJS): $(BIN_DIR)/%.o: $(SRC_DIR)/%.c | $(BIN_DIR) $(SRC) $(HDRS)
 	$(OLD_CODE_CC) $(OPT) $(OLD_CODE_WARN_OFF) $(SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 
 $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
-	$(CC) $(OPT) $(SHIM_INC) $(LIBGL_INC) $(OBJS) -D EM_CHILD_APP $(DEMO_LIB) $(GL_LIB) \
+	$(CC) $(OPT) $(SHIM_INC) $(LIBGL_INC) $(OBJS) $(DEMO_LIB) $(GL_LIB) \
 		$(SDL_INC) $(SDL_LIBS) $(GLES_INC) $(GLES_LIBS) $(GLES_LINK) -lm -o $@
 	$(call GLES_INSTALL)
 	ln -sF $(BIN_DIR) ./bin
@@ -52,8 +52,8 @@ $(EM_OBJS): $(WEB_DIR)/%.o: $(SRC_DIR)/%.c | $(WEB_DIR) $(EM_SRC) $(EM_HDRS)
 	$(OLD_CODE_EMCC) $(EM_OPT) $(EM_OLD_CODE_WARN_OFF) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 
 $(EM_APP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EM_OBJS)
-	$(EMCC) $(EM_OPT) $(LIBGL_INC) $(EM_OBJS) -D EM_CHILD_APP $(EM_DEMO_LIB) $(EM_GL_LIB) \
-		$(EM_SDL_LIBS) $(EM_PRELOAD) -lm -o $@
+	$(EMCC) $(EM_OPT) $(LIBGL_INC) $(EM_OBJS) $(EM_DEMO_LIB) $(EM_GL_LIB) \
+		$(EM_SDL_LIBS) $(EM_ASYNCIFY) $(EM_PRELOAD) -lm -o $@
 	$(APPCMDS)
 	@echo
 	@echo BUILT: $@

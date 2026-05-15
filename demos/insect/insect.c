@@ -13,8 +13,35 @@
 #include <device.h>
 #include <democolors.c>
 #include "insect.h"
-#define EM_CHILD_APP_NAME EM_INSECT
-#include "EM_CHILD_APP.h"
+
+/* begin Emscripten emcc crashes on -fcommon, so must fwd define */
+Object screen,viewit,shadow,body,hip[6],thigh[6],shin[6],kneeball[6];
+Object body_shadow,hip_shadow,thigh_shadow,shin_shadow,kneeball_shadow;
+
+Tag cphitag,cthetatag,cposittag,windowtag;
+
+Angle knee[6];
+Angle hip_phi[6];
+Angle hip_theta[6];
+
+Coord sdepth;
+float glsin,glcos;
+float px,py;
+float light[3],phi,theta;
+Boolean legup[6];
+float legx[6],legy[6];
+
+float cx,cy,cz,cvx,cvy,cvz;
+float dmr[6],fr[6];
+Angle ctheta,cphi,cvtheta,cvphi;
+Boolean follow;
+
+Coord k2[6][3];
+Coord k3[6][3];
+Coord b7[12][3];
+Coord b8[12][3];
+Icoord scr[4][2];
+/* end Emscripten emcc crashes on -fcommon, so must fwd define */
 
 Linestyle ls = 0xaaaa;
 
@@ -53,7 +80,7 @@ main (argc, argv)
 int	argc;
 char	*argv[];
 {
- 
+
     int     i,
             j,
             k;
@@ -98,7 +125,7 @@ char	*argv[];
 /* Changes for ECLIPSE 8 bit machine */
     if (nplanes == 4)
 	color (ECLIPSE8_SKYBLUE);
-    else 
+    else
 	color (SKYBLUE);
 
     clear ();
@@ -128,7 +155,7 @@ new for ECLIPSE 8 bit machine  */
     /* new for ECLIPSE 8 bit version */
     if (nplanes == 4)
 	color (ECLIPSE8_SKYBLUE);
-    else 
+    else
 	color (SKYBLUE);
 
     clear ();
@@ -139,7 +166,7 @@ new for ECLIPSE 8 bit machine  */
     draw_insect ();
     frontbuffer (FALSE);
 
-    em_while (TRUE) {
+    while (TRUE) {
 
 	while (qtest ()) {
 	    dev = qread (&val);
@@ -148,7 +175,7 @@ new for ECLIPSE 8 bit machine  */
 			if (val) break;
 
 		/* new for ECLIPSE 8 bit machine */
-		case WINQUIT: 
+		case WINQUIT:
 		    /* restore color map */
 		    if (nplanes == 4)
 			restoremap(savearray,0,15);
@@ -157,13 +184,13 @@ new for ECLIPSE 8 bit machine  */
 			gexit();
 		    exit (0);
 		    break;
-		case INPUTCHANGE: 
+		case INPUTCHANGE:
 		    attached = val;
 
 		    /* new for ECLIPSE 8 bit */
 		    if (nplanes == 4)
 			color (ECLIPSE8_SKYBLUE);
-		    else 
+		    else
 			color (SKYBLUE);
 
 		    clear ();
@@ -173,7 +200,7 @@ new for ECLIPSE 8 bit machine  */
 		    draw_shadow ();
 		    draw_insect ();
 		    break;
-		case REDRAW: 
+		case REDRAW:
 		    reshapeviewport ();
 		    fixwindow ();
 		    frontbuffer (TRUE);
@@ -181,7 +208,7 @@ new for ECLIPSE 8 bit machine  */
 		    /* new for ECLIPSE 8 bit */
 		    if (nplanes == 4)
 			color (ECLIPSE8_SKYBLUE);
-		    else 
+		    else
 			color (SKYBLUE);
 
 		    clear ();
@@ -192,7 +219,7 @@ new for ECLIPSE 8 bit machine  */
 		    draw_insect ();
 		    frontbuffer (FALSE);
 		    break;
-		case FKEY: 
+		case FKEY:
 		    if (val) {
 			follow = !follow;
 		    }
@@ -204,7 +231,7 @@ new for ECLIPSE 8 bit machine  */
 	    /* new for ECLIPSE 8 bit machine */
 	    if (nplanes == 4)
 		color (ECLIPSE8_SKYBLUE);
-	    else 
+	    else
 		color (SKYBLUE);
 
 	    clear ();
@@ -218,7 +245,7 @@ new for ECLIPSE 8 bit machine  */
 	    draw_shadow ();
 	    draw_insect ();
 	}
-	    swapbuffers ();	    
+	    swapbuffers ();
     }
 
 }
@@ -331,8 +358,8 @@ draw_shadow () {
 }
 
 
-/*  draw_insect  -- draw rear legs, body and forelegs of insect 
-	the order of drawing the objects is important to 
+/*  draw_insect  -- draw rear legs, body and forelegs of insect
+	the order of drawing the objects is important to
 	insure proper hidden surface elimination -- painter's algorithm	*/
 draw_insect () {
     Angle a;
@@ -537,27 +564,27 @@ dolegs () {
 	uy = gy / (RESF / 2.0);
 
 	switch (leg) {
-	    case 0: 
+	    case 0:
 		gx += 0.0;
 		gy += RESF;
 		break;
-	    case 1: 
+	    case 1:
 		gx += (RESF * 0.8660254);
 		gy += (RESF * 0.5);
 		break;
-	    case 2: 
+	    case 2:
 		gx += (RESF * 0.8660254);
 		gy += (RESF * -0.5);
 		break;
-	    case 3: 
+	    case 3:
 		gx += 0.0;
 		gy += -RESF;
 		break;
-	    case 4: 
+	    case 4:
 		gx += (RESF * -0.8660254);
 		gy += (RESF * -0.5);;
 		break;
-	    case 5: 
+	    case 5:
 		gx += (RESF * -0.8660254);
 		gy += (RESF * 0.5);
 		break;
@@ -698,15 +725,15 @@ Coord a[][3];
             ny;
 
     switch (c) {
-	case 'z': 
+	case 'z':
 	    i = 0;
 	    j = 1;
 	    break;
-	case 'y': 
+	case 'y':
 	    i = 2;
 	    j = 0;
 	    break;
-	case 'x': 
+	case 'x':
 	    i = 1;
 	    j = 2;
 	    break;
@@ -760,23 +787,23 @@ float   pts[][3];
     if (c > 1.0)
 	c = 1.0;
     switch (p) {
-	case 0: 
+	case 0:
 	    c = (float) (RAMPE - RAMPB) * c + (float) (RAMPB);
             if (((Colorindex) c) > RAMPE) c = (float) RAMPE;
 	    break;
-	case 1: 
+	case 1:
 	    c = (float) (RAMPE2 - RAMPB2) * c + (float) (RAMPB2);
             if (((Colorindex) c) > RAMPE2) c = (float) RAMPE2;
 	    break;
-	case 2: 
+	case 2:
 	    c = (float) (RAMPE3 - RAMPB3) * c + (float) (RAMPB3);
             if (((Colorindex) c) > RAMPE3) c = (float) RAMPE3;
 	    break;
-	case 3: 
+	case 3:
 	    c = (float) (RAMPE4 - RAMPB4) * c + (float) (RAMPB4);
             if (((Colorindex) c) > RAMPE4) c = (float) RAMPE4;
 	    break;
-	case 4: 
+	case 4:
 	    c = (float) (RAMPE5 - RAMPB5) * c + (float) (RAMPB5);
             if (((Colorindex) c) > RAMPE5) c = (float) RAMPE5;
 	    break;
@@ -785,7 +812,7 @@ float   pts[][3];
     /* Changed for 8 bit ECLIPSE machine */
     if (nplanes == 4)
 	c = (float)reduce_index((int)c);
-    color ((Colorindex) c);	
+    color ((Colorindex) c);
 }
 
 
@@ -954,7 +981,7 @@ Colorindex c1, c2;
     Colorindex i;
     int n;
 
-    for (i = c1, n = 0; i <= c2; i++) { 
+    for (i = c1, n = 0; i <= c2; i++) {
 	mapcolor(i, savearray[n], savearray[n+1], savearray[n+2]);
 	n += 3;
     }
@@ -964,7 +991,7 @@ getcoords()
 {
     pikx = getvaluator(MOUSEX);
     piky = getvaluator(MOUSEY);
-    if (pikx <= worgx || pikx >= worgx + wsizex || 
+    if (pikx <= worgx || pikx >= worgx + wsizex ||
 	piky <= worgy || piky >= worgy + wsizey) {
 	pikx = worgx + wsizex / 2 + 1;
 	piky = worgy + wsizey / 2 + 1;

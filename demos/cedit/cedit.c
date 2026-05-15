@@ -1,6 +1,6 @@
 /*
- *	cedit - 
- *		A simple color editor. Use the left mouse button to 
+ *	cedit -
+ *		A simple color editor. Use the left mouse button to
  *		pick the color on the screen to edit, then move the
  *		sliders to change the color.
  *
@@ -11,7 +11,6 @@
 #include "device.h"
 #include "port.h"
 #include "stdio.h"
-#include "EM_CHILD_APP.h"
 
 int drawsliders();
 int drawknob();
@@ -43,7 +42,7 @@ char **argv;
     initmouse();
     cc = 16;
     makeframe();
-    em_while (1) {
+    while (1) {
 	checkmouse();
 	if (m3) {
 	    x = getvaluator(MOUSEX);
@@ -61,7 +60,7 @@ char **argv;
 		     cb = (wy-2.0)/7.0;
 		     drawsliders(cc,cr,cg,cb);
 		}
-	    } 
+	    }
 	}
     }
 }
@@ -108,7 +107,7 @@ float r, g, b;
          ob = b;
 	 changed++;
     }
-    if (changed) 
+    if (changed)
 	modmapcolor(c,r,g,b);
 }
 
@@ -119,12 +118,12 @@ int c;
      pushmatrix();
 	 translate(x,2.0+(7.0*old),0.0);
 	 color(GREY(15));
-	 rectf(1.2,-0.10,1.8,0.10);	
+	 rectf(1.2,-0.10,1.8,0.10);
      popmatrix();
      pushmatrix();
 	 translate(x,2.0+(7.0*new),0.0);
 	 color(c);
-	 rectf(1.2,-0.10,1.8,0.10);	
+	 rectf(1.2,-0.10,1.8,0.10);
      popmatrix();
 }
 
@@ -161,19 +160,19 @@ checkmouse()
 
     if (1) {
 	if (m1 != 0 || m2 != 0 || m3 != 0) {
-	    if (!qtest()) 
+	    if (!qtest())
 		return;
-	} 
+	}
 	dev = qread(&val);
 	switch (dev) {
-		case MENUBUTTON: 
-			sel = dopup(menu);	
+		case MENUBUTTON:
+			sel = dopup(menu);
 			if (sel>0) {
 			    setcolorsys(sel);
 			    newcolor(cc);
 			}
 			break;
-		case MIDDLEMOUSE: 
+		case MIDDLEMOUSE:
 			m2 = val;
 			if (m2 == 0) {
 			    x = getvaluator(MOUSEX);
@@ -184,7 +183,7 @@ checkmouse()
 				modmapcolor(getapixel(x,y),cr,cg,cb);
 			}
 			break;
-		case LEFTMOUSE: 
+		case LEFTMOUSE:
 			m3 = val;
 			if (m3 == 0) {
 			    x = getvaluator(MOUSEX);
@@ -195,7 +194,7 @@ checkmouse()
 				newcolor(getapixel(x,y));
 			}
 			break;
-		case REDRAW: 
+		case REDRAW:
 			makeframe();
 			break;
 	}

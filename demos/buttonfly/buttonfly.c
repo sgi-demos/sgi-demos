@@ -8,7 +8,6 @@
 #include "buttonfly.h"
 #include "data.h"
 
-#include "EM_CHILD_APP.h"
 #include "EM_SYSTEM.h"
 
 #define X 0
@@ -138,7 +137,7 @@ char	*argv[];
     draw_buttons(current_buttons);
     swapbuffers();
 
-	em_while(exitflag == FALSE) 
+	while(exitflag == FALSE)
 	{
 		event();
 	}
@@ -303,7 +302,7 @@ void  do_popup()
 {
 	short mx, my;
 	button_struct *b;
-	
+
 	qread(&mx); qread(&my);
 	b = which_button(mx, my);
 	if (b)
@@ -329,7 +328,7 @@ short mx, my;
 	int i, num;
 	char t[128];
 	popup_struct *scan;
-	
+
 	menu = newpup();
 
 	if (b != rootbutton) {
@@ -424,7 +423,7 @@ button_struct *selected;
 	FILE *fp;
 
 	/* Need to open a pipe if submenu == "-" */
-	if ((selected->submenu != NULL) && 
+	if ((selected->submenu != NULL) &&
 		(strcmp(selected->submenu, "-") == 0))
 			needpipe = 1;
 	else needpipe = 0;
@@ -799,5 +798,5 @@ button_struct *button;
 void doclear() {
 
     c3f(curbackcolor);
-    clear();    
+    clear();
 }

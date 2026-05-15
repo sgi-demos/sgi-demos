@@ -4,8 +4,6 @@
 #include <math.h>
 #include <device.h>
 
-#define EM_CHILD_APP_NAME EM_COLORTEST
-#include "EM_CHILD_APP.h"
 #include "EM_SYSTEM.h"
 
 float c1[3];
@@ -48,7 +46,7 @@ int main(int argc, char *argv[]) {
 
     float t = 0;
     float r = 1.0;
-    em_while (1) {
+    while (1) {
         czclear(0, 0xff800000);
 
         v1[0] = sin(t)*r;

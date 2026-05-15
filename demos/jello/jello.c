@@ -6,8 +6,6 @@
 #include <gl.h>
 #include <math.h>
 #include <device.h>
-#define EM_CHILD_APP_NAME EM_JELLO
-#include "EM_CHILD_APP.h"
 
 #define X 0
 #define Y 1
@@ -251,7 +249,7 @@ main (argc, argv)
 int	argc;
 char	*argv[];
 {
- 
+
     int i, j;
 
 	if (argc != 1)
@@ -261,7 +259,7 @@ char	*argv[];
 	}
     initialize(argv[0]);
 
-    em_while (TRUE) {
+    while (TRUE) {
 
 	while(qtest()) {
 	    dev=qread(&val);
@@ -796,7 +794,7 @@ draw_floor() {
 
 		popmatrix();
 	    }
-	} 
+	}
 
 	if (view[2][2]>-ht/dist) {
 
@@ -1051,7 +1049,7 @@ find_surface()
 		c1 = jello_conec;
 		do {
 
-		    if (c1->from==a1 && c1->tu==a2 || 
+		    if (c1->from==a1 && c1->tu==a2 ||
 			c1->tu==a1 && c1->from==a2) {
 
 			c2 = jello_conec;
@@ -1141,8 +1139,8 @@ Triangle *triangle;
 
 	cross(v1, v2, norm);
 
-	r = sqrt(norm[X] * norm[X] + 
-		 norm[Y] * norm[Y] + 
+	r = sqrt(norm[X] * norm[X] +
+		 norm[Y] * norm[Y] +
 		 norm[Z] * norm[Z]);
 
 	norm[X] /= r;
@@ -1152,7 +1150,7 @@ Triangle *triangle;
 	if ((c = dot(norm, light_vector))<0.0) c = 0.0;
 
 	RGBcolor((int)(c * 100.0 + 100.0),
-		 (int)(c * 50.0 + 50.0), 
+		 (int)(c * 50.0 + 50.0),
 		 (int)(c * 120.0 + 120.0));
 
 	polf(3, polygon);
@@ -1202,7 +1200,7 @@ Triangle *triangle;
 	if ((c = triangle->vertex[0]->colur)<0.0) c = 0.0;
 
 	RGBcolor((int)(c * 100.0 + 30.0),
-		 (int)(c * 50.0 + 15.0), 
+		 (int)(c * 50.0 + 15.0),
 		 (int)(c * 200.0 + 50.0));
 
 	pmv(triangle->vertex[0]->pos[X],
@@ -1212,7 +1210,7 @@ Triangle *triangle;
 	if ((c = triangle->vertex[1]->colur)<0.0) c = 0.0;
 
 	RGBcolor((int)(c * 100.0 + 30.0),
-		 (int)(c * 50.0 + 15.0), 
+		 (int)(c * 50.0 + 15.0),
 		 (int)(c * 200.0 + 50.0));
 
 	pdr(triangle->vertex[1]->pos[X],
@@ -1222,7 +1220,7 @@ Triangle *triangle;
 	if ((c = triangle->vertex[2]->colur)<0.0) c = 0.0;
 
 	RGBcolor((int)(c * 100.0 + 30.0),
-		 (int)(c * 50.0 + 15.0), 
+		 (int)(c * 50.0 + 15.0),
 		 (int)(c * 200.0 + 50.0));
 
 	pdr(triangle->vertex[2]->pos[X],
@@ -1309,8 +1307,8 @@ float *pos;
 
     cross(v1, v2, norm);
 
-    r = sqrt(norm[X] * norm[X] + 
-	     norm[Y] * norm[Y] + 
+    r = sqrt(norm[X] * norm[X] +
+	     norm[Y] * norm[Y] +
 	     norm[Z] * norm[Z]);
 
     norm[X] /= r;
@@ -1321,8 +1319,8 @@ float *pos;
 		triangle->vertex[0]->pos[Y] * norm[Y] +
 		triangle->vertex[0]->pos[Z] * norm[Z]);
 
-    d = norm[X] * pos[X] + 
-	norm[Y] * pos[Y] + 
+    d = norm[X] * pos[X] +
+	norm[Y] * pos[Y] +
 	norm[Z] * pos[Z] + norm[W];
 
     if (d<0.0) {

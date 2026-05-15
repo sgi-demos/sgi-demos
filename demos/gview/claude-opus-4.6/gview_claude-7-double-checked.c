@@ -85,7 +85,6 @@
 #include "math.h"
 #include "gl.h"
 #include "device.h"
-#include "EM_CHILD_APP.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -894,7 +893,7 @@ void event_loop_and_render()
     }
     setup_menu();
 
-    em_while(1) {
+    while(1) {
 
 	/*
 	 * Event processing (0x4020f4-0x402668)

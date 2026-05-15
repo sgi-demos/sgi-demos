@@ -2,8 +2,6 @@
 #include <gl.h>
 #include <math.h>
 #include <device.h>
-#define EM_CHILD_APP_NAME EM_NEWAVE
-#include "EM_CHILD_APP.h"
 
 #define PI 3.1415926536
 #define NRAMPB 832
@@ -67,7 +65,7 @@ short oldcolors[1024][3];
 
 long xsize, ysize, xorig, yorig;
 
-menukill() 
+menukill()
 {
 	int really;
 
@@ -95,7 +93,7 @@ menugrid()
 	    grid = 21;
 	break;
     }
-    
+
 }
 
 menuspeed()
@@ -112,7 +110,7 @@ menuspeed()
 	    dt = 0.008;
 	break;
     }
-    
+
 }
 
 
@@ -328,7 +326,7 @@ char	*argv[];
 	zbuffer(TRUE);
 
 	for (i=0; i<32; i++) {
-	
+
 	    makerange (SRAMP + i*16, SRAMP + i*16 + 15,
 		    0, r*i/31,
 		    0, g*i/31,
@@ -349,7 +347,7 @@ grid_menu = defpup("Grid Size %t|small|medium|large");
 menu=defpup("WAVE %t|edit|go|reverse|display menu|spring menu|grid menu|reset|kill");
 
 	doublebuffer();
-	gconfig();	
+	gconfig();
 	color(BLACK);
 	clear(); swapbuffers(); clear();
 	color(CYAN);
@@ -369,7 +367,7 @@ menu=defpup("WAVE %t|edit|go|reverse|display menu|spring menu|grid menu|reset|ki
 	tie (MIDDLEMOUSE, MOUSEX, MOUSEY);
 	tie (LEFTMOUSE, MOUSEX, MOUSEY);
 
-    em_while(TRUE) {
+    while(TRUE) {
 
 		while(qtest()) {
 			dev=qread(&val);
@@ -471,7 +469,7 @@ menu=defpup("WAVE %t|edit|go|reverse|display menu|spring menu|grid menu|reset|ki
 		    default:
 		        break;
 		    }
-		    
+
 		}
 
 		if (!smode) {
@@ -556,7 +554,7 @@ getforce()
 
 	    d=posit[i][j]-posit[i-1][j-1];
 	    force[i][j] -= d ;
-	    force[i-1][j-1] += d;	    	
+	    force[i-1][j-1] += d;
 
 	}
 }
@@ -582,7 +580,7 @@ getvelocity()
 	for(i=2;i<(grid+1)/2;i++)
 	for(j=(grid+1)/2;j<i+(grid+1)/2-1;j++)
 	    veloc[i][j]+=force[i][j] * dt;
-	    
+
 }
 
 getposition()
@@ -695,12 +693,12 @@ doscreen()
 	    move( (Coord) i, (Coord) i-(grid+1)/2+2, (Coord) posit[i][i-(grid+1)/2+2]);
 	    draw( (Coord) (i+1), (Coord) (i-(grid+1)/2+2), 0.0);
 	}
-	
+
 	for(i=1;i<(grid+1)/2;i++) {
 	    move( (Coord) i, (Coord) (i+(grid+1)/2-2), (Coord)posit[i][i+(grid+1)/2-2]);
 	    draw( (Coord) i, (Coord) (i+(grid+1)/2-1), 0.0);
 	}
-	
+
 
 	move((float)((grid+1)/2-1), (float)(grid-1), 0.0);
 	draw(0.0, (float)((grid+1)/2-1), 0.0);
@@ -709,7 +707,7 @@ doscreen()
 	draw((float)(grid-1), (float)((grid+1)/2-1), 0.0);
 
 	if (smode) select_point();
-    
+
 	swapbuffers();
 	if (antialias && (dmode!=TOPVIEW)) {
 	    czclear(0, 0);
@@ -951,7 +949,7 @@ select_point()
 
 	if((x-y)>(grid+2)/2-2) x -= (x-y)-(grid+2)/2+2;
 	if((y-x)>(grid+2)/2-2) y -= (y-x)-(grid+2)/2+2;
-		    
+
     } else {
 	posit[x][y]= 0.006*(float)((my-yorig+2) * grid / ysize - grid/2);
     }
@@ -974,7 +972,7 @@ select_point()
     }
 
     if((dmode==DEPTHCUED)||(dmode==TOPVIEW)) depthcue(TRUE);
-	    
+
 }
 
 
@@ -982,7 +980,7 @@ select_point()
 int getpolycolor(pts)
 float pts[][3];
 {
-    float norm[3]; 
+    float norm[3];
     float v1[3],v2[3], constant;
     int i,get;
     float c;
@@ -1161,7 +1159,7 @@ int i, j;
     vertvec[i][j][Y] += d * -0.70710678;
     vertvec[i-1][j-1][Z] += 1.0/200.0;
     vertvec[i-1][j-1][X] += d * -0.70710678;
-    vertvec[i-1][j-1][Y] += d * -0.70710678;    
+    vertvec[i-1][j-1][Y] += d * -0.70710678;
 }
 
 

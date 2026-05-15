@@ -1470,7 +1470,11 @@ void setlinestyle(int index) {
 }
 
 void gflush() {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACE();
+    // For single-buffered demos: present the current front buffer and
+    // yield. Same yield primitive as swapbuffers(), but with no back/front
+    // swap (single-buffered demos draw directly to the front buffer).
+    events_frame_complete();
 }
 
 void greset() {
@@ -1779,8 +1783,12 @@ void qdevice(Device device) {
 
     switch (device) {
         case REDRAW:
-            // Initial redraw.
+            // Initial redraw, so the demo's first frame draws even before
+            // any SDL window event arrives.
             enqueue_device(REDRAW, 0);
+            // Also register REDRAW with the SDL side so it will enqueue
+            // REDRAW events on window expose/resize and via periodic pulse.
+            events_qdevice(device);
             break;
 
         case INPUTCHANGE:
@@ -1813,7 +1821,9 @@ void fetch_event_queue() {
     }
 }
 
-// If the queue is empty, qread() blocks.
+// Pops the next event (device number and value) off the head
+// of the queue and returns it.
+// Returns 0 if the event queue is empty.
 int qread(short *val) {
     TRACE();
 
@@ -1960,6 +1970,7 @@ void swapbuffers() {
     TRACE();
     rasterizer_swap();
     events_set_framebuffer(rasterizer_frontbuffer());
+    events_frame_complete();
 }
 
 void translate(Coord x, Coord y, Coord z) {
@@ -2454,13 +2465,12 @@ int dopup(int pup_index) {
         rasterizer_copy_back_to_front();
         pup_draw(thepup, menu_corner_left, menu_corner_top, selected);
 
-        // Run one SDL event loop:
-        // - GL's swapbuffers/qtest/qread require handing off to the SDL event loop
-        // - Demos' main loops use em_while() which makes their loop a child of SDL's event loop
-        // - Here, we are inside a demo loop, so we can't use em_while()
-        // - Rather, run the SDL event loop once, without a child loop, so screen can
-        //   update and SDL input events can be processed
-        events_run_event_loop();
+        // Nested event pump: present the current frame, pump SDL events,
+        // and yield - same yield primitive swapbuffers() uses for the
+        // demo's main loop, but without a back/front swap (the menu has
+        // been composited onto the front buffer via copy_back_to_front +
+        // pup_draw, and a swap here would blow that away).
+        events_frame_complete();
 
         if(qtest() != 0) {
             short val;

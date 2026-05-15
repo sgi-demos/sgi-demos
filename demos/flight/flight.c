@@ -18,7 +18,6 @@
 #include <stdio.h>
 #include <signal.h>
 // #include <psio.h>
-#include "EM_CHILD_APP.h"
 
 void make_crash ();
 extern void draw_hud (Plane p, int tick, float vx, float vy, float vz, int vv, float mach, float gf, int wheels, int flaps, int spoilers, int autop, int fuel, int thrust);
@@ -95,7 +94,7 @@ static short type,val,		/* queue reading variables	*/
 static int flaps, spoilers,	/* flap and spoiler settings	*/
 	roll_speed,		/* roll, elevation, azimuth speeds	*/
 	elevation_speed,	/* in 10'ths degrees per tick	*/
-	azimuth_speed, 
+	azimuth_speed,
 	plane_fov, tower_fov,	/* plane, tower field of view	*/
 	fuel,			/* fuel (0 - 12800)		*/
 	thrust,			/* thrust (0 - 100)		*/
@@ -157,7 +156,7 @@ static char usage[] = "Usage: flight [-dhz]\n";
     while (--argc > 0 && **++argv == '-') {
 	char *token;
 
-	for (token = argv[0] + 1; *token; token++) 
+	for (token = argv[0] + 1; *token; token++)
 	switch (*token) {
 #ifdef DOGFIGHT
 	    extern char *infile,*outfile;
@@ -218,7 +217,7 @@ static char usage[] = "Usage: flight [-dhz]\n";
     number_planes = 2;
     my_ptw = ptw;
 
-    if (dials) init_dials(); 
+    if (dials) init_dials();
 
     make_meters ();
     redraw_screen ();
@@ -237,7 +236,7 @@ static char usage[] = "Usage: flight [-dhz]\n";
 
     time_start = times (&tms_start_buf);
 }
-typedef enum {DEFAULT_LOCATION, RUNWAY, AIRBORNE, RANDOM} StartLocation; 
+typedef enum {DEFAULT_LOCATION, RUNWAY, AIRBORNE, RANDOM} StartLocation;
 void set_start_location(StartLocation location)
 {
 	switch(location)
@@ -521,10 +520,10 @@ flight (argc,argv)
     /****************************************************************
      *	Main loop
      ****************************************************************/
-    em_while(1)
+    while(1)
 	{
 	/* read all queue entries	*/
-	if (dials) check_dials(); 
+	if (dials) check_dials();
     while (qtest ()) {
 	    type = qread (&val);
 	    if (type == KEYBD) {
@@ -698,7 +697,7 @@ broadcast ("retracted my landing gear while on the ground");
 				goto end_of_main_loop;
 			}
 		    /* if missile launched, then blow up */
-		    else if (pp->mstatus > MEXPLODE && 
+		    else if (pp->mstatus > MEXPLODE &&
 			     pp->mtype != TYPE_CANNON)
 			 then pp->mstatus = MEXPLODE;
 		    break;
@@ -734,7 +733,7 @@ broadcast ("retracted my landing gear while on the ground");
 		}
 	    }
 
-	    
+
 	    else if (type == REDRAW) {
 
 		redraw_screen();
@@ -757,7 +756,7 @@ broadcast ("retracted my landing gear while on the ground");
 		else if (type == RIGHTARROWKEY && view_switch == PLANE_VIEW) {
 		    view_angle -= 900;
 		    if (view_angle < -1800) then view_angle += 3600;
-		}	
+		}
         else if (view_switch == TOWER_VIEW) {
             /* extra view controls from tower view */
             switch(type) {
@@ -802,7 +801,7 @@ broadcast ("retracted my landing gear while on the ground");
 	else if (pp -> status > 0) then pp -> status--;
 #ifdef DOGFIGHT
 	ptemp = get_indata (1);	/* read all input data		*/
-	if (ptemp != NULL) {	
+	if (ptemp != NULL) {
 	    sprintf (charbuf,"You were blown up by an enemy %s fired by %s",
 			WEAPON_NAME[ptemp -> mtype], ptemp -> myname);
 	    make_crash (charbuf);
@@ -830,7 +829,7 @@ broadcast ("retracted my landing gear while on the ground");
 		    else if (rudder > 0.05) then change_rudder (rudder -= .1);
 		    else if (rudder < -0.05) then change_rudder(rudder += .1);
 		    else setvaluator (MOUSEY,	/* lastly pitch		*/
-				itemp+=(int)(diff/-ELEVF/vz), 
+				itemp+=(int)(diff/-ELEVF/vz),
 				0,YMAXSCREEN);
 		}
 	    }
@@ -996,8 +995,8 @@ broadcast ("retracted my landing gear while on the ground");
 	    on_ground = FALSE;
 	}
 	else if (pp -> y < .5) {		/* check for on the ground */
-	    if (IN_BOX (pp,-800.0,100.0, -9500.0,1000.0) || 
-		IN_BOX (pp,100.0,1300.0, -2500.0,-1500.0) || 
+	    if (IN_BOX (pp,-800.0,100.0, -9500.0,1000.0) ||
+		IN_BOX (pp,100.0,1300.0, -2500.0,-1500.0) ||
 		IN_BOX (pp,-2300.0,-800.0, -4900.0,-2000.0))
 	    if (!on_ground) {			/* and not on ground before */
 		int rating,nm;
@@ -1183,7 +1182,7 @@ if (debug & (1<<4)) {
 	}
 	else if (view_switch == PLANE_VIEW) 	/* view from the plane	*/
 	{
-	    if (view_angle != 0) 
+	    if (view_angle != 0)
 		rotate(-view_angle, 'y');
 	    translate(0.0, pilot_y, pilot_z);	/* pilot's seat loc.	*/
 
@@ -1268,7 +1267,7 @@ if (debug & (1<<4)) {
     if (pp -> status > MEXPLODE) {
 	if (pp -> y > gefy) then kl = 1.0;	/* ground effect factor	*/
 	else {
-	    kl = pp -> y/b;		
+	    kl = pp -> y/b;
 	    if (kl > .225)
 	    then kl = .484 * kl + .661;
 	    else kl = 2.533 * kl + .20;
@@ -1355,7 +1354,7 @@ if (debug & (1<<4)) {
 	zdrag = vz * zdrag;
 	if (val) {			/* if vz is positive	*/
 	    ay -= ydrag;
-	    az -= zdrag; 
+	    az -= zdrag;
 	}
 	else {
 	    ay += ydrag;
@@ -1371,8 +1370,8 @@ if (debug & (1<<4)) {
 	ax -= ptw[0][1] * GRAVITY;
 	ay -= ptw[1][1] * GRAVITY;
 	az -= ptw[2][1] * GRAVITY;
-    
-	vx += ax;	vz += az;	
+
+	vx += ax;	vz += az;
 	if (on_ground && pp -> status > MEXPLODE) {
 	    float cos;
 
@@ -1430,7 +1429,7 @@ if (debug & (1<<3)) {
 	/****************************************************************
 	/*	display METERS
 	/****************************************************************/
-	tick_counter--;			/* 7,6,5,4,3,2,1,0	*/	
+	tick_counter--;			/* 7,6,5,4,3,2,1,0	*/
 	if (tick_counter == 2 && !pp -> mstatus) /* zero target if one	*/
 	then missile_target = NULL_PLANE_ID;
 
@@ -1709,7 +1708,7 @@ calculate_time (name)
 	cmov2s (150, y-3*dy);
 	charstr (charbuf);
 
-	if (hud) 
+	if (hud)
 	    closeobj();
 	else
 	{
@@ -1723,9 +1722,9 @@ calculate_time (name)
     if (current_tps == int_tps)
     {
 #ifdef _4D
-        tps_add = 
+        tps_add =
 #endif
-	vx_add = vy_add = vz_add = 
+	vx_add = vy_add = vz_add =
 	missile_vx_add = missile_vy_add = missile_vz_add = 0.0;
 	return;
     }
@@ -1915,7 +1914,7 @@ stopit()
 #else
     init_graphics ("flight");
 #endif
-    if (dials) init_dials(); 
+    if (dials) init_dials();
     make_meters ();
 	map_daynight (daytime);
 

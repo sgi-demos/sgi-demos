@@ -3,8 +3,6 @@
 #include <math.h>
 #include <stdio.h>
 #include "objects.h"
-#define EM_CHILD_APP_NAME EM_IDEAS
-#include "EM_CHILD_APP.h"
 
 #define X 0
 #define Y 1
@@ -20,26 +18,26 @@ float idmat[4][4] = {
     {0.0, 0.0, 0.0, 1.0},
 };
 float light1[] = {
-    AMBIENT, 0.0, 0.0, 0.0, 
-    LCOLOR,   1.0, 1.0, 1.0, 
-    POSITION, 0.0, 1.0, 0.0, 0.0, 
+    AMBIENT, 0.0, 0.0, 0.0,
+    LCOLOR,   1.0, 1.0, 1.0,
+    POSITION, 0.0, 1.0, 0.0, 0.0,
     LMNULL
 };
 float light2[] = {
-    AMBIENT, 0.0, 0.0, 0.0, 
-    LCOLOR,   0.3, 0.3, 0.5, 
-    POSITION, -1.0, 0.0, 0.0, 0.0, 
+    AMBIENT, 0.0, 0.0, 0.0,
+    LCOLOR,   0.3, 0.3, 0.5,
+    POSITION, -1.0, 0.0, 0.0, 0.0,
     LMNULL
 };
 float light3[] = {
-    AMBIENT, 0.2, 0.2, 0.2, 
-    LCOLOR,   0.2, 0.2, 0.2, 
-    POSITION, 0.0, -1.0, 0.0, 0.0, 
+    AMBIENT, 0.2, 0.2, 0.2,
+    LCOLOR,   0.2, 0.2, 0.2,
+    POSITION, 0.0, -1.0, 0.0, 0.0,
     LMNULL
 };
 float lmodel[] = {
-    AMBIENT, 0.3,  0.3, 0.3, 
-    LOCALVIEWER, 0.0, 
+    AMBIENT, 0.3,  0.3, 0.3,
+    LOCALVIEWER, 0.0,
     LMNULL
 };
 float mat_logo[] = {
@@ -274,7 +272,7 @@ char	*argv[];
 
     initialize(argv[0]);
 
-    em_while (TRUE) {
+    while (TRUE) {
 
 	while(qtest()) {
 
@@ -338,7 +336,7 @@ printf("time = %d\n", (int)time+1);*/
 	    c = 1.0 - (logo_pos[Y])/-0.33;
 	    pca /= 4.0;
 	    RGBcolor((int)(128.0*(1.0-c)*0.5 + 255.0*pca*c),
-		     (int)(102.0*(1.0-c)*0.5 + 255.0*pca*c), 
+		     (int)(102.0*(1.0-c)*0.5 + 255.0*pca*c),
 		     (int)(179.0*(1.0-c)*0.5 + 200.0*pca*c));
 	} else {
 	    RGBcolor(128/2, 102/2, 179/2);
@@ -545,7 +543,7 @@ draw_table() {
 	    if ((c = dot(lv, ov))<0.0) c = 0.0;
 	    c = c * c * c * lv[Y] * 255.0;
 /* fade */
-	    if ((time>TIME-5.0) && (time<TIME-3.0)) 
+	    if ((time>TIME-5.0) && (time<TIME-3.0))
 		c *= 1.0 - (time-(TIME-5.0)) * 0.5;
 
 	    tablecolors[j][i] = (int)c;
@@ -575,8 +573,8 @@ draw_table() {
     /* Below causes z-fighting briefly for paper on table, as logo rises out of table.
        Yet multiple versions of ideas (IRIS GL and OpenGL) enable zbuffer  here, and it
        apparently works without z-fighting.  Disabling it does not seem to cause any visual
-       issues however, and I don't see why it is necessary since zbuffer remains off when 
-       logo is enitrely below or entirely above the table.  So I'm disabling this until 
+       issues however, and I don't see why it is necessary since zbuffer remains off when
+       logo is enitrely below or entirely above the table.  So I'm disabling this until
        further insight.  sgi-demos 3/25/23
     */
     /*
@@ -595,7 +593,7 @@ draw_table() {
 	if ((c = dot(lv, ov))<0.0) c = 0.0;
 	c = c * c * c * lv[Y];
 /* fade */
-	    if ((time>TIME-5.0) && (time<TIME-3.0)) 
+	    if ((time>TIME-5.0) && (time<TIME-3.0))
 		c *= 1.0 - (time-(TIME-5.0)) * 0.5;
 
 	pcr = c * 255; pcg = c * 255; pcb = c * 200;
@@ -785,5 +783,3 @@ vector v1, v2;
 
     return v1[X]*v2[X]+v1[Y]*v2[Y]+v1[Z]*v2[Z];
 }
-
-

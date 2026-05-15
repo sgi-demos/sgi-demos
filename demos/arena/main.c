@@ -8,9 +8,6 @@
 
 #include "arena.h"
 
-#define EM_CHILD_APP_NAME EM_ARENA
-#include "EM_CHILD_APP.h"
-
 long screen_size[2];
 
 char buf[80];
@@ -198,7 +195,7 @@ main(argc, argv)
 	starttime = times(&tbuf);
     }
 
-    em_while(1)
+    while(1)
     {
 	while (qtest())
 	{
@@ -247,7 +244,7 @@ main(argc, argv)
 			}
 			else
 			    radar_zoom += 0.5;
-			
+
 			if (bitplanes >= 7)
 			{
 			    pushmatrix();
@@ -278,7 +275,7 @@ main(argc, argv)
 			}
 			else
 			    zoom += 0.1;
-			
+
 			if (bitplanes >= 7)
 			{
 			    pushmatrix();
@@ -368,11 +365,11 @@ main(argc, argv)
 	    colide();
 	    did_colide = TRUE;
 	}
-	
+
 	get_sect();
 	if (check_obj_colision())
 	    did_colide = TRUE;
-	    
+
 	if ((player[id].type & EXPLODE) && !(player[id].type & DEAD))
 	    explode(&player[id]);
 
@@ -694,4 +691,3 @@ get_sect()
 	    sect = NORTHEAST;
     }
 }
-

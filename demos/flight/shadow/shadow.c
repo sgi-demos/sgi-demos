@@ -14,7 +14,6 @@
 #include "flight.h"
 // #include "iconize.h"
 #include <stdio.h>
-#include "EM_CHILD_APP.h"
 
 short debug,hud,threat_mode;		/* debug flag		*/
 int dist_for_lines;			/* distance to draw building lines */
@@ -52,7 +51,7 @@ main (argc,argv)
 	register char *token;
 	extern char *infile,*outfile;
 
-	for (token = argv[0] + 1; *token; token++) 
+	for (token = argv[0] + 1; *token; token++)
 	switch (*token) {
 	    case 'i':
 		if (--argc > 0) infile = *++argv;
@@ -108,14 +107,14 @@ start:
     /****************************************************************
     /*	Main loop
     /****************************************************************/
-    em_while (1) 
+    while (1)
 	{
 	/* read all queue entries	*/
         while (qtest ()) {
 	    type = qread (&val);
    	    if (type == REDRAW) {
 doredraw:
-			make_my_objects(view_switch == TOWER_VIEW ? 
+			make_my_objects(view_switch == TOWER_VIEW ?
 				tower_fov : plane_fov);
 	    }
    	    else if (type == WINQUIT)
@@ -123,9 +122,9 @@ doredraw:
 	    else if (type == KEYBD) {
 		if (val == 27)
 			goto end_of_program;
-		else if(val == 18) 
+		else if(val == 18)
 			goto doredraw;	/* ^R; wsh bleeds through sometimes when scrolling */
-		else if(val == 26) 
+		else if(val == 26)
 			stopit();	/* ^Z suspends (iconizes) the game */
 		else if (val == 'z' || val == 'x') {
 		    if (view_switch == TOWER_VIEW) {

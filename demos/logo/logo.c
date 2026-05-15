@@ -9,8 +9,6 @@
 #include <math.h>
 #include <device.h>
 #include "light.h"
-#define EM_CHILD_APP_NAME EM_LOGO
-#include "EM_CHILD_APP.h"
 
 #define X 0
 #define Y 1
@@ -108,7 +106,7 @@ char	*argv[];
 
 	initialize(argv[0]);
 
-	em_while(TRUE) {
+	while(TRUE) {
 
 		while(qtest()) {
 			dev=qread(&val);
@@ -153,7 +151,7 @@ char	*argv[];
 			break;
 		    }
 
-		omx=nmx; 
+		omx=nmx;
 		omy=nmy;
 
 		draw_everything();
@@ -182,8 +180,8 @@ char *title;
 	RGBmode();
 	gconfig();
 	RGBcolor(0, 0, 0);
-	clear(); 
-	swapbuffers(); 
+	clear();
+	swapbuffers();
 	clear();
 	qdevice(INPUTCHANGE);
 	qdevice(REDRAW);
@@ -275,58 +273,58 @@ build_logo() {
 		tmp->polygons = double_cylinder;
 		tmp->move = move_double;
 
-		tmp->sub = new_thing(); 
+		tmp->sub = new_thing();
 		tmp = tmp->sub;
 		tmp->polygons = elbow;
 		tmp->move = bend_forward;
 
-		tmp->sub = new_thing(); 
+		tmp->sub = new_thing();
 		tmp = tmp->sub;
 		tmp->polygons = double_cylinder;
 		tmp->move = move_double;
 
-		tmp->sub = new_thing(); 
+		tmp->sub = new_thing();
 		tmp = tmp->sub;
 		tmp->polygons = elbow;
 		tmp->move = bend_forward;
 
-		tmp->sub = new_thing(); 
+		tmp->sub = new_thing();
 		tmp = tmp->sub;
 		tmp->polygons = single_cylinder;
 		tmp->move = move_single;
 
-		tmp->sub = new_thing(); 
+		tmp->sub = new_thing();
 		tmp = tmp->sub;
 		tmp->polygons = elbow;
 		tmp->move = bend_right;
 
 
-		tmp->sub = new_thing(); 
+		tmp->sub = new_thing();
 		tmp = tmp->sub;
 		tmp->polygons = double_cylinder;
 		tmp->move = move_double;
 
-		tmp->sub = new_thing(); 
+		tmp->sub = new_thing();
 		tmp = tmp->sub;
 		tmp->polygons = elbow;
 		tmp->move = bend_forward;
 
-		tmp->sub = new_thing(); 
+		tmp->sub = new_thing();
 		tmp = tmp->sub;
 		tmp->polygons = double_cylinder;
 		tmp->move = move_double;
 
-		tmp->sub = new_thing(); 
+		tmp->sub = new_thing();
 		tmp = tmp->sub;
 		tmp->polygons = elbow;
 		tmp->move = bend_forward;
 
-		tmp->sub = new_thing(); 
+		tmp->sub = new_thing();
 		tmp = tmp->sub;
 		tmp->polygons = single_cylinder;
 		tmp->move = move_single;
 
-		tmp->sub = new_thing(); 
+		tmp->sub = new_thing();
 		tmp = tmp->sub;
 		tmp->polygons = elbow;
 		tmp->move = bend_left;

@@ -1,5 +1,5 @@
-#ifndef __EVENT_SERVICE_H__
-#define __EVENT_SERVICE_H__
+#ifndef __EVENTS_H__
+#define __EVENTS_H__
 
 #include "basic_types.h"
 #define INPUT_QUEUE_SIZE 128
@@ -16,8 +16,9 @@
 // events_qread_continue    from: sdl queue pop device, val     event queue
 // events_tie               to:   event queue device & valuator continuous
 // events_set_framebuffer   to:   framebuffer                   continuous
-// events_run_event_loop    <none>                              continuous
 //
+extern void events_frame_complete(void);
+
 extern int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height);
 
 extern int32_t events_get_valuator(int32_t device);
@@ -32,6 +33,5 @@ extern int32_t events_qread_continue(int16_t *value);
 extern void events_tie(int32_t button, int32_t val1, int32_t val2);
 
 extern void events_set_framebuffer(unsigned char* framebuffer);
-extern void events_run_event_loop();
 
-#endif /* __EVENT_SERVICE_H__ */
+#endif /* __EVENTS_H__ */

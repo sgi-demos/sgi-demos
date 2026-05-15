@@ -5,7 +5,6 @@
 #include <math.h>
 #include <device.h>
 
-#include "EM_CHILD_APP.h"
 #include "EM_SYSTEM.h"
 
 #define X 0
@@ -82,16 +81,16 @@ float my_material[] =
 
 float my_light[] =
 {
-    AMBIENT, 0.0, 0.0, 0.0, 
-    LCOLOR,   1.0, 1.0, 1.0, 
-    POSITION, 0.0, 0.5, 1.0, 1.0, 
+    AMBIENT, 0.0, 0.0, 0.0,
+    LCOLOR,   1.0, 1.0, 1.0,
+    POSITION, 0.0, 0.5, 1.0, 1.0,
     LMNULL
 };
 
 float infinite[] =
 {
-    AMBIENT, 0.0, 0.0, 0.0, // 0.3, 0.3, 0.3, 
-    LOCALVIEWER, 0.0, 
+    AMBIENT, 0.0, 0.0, 0.0, // 0.3, 0.3, 0.3,
+    LOCALVIEWER, 0.0,
     LMNULL
 };
 
@@ -121,7 +120,7 @@ char	*argv[];
 {
     initialize(argv[0]);
 
-    em_while(TRUE) {
+    while(TRUE) {
 
         while(qtest()) {
             short val;
@@ -155,8 +154,8 @@ initialize()
     RGBmode();
     gconfig();
     RGBcolor(0, 0, 0);
-    clear(); 
-    swapbuffers(); 
+    clear();
+    swapbuffers();
     clear();
     qdevice(INPUTCHANGE);
     qdevice(REDRAW);
@@ -165,7 +164,7 @@ initialize()
     zbuffer(TRUE);
     zclear();
     init_lighting();
-    
+
     lmbind(MATERIAL, MY_MATERIAL);
 }
 

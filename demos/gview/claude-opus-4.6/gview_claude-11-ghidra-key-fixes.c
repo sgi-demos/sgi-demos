@@ -92,7 +92,6 @@
 #include "math.h"
 #include "gl.h"
 #include "device.h"
-#include "EM_CHILD_APP.h"
 
 /* Binary uses literal 3.1415 (f64 at GP-0x7F90), not M_PI */
 
@@ -905,7 +904,7 @@ void event_loop_and_render()
     }
     setup_menu();
 
-    em_while(1) {
+    while(1) {
 
 	/*
 	 * Event processing (0x4020f4-0x402668)
@@ -1059,7 +1058,7 @@ void event_loop_and_render()
 	 * override this pause (forces rendering without focus).
 	 *
 	 * We don't implement this idle state since our emulation layer
-	 * doesn't generate INPUTCHANGE events. The em_while macro
+	 * doesn't generate INPUTCHANGE events. The while macro
 	 * handles yielding. Render unconditionally.
 	 */
 

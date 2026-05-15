@@ -72,7 +72,6 @@
 #include "math.h"
 #include "gl.h"
 #include "device.h"
-#include "EM_CHILD_APP.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -128,7 +127,7 @@ static float  bbox_extent;
  * to window center controls look direction, and buttons control
  * forward/backward motion. The further the mouse is from center,
  * the faster the view turns.
- * 
+ *
  * Variable mapping to m2c global offsets (relative to $gp):
  *
  *   State struct base = unk-7E98
@@ -933,7 +932,7 @@ char **argv;
      * from render_frame_no_zbuf and general IrisGL practice:
      *   czclear -> draw_scene_fly (transforms) -> draw -> swap
      */
-    em_while(1) {
+    while(1) {
 	event_loop();
 	czclear(0x00000000, 0xffffffff);
 	draw_scene_fly();

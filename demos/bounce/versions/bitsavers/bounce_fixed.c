@@ -2,7 +2,6 @@
 #include "stdio.h"
 #include "gl.h"
 #include "device.h"
-#include "EM_CHILD_APP.h"
 
 #define UDIV 12
 #define VDIV 12
@@ -37,7 +36,7 @@ struct {
 float ballobj[UDIV+1][VDIV+1][4];
 float wallobj[WALLGRID+1][WALLGRID+1][4];
 float wallnorms[WALLGRID+1][WALLGRID+1][3];
-float wallnorm[3] = { 
+float wallnorm[3] = {
 	0.0, 0.0, -1.0 };
 
 int rx, ry;
@@ -53,10 +52,10 @@ int lflag = 0;
 
 char machinetype[12];
 static enum {
-	MACH_CLOVER1, 
-	MACH_CLOVER2, 
+	MACH_CLOVER1,
+	MACH_CLOVER2,
 	MACH_ECLIPSE
-} 
+}
 machine;
 
 float rotm[3][3],rotmi[3][3],curmat[3][3];
@@ -118,7 +117,7 @@ float wallmat[] = {
 float lmodel[] = {
 	AMBIENT,0.3,0.3,0.3,
 	LOCALVIEWER,1.0,
-	ATTENUATION, 1.0, 3.0, 
+	ATTENUATION, 1.0, 3.0,
 	LMNULL };
 
 extern float frand();
@@ -210,7 +209,7 @@ char **argv;
 	loadmatrix(ident4);
 	translate(0.0, 0.0, -EYEZ);
 
-	em_while(1)  {
+	while(1)  {
 		calcbox();
 		if (!freeze)
 			calcball();
@@ -659,7 +658,7 @@ char *name;
 
 	/*
      * Insure that the data is quad-word aligned and begins on a page
-     * boundary.  This shields us from the performance loss which occurs 
+     * boundary.  This shields us from the performance loss which occurs
      * whenever we try to fetch data which straddles a page boundary  (the OS
      * has to map in the next virtual page and re-start the DMA transfer).
      */

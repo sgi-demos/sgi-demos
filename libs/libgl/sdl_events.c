@@ -5,6 +5,7 @@
 #include <emscripten.h>
 #endif
 
+//#include <stdlib.h>
 #include <SDL.h>
 #include "sdl_framebuffer.h"
 
@@ -22,7 +23,8 @@ static uint32_t sdl_devices_queued[2048];
 static uint32_t sdl_tied_valuators[2048][2];
 static gl_event sdl_input_queue[INPUT_QUEUE_SIZE];
 static uint32_t sdl_input_queue_head = 0;    // The next item that needs to be read
-static uint32_t sdl_input_queue_length = 0;  // The number of items in the queue (tail = (head + length) % len):
+static uint32_t sdl_input_queue_length = 0;  // The number of items in the queue (tail = (head + length) % len)
+static int32_t  sdl_window_id = 0;           // Captured from SDL events for use as REDRAW value
 static int32_t sdl_keycode_to_gl(int32_t sdl_keycode);
 static void enqueue_event(gl_event *e);
 
@@ -153,6 +155,20 @@ static void mouseButtonEvent(int sdlButton, bool buttonDown)
     }
 }
 
+// Enqueue a REDRAW event if the demo has qdevice'd REDRAW. Called on
+// SDL window expose/shown/resize/focus events, and via periodic pulse
+// from yieldByEventQuery(), since no external window system is driving REDRAWs.
+static void enqueueRedraw()
+{
+    if (sdl_devices_queued[REDRAW])
+    {
+        gl_event ev;
+        ev.device = REDRAW;
+        ev.val = (int16_t)sdl_window_id;
+        enqueue_event(&ev);
+    }
+}
+
 void sdlProcessEvents()
 {
     SDL_Event event;
@@ -167,8 +183,20 @@ void sdlProcessEvents()
                 break;
 
             case SDL_WINDOWEVENT:
-                if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
-                    sdlResizeWindow(event.window.windowID);
+                sdl_window_id = event.window.windowID;
+                switch (event.window.event)
+                {
+                    case SDL_WINDOWEVENT_SIZE_CHANGED:
+                        sdlResizeWindow(sdl_window_id);
+                        enqueueRedraw();
+                        break;
+                    case SDL_WINDOWEVENT_EXPOSED:
+                    case SDL_WINDOWEVENT_SHOWN:
+                    case SDL_WINDOWEVENT_RESTORED:
+                    case SDL_WINDOWEVENT_FOCUS_GAINED:
+                        enqueueRedraw();
+                        break;
+                }
                 break;
 
             case SDL_TEXTINPUT:
@@ -202,36 +230,63 @@ void sdlProcessEvents()
 }
 
 // Framerate control:
-// - Simulate a decent SGI machine for the time, 60 fps is too fast for some demos (like ideas)
+// - Simulate a decent SGI machine for the time at 30fps, 60 fps is too fast for some demos (like ideas)
 // - Also, in the 80s and 90s, we had less than 60 fps and we liked it!
 // - TODO: Make this a per-demo option
-const int SCREEN_FPS = 30;
+const int DEMO_FPS = 30;
+const int DEMO_TICKS_PER_FRAME_BUDGET = 1000 / DEMO_FPS;
+static Uint32 frameStartTicks = 0;
 
-Uint32 beginMaintainFPS()
+void yieldByFrame(Uint32 frameTotalTicks)
 {
-    return SDL_GetTicks();
-}
-
-void endMaintainFPS(int fps, Uint32 startTicks)
-{
-    const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
-    Uint32 frameTicks = SDL_GetTicks() - startTicks;
-    if (frameTicks < SCREEN_TICKS_PER_FRAME)
+    if (frameTotalTicks < DEMO_TICKS_PER_FRAME_BUDGET)
     {
-        SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTicks);
+#ifdef __EMSCRIPTEN__
+        // Asyncify: yield to the browser for the remainder of the frame
+        // budget. The browser saves our C stack, runs other work, and
+        // resumes here approximately DEMO_TICKS_PER_FRAME_BUDGET - frameTicks
+        // milliseconds later.
+        emscripten_sleep(DEMO_TICKS_PER_FRAME_BUDGET - frameTotalTicks);
+#else
+        // Native: just sleep the remainder of the frame budget
+        SDL_Delay(DEMO_TICKS_PER_FRAME_BUDGET - frameTotalTicks);
+#endif
     }
+#ifdef __EMSCRIPTEN__
+    else
+    {
+        // Frame ran over budget, but we still must yield to the browser
+        // at least once per frame or the page will hang.
+        emscripten_sleep(0);
+    }
+#endif
 }
 
-void sdlRunEventLoop(void (*child_event_loop)())
+//
+//  events_frame_complete - The single platform yield point.
+//
+//  Called from:
+//    - swapbuffers()       (double-buffered demos)
+//    - gflush()            (single-buffered demos)
+//    - dopup()             (dopup's modal inner loop)
+//    - yieldByEventQuery()       (qtest/qread/getbutton/getvaluator safety net for demos,
+//                           such as twilight, which don't call swapbuffers or gflush,
+//                           but do at least poll the GL event queue)
+//
+//  This function:
+//    1. Pumps SDL events and translates them into the GL event queue
+//    2. Presents the framebuffer that was last set via events_set_framebuffer()
+//       In practice that pointer is set once by winopen and then re-set only by
+//       swapbuffers (the only caller whose rasterizer_swap changes the front
+//       buffer pointer).
+//    3. Native:     delays if necessary to not exceed 30fps via SDL sleep
+//       Emscripten: always yields to the browser via emscripten_sleep() (Asyncify),
+//                   also yields to not exceed 30 fps
+//
+void events_frame_complete(void)
 {
-    Uint32 startTicks = beginMaintainFPS();
-
     // Translate input events into IRIS GL events
     sdlProcessEvents();
-
-    // Run child event loop, if provided, so it can process events and redraw its stuff
-    if (child_event_loop != NULL)
-        child_event_loop();
 
     // Update framebuffer texture with rendered pixels
     sdlUpdateFramebufferTexture();
@@ -239,7 +294,34 @@ void sdlRunEventLoop(void (*child_event_loop)())
     // Render framebuffer texture
     sdlRenderFramebufferTexture();
 
-    endMaintainFPS(SCREEN_FPS, startTicks);
+    // Yield to browser every frame, and don't exceed DEMO_FPS in both browser & native
+    Uint32 frameTotalTicks = SDL_GetTicks() - frameStartTicks;
+    yieldByFrame(frameTotalTicks);
+
+    // Start the clock for the next frame, which will be whatever the
+    // demo does between now and the next events_frame_complete call.
+    frameStartTicks = SDL_GetTicks();
+}
+
+//
+// yieldByEventQuery - throttled safety-net yield, called from the SDL-side
+// event-query functions (events_qread_start, events_get_button,
+// events_get_valuator). Demos that don't call swapbuffers or gflush
+// (like twilight.c) still poll input, so we piggyback the yield on
+// those calls. The throttle keeps us from yielding on every tiny poll.
+//
+static void yieldByEventQuery()
+{
+    if (SDL_GetTicks() - frameStartTicks >= DEMO_TICKS_PER_FRAME_BUDGET)
+    {
+        // If a REDRAW-interested demo is waiting on events, pulse a REDRAW
+        // so it can repaint - there's no external window system pushing
+        // REDRAWs the way SGI had.
+        enqueueRedraw();
+
+        // Pump events, redraw, and yield
+        events_frame_complete();
+    }
 }
 
 
@@ -250,6 +332,7 @@ void sdlRunEventLoop(void (*child_event_loop)())
 // QUERY: SDL mouse position at any time
 int32_t events_get_valuator(int32_t device)
 {
+    yieldByEventQuery();
     switch (device)
     {
         case MOUSEX: return sdlClampToFramebufferX(mousePosX());
@@ -372,7 +455,9 @@ int32_t sdl_keycode_to_gl(int32_t sdl_keycode)
     return 0;
 }
 
-Boolean events_get_button(int32_t button) {
+Boolean events_get_button(int32_t button)
+{
+    yieldByEventQuery();
 
     if (button >= RIGHTMOUSE && button <= LEFTMOUSE)
     {
@@ -428,6 +513,10 @@ void enqueue_event(gl_event *e)
 
 uint32_t events_qread_start()
 {
+    // This is called by qtest() and qread(), even when the GL-side queue is empty.
+    // This is the hot spot where demos like twilight discover "no events"; a throttled
+    // yield here lets SDL pump events and fill the GL queue before returning.
+    yieldByEventQuery();
     return sdl_input_queue_length;
 }
 
@@ -442,6 +531,18 @@ int32_t events_qread_continue(int16_t *value)
 
 int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height)
 {
+    static int sdl_initialized = 0;
+    if (!sdl_initialized) {
+        // On winopen() do full SDL initialization
+        sdlInitWindow();
+        sdlInitFramebufferTexture();
+        atexit(sdlFreeFramebufferTexture);
+
+        // Seed the frame timer so the first frame paces correctly
+        frameStartTicks = SDL_GetTicks();
+        sdl_initialized = 1;
+    }
+
     sdlOpenWindow(title, frame_width, frame_height);
     return 0;
 }
@@ -449,12 +550,6 @@ int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height)
 void events_set_framebuffer(unsigned char* framebuffer)
 {
     sdlSetFramebufferSource(framebuffer);
-}
-
-void events_run_event_loop()
-{
-    // run event loop without a child loop
-    sdlRunEventLoop(NULL);
 }
 
 // usually:
