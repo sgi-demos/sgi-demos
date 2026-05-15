@@ -66,12 +66,12 @@ make
 ```
 
 ## To do
-- Run GL demo with asyncify, to avoid slicing up the code for SDL's event loop
-- Rendering via OpenGLES/WebGL (WIP)
+- Logged [issues](https://github.com/sgi-demos/sgi-demos/issues)
+- Popup menus, including the classic [SGI menu font](https://github.com/sgi-demos/sgi-fonts)
+- Rendering via [OpenGLES/WebGL](https://github.com/sgi-demos/igl) (WIP)
 - Arbitrary window size
 - Rudimentary context for each demo: name, author, year (as text in lower corner), code link
 - Popup/overlay help to show key/mouse input to try
-- Popup menus, including the classic SGI menu font
 - More demos, _all the demos_.
   - Electropaint, Cedit, any other IRIS GL demos I can find
   - Then OpenGL, GLUT, Inventor, Performer demos in no particular order
@@ -82,7 +82,6 @@ make
   - On/off for mouse/keyboard devices, as hints
 - Description/history/context for each demo - can obtain some descriptions from .Info slide files
 - Man page live links
-- See logged [issues](https://github.com/sgi-demos/sgi-demos/issues)
 
 ## Credits
 - Everyone who worked at [SGI](https://en.wikipedia.org/wiki/Silicon_Graphics), for the eye candy and the baller computers.
