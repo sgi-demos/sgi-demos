@@ -7,7 +7,7 @@
     "configurations": [
 
         {
-            "name": "Debug demo",
+            "name": "Debug demo MAC",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/${relativeFileDirname}/bin/${fileBasenameNoExtension}",
@@ -17,6 +17,21 @@
             "environment": [],
             "externalConsole": false,
             "MIMode": "lldb"
+        },
+        {
+            "name": "Debug demo WIN",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/${relativeFileDirname}/bin/${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/${relativeFileDirname}",
+            "environment": [
+                    { "name": "PATH", "value": "C:\\msys64\\clang64\\bin;${env:PATH}" }
+                ],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:/msys64/clang64/bin/gdb.exe"
         }
     ]
 }
