@@ -41,7 +41,7 @@ $(OBJS): $(BIN_DIR)/%.o: $(SRC_DIR)/%.c | $(BIN_DIR) $(SRC) $(HDRS)
 
 $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
 	$(CC) $(OPT) $(SHIM_INC) $(LIBGL_INC) $(OBJS) $(DEMO_LIB) $(GL_LIB) \
-		$(SDL_INC) $(SDL_LIBS) $(GLES_INC) $(GLES_LIBS) $(GLES_LINK) -lm -o $@
+		$(SDL_INC) $(SDL_LIBS) $(GLES_INC) $(GLES_LIBS) $(GLES_LINK) -lm $(CONSOLE_FLAGS) -o $@
 	$(call GLES_INSTALL)
 	ln -sF $(BIN_DIR) ./bin
 	@echo

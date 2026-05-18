@@ -1,7 +1,7 @@
 #include "basic_types.h"
 #include "geom_types.h"
 
-extern void sdlInitWindow();
+extern uint32_t sdlInitWindow();
 extern void sdlOpenWindow(char *title, int32_t frameWidth, int32_t frameHeight);
 extern void sdlSetFramebufferSource(unsigned char* pSrcPixels);
 extern void sdlResizeWindow(Uint32 windowID);

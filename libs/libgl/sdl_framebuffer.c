@@ -203,7 +203,7 @@ static void initGeometry()
     glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
 }
 
-void sdlInitWindow()
+uint32_t sdlInitWindow()
 {
     // Create SDL window
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
@@ -274,6 +274,8 @@ void sdlInitWindow()
 
     fb.windowID = SDL_GetWindowID(fb.pWindow);
     SDL_StartTextInput();
+
+    return (uint32_t)fb.windowID;
 }
 
 //

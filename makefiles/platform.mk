@@ -4,12 +4,15 @@ HW:=$(shell uname -m)
 ifeq ($(OS),Darwin)
 	OS = mac
 	DYL_EXT = dylib
+	CONSOLE_FLAGS =
 else ifeq ($(OS),Linux)
 	OS = linux
 	DYL_EXT = so
+	CONSOLE_FLAGS =
 else ifneq ($(findstring MINGW64_NT,$(OS)),)
 	OS = win
 	DYL_EXT = dll
+	CONSOLE_FLAGS = -mconsole
 endif
 
 # Source and executable dirs
@@ -62,9 +65,8 @@ OPT_TWO = -DNDEBUG -O2
 OPT = $(OPT_ZERO)
 EM_OPT = $(OPT_TWO)
 
-# Asyncify: allows the demo's while(1) loop to yield to the browser via call to
-# emscripten_sleep() in events_frame_complete(), which pauses/resumes via call stack save/restore.
-# ASYNCIFY_STACK_SIZE: bytes for storing call stack during yield (64KB is generous for deep call stacks)
+# ASYNCIFY: Enable demo pause/resume via call stack save/restore to yield to the browser
+# ASYNCIFY_STACK_SIZE: byn bytes for storing call stack during yield (64KB is generous for deep call stacks)
 EM_ASYNCIFY = -sASYNCIFY -sASYNCIFY_STACK_SIZE=65536
 
 # Debug options

@@ -5,7 +5,6 @@
 #include <emscripten.h>
 #endif
 
-//#include <stdlib.h>
 #include <SDL.h>
 #include "sdl_framebuffer.h"
 
@@ -24,7 +23,7 @@ static uint32_t sdl_tied_valuators[2048][2];
 static gl_event sdl_input_queue[INPUT_QUEUE_SIZE];
 static uint32_t sdl_input_queue_head = 0;    // The next item that needs to be read
 static uint32_t sdl_input_queue_length = 0;  // The number of items in the queue (tail = (head + length) % len)
-static int32_t  sdl_window_id = 0;           // Captured from SDL events for use as REDRAW value
+static uint32_t sdl_window_id = 0;           // Set in events_winopen; used as REDRAW event value
 static int32_t sdl_keycode_to_gl(int32_t sdl_keycode);
 static void enqueue_event(gl_event *e);
 
@@ -76,7 +75,7 @@ static void exitEvent()
     #endif
 }
 
-// EVENT: mouse transited fb boundary, in or out
+// EVENT: mouse transited framebuffer boundary, in or out
 static void mouseMotionEvent()
 {
     // detect when mouse transits into or out of framebuffer for INPUTCHANGE events
@@ -100,7 +99,7 @@ static void mouseMotionEvent()
 static void keyDownEvent(int sdl_keycode, char *text)
 {
     // convert SDL key event to GL and add it to GL event queue
-    //printf("sdl_keycode = %d, text = [%s]\n", sdl_keycode, text);
+    // printf("sdl_keycode = %d, text = [%s]\n", sdl_keycode, text);
     gl_event ev;
     ev.device = sdl_keycode_to_gl(sdl_keycode);
     if (ev.device != 0 && (sdl_devices_queued[ev.device] || sdl_devices_queued[KEYBD]))
@@ -138,10 +137,10 @@ static void mouseButtonEvent(int sdlButton, bool buttonDown)
         ev.val = buttonDown;
         enqueue_event(&ev);
 
-        // tied valuators is used for capturing mouse x and/or y
-        // position at the time when a mouse button is pressed, and
-        // emitting those as mouse position x and y events right after
-        // the mouse button event in the GL event queue
+        // tied valuators are used for capturing mouse x and/or y position at
+        // the time when a mouse button (or other device) is pressed, and
+        // emitting those as mouse position x and y events right after the
+        // mouse button (or other device) event in the GL event queue
         gl_event tied_ev;
         for (int j = 0; j < 2; ++j)
         {
@@ -155,22 +154,43 @@ static void mouseButtonEvent(int sdlButton, bool buttonDown)
     }
 }
 
-// Enqueue a REDRAW event if the demo has qdevice'd REDRAW. Called on
-// SDL window expose/shown/resize/focus events, and via periodic pulse
-// from yieldByEventQuery(), since no external window system is driving REDRAWs.
-static void enqueueRedraw()
-{
-    if (sdl_devices_queued[REDRAW])
-    {
-        gl_event ev;
-        ev.device = REDRAW;
-        ev.val = (int16_t)sdl_window_id;
-        enqueue_event(&ev);
-    }
-}
+// inSdlProcessEvents - This is the reentrancy guard for sdlProcessEvents.
+//
+// Always true for the duration of sdlProcessEvents(), false otherwise.
+//
+// Any set of events enqueued during one sdlProcessEvents call MUST stay contiguous
+// (atomic) in sdl_input_queue. Some demos (e.g. buttonfly) depend on atomic event
+// groups such as "LEFTMOUSE + tied MOUSEX + tied MOUSEY".
+//
+// Silently guarded in all yield paths:
+//   yieldByEventQuery     - prevents reentrant REDRAW pulse + frame_complete
+//   yieldByFrame          - prevents mid-pump Asyncify suspend
+//   events_frame_complete - prevents any other re-entrant callers
+//
+// Loudly guarded in sdlProcessEvents() itself, with an actual abort (the three
+// yield-path guards prevent normal expected reentrancy, so reaching this
+// abort means someone has bypassed these guards with new code).
+//
+// See ARCHITECTURE.md ('Event pump integrity') for further details.
+//
+static bool inSdlProcessEvents = false;
 
+//
+// sdlProcessEvents - The event pump, drains events off the SDL event queue and
+// enqueues them onto the IRIS GL event queue
+//
 void sdlProcessEvents()
 {
+    if (inSdlProcessEvents)
+    {
+        // This abort catches any future code that bypasses the existing reentrancy guards
+        fprintf(stderr,
+            "FATAL: sdlProcessEvents called reentrantly!\n"
+            "See ARCHITECTURE.md ('Event pump integrity') for why this is prohibited.\n");
+        abort();
+    }
+
+    inSdlProcessEvents = true;
     SDL_Event event;
     char text[32] = "";
     int keysym = 0;
@@ -183,20 +203,8 @@ void sdlProcessEvents()
                 break;
 
             case SDL_WINDOWEVENT:
-                sdl_window_id = event.window.windowID;
-                switch (event.window.event)
-                {
-                    case SDL_WINDOWEVENT_SIZE_CHANGED:
-                        sdlResizeWindow(sdl_window_id);
-                        enqueueRedraw();
-                        break;
-                    case SDL_WINDOWEVENT_EXPOSED:
-                    case SDL_WINDOWEVENT_SHOWN:
-                    case SDL_WINDOWEVENT_RESTORED:
-                    case SDL_WINDOWEVENT_FOCUS_GAINED:
-                        enqueueRedraw();
-                        break;
-                }
+                if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+                    sdlResizeWindow(event.window.windowID);
                 break;
 
             case SDL_TEXTINPUT:
@@ -227,6 +235,7 @@ void sdlProcessEvents()
                 break;
         }
     }
+    inSdlProcessEvents = false;
 }
 
 // Framerate control:
@@ -237,8 +246,17 @@ const int DEMO_FPS = 30;
 const int DEMO_TICKS_PER_FRAME_BUDGET = 1000 / DEMO_FPS;
 static Uint32 frameStartTicks = 0;
 
+// yieldByFrame - Don't run faster than DEMO_FPS:
+// Browser: Asyncify yield to the browser for the remainder of the frame budget time.
+// Native:  SDL sleep for the remainder of the frame budget time.
 void yieldByFrame(Uint32 frameTotalTicks)
 {
+    // This guard catches mid-pump Asyncify suspend on web builds. While not currently
+    // necessary on native builds, we guard native too so that all yield paths obey the
+    // same uniform "check the guard" rule.
+    if (inSdlProcessEvents)
+        return;
+
     if (frameTotalTicks < DEMO_TICKS_PER_FRAME_BUDGET)
     {
 #ifdef __EMSCRIPTEN__
@@ -263,35 +281,35 @@ void yieldByFrame(Uint32 frameTotalTicks)
 }
 
 //
-//  events_frame_complete - The single platform yield point.
+//  events_frame_complete - The single platform yield point
 //
 //  Called from:
 //    - swapbuffers()       (double-buffered demos)
 //    - gflush()            (single-buffered demos)
 //    - dopup()             (dopup's modal inner loop)
-//    - yieldByEventQuery()       (qtest/qread/getbutton/getvaluator safety net for demos,
+//    - yieldByEventQuery() (qtest/qread/getbutton/getvaluator catch all for demos
 //                           such as twilight, which don't call swapbuffers or gflush,
 //                           but do at least poll the GL event queue)
 //
 //  This function:
-//    1. Pumps SDL events and translates them into the GL event queue
-//    2. Presents the framebuffer that was last set via events_set_framebuffer()
-//       In practice that pointer is set once by winopen and then re-set only by
-//       swapbuffers (the only caller whose rasterizer_swap changes the front
-//       buffer pointer).
-//    3. Native:     delays if necessary to not exceed 30fps via SDL sleep
-//       Emscripten: always yields to the browser via emscripten_sleep() (Asyncify),
-//                   also yields to not exceed 30 fps
+//    1. Runs SDL event pump (iff pump is not already running).
+//    2. Presents the framebuffer that was last set via events_set_framebuffer().
+//       In practice, the framebuffer pointer is initialized by winopen and then only
+//       updated by double-buffered demos via swapbuffers().
+//    3. Native:     Delays if necessary to not exceed DEMO_FPS via SDL sleep.
+//       Emscripten: Yields to the browser via emscripten_sleep(), also not exceeding DEMO_FPS.
 //
 void events_frame_complete(void)
 {
+    // This guards against any reentrant callers that don't go through yieldByEventQuery or yieldByFrame
+    if (inSdlProcessEvents)
+        return;
+
     // Translate input events into IRIS GL events
     sdlProcessEvents();
 
-    // Update framebuffer texture with rendered pixels
+    // Update framebuffer texture with rendered pixels & render it
     sdlUpdateFramebufferTexture();
-
-    // Render framebuffer texture
     sdlRenderFramebufferTexture();
 
     // Yield to browser every frame, and don't exceed DEMO_FPS in both browser & native
@@ -299,25 +317,47 @@ void events_frame_complete(void)
     yieldByFrame(frameTotalTicks);
 
     // Start the clock for the next frame, which will be whatever the
-    // demo does between now and the next events_frame_complete call.
+    // demo does between now and the next call to this function
     frameStartTicks = SDL_GetTicks();
 }
 
 //
-// yieldByEventQuery - throttled safety-net yield, called from the SDL-side
-// event-query functions (events_qread_start, events_get_button,
-// events_get_valuator). Demos that don't call swapbuffers or gflush
-// (like twilight.c) still poll input, so we piggyback the yield on
-// those calls. The throttle keeps us from yielding on every tiny poll.
+// yieldByEventQuery - Guarded and throttled catch-all yield, called from event query
+// functions (events_qread_start, events_get_button, events_get_valuator). This is for
+// demos that don't call swapbuffers or gflush, like twilight, but that do still query
+// for events.
 //
 static void yieldByEventQuery()
 {
+    // This reentrancy guard prevents inserting REDRAW events and re-entering
+    // sdlProcessEvents while querying event state. Specific example from the
+    // buttonfly demo:
+    //
+    // sdlProcessEvents()
+    // └─mouseButtonEvent(SDL_BUTTON_LEFT) // user pressed left mouse
+    //   └─enqueue_event(LEFTMOUSE)
+    //   └─events_get_valuator(MOUSEX)     // demo wants mouse x position with left mouse event
+    //     └─yieldByEventQuery()
+    //       └─ GUARD NOW PREVENTS -> enqueue REDRAW *AND* sdlProcessEvents()
+    //
+    if (inSdlProcessEvents)
+        return;
+
+    // This throttle keeps us from yielding more often than DEMO_FPS
     if (SDL_GetTicks() - frameStartTicks >= DEMO_TICKS_PER_FRAME_BUDGET)
     {
         // If a REDRAW-interested demo is waiting on events, pulse a REDRAW
         // so it can repaint - there's no external window system pushing
-        // REDRAWs the way SGI had.
-        enqueueRedraw();
+        // REDRAWs the way SGI did. Window id is set in the value field to
+        // follow the IRIS GL API, although no demos in the current demo set
+        // make use of it.
+        if (sdl_devices_queued[REDRAW])
+        {
+            gl_event ev;
+            ev.device = REDRAW;
+            ev.val = (int16_t)sdl_window_id;
+            enqueue_event(&ev);
+        }
 
         // Pump events, redraw, and yield
         events_frame_complete();
@@ -534,7 +574,7 @@ int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height)
     static int sdl_initialized = 0;
     if (!sdl_initialized) {
         // On winopen() do full SDL initialization
-        sdlInitWindow();
+        sdl_window_id = sdlInitWindow();
         sdlInitFramebufferTexture();
         atexit(sdlFreeFramebufferTexture);
 

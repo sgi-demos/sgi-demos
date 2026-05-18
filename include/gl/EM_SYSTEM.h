@@ -5,43 +5,49 @@
 #include <string.h>
 
 // Buttonfly web: Invoke the demo web page on system() call
-int em_system(const char *command) 
-{ 
+int em_system(const char *command)
+{
     // Transform command line command into web page equivalent, e.g.:
     // "../bounce/bin/bounce ../bounce/x29.bin" ---> "bounce/web/bounce_full.html"
     printf ("command = %s\n", command);
 
     // copy command into url, trim "../" if present
-    char url[256]; 
+    char url[256];
     char* dotdot = strstr(command, "../");
     if (dotdot)
-        strcpy (url, command+strlen("../")); 
+        snprintf(url, sizeof(url), "%s", command+strlen("../"));
     else
-        strcpy (url, command);
-    
+        snprintf(url, sizeof(url), "%s", command);
     // replace "/bin/" with "/web/"
-    char* rep = strstr(url, "/bin/"); 
+    char* rep = strstr(url, "/bin/");
     if (rep) {
-        strcpy(rep, "/web"); rep[4] = '/'; 
-
-        // snip out command parameter 
+        memcpy(rep, "/web/", 5);
+        // snip out command parameter
         rep = strstr(url, " ../");
         if (rep)
             rep[0] = 0;
 
         // append "_full.html"
-        strcat(url, "_full.html"); 
+        size_t ulen = strlen(url);
+        if (ulen + strlen("_full.html") >= sizeof(url))
+            return -1;
+
+        strcpy(url + ulen, "_full.html");
         printf("url = %s\n", url);
 
         // generate js to visit full path url
-        char sys_js[256]; 
-        snprintf (sys_js, 256, "window.location.href = 'https://sgi-demos.github.io/sgi-demos/demos/%s';",url); 
+        char sys_js[256];
+        int n = snprintf(sys_js, sizeof(sys_js),
+            "window.location.href = 'https://sgi-demos.github.io/sgi-demos/demos/%s';", url);
+        if (n < 0 || (size_t)n >= sizeof(sys_js))
+            return -1;
         printf("sys_js = %s\n",sys_js);
 
         // run js
-        extern void emscripten_run_script(const char *); 
-        emscripten_run_script(sys_js); 
+        extern void emscripten_run_script(const char *);
+        emscripten_run_script(sys_js);
     }
+    return 0;
 }
 #define system em_system
 #endif
@@ -69,14 +75,30 @@ FILE *em_popen(const char *command, const char *mode)
 #define popen em_popen
 #endif
 
+#ifdef _WIN32
+// Buttonfly Windows: Convert demo path to Windows format (fwd to backslashes)
+int win_system(const char *command)
+{
+    char win_command[256];
+
+    for (size_t i = 0; i < strlen(command); i++)
+        win_command[i] = (command[i] == '/') ? '\\' : command[i];
+
+    printf("win_command = %s\n",win_command);
+
+    #undef system
+    return system(win_command);
+}
+#define system win_system
+#endif
 
 //
 // Various workarounds for 1980s & UNIX code
-// 
+//
 
 // Private Eyes by Hall and Oates was the #1 song in the US on 9 Nov 1981, the day of SGI founding
 
-// Avoid promoting signed values to unsigned when mixing 
+// Avoid promoting signed values to unsigned when mixing
 // strlen() in arithmetic expressions
 int strlen32(const char *s)
 {
@@ -98,9 +120,9 @@ uint32_t ntohl(uint32_t x) {
         return x;
     } else {
         /* Little-endian system, swap bytes */
-        return ((x & 0xFF) << 24) | 
-               ((x & 0xFF00) << 8) | 
-               ((x & 0xFF0000) >> 8) | 
+        return ((x & 0xFF) << 24) |
+               ((x & 0xFF00) << 8) |
+               ((x & 0xFF0000) >> 8) |
                ((x & 0xFF000000) >> 24);
     }
 }
