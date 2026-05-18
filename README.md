@@ -1,11 +1,10 @@
 # SGI demos from long ago, running in your browser [today](https://sgi-demos.github.io).
 _Old problems require modern solutions._
 
-This is the original SGI demo source code, compiled for the web using Emscripten and SDL2.  Rendering is done using an IRIS GL software rasterizer from the [Alice 4 project](https://lkesteloot.github.io/alice/alice4/libgl.html).  Event handling is done by SDL2, with events translated into GL's event system.  Each demo is a separate web page, with its own Javascript + WASM compiled by Emscripten from the original C/C++ source.  Minimal modifications have been made to the original source, in order to run in the browser and to work with compilers 35 years newer.  For more implementation details, see the [architecture doc](https://github.com/sgi-demos/sgi-demos/blob/main/ARCHITECTURE.md).
+This is the original SGI demo source code, compiled for the web using Emscripten and SDL2.  Rendering is done using an IRIS GL software rasterizer from the [Alice 4 project](https://lkesteloot.github.io/alice/alice4/libgl.html).  Event handling is done by SDL2, with events translated into GL's event system.  Each demo is a separate web page, with its own Javascript + WASM compiled by Emscripten from the original C/C++ source.  Native Linux, Mac, and Windows builds are also available. Minimal modifications have been made to the original source, in order to run in the browser and to build with compilers 30+ years later.  For more implementation details, see the [architecture doc](https://github.com/sgi-demos/sgi-demos/blob/main/ARCHITECTURE.md).
 
 ## Working demos
 - [Buttonfly](https://sgi-demos.github.io/)
-- [Bounce](https://sgi-demos.github.io/sgi-demos/demos/bounce/web/bounce_full.html)
 - [Ideas](https://sgi-demos.github.io/sgi-demos/demos/ideas/web/ideas_full.html)
 - [Insect](https://sgi-demos.github.io/sgi-demos/demos/insect/web/insect_full.html)
 - [Jello](https://sgi-demos.github.io/sgi-demos/demos/jello/web/jello_full.html)
@@ -13,9 +12,15 @@ This is the original SGI demo source code, compiled for the web using Emscripten
 - [Twilight](https://sgi-demos.github.io/sgi-demos/demos/twilight/web/twilight_full.html)
 
 ## Somewhat working demos
+- [Bounce](https://sgi-demos.github.io/sgi-demos/demos/bounce/web/bounce_full.html) (model selection not working on web)
 - [Flight](https://sgi-demos.github.io/sgi-demos/demos/flight/web/flight_full.html) (cockpit glitches, planes too slow in web version, night mode 'shimmers', no network play)
 - [Newave](https://sgi-demos.github.io/sgi-demos/demos/newave/web/newave_full.html) (no mesh editing, no popup menus, only wireframe)
 - [Arena](https://sgi-demos.github.io/sgi-demos/demos/arena/web/arena_full.html) (no network play)
+
+## Firmly WIP demos
+- [Gview (Barcelona)](https://github.com/sgi-demos/sgi-demos/tree/main/demos/gview)
+- [Cedit](https://github.com/sgi-demos/sgi-demos/tree/main/demos/cedit)
+- Sunflower, gltest, colortest
 
 ## Build instructions
 
@@ -66,22 +71,22 @@ make
 ```
 
 ## To do
-- Logged [issues](https://github.com/sgi-demos/sgi-demos/issues)
-- Popup menus, including the classic [SGI menu font](https://github.com/sgi-demos/sgi-fonts)
-- Rendering via [OpenGLES/WebGL](https://github.com/sgi-demos/igl) (WIP)
-- Arbitrary window size
-- Rudimentary context for each demo: name, author, year (as text in lower corner), code link
-- Popup/overlay help to show key/mouse input to try
-- More demos, _all the demos_.
+- Fix logged [issues](https://github.com/sgi-demos/sgi-demos/issues)
+- Enable popup menus, including the classic [SGI menu font](https://github.com/sgi-demos/sgi-fonts)
+- Upgrade rendering to [OpenGLES/WebGL](https://github.com/sgi-demos/igl) (WIP)
+- Enable arbitrary window size
+- Provide Rudimentary context for each demo: name, author, year (as text in lower corner), code link
+- Add popup/overlay help to show key/mouse input to try
+- Add more demos, _all the demos_.
   - Electropaint, Cedit, any other IRIS GL demos I can find
   - Then OpenGL, GLUT, Inventor, Performer demos in no particular order
-- Virtual mouse and keyboard:
+- Provide virtual mouse and keyboard for touch devices:
   - Only display virtual keys and mouse functions used by the demo; use demo's qdevice() calls to determine this
   - Displayed as transparent virtual mouse and key pictures overlaid on demo
   - On always for touch devices
   - On/off for mouse/keyboard devices, as hints
-- Description/history/context for each demo - can obtain some descriptions from .Info slide files
-- Man page live links
+- Add brief description/history/context for each demo - can obtain some descriptions from .Info slide files
+- Add links to man pages
 
 ## Credits
 - Everyone who worked at [SGI](https://en.wikipedia.org/wiki/Silicon_Graphics), for the eye candy and the baller computers.
