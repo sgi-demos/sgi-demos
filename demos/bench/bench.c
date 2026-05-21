@@ -5,7 +5,7 @@
 #include <math.h>
 #include <device.h>
 
-#include "DEMO_SHIM.h"
+#include "demo_shim.h"
 
 #define X 0
 #define Y 1

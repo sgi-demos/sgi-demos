@@ -1,7 +1,7 @@
-#if defined(_WIN32) && !defined(EMSCRIPTEN)
+#ifndef SYS_TIMES_SHIM_H_
+#define SYS_TIMES_SHIM_H_
 
-#ifndef SYS_TIMES_WINDOWS_H_
-#define SYS_TIMES_WINDOWS_H_
+#if defined(_WIN32)
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,5 +36,6 @@ clock_t times(struct tms *buf);
 }
 #endif
 
-#endif // SYS_TIMES_WINDOWS_H_
-#endif // _WIN32 && !EMSCRIPTEN
+#endif // _WIN32
+
+#endif // SYS_TIMES_SHIM_H_

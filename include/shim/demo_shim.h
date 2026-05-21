@@ -3,8 +3,8 @@
 #include <stdio.h>
 #define MAX_COMMAND_LEN 256
 
-int sgi_demo_shim_system(const char *command)
-#ifdef SGI_DEMO_BUTTONFLY
+int demo_shim_system(const char *command)
+#ifdef DEMO_BUTTONFLY
 {
     //
     // Web shim - Transform command line command into web url equivalent, e.g.:
@@ -16,7 +16,7 @@ int sgi_demo_shim_system(const char *command)
         return -1;
 
     // copy command into url, trim "../"
-    char url[MAX_COMMAND_LEN];
+    char url[MAX_COMMAND_LEN] = "";
     const char* dotdot = strstr(command, "../");
     if (dotdot)
     {
@@ -28,42 +28,45 @@ int sgi_demo_shim_system(const char *command)
         return -1;
 
     // replace "/bin/" with "/web/"
-    char* rep = strstr(url, "/bin/");
-    if (rep)
-        memcpy(rep, "/web/", 5);
+    char* rep_bin = strstr(url, "/bin/");
+    if (rep_bin)
+        memcpy(rep_bin, "/web/", 5);
     else
         return -1;
 
     // extract parameter from full command string
-    char param[128];
-    rep = strstr(url, " ../");
-    if (rep) {
-        rep[0] = 0;
-        const char *param_to_extract = rep + strlen(" ../");
+    char param[128] = "";
+    char* rep_dotdot = strstr(url, " ../");
+    if (rep_dotdot)
+    {
+        rep_dotdot[0] = 0;
+        const char *param_to_extract = rep_dotdot + strlen(" ../");
         // strip any preceding path so just the basename remains, e.g. "x29.bin"
         const char *slash = strrchr(param_to_extract, '/');
         if (slash)
             param_to_extract = slash + 1;
         snprintf(param, sizeof(param), "%s", param_to_extract);
     }
-    else
-        return -1;
 
-    // append "_full.html" and ?arg=<param>
+    // append "_full.html" and if have param, ?arg=<param>
     size_t url_len = strlen(url);
-    const char *suffix = "_full.html";
-    size_t needed_len = url_len + strlen(suffix) + strlen("?arg=") + strlen(param);
+    const char *suffix_full = "_full.html";
+    size_t param_len = strlen(param) ? strlen("?arg=") + strlen(param) : 0;
+    size_t needed_len = url_len + strlen(suffix_full) + param_len;
     if (needed_len >= sizeof(url))
         return -1;
 
-    strcpy(url + url_len, suffix);
-    strcat(url, "?arg=");
-    strcat(url, param);
+    strcpy(url + url_len, suffix_full);
+    if (param_len > 0)
+    {
+        strcat(url, "?arg=");
+        strcat(url, param);
+    }
     printf("url = %s\n", url);
 
     #ifdef __EMSCRIPTEN__
         // generate js to visit full path url
-        char sys_js[MAX_COMMAND_LEN];
+        char sys_js[MAX_COMMAND_LEN] = "";
         int n = snprintf(sys_js, sizeof(sys_js),
             "window.location.href = 'https://sgi-demos.github.io/sgi-demos/demos/%s';", url);
         if (n < 0 || (size_t)n >= sizeof(sys_js))
@@ -75,7 +78,7 @@ int sgi_demo_shim_system(const char *command)
     #else
         #ifdef _WIN32
             // Windows shim: Convert demo path to Windows format (fwd to backslashes)
-            char win_command[MAX_COMMAND_LEN];
+            char win_command[MAX_COMMAND_LEN] = "";
             snprintf(win_command, sizeof(win_command), "%s", command);
             for (size_t i = 0; i < strlen(win_command); i++)
                 win_command[i] = (win_command[i] == '/') ? '\\' : win_command[i];
@@ -92,16 +95,16 @@ int sgi_demo_shim_system(const char *command)
 {
     // Other demos: system() shim is only validated for buttonfly's command
     // If another demo needs it, implement it here or reuse buttonfly's
-    fprintf(stderr, "sgi_demo_shim_system: unimplemented for this demo, ignoring command: %s\n", command);
+    fprintf(stderr, "demo_shim_system: unimplemented for this demo, ignoring command: %s\n", command);
     return -1;
 }
-#endif
+#endif // DEMO_BUTTONFLY
 
-#define system sgi_demo_shim_system
+#define system demo_shim_system
 
-FILE *sgi_demo_shim_popen(const char *command, const char *mode)
+FILE *demo_shim_popen(const char *command, const char *mode)
 {
-#ifdef SGI_DEMO_BUTTONFLY
+#ifdef DEMO_BUTTONFLY
     // Web & native shim: Transform 'cat' pipe command popen() to file open fopen():
     // fp = popen("cat menus/m_bounce", "r");  --->  fp = fopen("menus/m_bounce", "r")
     // NOTE: Required for web, optional for native, but this way we have a unified code path
@@ -119,12 +122,12 @@ FILE *sgi_demo_shim_popen(const char *command, const char *mode)
 #else
     // Other demos: popen() shim is only validated for buttonfly
     // If another demo needs it, implement it here or reuse buttonfly's
-    fprintf(stderr, "sgi_demo_shim_popen: unimplemented for this demo, ignoring command: %s\n", command);
+    fprintf(stderr, "demo_shim_popen: unimplemented for this demo, ignoring command: %s\n", command);
     return NULL;
-#endif
+#endif // DEMO_BUTTONFLY
 }
 
-#define popen sgi_demo_shim_popen
+#define popen demo_shim_popen
 
 
 //

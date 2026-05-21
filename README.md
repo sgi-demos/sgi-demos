@@ -49,11 +49,12 @@ winget install MSYS2.MSYS2
 setx PATH "%PATH%C:\msys64\clang64\bin"
 ```
 
-3. Install clang toolchain and SDL2 in MSYS2 CLANG64 shell:
+3. Install clang toolchain, SDL2, and bison (for buttonfly menu parsing) in MSYS2 CLANG64 shell:
 ```bash
 pacman -Syu
 pacman -S base-devel mingw-w64-clang-x86_64-toolchain
 pacman -S mingw-w64-clang-x86_64-SDL2
+pacman -S bison
 ```
 
 4. Clone [emscripten](https://emscripten.org/docs/getting_started/downloads.html) from Github.  Cloning seems to work best with MSYS2 rather than using pacman.  Follow the default install directions, not the Windows directions!

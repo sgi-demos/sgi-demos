@@ -4,7 +4,7 @@
 #include "stdlib.h"
 #include "gl.h"
 #include "device.h"
-#include "DEMO_SHIM.h"
+#include "demo_shim.h"
 
 #define UDIV 12
 #define VDIV 12

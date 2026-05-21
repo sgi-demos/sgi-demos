@@ -2,7 +2,7 @@
 
 #if defined(_WIN32) && !defined(EMSCRIPTEN)
 
-#include "gl/shim/sys/times.h"
+#include "sys/times.h"
 #include <windows.h> 
 
 static clock_t filetime_to_clock_t(FILETIME ft) {

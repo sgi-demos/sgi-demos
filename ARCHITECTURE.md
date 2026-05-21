@@ -65,7 +65,7 @@ demos/                One subdirectory per demo, containing original
                       source and a one-line Makefile
 
 include/gl/           IRIS GL public headers: gl.h, device.h
-                      Old-to-modern shims: DEMO_SHIM.h
+                      Old-to-modern shims: demo_shim.h
 
 include/demo_include/ Shared demo utilities (port.h, slider.h, etc.)
 
@@ -183,7 +183,7 @@ EM_ASYNCIFY = -sASYNCIFY -sASYNCIFY_STACK_SIZE=65536
 Per the preservation goal, demo source modifications are kept minimal. In practice the only common modification is to add this header at the top of the main demo file:
 
 ```c
-#include "DEMO_SHIM.h"
+#include "demo_shim.h"
 ```
 
 …which provides shims for 1980s and old UNIX system calls, and browser-compatible replacements for `buttonfly`'s `system()` and `popen()` calls.

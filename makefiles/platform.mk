@@ -42,7 +42,6 @@ endef
 else ifeq ($(OS),linux)
 	GLES_LINK = -Wl,-rpath,$(GLES_LIBS_PATH)
 else ifeq ($(OS),win)
-	SHIM_INC = -I$(INCS_DIR)/gl/shim
 define GLES_INSTALL
 	for dylib in $(GLES_DYLIBS); \
 		do cp $(GLES_LIBS_PATH)/$$dylib $(BIN_DIR)/$$dylib; \
@@ -50,10 +49,16 @@ define GLES_INSTALL
 endef
 endif
 
+# Shim includes
+SHIM_INC = -I$(INCS_DIR)/shim
+ifeq ($(OS),win)
+	SHIM_INC += -I$(INCS_DIR)/shim/win
+endif
+
 # Internal libs and includes
 GL_LIB = $(LIBS_DIR)/libgl/$(BIN_DIR)/libgl.a
 EM_GL_LIB = $(LIBS_DIR)/libgl/$(WEB_DIR)/libgl.a
-LIBGL_INC = -I$(INCS_DIR) -I$(INCS_DIR)/gl
+LIBGL_INC = -I$(INCS_DIR) $(SHIM_INC) -I$(INCS_DIR)/gl
 
 DEMO_LIB = $(LIBS_DIR)/libdemo/$(BIN_DIR)/libdemo.a
 EM_DEMO_LIB = $(LIBS_DIR)/libdemo/$(WEB_DIR)/libdemo.a
@@ -66,7 +71,7 @@ OPT = $(OPT_ZERO)
 EM_OPT = $(OPT_TWO)
 
 # ASYNCIFY: Enable demo pause/resume via call stack save/restore to yield to the browser
-# ASYNCIFY_STACK_SIZE: byn bytes for storing call stack during yield (64KB is generous for deep call stacks)
+# ASYNCIFY_STACK_SIZE: num bytes for storing call stack during yield (64KB is generous for deep call stacks)
 EM_ASYNCIFY = -sASYNCIFY -sASYNCIFY_STACK_SIZE=65536
 
 # Debug options

@@ -3,7 +3,7 @@ include ../../makefiles/platform.mk
 APP = $(BIN_DIR)/$(APPNAME)
 EM_APPNAME = $(WEB_DIR)/$(APPNAME)
 EM_APP = $(EM_APPNAME).html
-APPNAME_DEF := -DSGI_DEMO_$(shell echo $(APPNAME) | tr a-z A-Z)
+APPNAME_DEF := -DDEMO_$(shell echo $(APPNAME) | tr a-z A-Z)
 
 HDRS = $(wildcard *.h)
 SRC = $(wildcard *.c)
@@ -39,10 +39,10 @@ $(WEB_DIR):
 	echo "*.[oach]" > $@/.gitignore
 
 $(OBJS): $(BIN_DIR)/%.o: $(SRC_DIR)/%.c | $(BIN_DIR) $(SRC) $(HDRS)
-	$(OLD_CODE_CC) $(OPT) $(OLD_CODE_WARN_OFF) $(APPNAME_DEF) $(SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
+	$(OLD_CODE_CC) $(OPT) $(OLD_CODE_WARN_OFF) $(APPNAME_DEF) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 
 $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
-	$(CC) $(OPT) $(SHIM_INC) $(LIBGL_INC) $(OBJS) $(DEMO_LIB) $(GL_LIB) \
+	$(CC) $(OPT) $(LIBGL_INC) $(OBJS) $(DEMO_LIB) $(GL_LIB) \
 		$(SDL_INC) $(SDL_LIBS) $(GLES_INC) $(GLES_LIBS) $(GLES_LINK) -lm $(CONSOLE_FLAGS) -o $@
 	$(call GLES_INSTALL)
 	ln -sF $(BIN_DIR) ./bin
