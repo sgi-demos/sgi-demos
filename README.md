@@ -5,6 +5,7 @@ This is the original SGI demo source code, compiled for the web using Emscripten
 
 ## Working demos
 - [Buttonfly](https://sgi-demos.github.io/)
+- [Bounce](https://sgi-demos.github.io/sgi-demos/demos/bounce/web/bounce_full.html)
 - [Ideas](https://sgi-demos.github.io/sgi-demos/demos/ideas/web/ideas_full.html)
 - [Insect](https://sgi-demos.github.io/sgi-demos/demos/insect/web/insect_full.html)
 - [Jello](https://sgi-demos.github.io/sgi-demos/demos/jello/web/jello_full.html)
@@ -12,7 +13,6 @@ This is the original SGI demo source code, compiled for the web using Emscripten
 - [Twilight](https://sgi-demos.github.io/sgi-demos/demos/twilight/web/twilight_full.html)
 
 ## Somewhat working demos
-- [Bounce](https://sgi-demos.github.io/sgi-demos/demos/bounce/web/bounce_full.html) (model selection not working on web)
 - [Flight](https://sgi-demos.github.io/sgi-demos/demos/flight/web/flight_full.html) (cockpit glitches, planes too slow in web version, night mode 'shimmers', no network play)
 - [Newave](https://sgi-demos.github.io/sgi-demos/demos/newave/web/newave_full.html) (no mesh editing, no popup menus, only wireframe)
 - [Arena](https://sgi-demos.github.io/sgi-demos/demos/arena/web/arena_full.html) (no network play)
