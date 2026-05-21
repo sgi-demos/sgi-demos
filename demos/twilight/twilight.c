@@ -31,7 +31,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "EM_SYSTEM.h"
+#include "DEMO_SHIM.h"
 
 /* prototypes */
 void draw_background(float x, float y, Boolean rgb_mode);

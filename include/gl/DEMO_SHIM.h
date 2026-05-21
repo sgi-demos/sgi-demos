@@ -1,5 +1,5 @@
-#ifndef EM_SYSTEM_H
-#define EM_SYSTEM_H 1
+#ifndef DEMO_SHIM_H
+#define DEMO_SHIM_H 1
 #include <stdio.h>
 #define MAX_COMMAND_LEN 256
 
@@ -173,4 +173,4 @@ uint32_t ntohl(uint32_t x) {
 
 //#define long int
 
-#endif /* EM_SYSTEM_H */
+#endif /* DEMO_SHIM_H */

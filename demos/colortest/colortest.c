@@ -4,7 +4,7 @@
 #include <math.h>
 #include <device.h>
 
-#include "EM_SYSTEM.h"
+#include "DEMO_SHIM.h"
 
 float c1[3];
 float c2[3];
