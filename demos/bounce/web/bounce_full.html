@@ -22,7 +22,8 @@
         <script type="text/javascript">
             var Module = {};
             Module.canvas = document.getElementById('canvas');
-            Module.arguments = ['x29.bin']
+            var param = new URLSearchParams(window.location.search).get('arg');
+            Module.arguments = [param && /^[A-Za-z0-9_.-]+$/.test(param) ? param : 'x29.bin'];
         </script>
         <script async type="text/javascript" src="./bounce.js"></script>
     </body>

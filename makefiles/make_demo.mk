@@ -3,6 +3,8 @@ include ../../makefiles/platform.mk
 APP = $(BIN_DIR)/$(APPNAME)
 EM_APPNAME = $(WEB_DIR)/$(APPNAME)
 EM_APP = $(EM_APPNAME).html
+APPNAME_DEF := -DSGI_DEMO_$(shell echo $(APPNAME) | tr a-z A-Z)
+
 HDRS = $(wildcard *.h)
 SRC = $(wildcard *.c)
 OBJS = $(patsubst %.c,$(BIN_DIR)/%.o,$(SRC))
@@ -37,7 +39,7 @@ $(WEB_DIR):
 	echo "*.[oach]" > $@/.gitignore
 
 $(OBJS): $(BIN_DIR)/%.o: $(SRC_DIR)/%.c | $(BIN_DIR) $(SRC) $(HDRS)
-	$(OLD_CODE_CC) $(OPT) $(OLD_CODE_WARN_OFF) $(SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
+	$(OLD_CODE_CC) $(OPT) $(OLD_CODE_WARN_OFF) $(APPNAME_DEF) $(SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 
 $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
 	$(CC) $(OPT) $(SHIM_INC) $(LIBGL_INC) $(OBJS) $(DEMO_LIB) $(GL_LIB) \
@@ -49,7 +51,7 @@ $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
 	@echo $(CUR_DIR)
 
 $(EM_OBJS): $(WEB_DIR)/%.o: $(SRC_DIR)/%.c | $(WEB_DIR) $(EM_SRC) $(EM_HDRS)
-	$(OLD_CODE_EMCC) $(EM_OPT) $(EM_OLD_CODE_WARN_OFF) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
+	$(OLD_CODE_EMCC) $(EM_OPT) $(EM_OLD_CODE_WARN_OFF) $(APPNAME_DEF) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 
 $(EM_APP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EM_OBJS)
 	$(EMCC) $(EM_OPT) $(LIBGL_INC) $(EM_OBJS) $(EM_DEMO_LIB) $(EM_GL_LIB) \

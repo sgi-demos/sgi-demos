@@ -1,96 +1,131 @@
 #ifndef EM_SYSTEM_H
 #define EM_SYSTEM_H 1
+#include <stdio.h>
+#define MAX_COMMAND_LEN 256
 
-#ifdef __EMSCRIPTEN__
-#include <string.h>
-
-// Buttonfly web: Invoke the demo web page on system() call
-int em_system(const char *command)
+int sgi_demo_shim_system(const char *command)
+#ifdef SGI_DEMO_BUTTONFLY
 {
-    // Transform command line command into web page equivalent, e.g.:
-    // "../bounce/bin/bounce ../bounce/x29.bin" ---> "bounce/web/bounce_full.html"
+    //
+    // Web shim - Transform command line command into web url equivalent, e.g.:
+    // "../bounce/bin/bounce ../bounce/x29.bin" ---> "bounce/web/bounce_full.html?arg=x29.bin"
+    // NOTE: This still gets compiled in the native path for debugging and maintenance purposes.
+    //
     printf ("command = %s\n", command);
+    if (strlen(command) >= MAX_COMMAND_LEN)
+        return -1;
 
-    // copy command into url, trim "../" if present
-    char url[256];
-    char* dotdot = strstr(command, "../");
+    // copy command into url, trim "../"
+    char url[MAX_COMMAND_LEN];
+    const char* dotdot = strstr(command, "../");
     if (dotdot)
-        snprintf(url, sizeof(url), "%s", command+strlen("../"));
+    {
+        int n = snprintf(url, sizeof(url), "%s", command+strlen("../"));
+        if (n < 0 || (size_t)n >= sizeof(url))
+            return -1;
+    }
     else
-        snprintf(url, sizeof(url), "%s", command);
+        return -1;
+
     // replace "/bin/" with "/web/"
     char* rep = strstr(url, "/bin/");
-    if (rep) {
+    if (rep)
         memcpy(rep, "/web/", 5);
-        // snip out command parameter
-        rep = strstr(url, " ../");
-        if (rep)
-            rep[0] = 0;
+    else
+        return -1;
 
-        // append "_full.html"
-        size_t ulen = strlen(url);
-        if (ulen + strlen("_full.html") >= sizeof(url))
-            return -1;
+    // extract parameter from full command string
+    char param[128];
+    rep = strstr(url, " ../");
+    if (rep) {
+        rep[0] = 0;
+        const char *param_to_extract = rep + strlen(" ../");
+        // strip any preceding path so just the basename remains, e.g. "x29.bin"
+        const char *slash = strrchr(param_to_extract, '/');
+        if (slash)
+            param_to_extract = slash + 1;
+        snprintf(param, sizeof(param), "%s", param_to_extract);
+    }
+    else
+        return -1;
 
-        strcpy(url + ulen, "_full.html");
-        printf("url = %s\n", url);
+    // append "_full.html" and ?arg=<param>
+    size_t url_len = strlen(url);
+    const char *suffix = "_full.html";
+    size_t needed_len = url_len + strlen(suffix) + strlen("?arg=") + strlen(param);
+    if (needed_len >= sizeof(url))
+        return -1;
 
+    strcpy(url + url_len, suffix);
+    strcat(url, "?arg=");
+    strcat(url, param);
+    printf("url = %s\n", url);
+
+    #ifdef __EMSCRIPTEN__
         // generate js to visit full path url
-        char sys_js[256];
+        char sys_js[MAX_COMMAND_LEN];
         int n = snprintf(sys_js, sizeof(sys_js),
             "window.location.href = 'https://sgi-demos.github.io/sgi-demos/demos/%s';", url);
         if (n < 0 || (size_t)n >= sizeof(sys_js))
             return -1;
-        printf("sys_js = %s\n",sys_js);
 
         // run js
         extern void emscripten_run_script(const char *);
         emscripten_run_script(sys_js);
-    }
+    #else
+        #ifdef _WIN32
+            // Windows shim: Convert demo path to Windows format (fwd to backslashes)
+            char win_command[MAX_COMMAND_LEN];
+            snprintf(win_command, sizeof(win_command), "%s", command);
+            for (size_t i = 0; i < strlen(win_command); i++)
+                win_command[i] = (win_command[i] == '/') ? '\\' : win_command[i];
+            printf("win_command = %s\n",win_command);
+            system(win_command);
+        #else
+            system(command);
+        #endif
+    #endif
+
     return 0;
 }
-#define system em_system
+#else
+{
+    // Other demos: system() shim is only validated for buttonfly's command
+    // If another demo needs it, implement it here or reuse buttonfly's
+    fprintf(stderr, "sgi_demo_shim_system: unimplemented for this demo, ignoring command: %s\n", command);
+    return -1;
+}
 #endif
 
-// Buttonfly web: Redirect to fopen() on popen() call
-#ifdef __EMSCRIPTEN__
-#include <string.h>
-#include <stdio.h>
-FILE *em_popen(const char *command, const char *mode)
+#define system sgi_demo_shim_system
+
+FILE *sgi_demo_shim_popen(const char *command, const char *mode)
 {
-    // Transform pipe command into file open, e.g.:
+#ifdef SGI_DEMO_BUTTONFLY
+    // Web & native shim: Transform 'cat' pipe command popen() to file open fopen():
     // fp = popen("cat menus/m_bounce", "r");  --->  fp = fopen("menus/m_bounce", "r")
-    char command_cpy[256];
-    strcpy(command_cpy, command);
-
-    char *cat = strstr(command_cpy, "cat ");
-    if (cat && strcmp(mode, "r") == 0)
+    // NOTE: Required for web, optional for native, but this way we have a unified code path
+    if (strlen(command) < MAX_COMMAND_LEN)
     {
-        char *menu_file = command_cpy + strlen("cat ");
-        return fopen(menu_file, "r");
+        const char *cat = strstr(command, "cat ");
+        if (cat && strcmp(mode, "r") == 0)
+        {
+            const char *menu_file = command + strlen("cat ");
+            return fopen(menu_file, "r");
+        }
     }
-    else
-        return NULL;
-}
-#define popen em_popen
+
+    return NULL;
+#else
+    // Other demos: popen() shim is only validated for buttonfly
+    // If another demo needs it, implement it here or reuse buttonfly's
+    fprintf(stderr, "sgi_demo_shim_popen: unimplemented for this demo, ignoring command: %s\n", command);
+    return NULL;
 #endif
-
-#ifdef _WIN32
-// Buttonfly Windows: Convert demo path to Windows format (fwd to backslashes)
-int win_system(const char *command)
-{
-    char win_command[256];
-
-    for (size_t i = 0; i < strlen(command); i++)
-        win_command[i] = (command[i] == '/') ? '\\' : command[i];
-
-    printf("win_command = %s\n",win_command);
-
-    #undef system
-    return system(win_command);
 }
-#define system win_system
-#endif
+
+#define popen sgi_demo_shim_popen
+
 
 //
 // Various workarounds for 1980s & UNIX code
