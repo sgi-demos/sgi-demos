@@ -12,8 +12,8 @@ all:
 native:
 	for demo in $(DEMOS) ; do echo "\nBUILDING: $${demo}\n" && make native -C $(DEMOS_DIR)/$${demo} ; done
 
-em:
-	for demo in $(DEMOS) ; do echo "\nBUILDING: $${demo}\n" && make em -C $(DEMOS_DIR)/$${demo} ; done
+web:
+	for demo in $(DEMOS) ; do echo "\nBUILDING: $${demo}\n" && make web -C $(DEMOS_DIR)/$${demo} ; done
 
 libs:
 	for lib in $(LIBS) ; do echo "\nBUILDING: $${lib}\n" && make -C $(LIBS_DIR)/$${lib} ; done
@@ -21,8 +21,8 @@ libs:
 libs-native:
 	for lib in $(LIBS) ; do echo "\nBUILDING: $${lib}\n" && make native -C $(LIBS_DIR)/$${lib} ; done
 
-libs-em:
-	for lib in $(LIBS) ; do echo "\nBUILDING: $${lib}\n" && make em -C $(LIBS_DIR)/$${lib} ; done
+libs-web:
+	for lib in $(LIBS) ; do echo "\nBUILDING: $${lib}\n" && make web -C $(LIBS_DIR)/$${lib} ; done
 
 clean:
 	for demo in $(DEMOS) ; do echo "\nCLEANING: $${demo}\n" && make clean -C $(DEMOS_DIR)/$${demo} ; done

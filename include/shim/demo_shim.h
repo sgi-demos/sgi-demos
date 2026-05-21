@@ -127,6 +127,7 @@ FILE *demo_shim_popen(const char *command, const char *mode)
 #endif // DEMO_BUTTONFLY
 }
 
+#undef popen
 #define popen demo_shim_popen
 
 

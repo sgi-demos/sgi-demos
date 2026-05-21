@@ -51,6 +51,7 @@ endif
 
 # Shim includes
 SHIM_INC = -I$(INCS_DIR)/shim
+EM_SHIM_INC = -I$(INCS_DIR)/shim
 ifeq ($(OS),win)
 	SHIM_INC += -I$(INCS_DIR)/shim/win
 endif
@@ -58,7 +59,7 @@ endif
 # Internal libs and includes
 GL_LIB = $(LIBS_DIR)/libgl/$(BIN_DIR)/libgl.a
 EM_GL_LIB = $(LIBS_DIR)/libgl/$(WEB_DIR)/libgl.a
-LIBGL_INC = -I$(INCS_DIR) $(SHIM_INC) -I$(INCS_DIR)/gl
+LIBGL_INC = -I$(INCS_DIR) -I$(INCS_DIR)/gl
 
 DEMO_LIB = $(LIBS_DIR)/libdemo/$(BIN_DIR)/libdemo.a
 EM_DEMO_LIB = $(LIBS_DIR)/libdemo/$(WEB_DIR)/libdemo.a
