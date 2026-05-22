@@ -5,3 +5,4 @@ Thumbs.db
 bin
 bin-*-*/
 full-repo.md
+logs/*
