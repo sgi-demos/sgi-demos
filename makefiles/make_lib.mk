@@ -16,11 +16,11 @@ LIB_CC = $(CC) $(OPT)
 LIB_EMCC = $(EMCC) $(EM_OPT) -Wno-unused-command-line-argument
 endif
 
-all: native web
+all: native browser
 
 native: $(LIB)
 
-web: $(EM_LIB)
+browser: $(EM_LIB)
 
 $(BIN_DIR):
 	mkdir -p $@
@@ -47,7 +47,7 @@ $(EM_LIB): $(EM_OBJS)
 	@echo BUILT: $@
 	@echo
 
-.PHONY: all native web clean
+.PHONY: all native browser clean
 
 clean:
 	rm -f $(LIB) $(OBJS)

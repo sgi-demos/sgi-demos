@@ -1,6 +1,6 @@
 TARGETS = Make_parser Make_demo
 
-.PHONY: all clean Make_parser Make_demo native web
+.PHONY: all clean Make_parser Make_demo native browser
 
 all: $(TARGETS)
 
@@ -10,7 +10,7 @@ Make_parser:
 Make_demo: Make_parser
 	make -f Make_demo
 
-native web: Make_parser
+native browser: Make_parser
 	$(MAKE) $@ -f Make_demo
 
 clean:

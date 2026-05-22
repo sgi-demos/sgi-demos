@@ -10,23 +10,23 @@ SRC = $(wildcard *.c)
 OBJS = $(patsubst %.c,$(BIN_DIR)/%.o,$(SRC))
 EM_OBJS = $(patsubst %.c,$(WEB_DIR)/%.o,$(SRC))
 
-all: native web
+all: native browser
 
 native: $(APP)
 
-web: $(EM_APP)
+browser: $(EM_APP)
 
 $(GL_LIB):
 	make native -C $(LIBS_DIR)/libgl
 
 $(EM_GL_LIB):
-	make web -C $(LIBS_DIR)/libgl
+	make browser -C $(LIBS_DIR)/libgl
 
 $(DEMO_LIB):
 	make native -C $(LIBS_DIR)/libdemo
 
 $(EM_DEMO_LIB):
-	make web -C $(LIBS_DIR)/libdemo
+	make browser -C $(LIBS_DIR)/libdemo
 
 $(BIN_DIR):
 	mkdir -p $@
@@ -61,7 +61,7 @@ $(EM_APP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EM_OBJS)
 	@echo BUILT: $@
 	@echo $(CUR_DIR)
 
-.PHONY: all native web run run-native run-web clean
+.PHONY: all native browser run run-native run-browser clean
 
 # Run both applications
 run: all
@@ -72,7 +72,7 @@ run-native: native
 	$(APP) $(APPARGS)
 
 # Run only the emscripten application
-run-web: web
+run-browser: browser
 	emrun $(EM_APP)
 
 clean:
