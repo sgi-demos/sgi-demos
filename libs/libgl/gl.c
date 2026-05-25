@@ -184,79 +184,6 @@ void lmodel_init(lmodel *l)
     l->attenuation[1] = 0.0;
 }
 
-//------------------------------------------------------------------------
-// Popup menus ("pup" in GL lingo)
-
-#define MAX_PUPS 16
-#define MAX_PUP_ITEMS 16
-
-typedef struct pup_item {
-    char *item;
-    int value;
-    int submenu;
-    int (*func)(int i);
-} pup_item;
-
-typedef struct pup {
-    int defd;
-    char *title;
-    int (*func)(int i);
-    int item_count;
-    struct pup_item items[MAX_PUP_ITEMS];
-} pup;
-static struct pup pups[MAX_PUPS];
-
-void pup_init(pup *p)
-{
-    p->defd = 0;
-    p->title = NULL;
-    p->func = NULL;
-    p->item_count = 0;
-}
-
-void pup_new(pup *p)
-{
-    p->defd = 1;
-}
-
-void pup_free(pup *p)
-{
-    if(p->title != NULL) {
-        free(p->title);
-    }
-    for(int i = 0; i < p->item_count; i++) {
-        pup_item *pi = p->items + i;
-        if(pi->item != NULL) {
-            free(pi->item);
-        }
-    }
-    pup_init(p);
-}
-
-void pup_set_title(pup *p, char *title)
-{
-    if(p->title != NULL) {
-        free(p->title);
-    }
-    p->title = NULL;
-    if(title != NULL) {
-        p->title = strdup(title);
-    }
-}
-
-void pup_add(pup *p, char *item, int value, int submenu, int (*func)(int i))
-{
-    pup_item *pi = p->items + p->item_count++;
-
-    if(item != NULL)
-        pi->item = strdup(item);
-    else
-        pi->item = NULL;
-    pi->value = value;
-    pi->submenu = submenu;
-    pi->func = func;
-}
-
 //----------------------------------------------------------------------------
 // Transformation, lighting, clipping
 
@@ -739,8 +666,300 @@ void process_polygon(int n, world_vertex *worldverts)
     for(int i = 0; i < n - 2; i++) {
         triangle[1] = screenverts[i + 1];
         triangle[2] = screenverts[i + 2];
-	if(!backface_enabled || !backface_cull(triangle))
-        rasterizer_draw(DRAW_TRIANGLES, 3, triangle);
+	    if(!backface_enabled || !backface_cull(triangle))
+            rasterizer_draw(DRAW_TRIANGLES, 3, triangle);
+    }
+}
+
+//------------------------------------------------------------------------
+// Popup menus ("pup" in GL lingo)
+
+#define MAX_PUPS 16
+#define MAX_PUP_ITEMS 16
+
+typedef struct { Icoord x, y; } Icoord2;
+typedef struct { Icoord left, top, right, bottom; } IcoordRect; // Y-up: top > bottom
+
+typedef struct pup_item {
+    char *label;
+    int value;
+    int submenu;
+    int (*func)(int i);
+} pup_item;
+
+typedef struct pup {
+    int defd;
+    char *title;
+    int (*func)(int i);
+    int item_count;
+    struct pup_item items[MAX_PUP_ITEMS];
+} pup;
+static struct pup pups[MAX_PUPS];
+
+void pup_init(pup *menu)
+{
+    menu->defd = 0;
+    menu->title = NULL;
+    menu->func = NULL;
+    menu->item_count = 0;
+}
+
+void pup_new(pup *menu)
+{
+    menu->defd = 1;
+}
+
+void pup_free(pup *menu)
+{
+    if(menu->title != NULL) {
+        free(menu->title);
+    }
+    for(int i = 0; i < menu->item_count; i++) {
+        pup_item *item = menu->items + i;
+        if(item->label != NULL) {
+            free(item->label);
+        }
+    }
+    pup_init(menu);
+}
+
+void pup_set_title(pup *menu, char *title)
+{
+    if(menu->title != NULL) {
+        free(menu->title);
+    }
+    menu->title = NULL;
+    if(title != NULL) {
+        menu->title = strdup(title);
+    }
+}
+
+void pup_add(pup *menu, char *label, int value, int submenu, int (*func)(int i))
+{
+    pup_item *item = menu->items + menu->item_count++;
+
+    if(label != NULL)
+        item->label = strdup(label);
+    else
+        item->label = NULL;
+    item->value = value;
+    item->submenu = submenu;
+    item->func = func;
+}
+
+const int menu_corner_top = YMAXSCREEN - 1 - 10;
+const int menu_corner_left = 10;
+const int menu_padding = 3;
+const int menu_item_separation = 2;
+const int menu_items_gap = 8;
+
+static int str_width_in_pixels(char *str) {
+    int width = 0;
+    for(int i = 0; i < strlen(str); i++) {
+        if (str[i] == '\t') {
+            width += font_width * 8;
+        } else {
+            width += font_width;
+        }
+    }
+    return width;
+}
+
+void string_draw(screen_vertex* screenvert_, const char *str) {
+    static screen_vertex screenvert;
+
+    screenvert = *screenvert_;
+
+    for(int i = 0; i < strlen(str); i++) {
+        if (str[i] == '\t') {
+            // I don't know whether the original charstr() supported tabs (I can't find
+            // a man page), but arena/startup.c uses them. --LK
+            screenvert.x += font_width * SCREEN_VERTEX_V2_SCALE * 8;
+        } else {
+            rasterizer_bitmap(font_width, font_rowbytes, font_height, &screenvert, font_bits + str[i] * font_height * font_rowbytes);
+            screenvert.x += font_width * SCREEN_VERTEX_V2_SCALE;
+        }
+    }
+}
+
+// XXX rasterizer_draw() enqueue triangles
+void draw_screen_aarect_filled(int r, int g, int b, IcoordRect rect)
+{
+    screen_vertex q[4];
+
+    for(int i = 0; i < 4; i++)
+        screen_vertex_set_color(&q[i], r, g, b, 255);
+
+    screen_vertex_set_position(&q[0], rect.left,  rect.bottom);
+    screen_vertex_set_position(&q[1], rect.right, rect.bottom);
+    screen_vertex_set_position(&q[2], rect.right, rect.top);
+    screen_vertex_set_position(&q[3], rect.left,  rect.top);
+
+    // XXX break into a single draw of TRIANGLES instead of a single function call per triangle:
+    static screen_vertex triangle[3];
+    triangle[0] = q[0];
+
+    for(int i = 0; i < 2; i++) {
+        triangle[1] = q[i + 1];
+        triangle[2] = q[i + 2];
+	    if(!backface_enabled || !backface_cull(triangle))
+            rasterizer_draw(DRAW_TRIANGLES, 3, triangle);
+    }
+}
+
+// XXX rasterizer_draw() enqueue triangles
+void draw_screen_aarect_outline(int r, int g, int b, IcoordRect rect)
+{
+    // draw four sides as four 1-pixel wide filled rects
+    draw_screen_aarect_filled(r, g, b, (IcoordRect){rect.left,      rect.top,       rect.left + 1,  rect.bottom });
+    draw_screen_aarect_filled(r, g, b, (IcoordRect){rect.right - 1, rect.top,       rect.right,     rect.bottom });
+    draw_screen_aarect_filled(r, g, b, (IcoordRect){rect.left,      rect.top,       rect.right,     rect.top - 1 });
+    draw_screen_aarect_filled(r, g, b, (IcoordRect){rect.left,      rect.bottom + 1, rect.right,    rect.bottom });
+}
+
+void draw_screen_string(int r, int g, int b, Icoord2 origin, const char *str) {
+    screen_vertex sv;
+    screen_vertex_set_color(&sv, r, g, b, 255);
+    screen_vertex_set_position(&sv, origin.x, origin.y);
+    string_draw(&sv, str);
+}
+
+typedef struct pup_layout {
+    // Title pane
+    IcoordRect title_outline;
+    IcoordRect title_fill;
+    Icoord2    title_pane;     // top-left text origin
+
+    // Items pane
+    IcoordRect items_outline;
+    IcoordRect items_fill;
+    Icoord2    items_pane;     // top-left text origin
+
+    // Per-item row pitch (font_height + menu_item_separation), used for
+    // hit-testing the cursor against item slots.
+    int item_slot_height;
+} pup_layout;
+
+static void pup_compute_layout(pup *menu, int menu_left, int menu_top, pup_layout *layout)
+{
+    int menu_text_pane_width = 0;
+    int title_text_pane_height;
+
+    // Size of title area
+    if (menu->title) {
+        menu_text_pane_width = str_width_in_pixels(menu->title);
+        title_text_pane_height = font_height;
+    } else {
+        title_text_pane_height = menu_item_separation;
+    }
+
+    // Size of items area
+    int items_text_pane_height = 0;
+    for (int i = 0; i < menu->item_count; i++) {
+        int w = str_width_in_pixels(menu->items[i].label);
+        if (w > menu_text_pane_width)
+            menu_text_pane_width = w;
+        items_text_pane_height += font_height;
+        if (i != menu->item_count - 1)
+            items_text_pane_height += menu_item_separation;
+    }
+
+    int title_fill_width  = menu_padding * 2 + menu_text_pane_width;
+    int title_fill_height = menu_padding * 2 + title_text_pane_height;
+
+    layout->title_outline = (IcoordRect){
+        menu_left,
+        menu_top,
+        menu_left + 2 + title_fill_width,
+        menu_top  - 2 - title_fill_height
+    };
+    layout->title_fill = (IcoordRect){
+        layout->title_outline.left   + 1,
+        layout->title_outline.top    - 1,
+        layout->title_outline.right  - 1,
+        layout->title_outline.bottom + 1
+    };
+    layout->title_pane = (Icoord2){
+        layout->title_fill.left + menu_padding,
+        layout->title_fill.top  - menu_padding
+    };
+
+    int items_fill_width  = menu_padding * 2 + menu_text_pane_width;
+    int items_fill_height = menu_padding * 2 + items_text_pane_height;
+
+    int items_outline_top = layout->title_outline.bottom - menu_items_gap;
+    layout->items_outline = (IcoordRect){
+        menu_left,
+        items_outline_top,
+        menu_left + 2 + items_fill_width,
+        items_outline_top - 2 - items_fill_height
+    };
+    layout->items_fill = (IcoordRect){
+        layout->items_outline.left   + 1,
+        layout->items_outline.top    - 1,
+        layout->items_outline.right  - 1,
+        layout->items_outline.bottom + 1
+    };
+    layout->items_pane = (Icoord2){
+        layout->items_fill.left + menu_padding,
+        layout->items_fill.top  - menu_padding
+    };
+
+    layout->item_slot_height = font_height + menu_item_separation;
+}
+
+// Returns the index 0..item_count-1 of the item slot at screen coords
+// `pt`, or -1 if `pt` is not over any item slot (i.e. outside the items
+// pane, in the bottom padding past the last item, etc.).
+static int pup_item_at(pup *menu, const pup_layout *layout, Icoord2 pt)
+{
+    if (pt.x < layout->items_outline.left   || pt.x > layout->items_outline.right ||
+        pt.y < layout->items_outline.bottom || pt.y > layout->items_outline.top)
+        return -1;
+    int dy = layout->items_pane.y - pt.y;
+    if (dy < 0) return -1;
+    int idx = dy / layout->item_slot_height;
+    if (idx < 0 || idx >= menu->item_count) return -1;
+    return idx;
+}
+
+void pup_draw(pup *menu, int menu_left, int menu_top, int selected)
+{
+    pup_layout layout;
+    pup_compute_layout(menu, menu_left, menu_top, &layout);
+
+    // draw title:
+    //  draw title border lines
+    //  draw title box
+    //  draw title string
+    draw_screen_aarect_outline(0, 0, 0,     layout.title_outline);
+    draw_screen_aarect_filled(200, 200, 200, layout.title_fill);
+    if (menu->title) {
+        draw_screen_string(0, 0, 0,
+            (Icoord2){ layout.title_pane.x, layout.title_pane.y - font_height }, menu->title);
+    }
+
+    // draw items:
+    //  draw items border lines
+    //  draw items box
+    //  draw item strings
+    draw_screen_aarect_outline(0, 0, 0,       layout.items_outline);
+    draw_screen_aarect_filled(255, 255, 255,  layout.items_fill);
+    int item_top = layout.items_pane.y;
+    for (int i = 0; i < menu->item_count; i++) {
+        Icoord2 text_pos = (Icoord2){layout.items_pane.x, item_top - font_height };
+        if (i == selected) {
+            draw_screen_aarect_filled(0, 0, 0, (IcoordRect){
+                layout.items_fill.left  + 1,
+                item_top + 2,
+                layout.items_fill.right - 1,
+                item_top - font_height - 2,
+            });
+            draw_screen_string(255, 255, 255, text_pos, menu->items[i].label);
+        }
+        else
+            draw_screen_string(0, 0, 0, text_pos, menu->items[i].label);
+        item_top -= layout.item_slot_height;
     }
 }
 
@@ -2257,177 +2476,6 @@ int defpup(char *menu, ...)
     return which;
 }
 
-void sigwinch(int s)
-{
-    enqueue_device(RIGHTMOUSE, 1);
-}
-
-void siginfo(int s)
-{
-    enqueue_device(RIGHTMOUSE, 0);
-}
-
-const int menu_corner_top = YMAXSCREEN - 1 - 10;
-const int menu_corner_left = 10;
-const int menu_padding = 3;
-const int menu_item_separation = 2;
-const int menu_items_gap = 8;
-
-static int str_width_in_pixels(char *str) {
-    int width = 0;
-    for(int i = 0; i < strlen(str); i++) {
-        if (str[i] == '\t') {
-            width += font_width * 8;
-        } else {
-            width += font_width;
-        }
-    }
-    return width;
-}
-
-void string_draw(screen_vertex* screenvert_, const char *str) {
-    static screen_vertex screenvert;
-
-    screenvert = *screenvert_;
-
-    for(int i = 0; i < strlen(str); i++) {
-        if (str[i] == '\t') {
-            // I don't know whether the original charstr() supported tabs (I can't find
-            // a man page), but arena/startup.c uses them. --LK
-            screenvert.x += font_width * SCREEN_VERTEX_V2_SCALE * 8;
-        } else {
-            rasterizer_bitmap(font_width, font_rowbytes, font_height, &screenvert, font_bits + str[i] * font_height * font_rowbytes);
-            screenvert.x += font_width * SCREEN_VERTEX_V2_SCALE;
-        }
-    }
-}
-
-// XXX rasterizer_draw() enqueue triangles
-void draw_screen_aarect_filled(int r, int g, int b, float left, float top, float right, float bottom)
-{
-    screen_vertex q[4];
-
-    for(int i = 0; i < 4; i++)
-        screen_vertex_set_color(&q[i], r, g, b, 255);
-
-    screen_vertex_set_position(&q[0], left, bottom);
-    screen_vertex_set_position(&q[1], right, bottom);
-    screen_vertex_set_position(&q[2], right, top);
-    screen_vertex_set_position(&q[3], left, top);
-
-    // XXX break into a single draw of TRIANGLES instead of a single function call per triangle:
-    static screen_vertex triangle[3];
-    triangle[0] = q[0];
-
-    for(int i = 0; i < 2; i++) {
-        triangle[1] = q[i + 1];
-        triangle[2] = q[i + 2];
-	    if(!backface_enabled || !backface_cull(triangle))
-            rasterizer_draw(DRAW_TRIANGLES, 3, triangle);
-    }
-}
-
-// XXX rasterizer_draw() enqueue triangles
-void draw_screen_aarect_outline(int r, int g, int b, float left, float top, float right, float bottom)
-{
-    draw_screen_aarect_filled(r, g, b, left, top, left + 1, bottom);
-    draw_screen_aarect_filled(r, g, b, right - 1, top, right, bottom);
-    draw_screen_aarect_filled(r, g, b, left, top, right, top - 1);
-    draw_screen_aarect_filled(r, g, b, left, bottom + 1, right, bottom);
-}
-
-void draw_screen_string(int r, int g, int b, float x, float y, const char *str) {
-    screen_vertex sv;
-    screen_vertex_set_color(&sv, r, g, b, 255);
-    screen_vertex_set_position(&sv, x, y);
-    string_draw(&sv, str);
-}
-
-void pup_draw(pup *p, int menu_left, int menu_top, int selected)
-{
-    int menu_text_pane_width = 0;
-
-    int title_text_pane_height;
-
-    // Size of title area
-    if(p->title) {
-        menu_text_pane_width = str_width_in_pixels(p->title);
-        title_text_pane_height = font_height;
-    } else {
-        title_text_pane_height = menu_item_separation;
-    }
-
-    // Size of items area
-    int items_text_pane_height = 0;
-    for(int i = 0; i < p->item_count; i++) {
-        int w = str_width_in_pixels(p->items[i].item);
-        if(w > menu_text_pane_width)
-            menu_text_pane_width = w;
-        items_text_pane_height += font_height;
-        if(i != p->item_count - 1)
-            items_text_pane_height += menu_item_separation;
-    }
-
-    int title_fill_width = menu_padding * 2 + menu_text_pane_width;
-    int title_fill_height = menu_padding * 2 + title_text_pane_height;
-
-    int title_outline_left = menu_left;
-    int title_outline_top = menu_top;
-    int title_outline_right = title_outline_left + 2 + title_fill_width;
-    int title_outline_bottom = title_outline_top - 2 - title_fill_height;
-
-    int title_fill_left = title_outline_left + 1;
-    int title_fill_top = title_outline_top - 1;
-    int title_fill_right = title_outline_right - 1;
-    int title_fill_bottom = title_outline_bottom + 1;
-
-    int title_pane_left = title_fill_left + menu_padding;
-    int title_pane_top = title_fill_top - menu_padding;
-
-    // draw title:
-    //  draw title border lines
-    //  draw title box
-    //  draw title string
-    draw_screen_aarect_outline(0, 0, 0, title_outline_left, title_outline_top, title_outline_right, title_outline_bottom);
-    draw_screen_aarect_filled(200, 200, 200, title_fill_left, title_fill_top, title_fill_right, title_fill_bottom);
-    if(p->title) {
-        draw_screen_string(0, 0, 0, title_pane_left, title_pane_top - font_height, p->title);
-    }
-
-    int items_fill_width = menu_padding * 2 + menu_text_pane_width;
-    int items_fill_height = menu_padding * 2 + items_text_pane_height;
-
-    int items_outline_left = menu_left;
-    int items_outline_top = title_outline_bottom - menu_items_gap;
-    int items_outline_right = items_outline_left + 2 + items_fill_width;
-    int items_outline_bottom = items_outline_top - 2 - items_fill_height;
-
-    int items_fill_left = items_outline_left + 1;
-    int items_fill_top = items_outline_top - 1;
-    int items_fill_right = items_outline_right - 1;
-    int items_fill_bottom = items_outline_bottom + 1;
-
-    int items_pane_left = items_fill_left + menu_padding;
-    int items_pane_top = items_fill_top - menu_padding;
-
-    // draw items:
-    //  draw items border lines
-    //  draw items box
-    //  draw item strings
-    draw_screen_aarect_outline(0, 0, 0, items_outline_left, items_outline_top, items_outline_right, items_outline_bottom);
-    draw_screen_aarect_filled(255, 255, 255, items_fill_left, items_fill_top, items_fill_right, items_fill_bottom);
-    int item_top = items_pane_top;
-    for(int i = 0; i < p->item_count; i++) {
-        if(i == selected) {
-            draw_screen_aarect_filled(0, 0, 0, items_fill_left + 1, item_top + 2, items_fill_right - 1, item_top - font_height - 2);
-            draw_screen_string(255, 255, 255, items_pane_left, item_top - font_height, p->items[i].item);
-        }
-        else
-            draw_screen_string(0, 0, 0, items_pane_left, item_top - font_height, p->items[i].item);
-            item_top -= font_height + menu_item_separation;
-    }
-}
-
 int dopup(int pup_index) {
 
     #ifdef __EMSCRIPTEN__
@@ -2448,8 +2496,9 @@ int dopup(int pup_index) {
     int rarrow_queued = devices_queued[RIGHTARROWKEY];
     int uarrow_queued = devices_queued[UPARROWKEY];
     int darrow_queued = devices_queued[DOWNARROWKEY];
-    int esc_queued = devices_queued[ESCKEY];
-    int ret_queued = devices_queued[RETKEY];
+    int esc_queued    = devices_queued[ESCKEY];
+    int ret_queued    = devices_queued[RETKEY];
+    int lmouse_queued = devices_queued[LEFTMOUSE];
 
     qdevice(LEFTARROWKEY);
     qdevice(RIGHTARROWKEY);
@@ -2457,28 +2506,48 @@ int dopup(int pup_index) {
     qdevice(DOWNARROWKEY);
     qdevice(ESCKEY);
     qdevice(RETKEY);
+    qdevice(LEFTMOUSE);
+
+    // Compute menu geometry once for hit-testing
+    pup_layout layout;
+    pup_compute_layout(thepup, menu_corner_left, menu_corner_top, &layout);
+
+    // Full menu box: top of title down to bottom of items. Title and items
+    // panes share the same horizontal extent.
+    IcoordRect menu_box = {
+        layout.title_outline.left,
+        layout.title_outline.top,
+        layout.items_outline.right,
+        layout.items_outline.bottom,
+    };
 
     int selected = 0;
     int done = 0;
 
-    while(!done) {
+    while (!done) {
         rasterizer_copy_back_to_front();
         pup_draw(thepup, menu_corner_left, menu_corner_top, selected);
 
-        // Nested event pump: present the current frame, pump SDL events,
-        // and yield - same yield primitive swapbuffers() uses for the
-        // demo's main loop, but without a back/front swap (the menu has
-        // been composited onto the front buffer via copy_back_to_front +
-        // pup_draw, and a swap here would blow that away).
         events_frame_complete();
 
-        if(qtest() != 0) {
+        // Hover: if the cursor is over an item slot, move the highlight to
+        // it. If the cursor is over the title, the gap, or outside the menu,
+        // leave the highlight alone.
+        {
+            int hovered = pup_item_at(thepup, &layout,
+                (Icoord2){ getvaluator(MOUSEX), getvaluator(MOUSEY) });
+            if (hovered >= 0)
+                selected = hovered;
+        }
+
+        if (qtest() != 0) {
             short val;
             int device = qread(&val);
             if (val) {
-                switch(device) {
+                switch (device) {
                     case ESCKEY:
                         done = 1;
+                        /*fallthrough*/
                     case LEFTARROWKEY:
                         selected = -1;
                         break;
@@ -2487,24 +2556,41 @@ int dopup(int pup_index) {
                         done = 1;
                         break;
                     case UPARROWKEY:
-                        if(selected > 0)
+                        if (selected > 0)
                             selected--;
                         break;
                     case DOWNARROWKEY:
-                        if(selected < thepup->item_count)
+                        if (selected < thepup->item_count - 1)
                             selected++;
                         break;
+                    case LEFTMOUSE: {
+                        // Click over an item: select it. Click outside the
+                        // full menu box: cancel. Click on the title or in
+                        // the gap between title and items: ignore.
+                        Icoord2 cm = { getvaluator(MOUSEX), getvaluator(MOUSEY) };
+                        int idx = pup_item_at(thepup, &layout, cm);
+                        if (idx >= 0) {
+                            selected = idx;
+                            done = 1;
+                        } else if (cm.x < menu_box.left   || cm.x > menu_box.right ||
+                                   cm.y < menu_box.bottom || cm.y > menu_box.top) {
+                            selected = -1;
+                            done = 1;
+                        }
+                        break;
+                    }
                 }
             }
         }
     }
 
-    if(!larrow_queued) unqdevice(LEFTARROWKEY);
-    if(!rarrow_queued) unqdevice(RIGHTARROWKEY);
-    if(!uarrow_queued) unqdevice(UPARROWKEY);
-    if(!darrow_queued) unqdevice(DOWNARROWKEY);
-    if(!esc_queued) unqdevice(ESCKEY);
-    if(!ret_queued) unqdevice(RETKEY);
+    if (!larrow_queued) unqdevice(LEFTARROWKEY);
+    if (!rarrow_queued) unqdevice(RIGHTARROWKEY);
+    if (!uarrow_queued) unqdevice(UPARROWKEY);
+    if (!darrow_queued) unqdevice(DOWNARROWKEY);
+    if (!esc_queued)    unqdevice(ESCKEY);
+    if (!ret_queued)    unqdevice(RETKEY);
+    if (!lmouse_queued) unqdevice(LEFTMOUSE);
 
     // Restore previous drawing state
     rasterizer_copy_back_to_front();
@@ -3520,9 +3606,17 @@ int gversion(char *version)
     return 0;
 }
 
-#ifndef SIGINFO
-#define SIGINFO 29
-#endif
+// #ifndef SIGINFO
+// #define SIGINFO 29
+// #endif
+// void sigwinch(int s)
+// {
+//     enqueue_device(RIGHTMOUSE, 1);
+// }
+// void siginfo(int s)
+// {
+//     enqueue_device(RIGHTMOUSE, 0);
+// }
 
 static void init_gl_state() __attribute__((constructor));
 static void init_gl_state()

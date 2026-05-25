@@ -21,6 +21,7 @@ static bool debugTexBuild = false;
 // Enable to debug texture updates
 static bool debugTexUpdate = false;
 
+typedef struct { int width; int height; } Size2D;
 typedef struct
 {
     // SDL Window

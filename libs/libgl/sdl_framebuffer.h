@@ -1,5 +1,4 @@
-#include "basic_types.h"
-#include "geom_types.h"
+#include <stdbool.h>
 
 extern uint32_t sdlInitWindow();
 extern void sdlOpenWindow(char *title, int32_t frameWidth, int32_t frameHeight);
