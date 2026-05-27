@@ -1,1 +1,1 @@
-npx repomix . --style markdown --ignore 'docs/**','**/*.js','demos/gview/**' --output docs/REPO.md
+npx repomix . --style markdown --ignore 'docs/**','**/*.js','demos/gview/**','**/*uue*.txt' --output docs/REPO.md

@@ -8,9 +8,9 @@ SRC = $(wildcard *.c)
 OBJS = $(patsubst %.c,$(BIN_DIR)/%.o,$(SRC))
 EM_OBJS = $(patsubst %.c,$(WEB_DIR)/%.o,$(SRC))
 
-ifeq ($(IS_OLD_CODE),yes)
-LIB_CC = $(OLD_CODE_CC) $(OPT) $(OLD_CODE_WARN_OFF)
-LIB_EMCC = $(OLD_CODE_EMCC) $(EM_OPT) $(EM_OLD_CODE_WARN_OFF)
+ifeq ($(IS_DEMO_CODE),yes)
+LIB_CC = $(DEMO_CODE_CC) $(OPT) $(DEMO_CODE_WARN_OFF)
+LIB_EMCC = $(DEMO_CODE_EMCC) $(EM_OPT) $(EM_DEMO_CODE_WARN_OFF)
 else
 LIB_CC = $(CC) $(OPT)
 LIB_EMCC = $(EMCC) $(EM_OPT) -Wno-unused-command-line-argument

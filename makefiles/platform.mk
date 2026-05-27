@@ -87,8 +87,8 @@ EMCC = emcc -s WASM=1 -s PRECISE_F32=1
 AR = ar rvsc
 EMAR = emar rvsc
 
-# Compiler options for ancient SGI code
-OLD_CODE_CC = $(CC) -std=c90
-OLD_CODE_EMCC = $(EMCC) -std=c90
-OLD_CODE_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat -Wno-pointer-sign -Wno-int-conversion -Wno-out-of-scope-function -Wno-format-extra-args -Wno-unused-command-line-argument -Wno-comment -Wno-deprecated-non-prototype $(OLD_CODE_WARN_OFF_EXTRA)
-EM_OLD_CODE_WARN_OFF = $(OLD_CODE_WARN_OFF)
+# Compiler options for ancient SGI demo code
+DEMO_CODE_CC = $(CC) -std=c90
+DEMO_CODE_EMCC = $(EMCC) -std=c90
+DEMO_CODE_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat -Wno-pointer-sign -Wno-int-conversion -Wno-out-of-scope-function -Wno-format-extra-args -Wno-unused-command-line-argument -Wno-comment -Wno-deprecated-non-prototype $(DEMO_CODE_WARN_OFF_EXTRA)
+EM_DEMO_CODE_WARN_OFF = $(DEMO_CODE_WARN_OFF)
