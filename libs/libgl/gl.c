@@ -26,6 +26,7 @@
 #include "basic_types.h"
 #include "vector.h"
 #include "rasterizer.h"
+#include "texfont.h"
 #include "events.h"
 #include "font.h"
 
@@ -696,6 +697,11 @@ typedef struct pup {
 } pup;
 static struct pup pups[MAX_PUPS];
 
+// Font used by pup rendering. Loaded eagerly in init_gl_state from a
+// fixed path; if loading fails, pup_texfont stays NULL and pup_draw
+// falls back to the bitmap font (font_bits / rasterizer_bitmap).
+static TexFont *pup_texfont = NULL;
+
 void pup_init(pup *menu)
 {
     menu->defd = 0;
@@ -753,15 +759,21 @@ const int menu_padding = 3;
 const int menu_item_separation = 2;
 const int menu_items_gap = 8;
 
-static int str_width_in_pixels(char *str) {
+static int str_width_in_pixels(const char *str) {
     int width = 0;
-    for(int i = 0; i < strlen(str); i++) {
-        if (str[i] == '\t') {
-            width += font_width * 8;
-        } else {
-            width += font_width;
+
+    if (pup_texfont)
+        txf_string_metrics(pup_texfont, str, &width, NULL, NULL);
+    else {
+        for(int i = 0; i < strlen(str); i++) {
+            if (str[i] == '\t') {
+                width += font_width * 8;
+            } else {
+                width += font_width;
+            }
         }
     }
+
     return width;
 }
 
@@ -840,15 +852,43 @@ typedef struct pup_layout {
     int item_slot_height;
 } pup_layout;
 
+// Returns the line height in pixels (full ascent + descent) of the
+// current pup font.
+static int pup_line_height(void) {
+    if (pup_texfont)
+        return pup_texfont->max_ascent + pup_texfont->max_descent;
+    else
+        return font_height;
+}
+
+// Draws str with the current pup font. The (x, y) point is the baseline-
+// equivalent origin: for the bitmap font, it's the bottom-left of the
+// glyph block (which has no separate baseline / descender). For TXF, it's
+// the actual baseline; glyphs with descenders will dip below y.
+static void pup_draw_string(int r, int g, int b, Icoord2 baseline, const char *str) {
+    if (pup_texfont) {
+        screen_vertex sv;
+        const float fudge_x = -9, fudge_y = 4;
+        float x = baseline.x + fudge_x;
+        float y = DISPLAY_HEIGHT - 1 - baseline.y + fudge_y;
+        screen_vertex_set_position(&sv, x, y);
+        txf_render_string(pup_texfont, &sv,
+                          (uint8_t)r, (uint8_t)g, (uint8_t)b, str);
+    } else {
+        draw_screen_string(r, g, b, baseline, str);
+    }
+}
+
 static void pup_compute_layout(pup *menu, int menu_left, int menu_top, pup_layout *layout)
 {
     int menu_text_pane_width = 0;
     int title_text_pane_height;
+    int line_height = pup_line_height();
 
     // Size of title area
     if (menu->title) {
         menu_text_pane_width = str_width_in_pixels(menu->title);
-        title_text_pane_height = font_height;
+        title_text_pane_height = line_height;
     } else {
         title_text_pane_height = menu_item_separation;
     }
@@ -859,7 +899,7 @@ static void pup_compute_layout(pup *menu, int menu_left, int menu_top, pup_layou
         int w = str_width_in_pixels(menu->items[i].label);
         if (w > menu_text_pane_width)
             menu_text_pane_width = w;
-        items_text_pane_height += font_height;
+        items_text_pane_height += line_height;
         if (i != menu->item_count - 1)
             items_text_pane_height += menu_item_separation;
     }
@@ -905,7 +945,7 @@ static void pup_compute_layout(pup *menu, int menu_left, int menu_top, pup_layou
         layout->items_fill.top  - menu_padding
     };
 
-    layout->item_slot_height = font_height + menu_item_separation;
+    layout->item_slot_height = pup_line_height() + menu_item_separation;
 }
 
 // Returns the index 0..item_count-1 of the item slot at screen coords
@@ -927,6 +967,7 @@ void pup_draw(pup *menu, int menu_left, int menu_top, int selected)
 {
     pup_layout layout;
     pup_compute_layout(menu, menu_left, menu_top, &layout);
+    int line_height = pup_line_height();
 
     // draw title:
     //  draw title border lines
@@ -935,8 +976,8 @@ void pup_draw(pup *menu, int menu_left, int menu_top, int selected)
     draw_screen_aarect_outline(0, 0, 0,     layout.title_outline);
     draw_screen_aarect_filled(200, 200, 200, layout.title_fill);
     if (menu->title) {
-        draw_screen_string(0, 0, 0,
-            (Icoord2){ layout.title_pane.x, layout.title_pane.y - font_height }, menu->title);
+        pup_draw_string(0, 0, 0,
+            (Icoord2){ layout.title_pane.x, layout.title_pane.y - line_height }, menu->title);
     }
 
     // draw items:
@@ -947,18 +988,19 @@ void pup_draw(pup *menu, int menu_left, int menu_top, int selected)
     draw_screen_aarect_filled(255, 255, 255,  layout.items_fill);
     int item_top = layout.items_pane.y;
     for (int i = 0; i < menu->item_count; i++) {
-        Icoord2 text_pos = (Icoord2){layout.items_pane.x, item_top - font_height };
         if (i == selected) {
             draw_screen_aarect_filled(0, 0, 0, (IcoordRect){
                 layout.items_fill.left  + 1,
                 item_top + 2,
                 layout.items_fill.right - 1,
-                item_top - font_height - 2,
+                item_top - line_height - 2,
             });
-            draw_screen_string(255, 255, 255, text_pos, menu->items[i].label);
+            pup_draw_string(255, 255, 255,
+                (Icoord2){ layout.items_pane.x, item_top - line_height }, menu->items[i].label);
         }
         else
-            draw_screen_string(0, 0, 0, text_pos, menu->items[i].label);
+            pup_draw_string(0, 0, 0,
+                (Icoord2){ layout.items_pane.x, item_top - line_height }, menu->items[i].label);
         item_top -= layout.item_slot_height;
     }
 }
@@ -3670,6 +3712,14 @@ static void init_gl_state()
 
     for(int i = 0; i < MAX_PUPS; i++)
         pup_init(pups + i);
+
+    extern const unsigned char helvetica_oblique_txf[];
+    extern const unsigned int helvetica_oblique_txf_len;
+    pup_texfont = txf_load_font_mem(helvetica_oblique_txf, helvetica_oblique_txf_len);
+    if (!pup_texfont) {
+        fprintf(stderr, "pup: TXF font not loaded (%s); using bitmap font fallback\n",
+                txf_error_string() ? txf_error_string() : "no error reported");
+    }
 
     //signal(SIGWINCH, sigwinch); // window changed event callback, maybe for window resizing
     //signal(SIGINFO, siginfo);   // status info event callback, Ctrl+T request for program info

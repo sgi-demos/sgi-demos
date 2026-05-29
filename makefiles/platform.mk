@@ -79,7 +79,7 @@ EM_ASYNCIFY = -sASYNCIFY -sASYNCIFY_STACK_SIZE=65536
 EXTRA_DEBUG = -fsanitize=undefined
 EM_EXTRA_DEBUG = $(EXTRA_DEBUG) -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK=2
 
-# Compilers
+# Base compilers
 CC = cc $(EXTRA_DEBUG)
 EMCC = emcc -s WASM=1 -s PRECISE_F32=1
 
@@ -87,8 +87,12 @@ EMCC = emcc -s WASM=1 -s PRECISE_F32=1
 AR = ar rvsc
 EMAR = emar rvsc
 
-# Compiler options for ancient SGI demo code
+# Compiler options for original SGI demo code and demo helper libs
 DEMO_CODE_CC = $(CC) -std=c90
 DEMO_CODE_EMCC = $(EMCC) -std=c90
 DEMO_CODE_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat -Wno-pointer-sign -Wno-int-conversion -Wno-out-of-scope-function -Wno-format-extra-args -Wno-unused-command-line-argument -Wno-comment -Wno-deprecated-non-prototype $(DEMO_CODE_WARN_OFF_EXTRA)
 EM_DEMO_CODE_WARN_OFF = $(DEMO_CODE_WARN_OFF)
+
+# Compiler options for all other code
+MODERN_CODE_CC = $(CC) -std=gnu17
+MODERN_CODE_EMCC = $(EMCC) -std=gnu17

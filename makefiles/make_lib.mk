@@ -12,8 +12,8 @@ ifeq ($(IS_DEMO_CODE),yes)
 LIB_CC = $(DEMO_CODE_CC) $(OPT) $(DEMO_CODE_WARN_OFF)
 LIB_EMCC = $(DEMO_CODE_EMCC) $(EM_OPT) $(EM_DEMO_CODE_WARN_OFF)
 else
-LIB_CC = $(CC) $(OPT)
-LIB_EMCC = $(EMCC) $(EM_OPT) -Wno-unused-command-line-argument
+LIB_CC = $(MODERN_CODE_CC) $(OPT)
+LIB_EMCC = $(MODERN_CODE_EMCC) $(EM_OPT) -Wno-unused-command-line-argument
 endif
 
 all: native browser

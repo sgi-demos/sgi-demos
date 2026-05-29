@@ -21,6 +21,7 @@ static float the_linewidth;
 static uint16_t the_pattern[16];
 static int pattern_enabled = 0;
 static int rgb_mode = 0; // color map mode by default
+static int text_antialias_enabled = 1;
 
 // double color buffers
 static int backbuffer_draw_enabled = 1;
@@ -392,6 +393,57 @@ void rasterizer_bitmap(uint32_t width, uint32_t rowbytes, uint32_t height, scree
             screen_vertex_offset_with_clamp(&s[3], count, 0);
             draw_screen_triangle(&s[0], &s[1], &s[2]);
             draw_screen_triangle(&s[2], &s[3], &s[0]);
+        }
+    }
+}
+
+// Blit an 8-bit alpha source over the framebuffer at sv, in color (r,g,b),
+// using source-over blending. Like rasterizer_bitmap but with grayscale
+// coverage instead of 1bpp, for antialiased glyph rendering.
+void rasterizer_alpha_blit(uint32_t width, uint32_t rowbytes, uint32_t height,
+                           screen_vertex *sv, uint8_t *alpha,
+                           uint8_t r, uint8_t g, uint8_t b)
+{
+    // Anchor in pixel coords (sv is in fixed-point).
+    // Mirrors rasterizer_bitmap's coordinate conventions: sv->x and sv->y are in
+    // SCREEN_VERTEX_V2_SCALE fixed-point
+    int base_x = sv->x / SCREEN_VERTEX_V2_SCALE;
+    int base_y = sv->y / SCREEN_VERTEX_V2_SCALE;
+
+    for (int j = 0; j < (int)height; j++) {
+        // Matches rasterizer_bitmap: the source is drawn Y-flipped so
+        // that increasing j in source goes downward on screen (with Y-up).
+        int y = base_y + (int)(height - j - 1);
+        if (y < 0 || y >= DISPLAY_HEIGHT) continue;
+
+        for (int i = 0; i < (int)width; i++) {
+            int x = base_x + i;
+            if (x < 0 || x >= DISPLAY_WIDTH) continue;
+
+            uint8_t a = alpha[j * rowbytes + i];
+            if (a == 0) continue;
+            if (!text_antialias_enabled) {
+                // Hard 50% threshold: opaque or nothing.
+                if (a < 128) continue; // 128
+                a = 255;
+            }
+
+            // Source-over blend: dst = src*a + dst*(1-a), with a in [0,255].
+            // The (x + 127) / 255 rounded-divide form is exact for the
+            // integer math; the cheaper (x*a + x) >> 8 is a near-equivalent
+            // approximation we could use if this turns out to be a hot spot.
+            if (backbuffer_draw_enabled) {
+                uint8_t *p = (*gl_c_backbuffer)[y][x];
+                p[RED_BYTE]   = (uint8_t)((r * a + p[RED_BYTE]   * (255 - a) + 127) / 255);
+                p[GREEN_BYTE] = (uint8_t)((g * a + p[GREEN_BYTE] * (255 - a) + 127) / 255);
+                p[BLUE_BYTE]  = (uint8_t)((b * a + p[BLUE_BYTE]  * (255 - a) + 127) / 255);
+            }
+            if (frontbuffer_draw_enabled) {
+                uint8_t *p = (*gl_c_frontbuffer)[y][x];
+                p[RED_BYTE]   = (uint8_t)((r * a + p[RED_BYTE]   * (255 - a) + 127) / 255);
+                p[GREEN_BYTE] = (uint8_t)((g * a + p[GREEN_BYTE] * (255 - a) + 127) / 255);
+                p[BLUE_BYTE]  = (uint8_t)((b * a + p[BLUE_BYTE]  * (255 - a) + 127) / 255);
+            }
         }
     }
 }
