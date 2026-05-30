@@ -27,6 +27,7 @@
 #include "vector.h"
 #include "rasterizer.h"
 #include "texfont.h"
+#include "bdffont.h"
 #include "events.h"
 #include "font.h"
 
@@ -697,10 +698,26 @@ typedef struct pup {
 } pup;
 static struct pup pups[MAX_PUPS];
 
-// Font used by pup rendering. Loaded eagerly in init_gl_state from a
-// fixed path; if loading fails, pup_texfont stays NULL and pup_draw
-// falls back to the bitmap font (font_bits / rasterizer_bitmap).
+// Font used by pup rendering. Two parallel options:
+//  - TXF (antialiased texture font), the default; smooth edges.
+//  - BDF (authentic 1-bit X11 Helvetica Oblique bitmap), for pixel-exact
+//    historic fidelity; chunky aliased edges like the original SGI menus.
+// Select via pup_font_mode. If the chosen font fails to load, pup_draw
+// falls back to the built-in bitmap font (font_bits / rasterizer_bitmap).
+typedef enum { PUP_FONT_TXF, PUP_FONT_BDF } pup_font_mode_t;
+static pup_font_mode_t pup_font_mode = PUP_FONT_BDF;
+
 static TexFont *pup_texfont = NULL;
+static const BdfFont *pup_bdffont = NULL;
+
+// True when the BDF path is selected and a BDF font is loaded.
+static int pup_use_bdf(void) {
+    return pup_font_mode == PUP_FONT_BDF && pup_bdffont != NULL;
+}
+// True when the TXF path is selected and a TXF font is loaded.
+static int pup_use_txf(void) {
+    return pup_font_mode == PUP_FONT_TXF && pup_texfont != NULL;
+}
 
 void pup_init(pup *menu)
 {
@@ -755,14 +772,55 @@ void pup_add(pup *menu, char *label, int value, int submenu, int (*func)(int i))
 
 const int menu_corner_top = YMAXSCREEN - 1 - 10;
 const int menu_corner_left = 10;
-const int menu_padding = 3;
-const int menu_item_separation = 2;
-const int menu_items_gap = 8;
+// Horizontal text insets, in pixels. Left is from the fill's left edge to the
+// text pen origin; right is from the widest label's pen advance to the fill's
+// right edge. Separate so the left can be tighter than the right (per the SGI
+// reference). Vertical layout is anchor-based, so these are horizontal only.
+const int menu_pad_left  = 5;
+const int menu_pad_right = 9;
+// Vertical gap between the bottom of the title FILL rect and the top of the
+// items FILL rect, in pixels. (The outline-to-outline placement below backs
+// out the two bevels so this fill-to-fill figure is exact.)
+const int menu_items_gap = 10;
+
+// Beveled "3D lit" menu frame. Light from upper-left: top/left edges use the
+// highlight color, bottom/right edges use the shadow color. menu_bevel is the
+// frame thickness in pixels on each side. Tune the grays by eye.
+const int menu_bevel = 2;
+const int menu_face_r = 165, menu_face_g = 165, menu_face_b = 165;   // title fill
+const int menu_hilite_r = 230, menu_hilite_g = 230, menu_hilite_b = 230; // top/left bevel
+const int menu_shadow_r = 96,  menu_shadow_g = 96,  menu_shadow_b = 96;  // bottom/right bevel
+// Items pane fill: lighter than the title (menu_face) but darker than the
+// selected-row highlight (menu_select). Three tiers, lightening downward.
+const int menu_items_face_r = 205, menu_items_face_g = 205, menu_items_face_b = 205;
+// Selected item: bright fill with dark text (a "lit" row), per the SGI refs.
+const int menu_select_r = 245, menu_select_g = 245, menu_select_b = 245;
+
+// Title pane geometry, set to match the reference exactly: the title fill is
+// a fixed height, and the title baseline sits a fixed number of pixels up
+// from the bottom of that fill (rather than being derived from padding +
+// line height like the items area).
+const int menu_title_fill_height = 24;  // title fill box height in pixels
+const int menu_title_text_up     = 7;   // baseline, pixels up from fill bottom
+
+// Item rows are spaced this many pixels baseline-to-baseline. (The row pitch;
+// must be >= pup_line_height() or rows would overlap.) The items-box height
+// and the per-row advance both derive from this so they can't desync.
+const int menu_item_pitch = 22;
+// Baseline of the FIRST item row, measured in pixels down from the top of the
+// items fill rectangle. Subsequent rows step down by menu_item_pitch.
+const int menu_items_text_down = 17;
+// Gap in pixels from the LAST item row's baseline down to the bottom of the
+// items fill rectangle. Together with menu_items_text_down and menu_item_pitch
+// this fully determines the items fill height.
+const int menu_items_text_bottom = 7;
 
 static int str_width_in_pixels(const char *str) {
     int width = 0;
 
-    if (pup_texfont)
+    if (pup_use_bdf())
+        width = bdf_string_width(pup_bdffont, str);
+    else if (pup_use_txf())
         txf_string_metrics(pup_texfont, str, &width, NULL, NULL);
     else {
         for(int i = 0; i < strlen(str); i++) {
@@ -829,6 +887,84 @@ void draw_screen_aarect_outline(int r, int g, int b, IcoordRect rect)
     draw_screen_aarect_filled(r, g, b, (IcoordRect){rect.left,      rect.bottom + 1, rect.right,    rect.bottom });
 }
 
+// Draw a beveled ("3D lit") frame around `rect`, `thickness` pixels wide on
+// each side, then fill the interior. The light comes from the upper-left:
+// the top and left edges get the highlight color, the bottom and right edges
+// get the shadow color. Pass highlight lighter than fill and shadow darker
+// than fill for a raised look; swap them for an inset/sunken look.
+//
+// Drawn as filled rects following the IcoordRect {left,top,right,bottom}
+// (Y-up, top > bottom) convention used by the other helpers. The top-left
+// highlight owns the top-left corner; the bottom-right shadow owns the
+// bottom-right corner (the diagonal split is the conventional bevel look).
+// Fill a single triangle in screen space (three Icoord2 corners).
+static void draw_screen_aatri(int r, int g, int b,
+                              Icoord2 a, Icoord2 c, Icoord2 d)
+{
+    screen_vertex tri[3];
+    screen_vertex_set_color(&tri[0], r, g, b, 255);
+    screen_vertex_set_color(&tri[1], r, g, b, 255);
+    screen_vertex_set_color(&tri[2], r, g, b, 255);
+    screen_vertex_set_position(&tri[0], a.x, a.y);
+    screen_vertex_set_position(&tri[1], c.x, c.y);
+    screen_vertex_set_position(&tri[2], d.x, d.y);
+    if(!backface_enabled || !backface_cull(tri))
+        rasterizer_draw(DRAW_TRIANGLES, 3, tri);
+}
+
+static void draw_screen_aabevel(IcoordRect rect, int thickness,
+                                int hi_r, int hi_g, int hi_b,
+                                int sh_r, int sh_g, int sh_b,
+                                int fill_r, int fill_g, int fill_b)
+{
+    // Top edge (full width) and left edge (full height): highlight.
+    draw_screen_aarect_filled(hi_r, hi_g, hi_b,
+        (IcoordRect){ rect.left, rect.top, rect.right, rect.top - thickness });
+    draw_screen_aarect_filled(hi_r, hi_g, hi_b,
+        (IcoordRect){ rect.left, rect.top, rect.left + thickness, rect.bottom });
+
+    // Bottom edge (full width) and right edge (full height): shadow.
+    draw_screen_aarect_filled(sh_r, sh_g, sh_b,
+        (IcoordRect){ rect.left, rect.bottom + thickness, rect.right, rect.bottom });
+    draw_screen_aarect_filled(sh_r, sh_g, sh_b,
+        (IcoordRect){ rect.right - thickness, rect.top, rect.right, rect.bottom });
+
+    // Interior fill, inset by thickness on all sides.
+    draw_screen_aarect_filled(fill_r, fill_g, fill_b,
+        (IcoordRect){ rect.left + thickness, rect.top - thickness,
+                      rect.right - thickness, rect.bottom + thickness });
+
+    // The two "mixed" corners (lower-left and upper-right) currently have one
+    // color squared off over the whole corner square. Redraw each as a
+    // diagonal split: the edge along that corner keeps its color on its side
+    // of the 45-degree miter, the perpendicular edge gets the other triangle.
+    int t = thickness;
+
+    // Lower-left: diagonal from outer (left,bottom) to inner (left+t,bottom+t).
+    //  upper-left triangle -> highlight (left edge); lower-right -> shadow (bottom edge).
+    //  Vertices wound to match draw_screen_aarect_filled (positive area) so
+    //  they survive backface culling if an app enables it.
+    draw_screen_aatri(hi_r, hi_g, hi_b,
+        (Icoord2){ rect.left,     rect.bottom     },
+        (Icoord2){ rect.left + t, rect.bottom + t },
+        (Icoord2){ rect.left,     rect.bottom + t });
+    draw_screen_aatri(sh_r, sh_g, sh_b,
+        (Icoord2){ rect.left,     rect.bottom     },
+        (Icoord2){ rect.left + t, rect.bottom     },
+        (Icoord2){ rect.left + t, rect.bottom + t });
+
+    // Upper-right: diagonal from outer (right,top) to inner (right-t,top-t).
+    //  lower-right triangle -> shadow (right edge); upper-left -> highlight (top edge).
+    draw_screen_aatri(sh_r, sh_g, sh_b,
+        (Icoord2){ rect.right,     rect.top     },
+        (Icoord2){ rect.right - t, rect.top - t },
+        (Icoord2){ rect.right,     rect.top - t });
+    draw_screen_aatri(hi_r, hi_g, hi_b,
+        (Icoord2){ rect.right,     rect.top     },
+        (Icoord2){ rect.right - t, rect.top     },
+        (Icoord2){ rect.right - t, rect.top - t });
+}
+
 void draw_screen_string(int r, int g, int b, Icoord2 origin, const char *str) {
     screen_vertex sv;
     screen_vertex_set_color(&sv, r, g, b, 255);
@@ -847,15 +983,18 @@ typedef struct pup_layout {
     IcoordRect items_fill;
     Icoord2    items_pane;     // top-left text origin
 
-    // Per-item row pitch (font_height + menu_item_separation), used for
-    // hit-testing the cursor against item slots.
+    // Per-item row pitch (= menu_item_pitch, baseline-to-baseline), used both
+    // for advancing rows when drawing and for hit-testing the cursor against
+    // item slots.
     int item_slot_height;
 } pup_layout;
 
 // Returns the line height in pixels (full ascent + descent) of the
 // current pup font.
 static int pup_line_height(void) {
-    if (pup_texfont)
+    if (pup_use_bdf())
+        return pup_bdffont->ascent + pup_bdffont->descent;
+    else if (pup_use_txf())
         return pup_texfont->max_ascent + pup_texfont->max_descent;
     else
         return font_height;
@@ -864,14 +1003,18 @@ static int pup_line_height(void) {
 // Draws str with the current pup font. The (x, y) point is the baseline-
 // equivalent origin: for the bitmap font, it's the bottom-left of the
 // glyph block (which has no separate baseline / descender). For TXF, it's
-// the actual baseline; glyphs with descenders will dip below y.
+// the actual baseline; glyphs with descenders will dip below y. The BDF
+// path uses rasterizer_bitmap (same primitive as draw_screen_string), so
+// it takes the baseline origin directly, no Y-flip.
 static void pup_draw_string(int r, int g, int b, Icoord2 baseline, const char *str) {
-    if (pup_texfont) {
+    if (pup_use_bdf()) {
         screen_vertex sv;
-        const float fudge_x = -9, fudge_y = 4;
-        float x = baseline.x + fudge_x;
-        float y = DISPLAY_HEIGHT - 1 - baseline.y + fudge_y;
-        screen_vertex_set_position(&sv, x, y);
+        screen_vertex_set_color(&sv, r, g, b, 255);
+        screen_vertex_set_position(&sv, baseline.x, baseline.y);
+        bdf_render_string(pup_bdffont, &sv, str);
+    } else if (pup_use_txf()) {
+        screen_vertex sv;
+        screen_vertex_set_position(&sv, baseline.x, baseline.y);
         txf_render_string(pup_texfont, &sv,
                           (uint8_t)r, (uint8_t)g, (uint8_t)b, str);
     } else {
@@ -882,70 +1025,77 @@ static void pup_draw_string(int r, int g, int b, Icoord2 baseline, const char *s
 static void pup_compute_layout(pup *menu, int menu_left, int menu_top, pup_layout *layout)
 {
     int menu_text_pane_width = 0;
-    int title_text_pane_height;
     int line_height = pup_line_height();
 
-    // Size of title area
-    if (menu->title) {
+    // Title width (the title fill height is fixed: menu_title_fill_height).
+    if (menu->title)
         menu_text_pane_width = str_width_in_pixels(menu->title);
-        title_text_pane_height = line_height;
-    } else {
-        title_text_pane_height = menu_item_separation;
-    }
 
-    // Size of items area
+    // Size of items area. The fill height is fully determined by the explicit
+    // anchors: menu_items_text_down (fill top -> first baseline) + (N-1) row
+    // pitches (first -> last baseline) + menu_items_text_bottom (last baseline
+    // -> fill bottom).
     int items_text_pane_height = 0;
     for (int i = 0; i < menu->item_count; i++) {
         int w = str_width_in_pixels(menu->items[i].label);
         if (w > menu_text_pane_width)
             menu_text_pane_width = w;
-        items_text_pane_height += line_height;
-        if (i != menu->item_count - 1)
-            items_text_pane_height += menu_item_separation;
     }
+    if (menu->item_count > 0)
+        items_text_pane_height = menu_items_text_down
+                               + (menu->item_count - 1) * menu_item_pitch
+                               + menu_items_text_bottom;
 
-    int title_fill_width  = menu_padding * 2 + menu_text_pane_width;
-    int title_fill_height = menu_padding * 2 + title_text_pane_height;
+    int title_fill_width  = menu_pad_left + menu_text_pane_width + menu_pad_right;
+    int title_fill_height = menu_title_fill_height;
 
     layout->title_outline = (IcoordRect){
         menu_left,
         menu_top,
-        menu_left + 2 + title_fill_width,
-        menu_top  - 2 - title_fill_height
+        menu_left + 2 * menu_bevel + title_fill_width,
+        menu_top  - 2 * menu_bevel - title_fill_height
     };
     layout->title_fill = (IcoordRect){
-        layout->title_outline.left   + 1,
-        layout->title_outline.top    - 1,
-        layout->title_outline.right  - 1,
-        layout->title_outline.bottom + 1
+        layout->title_outline.left   + menu_bevel,
+        layout->title_outline.top    - menu_bevel,
+        layout->title_outline.right  - menu_bevel,
+        layout->title_outline.bottom + menu_bevel
     };
     layout->title_pane = (Icoord2){
-        layout->title_fill.left + menu_padding,
-        layout->title_fill.top  - menu_padding
+        layout->title_fill.left + menu_pad_left,
+        // Chosen so that (title_pane.y - line_height), the baseline used at
+        // the draw site, sits menu_title_text_up pixels above the fill bottom.
+        layout->title_fill.bottom + menu_title_text_up + line_height
     };
 
-    int items_fill_width  = menu_padding * 2 + menu_text_pane_width;
-    int items_fill_height = menu_padding * 2 + items_text_pane_height;
+    int items_fill_width  = menu_pad_left + menu_text_pane_width + menu_pad_right;
+    // Height already includes the top/bottom baseline gaps via the anchors.
+    int items_fill_height = items_text_pane_height;
 
-    int items_outline_top = layout->title_outline.bottom - menu_items_gap;
+    // menu_items_gap is the fill-to-fill gap. Each fill is inset from its
+    // outline by menu_bevel, so the outline-to-outline distance is the desired
+    // fill gap minus the two bevels that sit between the fills.
+    int items_outline_top = layout->title_outline.bottom - (menu_items_gap - 2 * menu_bevel);
     layout->items_outline = (IcoordRect){
         menu_left,
         items_outline_top,
-        menu_left + 2 + items_fill_width,
-        items_outline_top - 2 - items_fill_height
+        menu_left + 2 * menu_bevel + items_fill_width,
+        items_outline_top - 2 * menu_bevel - items_fill_height
     };
     layout->items_fill = (IcoordRect){
-        layout->items_outline.left   + 1,
-        layout->items_outline.top    - 1,
-        layout->items_outline.right  - 1,
-        layout->items_outline.bottom + 1
+        layout->items_outline.left   + menu_bevel,
+        layout->items_outline.top    - menu_bevel,
+        layout->items_outline.right  - menu_bevel,
+        layout->items_outline.bottom + menu_bevel
     };
     layout->items_pane = (Icoord2){
-        layout->items_fill.left + menu_padding,
-        layout->items_fill.top  - menu_padding
+        layout->items_fill.left + menu_pad_left,
+        // Chosen so that (items_pane.y - line_height), the first row's baseline
+        // at the draw site, sits menu_items_text_down pixels below fill top.
+        layout->items_fill.top - menu_items_text_down + line_height
     };
 
-    layout->item_slot_height = pup_line_height() + menu_item_separation;
+    layout->item_slot_height = menu_item_pitch;
 }
 
 // Returns the index 0..item_count-1 of the item slot at screen coords
@@ -969,33 +1119,46 @@ void pup_draw(pup *menu, int menu_left, int menu_top, int selected)
     pup_compute_layout(menu, menu_left, menu_top, &layout);
     int line_height = pup_line_height();
 
-    // draw title:
-    //  draw title border lines
-    //  draw title box
-    //  draw title string
-    draw_screen_aarect_outline(0, 0, 0,     layout.title_outline);
-    draw_screen_aarect_filled(200, 200, 200, layout.title_fill);
+    // draw title: beveled raised frame + title string
+    draw_screen_aabevel(layout.title_outline, menu_bevel,
+                        menu_hilite_r, menu_hilite_g, menu_hilite_b,
+                        menu_shadow_r, menu_shadow_g, menu_shadow_b,
+                        menu_face_r, menu_face_g, menu_face_b);
     if (menu->title) {
         pup_draw_string(0, 0, 0,
             (Icoord2){ layout.title_pane.x, layout.title_pane.y - line_height }, menu->title);
     }
 
-    // draw items:
-    //  draw items border lines
-    //  draw items box
-    //  draw item strings
-    draw_screen_aarect_outline(0, 0, 0,       layout.items_outline);
-    draw_screen_aarect_filled(255, 255, 255,  layout.items_fill);
+    // draw items: beveled raised frame + item strings
+    draw_screen_aabevel(layout.items_outline, menu_bevel,
+                        menu_hilite_r, menu_hilite_g, menu_hilite_b,
+                        menu_shadow_r, menu_shadow_g, menu_shadow_b,
+                        menu_items_face_r, menu_items_face_g, menu_items_face_b);
     int item_top = layout.items_pane.y;
     for (int i = 0; i < menu->item_count; i++) {
         if (i == selected) {
-            draw_screen_aarect_filled(0, 0, 0, (IcoordRect){
-                layout.items_fill.left  + 1,
-                item_top + 2,
-                layout.items_fill.right - 1,
-                item_top - line_height - 2,
-            });
-            pup_draw_string(255, 255, 255,
+            // Selected row: bright "lit" fill with dark text. The highlight
+            // rect is nudged vertically (menu_select_dy, screen-space Y-up so
+            // negative = down) to sit centered on the glyphs; the text origin
+            // is left unchanged.
+            const int menu_select_dy = -3;
+            int hl_bottom = item_top - line_height - 2 + menu_select_dy;
+            draw_screen_aarect_filled(menu_select_r, menu_select_g, menu_select_b,
+                (IcoordRect){
+                    layout.items_fill.left  + 1,
+                    item_top + 2 + menu_select_dy,
+                    layout.items_fill.right - 1,
+                    hl_bottom,
+                });
+            // Dark rule along the bottom edge of the highlight (shadow gray).
+            draw_screen_aarect_filled(menu_shadow_r, menu_shadow_g, menu_shadow_b,
+                (IcoordRect){
+                    layout.items_fill.left  + 1,
+                    hl_bottom + 1,
+                    layout.items_fill.right - 1,
+                    hl_bottom,
+                });
+            pup_draw_string(0, 0, 0,
                 (Icoord2){ layout.items_pane.x, item_top - line_height }, menu->items[i].label);
         }
         else
@@ -3720,6 +3883,11 @@ static void init_gl_state()
         fprintf(stderr, "pup: TXF font not loaded (%s); using bitmap font fallback\n",
                 txf_error_string() ? txf_error_string() : "no error reported");
     }
+
+    // BDF font is baked into the binary (see bake_bdf.py). It's a const
+    // global, so no loading/parsing is needed -- just point at it.
+    extern const BdfFont helvBO14_bdf;
+    pup_bdffont = &helvBO14_bdf;
 
     //signal(SIGWINCH, sigwinch); // window changed event callback, maybe for window resizing
     //signal(SIGINFO, siginfo);   // status info event callback, Ctrl+T request for program info
