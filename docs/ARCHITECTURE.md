@@ -178,17 +178,9 @@ EM_ASYNCIFY = -sASYNCIFY -sASYNCIFY_STACK_SIZE=65536
 
 `-sASYNCIFY` instruments the call chain so `emscripten_sleep` can pause and resume the WebAssembly stack. `ASYNCIFY_STACK_SIZE=65536` allocates 64KB to hold the saved stack during a yield — probably generous enough for the demos, but can be expanded further if necessary. Asyncify increases WASM code size, but for 1980s-90s code running on 2026 hardware, this cost should be negligible.
 
-## Source modifications
+## Demo source modifications
 
-Per the preservation goal, demo source modifications are kept minimal. In practice the only common modification is to add this header at the top of the main demo file:
-
-```c
-#include "demo_shim.h"
-```
-
-…which provides shims for 1980s and old UNIX system calls, and browser-compatible replacements for `buttonfly`'s `system()` and `popen()` calls.
-
-Some demos require additional small fixes — usually for C90 strictness, for `-fcommon` LLVM compiler workarounds (insect's globals), or for network play in `arena` and `flight`. These are noted in the demos' own subdirectories and represent the irreducible delta between old SGI hardware and modern browsers and devices.
+Per the preservation goal, original demo source compiles unmodified for the most part.  Translation between old code and new compilers/headers happens in `platform.mk`: see `DEMO_CODE_*` and `demo_shim.h` in particular. Some demos require additional small fixes, such as `-fcommon` LLVM compiler workaround (insect's globals), or for network play in `arena` and `flight`.
 
 ## Future directions
 

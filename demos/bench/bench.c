@@ -5,8 +5,6 @@
 #include <math.h>
 #include <device.h>
 
-#include "demo_shim.h"
-
 #define X 0
 #define Y 1
 #define Z 2

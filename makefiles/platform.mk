@@ -56,6 +56,10 @@ ifeq ($(OS),win)
 	SHIM_INC += -I$(INCS_DIR)/shim/win
 endif
 
+ifeq ($(USE_SHIM_HEADER),yes)
+	SHIM_HEADER = -include demo_shim.h
+endif
+
 # Internal libs and includes
 GL_LIB = $(LIBS_DIR)/libgl/$(BIN_DIR)/libgl.a
 EM_GL_LIB = $(LIBS_DIR)/libgl/$(WEB_DIR)/libgl.a
@@ -88,8 +92,8 @@ AR = ar rvsc
 EMAR = emar rvsc
 
 # Compiler options for original SGI demo code and demo helper libs
-DEMO_CODE_CC = $(CC) -std=c90
-DEMO_CODE_EMCC = $(EMCC) -std=c90
+DEMO_CODE_CC = $(CC) -std=c90 $(SHIM_HEADER)
+DEMO_CODE_EMCC = $(EMCC) -std=c90 $(SHIM_HEADER)
 DEMO_CODE_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat -Wno-pointer-sign -Wno-int-conversion -Wno-out-of-scope-function -Wno-format-extra-args -Wno-unused-command-line-argument -Wno-comment -Wno-deprecated-non-prototype $(DEMO_CODE_WARN_OFF_EXTRA)
 EM_DEMO_CODE_WARN_OFF = $(DEMO_CODE_WARN_OFF)
 

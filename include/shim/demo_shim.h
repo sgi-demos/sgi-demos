@@ -1,6 +1,13 @@
 #ifndef DEMO_SHIM_H
 #define DEMO_SHIM_H 1
+
+// Pull in all system headers the shims and the demos need, BEFORE any shim
+// macros, so the real library declarations are seen first before #define shimming.
 #include <stdio.h>
+#include <stdlib.h>   // exit, system, rand/srand, drand48/srand48 decls
+#include <string.h>   // strlen, strstr, memcpy
+#include <stdint.h>   // uint32_t (used by ntohl)
+
 #define MAX_COMMAND_LEN 256
 
 int demo_shim_system(const char *command)
@@ -171,10 +178,33 @@ uint32_t ntohl(uint32_t x) {
 #define M_PI 3.141596
 #endif
 
+// Browser-friendly exit(): in the web build a raw exit() tears down the C
+// runtime but leaves the page sitting there (looks frozen), so instead we
+// navigate away -- back to the previous page, or to the demos home if there
+// is none. Native builds exit normally. 
+static void demo_exit(int status)
+{
+#ifdef __EMSCRIPTEN__
+    // Go to previous page, or if none, to the demos home page.
+    const char *exit_js =
+        "if (document.referrer) {                                   "
+        "     window.history.back();                                "
+        "}                                                          "
+        "else {                                                     "
+        "    window.location.href = 'https://sgi-demos.github.io';  "
+        "}                                                          ";
+    extern void emscripten_run_script(const char *);
+    emscripten_run_script(exit_js);
+#endif
+    exit(status);
+}
+    
+#define exit demo_exit
+
 // SGI        sizeof(long) == 4, sizeof(int) == 4, sizeof(size_t) == 4
 // Mac M1     sizeof(long) == 8, sizeof(int) == 4, sizeof(size_t) == 8  <--- Bad things happen mixing longs and ints
 // Wintel     sizeof(long) == 4, sizeof(int) == 4, sizeof(size_t) == 8
-
 //#define long int
+
 
 #endif /* DEMO_SHIM_H */

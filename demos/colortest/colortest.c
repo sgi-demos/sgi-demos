@@ -4,8 +4,6 @@
 #include <math.h>
 #include <device.h>
 
-#include "demo_shim.h"
-
 float c1[3];
 float c2[3];
 float c3[3];
