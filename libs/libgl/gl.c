@@ -2683,10 +2683,6 @@ int defpup(char *menu, ...)
 
 int dopup(int pup_index) {
 
-    #ifdef __EMSCRIPTEN__
-    return -1;
-    #endif
-
     // Save previous drawing state
     int old_zbuffer = zbuffer_enabled;
     zbuffer(0);

@@ -6,6 +6,7 @@
 #endif
 
 #include <SDL.h>
+#include <math.h>
 #include "sdl_framebuffer.h"
 
 // IRIS GL
@@ -26,6 +27,30 @@ static uint32_t sdl_input_queue_length = 0;  // The number of items in the queue
 static uint32_t sdl_window_id = 0;           // Set in events_winopen; used as REDRAW event value
 static int32_t sdl_keycode_to_gl(int32_t sdl_keycode);
 static void enqueue_event(gl_event *e);
+
+//
+// Turn touch long-press into right mouse button event
+//
+// On touch devices, SDL already synthesizes LEFT mouse events from single
+// finger taps (SDL_HINT_TOUCH_MOUSE_EVENTS, on by default), so tap-to-select
+// and tap-outside-to-close already work. The only missing piece is a way to
+// OPEN the menu, which is a RIGHTMOUSE event. We detect a stationary single-
+// finger long-press from the SDL_FINGER* events and synthesize RIGHTMOUSE at
+// that point; the existing tied-valuator path attaches MOUSEX/MOUSEY.
+//
+#define TOUCH_LONGPRESS_MS  500   // hold this long (stationary) (Android and iOS defaults)
+#define TOUCH_MOVE_TOL      20    // normalized*1000 movement that cancels long-press
+
+static struct {
+    bool            enabled;            // touch input enabled or not
+    bool            in_progress;        // touch has started
+    SDL_FingerID    finger_id;          // which finger
+    Uint32          down_ticks;         // when it went down
+    float           down_x, down_y;     // normalized start position
+    bool            dragged;            // exceeded move tolerance (drag, not a press)
+    bool            longpressed;        // long-press occurred
+} touch = { false, false, 0, 0, 0.0f, 0.0f, false, false };
+
 
 static int mousePosX()
 {
@@ -56,23 +81,6 @@ static Uint8* getKeyboardState()
 static bool mouseInsideFramebuffer()
 {
     return sdlInsideFramebuffer(mousePosX(), mousePosY());
-}
-
-static void exitEvent()
-{
-    #ifdef __EMSCRIPTEN__
-        // Go to previous page, or if none, to demo home page
-        const char *exit_js =
-            "if (document.referrer) {                                   "
-            "     window.history.back();                                "
-            "}                                                          "
-            "else {                                                     "
-            "    window.location.href = 'https://sgi-demos.github.io';  "
-            "}                                                          ";
-        emscripten_run_script(exit_js);
-    #else
-        exit(0);
-    #endif
 }
 
 // EVENT: mouse transited framebuffer boundary, in or out
@@ -131,6 +139,15 @@ static void mouseButtonEvent(int sdlButton, bool buttonDown)
         default: ev.device = NULLDEV;
     }
 
+    // TODO: remove once all combos of OS, browser, touchpad/touchscrren have been tested
+    switch(ev.device)
+    {
+        case LEFTMOUSE:     fprintf(stderr, "LEFTMOUSE   %s\n", buttonDown ? "down" : "up"); break;
+        case MIDDLEMOUSE:   fprintf(stderr, "MIDDLEMOUSE %s\n", buttonDown ? "down" : "up"); break;
+        case RIGHTMOUSE:    fprintf(stderr, "RIGHTMOUSE  %s\n", buttonDown ? "down" : "up"); break;
+        default:            fprintf(stderr, "NULLDEV     %s\n", buttonDown ? "down" : "up"); break;
+    }
+
     // convert SDL mouse button event to GL and add it to GL event queue
     if (ev.device != NULLDEV && sdl_devices_queued[ev.device])
     {
@@ -151,6 +168,77 @@ static void mouseButtonEvent(int sdlButton, bool buttonDown)
                 enqueue_event(&tied_ev);
             }
         }
+    }
+}
+
+static void touchEventDown(SDL_TouchFingerEvent *f)
+{
+    if (!touch.enabled)
+        return;
+
+    if (!touch.in_progress)
+    {
+        fprintf(stderr, "TOUCH START\n");
+        touch.in_progress   = true;
+        touch.finger_id     = f->fingerId;
+        touch.down_ticks    = SDL_GetTicks();
+        touch.down_x        = f->x;
+        touch.down_y        = f->y;
+        touch.dragged       = false;
+        touch.longpressed   = false;
+    }
+    else {
+        fprintf(stderr, "MULTI TOUCH\n");
+        touch.dragged = true;   // multi-touch, so not a long-press
+    }
+}
+
+static void touchEventMotion(SDL_TouchFingerEvent *f)
+{
+    if (!touch.enabled)
+        return;
+
+    // Allow slight finger motion during long press, but past a
+    // threshold, it is no longer a press but instead a drag
+    if (touch.in_progress && f->fingerId == touch.finger_id)
+    {
+        fprintf(stderr, "TOUCH MOTION\n");
+        float dx = fabsf(f->x - touch.down_x) * 1000.0f;
+        float dy = fabsf(f->y - touch.down_y) * 1000.0f;
+        if (dx > TOUCH_MOVE_TOL || dy > TOUCH_MOVE_TOL) {
+            fprintf(stderr, "    DRAGGED\n");
+            touch.dragged = true; // a drag, not a long-press
+        }
+    }
+}
+
+// Called before each event pump
+static void touchEventProcess()
+{
+    if (!touch.enabled)
+        return;
+
+    if (touch.in_progress       // finger pressed?
+        && !touch.dragged       // not dragging?
+        && !touch.longpressed   // didn't already long press?
+        && SDL_GetTicks() - touch.down_ticks >= TOUCH_LONGPRESS_MS) // pressed long enough?
+    {
+        // Synthesize a RIGHTMOUSE click (down+up) via the normal mouse button path;
+        // the tied MOUSEX/MOUSEY valuators ride along the same as for a real right click
+        touch.longpressed = true;
+        mouseButtonEvent(SDL_BUTTON_RIGHT, true);
+        mouseButtonEvent(SDL_BUTTON_RIGHT, false);
+    }
+}
+
+static void touchEventUp(SDL_TouchFingerEvent *f)
+{
+    if (!touch.enabled)
+        return;
+
+    if (touch.in_progress && f->fingerId == touch.finger_id) {
+        fprintf(stderr, "TOUCH END\n");
+        touch.in_progress = false;
     }
 }
 
@@ -194,13 +282,19 @@ void sdlProcessEvents()
     SDL_Event event;
     char text[32] = "";
     int keysym = 0;
+
+    // Handle in-progress touch event
+    touchEventProcess();
+
     while (SDL_PollEvent(&event))
     {
         switch (event.type)
         {
+            #ifndef __EMSCRIPTEN__
             case SDL_QUIT:
-                exitEvent();
+                exit(0);
                 break;
+            #endif
 
             case SDL_WINDOWEVENT:
                 if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
@@ -212,7 +306,11 @@ void sdlProcessEvents()
                 strncpy(text, event.text.text, sizeof(text)-1);
                 //printf("SDL_TEXTINPUT text = [%s] keysym = [%d]\n", text, keysym);
                 if (strlen(SDL_GetKeyName(keysym)) == 1)
+                {
+                    if (keysym == SDLK_EXCLAIM)
+                        touch.enabled = !touch.enabled;
                     keyDownEvent(keysym, text);
+                }
                 break;
 
             case SDL_KEYDOWN:
@@ -232,6 +330,18 @@ void sdlProcessEvents()
 
             case SDL_MOUSEBUTTONUP:
                 mouseButtonEvent(((SDL_MouseButtonEvent *)&event)->button, false);
+                break;
+
+            case SDL_FINGERDOWN:
+                touchEventDown((SDL_TouchFingerEvent *)&event);
+                break;
+
+            case SDL_FINGERMOTION:
+                touchEventMotion((SDL_TouchFingerEvent *)&event);
+                break;
+
+            case SDL_FINGERUP:
+                touchEventUp((SDL_TouchFingerEvent *)&event);
                 break;
         }
     }
