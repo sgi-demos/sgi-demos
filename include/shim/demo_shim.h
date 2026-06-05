@@ -72,15 +72,26 @@ int demo_shim_system(const char *command)
     printf("url = %s\n", url);
 
     #ifdef __EMSCRIPTEN__
-        // generate js to visit relative url
+        extern void emscripten_run_script(const char *);
+        extern int emscripten_run_script_int(const char *);
+
+        // detect if running locally (page url contains "//127.0.0.1" or "//localhost")
+        int is_local = emscripten_run_script_int(
+            "(window.location.href.indexOf('//127.0.0.1') !== -1 || "
+            "window.location.href.indexOf('//localhost') !== -1) ? 1 : 0");
+
         char sys_js[MAX_COMMAND_LEN] = "";
-        int n = snprintf(sys_js, sizeof(sys_js),
-            "window.location.href = '../../%s';", url);
+        int n;
+        if (is_local) {
+            n = snprintf(sys_js, sizeof(sys_js),
+                "window.location.href = '../../%s';", url);
+        } else {
+            n = snprintf(sys_js, sizeof(sys_js),
+                "window.location.href = 'https://sgi-demos.github.io/sgi-demos/demos/%s';", url);
+        }
         if (n < 0 || (size_t)n >= sizeof(sys_js))
             return -1;
-
         // run js
-        extern void emscripten_run_script(const char *);
         emscripten_run_script(sys_js);
     #else
         #ifdef _WIN32
