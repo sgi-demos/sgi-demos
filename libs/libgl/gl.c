@@ -26,7 +26,6 @@
 #include "basic_types.h"
 #include "vector.h"
 #include "rasterizer.h"
-#include "texfont.h"
 #include "bdffont.h"
 #include "events.h"
 #include "font.h"
@@ -699,24 +698,14 @@ typedef struct pup {
 static struct pup pups[MAX_PUPS];
 
 // Font used by pup rendering. Two parallel options:
-//  - TXF (antialiased texture font), the default; smooth edges.
+//  - BMP - built-in bitmap font (font_bits / rasterizer_bitmap).
 //  - BDF (authentic 1-bit X11 Helvetica Oblique bitmap), for pixel-exact
 //    historic fidelity; chunky aliased edges like the original SGI menus.
-// Select via pup_font_mode. If the chosen font fails to load, pup_draw
-// falls back to the built-in bitmap font (font_bits / rasterizer_bitmap).
-typedef enum { PUP_FONT_TXF, PUP_FONT_BDF } pup_font_mode_t;
+typedef enum { PUP_FONT_BMP, PUP_FONT_BDF } pup_font_mode_t;
 static pup_font_mode_t pup_font_mode = PUP_FONT_BDF;
-
-static TexFont *pup_texfont = NULL;
 static const BdfFont *pup_bdffont = NULL;
-
-// True when the BDF path is selected and a BDF font is loaded.
 static int pup_use_bdf(void) {
     return pup_font_mode == PUP_FONT_BDF && pup_bdffont != NULL;
-}
-// True when the TXF path is selected and a TXF font is loaded.
-static int pup_use_txf(void) {
-    return pup_font_mode == PUP_FONT_TXF && pup_texfont != NULL;
 }
 
 void pup_init(pup *menu)
@@ -820,8 +809,6 @@ static int str_width_in_pixels(const char *str) {
 
     if (pup_use_bdf())
         width = bdf_string_width(pup_bdffont, str);
-    else if (pup_use_txf())
-        txf_string_metrics(pup_texfont, str, &width, NULL, NULL);
     else {
         for(int i = 0; i < strlen(str); i++) {
             if (str[i] == '\t') {
@@ -994,16 +981,13 @@ typedef struct pup_layout {
 static int pup_line_height(void) {
     if (pup_use_bdf())
         return pup_bdffont->ascent + pup_bdffont->descent;
-    else if (pup_use_txf())
-        return pup_texfont->max_ascent + pup_texfont->max_descent;
     else
         return font_height;
 }
 
 // Draws str with the current pup font. The (x, y) point is the baseline-
 // equivalent origin: for the bitmap font, it's the bottom-left of the
-// glyph block (which has no separate baseline / descender). For TXF, it's
-// the actual baseline; glyphs with descenders will dip below y. The BDF
+// glyph block (which has no separate baseline / descender). The BDF
 // path uses rasterizer_bitmap (same primitive as draw_screen_string), so
 // it takes the baseline origin directly, no Y-flip.
 static void pup_draw_string(int r, int g, int b, Icoord2 baseline, const char *str) {
@@ -1012,11 +996,6 @@ static void pup_draw_string(int r, int g, int b, Icoord2 baseline, const char *s
         screen_vertex_set_color(&sv, r, g, b, 255);
         screen_vertex_set_position(&sv, baseline.x, baseline.y);
         bdf_render_string(pup_bdffont, &sv, str);
-    } else if (pup_use_txf()) {
-        screen_vertex sv;
-        screen_vertex_set_position(&sv, baseline.x, baseline.y);
-        txf_render_string(pup_texfont, &sv,
-                          (uint8_t)r, (uint8_t)g, (uint8_t)b, str);
     } else {
         draw_screen_string(r, g, b, baseline, str);
     }
@@ -3871,14 +3850,6 @@ static void init_gl_state()
 
     for(int i = 0; i < MAX_PUPS; i++)
         pup_init(pups + i);
-
-    extern const unsigned char helvetica_oblique_txf[];
-    extern const unsigned int helvetica_oblique_txf_len;
-    pup_texfont = txf_load_font_mem(helvetica_oblique_txf, helvetica_oblique_txf_len);
-    if (!pup_texfont) {
-        fprintf(stderr, "pup: TXF font not loaded (%s); using bitmap font fallback\n",
-                txf_error_string() ? txf_error_string() : "no error reported");
-    }
 
     // BDF font is baked into the binary (see bake_bdf.py). It's a const
     // global, so no loading/parsing is needed -- just point at it.

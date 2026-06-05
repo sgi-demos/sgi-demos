@@ -2,8 +2,7 @@
 //
 // This is the pixel-exact path: it draws the authentic Adobe X11 bitmap
 // glyphs through libgl's 1bpp rasterizer_bitmap(), the same primitive the
-// built-in fixed font uses. Parallel to texfont.{c,h} (the antialiased TXF
-// path); the menu code chooses between them via a flag.
+// built-in fixed font uses.
 #ifndef __BDFFONT_H__
 #define __BDFFONT_H__
 
@@ -44,8 +43,7 @@ const BdfGlyph *bdf_find_glyph(const BdfFont *font, int c);
 int bdf_string_width(const BdfFont *font, const char *str);
 
 // Render `str` with its baseline origin at the pen position carried in *sv
-// (screen_vertex fixed-point, same convention as txf_render_string). Draws
-// each glyph via rasterizer_bitmap with color taken from sv's color fields.
+// Draws each glyph via rasterizer_bitmap with color taken from sv's color fields.
 void bdf_render_string(const BdfFont *font, screen_vertex *sv, const char *str);
 
 #endif /* __BDFFONT_H__ */

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Bake an X11 BDF bitmap font into a C source + header pair for libgl.
 
-Run offline, once, and commit the generated .c/.h alongside libgl sources
-(same workflow as bake_font.py for .txf). The build's `wildcard *.c` picks
-up the .c automatically; no Makefile or runtime BDF parser needed.
+Run offline, once, and commit the generated .c/.h alongside libgl sources.
+The build's `wildcard *.c` picks up the .c automatically; no Makefile or
+runtime BDF parser needed.
 
 This targets the authentic Adobe X11 bitmaps (e.g. helvO14.bdf from
 freedesktop/xorg-font-adobe-75dpi) so the menu text can be pixel-exact to
