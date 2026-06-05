@@ -716,11 +716,6 @@ void pup_init(pup *menu)
     menu->item_count = 0;
 }
 
-void pup_new(pup *menu)
-{
-    menu->defd = 1;
-}
-
 void pup_free(pup *menu)
 {
     if(menu->title != NULL) {
@@ -759,8 +754,70 @@ void pup_add(pup *menu, char *label, int value, int submenu, int (*func)(int i))
     item->func = func;
 }
 
-const int menu_corner_top = YMAXSCREEN - 1 - 10;
-const int menu_corner_left = 10;
+static void pup_parse_string(pup *thepup, const char *menu)
+{
+    char *menu2 = strdup(menu);
+    char *menu3 = menu2;
+    int nextvalue = thepup->item_count + 1;
+
+    while(menu3) {
+        char *item = strsep(&menu3, "|");
+        int is_title = 0;
+        int (*func)(int) = NULL;
+        int value = -1;
+        int submenu = -1;
+
+        char *p = item;
+        while(*p) {
+            while(*p && *p != '%')
+                p++;
+
+            char *w = p;
+            while(w >= item && *w == ' ')
+                *w-- = '\0';
+
+            if(*p == '\0')          // no flag found; done with this item
+                break;
+
+            *p++ = '\0';            // terminate label, step past '%'
+
+            if(*p == 't') {
+                is_title = 1;
+                pup_set_title(thepup, item);
+            } else if(*p == 'F') {
+                printf("addtopup/defpup argument %%F ignored\n");
+            } else if(*p == 'f') {
+                printf("addtopup/defpup argument %%f ignored\n");
+            } else if(*p == 'n') {
+                printf("addtopup/defpup argument %%n ignored\n");
+            } else if(*p == 'm') {
+                printf("addtopup/defpup argument %%m ignored\n");
+            } else if(*p == 'l') {
+                /* %l: underline/separator — not yet rendered */
+            } else if(*p == 'x') {
+                value = 0;
+                p++;
+                while(*p >= '0' && *p <= '9') {   // was: *p <= 9  (tab) — broke %x
+                    value = value * 10 + (*p - '0');
+                    p++;
+                }
+                continue;           // p already advanced past digits
+            }
+            p++;
+        }
+
+        if(!is_title) {
+            if(value == -1)
+                value = nextvalue++;
+            pup_add(thepup, item, value, submenu, func);
+        }
+    }
+
+    free(menu2);
+}
+
+int menu_corner_top = YMAXSCREEN - 1 - 10;
+int menu_corner_left = 10;
 // Horizontal text insets, in pixels. Left is from the fill's left edge to the
 // text pen origin; right is from the widest label's pen advance to the fill's
 // right edge. Separate so the left can be tighter than the right (per the SGI
@@ -1007,7 +1064,8 @@ static void pup_compute_layout(pup *menu, int menu_left, int menu_top, pup_layou
     int line_height = pup_line_height();
 
     // Title width (the title fill height is fixed: menu_title_fill_height).
-    if (menu->title)
+    int has_title = (menu->title != NULL);
+    if (has_title)
         menu_text_pane_width = str_width_in_pixels(menu->title);
 
     // Size of items area. The fill height is fully determined by the explicit
@@ -1028,24 +1086,33 @@ static void pup_compute_layout(pup *menu, int menu_left, int menu_top, pup_layou
     int title_fill_width  = menu_pad_left + menu_text_pane_width + menu_pad_right;
     int title_fill_height = menu_title_fill_height;
 
-    layout->title_outline = (IcoordRect){
-        menu_left,
-        menu_top,
-        menu_left + 2 * menu_bevel + title_fill_width,
-        menu_top  - 2 * menu_bevel - title_fill_height
-    };
-    layout->title_fill = (IcoordRect){
-        layout->title_outline.left   + menu_bevel,
-        layout->title_outline.top    - menu_bevel,
-        layout->title_outline.right  - menu_bevel,
-        layout->title_outline.bottom + menu_bevel
-    };
-    layout->title_pane = (Icoord2){
-        layout->title_fill.left + menu_pad_left,
-        // Chosen so that (title_pane.y - line_height), the baseline used at
-        // the draw site, sits menu_title_text_up pixels above the fill bottom.
-        layout->title_fill.bottom + menu_title_text_up + line_height
-    };
+    if (has_title) {
+        layout->title_outline = (IcoordRect){
+            menu_left,
+            menu_top,
+            menu_left + 2 * menu_bevel + title_fill_width,
+            menu_top  - 2 * menu_bevel - title_fill_height
+        };
+        layout->title_fill = (IcoordRect){
+            layout->title_outline.left   + menu_bevel,
+            layout->title_outline.top    - menu_bevel,
+            layout->title_outline.right  - menu_bevel,
+            layout->title_outline.bottom + menu_bevel
+        };
+        layout->title_pane = (Icoord2){
+            layout->title_fill.left + menu_pad_left,
+            // Chosen so that (title_pane.y - line_height), the baseline used at
+            // the draw site, sits menu_title_text_up pixels above the fill bottom.
+            layout->title_fill.bottom + menu_title_text_up + line_height
+        };
+    } else {
+        // No title: collapse the title pane to a zero-area point at the top-
+        // left corner. It contributes nothing to the menu extents (which read
+        // title_outline.top/.left), and the items pane starts at menu_top.
+        layout->title_outline = (IcoordRect){ menu_left, menu_top, menu_left, menu_top };
+        layout->title_fill    = layout->title_outline;
+        layout->title_pane    = (Icoord2){ menu_left, menu_top };
+    }
 
     int items_fill_width  = menu_pad_left + menu_text_pane_width + menu_pad_right;
     // Height already includes the top/bottom baseline gaps via the anchors.
@@ -1053,8 +1120,11 @@ static void pup_compute_layout(pup *menu, int menu_left, int menu_top, pup_layou
 
     // menu_items_gap is the fill-to-fill gap. Each fill is inset from its
     // outline by menu_bevel, so the outline-to-outline distance is the desired
-    // fill gap minus the two bevels that sit between the fills.
-    int items_outline_top = layout->title_outline.bottom - (menu_items_gap - 2 * menu_bevel);
+    // fill gap minus the two bevels that sit between the fills. With no title,
+    // the items pane begins right at the top-left corner.
+    int items_outline_top = has_title
+        ? layout->title_outline.bottom - (menu_items_gap - 2 * menu_bevel)
+        : menu_top;
     layout->items_outline = (IcoordRect){
         menu_left,
         items_outline_top,
@@ -1075,6 +1145,34 @@ static void pup_compute_layout(pup *menu, int menu_left, int menu_top, pup_layou
     };
 
     layout->item_slot_height = menu_item_pitch;
+}
+
+// Place the menu's upper-left corner at the cursor, then nudge it left
+// and/or up so the whole menu stays inside the framebuffer. The menu's
+// pixel extents are independent of the anchor (every layout coord is just
+// anchor +/- a constant), so probe a layout at the origin to measure them.
+void pup_menu_topleft_corner_from_mouse(pup *thepup)
+{
+    pup_layout probe;
+    pup_compute_layout(thepup, 0, 0, &probe);
+    int menu_w = probe.items_outline.right - probe.title_outline.left;
+    int menu_h = probe.title_outline.top   - probe.items_outline.bottom;
+
+    int menu_left = getvaluator(MOUSEX);   // upper-left X at cursor
+    int menu_top  = getvaluator(MOUSEY);   // upper-left Y at cursor (Y-up)
+
+    // Right edge can't pass XMAXSCREEN; if it would, slide left. If the
+    // menu is wider than the screen, pin it to the left edge.
+    if (menu_left + menu_w > XMAXSCREEN) menu_left = XMAXSCREEN - menu_w;
+    if (menu_left < 0) menu_left = 0;
+
+    // Bottom edge (menu_top - menu_h) can't drop below 0; if it would,
+    // slide up. If the menu is taller than the screen, pin it to the top.
+    if (menu_top - menu_h < 0) menu_top = menu_h;
+    if (menu_top > YMAXSCREEN) menu_top = YMAXSCREEN;
+
+    menu_corner_left = menu_left;
+    menu_corner_top = menu_top;
 }
 
 // Returns the index 0..item_count-1 of the item slot at screen coords
@@ -1098,12 +1196,12 @@ void pup_draw(pup *menu, int menu_left, int menu_top, int selected)
     pup_compute_layout(menu, menu_left, menu_top, &layout);
     int line_height = pup_line_height();
 
-    // draw title: beveled raised frame + title string
-    draw_screen_aabevel(layout.title_outline, menu_bevel,
-                        menu_hilite_r, menu_hilite_g, menu_hilite_b,
-                        menu_shadow_r, menu_shadow_g, menu_shadow_b,
-                        menu_face_r, menu_face_g, menu_face_b);
+    // draw title: beveled raised frame + title string (only when present)
     if (menu->title) {
+        draw_screen_aabevel(layout.title_outline, menu_bevel,
+                            menu_hilite_r, menu_hilite_g, menu_hilite_b,
+                            menu_shadow_r, menu_shadow_g, menu_shadow_b,
+                            menu_face_r, menu_face_g, menu_face_b);
         pup_draw_string(0, 0, 0,
             (Icoord2){ layout.title_pane.x, layout.title_pane.y - line_height }, menu->title);
     }
@@ -2457,10 +2555,6 @@ void ringbell() {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
-void addtopup(long menu, char *add) {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
-}
-
 static int polygon_vert_count = 0;
 static world_vertex polygon_verts[POLY_MAX];
 
@@ -2586,7 +2680,6 @@ dopup() enters a loop:
         (optional) play back entire previous frame contents
     return leaf item value
 */
-
 int defpup(char *menu, ...)
 {
     int which = 0;
@@ -2599,65 +2692,25 @@ int defpup(char *menu, ...)
     }
 
     pup *thepup = pups + which;
-    pup_new(thepup);
+    pup_init(thepup);
+    thepup->defd = 1;
 
-    char *menu2 = strdup(menu);
-    char *menu3 = menu2;
-    int nextvalue = 1;
-
-    while(menu3) {
-        char *item = strsep(&menu3, "|");
-        int is_title = 0;
-
-        int (*func)(int) = NULL;
-        int value = -1;
-        int submenu = -1;
-
-        char *p = item;
-        while(*p) {
-            while(*p && *p != '%')
-                p++;
-
-            char *w = p;
-            while(w >= item && *w == ' ')
-                *w-- = '\0';
-
-            *p++ = '\0';
-
-            if(*p == 't') {
-                is_title = 1;
-                pup_set_title(thepup, item);
-            } else if(*p == 'F') {
-                /* thepup->func = XXX */
-                printf("defpup argument %%F ignored\n");
-            } else if(*p == 'f') {
-                printf("defpup argument %%f ignored\n");
-                /* func = XXX */
-            } else if(*p == 'n') {
-                printf("defpup argument %%n ignored\n");
-                /* ??? XXX */
-            } else if(*p == 'm') {
-                printf("defpup argument %%m ignored\n");
-                /* thepup->func = XXX */
-            } else if(*p == 'x') {
-                value = 0;
-                while(*p && *p >= '0' && *p <= 9) {
-                    value = value * 10 + *p - '0';
-                    p++;
-                }
-            }
-            p++;
-        }
-        if(!is_title) {
-            if(value == -1)
-                value = nextvalue++;
-            pup_add(thepup, item, value, submenu, func);
-        }
-    }
-
-    free(menu2);
+    if (menu)
+        pup_parse_string(thepup, menu);
 
     return which;
+}
+
+int newpup() {
+    return defpup(NULL);
+}
+
+void addtopup(long which, char *menu) {
+    if(which < 0 || which >= MAX_PUPS || !pups[which].defd) {
+        printf("addtopup: invalid pup id %ld\n", which);
+        return;
+    }
+    pup_parse_string(pups + which, menu);
 }
 
 int dopup(int pup_index) {
@@ -2687,6 +2740,8 @@ int dopup(int pup_index) {
     qdevice(ESCKEY);
     qdevice(RETKEY);
     qdevice(LEFTMOUSE);
+
+    pup_menu_topleft_corner_from_mouse(thepup);
 
     // Compute menu geometry once for hit-testing
     pup_layout layout;
@@ -2783,6 +2838,14 @@ int dopup(int pup_index) {
         return -1;
 }
 
+void freepup(int popup) {
+    if(popup < 0 || popup >= MAX_PUPS) {
+        printf("freepup: invalid pup id %d\n", popup);
+        return;
+    }
+    pup_free(pups + popup);
+}
+
 void endpoint()
 {
     if(cur_ptr_to_nextptr != NULL) {
@@ -2843,10 +2906,6 @@ void endpolygon() {
     if(trace_functions) printf("%*sendpolygon(); /* %d verts */\n", trace_indent, "", polygon_vert_count);
 
     process_polygon(polygon_vert_count, polygon_verts);
-}
-
-void freepup(int popup) {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
 void drawmode(int drawmode) {
@@ -3239,11 +3298,6 @@ void n3f(float n[3]) {
     TRACEF("%f, %f, %f", n[0], n[1], n[2]);
 
     vec3f_copy(current_normal, n);
-}
-
-int newpup() {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
-    return 0;
 }
 
 void prefposition(int x1, int x2, int y1, int y2) {
