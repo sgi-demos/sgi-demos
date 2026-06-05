@@ -72,10 +72,10 @@ int demo_shim_system(const char *command)
     printf("url = %s\n", url);
 
     #ifdef __EMSCRIPTEN__
-        // generate js to visit full path url
+        // generate js to visit relative url
         char sys_js[MAX_COMMAND_LEN] = "";
         int n = snprintf(sys_js, sizeof(sys_js),
-            "window.location.href = 'https://sgi-demos.github.io/sgi-demos/demos/%s';", url);
+            "window.location.href = '../../%s';", url);
         if (n < 0 || (size_t)n >= sizeof(sys_js))
             return -1;
 
@@ -181,7 +181,7 @@ uint32_t ntohl(uint32_t x) {
 // Browser-friendly exit(): in the web build a raw exit() tears down the C
 // runtime but leaves the page sitting there (looks frozen), so instead we
 // navigate away -- back to the previous page, or to the demos home if there
-// is none. Native builds exit normally. 
+// is none. Native builds exit normally.
 static void demo_exit(int status)
 {
 #ifdef __EMSCRIPTEN__
@@ -198,7 +198,7 @@ static void demo_exit(int status)
 #endif
     exit(status);
 }
-    
+
 #define exit demo_exit
 
 // SGI        sizeof(long) == 4, sizeof(int) == 4, sizeof(size_t) == 4

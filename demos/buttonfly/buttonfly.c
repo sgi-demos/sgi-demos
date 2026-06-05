@@ -8,6 +8,8 @@
 #include "buttonfly.h"
 #include "data.h"
 
+#include "demo_shim.h" // must manually include shim here after local headers
+
 #define X 0
 #define Y 1
 #define Z 2
