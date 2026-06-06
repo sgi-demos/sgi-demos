@@ -73,13 +73,12 @@ make
 
 ## To do
 - Fix logged [issues](https://github.com/sgi-demos/sgi-demos/issues)
-- Enable popup menus, including the classic [SGI menu font](https://github.com/sgi-demos/sgi-fonts)
 - Upgrade rendering to [OpenGLES/WebGL](https://github.com/sgi-demos/igl) (WIP)
 - Enable arbitrary window size
-- Provide Rudimentary context for each demo: name, author, year (as text in lower corner), code link
+- Provide rudimentary context for each demo: name, author, year (as text in lower corner), code link
 - Add popup/overlay help to show key/mouse input to try
 - Add more demos, _all the demos_.
-  - Electropaint, Cedit, any other IRIS GL demos I can find
+  - Barcelona, Electropaint, Cedit, any other IRIS GL demos I can find
   - Then OpenGL, GLUT, Inventor, Performer demos in no particular order
 - Provide virtual mouse and keyboard for touch devices:
   - Only display virtual keys and mouse functions used by the demo; use demo's qdevice() calls to determine this
