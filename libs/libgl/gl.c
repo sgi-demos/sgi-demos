@@ -3300,6 +3300,10 @@ void n3f(float n[3]) {
     vec3f_copy(current_normal, n);
 }
 
+void prefsize(long width, long height) {
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
 void prefposition(int x1, int x2, int y1, int y2) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }

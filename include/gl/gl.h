@@ -335,7 +335,7 @@ extern void	popmatrix();
 extern void	popname();
 extern void	popviewport();
 extern void	prefposition(int x1, int x2, int y1, int y2);
-extern void	prefsize();
+extern void	prefsize(long width, long height);
 extern void	pupcolor();
 extern void	pupmode();
 extern void	pushattributes();
@@ -559,7 +559,7 @@ extern void gl_sincos(Angle angle, float *s, float *c);
 #define ZF_NOTEQUAL     5
 #define ZF_GEQUAL       6
 #define ZF_ALWAYS       7
-    
+
 /* defines for zsource() */
 #define ZSRC_DEPTH      0
 #define ZSRC_COLOR      1
@@ -585,7 +585,7 @@ extern void gl_sincos(Angle angle, float *s, float *c);
 #define GD_BITS_OVER_SNG_CMODE  17
 #define GD_BITS_UNDR_SNG_CMODE  18
 #define GD_BITS_PUP_SNG_CMODE   19
-#define GD_BITS_NORM_SNG_ALPHA  21 
+#define GD_BITS_NORM_SNG_ALPHA  21
 #define GD_BITS_NORM_DBL_ALPHA  22
 #define GD_BITS_CURSOR          23
 #define GD_OVERUNDER_SHARED     24
