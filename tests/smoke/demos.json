@@ -1,0 +1,19 @@
+{
+  "//": "Smoke-test config. Paths are relative to the repo root. Every demo is captured once per entry in 'modes' (?rast=... URL param: 'ref' = CPU reference rasterizer, 'gles2' = GPU rasterizer); override per demo with a 'modes' array on its entry. 'arg' becomes &arg=... on the URL (omit if none). 'minContent' is the minimum fraction of the canvas that must differ from the dominant color for the frame to count as non-blank (0..1). 'status' is just a human note shown in the gallery. Comment a demo out by deleting its entry. 'cedit' is intentionally absent: it has no web page yet.",
+  "settleMs": 3000,
+  "viewport": { "width": 1024, "height": 768 },
+  "modes": ["ref", "gles2"],
+  "defaults": { "minContent": 0.02 },
+  "demos": [
+    { "name": "buttonfly", "path": "demos/buttonfly/web/buttonfly_full.html", "status": "working" },
+    { "name": "bounce",    "path": "demos/bounce/web/bounce_full.html",       "status": "working" },
+    { "name": "ideas",     "path": "demos/ideas/web/ideas_full.html",         "status": "working" },
+    { "name": "insect",    "path": "demos/insect/web/insect_full.html",       "status": "working" },
+    { "name": "jello",     "path": "demos/jello/web/jello_full.html",         "status": "working" },
+    { "name": "logo",      "path": "demos/logo/web/logo_full.html",           "status": "working" },
+    { "name": "twilight",  "path": "demos/twilight/web/twilight_full.html",   "status": "working" },
+    { "name": "flight",    "path": "demos/flight/web/flight_full.html",       "status": "somewhat" },
+    { "name": "newave",    "path": "demos/newave/web/newave_full.html",       "status": "somewhat", "minContent": 0.01 },
+    { "name": "arena",     "path": "demos/arena/web/arena_full.html",         "status": "somewhat" }
+  ]
+}

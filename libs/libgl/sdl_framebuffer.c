@@ -489,11 +489,13 @@ void sdlRenderFramebufferTexture()
     {
         // showFrameCounter();
         // Reset state the gles2 rasterizer may have changed (it renders
-        // into its own FBOs with depth testing between our frames)
+        // into its own FBOs with depth testing between our frames, and its
+        // clears leave the demo's clear color behind)
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glViewport(0, 0, fb.windowSize.width, fb.windowSize.height);
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
+        glClearColor(0, 0, 0, 1.0f);
 
         glClear(GL_COLOR_BUFFER_BIT);
 

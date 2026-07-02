@@ -1,0 +1,15 @@
+{
+  "name": "sgi-demos-smoke",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Visual smoke tests for sgi-demos web (Emscripten) targets.",
+  "scripts": {
+    "smoke": "node smoke.mjs",
+    "smoke:update-baseline": "node smoke.mjs --update-baseline"
+  },
+  "dependencies": {
+    "playwright": "^1.49.0",
+    "pngjs": "^7.0.0"
+  }
+}

@@ -1,4 +1,4 @@
-.PHONY: demos libs clean
+.PHONY: demos libs clean smoke smoke-baseline
 
 DEMOS_DIR = demos
 DEMOS = arena bounce buttonfly cedit flight ideas insect jello logo newave twilight
@@ -92,3 +92,26 @@ clean:
 	for demo in $(DEMOS) ; do echo "" ; echo "CLEANING: $$demo" ; echo "" ; make clean -C $(DEMOS_DIR)/$$demo ; done
 	for lib in $(LIBS) ; do echo "" ; echo "CLEANING: $$lib" ; echo "" ; make clean -C $(LIBS_DIR)/$$lib ; done
 	rm -rf $(LOG_DIR)
+
+# ======================================================================
+# Visual smoke tests (web targets) — see tests/smoke/README.md
+#
+# `make smoke` assumes the web targets are already built (`make browser`).
+# Captures every demo in both rendering modes (CPU reference + gles2 GPU),
+# fails on errors/blank frames, and writes the human-review gallery to
+# tests/smoke/report/index.html. First run installs node deps + Chromium.
+# ======================================================================
+
+SMOKE_DIR = tests/smoke
+
+$(SMOKE_DIR)/node_modules:
+	cd $(SMOKE_DIR) && npm install
+	cd $(SMOKE_DIR) && npx playwright install chromium
+
+smoke: $(SMOKE_DIR)/node_modules
+	cd $(SMOKE_DIR) && node smoke.mjs --repo ../..
+
+# Promote the current captured frames to baseline/ (for the gallery's
+# side-by-side eyeball view; not part of the pass/fail gate).
+smoke-baseline: $(SMOKE_DIR)/node_modules
+	cd $(SMOKE_DIR) && node smoke.mjs --repo ../.. --update-baseline
