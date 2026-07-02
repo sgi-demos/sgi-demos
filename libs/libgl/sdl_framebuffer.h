@@ -1,6 +1,7 @@
 #include <stdbool.h>
 
 extern uint32_t sdlInitWindow();
+extern bool sdlGLContextReady();
 extern void sdlOpenWindow(char *title, int32_t frameWidth, int32_t frameHeight);
 extern void sdlSetFramebufferSource(unsigned char* pSrcPixels);
 extern void sdlResizeWindow(Uint32 windowID);

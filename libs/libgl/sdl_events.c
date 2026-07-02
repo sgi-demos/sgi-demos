@@ -13,6 +13,7 @@
 #include <gl.h>
 #include <device.h>
 #include "events.h"
+#include "rasterizer.h"
 
 typedef struct gl_event {
     int32_t device;
@@ -417,6 +418,10 @@ void events_frame_complete(void)
 
     // Translate input events into IRIS GL events
     sdlProcessEvents();
+
+    // Let a GPU rasterizer flush pending geometry and read back the front
+    // buffer before we display it (no-op for the CPU reference rasterizer)
+    rasterizer_frame_sync();
 
     // Update framebuffer texture with rendered pixels & render it
     sdlUpdateFramebufferTexture();

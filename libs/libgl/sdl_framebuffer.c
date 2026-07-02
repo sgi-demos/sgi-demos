@@ -2,8 +2,8 @@
 //  Provide an SDL framebuffer for IRIS GL to render into
 //
 //  Two types of framebuffers are provided:
-//  1. An SDL_texture is updated with IRIS GL's ref rasterizer buffer, and displayed using SDL_RenderCopy & SDL_RenderPresent
-//  2. An OpenGL texture is updated with IRIS GL's ref rasterizer buffer, and displayed using glDrawArrays & SDL_GL_SwapWindow
+//  1. An SDL_texture is updated with ref rasterizer frontbuffer or GLES2 front FBO, and displayed using SDL_RenderCopy & SDL_RenderPresent
+//  2. An OpenGL texture is updated with ref rasterizer frontbuffer or GLES2 front FBO,, and displayed using glDrawArrays & SDL_GL_SwapWindow
 //
 //  The OpenGL texture framebuffer is a stepping stone towards having an OpenGL rasterizer, which opens up
 //  faster rendering -- especially important for arbitrary window sizes and texture mapping.
@@ -14,7 +14,7 @@
 #include "sdl_framebuffer.h"
 
 static const int fbBitsPerPixel = 32;
-static bool useGLFramebuffer = false;
+static bool useGLFramebuffer = true;
 
 // Enable to debug initial test texture
 static bool debugTexBuild = false;
@@ -279,6 +279,14 @@ uint32_t sdlInitWindow()
     return (uint32_t)fb.windowID;
 }
 
+// True once the GL context exists (i.e. after sdlInitWindow on the GL
+// display path). The gles2 rasterizer polls this to lazily create its GL
+// resources, since rasterizer_winopen runs before the window is created.
+bool sdlGLContextReady()
+{
+    return useGLFramebuffer && fb.glContext != NULL;
+}
+
 //
 // framebuffer texture
 //
@@ -480,9 +488,17 @@ void sdlRenderFramebufferTexture()
     if (useGLFramebuffer)
     {
         // showFrameCounter();
+        // Reset state the gles2 rasterizer may have changed (it renders
+        // into its own FBOs with depth testing between our frames)
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glViewport(0, 0, fb.windowSize.width, fb.windowSize.height);
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_BLEND);
+
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(fb.glShaderProg);
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, fb.glTex);
         glBindBuffer(GL_ARRAY_BUFFER, fb.glQuadVBO);
         glEnableVertexAttribArray(0);

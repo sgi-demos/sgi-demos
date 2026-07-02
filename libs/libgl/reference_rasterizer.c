@@ -74,7 +74,7 @@ static void clear_cibuffer(int draw_enabled, color_index_buffer_t* buffer, short
     //     memset_pattern16(buffer, &color_index, DISPLAY_HEIGHT * DISPLAY_WIDTH);
 }
 
-void rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
+void ref_rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
 {
     clear_cbuffer(backbuffer_draw_enabled, gl_c_backbuffer, r, g, b);
     clear_cbuffer(frontbuffer_draw_enabled, gl_c_frontbuffer, r, g, b);
@@ -84,39 +84,39 @@ void rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
     }
 }
 
-void rasterizer_linewidth(float w)
+void ref_rasterizer_linewidth(float w)
 {
     the_linewidth = w;
 }
 
-void rasterizer_setpattern(uint16_t pattern[16])
+void ref_rasterizer_setpattern(uint16_t pattern[16])
 {
     for (int i = 0; i < 16; i++) {
         the_pattern[i] = pattern[i];
     }
 }
 
-void rasterizer_pattern(int enable)
+void ref_rasterizer_pattern(int enable)
 {
     pattern_enabled = enable;
 }
 
-unsigned char* rasterizer_frontbuffer()
+unsigned char* ref_rasterizer_frontbuffer()
 {
     return (unsigned char*)gl_c_frontbuffer;
 }
 
-void rasterizer_copy_front_to_back()
+void ref_rasterizer_copy_front_to_back()
 {
     memcpy(gl_c_backbuffer, gl_c_frontbuffer, sizeof(color_buffer_t));
 }
 
-void rasterizer_copy_back_to_front()
+void ref_rasterizer_copy_back_to_front()
 {
     memcpy(gl_c_frontbuffer, gl_c_backbuffer, sizeof(color_buffer_t));
 }
 
-void rasterizer_swap()
+void ref_rasterizer_swap()
 {
     // swap back buffer (buffer being rasterized) and front buffer (buffer being displayed)
     color_buffer_t *_gl_backbuffer = gl_c_backbuffer; gl_c_backbuffer = gl_c_frontbuffer; gl_c_frontbuffer = _gl_backbuffer;
@@ -145,10 +145,11 @@ void rasterizer_swap()
     frame++;
 }
 
-int32_t rasterizer_winopen(char *title)
+int32_t ref_rasterizer_winopen(char *title)
 {
-    rasterizer_clear(0, 0, 0, 0);
-    rasterizer_zclear(Z_MAX);
+    void ref_rasterizer_zclear(uint32_t z);
+    ref_rasterizer_clear(0, 0, 0, 0);
+    ref_rasterizer_zclear(Z_MAX);
 
     if (getenv("GEN_FRAME_PPM_FILES") != NULL) {
         gen_ppm_frame_files = 1;
@@ -163,33 +164,33 @@ int32_t rasterizer_winopen(char *title)
     return 1;
 }
 
-void rasterizer_rgbmode(int enable)
+void ref_rasterizer_rgbmode(int enable)
 {
     rgb_mode = enable;
 }
 
-void rasterizer_cbuffer_draw(int enable_front, int enable_back)
+void ref_rasterizer_cbuffer_draw(int enable_front, int enable_back)
 {
     frontbuffer_draw_enabled = enable_front;
     backbuffer_draw_enabled = enable_back;
 }
 
-void rasterizer_zbuffer(int enable)
+void ref_rasterizer_zbuffer(int enable)
 {
     zbuffer_enabled = enable;
 }
 
-void rasterizer_zclear(uint32_t z)
+void ref_rasterizer_zclear(uint32_t z)
 {
     for (int j = 0; j < DISPLAY_HEIGHT; j++)
         for (int i = 0; i < DISPLAY_WIDTH; i++)
             z_buffer[j][i] = z;
 }
 
-void rasterizer_czclear(uint8_t r, uint8_t g, uint8_t b, short color_index, uint32_t z)
+void ref_rasterizer_czclear(uint8_t r, uint8_t g, uint8_t b, short color_index, uint32_t z)
 {
-    rasterizer_zclear(z);
-    rasterizer_clear(r, g, b, color_index);
+    ref_rasterizer_zclear(z);
+    ref_rasterizer_clear(r, g, b, color_index);
 }
 
 static void boxi2DClear(int bbox[4])
@@ -344,7 +345,7 @@ static void screen_vertex_offset_with_clamp(screen_vertex* v, float dx, float dy
     v->y = clamp(v->y + dy * SCREEN_VERTEX_V2_SCALE, 0, (DISPLAY_HEIGHT - 1) * SCREEN_VERTEX_V2_SCALE);
 }
 
-void rasterizer_bitmap(uint32_t width, uint32_t rowbytes, uint32_t height, screen_vertex *sv, uint8_t *bits)
+void ref_rasterizer_bitmap(uint32_t width, uint32_t rowbytes, uint32_t height, screen_vertex *sv, uint8_t *bits)
 {
     screen_vertex s[4];
 
@@ -398,20 +399,20 @@ void rasterizer_bitmap(uint32_t width, uint32_t rowbytes, uint32_t height, scree
 }
 
 // Blit an 8-bit alpha source over the framebuffer at sv, in color (r,g,b),
-// using source-over blending. Like rasterizer_bitmap but with grayscale
+// using source-over blending. Like ref_rasterizer_bitmap but with grayscale
 // coverage instead of 1bpp, for antialiased glyph rendering.
-void rasterizer_alpha_blit(uint32_t width, uint32_t rowbytes, uint32_t height,
+void ref_rasterizer_alpha_blit(uint32_t width, uint32_t rowbytes, uint32_t height,
                            screen_vertex *sv, uint8_t *alpha,
                            uint8_t r, uint8_t g, uint8_t b)
 {
     // Anchor in pixel coords (sv is in fixed-point).
-    // Mirrors rasterizer_bitmap's coordinate conventions: sv->x and sv->y are in
+    // Mirrors ref_rasterizer_bitmap's coordinate conventions: sv->x and sv->y are in
     // SCREEN_VERTEX_V2_SCALE fixed-point
     int base_x = sv->x / SCREEN_VERTEX_V2_SCALE;
     int base_y = sv->y / SCREEN_VERTEX_V2_SCALE;
 
     for (int j = 0; j < (int)height; j++) {
-        // Matches rasterizer_bitmap: the source is drawn Y-flipped so
+        // Matches ref_rasterizer_bitmap: the source is drawn Y-flipped so
         // that increasing j in source goes downward on screen (with Y-up).
         int y = base_y + (int)(height - j - 1);
         if (y < 0 || y >= DISPLAY_HEIGHT) continue;
@@ -501,7 +502,7 @@ static void draw_line(screen_vertex *v0, screen_vertex *v1)
     draw_screen_triangle(&q[2], &q[3], &q[0]);
 }
 
-void rasterizer_draw(uint32_t type, uint32_t count, screen_vertex *screenverts)
+void ref_rasterizer_draw(uint32_t type, uint32_t count, screen_vertex *screenverts)
 {
     int i;
     switch(type) {
@@ -519,4 +520,35 @@ void rasterizer_draw(uint32_t type, uint32_t count, screen_vertex *screenverts)
                 draw_screen_triangle(&screenverts[i * 3], &screenverts[i * 3 + 1], &screenverts[i * 3 + 2]);
             break;
     }
+}
+
+void ref_rasterizer_frame_sync(void)
+{
+    // CPU rasterizer renders directly into the front/back buffers; nothing to flush
+}
+
+const rasterizer_funcs* ref_rasterizer_get_funcs(void)
+{
+    static const rasterizer_funcs funcs =
+    {
+        .winopen            = ref_rasterizer_winopen,
+        .rgbmode            = ref_rasterizer_rgbmode,
+        .clear              = ref_rasterizer_clear,
+        .zclear             = ref_rasterizer_zclear,
+        .czclear            = ref_rasterizer_czclear,
+        .swap               = ref_rasterizer_swap,
+        .copy_front_to_back = ref_rasterizer_copy_front_to_back,
+        .copy_back_to_front = ref_rasterizer_copy_back_to_front,
+        .frontbuffer        = ref_rasterizer_frontbuffer,
+        .draw               = ref_rasterizer_draw,
+        .bitmap             = ref_rasterizer_bitmap,
+        .alpha_blit         = ref_rasterizer_alpha_blit,
+        .setpattern         = ref_rasterizer_setpattern,
+        .pattern            = ref_rasterizer_pattern,
+        .cbuffer_draw       = ref_rasterizer_cbuffer_draw,
+        .zbuffer            = ref_rasterizer_zbuffer,
+        .linewidth          = ref_rasterizer_linewidth,
+        .frame_sync         = ref_rasterizer_frame_sync,
+    };
+    return &funcs;
 }
