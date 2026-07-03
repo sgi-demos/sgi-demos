@@ -439,7 +439,7 @@ static void checkValidTex()
         );
         GLenum glError = glGetError();
         if (glError == GL_NO_ERROR)
-            printf("INFO: GL %s OK\n", texture_info);
+            printf("INFO:  GL %s OK\n", texture_info);
         else
             printf("ERROR: GL %s code: 0x%x\n", texture_info, glError);
     }
