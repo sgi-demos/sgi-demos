@@ -28,12 +28,13 @@ typedef struct
     char title[256];
     SDL_Window* pWindow;
     Uint32 windowID;
-    Size2D windowSize;
+    Size2D windowSize;          // Drawable size in device pixels (GL viewport space)
+    Size2D logicalSize;         // SDL window size in points (the space mouse coords arrive in)
 
     // Rendered framebuffer
     Size2D size;                // Framebuffer size (<= window size)
     unsigned char* pSrcPixels;  // Framebuffer source pixels
-    GLfloat pixelScale;         // Handle SDL_WINDOW_ALLOW_HIGHDPI
+    GLfloat pixelScale;         // Device pixels per point: windowSize / logicalSize (SDL_WINDOW_ALLOW_HIGHDPI)
 
     // OGL framebuffer
     GLuint  glShaderProg;       // Framebuffer shader
@@ -41,8 +42,11 @@ typedef struct
     GLint   glShaderFbSize;
     GLint   glShaderTexSize;
     GLint   glShaderPixelScale;
+    GLint   glShaderYFlip;      // location of bool yFlip: true = source rows are top-down (CPU upload path)
+    GLint   glShaderRBSwap;     // location of float rbSwap: 1.0 = source bytes are BGRA (CPU upload path)
     GLuint  glTex;              // Texture object for displaying the framebuffer
-    GLsizei glTexSize[2];       // Texture size >= framebuffer size (GLES n^2 texture reqmt)
+    GLsizei glTexSize[2];       // Texture size >= framebuffer size (GLES n^2 (POT) texture reqmt)
+    GLuint  extTex;             // Framebuffer-sized external texture (gles2 rasterizer front FBO, 0 for CPU upload path)
     GLuint  glQuadVBO;          // Quad geometry for displaying the texture
     SDL_GLContext glContext;    // OGL renderer context
 
@@ -57,6 +61,7 @@ static SDLFramebuffer fb = (SDLFramebuffer)
     .pWindow = NULL,
     .windowID = 0,
     .windowSize = {880, 560},
+    .logicalSize = {880, 560},
 
     .size = {800, 480},
     .pSrcPixels = NULL,
@@ -67,8 +72,11 @@ static SDLFramebuffer fb = (SDLFramebuffer)
     .glShaderFbSize = 0,
     .glShaderTexSize = 0,
     .glShaderPixelScale = 0,
+    .glShaderYFlip = 0,
+    .glShaderRBSwap = 0,
     .glTex = 0,
     .glTexSize = {0, 0},
+    .extTex = 0,
     .glQuadVBO = 0,
     .glContext = NULL,
     .pixelScale = 1.0f,
@@ -81,10 +89,29 @@ static SDLFramebuffer fb = (SDLFramebuffer)
 static int min(int x, int y)            { return x < y ? x : y; }
 static int nextPowerOfTwo(int val)      { int power = 1; while (power < val) power *= 2; return power; }
 static void showFrameCounter()          { static int frameCt = 0; printf("frame = %d\n", frameCt++); }
-static int normWindowWidth()            { return fb.windowSize.width / fb.pixelScale; }
-static int normWindowHeight()           { return fb.windowSize.height / fb.pixelScale; }
-static int windowToFramebufferOffsetX() { return normWindowWidth() / 2 - fb.size.width / 2; }
-static int windowToFramebufferOffsetY() { return normWindowHeight() / 2 - fb.size.height / 2; }
+
+// Mouse coordinates arrive in SDL's logical window space; the framebuffer is
+// displayed at 1:1 in that same space, centered (the GL quad spans
+// fb.size * pixelScale device pixels = fb.size points). Both transforms
+// derive from logicalSize so display and hit testing always agree.
+static int windowToFramebufferOffsetX() { return fb.logicalSize.width / 2 - fb.size.width / 2; }
+static int windowToFramebufferOffsetY() { return fb.logicalSize.height / 2 - fb.size.height / 2; }
+
+// Refresh the window geometry: logical size (points), drawable size (device
+// pixels), and their ratio. Called at window creation and on every resize.
+static void updateWindowGeometry()
+{
+    SDL_GetWindowSize(fb.pWindow, &fb.logicalSize.width, &fb.logicalSize.height);
+
+    if (useGLFramebuffer)
+        SDL_GL_GetDrawableSize(fb.pWindow, &fb.windowSize.width, &fb.windowSize.height);
+    else
+        fb.windowSize = fb.logicalSize;
+
+    fb.pixelScale = (fb.logicalSize.width > 0)
+        ? (GLfloat)fb.windowSize.width / (GLfloat)fb.logicalSize.width
+        : 1.0f;
+}
 
 // Shader for displaying the framebuffer texture on a quad which fills the viewport
 const GLchar* fbVertexSource =
@@ -94,6 +121,7 @@ const GLchar* fbVertexSource =
     "uniform vec2 vpSize;                                               \n"
     "uniform vec2 fbSize;                                               \n"
     "uniform vec2 texSize;                                              \n"
+    "uniform bool yFlip;                                                \n"
     "void main()                                                        \n"
     "{                                                                  \n"
     "    // Geometry                                                    \n"
@@ -117,20 +145,27 @@ const GLchar* fbVertexSource =
     "    texCoord.x = position.x * fbSize.x / texSize.x;                \n"
     "    texCoord.y = position.y * fbSize.y / texSize.y;                \n"
     "                                                                   \n"
-    "    // Invert and offset y to put fb origin at upper left          \n"
-    "    texCoord.y = -texCoord.y;                                      \n"
-    "    texCoord.y -= (texSize.y - fbSize.y) / texSize.y;              \n"
+    "    // CPU-uploaded textures store rows top-down: invert and       \n"
+    "    // offset y to put the fb origin at upper left. FBO textures   \n"
+    "    // (gles2 rasterizer) are bottom-up like GL wants: no flip.    \n"
+    "    if (yFlip)                                                     \n"
+    "    {                                                              \n"
+    "        texCoord.y = -texCoord.y;                                  \n"
+    "        texCoord.y -= (texSize.y - fbSize.y) / texSize.y;          \n"
+    "    }                                                              \n"
     "}                                                                  \n";
 
 const GLchar* fbFragmentSource =
     "precision mediump float;                                           \n"
     "varying vec2 texCoord;                                             \n"
     "uniform sampler2D texSampler;                                      \n"
+    "uniform float rbSwap;                                              \n"
     "void main()                                                        \n"
     "{                                                                  \n"
-    "    // Sample ABGR fb texture, then swap B and R, and make A opaque\n"
+    "    // CPU-uploaded textures hold BGRA bytes: swap B and R.        \n"
+    "    // FBO textures (gles2 rasterizer) are true RGBA: no swap.     \n"
     "    vec3 texel = texture2D(texSampler, texCoord).rgb;              \n"
-    "    gl_FragColor = vec4(texel.b, texel.g, texel.r, 1.0);           \n"
+    "    gl_FragColor = vec4(mix(texel, texel.bgr, rbSwap), 1.0);       \n"
     "}                                                                  \n";
 
 static void checkShaderBuilt(const char* shader_name, GLenum status, GLuint shader)
@@ -143,6 +178,13 @@ static void checkShaderBuilt(const char* shader_name, GLenum status, GLuint shad
         printf("ERROR: GL %s shader id %d build FAILED!\n", shader_name, shader);
 }
 
+// The texture the present quad samples: the external FBO texture when set
+// (gles2 rasterizer), else the CPU-upload texture
+static GLuint presentTexSource()
+{
+    return fb.extTex ? fb.extTex : fb.glTex;
+}
+
 static void updateShaderVars()
 {
     glUseProgram(fb.glShaderProg);
@@ -153,10 +195,19 @@ static void updateShaderVars()
     GLfloat fbSize[2] = {fb.size.width, fb.size.height};
     glUniform2fv(fb.glShaderFbSize, 1, fbSize);
 
-    GLfloat texSize[2] = {fb.glTexSize[0], fb.glTexSize[1]};
-    glUniform2fv(fb.glShaderTexSize, 1, texSize);
-
     glUniform1f(fb.glShaderPixelScale, fb.pixelScale);
+
+    // To POT or NPOT?
+    // POT:  The CPU-upload texture needs a y-flip which requires GL_REPEAT which requires POT
+    // NPOT: The external FBO texture needs no flip, so CLAMP_TO_EDGE, and no mipmaps, so NPOT is OK
+    bool useExtTex = fb.extTex != 0;
+    GLfloat texSize[2] = {
+        (GLfloat)(useExtTex ? fb.size.width : fb.glTexSize[0]),
+        (GLfloat)(useExtTex ? fb.size.height : fb.glTexSize[1]),
+    };
+    glUniform2fv(fb.glShaderTexSize, 1, texSize);
+    glUniform1i(fb.glShaderYFlip, useExtTex ? 0 : 1);        // bool uniform
+    glUniform1f(fb.glShaderRBSwap, useExtTex ? 0.0f : 1.0f); // float: used in mix()
 }
 
 static void initShader()
@@ -185,6 +236,8 @@ static void initShader()
     fb.glShaderFbSize     = glGetUniformLocation(fb.glShaderProg, "fbSize");
     fb.glShaderTexSize    = glGetUniformLocation(fb.glShaderProg, "texSize");
     fb.glShaderPixelScale = glGetUniformLocation(fb.glShaderProg, "pixelScale");
+    fb.glShaderYFlip      = glGetUniformLocation(fb.glShaderProg, "yFlip");
+    fb.glShaderRBSwap     = glGetUniformLocation(fb.glShaderProg, "rbSwap");
 
     updateShaderVars();
 }
@@ -244,14 +297,16 @@ uint32_t sdlInitWindow()
         //glClearColor(r, g, b, a);
         glClearColor(0,0,0,1.0f);
 
-        // handle high DPI scaling by getting ratio of requested to actual window size
-        int requestedWidth = fb.windowSize.width;
-        SDL_GL_GetDrawableSize(fb.pWindow, &fb.windowSize.width, &fb.windowSize.height);
-        fb.pixelScale = fb.windowSize.width / requestedWidth;
-        printf("INFO: GL pixel scale: %f\n", fb.pixelScale);
+        // Window geometry: logical (mouse) size, drawable (GL) size, and
+        // their HIGHDPI ratio. NOTE: must be float division — on web the
+        // canvas can be any size (e.g. fullwindow shells), so the ratio is
+        // not necessarily a whole number
+        updateWindowGeometry();
+        printf("INFO: GL window: %dx%d points, viewport %dx%d px, pixel scale %f\n",
+               fb.logicalSize.width, fb.logicalSize.height,
+               fb.windowSize.width, fb.windowSize.height, fb.pixelScale);
 
         glViewport(0, 0, fb.windowSize.width, fb.windowSize.height);
-        printf("INFO: GL viewport: %dx%d\n", fb.windowSize.width, fb.windowSize.height);
 
         initShader();
         initGeometry();
@@ -267,6 +322,8 @@ uint32_t sdlInitWindow()
             SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
 
         fb.pSDLRenderer = SDL_CreateRenderer(fb.pWindow, -1, 0);
+
+        updateWindowGeometry();
 
         // const Uint8 r = 0.2f * 255, g = 0.1f * 255, b = 0.15f * 255, a = 255;
         // SDL_SetRenderDrawColor(fb.pSDLRenderer, r, g, b, a);
@@ -453,6 +510,10 @@ void sdlUpdateFramebufferTexture()
     if (debugTexBuild)
         return;
 
+    // Use external framebuffer texture directly
+    if (fb.extTex)
+        return;
+
     if (fb.pSrcPixels)
     {
         if (useGLFramebuffer)
@@ -501,7 +562,7 @@ void sdlRenderFramebufferTexture()
 
         glUseProgram(fb.glShaderProg);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, fb.glTex);
+        glBindTexture(GL_TEXTURE_2D, presentTexSource());
         glBindBuffer(GL_ARRAY_BUFFER, fb.glQuadVBO);
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -544,12 +605,15 @@ void sdlFreeFramebufferTexture()
 //
 // framebuffer events
 //
+
 void sdlResizeWindow(Uint32 windowID)
 {
     if (windowID == fb.windowID)
     {
-        SDL_GL_GetDrawableSize(fb.pWindow, &fb.windowSize.width, &fb.windowSize.height);
-        printf("INFO: resize window: %dx%d\n", fb.windowSize.width, fb.windowSize.height);
+        updateWindowGeometry();
+        printf("INFO: resize window: %dx%d points, viewport %dx%d px, pixel scale %f\n",
+               fb.logicalSize.width, fb.logicalSize.height,
+               fb.windowSize.width, fb.windowSize.height, fb.pixelScale);
 
         if (useGLFramebuffer)
         {
@@ -587,7 +651,7 @@ void sdlOpenWindow(char *title, int32_t frameWidth, int32_t frameHeight)
     // initial size
 }
 
-void sdlSetFramebufferSource(unsigned char* pSrcPixels)
+void sdlSetFramebufferSourceMem(unsigned char* pSrcPixels)
 {
     static int calls = 0;
     if (++calls <= 1)
@@ -595,12 +659,29 @@ void sdlSetFramebufferSource(unsigned char* pSrcPixels)
     fb.pSrcPixels = pSrcPixels;
 }
 
+// Zero-readback present: display directly from a GL texture (the gles2
+// rasterizer's front FBO color texture) instead of uploading CPU pixels.
+// The texture must be exactly framebuffer-sized.
+void sdlSetFramebufferSourceTex(uint32_t tex)
+{
+    static int calls = 0;
+    if (++calls <= 1)
+        printf("SDL fb texture source = %u\n", tex);
+
+    bool changed = fb.extTex != (GLuint)tex;
+    fb.extTex = (GLuint)tex;
+
+    // source-dependent shader vars (texSize, yFlip, rbSwap) follow the source
+    if (changed && fb.glShaderProg)
+        updateShaderVars();
+}
+
 // For now, window and framebuffer dimensions may differ, so convert
 // incoming window coords to framebuffer coords, including inverting y
 static int clamp(int v, int low, int high)          { return v > high ? high : (v < low ? low : v); }
 static bool would_clamp(int v, int low, int high)   { return v < low || v > high; }
 static int framebufferX(int windowX)                { return windowX - windowToFramebufferOffsetX(); }
-static int framebufferY(int windowY)                { return normWindowHeight() - windowY - windowToFramebufferOffsetY(); }
+static int framebufferY(int windowY)                { return fb.logicalSize.height - windowY - windowToFramebufferOffsetY(); }
 
 int sdlClampToFramebufferX(int windowX)             { return clamp(framebufferX(windowX), 1, fb.size.width - 1); }
 int sdlClampToFramebufferY(int windowY)             { return clamp(framebufferY(windowY), 1, fb.size.height - 1); }

@@ -704,7 +704,7 @@ int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height)
 
 void events_set_framebuffer(unsigned char* framebuffer)
 {
-    sdlSetFramebufferSource(framebuffer);
+    sdlSetFramebufferSourceMem(framebuffer);
 }
 
 // usually:

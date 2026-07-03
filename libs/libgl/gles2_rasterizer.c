@@ -10,11 +10,13 @@
 //    expanded into quads exactly the way the reference rasterizer does)
 //    and flushed with one glDrawArrays(GL_TRIANGLES) per color buffer.
 //  - IRIS GL's double-buffered model is mirrored with two offscreen FBOs
-//    (front and back), each with an RGBA color texture and a 16-bit depth
-//    renderbuffer (the reference rasterizer's z-buffer is also 16-bit).
-//  - After each swap (or any operation that touches the front buffer) the
-//    front FBO is read back into a CPU BGRA buffer, so the existing SDL
-//    display and events code paths work unchanged in both modes.
+//    (front and back), each with an RGBA color texture; one 16-bit depth
+//    renderbuffer is shared by both (the reference rasterizer's z-buffer is
+//    also 16-bit and shared).
+//  - Zero-readback present: the front FBO's color texture is handed to the
+//    display quad directly (sdlSetFramebufferSourceTex), so no glReadPixels
+//    happens per frame. The CPU front buffer copy is refreshed from the
+//    GPU FBO only when GEN_FRAME_PPM_FILES needs it for frame dumps.
 //  - GL resources are created lazily on the first call after the SDL window
 //    and GL context exist (rasterizer_winopen is called before the window
 //    is created, so nothing GL can happen there).
@@ -95,11 +97,14 @@ static GLuint blit_vbo = 0;
 static int gl_ready = 0;
 
 //
-// CPU front buffer (what the SDL display and events layers consume)
+// CPU front buffer. The display samples the front FBO texture directly
+// (zero-readback present), so this copy is only refreshed from the GPU
+// front FBO for the GEN_FRAME_PPM_FILES frame dumps; it is also what
+// rasterizer_frontbuffer returns (the display ignores that pointer once a
+// texture source is set).
 //
 static unsigned char cpu_front[FB_HEIGHT][FB_WIDTH][4];    // BGRA, row 0 = top
 static unsigned char readback_rgba[FB_HEIGHT][FB_WIDTH][4]; // RGBA, row 0 = bottom (GL order)
-static int front_dirty = 0; // front FBO has content not yet in cpu_front
 
 //
 // vertex batch — everything becomes GL_TRIANGLES
@@ -140,10 +145,10 @@ static const GLchar *draw_fs_src =
     "precision mediump float;                                           \n"
     "varying vec4 v_color;                                              \n"
     "uniform sampler2D pattern_tex;                                     \n"
-    "uniform float pattern_on;                                          \n"
+    "uniform bool pattern_on;                                           \n"
     "void main()                                                        \n"
     "{                                                                  \n"
-    "    if (pattern_on > 0.5)                                          \n"
+    "    if (pattern_on)                                                \n"
     "    {                                                              \n"
     "        vec2 pc = mod(gl_FragCoord.xy, 16.0) / 16.0;               \n"
     "        if (texture2D(pattern_tex, pc).a < 0.5)                    \n"
@@ -310,6 +315,10 @@ static int ensure_gl(void)
     clear_gl_buffers(pend_clear_rgb[0], pend_clear_rgb[1], pend_clear_rgb[2],
                      1, 1, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    // present directly from the front FBO texture from the outset, so even
+    // frames before the first swap (front-buffer drawing) display correctly
+    sdlSetFramebufferSourceTex(front_buf->tex);
+
     printf("INFO: gles2 rasterizer initialized (%dx%d front/back FBOs)\n", FB_WIDTH, FB_HEIGHT);
     return 1;
 }
@@ -351,7 +360,7 @@ static void flush_batch(void)
 
     glUseProgram(draw_prog);
     glUniform2f(u_draw_scale, 2.0f / FB_WIDTH, 2.0f / FB_HEIGHT);
-    glUniform1f(u_draw_pattern_on, batch_pattern_on ? 1.0f : 0.0f);
+    glUniform1i(u_draw_pattern_on, batch_pattern_on ? 1 : 0);   // bool uniform
     glUniform1i(u_draw_pattern_tex, 0);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, pattern_tex);
@@ -385,7 +394,6 @@ static void flush_batch(void)
             glDepthFunc(GL_LEQUAL);
         glBindFramebuffer(GL_FRAMEBUFFER, front_buf->fbo);
         glDrawArrays(GL_TRIANGLES, 0, batch_count);
-        front_dirty = 1;
     }
 
     glDisableVertexAttribArray(0);
@@ -420,8 +428,6 @@ static void sync_front_to_cpu(void)
             dst[i][ALPHA_BYTE] = 255;
         }
     }
-
-    front_dirty = 0;
 }
 
 //
@@ -442,8 +448,6 @@ static void clear_gl_buffers(uint8_t r, uint8_t g, uint8_t b,
     {
         glBindFramebuffer(GL_FRAMEBUFFER, front_buf->fbo);
         glClear(mask);
-        if (mask & GL_COLOR_BUFFER_BIT)
-            front_dirty = 1;
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -489,10 +493,12 @@ void gles2_rasterizer_swap(void)
     flush_batch();
 
     // optionally dump frames to ppm files; like the reference rasterizer,
-    // the frame dumped at swap N is the frame presented at swap N-1
+    // the frame dumped at swap N is the outgoing front buffer — the frame
+    // presented at swap N-1 plus any front-buffer drawing done since
     static int frame = 0;
     if (gen_ppm_frame_files && gl_ready)
     {
+        sync_front_to_cpu();
         char name[128];
         sprintf(name, "frame%04d.ppm", frame);
         FILE *fp = fopen(name, "wb");
@@ -515,12 +521,14 @@ void gles2_rasterizer_swap(void)
     }
     frame++;
 
-    // exchange front and back, then refresh the CPU copy of the new front
+    // exchange front and back, and hand the new front texture to the
+    // display quad (zero-readback present)
     gl_buffer *tmp = back_buf;
     back_buf = front_buf;
     front_buf = tmp;
 
-    sync_front_to_cpu();
+    if (gl_ready)
+        sdlSetFramebufferSourceTex(front_buf->tex);
 }
 
 void gles2_rasterizer_copy_front_to_back(void)
@@ -545,9 +553,6 @@ void gles2_rasterizer_copy_back_to_front(void)
     glBindTexture(GL_TEXTURE_2D, front_buf->tex);
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, FB_WIDTH, FB_HEIGHT);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    front_dirty = 1;
-    sync_front_to_cpu();
 }
 
 unsigned char* gles2_rasterizer_frontbuffer(void)
@@ -555,17 +560,16 @@ unsigned char* gles2_rasterizer_frontbuffer(void)
     return (unsigned char *)cpu_front;
 }
 
-// Called once per presented frame (events_frame_complete), to allow the
-// GPU rasterizer to flush pending batched geometry and read back the
-// front buffer; no-op for the CPU reference rasterizer.
+// Called once per presented frame (events_frame_complete), before the
+// display quad samples the front FBO texture: flush pending batched
+// geometry so everything drawn this frame (menus, single-buffered demos)
+// is in the FBO. No readback — the display reads the texture directly.
 void gles2_rasterizer_frame_sync(void)
 {
     if (!gl_ready)
         return;
     if (batch_count > 0)
         flush_batch();
-    if (front_dirty)
-        sync_front_to_cpu();
 }
 
 //
@@ -822,7 +826,6 @@ void gles2_rasterizer_alpha_blit(uint32_t width, uint32_t rowbytes, uint32_t hei
     {
         glBindFramebuffer(GL_FRAMEBUFFER, front_buf->fbo);
         glDrawArrays(GL_TRIANGLES, 0, 6);
-        front_dirty = 1;
     }
 
     glDisableVertexAttribArray(0);
