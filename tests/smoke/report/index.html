@@ -1,0 +1,233 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>sgi-demos smoke report</title>
+<style>
+  :root { color-scheme: dark; }
+  body { font: 14px/1.4 system-ui, sans-serif; margin: 0; padding: 24px; background:#111; color:#eee; }
+  header { margin-bottom: 20px; }
+  h1 { margin: 0 0 4px; font-size: 20px; }
+  .summary { color:#aaa; }
+  .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(480px,1fr)); gap:16px; }
+  .card { background:#1b1b1b; border:1px solid #333; border-radius:8px; padding:12px; }
+  .card.bad { border-color:#a33; }
+  .card h2 { font-size:15px; margin:0 0 6px; display:flex; align-items:center; gap:8px; }
+  .meta { color:#999; font-size:12px; margin-bottom:8px; }
+  img { width:100%; height:auto; display:block; border-radius:4px; background:#000; border:1px solid #2a2a2a; }
+  .pair { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  figure { margin:0; }
+  figcaption { font-size:11px; color:#888; margin-bottom:2px; display:flex; align-items:center; gap:6px; }
+  .content { color:#666; }
+  .badge { font-size:10px; padding:1px 7px; border-radius:999px; font-weight:600; }
+  .badge.pass { background:#0a3; color:#fff; }
+  .badge.fail { background:#c33; color:#fff; }
+  .reasons { color:#f99; margin:8px 0 0; padding-left:18px; }
+  details { margin-top:8px; }
+  summary { cursor:pointer; color:#888; font-size:12px; }
+  pre { white-space:pre-wrap; background:#000; padding:8px; border-radius:4px; max-height:200px; overflow:auto; font-size:12px; }
+</style></head><body>
+<header>
+  <h1>sgi-demos visual smoke report</h1>
+  <div class="summary">20/20 captures passed &middot; modes: ref, gles2 &middot; 2026-07-03T03:26:44.311Z &middot; viewport 1024&times;768 &middot; settle 3000ms</div>
+</header>
+<div class="grid">
+<div class="card ok">
+        <h2>buttonfly</h2>
+        <div class="meta">status: working &middot; min content 0.02</div>
+        <div class="pair"><figure>
+            <figcaption>ref <span class="badge pass">PASS</span> <span class="content">content 0.4886</span></figcaption>
+            <a href="../results/buttonfly.ref.png" target="_blank"><img src="../results/buttonfly.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 <span class="badge pass">PASS</span> <span class="content">content 0.4886</span></figcaption>
+            <a href="../results/buttonfly.gles2.png" target="_blank"><img src="../results/buttonfly.gles2.png" loading="lazy"></a>
+          </figure></div>
+        <details><summary>baseline</summary><div class="pair"><figure>
+            <figcaption>ref baseline</figcaption>
+            <a href="../baseline/buttonfly.ref.png" target="_blank"><img src="../baseline/buttonfly.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 baseline</figcaption>
+            <a href="../baseline/buttonfly.gles2.png" target="_blank"><img src="../baseline/buttonfly.gles2.png" loading="lazy"></a>
+          </figure></div></details>
+        
+        
+      </div>
+<div class="card ok">
+        <h2>bounce</h2>
+        <div class="meta">status: working &middot; min content 0.02</div>
+        <div class="pair"><figure>
+            <figcaption>ref <span class="badge pass">PASS</span> <span class="content">content 0.3438</span></figcaption>
+            <a href="../results/bounce.ref.png" target="_blank"><img src="../results/bounce.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 <span class="badge pass">PASS</span> <span class="content">content 0.3469</span></figcaption>
+            <a href="../results/bounce.gles2.png" target="_blank"><img src="../results/bounce.gles2.png" loading="lazy"></a>
+          </figure></div>
+        <details><summary>baseline</summary><div class="pair"><figure>
+            <figcaption>ref baseline</figcaption>
+            <a href="../baseline/bounce.ref.png" target="_blank"><img src="../baseline/bounce.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 baseline</figcaption>
+            <a href="../baseline/bounce.gles2.png" target="_blank"><img src="../baseline/bounce.gles2.png" loading="lazy"></a>
+          </figure></div></details>
+        
+        
+      </div>
+<div class="card ok">
+        <h2>ideas</h2>
+        <div class="meta">status: working &middot; min content 0.02</div>
+        <div class="pair"><figure>
+            <figcaption>ref <span class="badge pass">PASS</span> <span class="content">content 0.2410</span></figcaption>
+            <a href="../results/ideas.ref.png" target="_blank"><img src="../results/ideas.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 <span class="badge pass">PASS</span> <span class="content">content 0.2422</span></figcaption>
+            <a href="../results/ideas.gles2.png" target="_blank"><img src="../results/ideas.gles2.png" loading="lazy"></a>
+          </figure></div>
+        <details><summary>baseline</summary><div class="pair"><figure>
+            <figcaption>ref baseline</figcaption>
+            <a href="../baseline/ideas.ref.png" target="_blank"><img src="../baseline/ideas.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 baseline</figcaption>
+            <a href="../baseline/ideas.gles2.png" target="_blank"><img src="../baseline/ideas.gles2.png" loading="lazy"></a>
+          </figure></div></details>
+        
+        
+      </div>
+<div class="card ok">
+        <h2>insect</h2>
+        <div class="meta">status: working &middot; min content 0.02</div>
+        <div class="pair"><figure>
+            <figcaption>ref <span class="badge pass">PASS</span> <span class="content">content 0.4880</span></figcaption>
+            <a href="../results/insect.ref.png" target="_blank"><img src="../results/insect.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 <span class="badge pass">PASS</span> <span class="content">content 0.4880</span></figcaption>
+            <a href="../results/insect.gles2.png" target="_blank"><img src="../results/insect.gles2.png" loading="lazy"></a>
+          </figure></div>
+        <details><summary>baseline</summary><div class="pair"><figure>
+            <figcaption>ref baseline</figcaption>
+            <a href="../baseline/insect.ref.png" target="_blank"><img src="../baseline/insect.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 baseline</figcaption>
+            <a href="../baseline/insect.gles2.png" target="_blank"><img src="../baseline/insect.gles2.png" loading="lazy"></a>
+          </figure></div></details>
+        
+        
+      </div>
+<div class="card ok">
+        <h2>jello</h2>
+        <div class="meta">status: working &middot; min content 0.02</div>
+        <div class="pair"><figure>
+            <figcaption>ref <span class="badge pass">PASS</span> <span class="content">content 0.1839</span></figcaption>
+            <a href="../results/jello.ref.png" target="_blank"><img src="../results/jello.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 <span class="badge pass">PASS</span> <span class="content">content 0.1839</span></figcaption>
+            <a href="../results/jello.gles2.png" target="_blank"><img src="../results/jello.gles2.png" loading="lazy"></a>
+          </figure></div>
+        <details><summary>baseline</summary><div class="pair"><figure>
+            <figcaption>ref baseline</figcaption>
+            <a href="../baseline/jello.ref.png" target="_blank"><img src="../baseline/jello.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 baseline</figcaption>
+            <a href="../baseline/jello.gles2.png" target="_blank"><img src="../baseline/jello.gles2.png" loading="lazy"></a>
+          </figure></div></details>
+        
+        
+      </div>
+<div class="card ok">
+        <h2>logo</h2>
+        <div class="meta">status: working &middot; min content 0.02</div>
+        <div class="pair"><figure>
+            <figcaption>ref <span class="badge pass">PASS</span> <span class="content">content 0.0320</span></figcaption>
+            <a href="../results/logo.ref.png" target="_blank"><img src="../results/logo.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 <span class="badge pass">PASS</span> <span class="content">content 0.0331</span></figcaption>
+            <a href="../results/logo.gles2.png" target="_blank"><img src="../results/logo.gles2.png" loading="lazy"></a>
+          </figure></div>
+        <details><summary>baseline</summary><div class="pair"><figure>
+            <figcaption>ref baseline</figcaption>
+            <a href="../baseline/logo.ref.png" target="_blank"><img src="../baseline/logo.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 baseline</figcaption>
+            <a href="../baseline/logo.gles2.png" target="_blank"><img src="../baseline/logo.gles2.png" loading="lazy"></a>
+          </figure></div></details>
+        
+        
+      </div>
+<div class="card ok">
+        <h2>twilight</h2>
+        <div class="meta">status: working &middot; min content 0.02</div>
+        <div class="pair"><figure>
+            <figcaption>ref <span class="badge pass">PASS</span> <span class="content">content 0.4544</span></figcaption>
+            <a href="../results/twilight.ref.png" target="_blank"><img src="../results/twilight.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 <span class="badge pass">PASS</span> <span class="content">content 0.4554</span></figcaption>
+            <a href="../results/twilight.gles2.png" target="_blank"><img src="../results/twilight.gles2.png" loading="lazy"></a>
+          </figure></div>
+        <details><summary>baseline</summary><div class="pair"><figure>
+            <figcaption>ref baseline</figcaption>
+            <a href="../baseline/twilight.ref.png" target="_blank"><img src="../baseline/twilight.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 baseline</figcaption>
+            <a href="../baseline/twilight.gles2.png" target="_blank"><img src="../baseline/twilight.gles2.png" loading="lazy"></a>
+          </figure></div></details>
+        
+        
+      </div>
+<div class="card ok">
+        <h2>flight</h2>
+        <div class="meta">status: somewhat &middot; min content 0.02</div>
+        <div class="pair"><figure>
+            <figcaption>ref <span class="badge pass">PASS</span> <span class="content">content 0.2903</span></figcaption>
+            <a href="../results/flight.ref.png" target="_blank"><img src="../results/flight.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 <span class="badge pass">PASS</span> <span class="content">content 0.2902</span></figcaption>
+            <a href="../results/flight.gles2.png" target="_blank"><img src="../results/flight.gles2.png" loading="lazy"></a>
+          </figure></div>
+        <details><summary>baseline</summary><div class="pair"><figure>
+            <figcaption>ref baseline</figcaption>
+            <a href="../baseline/flight.ref.png" target="_blank"><img src="../baseline/flight.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 baseline</figcaption>
+            <a href="../baseline/flight.gles2.png" target="_blank"><img src="../baseline/flight.gles2.png" loading="lazy"></a>
+          </figure></div></details>
+        
+        
+      </div>
+<div class="card ok">
+        <h2>newave</h2>
+        <div class="meta">status: somewhat &middot; min content 0.01</div>
+        <div class="pair"><figure>
+            <figcaption>ref <span class="badge pass">PASS</span> <span class="content">content 0.0177</span></figcaption>
+            <a href="../results/newave.ref.png" target="_blank"><img src="../results/newave.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 <span class="badge pass">PASS</span> <span class="content">content 0.0176</span></figcaption>
+            <a href="../results/newave.gles2.png" target="_blank"><img src="../results/newave.gles2.png" loading="lazy"></a>
+          </figure></div>
+        <details><summary>baseline</summary><div class="pair"><figure>
+            <figcaption>ref baseline</figcaption>
+            <a href="../baseline/newave.ref.png" target="_blank"><img src="../baseline/newave.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 baseline</figcaption>
+            <a href="../baseline/newave.gles2.png" target="_blank"><img src="../baseline/newave.gles2.png" loading="lazy"></a>
+          </figure></div></details>
+        
+        
+      </div>
+<div class="card ok">
+        <h2>arena</h2>
+        <div class="meta">status: somewhat &middot; min content 0.02</div>
+        <div class="pair"><figure>
+            <figcaption>ref <span class="badge pass">PASS</span> <span class="content">content 0.4862</span></figcaption>
+            <a href="../results/arena.ref.png" target="_blank"><img src="../results/arena.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 <span class="badge pass">PASS</span> <span class="content">content 0.4863</span></figcaption>
+            <a href="../results/arena.gles2.png" target="_blank"><img src="../results/arena.gles2.png" loading="lazy"></a>
+          </figure></div>
+        <details><summary>baseline</summary><div class="pair"><figure>
+            <figcaption>ref baseline</figcaption>
+            <a href="../baseline/arena.ref.png" target="_blank"><img src="../baseline/arena.ref.png" loading="lazy"></a>
+          </figure><figure>
+            <figcaption>gles2 baseline</figcaption>
+            <a href="../baseline/arena.gles2.png" target="_blank"><img src="../baseline/arena.gles2.png" loading="lazy"></a>
+          </figure></div></details>
+        
+        
+      </div>
+</div>
+</body></html>
