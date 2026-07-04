@@ -2,8 +2,9 @@
 // GLES2 (GPU) rasterizer
 //
 // Implements the rasterizer interface with OpenGL ES2 draw calls instead of
-// the CPU reference rasterizer. Selected via rasterizer.c dispatch
-// (GLES2_RASTERIZER=gles2 native, ?rast=gles2 web).
+// the CPU reference rasterizer. The DEFAULT rasterizer (rasterizer.c
+// dispatch; select the CPU reference instead via GLES2_RASTERIZER=ref
+// native, ?rast=ref web).
 //
 // Design:
 //  - Primitives are batched into a vertex array (points and lines are
@@ -32,12 +33,13 @@
 #include <SDL.h>
 #include <SDL_opengles2.h>
 
-#include <gl.h> // XMAXSCREEN / YMAXSCREEN
 #include "rasterizer.h"
 #include "sdl_framebuffer.h"
 
-#define FB_WIDTH  (XMAXSCREEN + 1)
-#define FB_HEIGHT (YMAXSCREEN + 1)
+// Framebuffer size tracks the window (gles2_rasterizer_resize); buffers and
+// FBOs are (re)created at that size. Zero until the window exists.
+static int fb_width = 0;
+static int fb_height = 0;
 
 // CPU front buffer byte order must match the reference rasterizer (BGRA for SDL)
 #define BLUE_BYTE 0
@@ -103,8 +105,8 @@ static int gl_ready = 0;
 // rasterizer_frontbuffer returns (the display ignores that pointer once a
 // texture source is set).
 //
-static unsigned char cpu_front[FB_HEIGHT][FB_WIDTH][4];    // BGRA, row 0 = top
-static unsigned char readback_rgba[FB_HEIGHT][FB_WIDTH][4]; // RGBA, row 0 = bottom (GL order)
+static unsigned char *cpu_front = NULL;     // BGRA, row 0 = top, fb_width*fb_height*4
+static unsigned char *readback_rgba = NULL; // RGBA, row 0 = bottom (GL order), same size
 
 //
 // vertex batch — everything becomes GL_TRIANGLES
@@ -241,7 +243,7 @@ static void create_buffer(gl_buffer *b)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, FB_WIDTH, FB_HEIGHT, 0,
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fb_width, fb_height, 0,
                  GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
     glGenFramebuffers(1, &b->fbo);
@@ -263,7 +265,7 @@ static int ensure_gl(void)
 {
     if (gl_ready)
         return 1;
-    if (!sdlGLContextReady())
+    if (!sdlGLContextReady() || fb_width == 0)
         return 0;
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -301,7 +303,7 @@ static int ensure_gl(void)
 
     glGenRenderbuffers(1, &shared_depth_rb);
     glBindRenderbuffer(GL_RENDERBUFFER, shared_depth_rb);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, FB_WIDTH, FB_HEIGHT);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, fb_width, fb_height);
 
     create_buffer(&buffers[0]);
     create_buffer(&buffers[1]);
@@ -319,7 +321,7 @@ static int ensure_gl(void)
     // frames before the first swap (front-buffer drawing) display correctly
     sdlSetFramebufferSourceTex(front_buf->tex);
 
-    printf("INFO: gles2 rasterizer initialized (%dx%d front/back FBOs)\n", FB_WIDTH, FB_HEIGHT);
+    printf("INFO: gles2 rasterizer initialized (%dx%d front/back FBOs)\n", fb_width, fb_height);
     return 1;
 }
 
@@ -359,7 +361,7 @@ static void flush_batch(void)
     glBufferData(GL_ARRAY_BUFFER, batch_count * sizeof(gpu_vertex), batch, GL_STREAM_DRAW);
 
     glUseProgram(draw_prog);
-    glUniform2f(u_draw_scale, 2.0f / FB_WIDTH, 2.0f / FB_HEIGHT);
+    glUniform2f(u_draw_scale, 2.0f / fb_width, 2.0f / fb_height);
     glUniform1i(u_draw_pattern_on, batch_pattern_on ? 1 : 0);   // bool uniform
     glUniform1i(u_draw_pattern_tex, 0);
     glActiveTexture(GL_TEXTURE0);
@@ -377,7 +379,7 @@ static void flush_batch(void)
     glDepthFunc(zbuffer_enabled ? GL_LESS : GL_ALWAYS);
     glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
-    glViewport(0, 0, FB_WIDTH, FB_HEIGHT);
+    glViewport(0, 0, fb_width, fb_height);
 
     if (backbuffer_draw_enabled)
     {
@@ -412,20 +414,20 @@ static void sync_front_to_cpu(void)
         return;
 
     glBindFramebuffer(GL_FRAMEBUFFER, front_buf->fbo);
-    glReadPixels(0, 0, FB_WIDTH, FB_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, readback_rgba);
+    glReadPixels(0, 0, fb_width, fb_height, GL_RGBA, GL_UNSIGNED_BYTE, readback_rgba);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // swizzle RGBA -> BGRA and flip vertically (GL row 0 is the bottom row)
-    for (int j = 0; j < FB_HEIGHT; j++)
+    for (int j = 0; j < fb_height; j++)
     {
-        unsigned char (*src)[4] = readback_rgba[FB_HEIGHT - 1 - j];
-        unsigned char (*dst)[4] = cpu_front[j];
-        for (int i = 0; i < FB_WIDTH; i++)
+        unsigned char *src = readback_rgba + (size_t)(fb_height - 1 - j) * fb_width * 4;
+        unsigned char *dst = cpu_front + (size_t)j * fb_width * 4;
+        for (int i = 0; i < fb_width; i++)
         {
-            dst[i][BLUE_BYTE] = src[i][2];
-            dst[i][GREEN_BYTE] = src[i][1];
-            dst[i][RED_BYTE] = src[i][0];
-            dst[i][ALPHA_BYTE] = 255;
+            dst[i * 4 + BLUE_BYTE] = src[i * 4 + 2];
+            dst[i * 4 + GREEN_BYTE] = src[i * 4 + 1];
+            dst[i * 4 + RED_BYTE] = src[i * 4 + 0];
+            dst[i * 4 + ALPHA_BYTE] = 255;
         }
     }
 }
@@ -496,7 +498,7 @@ void gles2_rasterizer_swap(void)
     // the frame dumped at swap N is the outgoing front buffer — the frame
     // presented at swap N-1 plus any front-buffer drawing done since
     static int frame = 0;
-    if (gen_ppm_frame_files && gl_ready)
+    if (gen_ppm_frame_files && gl_ready && cpu_front)
     {
         sync_front_to_cpu();
         char name[128];
@@ -504,15 +506,16 @@ void gles2_rasterizer_swap(void)
         FILE *fp = fopen(name, "wb");
         if (fp)
         {
-            fprintf(fp, "P6 %d %d 255\n", FB_WIDTH, FB_HEIGHT);
-            for (int j = 0; j < FB_HEIGHT; j++)
+            fprintf(fp, "P6 %d %d 255\n", fb_width, fb_height);
+            for (int j = 0; j < fb_height; j++)
             {
-                for (int i = 0; i < FB_WIDTH; i++)
+                for (int i = 0; i < fb_width; i++)
                 {
                     unsigned char rgb_pixel[3];
-                    rgb_pixel[0] = cpu_front[j][i][RED_BYTE];
-                    rgb_pixel[1] = cpu_front[j][i][GREEN_BYTE];
-                    rgb_pixel[2] = cpu_front[j][i][BLUE_BYTE];
+                    unsigned char *px = cpu_front + ((size_t)j * fb_width + i) * 4;
+                    rgb_pixel[0] = px[RED_BYTE];
+                    rgb_pixel[1] = px[GREEN_BYTE];
+                    rgb_pixel[2] = px[BLUE_BYTE];
                     fwrite(rgb_pixel, 1, 3, fp);
                 }
             }
@@ -539,7 +542,7 @@ void gles2_rasterizer_copy_front_to_back(void)
 
     glBindFramebuffer(GL_FRAMEBUFFER, front_buf->fbo);
     glBindTexture(GL_TEXTURE_2D, back_buf->tex);
-    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, FB_WIDTH, FB_HEIGHT);
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, fb_width, fb_height);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
@@ -551,13 +554,65 @@ void gles2_rasterizer_copy_back_to_front(void)
 
     glBindFramebuffer(GL_FRAMEBUFFER, back_buf->fbo);
     glBindTexture(GL_TEXTURE_2D, front_buf->tex);
-    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, FB_WIDTH, FB_HEIGHT);
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, fb_width, fb_height);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 unsigned char* gles2_rasterizer_frontbuffer(void)
 {
-    return (unsigned char *)cpu_front;
+    return cpu_front; // NULL until the first resize allocates it
+}
+
+// The framebuffer tracks the window size: reallocate the CPU buffers and,
+// when GL is up, recreate the FBO textures and shared depth renderbuffer at
+// the new size — atomically re-registering the new front texture with the
+// display before returning (a size mismatch would crop, never scale).
+void gles2_rasterizer_resize(uint32_t width, uint32_t height)
+{
+    if ((int)width == fb_width && (int)height == fb_height)
+        return;
+
+    fb_width = (int)width;
+    fb_height = (int)height;
+
+    free(cpu_front);
+    free(readback_rgba);
+    cpu_front = calloc(1, (size_t)fb_width * fb_height * 4);
+    readback_rgba = malloc((size_t)fb_width * fb_height * 4);
+
+    if (!gl_ready)
+    {
+        // context may already exist (window created before first draw):
+        // create everything now at the new size; otherwise the first
+        // draw/clear's ensure_gl() picks the size up from fb_width/fb_height
+        ensure_gl();
+        return;
+    }
+
+    // GL resources exist at the old size: rebuild color textures, FBOs and
+    // the shared depth renderbuffer
+    batch_count = 0; // any batched geometry is in old-framebuffer coords
+    for (int i = 0; i < 2; i++)
+    {
+        glDeleteFramebuffers(1, &buffers[i].fbo);
+        glDeleteTextures(1, &buffers[i].tex);
+    }
+    glDeleteRenderbuffers(1, &shared_depth_rb);
+
+    glGenRenderbuffers(1, &shared_depth_rb);
+    glBindRenderbuffer(GL_RENDERBUFFER, shared_depth_rb);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, fb_width, fb_height);
+
+    create_buffer(&buffers[0]);
+    create_buffer(&buffers[1]);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    glClearDepthf(1.0f);
+    clear_gl_buffers(0, 0, 0, 1, 1, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    sdlSetFramebufferSourceTex(front_buf->tex);
+
+    printf("INFO: gles2 rasterizer framebuffer %dx%d\n", fb_width, fb_height);
 }
 
 // Called once per presented frame (events_frame_complete), before the
@@ -621,8 +676,8 @@ static void emit_screen_triangle(screen_vertex *s0, screen_vertex *s1, screen_ve
 
 static void screen_vertex_offset_with_clamp(screen_vertex *v, float dx, float dy)
 {
-    v->x = clampf(v->x + dx * SCREEN_VERTEX_V2_SCALE, 0, (FB_WIDTH - 1) * SCREEN_VERTEX_V2_SCALE);
-    v->y = clampf(v->y + dy * SCREEN_VERTEX_V2_SCALE, 0, (FB_HEIGHT - 1) * SCREEN_VERTEX_V2_SCALE);
+    v->x = clampf(v->x + dx * SCREEN_VERTEX_V2_SCALE, 0, (fb_width - 1) * SCREEN_VERTEX_V2_SCALE);
+    v->y = clampf(v->y + dy * SCREEN_VERTEX_V2_SCALE, 0, (fb_height - 1) * SCREEN_VERTEX_V2_SCALE);
 }
 
 static void emit_point(screen_vertex *sv)
@@ -630,8 +685,8 @@ static void emit_point(screen_vertex *sv)
     // the reference rasterizer writes exactly one pixel, bypassing the
     // pattern test; emit a never-stippled 1x1 quad covering that pixel
     batch_select_pattern(0);
-    float px = floorf(clampf(sv->x / (float)SCREEN_VERTEX_V2_SCALE, 0, FB_WIDTH - 1));
-    float py = floorf(clampf(sv->y / (float)SCREEN_VERTEX_V2_SCALE, 0, FB_HEIGHT - 1));
+    float px = floorf(clampf(sv->x / (float)SCREEN_VERTEX_V2_SCALE, 0, fb_width - 1));
+    float py = floorf(clampf(sv->y / (float)SCREEN_VERTEX_V2_SCALE, 0, fb_height - 1));
     float z = sv_z01(sv);
 
     batch_reserve(6);
@@ -798,7 +853,7 @@ void gles2_rasterizer_alpha_blit(uint32_t width, uint32_t rowbytes, uint32_t hei
     glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STREAM_DRAW);
 
     glUseProgram(blit_prog);
-    glUniform2f(u_blit_scale, 2.0f / FB_WIDTH, 2.0f / FB_HEIGHT);
+    glUniform2f(u_blit_scale, 2.0f / fb_width, 2.0f / fb_height);
     glUniform4f(u_blit_color, r / 255.0f, g / 255.0f, b / 255.0f, 1.0f);
     glUniform1i(u_blit_tex, 0);
     glActiveTexture(GL_TEXTURE0);
@@ -815,7 +870,7 @@ void gles2_rasterizer_alpha_blit(uint32_t width, uint32_t rowbytes, uint32_t hei
     glDepthMask(GL_FALSE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glViewport(0, 0, FB_WIDTH, FB_HEIGHT);
+    glViewport(0, 0, fb_width, fb_height);
 
     if (backbuffer_draw_enabled)
     {
@@ -891,12 +946,7 @@ int32_t gles2_rasterizer_winopen(char *title)
         printf("Generating .PPM file for each frame\n");
     }
 
-    memset(cpu_front, 0, sizeof(cpu_front));
-    for (int j = 0; j < FB_HEIGHT; j++)
-        for (int i = 0; i < FB_WIDTH; i++)
-            cpu_front[j][i][ALPHA_BYTE] = 255;
-
-    return 1;
+    return 1; // buffers are allocated by the first gles2_rasterizer_resize
 }
 
 const rasterizer_funcs* gles2_rasterizer_get_funcs(void)
@@ -921,6 +971,7 @@ const rasterizer_funcs* gles2_rasterizer_get_funcs(void)
         .zbuffer            = gles2_rasterizer_zbuffer,
         .linewidth          = gles2_rasterizer_linewidth,
         .frame_sync         = gles2_rasterizer_frame_sync,
+        .resize             = gles2_rasterizer_resize,
     };
     return &funcs;
 }

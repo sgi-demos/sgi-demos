@@ -79,13 +79,18 @@ EM_OPT = $(OPT_TWO)
 # ASYNCIFY_STACK_SIZE: num bytes for storing call stack during yield (64KB is generous for deep call stacks)
 EM_ASYNCIFY = -sASYNCIFY -sASYNCIFY_STACK_SIZE=65536
 
+# The framebuffer tracks the window size, so rasterizer buffers are heap
+# allocated at runtime, so let the WASM heap grow past the 16MB default
+# instead of aborting on large browser windows
+EM_MEMORY = -sALLOW_MEMORY_GROWTH=1
+
 # Debug options
 EXTRA_DEBUG = -fsanitize=undefined
 EM_EXTRA_DEBUG = $(EXTRA_DEBUG) -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK=2
 
 # Base compilers
 CC = cc $(EXTRA_DEBUG)
-EMCC = emcc -s WASM=1 -s PRECISE_F32=1
+EMCC = emcc # -s WASM=1 -s PRECISE_F32=1 # TODO: warning: linker setting ignored during compilation: -Wunused-command-line-argument
 
 # Library archivers
 AR = ar rvsc

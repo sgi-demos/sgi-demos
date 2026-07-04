@@ -27,12 +27,20 @@ void rasterizer_zbuffer(int enable);
 void rasterizer_linewidth(float w);
 void rasterizer_frame_sync(void);
 
+// The framebuffer tracks the window size: called once after the window
+// exists (with its initial size) and again on every window resize. The
+// rasterizer (re)allocates its buffers at the new size; contents are
+// cleared. The transition is atomic: by the time this returns, the new
+// buffers are the active draw/display targets.
+void rasterizer_resize(uint32_t width, uint32_t height);
+
 //
 // Dual rendering modes: the rasterizer_* API above dispatches through a
 // function table to one of two implementations, selected at startup in
 // rasterizer.c:
-//   - reference: CPU scanline rasterizer  (reference_rasterizer.c)
-//   - gles2:     GPU rasterizer on OpenGL ES2  (gles2_rasterizer.c)
+//   - gles2:     GPU rasterizer on OpenGL ES2  (gles2_rasterizer.c) — default
+//   - reference: CPU scanline rasterizer  (reference_rasterizer.c) — for
+//                reference/debugging (GLES2_RASTERIZER=ref / ?rast=ref)
 //
 typedef struct rasterizer_funcs
 {
@@ -54,6 +62,7 @@ typedef struct rasterizer_funcs
     void (*zbuffer)(int enable);
     void (*linewidth)(float w);
     void (*frame_sync)(void);
+    void (*resize)(uint32_t width, uint32_t height);
 } rasterizer_funcs;
 
 const rasterizer_funcs* ref_rasterizer_get_funcs(void);

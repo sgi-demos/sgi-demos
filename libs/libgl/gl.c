@@ -79,8 +79,12 @@ void trace_func(const char *func, const char *fmt, ...)
 
 //----------------------------------------------------------------------------
 // GL state
-static const int DISPLAY_WIDTH = XMAXSCREEN + 1;
-static const int DISPLAY_HEIGHT = YMAXSCREEN + 1;
+// Display (framebuffer) size tracks the window: set via
+// gl_framebuffer_resized() at window creation and on window resizes.
+// XMAXSCREEN+1 x YMAXSCREEN+1 is only the pre-window default.
+static int DISPLAY_WIDTH = XMAXSCREEN + 1;
+static int DISPLAY_HEIGHT = YMAXSCREEN + 1;
+
 
 static vec3ub colormap[4096];
 static vec4f current_color = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -816,7 +820,7 @@ static void pup_parse_string(pup *thepup, const char *menu)
     free(menu2);
 }
 
-int menu_corner_top = YMAXSCREEN - 1 - 10;
+int menu_corner_top = YMAXSCREEN - 1 - 10; // refreshed by gl_framebuffer_resized
 int menu_corner_left = 10;
 // Horizontal text insets, in pixels. Left is from the fill's left edge to the
 // text pen origin; right is from the widest label's pen advance to the fill's
@@ -1161,15 +1165,15 @@ void pup_menu_topleft_corner_from_mouse(pup *thepup)
     int menu_left = getvaluator(MOUSEX);   // upper-left X at cursor
     int menu_top  = getvaluator(MOUSEY);   // upper-left Y at cursor (Y-up)
 
-    // Right edge can't pass XMAXSCREEN; if it would, slide left. If the
+    // Right edge can't pass the screen; if it would, slide left. If the
     // menu is wider than the screen, pin it to the left edge.
-    if (menu_left + menu_w > XMAXSCREEN) menu_left = XMAXSCREEN - menu_w;
+    if (menu_left + menu_w > DISPLAY_WIDTH - 1) menu_left = DISPLAY_WIDTH - 1 - menu_w;
     if (menu_left < 0) menu_left = 0;
 
     // Bottom edge (menu_top - menu_h) can't drop below 0; if it would,
     // slide up. If the menu is taller than the screen, pin it to the top.
     if (menu_top - menu_h < 0) menu_top = menu_h;
-    if (menu_top > YMAXSCREEN) menu_top = YMAXSCREEN;
+    if (menu_top > DISPLAY_HEIGHT - 1) menu_top = DISPLAY_HEIGHT - 1;
 
     menu_corner_left = menu_left;
     menu_corner_top = menu_top;
@@ -1730,8 +1734,8 @@ void backface(int enable) {
 
 // Whether the viewport is the full screen.
 static int is_full_viewport() {
-    return the_viewport[0] == 0 && the_viewport[1] == XMAXSCREEN &&
-           the_viewport[2] == 0 && the_viewport[3] == YMAXSCREEN;
+    return the_viewport[0] == 0 && the_viewport[1] == DISPLAY_WIDTH - 1 &&
+           the_viewport[2] == 0 && the_viewport[3] == DISPLAY_HEIGHT - 1;
 }
 
 void clear() {
@@ -2061,6 +2065,85 @@ void objreplace(Tag tag) {
     replace_mode = 1;
 }
 
+//
+// Adaptive aspect (implied reshape). GLUT programs re-derive their
+// projection from the new aspect on every window reshape; the original
+// demos can't be modified to do that (rule #1), so the shim does it for
+// them: the last projection the demo set is recorded here, and when the
+// framebuffer aspect changes on a window resize it is re-derived with the
+// horizontal view widened/narrowed to the new aspect. Content keeps 1:1
+// x/y at any window shape — no letterboxing, no stretching.
+//
+// MSINGLE-mode projections are recorded but not re-applied: single-matrix
+// demos rebuild their matrix every frame from getsize(), so they adapt on
+// their own (and re-applying would clobber their composed matrix).
+//
+typedef enum { PROJ_NONE = 0, PROJ_PERSPECTIVE, PROJ_WINDOW, PROJ_ORTHO2 } proj_type;
+static struct {
+    proj_type type;
+    float fovy, aspect;                     // perspective
+    float left, right, bottom, top;         // window / ortho2
+    float near, far;                        // perspective / window
+    float fb_aspect_at_set;                 // framebuffer aspect when set
+    int msingle;                            // set while in MSINGLE mode
+    float matrix[16];                       // the projection matrix as loaded
+                                            // (updated on each re-derivation)
+} the_projection = { PROJ_NONE };
+
+static void record_projection(proj_type type, const float m[16],
+    float fovy, float aspect, float left, float right, float bottom, float top,
+    float near, float far)
+{
+    the_projection.type = type;
+    matrix4x4f_copy(the_projection.matrix, (float *)m);
+    the_projection.fovy = fovy;
+    the_projection.aspect = aspect;
+    the_projection.left = left;
+    the_projection.right = right;
+    the_projection.bottom = bottom;
+    the_projection.top = top;
+    the_projection.near = near;
+    the_projection.far = far;
+    the_projection.fb_aspect_at_set = (float)DISPLAY_WIDTH / (float)DISPLAY_HEIGHT;
+    the_projection.msingle = (matrix_mode == MSINGLE);
+}
+
+static void perspective_matrix(float m[16], Angle fovy_, float aspect, Coord near, Coord far)
+{
+    float fovy = fovy_ / 1800.0 * M_PI;
+    float f = 1.0 / tan(fovy / 2.0);
+
+    matrix4x4f_copy(m, identity_4x4f);
+    m[0] = f / aspect;
+    m[5] = f;
+    m[10] = (far + near) / (near - far);
+    m[11] = -1.0;
+    m[14] = 2 * far * near / (near - far);
+    m[15] = 0.0;
+}
+
+static void ortho2_matrix(float m[16], Coord left, Coord right, Coord bottom, Coord top)
+{
+    matrix4x4f_copy(m, identity_4x4f);
+    m[0] =  2.0f / (right-left);
+    m[5] =  2.0f / (top-bottom);
+    m[10] = -1.0f;
+    m[12] = -(right+left) / (right-left);
+    m[13] = -(top+bottom) / (top-bottom);
+    m[15] =  1.0f;
+}
+
+static void window_matrix(float m[16], Coord left, Coord right, Coord bottom, Coord top, Coord near, Coord far)
+{
+    matrix4x4f_copy(m, identity_4x4f);
+    m[0] = 2 * near / (right - left);
+    m[5] = 2 * near / (top - bottom);
+    m[8] = (right + left) / (right - left);
+    m[9] = (top + bottom) / (top - bottom);
+    m[10] = - (far + near) / (far - near);
+    m[14] = - 2 * far * near / (far - near);
+}
+
 void perspective(Angle fovy_, float aspect, Coord near, Coord far) {
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(PERSPECTIVE);
@@ -2074,17 +2157,8 @@ void perspective(Angle fovy_, float aspect, Coord near, Coord far) {
     TRACEF("%d, %f, %f, %f", fovy_, aspect, near, far);
 
     float m[16];
-    float fovy = fovy_ / 1800.0 * M_PI;
-
-    float f = 1.0 / tan(fovy / 2.0);
-
-    matrix4x4f_copy(m, identity_4x4f);
-    m[0] = f / aspect;
-    m[5] = f;
-    m[10] = (far + near) / (near - far);
-    m[11] = -1.0;
-    m[14] = 2 * far * near / (near - far);
-    m[15] = 0.0;
+    perspective_matrix(m, fovy_, aspect, near, far);
+    record_projection(PROJ_PERSPECTIVE, m, fovy_, aspect, 0, 0, 0, 0, near, far);
     if(matrix_mode == MSINGLE) {
         matrix4x4f_stack_load(&projection_stack, m);
         matrix4x4f_stack_load(&modelview_stack, identity_4x4f);
@@ -2105,14 +2179,8 @@ void ortho2(Coord left, Coord right, Coord bottom, Coord top) {
     TRACEF("%f, %f, %f, %f", left, right, bottom, top);
 
     float m[16];
-
-    matrix4x4f_copy(m, identity_4x4f);
-    m[0] =  2.0f / (right-left);
-    m[5] =  2.0f / (top-bottom);
-    m[10] = -1.0f;
-    m[12] = -(right+left) / (right-left);
-    m[13] = -(top+bottom) / (top-bottom);
-    m[15] =  1.0f;
+    ortho2_matrix(m, left, right, bottom, top);
+    record_projection(PROJ_ORTHO2, m, 0, 0, left, right, bottom, top, 0, 0);
 
     if(matrix_mode == MSINGLE) {
         matrix4x4f_stack_load(&projection_stack, m);
@@ -2506,15 +2574,8 @@ void window(Coord left, Coord right, Coord bottom, Coord top, Coord near, Coord 
     TRACEF("%f, %f, %f, %f, %f, %f", left, right, bottom, top, near, far);
 
     float m[16];
-
-    matrix4x4f_copy(m, identity_4x4f);
-
-    m[0] = 2 * near / (right - left);
-    m[5] = 2 * near / (top - bottom);
-    m[8] = (right + left) / (right - left);
-    m[9] = (top + bottom) / (top - bottom);
-    m[10] = - (far + near) / (far - near);
-    m[14] = - 2 * far * near / (far - near);
+    window_matrix(m, left, right, bottom, top, near, far);
+    record_projection(PROJ_WINDOW, m, 0, 0, left, right, bottom, top, near, far);
     if(matrix_mode == MSINGLE) {
         matrix4x4f_stack_load(&projection_stack, m);
         matrix4x4f_stack_load(&modelview_stack, identity_4x4f);
@@ -2523,7 +2584,116 @@ void window(Coord left, Coord right, Coord bottom, Coord top, Coord near, Coord 
     }
 }
 
+// Re-derive the recorded projection for the current framebuffer aspect
+// (the implied reshape; see the_projection above). The horizontal view
+// widens/narrows so x/y stays 1:1 — like gluPerspective with a new aspect.
+static void reapply_projection_for_aspect(void) {
+    if (the_projection.type == PROJ_NONE || the_projection.msingle)
+        return;
+
+    float k = ((float)DISPLAY_WIDTH / (float)DISPLAY_HEIGHT)
+            / the_projection.fb_aspect_at_set;
+    float m[16];
+
+    switch (the_projection.type) {
+        case PROJ_PERSPECTIVE:
+            perspective_matrix(m, the_projection.fovy, the_projection.aspect * k,
+                               the_projection.near, the_projection.far);
+            break;
+        case PROJ_WINDOW:
+        case PROJ_ORTHO2: {
+            // scale the horizontal extents about their center
+            float cx = (the_projection.left + the_projection.right) * 0.5f;
+            float hw = (the_projection.right - the_projection.left) * 0.5f * k;
+            if (the_projection.type == PROJ_WINDOW)
+                window_matrix(m, cx - hw, cx + hw,
+                              the_projection.bottom, the_projection.top,
+                              the_projection.near, the_projection.far);
+            else
+                ortho2_matrix(m, cx - hw, cx + hw,
+                              the_projection.bottom, the_projection.top);
+            break;
+        }
+        default:
+            return;
+    }
+
+    // Demos may compose extra transforms onto the projection stack after
+    // setting it (buttonfly: translate right after perspective, in
+    // MPROJECTION mode). The stack top is E x P_set; replace only the
+    // projection part: top = E x P_new = (top x P_set^-1) x P_new.
+    float inv[16], extra[16], newtop[16];
+    if (matrix4x4f_invert(the_projection.matrix, inv) == 0) {
+        matrix4x4f_mult_matrix4x4f(matrix4x4f_stack_top(&projection_stack), inv, extra);
+        matrix4x4f_mult_matrix4x4f(extra, m, newtop);
+        matrix4x4f_stack_load(&projection_stack, newtop);
+    } else {
+        matrix4x4f_stack_load(&projection_stack, m); // singular: bare reload
+    }
+    matrix4x4f_copy(the_projection.matrix, m);
+}
+
+// Called by the events layer when the framebuffer size is established
+// (window creation) or changes (window resize; the demo also gets a REDRAW
+// event). Updates GL's display dimensions, resizes the rasterizer
+// framebuffer (atomic buffer swap), and re-registers the possibly
+// reallocated front buffer with the display. A full-screen viewport tracks
+// the new size; a demo-set sub-viewport is left for the demo's own
+// reshapeviewport() (IRIS GL semantics).
+void gl_framebuffer_resized(int width, int height) {
+    int was_full_viewport = is_full_viewport();
+
+    DISPLAY_WIDTH = width;
+    DISPLAY_HEIGHT = height;
+    menu_corner_top = DISPLAY_HEIGHT - 1 - 1 - 10;
+
+    rasterizer_resize((uint32_t)width, (uint32_t)height);
+    events_set_framebuffer(rasterizer_frontbuffer());
+
+    if (was_full_viewport) {
+        the_viewport[1] = DISPLAY_WIDTH - 1.0;
+        the_viewport[3] = DISPLAY_HEIGHT - 1.0;
+    }
+
+    // implied reshape: keep the demo's projection aspect-true
+    reapply_projection_for_aspect();
+}
+
+// IRIX window-constraint semantics: keepaspect after winopen is deferred
+// until the demo calls winconstraints (see keepaspect/winconstraints)
+static int window_is_open = 0;
+static int pending_aspect_x = 0, pending_aspect_y = 0;
+
+// The demo name stamped into the binary by make_demo.mk (see
+// makefiles/gl_appname.c). Weak NULL default for programs built outside
+// make_demo.mk (e.g. tests/native-resize); those fall back to the title
+// passed to winopen.
+__attribute__((weak)) const char *gl_appname = NULL;
+
+static int demo_is(const char *title, const char *name) {
+    return strcmp(title, name) == 0;
+}
+
+// Shim-level per-demo compatibility quirks. Original demo sources are never
+// modified (rule #1); demos whose code bakes in the classic fixed screen
+// get shim policies that recreate it:
+//  - arena: hardcodes 800:480 projection aspects (main.c perspective calls)
+//    -> keep the framebuffer that aspect at any window size
+//  - flight: panel viewports are compile-time 800x480 constants (meters.c,
+//    land2.c) -> classic fixed-size framebuffer, scaled to the window
+static void apply_demo_quirks(char *title) {
+    if (demo_is(title, "arena"))
+        events_keepaspect(XMAXSCREEN + 1, YMAXSCREEN + 1);
+    else if (demo_is(title, "flight"))
+        events_fix_framebuffer_size(XMAXSCREEN + 1, YMAXSCREEN + 1);
+}
+
 int winopen(char *title) {
+    // One demo per program: the build-stamped name beats the passed title
+    // (web argv[0] is "this.program"; native titles pick up argv paths)
+    if (gl_appname)
+        title = (char *)gl_appname;
+
     TRACEF("%s", title);
     int rasterizer_window = rasterizer_winopen(title);
 
@@ -2534,7 +2704,14 @@ int winopen(char *title) {
     rasterizer_setpattern(patterns[0]);
     rasterizer_cbuffer_draw(frontbuffer_draw_enabled, backbuffer_draw_enabled);
 
-    int events_window = events_winopen(title, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+    // Aspect policy: demos that declared keepaspect() get a conforming
+    // window (native) / centered framebuffer (web). All other demos get a
+    // free-form window-sized framebuffer, kept undistorted by the implied
+    // reshape (see the_projection / reapply_projection_for_aspect).
+    apply_demo_quirks(title);
+
+    int events_window = events_winopen(title);
+    window_is_open = 1;
     events_set_framebuffer(rasterizer_frontbuffer());
     // XXX if we made a multi-window system, we'd tie "rasterizer_window"
     // and "events_window" together so we could pass the right identifier
@@ -3053,7 +3230,17 @@ void pnt2s(Scoord x, Scoord y) {
 }
 
 void keepaspect(int x, int y) {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%d, %d", x, y);
+    // IRIX keepaspect took effect at the NEXT winopen or winconstraints,
+    // never immediately. Before winopen we pass it straight down (recorded,
+    // applied at window creation). After winopen it stays pending until the
+    // demo calls winconstraints (e.g. buttonfly's SPACE toggle_window).
+    if (!window_is_open) {
+        events_keepaspect(x, y);
+    } else {
+        pending_aspect_x = x;
+        pending_aspect_y = y;
+    }
 }
 
 void linewidth(int w) {
@@ -3397,7 +3584,13 @@ int winattach() {
 }
 
 void winconstraints() {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    // Applies constraints declared since the last winopen/winconstraints
+    // (IRIX one-shot semantics). Only keepaspect is modeled; prefsize/
+    // prefposition/winposition remain unimplemented.
+    if (pending_aspect_x > 0) {
+        events_keepaspect(pending_aspect_x, pending_aspect_y);
+        pending_aspect_x = pending_aspect_y = 0;
+    }
 }
 
 int winget() {
@@ -3672,12 +3865,18 @@ void rects(Scoord x1, Scoord y1, Scoord x2, Scoord y2) {
 static int bgn_screen_aligned()
 {
     pushviewport();
-    viewport (0,XMAXSCREEN,0,YMAXSCREEN);
+    viewport (0, DISPLAY_WIDTH - 1, 0, DISPLAY_HEIGHT - 1);
 
     int prev_matrix_mode = matrix_mode;
     mmode(MPROJECTION);
     pushmatrix();
-    ortho2 (-0.5, XMAXSCREEN+0.5, -0.5, YMAXSCREEN+0.5);
+    // load the screen-aligned ortho WITHOUT recording it as the demo's
+    // projection (the demo's own is restored by popmatrix below)
+    {
+        float m[16];
+        ortho2_matrix(m, -0.5, DISPLAY_WIDTH - 1 + 0.5, -0.5, DISPLAY_HEIGHT - 1 + 0.5);
+        matrix4x4f_stack_load(&projection_stack, m);
+    }
     return prev_matrix_mode;
 }
 

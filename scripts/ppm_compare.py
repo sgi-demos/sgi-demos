@@ -8,10 +8,10 @@ when GEN_FRAME_PPM_FILES is set, so same-index frames are comparable for
 demos whose animation steps per frame (e.g. insect):
 
     # reference (CPU) rasterizer
-    cd demos/insect && GEN_FRAME_PPM_FILES=1 ./bin/insect   # then: mv frame*.ppm ref/
+    cd demos/insect && GLES2_RASTERIZER=ref GEN_FRAME_PPM_FILES=1 ./bin/insect  # then: mv frame*.ppm ref/
 
-    # gles2 (GPU) rasterizer
-    GLES2_RASTERIZER=gles2 GEN_FRAME_PPM_FILES=1 ./bin/insect # then: mv frame*.ppm gles2/
+    # gles2 (GPU) rasterizer (the default)
+    GEN_FRAME_PPM_FILES=1 ./bin/insect                        # then: mv frame*.ppm gles2/
 
     python3 ../../scripts/ppm_compare.py ref gles2
 

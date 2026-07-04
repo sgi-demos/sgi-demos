@@ -2,11 +2,13 @@
 // Rasterizer dispatch — dual rendering modes
 //
 // Selects between the two rasterizer implementations at startup:
-//   - reference: CPU scanline rasterizer  (reference_rasterizer.c)
-//   - gles2:     GPU rasterizer on OpenGL ES2  (gles2_rasterizer.c)
+//   - gles2:     GPU rasterizer on OpenGL ES2  (gles2_rasterizer.c) — DEFAULT
+//   - reference: CPU scanline rasterizer  (reference_rasterizer.c), kept for
+//                reference/debugging (CPU-rasterizing large framebuffers is
+//                slow now that the framebuffer tracks the window size)
 //
-// Native: set GLES2_RASTERIZER=gles2 (default is the reference rasterizer).
-// Web:    add ?rast=gles2 to the URL (or set GLES2_RASTERIZER in Module ENV).
+// Native: set GLES2_RASTERIZER=ref to select the CPU reference rasterizer.
+// Web:    add ?rast=ref to the URL (or set GLES2_RASTERIZER in Module ENV).
 //
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,7 +40,12 @@ static const char* rasterizer_mode(void)
     else if (url_mode == 1) mode = "ref";
 #endif
 
-    return mode ? mode : "ref";
+    // The legacy SDL-renderer display path creates no GL context, which the
+    // gles2 rasterizer requires; force the CPU reference rasterizer there
+    if (getenv("SGI_SDL_FRAMEBUFFER") != NULL)
+        mode = "ref";
+
+    return mode ? mode : "gles2";
 }
 
 static const rasterizer_funcs* rast(void)
@@ -80,3 +87,4 @@ void rasterizer_cbuffer_draw(int enable_front, int enable_back) { rast()->cbuffe
 void rasterizer_zbuffer(int enable)                     { rast()->zbuffer(enable); }
 void rasterizer_linewidth(float w)                      { rast()->linewidth(w); }
 void rasterizer_frame_sync(void)                        { rast()->frame_sync(); }
+void rasterizer_resize(uint32_t width, uint32_t height) { rast()->resize(width, height); }

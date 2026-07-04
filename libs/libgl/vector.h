@@ -55,6 +55,7 @@ extern void matrix4x4f_translate(float x, float y, float z, float matrix[16]);
 extern void matrix4x4f_scale(float x, float y, float z, float matrix[16]);
 extern void matrix4x4f_rotate(float a, float x, float y, float z, float matrix[16]);
 extern void matrix4x4f_mult_matrix4x4f(const matrix4x4f m1, const matrix4x4f m2, matrix4x4f r);
+extern int matrix4x4f_invert(const matrix4x4f mat, matrix4x4f inv); // 0 = ok, -1 = singular
 extern void matrix4x4f_mult_vec4f_(const matrix4x4f m, const vec4f in, vec4f out);
 extern void matrix4x4f_mult_vec4f(const matrix4x4f m, const vec4f in, vec4f out);
 extern void vec3f_mult_matrix4x4f(const vec3f in, const matrix4x4f m, vec3f out);

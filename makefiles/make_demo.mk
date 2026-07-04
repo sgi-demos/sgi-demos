@@ -5,10 +5,13 @@ EM_APPNAME = $(WEB_DIR)/$(APPNAME)
 EM_APP = $(EM_APPNAME).html
 APPNAME_DEF := -DDEMO_$(shell echo $(APPNAME) | tr a-z A-Z)
 
-HDRS = $(wildcard *.h)
+HDRS = $(wildcard *.h) $(wildcard $(INCS_DIR)/gl/*.h)
 SRC = $(wildcard *.c)
-OBJS = $(patsubst %.c,$(BIN_DIR)/%.o,$(SRC))
-EM_OBJS = $(patsubst %.c,$(WEB_DIR)/%.o,$(SRC))
+DEMO_OBJS = $(patsubst %.c,$(BIN_DIR)/%.o,$(SRC))
+EM_DEMO_OBJS = $(patsubst %.c,$(WEB_DIR)/%.o,$(SRC))
+OBJS = $(DEMO_OBJS) $(BIN_DIR)/gl_appname.o
+EM_OBJS = $(EM_DEMO_OBJS) $(WEB_DIR)/gl_appname.o
+
 
 all: native browser
 
@@ -38,7 +41,14 @@ $(WEB_DIR):
 	mkdir -p $@
 	echo "*.[oach]" > $@/.gitignore
 
-$(OBJS): $(BIN_DIR)/%.o: $(SRC_DIR)/%.c | $(BIN_DIR) $(SRC) $(HDRS)
+# the demo-name stamp (see makefiles/gl_appname.c)
+$(BIN_DIR)/gl_appname.o: ../../makefiles/gl_appname.c | $(BIN_DIR)
+	$(MODERN_CODE_CC) $(OPT) -DGL_APPNAME='"$(APPNAME)"' $< -c -o $@
+
+$(WEB_DIR)/gl_appname.o: ../../makefiles/gl_appname.c | $(WEB_DIR)
+	$(MODERN_CODE_EMCC) $(EM_OPT) -DGL_APPNAME='"$(APPNAME)"' $< -c -o $@
+
+$(DEMO_OBJS): $(BIN_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(BIN_DIR)
 	$(DEMO_CODE_CC) $(OPT) $(DEMO_CODE_WARN_OFF) $(APPNAME_DEF) $(SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 
 $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
@@ -50,12 +60,12 @@ $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
 	@echo BUILT: $@
 	@echo $(CUR_DIR)
 
-$(EM_OBJS): $(WEB_DIR)/%.o: $(SRC_DIR)/%.c | $(WEB_DIR) $(EM_SRC) $(EM_HDRS)
+$(EM_DEMO_OBJS): $(WEB_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(WEB_DIR)
 	$(DEMO_CODE_EMCC) $(EM_OPT) $(EM_DEMO_CODE_WARN_OFF) $(APPNAME_DEF) $(EM_SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 
 $(EM_APP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EM_OBJS)
 	$(MODERN_CODE_EMCC) $(EM_OPT) $(EM_SHIM_INC) $(LIBGL_INC) $(EM_OBJS) $(EM_DEMO_LIB) $(EM_GL_LIB) \
-		$(EM_SDL_LIBS) $(EM_ASYNCIFY) $(EM_PRELOAD) -lm -o $@
+		$(EM_SDL_LIBS) $(EM_ASYNCIFY) $(EM_MEMORY) $(EM_PRELOAD) -lm -o $@
 	$(APPCMDS)
 	@echo
 	@echo BUILT: $@

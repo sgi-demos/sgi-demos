@@ -28,6 +28,7 @@ static uint32_t sdl_input_queue_length = 0;  // The number of items in the queue
 static uint32_t sdl_window_id = 0;           // Set in events_winopen; used as REDRAW event value
 static int32_t sdl_keycode_to_gl(int32_t sdl_keycode);
 static void enqueue_event(gl_event *e);
+static void enqueueRedrawEvent(void);
 
 //
 // Turn touch long-press into right mouse button event
@@ -299,7 +300,19 @@ void sdlProcessEvents()
 
             case SDL_WINDOWEVENT:
                 if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
-                    sdlResizeWindow(event.window.windowID);
+                {
+                    // The framebuffer tracks the window size. When it
+                    // changes: display textures were rebuilt (sdlResizeWindow),
+                    // then GL + rasterizer resize atomically, then the demo
+                    // is told via REDRAW (it typically reshapeviewport()s).
+                    if (sdlResizeWindow(event.window.windowID))
+                    {
+                        int32_t fbw, fbh;
+                        sdlGetFramebufferSize(&fbw, &fbh);
+                        gl_framebuffer_resized(fbw, fbh);
+                        enqueueRedrawEvent();
+                    }
+                }
                 break;
 
             case SDL_TEXTINPUT:
@@ -684,7 +697,48 @@ int32_t events_qread_continue(int16_t *value)
     return device;
 }
 
-int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height)
+// Tell the demo to repaint. NOTE: in IRIS GL, REDRAW was queued by DEFAULT
+// for every window — no qdevice(REDRAW) required (twilight relies on this)
+// — so framebuffer-change redraws are delivered unconditionally.
+static void enqueueRedrawEvent(void)
+{
+    gl_event ev;
+    ev.device = REDRAW;
+    ev.val = (int16_t)sdl_window_id;
+    enqueue_event(&ev);
+}
+
+// Re-fit the framebuffer after a constraint change and, when its size
+// changed, tell GL + the demo — same flow as a window resize
+static void applyFramebufferConstraintChange(void)
+{
+    if (sdlApplyFramebufferSize())
+    {
+        int32_t fbw, fbh;
+        sdlGetFramebufferSize(&fbw, &fbh);
+        gl_framebuffer_resized(fbw, fbh);
+        enqueueRedrawEvent();
+    }
+}
+
+// keepaspect(): constrain the framebuffer to x:y. Before winopen this just
+// records the constraint (applied at window creation); afterwards it re-fits
+// the framebuffer immediately and tells GL + the demo, same as a resize.
+void events_keepaspect(int32_t x, int32_t y)
+{
+    sdlSetFramebufferAspect(x, y);
+    applyFramebufferConstraintChange();
+}
+
+// Demo compatibility quirk: lock the framebuffer to a fixed (classic) size;
+// the display scales it to the window
+void events_fix_framebuffer_size(int32_t width, int32_t height)
+{
+    sdlSetFramebufferFixedSize(width, height);
+    applyFramebufferConstraintChange();
+}
+
+int32_t events_winopen(char *title)
 {
     static int sdl_initialized = 0;
     if (!sdl_initialized) {
@@ -693,12 +747,18 @@ int32_t events_winopen(char *title, int32_t frame_width, int32_t frame_height)
         sdlInitFramebufferTexture();
         atexit(sdlFreeFramebufferTexture);
 
+        // The framebuffer tracks the window size: hand GL and the
+        // rasterizer their initial (real) framebuffer dimensions
+        int32_t fbw, fbh;
+        sdlGetFramebufferSize(&fbw, &fbh);
+        gl_framebuffer_resized(fbw, fbh);
+
         // Seed the frame timer so the first frame paces correctly
         frameStartTicks = SDL_GetTicks();
         sdl_initialized = 1;
     }
 
-    sdlOpenWindow(title, frame_width, frame_height);
+    sdlOpenWindow(title);
     return 0;
 }
 

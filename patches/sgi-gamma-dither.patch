@@ -1,0 +1,189 @@
+diff --git a/libs/libgl/sdl_framebuffer.c b/libs/libgl/sdl_framebuffer.c
+index 9cd37bf..8cf8f75 100644
+--- a/libs/libgl/sdl_framebuffer.c
++++ b/libs/libgl/sdl_framebuffer.c
+@@ -47,6 +47,10 @@ typedef struct
+     GLint   glShaderPixelScale;
+     GLint   glShaderYFlip;      // location of bool yFlip: true = source rows are top-down (CPU upload path)
+     GLint   glShaderRBSwap;     // location of float rbSwap: 1.0 = source bytes are BGRA (CPU upload path)
++    GLint   glShaderGammaPow;   // location of float gammaPow (SGI gamma sim)
++    GLint   glShaderDitherOn;   // location of bool ditherOn (REX3 dither sim)
++    GLint   glShaderDitherLvls; // location of vec3 ditherLvls
++    GLint   glShaderFbRes;      // location of vec2 fbRes
+     GLuint  glTex;              // Texture object for displaying the framebuffer
+     GLuint  extTex;             // Framebuffer-sized external texture (gles2 rasterizer front FBO, 0 for CPU upload path)
+     GLuint  glQuadVBO;          // Quad geometry for displaying the texture
+@@ -75,6 +79,10 @@ static SDLFramebuffer fb = (SDLFramebuffer)
+     .glShaderPixelScale = 0,
+     .glShaderYFlip = 0,
+     .glShaderRBSwap = 0,
++    .glShaderGammaPow = 0,
++    .glShaderDitherOn = 0,
++    .glShaderDitherLvls = 0,
++    .glShaderFbRes = 0,
+     .glTex = 0,
+     .extTex = 0,
+     .glQuadVBO = 0,
+@@ -136,16 +144,31 @@ static Size2D fbAspect = {0, 0};
+ // is widened 16/15, exactly filling the window (no letterbox) with the
+ // authentic CRT proportions. Stretching (magnification) rather than
+ // squashing (minification) so no framebuffer row/column is ever dropped by
+-// the NEAREST sampling, at any display density. Display-only: rasterizer
+-// output and PPM dumps are untouched.
++// the NEAREST sampling, at any display density. Gamma maps SGI's 2.4 to
++// modern 2.2 displays; dithering reproduces the REX3 4x4 Bayer hardware at
++// selectable bit depths. All display-only: rasterizer output and PPM dumps
++// are untouched.
+ //
+ // Config (native env / web URL param):
+ //   SGI_PAR=0|1      / ?par=0|1        pixel aspect correction (default 1)
++//   SGI_GAMMA=0|1    / ?gamma=0|1      gamma 2.4 -> 2.2       (default 1)
++//   SGI_DITHER=0..4  / ?dither=0..4    0 off (default), 1 Indy 8-bit XL
++//                                      (3-3-2), 2 Indigo2 12-bit (4-4-4),
++//                                      3 15-bit (5-5-5), 4 16-bit (5-6-5)
+ //
+ #define SGI_PAR_NUM 15  // displayed width = fb columns * 16/15
+ #define SGI_PAR_DEN 16
+ 
+ static bool parEnabled = true;
++static bool gammaEnabled = true;
++static int  ditherMode = 0;
++static const float ditherLevels[5][3] = {
++    { 256, 256, 256 },  // 0: off (unused)
++    {   8,   8,   4 },  // 1: SGI Indy 8-bit XL (3-3-2)
++    {  16,  16,  16 },  // 2: Indigo2 12-bit (4-4-4)
++    {  32,  32,  32 },  // 3: generic 15-bit (5-5-5)
++    {  32,  64,  32 },  // 4: PC 16-bit HighColor (5-6-5)
++};
+ 
+ // Fixed framebuffer size (demo compatibility quirk): some demos are
+ // hard-authored for the classic screen (compile-time viewport constants);
+@@ -187,6 +210,8 @@ static void parseDisplayConfig(void)
+ {
+     const char *v;
+     if ((v = getenv("SGI_PAR")) != NULL)    parEnabled = atoi(v) != 0;
++    if ((v = getenv("SGI_GAMMA")) != NULL)  gammaEnabled = atoi(v) != 0;
++    if ((v = getenv("SGI_DITHER")) != NULL) ditherMode = atoi(v);
+ 
+ #ifdef __EMSCRIPTEN__
+     int q;
+@@ -195,9 +220,23 @@ static void parseDisplayConfig(void)
+         return m ? (m[1] | 0) : -1;
+     });
+     if (q >= 0) parEnabled = q != 0;
++    q = EM_ASM_INT({
++        var m = window.location.search.match(/[?&]gamma=([0-9]+)/);
++        return m ? (m[1] | 0) : -1;
++    });
++    if (q >= 0) gammaEnabled = q != 0;
++    q = EM_ASM_INT({
++        var m = window.location.search.match(/[?&]dither=([0-9]+)/);
++        return m ? (m[1] | 0) : -1;
++    });
++    if (q >= 0) ditherMode = q;
+ #endif
+ 
+-    printf("INFO: SGI display sim: par=%d\n", parEnabled);
++    if (ditherMode < 0 || ditherMode > 4)
++        ditherMode = 0;
++
++    printf("INFO: SGI display sim: par=%d gamma=%d dither=%d\n",
++           parEnabled, gammaEnabled, ditherMode);
+ }
+ 
+ void sdlSetFramebufferAspect(int32_t x, int32_t y)
+@@ -350,12 +389,67 @@ const GLchar* fbFragmentSource =
+     "varying vec2 texCoord;                                             \n"
+     "uniform sampler2D texSampler;                                      \n"
+     "uniform float rbSwap;                                              \n"
++    "uniform float gammaPow;   // 1.0 = off, else SGI 2.4 -> modern 2.2 \n"
++    "uniform bool ditherOn;                                             \n"
++    "uniform vec3 ditherLvls;  // quantization levels per channel       \n"
++    "uniform vec2 fbRes;       // fb pixel resolution (Bayer grid)      \n"
++    "                                                                   \n"
++    "// Authentic REX3 4x4 Bayer matrix (issue #9)                      \n"
++    "float bayer4x4(vec2 pos)                                           \n"
++    "{                                                                  \n"
++    "    vec2 p = floor(mod(pos, 4.0));                                 \n"
++    "    float idx = p.x + p.y * 4.0;                                   \n"
++    "    float m;                                                       \n"
++    "    if      (idx <  0.5) m =  0.0;                                 \n"
++    "    else if (idx <  1.5) m =  8.0;                                 \n"
++    "    else if (idx <  2.5) m =  2.0;                                 \n"
++    "    else if (idx <  3.5) m = 10.0;                                 \n"
++    "    else if (idx <  4.5) m = 12.0;                                 \n"
++    "    else if (idx <  5.5) m =  4.0;                                 \n"
++    "    else if (idx <  6.5) m = 14.0;                                 \n"
++    "    else if (idx <  7.5) m =  6.0;                                 \n"
++    "    else if (idx <  8.5) m =  3.0;                                 \n"
++    "    else if (idx <  9.5) m = 11.0;                                 \n"
++    "    else if (idx < 10.5) m =  1.0;                                 \n"
++    "    else if (idx < 11.5) m =  9.0;                                 \n"
++    "    else if (idx < 12.5) m = 15.0;                                 \n"
++    "    else if (idx < 13.5) m =  7.0;                                 \n"
++    "    else if (idx < 14.5) m = 13.0;                                 \n"
++    "    else                 m =  5.0;                                 \n"
++    "    return (m + 0.5) / 16.0;                                       \n"
++    "}                                                                  \n"
++    "                                                                   \n"
++    "float ditherChannel(float c, float lvl, float threshold)           \n"
++    "{                                                                  \n"
++    "    float maxVal = lvl - 1.0;                                      \n"
++    "    float scaled = c * maxVal;                                     \n"
++    "    float lo = floor(scaled);                                      \n"
++    "    float frac = scaled - lo;                                      \n"
++    "    float quantized = lo + step(threshold, frac);                  \n"
++    "    return clamp(quantized / maxVal, 0.0, 1.0);                    \n"
++    "}                                                                  \n"
++    "                                                                   \n"
+     "void main()                                                        \n"
+     "{                                                                  \n"
+     "    // CPU-uploaded textures hold BGRA bytes: swap B and R.        \n"
+     "    // FBO textures (gles2 rasterizer) are true RGBA: no swap.     \n"
+     "    vec3 texel = texture2D(texSampler, texCoord).rgb;              \n"
+-    "    gl_FragColor = vec4(mix(texel, texel.bgr, rbSwap), 1.0);       \n"
++    "    vec3 c = mix(texel, texel.bgr, rbSwap);                        \n"
++    "                                                                   \n"
++    "    // REX3 hardware dither at the selected bit depth              \n"
++    "    if (ditherOn)                                                  \n"
++    "    {                                                              \n"
++    "        float t = bayer4x4(texCoord * fbRes);                      \n"
++    "        c.r = ditherChannel(c.r, ditherLvls.r, t);                 \n"
++    "        c.g = ditherChannel(c.g, ditherLvls.g, t);                 \n"
++    "        c.b = ditherChannel(c.b, ditherLvls.b, t);                 \n"
++    "    }                                                              \n"
++    "                                                                   \n"
++    "    // SGI 2.4 gamma decoded for a modern 2.2 display (after      \n"
++    "    // dithering, matching CRT physics); gammaPow 1.0 = off        \n"
++    "    c = pow(c, vec3(gammaPow));                                    \n"
++    "                                                                   \n"
++    "    gl_FragColor = vec4(c, 1.0);                                   \n"
+     "}                                                                  \n";
+ 
+ static void checkShaderBuilt(const char* shader_name, GLenum status, GLuint shader)
+@@ -392,6 +486,14 @@ static void updateShaderVars()
+ 
+     glUniform1f(fb.glShaderPixelScale, fb.pixelScale);
+ 
++    // SGI display simulation: gamma 2.4 decoded for a 2.2 display, and the
++    // REX3 Bayer dither at the configured bit depth
++    glUniform1f(fb.glShaderGammaPow, gammaEnabled ? (2.4f / 2.2f) : 1.0f);
++    glUniform1i(fb.glShaderDitherOn, ditherMode > 0 ? 1 : 0);
++    glUniform3fv(fb.glShaderDitherLvls, 1, ditherLevels[ditherMode]);
++    GLfloat fbRes[2] = {fb.size.width, fb.size.height};
++    glUniform2fv(fb.glShaderFbRes, 1, fbRes);
++
+ 
+     // Source-dependent vars. Both sources are exact framebuffer-sized
+     // NPOT textures — legal to sample with CLAMP_TO_EDGE and no mipmaps,
+@@ -431,6 +533,10 @@ static void initShader()
+     fb.glShaderPixelScale = glGetUniformLocation(fb.glShaderProg, "pixelScale");
+     fb.glShaderYFlip      = glGetUniformLocation(fb.glShaderProg, "yFlip");
+     fb.glShaderRBSwap     = glGetUniformLocation(fb.glShaderProg, "rbSwap");
++    fb.glShaderGammaPow   = glGetUniformLocation(fb.glShaderProg, "gammaPow");
++    fb.glShaderDitherOn   = glGetUniformLocation(fb.glShaderProg, "ditherOn");
++    fb.glShaderDitherLvls = glGetUniformLocation(fb.glShaderProg, "ditherLvls");
++    fb.glShaderFbRes      = glGetUniformLocation(fb.glShaderProg, "fbRes");
+ 
+     updateShaderVars();
+ }

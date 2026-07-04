@@ -25,7 +25,9 @@ typedef uint8_t bool;
 
 typedef struct screen_vertex
 {
-    uint16_t x, y;
+    int32_t x, y;   // pixels in 1/SCREEN_VERTEX_V2_SCALE fixed point; signed
+                    // so coordinate differences are safe, 32-bit so any
+                    // realistic framebuffer size fits (2^31/32 = 67M pixels)
     uint32_t z;
     uint8_t r, g, b, a;
 } screen_vertex;

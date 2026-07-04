@@ -6,8 +6,10 @@
 #include <gl.h>
 #include "rasterizer.h"
 
-static const int32_t DISPLAY_WIDTH = XMAXSCREEN + 1;
-static const int32_t DISPLAY_HEIGHT = YMAXSCREEN + 1;
+// Framebuffer size tracks the window (ref_rasterizer_resize); buffers are
+// heap-allocated at that size. Zero until the window exists.
+static int32_t DISPLAY_WIDTH = 0;
+static int32_t DISPLAY_HEIGHT = 0;
 
 // SDL wants BGRA
 #define BLUE_BYTE 0
@@ -26,15 +28,17 @@ static int text_antialias_enabled = 1;
 // double color buffers
 static int backbuffer_draw_enabled = 1;
 static int frontbuffer_draw_enabled = 0;
-typedef unsigned char color_buffer_t[YMAXSCREEN + 1][XMAXSCREEN + 1][4];
-static color_buffer_t c_buffer[2]; // uchar = 8 bits = 1 byte * 800 * 480 * 4 = 1.53M * 2 = 3.06M
-static color_buffer_t *gl_c_backbuffer = &(c_buffer[0]);  // render to back buffer
-static color_buffer_t *gl_c_frontbuffer = &(c_buffer[1]); // display from front buffer
+static uint8_t *c_buffer[2] = {NULL, NULL};   // BGRA, DISPLAY_WIDTH*DISPLAY_HEIGHT*4 each
+static uint8_t *gl_c_backbuffer = NULL;       // render to back buffer
+static uint8_t *gl_c_frontbuffer = NULL;      // display from front buffer
 
-typedef unsigned short color_index_buffer_t[YMAXSCREEN + 1][XMAXSCREEN + 1];
-static color_index_buffer_t ci_buffer[2]; // short = 16 bits = 2 bytes * 800 * 480 = 640K * 2 = 1.28M
-static color_index_buffer_t *gl_ci_backbuffer = &(ci_buffer[0]);  // render to back buffer
-static color_index_buffer_t *gl_ci_frontbuffer = &(ci_buffer[1]); // display from front buffer
+static size_t color_buffer_bytes(void) { return (size_t)DISPLAY_WIDTH * DISPLAY_HEIGHT * 4; }
+
+// Address of pixel (x, y) in a color buffer (y is buffer row, 0 = top)
+static uint8_t* buffer_pixel(uint8_t *buffer, int x, int y)
+{
+    return buffer + ((size_t)y * DISPLAY_WIDTH + x) * 4;
+}
 
 // z buffer
 static int zbuffer_enabled = 0;
@@ -44,7 +48,7 @@ static const unsigned int Z_MAX = 0xffffffff;
 // Should we just 'upgrade' GL to 32-bit Z since we computed it?
 //typedef uint32_t z_t;
 //static const int Z_SHIFT = 0;
-static z_t z_buffer[YMAXSCREEN + 1][XMAXSCREEN + 1]; // z_t = 16 bits = 2 bytes * 800 * 480 = 640K
+static z_t *z_buffer = NULL; // DISPLAY_WIDTH*DISPLAY_HEIGHT, 16 bits per pixel
 
 static float min(float a, float b)
 {
@@ -56,22 +60,22 @@ static float clamp(float v, float low, float high)
     return v > high ? high : (v < low ? low : v);
 }
 
-static void clear_cbuffer(int draw_enabled, color_buffer_t* buffer, uint8_t r, uint8_t g, uint8_t b)
+static void clear_cbuffer(int draw_enabled, uint8_t *buffer, uint8_t r, uint8_t g, uint8_t b)
 {
-    if (draw_enabled) {
+    if (draw_enabled && buffer) {
         for (int j = 0; j < DISPLAY_HEIGHT; j++)
             for (int i = 0; i < DISPLAY_WIDTH; i++) {
-                (*buffer)[j][i][RED_BYTE] = r;
-                (*buffer)[j][i][GREEN_BYTE] = g;
-                (*buffer)[j][i][BLUE_BYTE] = b;
+                uint8_t *p = buffer_pixel(buffer, i, j);
+                p[RED_BYTE] = r;
+                p[GREEN_BYTE] = g;
+                p[BLUE_BYTE] = b;
             }
     }
 }
 
-static void clear_cibuffer(int draw_enabled, color_index_buffer_t* buffer, short color_index)
+static void clear_cibuffer(int draw_enabled, short color_index)
 {
-    // if (draw_enabled)
-    //     memset_pattern16(buffer, &color_index, DISPLAY_HEIGHT * DISPLAY_WIDTH);
+    // color index buffers not implemented; colors arrive pre-resolved in screen_vertex
 }
 
 void ref_rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
@@ -79,8 +83,8 @@ void ref_rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
     clear_cbuffer(backbuffer_draw_enabled, gl_c_backbuffer, r, g, b);
     clear_cbuffer(frontbuffer_draw_enabled, gl_c_frontbuffer, r, g, b);
     if (!rgb_mode) {
-        clear_cibuffer(backbuffer_draw_enabled, gl_ci_backbuffer, color_index);
-        clear_cibuffer(frontbuffer_draw_enabled, gl_ci_frontbuffer, color_index);
+        clear_cibuffer(backbuffer_draw_enabled, color_index);
+        clear_cibuffer(frontbuffer_draw_enabled, color_index);
     }
 }
 
@@ -103,27 +107,29 @@ void ref_rasterizer_pattern(int enable)
 
 unsigned char* ref_rasterizer_frontbuffer()
 {
-    return (unsigned char*)gl_c_frontbuffer;
+    return gl_c_frontbuffer;
 }
 
 void ref_rasterizer_copy_front_to_back()
 {
-    memcpy(gl_c_backbuffer, gl_c_frontbuffer, sizeof(color_buffer_t));
+    if (gl_c_backbuffer)
+        memcpy(gl_c_backbuffer, gl_c_frontbuffer, color_buffer_bytes());
 }
 
 void ref_rasterizer_copy_back_to_front()
 {
-    memcpy(gl_c_frontbuffer, gl_c_backbuffer, sizeof(color_buffer_t));
+    if (gl_c_frontbuffer)
+        memcpy(gl_c_frontbuffer, gl_c_backbuffer, color_buffer_bytes());
 }
 
 void ref_rasterizer_swap()
 {
     // swap back buffer (buffer being rasterized) and front buffer (buffer being displayed)
-    color_buffer_t *_gl_backbuffer = gl_c_backbuffer; gl_c_backbuffer = gl_c_frontbuffer; gl_c_frontbuffer = _gl_backbuffer;
+    uint8_t *_gl_backbuffer = gl_c_backbuffer; gl_c_backbuffer = gl_c_frontbuffer; gl_c_frontbuffer = _gl_backbuffer;
 
     // optionally dump frames to ppm files
     static int frame = 0;
-    if (gen_ppm_frame_files)
+    if (gen_ppm_frame_files && gl_c_backbuffer)
     {
         unsigned char rgb_pixel[3];
         char name[128];
@@ -133,9 +139,10 @@ void ref_rasterizer_swap()
             for (int j = 0; j < DISPLAY_HEIGHT; j++) {
                 for (int i = 0; i < DISPLAY_WIDTH; i++) {
                     // PPM expects RGB format
-                    rgb_pixel[0] = (*gl_c_backbuffer)[j][i][RED_BYTE];
-                    rgb_pixel[1] = (*gl_c_backbuffer)[j][i][GREEN_BYTE];
-                    rgb_pixel[2] = (*gl_c_backbuffer)[j][i][BLUE_BYTE];
+                    uint8_t *p = buffer_pixel(gl_c_backbuffer, i, j);
+                    rgb_pixel[0] = p[RED_BYTE];
+                    rgb_pixel[1] = p[GREEN_BYTE];
+                    rgb_pixel[2] = p[BLUE_BYTE];
                     fwrite(rgb_pixel, 1, 3, fp);
                 }
             }
@@ -182,9 +189,11 @@ void ref_rasterizer_zbuffer(int enable)
 
 void ref_rasterizer_zclear(uint32_t z)
 {
-    for (int j = 0; j < DISPLAY_HEIGHT; j++)
-        for (int i = 0; i < DISPLAY_WIDTH; i++)
-            z_buffer[j][i] = z;
+    if (!z_buffer)
+        return;
+    size_t n = (size_t)DISPLAY_WIDTH * DISPLAY_HEIGHT;
+    for (size_t i = 0; i < n; i++)
+        z_buffer[i] = z;
 }
 
 void ref_rasterizer_czclear(uint8_t r, uint8_t g, uint8_t b, short color_index, uint32_t z)
@@ -235,13 +244,14 @@ static void calcHalfPlaneDiffs(float v0[2], float v1[2], float v2[2],
     *dy = evalHalfPlane(v0, v1, v2, 0, 1) - evalHalfPlane(v0, v1, v2, 0, 0);
 }
 
-static void set_buffer_pixel(int draw_enabled, color_buffer_t* buffer, int y, int x, uint8_t r, uint8_t g, uint8_t b)
+static void set_buffer_pixel(int draw_enabled, uint8_t *buffer, int y, int x, uint8_t r, uint8_t g, uint8_t b)
 {
     if (draw_enabled)
     {
-        (*buffer)[y][x][RED_BYTE] = r;
-        (*buffer)[y][x][GREEN_BYTE] = g;
-        (*buffer)[y][x][BLUE_BYTE] = b;
+        uint8_t *p = buffer_pixel(buffer, x, y);
+        p[RED_BYTE] = r;
+        p[GREEN_BYTE] = g;
+        p[BLUE_BYTE] = b;
     }
 }
 
@@ -269,10 +279,11 @@ static void triPixel(int x, int y, float bary[3], screen_vertex s[3])
 
     int buffer_y = DISPLAY_HEIGHT - 1 - y;
 
-    if (!zbuffer_enabled || (z < z_buffer[buffer_y][x])) {
+    size_t zi = (size_t)buffer_y * DISPLAY_WIDTH + x;
+    if (!zbuffer_enabled || (z < z_buffer[zi])) {
         set_buffer_pixel(backbuffer_draw_enabled, gl_c_backbuffer, buffer_y, x, r, g, b);
         set_buffer_pixel(frontbuffer_draw_enabled, gl_c_frontbuffer, buffer_y, x, r, g, b);
-        z_buffer[buffer_y][x] = z;
+        z_buffer[zi] = z;
     }
 }
 
@@ -295,7 +306,7 @@ static void draw_screen_triangle(screen_vertex *s0, screen_vertex *s1, screen_ve
         v2[0] = floor(v2[0]);
         v2[1] = floor(v2[1]);
     }
-    static int viewport[4] = {0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT};
+    int viewport[4] = {0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT};
     screen_vertex s[3] = {*s0, *s1, *s2};
 
     int bbox[4];
@@ -348,6 +359,8 @@ static void screen_vertex_offset_with_clamp(screen_vertex* v, float dx, float dy
 void ref_rasterizer_bitmap(uint32_t width, uint32_t rowbytes, uint32_t height, screen_vertex *sv, uint8_t *bits)
 {
     screen_vertex s[4];
+    if (!gl_c_backbuffer)
+        return;
 
     for (int j = 0; j < height; j++) {
         int prevbit = 0;
@@ -405,6 +418,9 @@ void ref_rasterizer_alpha_blit(uint32_t width, uint32_t rowbytes, uint32_t heigh
                            screen_vertex *sv, uint8_t *alpha,
                            uint8_t r, uint8_t g, uint8_t b)
 {
+    if (!gl_c_backbuffer)
+        return;
+
     // Anchor in pixel coords (sv is in fixed-point).
     // Mirrors ref_rasterizer_bitmap's coordinate conventions: sv->x and sv->y are in
     // SCREEN_VERTEX_V2_SCALE fixed-point
@@ -434,13 +450,13 @@ void ref_rasterizer_alpha_blit(uint32_t width, uint32_t rowbytes, uint32_t heigh
             // integer math; the cheaper (x*a + x) >> 8 is a near-equivalent
             // approximation we could use if this turns out to be a hot spot.
             if (backbuffer_draw_enabled) {
-                uint8_t *p = (*gl_c_backbuffer)[y][x];
+                uint8_t *p = buffer_pixel(gl_c_backbuffer, x, y);
                 p[RED_BYTE]   = (uint8_t)((r * a + p[RED_BYTE]   * (255 - a) + 127) / 255);
                 p[GREEN_BYTE] = (uint8_t)((g * a + p[GREEN_BYTE] * (255 - a) + 127) / 255);
                 p[BLUE_BYTE]  = (uint8_t)((b * a + p[BLUE_BYTE]  * (255 - a) + 127) / 255);
             }
             if (frontbuffer_draw_enabled) {
-                uint8_t *p = (*gl_c_frontbuffer)[y][x];
+                uint8_t *p = buffer_pixel(gl_c_frontbuffer, x, y);
                 p[RED_BYTE]   = (uint8_t)((r * a + p[RED_BYTE]   * (255 - a) + 127) / 255);
                 p[GREEN_BYTE] = (uint8_t)((g * a + p[GREEN_BYTE] * (255 - a) + 127) / 255);
                 p[BLUE_BYTE]  = (uint8_t)((b * a + p[BLUE_BYTE]  * (255 - a) + 127) / 255);
@@ -461,15 +477,16 @@ static void draw_point(screen_vertex *sv)
         v[1] = floor(v[1]);
     }
 
-    int x = clamp(v[0], 0, DISPLAY_WIDTH);
-    int y = clamp(v[1], 0, DISPLAY_HEIGHT);
+    int x = clamp(v[0], 0, DISPLAY_WIDTH - 1);
+    int y = clamp(v[1], 0, DISPLAY_HEIGHT - 1);
     z_t z = sz_to_zbuffer(s.z);
 
     int buffer_y = DISPLAY_HEIGHT - 1 - y;
-    if (!zbuffer_enabled || (z < z_buffer[buffer_y][x])) {
+    size_t zi = (size_t)buffer_y * DISPLAY_WIDTH + x;
+    if (!zbuffer_enabled || (z < z_buffer[zi])) {
         set_buffer_pixel(backbuffer_draw_enabled, gl_c_backbuffer, buffer_y, x, s.r, s.g, s.b);
         set_buffer_pixel(frontbuffer_draw_enabled, gl_c_frontbuffer, buffer_y, x, s.r, s.g, s.b);
-        z_buffer[buffer_y][x] = z;
+        z_buffer[zi] = z;
     }
 }
 
@@ -505,6 +522,8 @@ static void draw_line(screen_vertex *v0, screen_vertex *v1)
 void ref_rasterizer_draw(uint32_t type, uint32_t count, screen_vertex *screenverts)
 {
     int i;
+    if (!gl_c_backbuffer)
+        return;
     switch(type) {
         case DRAW_POINTS:
             for (i = 0; i < count; ++i)
@@ -525,6 +544,32 @@ void ref_rasterizer_draw(uint32_t type, uint32_t count, screen_vertex *screenver
 void ref_rasterizer_frame_sync(void)
 {
     // CPU rasterizer renders directly into the front/back buffers; nothing to flush
+}
+
+// The framebuffer tracks the window size: reallocate the color and z
+// buffers at the new size and clear them. The caller (gl.c) re-registers
+// the new front buffer pointer with the display afterwards.
+void ref_rasterizer_resize(uint32_t width, uint32_t height)
+{
+    if ((int32_t)width == DISPLAY_WIDTH && (int32_t)height == DISPLAY_HEIGHT)
+        return;
+
+    free(c_buffer[0]);
+    free(c_buffer[1]);
+    free(z_buffer);
+
+    DISPLAY_WIDTH = width;
+    DISPLAY_HEIGHT = height;
+
+    c_buffer[0] = calloc(1, color_buffer_bytes()); // calloc = cleared to black
+    c_buffer[1] = calloc(1, color_buffer_bytes());
+    z_buffer = malloc((size_t)DISPLAY_WIDTH * DISPLAY_HEIGHT * sizeof(z_t));
+    gl_c_backbuffer = c_buffer[0];
+    gl_c_frontbuffer = c_buffer[1];
+
+    ref_rasterizer_zclear(Z_MAX);
+
+    printf("INFO: ref rasterizer framebuffer %dx%d\n", DISPLAY_WIDTH, DISPLAY_HEIGHT);
 }
 
 const rasterizer_funcs* ref_rasterizer_get_funcs(void)
@@ -549,6 +594,7 @@ const rasterizer_funcs* ref_rasterizer_get_funcs(void)
         .zbuffer            = ref_rasterizer_zbuffer,
         .linewidth          = ref_rasterizer_linewidth,
         .frame_sync         = ref_rasterizer_frame_sync,
+        .resize             = ref_rasterizer_resize,
     };
     return &funcs;
 }
