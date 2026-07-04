@@ -72,21 +72,20 @@ make
 ```
 
 ## To do
-- Fix logged [issues](https://github.com/sgi-demos/sgi-demos/issues)
-- Upgrade rendering to [OpenGLES/WebGL](https://github.com/sgi-demos/igl) (WIP)
-- Enable arbitrary window size
-- Provide rudimentary context for each demo: name, author, year (as text in lower corner), code link
-- Add popup/overlay help to show key/mouse input to try
 - Add more demos, _all the demos_.
   - Barcelona, Electropaint, Cedit, any other IRIS GL demos I can find
   - Then OpenGL, GLUT, Inventor, Performer demos in no particular order
+- Fix logged [issues](https://github.com/sgi-demos/sgi-demos/issues)
+- Provide context for each demo:
+  - Name, author, year (as text in lower corner), code link
+  - Brief description/history/context for each demo - can obtain some descriptions from .Info slide files
+  - Link to demo man pages
+- Add popup/overlay help to show key/mouse input to try
 - Provide virtual mouse and keyboard for touch devices:
   - Only display virtual keys and mouse functions used by the demo; use demo's qdevice() calls to determine this
   - Displayed as transparent virtual mouse and key pictures overlaid on demo
   - On always for touch devices
   - On/off for mouse/keyboard devices, as hints
-- Add brief description/history/context for each demo - can obtain some descriptions from .Info slide files
-- Add links to man pages
 
 ## Credits
 - Everyone who worked at [SGI](https://en.wikipedia.org/wiki/Silicon_Graphics), for the eye candy and the baller computers.
