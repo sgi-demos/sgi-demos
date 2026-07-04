@@ -1,0 +1,32 @@
+#!/usr/demos/bin/slides
+.back 0 0 130,clear 
+.size 100 1179 50 973 
+.margins 60 60 10 10 
+.back 100 100 200,clear 
+.font 2
+.color 230 120 0,center on,shadow on 4,fade off,wait off,under on
+.sk 1
+Barcelona Pavillion
+.under off,shadow on 3 
+.color 170 241 42,fade off,center on
+.font 2,sk 3
+The Barcelona Pavillion was a German Pavillion designed by
+Meis Van DerRohe for the 1929 World Exhibition in 
+(where else) Barcelona and is considered by many 
+designers to be the predecessor to todays "modern" 
+architectural style.
+.sk 2
+The Pavillion was dismantled and lost in shipment back to
+Germany, but was recently recreated in Barcelona.
+.sk 2
+This representation displays 2676 radiosity calculated
+gouraud shaded polygons.
+.sk 2
+For more information about this radiosity project
+consult the summer 1988 issue of the IRIS Universe.
+.sk 2
+.color 230 120 0
+.font 0
+.shadow on 1
+Hit the right mouse button to continue.
+.wait on

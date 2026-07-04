@@ -1,0 +1,27 @@
+#!/usr/demos/bin/slides
+.back 0 0 130,clear 
+.size 100 1179 50 973 
+.margins 60 60 10 10 
+.back 100 100 200,clear 
+.font 2
+.color 230 120 0,center on,shadow on 4,fade off,wait off,under on
+.sk 1
+Sphere
+.under off,shadow on 3 
+.color 170 241 42,fade off,center on
+.font 2,sk 3
+This is a simple model of a sphere on a pillar in a room to
+demonstrate the effects of radiosity calculations.
+.sk 2
+This model has 1072 polygons.  Notice how light bouncing off
+the red and blue walls affects the surrounding grey walls
+and sphere.  Also note the soft shadow cast on the wall
+opposite the light source.  This program does not do the
+radiosity calculations; it just displays the results of the
+calculations
+.sk 1
+.color 230 120 0
+.font 0
+.shadow on 1
+Hit the right mouse button to continue.
+.wait on

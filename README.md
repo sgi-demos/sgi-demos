@@ -16,9 +16,9 @@ This is the original SGI demo source code, compiled for the web using Emscripten
 - [Flight](https://sgi-demos.github.io/sgi-demos/demos/flight/web/flight_full.html) (cockpit glitches, planes too slow in web version, night mode 'shimmers', no network play)
 - [Newave](https://sgi-demos.github.io/sgi-demos/demos/newave/web/newave_full.html) (no mesh editing, no popup menus, only wireframe)
 - [Arena](https://sgi-demos.github.io/sgi-demos/demos/arena/web/arena_full.html) (no network play)
+- [Gview (Barcelona)](https://sgi-demos.github.io/sgi-demos/demos/gview/web/gview_full.html) (reconstructed from the IRIX 3 binary: fly-through and turntable modes work; no materials, movie loops, or binary model cache)
 
 ## Firmly WIP demos
-- [Gview (Barcelona)](https://github.com/sgi-demos/sgi-demos/tree/main/demos/gview)
 - [Cedit](https://github.com/sgi-demos/sgi-demos/tree/main/demos/cedit)
 - Sunflower, gltest, colortest
 

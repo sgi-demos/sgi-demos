@@ -1,6 +1,6 @@
 {
   "meta": {
-    "timestamp": "2026-07-03T23:11:50.777Z",
+    "timestamp": "2026-07-04T19:06:21.832Z",
     "settleMs": 3000,
     "viewport": {
       "width": 1024,
@@ -40,7 +40,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.9120356241861979,
+      "content": 0.872802734375,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -51,7 +51,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.9180819193522135,
+      "content": 0.9292208353678385,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -227,7 +227,29 @@
       "mode": "gles2",
       "status": "somewhat",
       "minContent": 0.02,
-      "content": 0.658709208170573,
+      "content": 0.6585795084635417,
+      "pass": true,
+      "reasons": [],
+      "errors": []
+    },
+    {
+      "id": "gview.ref",
+      "name": "gview",
+      "mode": "ref",
+      "status": "somewhat",
+      "minContent": 0.02,
+      "content": 0.6521186828613281,
+      "pass": true,
+      "reasons": [],
+      "errors": []
+    },
+    {
+      "id": "gview.gles2",
+      "name": "gview",
+      "mode": "gles2",
+      "status": "somewhat",
+      "minContent": 0.02,
+      "content": 0.6492474873860676,
       "pass": true,
       "reasons": [],
       "errors": []

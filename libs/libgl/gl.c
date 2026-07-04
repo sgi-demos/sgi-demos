@@ -2511,6 +2511,12 @@ void rotate(Angle ang, char axis) {
     matrix4x4f_stack_mult(current_stack, m);
 }
 
+// rot() is the float-degrees variant of rotate(); tenths of a degree
+// is the finest granularity the fixed-point Angle path supports
+void rot(float ang, char axis) {
+    rotate((Angle)roundf(ang * 10.0f), axis);
+}
+
 void setpattern(int pattern) {
     if(cur_ptr_to_nextptr != NULL) {
         dl_element *e = element_next_in_object(SETPATTERN);

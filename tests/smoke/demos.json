@@ -14,6 +14,7 @@
     { "name": "twilight",  "path": "demos/twilight/web/twilight_full.html",   "status": "working" },
     { "name": "flight",    "path": "demos/flight/web/flight_full.html",       "status": "somewhat" },
     { "name": "newave",    "path": "demos/newave/web/newave_full.html",       "status": "somewhat", "minContent": 0.01 },
-    { "name": "arena",     "path": "demos/arena/web/arena_full.html",         "status": "somewhat" }
+    { "name": "arena",     "path": "demos/arena/web/arena_full.html",         "status": "somewhat" },
+    { "name": "gview",     "path": "demos/gview/web/gview_full.html",         "status": "somewhat" }
   ]
 }

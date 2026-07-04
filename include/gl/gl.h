@@ -384,7 +384,7 @@ extern void	rmv2i(Icoord dx, Icoord dy);
 extern void	rmv2s();
 extern void	rmvi();
 extern void	rmvs();
-extern void	rot();
+extern void	rot(float angle, char axis);
 extern void	rotate(Angle angle, char axis);
 extern void	rpatch();
 extern void	rpdr();

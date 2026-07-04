@@ -17,3 +17,8 @@ Arena
 	../arena/bin/arena
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0
+
+Gview
+	../gview/bin/gview ../gview/Barcelona.gfo
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
