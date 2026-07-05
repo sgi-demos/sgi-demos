@@ -404,12 +404,12 @@ char *filename;
 	    gfo_nv++;
 	}
 	else if (sscanf(p, "cpack {%i}", &gfo_colors[gfo_nc]) == 1) {
-	    /* Convert 0xRRGGBB to IrisGL cpack ABGR ordering */
-	    int c = gfo_colors[gfo_nc];
-	    int r = (c >> 16) & 0xff;
-	    int g = (c >> 8) & 0xff;
-	    int b = c & 0xff;
-	    gfo_colors[gfo_nc] = 0xff000000 | (b << 16) | (g << 8) | r;
+	    /* GFO files store colors in native IrisGL cpack order
+	     * (0xAABBGGRR, red in the low byte) -- pass straight
+	     * through to cpack(), just force alpha opaque. Swapping
+	     * to RGB here renders teal water as brown and the purple
+	     * sky as maroon. */
+	    gfo_colors[gfo_nc] = 0xff000000 | (gfo_colors[gfo_nc] & 0xffffff);
 	    gfo_nc++;
 	}
 	else if (strncmp(p, "polygon {", 9) == 0) {
