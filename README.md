@@ -1,7 +1,7 @@
 # SGI demos from long ago, running in your browser [today](https://sgi-demos.github.io).
 _Old problems require modern solutions._
 
-This is the original SGI demo source code, compiled for the web using Emscripten and SDL2.  Rendering is done using an IRIS GL software rasterizer from the [Alice 4 project](https://lkesteloot.github.io/alice/alice4/libgl.html).  Event handling is done by SDL2, with events translated into GL's event system.  Each demo is a separate web page, with its own Javascript + WASM compiled by Emscripten from the original C/C++ source.  Native Linux, Mac, and Windows builds are also available. Minimal modifications have been made to the original source, in order to run in the browser and to build with compilers 30+ years later.  For more implementation details, see the [architecture doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs/ARCHITECTURE.md).
+This is the original SGI demo source code, compiled for the web using Emscripten and SDL2.  Rendering is done using an IRIS GL-to-GLES2 rasterizer with a reference software rasterizer also available from the [Alice 4 project](https://lkesteloot.github.io/alice/alice4/libgl.html).  Event handling is done by SDL2, with events translated into GL's event system.  Each demo is a separate web page, with its own Javascript + WASM compiled by Emscripten from the original C/C++ source.  Native Linux, Mac, and Windows builds are also available. Minimal modifications have been made to the original source, in order to run in the browser and to build with compilers 30+ years later.  For more implementation details, see the [architecture doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs/ARCHITECTURE.md).
 
 ## Working demos
 - [Buttonfly](https://sgi-demos.github.io/)
