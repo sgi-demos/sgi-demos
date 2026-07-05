@@ -90,10 +90,47 @@
 #include "stdlib.h"
 #include "string.h"
 #include "math.h"
+#include "sys/time.h"
 #include "gl.h"
 #include "device.h"
 
 /* Binary uses literal 3.1415 (f64 at GP-0x7F90), not M_PI */
+
+/*
+ * DEPARTURE: all of the binary's motion constants are per-FRAME
+ * (orbit spin 10 deg/frame, fly yaw 15 deg/frame, speed/drag applied
+ * once per frame), implicitly tuned for the ~10-15 fps this scene
+ * rendered at on late-1980s hardware. Modern displays run the loop at
+ * 60-120 fps, multiplying every rate by 4-8x. frame_scale converts
+ * "original frames" to wall-clock time: it is dt * ORIG_FPS, so at
+ * ORIG_FPS the motion matches the original frame-for-frame, and at
+ * any other refresh rate it matches in real time.
+ */
+#define ORIG_FPS 15.0
+
+static float frame_scale = 1.0;
+
+static void update_frame_scale()
+{
+    static int have_last = 0;
+    static struct timeval last;
+    struct timeval now;
+    double dt;
+
+    gettimeofday(&now, NULL);
+    if (!have_last) {
+	have_last = 1;
+	last = now;
+	frame_scale = ORIG_FPS / 60.0;
+	return;
+    }
+    dt = (double)(now.tv_sec - last.tv_sec)
+       + (double)(now.tv_usec - last.tv_usec) / 1000000.0;
+    last = now;
+    if (dt < 0.0) dt = 0.0;
+    if (dt > 0.25) dt = 0.25;	/* clamp across menu popups / tab switches */
+    frame_scale = (float)(dt * ORIG_FPS);
+}
 
 /*
  * GFO file data structures
@@ -579,13 +616,15 @@ void draw_scene_fly()
      * Binary checks only view_state+0x18 (left_down); auto_advance
      * is a movie-playback feature, not a fly navigation feature. */
     if (left_down)
-	fly_speed += speed_factor;
+	fly_speed += speed_factor * frame_scale;
     if (middle_down)
-	fly_speed -= speed_factor;
+	fly_speed -= speed_factor * frame_scale;
 
-    /* Apply drag: speed = speed * (1.0 - drag) (m2c line 924) */
+    /* Apply drag: speed = speed * (1.0 - drag) (m2c line 924);
+     * drag amount scaled to real time (see frame_scale) */
     d_speed = (double)fly_speed;
-    fly_speed = (float)(d_speed - d_speed * (double)speed_drag);
+    fly_speed = (float)(d_speed - d_speed * (double)speed_drag
+					  * (double)frame_scale);
 
     /* Mouse-to-angle mapping (m2c lines 925-941).
      * Binary polls getvaluator unconditionally -- no shift guard.
@@ -596,7 +635,8 @@ void draw_scene_fly()
 
 	/* Yaw: accumulated, scaled by sensitivity */
 	yaw_accum += (float)((double)(float)(mx - (int)win_xsize / 2)
-			     * (double)yaw_sensitivity / (double)win_xsize);
+			     * (double)yaw_sensitivity / (double)win_xsize)
+		   * frame_scale;
 
 	/* Pitch: direct, scaled by sensitivity */
 	pitch_val = (float)((double)(float)(my - (int)win_ysize / 2)
@@ -607,15 +647,17 @@ void draw_scene_fly()
     sin_pitch_speed = (float)((double)(float)sin(
 	(double)pitch_val * 3.1415 / 180.0) * (double)fly_speed);
 
-    /* Position update (m2c lines 946-978, axis mode 3 = Z-up) */
-    cam_z -= sin_pitch_speed;
+    /* Position update (m2c lines 946-978, axis mode 3 = Z-up);
+     * fly_speed is in units per original frame, so displacement per
+     * rendered frame is scaled to real time (see frame_scale) */
+    cam_z -= sin_pitch_speed * frame_scale;
 
     yaw_rad = (double)yaw_accum * 3.1415 / 180.0;
     sin_yaw = (float)sin(yaw_rad);
     cos_yaw = (float)cos(yaw_rad);
 
-    cam_x += (float)((double)sin_yaw * (double)fly_speed);
-    cam_y += (float)((double)cos_yaw * (double)fly_speed);
+    cam_x += (float)((double)sin_yaw * (double)fly_speed) * frame_scale;
+    cam_y += (float)((double)cos_yaw * (double)fly_speed) * frame_scale;
 
     /*
      * Transform setup
@@ -753,8 +795,8 @@ void draw_scene_orbit()
 	 *   azimuth   += (norm_y - 0.5) * 10.0
 	 *   elevation += (norm_x - 0.5) * 10.0
 	 */
-	orbit_azimuth   += (mouse_norm_y - 0.5) * 10.0;
-	orbit_elevation += (mouse_norm_x - 0.5) * 10.0;
+	orbit_azimuth   += (mouse_norm_y - 0.5) * 10.0 * frame_scale;
+	orbit_elevation += (mouse_norm_x - 0.5) * 10.0 * frame_scale;
     }
 
     /*
@@ -1120,6 +1162,8 @@ void event_loop_and_render()
 	 * function. The normalized values are stored in view_state
 	 * (+0x10, +0x14) and read by draw_scene_orbit / draw_scene_fly.
 	 */
+	update_frame_scale();
+
 	mx = getvaluator(MOUSEX);
 	my = getvaluator(MOUSEY);
 	if (mouse_x0 < 0) {

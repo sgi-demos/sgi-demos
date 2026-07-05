@@ -1,6 +1,6 @@
 {
   "meta": {
-    "timestamp": "2026-07-05T13:53:12.611Z",
+    "timestamp": "2026-07-05T16:57:58.036Z",
     "settleMs": 3000,
     "viewport": {
       "width": 1024,
@@ -40,7 +40,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.8196843465169271,
+      "content": 0.9041608174641927,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -51,7 +51,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.927422841389974,
+      "content": 0.9381116231282552,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -183,7 +183,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.02954355875651038,
+      "content": 0.02979532877604163,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -205,7 +205,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.08125559488932288,
+      "content": 0.084527333577474,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -216,7 +216,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.12414932250976562,
+      "content": 0.025437672932942745,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -227,7 +227,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.119500478108724,
+      "content": 0.1356353759765625,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -238,7 +238,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.0799407958984375,
+      "content": 0.09721501668294275,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -249,7 +249,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.15413665771484375,
+      "content": 0.16082382202148438,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -304,7 +304,7 @@
       "mode": "ref",
       "status": "somewhat",
       "minContent": 0.02,
-      "content": 0.6587600708007812,
+      "content": 0.6586354573567708,
       "pass": true,
       "reasons": [],
       "errors": []
