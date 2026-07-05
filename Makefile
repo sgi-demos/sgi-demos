@@ -1,7 +1,7 @@
 .PHONY: demos libs clean smoke smoke-baseline
 
 DEMOS_DIR = demos
-DEMOS = arena bounce buttonfly cedit flight ideas insect jello logo newave twilight
+DEMOS = arena bounce buttonfly cedit ep-1988 ep-1989 ep-1994-ogl-decomp ep-1994-ogl-reversed flight ideas insect jello logo newave twilight
 
 LIBS_DIR = libs
 LIBS = libgl libdemo
@@ -27,8 +27,8 @@ endef
 # warning lines per file; reports overall pass/fail.
 define summarize
     @echo "" ; \
-    echo "==================== BUILD SUMMARY ====================" ; \
-    printf "%-15s %12s %12s %13s\n" "TARGET" "ERRORS" "WARNINGS" "STATUS" ; \
+    echo "==================== BUILD SUMMARY ===========================" ; \
+    printf "%-22s %12s %12s %13s\n" "TARGET" "ERRORS" "WARNINGS" "STATUS" ; \
     fail=0 ; \
     for item in $(1) ; do \
         log=$(LOG_DIR)/$$item.log ; \
@@ -45,9 +45,9 @@ define summarize
             rc=? ; \
         fi ; \
         if [ "$$rc" != "0" ] ; then fail=1 ; fi ; \
-        printf "%-15s %12s %12s %13s\n" $$item $$errs $$warns $$rc ; \
+        printf "%-22s %12s %12s %13s\n" $$item $$errs $$warns $$rc ; \
     done ; \
-    echo "=======================================================" ; \
+    echo "==============================================================" ; \
     if [ $$fail -ne 0 ] ; then \
         echo "BUILD FAILED: See $(LOG_DIR)/<target>.log for details." ; \
         exit 1 ; \
@@ -93,14 +93,14 @@ clean:
 	for lib in $(LIBS) ; do echo "" ; echo "CLEANING: $$lib" ; echo "" ; make clean -C $(LIBS_DIR)/$$lib ; done
 	rm -rf $(LOG_DIR)
 
-# ======================================================================
+# ============================================================================
 # Visual smoke tests (web targets) — see tests/smoke/README.md
 #
 # `make smoke` assumes the web targets are already built (`make browser`).
 # Captures every demo in both rendering modes (CPU reference + gles2 GPU),
 # fails on errors/blank frames, and writes the human-review gallery to
 # tests/smoke/report/index.html. First run installs node deps + Chromium.
-# ======================================================================
+# ============================================================================
 
 SMOKE_DIR = tests/smoke
 

@@ -19,8 +19,8 @@ Logo
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0
 
-Twilight
-	../twilight/bin/twilight
+Ep
+	../ep-1994-ogl-decomp/bin/ep-1994-ogl-decomp
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0
 

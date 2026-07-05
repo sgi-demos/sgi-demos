@@ -1,6 +1,6 @@
 {
   "meta": {
-    "timestamp": "2026-07-03T23:11:50.777Z",
+    "timestamp": "2026-07-05T12:39:58.319Z",
     "settleMs": 3000,
     "viewport": {
       "width": 1024,
@@ -40,7 +40,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.9120356241861979,
+      "content": 0.8838857014973959,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -51,7 +51,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.9180819193522135,
+      "content": 0.9091377258300781,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -62,7 +62,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.4924443562825521,
+      "content": 0.4959894816080729,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -73,7 +73,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.489142100016276,
+      "content": 0.4948450724283854,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -167,6 +167,94 @@
       "errors": []
     },
     {
+      "id": "ep-1988.ref",
+      "name": "ep-1988",
+      "mode": "ref",
+      "status": "working",
+      "minContent": 0.004,
+      "content": 0.029956817626953125,
+      "pass": true,
+      "reasons": [],
+      "errors": []
+    },
+    {
+      "id": "ep-1988.gles2",
+      "name": "ep-1988",
+      "mode": "gles2",
+      "status": "working",
+      "minContent": 0.004,
+      "content": 0.02954355875651038,
+      "pass": true,
+      "reasons": [],
+      "errors": []
+    },
+    {
+      "id": "ep-1989.ref",
+      "name": "ep-1989",
+      "mode": "ref",
+      "status": "working",
+      "minContent": 0.004,
+      "content": 0.08498636881510413,
+      "pass": true,
+      "reasons": [],
+      "errors": []
+    },
+    {
+      "id": "ep-1989.gles2",
+      "name": "ep-1989",
+      "mode": "gles2",
+      "status": "working",
+      "minContent": 0.004,
+      "content": 0.084527333577474,
+      "pass": true,
+      "reasons": [],
+      "errors": []
+    },
+    {
+      "id": "ep-1994-ogl-decomp.ref",
+      "name": "ep-1994-ogl-decomp",
+      "mode": "ref",
+      "status": "working",
+      "minContent": 0.004,
+      "content": 0.18921279907226562,
+      "pass": true,
+      "reasons": [],
+      "errors": []
+    },
+    {
+      "id": "ep-1994-ogl-decomp.gles2",
+      "name": "ep-1994-ogl-decomp",
+      "mode": "gles2",
+      "status": "working",
+      "minContent": 0.004,
+      "content": 0.14027913411458337,
+      "pass": true,
+      "reasons": [],
+      "errors": []
+    },
+    {
+      "id": "ep-1994-ogl-reversed.ref",
+      "name": "ep-1994-ogl-reversed",
+      "mode": "ref",
+      "status": "working",
+      "minContent": 0.004,
+      "content": 0.03089141845703125,
+      "pass": true,
+      "reasons": [],
+      "errors": []
+    },
+    {
+      "id": "ep-1994-ogl-reversed.gles2",
+      "name": "ep-1994-ogl-reversed",
+      "mode": "gles2",
+      "status": "working",
+      "minContent": 0.004,
+      "content": 0.060604095458984375,
+      "pass": true,
+      "reasons": [],
+      "errors": []
+    },
+    {
       "id": "flight.ref",
       "name": "flight",
       "mode": "ref",
@@ -216,7 +304,7 @@
       "mode": "ref",
       "status": "somewhat",
       "minContent": 0.02,
-      "content": 0.6586354573567708,
+      "content": 0.6587600708007812,
       "pass": true,
       "reasons": [],
       "errors": []

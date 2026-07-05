@@ -12,6 +12,10 @@
     { "name": "jello",     "path": "demos/jello/web/jello_full.html",         "status": "working" },
     { "name": "logo",      "path": "demos/logo/web/logo_full.html",           "status": "working" },
     { "name": "twilight",  "path": "demos/twilight/web/twilight_full.html",   "status": "working" },
+    { "name": "ep-1988", "path": "demos/ep-1988/web/ep-1988_full.html", "status": "working", "minContent": 0.004 },
+    { "name": "ep-1989", "path": "demos/ep-1989/web/ep-1989_full.html", "status": "working", "minContent": 0.004 },
+    { "name": "ep-1994-ogl-decomp", "path": "demos/ep-1994-ogl-decomp/web/ep-1994-ogl-decomp_full.html", "status": "working", "minContent": 0.004 },
+    { "name": "ep-1994-ogl-reversed", "path": "demos/ep-1994-ogl-reversed/web/ep-1994-ogl-reversed_full.html", "status": "working", "minContent": 0.004 },
     { "name": "flight",    "path": "demos/flight/web/flight_full.html",       "status": "somewhat" },
     { "name": "newave",    "path": "demos/newave/web/newave_full.html",       "status": "somewhat", "minContent": 0.01 },
     { "name": "arena",     "path": "demos/arena/web/arena_full.html",         "status": "somewhat" }

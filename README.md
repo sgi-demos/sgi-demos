@@ -16,6 +16,10 @@ This is the original SGI demo source code, compiled for the web using Emscripten
 - [Flight](https://sgi-demos.github.io/sgi-demos/demos/flight/web/flight_full.html) (cockpit glitches, planes too slow in web version, night mode 'shimmers', no network play)
 - [Newave](https://sgi-demos.github.io/sgi-demos/demos/newave/web/newave_full.html) (no mesh editing, no popup menus, only wireframe)
 - [Arena](https://sgi-demos.github.io/sgi-demos/demos/arena/web/arena_full.html) (no network play)
+- [Electropaint 1988](https://sgi-demos.github.io/sgi-demos/demos/ep-1988/web/ep-1988_full.html) (earliest version, Panel Library v7, from the 1988 Usenet posting; plain sliders)
+- [Electropaint 1989](https://sgi-demos.github.io/sgi-demos/demos/ep-1989/web/ep-1989_full.html) (Panel Library 9.6; IRIS GL, driven by Tristram's authentic default script; keyboard toggles)
+- [Electropaint 1994 (OpenGL, decompiled)](https://sgi-demos.github.io/sgi-demos/demos/ep-1994-ogl-decomp/web/ep-1994-ogl-decomp_full.html) (the real OpenGL IRIX screensaver, decompiled; smooth HLS colour + the famous default script)
+- [Electropaint 1994 (OpenGL, reversed)](https://sgi-demos.github.io/sgi-demos/demos/ep-1994-ogl-reversed/web/ep-1994-ogl-reversed_full.html) (the OpenGL version with ep.c refactored to readable names — byte-identical output)
 
 ## Firmly WIP demos
 - [Gview (Barcelona)](https://github.com/sgi-demos/sgi-demos/tree/main/demos/gview)
@@ -73,7 +77,7 @@ make
 
 ## To do
 - Add more demos, _all the demos_.
-  - Barcelona, Electropaint, Cedit, any other IRIS GL demos I can find
+  - Barcelona, Cedit, any other IRIS GL demos I can find
   - Then OpenGL, GLUT, Inventor, Performer demos in no particular order
 - Fix logged [issues](https://github.com/sgi-demos/sgi-demos/issues)
 - Provide context for each demo:
