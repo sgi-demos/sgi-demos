@@ -13,6 +13,64 @@ static GLenum ep_prim_mode;
 static Coord  ep_vbuf[EP_MAXV][2];
 static int    ep_vcount;
 
+/* OpenGL rasterizes NOTHING for zero-area triangles and zero-length
+   lines, and ep depends on that: its display loop never fills the size[]
+   history array, so the three mirrored copies of every wing are drawn
+   under scale(0,0,1) and are invisible on the real screensaver.  The
+   IRIS GL rasterizers here plot such degenerate primitives as single
+   pixels, which showed up as spurious swirling "particles".  So track a
+   degenerate flag through the matrix stack (all of ep's push/pop/scale
+   flow through these shims) and skip primitive emission while set. */
+static int ep_degenerate = 0;
+static int ep_deg_stack[32];
+static int ep_deg_sp = 0;
+
+/* Shipped-1994 mode (off by default, M toggles).  The OpenGL rewrite of
+   Electropaint accidentally diverged from the IRIS GL ep in two ways:
+   (1) it lost the size wiring, so the 3 mirrored copies of every wing are
+   drawn under scale(0,0,1) -- invisible on real OpenGL, killing the
+   IRIS-era 4-fold symmetry; (2) it passed the IRIS perspective() angle
+   "300" (tenths of a degree) to gluPerspective, which reads degrees,
+   giving an inverted frustum with an effective 60-degree FOV at eye
+   distance 4 (vs the IRIS 30 degrees at polarview distance 10).
+
+   Default (0): faithful to the IRIS GL ep -- mirrors restored (the
+   collapsing scale is treated as identity) and the intended camera.
+   M / shipped (1): what the 1994 binary actually rendered -- one visible
+   copy per wing (degenerates discarded as real OpenGL rasterization
+   would) and the accidental wide flipped camera. */
+int ep_shipped_ogl = 0;
+
+void
+ep_gl_pushmatrix(void)
+{
+    pushmatrix();
+    if (ep_deg_sp < 32)
+        ep_deg_stack[ep_deg_sp++] = ep_degenerate;
+}
+
+void
+ep_gl_popmatrix(void)
+{
+    popmatrix();
+    if (ep_deg_sp > 0)
+        ep_degenerate = ep_deg_stack[--ep_deg_sp];
+}
+
+void
+ep_gl_scalef(GLfloat x, GLfloat y, GLfloat z)
+{
+    /* z can't collapse ep's 2D squares; x or y ~0 flattens them */
+    int collapses = (x < 1e-6f && x > -1e-6f) || (y < 1e-6f && y > -1e-6f);
+
+    if (collapses && !ep_shipped_ogl)
+        return;                 /* restore the mirror: identity, not 0 */
+
+    scale((float)x, (float)y, (float)z);
+    if (collapses)
+        ep_degenerate = 1;      /* real OpenGL would draw nothing */
+}
+
 void
 ep_gl_begin(GLenum mode)
 {
@@ -34,6 +92,11 @@ void
 ep_gl_end(void)
 {
     int i;
+
+    if (ep_degenerate) {
+        ep_vcount = 0;   /* collapsed to a point: real GL draws nothing */
+        return;
+    }
 
     if (ep_prim_mode == GL_LINES) {
         /* GL_LINES: independent segments, one per vertex pair */
@@ -120,5 +183,16 @@ ep_gl_frustum(GLdouble l, GLdouble r, GLdouble b, GLdouble t,
 void
 ep_gluPerspective(double fovy, double aspect, double near, double far)
 {
-    perspective((Angle)fovy, (float)aspect, (Coord)near, (Coord)far);
+    if (ep_shipped_ogl) {
+        /* emulate the binary's gluPerspective(300 degrees): an inverted
+           frustum with an effective 60-degree FOV; ep's reshape then
+           applies its own -4 eye translation */
+        perspective((Angle)(fovy * 2.0), (float)aspect, (Coord)near, (Coord)far);
+        scale(1.0f, -1.0f, 1.0f);
+    } else {
+        /* as the IRIS GL ep framed it: 30 degrees at polarview distance
+           10 -- ep's reshape contributes -4, we add the remaining -6 */
+        perspective((Angle)fovy, (float)aspect, (Coord)near, (Coord)far);
+        translate(0.0, 0.0, -6.0);
+    }
 }

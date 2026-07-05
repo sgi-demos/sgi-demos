@@ -19,7 +19,7 @@ This is the original SGI demo source code, compiled for the web using Emscripten
 - [Gview (Barcelona)](https://sgi-demos.github.io/sgi-demos/demos/gview/web/gview_full.html) (reconstructed from the IRIX 3 binary: fly-through and turntable modes work; no materials, movie loops, or binary model cache)
 - [Electropaint 1988](https://sgi-demos.github.io/sgi-demos/demos/ep-1988/web/ep-1988_full.html) (earliest version, Panel Library v7, from the 1988 Usenet posting; plain sliders)
 - [Electropaint 1989](https://sgi-demos.github.io/sgi-demos/demos/ep-1989/web/ep-1989_full.html) (Panel Library 9.6; IRIS GL, driven by Tristram's authentic default script; keyboard toggles)
-- [Electropaint 1994 (OpenGL, decompiled)](https://sgi-demos.github.io/sgi-demos/demos/ep-1994-ogl-decomp/web/ep-1994-ogl-decomp_full.html) (the real OpenGL IRIX screensaver, decompiled; smooth HLS colour + the famous default script)
+- [Electropaint 1994 (OpenGL, decompiled)](https://sgi-demos.github.io/sgi-demos/demos/ep-1994-ogl-decomp/web/ep-1994-ogl-decomp_full.html) (the real OpenGL IRIX screensaver, decompiled; smooth HLS colour + the famous default script; IRIS-faithful by default — restored 4-fold mirrors + 30° camera — M toggles the shipped 1994 look)
 - [Electropaint 1994 (OpenGL, reversed)](https://sgi-demos.github.io/sgi-demos/demos/ep-1994-ogl-reversed/web/ep-1994-ogl-reversed_full.html) (the OpenGL version with ep.c refactored to readable names — byte-identical output)
 
 ## Firmly WIP demos

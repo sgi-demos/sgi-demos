@@ -63,13 +63,17 @@ void ep_gl_matrixmode(GLenum mode);
 void ep_gl_loadidentity(void);
 void ep_gl_frustum(GLdouble l, GLdouble r, GLdouble b, GLdouble t,
                    GLdouble near, GLdouble far);
+void ep_gl_pushmatrix(void);
+void ep_gl_popmatrix(void);
+void ep_gl_scalef(GLfloat x, GLfloat y, GLfloat z);
+extern int ep_shipped_ogl;    /* see gl_wrap_sgi.c; toggled with M */
 
 /* ep.c's immediate-mode drawing -> IRIS GL */
 #define wrap_glColor4f(r, g, b, a, ctx)   ep_gl_color4f((r), (g), (b), (a))
-#define wrap_glPushMatrix(ctx)            pushmatrix()
-#define wrap_glPopMatrix(ctx)             popmatrix()
+#define wrap_glPushMatrix(ctx)            ep_gl_pushmatrix()
+#define wrap_glPopMatrix(ctx)             ep_gl_popmatrix()
 #define wrap_glTranslatef(x, y, z, ctx)   translate((Coord)(x), (Coord)(y), (Coord)(z))
-#define wrap_glScalef(x, y, z, ctx)       scale((float)(x), (float)(y), (float)(z))
+#define wrap_glScalef(x, y, z, ctx)       ep_gl_scalef((x), (y), (z))
 #define wrap_glRotatef(a, x, y, z, ctx)   ep_gl_rotatef((a), (x), (y), (z))
 #define wrap_glBegin(mode, ctx)           ep_gl_begin(mode)
 #define wrap_glVertex2f(x, y, ctx)        ep_gl_vertex2f((x), (y))

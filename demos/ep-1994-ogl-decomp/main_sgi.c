@@ -8,6 +8,8 @@
 #include <device.h>
 #include "ep.h"
 
+extern int ep_shipped_ogl;   /* gl_wrap_sgi.c: shipped-1994 look (M) */
+
 /* (ep.c defines oflag/bflag itself; oflag defaults to 0 = quiet.) */
 
 int
@@ -21,6 +23,7 @@ main(void)
     gconfig();
     qdevice(ESCKEY);
     qdevice(REDRAW);
+    qdevice(MKEY);              /* toggle shipped-1994 look */
 
     getsize(&w, &h);
     init_ep();
@@ -33,6 +36,11 @@ main(void)
 
             if (dev == ESCKEY && val)
                 return 0;
+            if (dev == MKEY && val) {
+                ep_shipped_ogl = !ep_shipped_ogl;
+                getsize(&w, &h);
+                reshape__GiT1((int)w, (int)h);  /* re-derive the camera */
+            }
             if (dev == REDRAW) {
                 getsize(&w, &h);
                 reshape__GiT1((int)w, (int)h);
