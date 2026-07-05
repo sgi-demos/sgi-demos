@@ -3,7 +3,8 @@ include ../../makefiles/platform.mk
 APP = $(BIN_DIR)/$(APPNAME)
 EM_APPNAME = $(WEB_DIR)/$(APPNAME)
 EM_APP = $(EM_APPNAME).html
-APPNAME_DEF := -DDEMO_$(shell echo $(APPNAME) | tr a-z A-Z)
+# uppercase, and map non-identifier chars (e.g. '-' in electropaint-1988) to '_'
+APPNAME_DEF := -DDEMO_$(shell echo $(APPNAME) | tr 'a-z-' 'A-Z_')
 
 HDRS = $(wildcard *.h) $(wildcard $(INCS_DIR)/gl/*.h)
 SRC = $(wildcard *.c)
@@ -49,7 +50,7 @@ $(WEB_DIR)/gl_appname.o: ../../makefiles/gl_appname.c | $(WEB_DIR)
 	$(MODERN_CODE_EMCC) $(EM_OPT) -DGL_APPNAME='"$(APPNAME)"' $< -c -o $@
 
 $(DEMO_OBJS): $(BIN_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(BIN_DIR)
-	$(DEMO_CODE_CC) $(OPT) $(DEMO_CODE_WARN_OFF) $(APPNAME_DEF) $(SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
+	$(DEMO_CODE_CC) $(OPT) $(DEMO_CODE_WARN_OFF) $(APPNAME_DEF) $(DEMO_CFLAGS) $(SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 
 $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
 	$(MODERN_CODE_CC) $(OPT) $(SHIM_INC) $(LIBGL_INC) $(OBJS) $(DEMO_LIB) $(GL_LIB) \
@@ -61,7 +62,7 @@ $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
 	@echo $(CUR_DIR)
 
 $(EM_DEMO_OBJS): $(WEB_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(WEB_DIR)
-	$(DEMO_CODE_EMCC) $(EM_OPT) $(EM_DEMO_CODE_WARN_OFF) $(APPNAME_DEF) $(EM_SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
+	$(DEMO_CODE_EMCC) $(EM_OPT) $(EM_DEMO_CODE_WARN_OFF) $(APPNAME_DEF) $(DEMO_CFLAGS) $(EM_SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 
 $(EM_APP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EM_OBJS)
 	$(MODERN_CODE_EMCC) $(EM_OPT) $(EM_SHIM_INC) $(LIBGL_INC) $(EM_OBJS) $(EM_DEMO_LIB) $(EM_GL_LIB) \

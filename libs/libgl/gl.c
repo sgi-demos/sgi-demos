@@ -3155,6 +3155,10 @@ void pdr(Coord x, Coord y, Coord z) {
     pdr_(x, y, z);
 }
 
+void pdr2(Coord x, Coord y) {
+    pdr_(x, y, 0);
+}
+
 void pdr2i(Icoord x, Icoord y) {
     pdr_(x, y, 0);
 }
@@ -3164,6 +3168,17 @@ void pdri(Icoord x, Icoord y, Icoord z) {
 }
 
 void pclos() {
+    endpolygon();
+}
+
+// Old-style (pre-4D) shaded polygons: setshade picks the colormap shade for
+// the vertices that follow, spclos closes and fills. True Gouraud between
+// shades isn't emulated; the polygon fills flat with the latest shade.
+void setshade(Colorindex shade) {
+    color(shade);
+}
+
+void spclos() {
     endpolygon();
 }
 
@@ -3667,8 +3682,31 @@ void lookat(Coord viewx,Coord viewy, Coord viewz, Coord pointx, Coord pointy, Co
     matrix4x4f_stack_mult(current_stack, (float *)m);
 }
 
+// Viewer on a sphere around the origin: back the eye off by dist, then
+// undo twist, incidence, and azimuth. Angles are in tenths of degrees.
+// Implemented with the regular matrix calls so display lists and the
+// current matrix mode are handled for free. (Used by electropaint.)
+void polarview(Coord dist, Angle azim, Angle inc, Angle twist) {
+    translate(0.0, 0.0, -dist);
+    rotate(-twist, 'z');
+    rotate(-inc, 'x');
+    rotate(-azim, 'z');
+}
+
 void lsetdepth(int near, int far) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+// pre-4D name for lsetdepth, with a Screencoord (16-bit) z range
+void setdepth(Screencoord near, Screencoord far) {
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+// IRIX libc, not IRIS GL: nap for ticks/100 seconds. Demos call it to be
+// polite with the CPU; our frame pacing happens in events_frame_complete()
+// (swapbuffers/gflush/event queries), so there is nothing to do here.
+long sginap(long ticks) {
+    return 0;
 }
 
 void depthcue(Boolean enable)

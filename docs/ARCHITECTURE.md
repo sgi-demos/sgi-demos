@@ -188,7 +188,7 @@ This project now has a relatively clean foundation for building out further in t
 
 - **OpenGLES implementation of IRIS GL rendering** - Add a new `ogl_rasterizer.c` implementation of `rasterizer.h`, supplanting `reference_rasterizer.c` once it is fully working.  Use [IGL](https://github.com/sgi-demos/igl) as a starting point for this implementation.
 
-- **Complete the IrisGL demo set** - Highlights here include the last IrisGL version of `flight`, `electropaint`, and `gview` (which is making progress in the reversing process - see `demos\gview`).
+- **Complete the IrisGL demo set** - Highlights here include the last IrisGL version of `flight`, and `gview` (which is making progress in the reversing process - see `demos\gview`). `electropaint` is in, running headless of its panel-library control panels (see `demos/electropaint/README.md`); a fuller port would bring the panels back.
 
 - **Add OpenGL demos** - This will require reworking some project structure since the project is currently IrisGL centric.  Use [GL4ES](https://github.com/sgi-demos/gl4es) and/or something similar, to translate old immediate-mode OpenGL calls to modern retained-mode OpenGL(ES2).
 
