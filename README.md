@@ -4,23 +4,23 @@ _Old problems require modern solutions._
 This is the original SGI demo source code, compiled for the web using Emscripten and SDL2.  Rendering is done using an IRIS GL-to-GLES2 rasterizer with a reference software rasterizer also available from the [Alice 4 project](https://lkesteloot.github.io/alice/alice4/libgl.html).  Event handling is done by SDL2, with events translated into GL's event system.  Each demo is a separate web page, with its own Javascript + WASM compiled by Emscripten from the original C/C++ source.  Native Linux, Mac, and Windows builds are also available. Minimal modifications have been made to the original source, in order to run in the browser and to build with compilers 30+ years later.  For more implementation details, see the [architecture doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs/ARCHITECTURE.md).
 
 ## Working demos
-- [Buttonfly](https://sgi-demos.github.io/)
+- [Buttonfly](https://sgi-demos.github.io/) (Wade Olsen)
 - [Bounce](https://sgi-demos.github.io/sgi-demos/demos/bounce/web/bounce_full.html)
-- [Cedit](https://sgi-demos.github.io/sgi-demos/demos/cedit/web/cedit_full.html) (Paul Haeberli's 1984 color editor; live palette editing via emulated hardware colormap LUT)
+- [Cedit](https://sgi-demos.github.io/sgi-demos/demos/cedit/web/cedit_full.html) (Paul Haeberli, 1984 — color editor; live palette editing via emulated hardware colormap LUT)
 - [Ideas](https://sgi-demos.github.io/sgi-demos/demos/ideas/web/ideas_full.html)
-- [Insect](https://sgi-demos.github.io/sgi-demos/demos/insect/web/insect_full.html)
-- [Jello](https://sgi-demos.github.io/sgi-demos/demos/jello/web/jello_full.html)
-- [Logo](https://sgi-demos.github.io/sgi-demos/demos/logo/web/logo_full.html)
-- [Newave](https://sgi-demos.github.io/sgi-demos/demos/newave/web/newave_full.html) (right-click for menus: mesh editing, flat/gouraud shading, depth cueing, top view; the wave starts flat — edit it, then choose 'go')
-- [Twilight](https://sgi-demos.github.io/sgi-demos/demos/twilight/web/twilight_full.html)
+- [Insect](https://sgi-demos.github.io/sgi-demos/demos/insect/web/insect_full.html) (originally for the IRIS 2400, mid-1980s)
+- [Jello](https://sgi-demos.github.io/sgi-demos/demos/jello/web/jello_full.html) (Thant Tessman, 1987)
+- [Logo](https://sgi-demos.github.io/sgi-demos/demos/logo/web/logo_full.html) (Thant Tessman, 1987)
+- [Newave](https://sgi-demos.github.io/sgi-demos/demos/newave/web/newave_full.html) (originally for the 4D/70G, late 1980s; right-click for menus: mesh editing, flat/gouraud shading, depth cueing, top view; the wave starts flat — edit it, then choose 'go')
+- [Twilight](https://sgi-demos.github.io/sgi-demos/demos/twilight/web/twilight_full.html) (Howard Look, 1991)
 
 ## Somewhat working demos
-- [Flight 1988](https://sgi-demos.github.io/sgi-demos/demos/flight-1988/web/flight-1988_full.html) (the 1988–89 colormap-mode original, now byte-faithful source — 25 diff lines total — at the authentic 1280×1024; splash, plane menu, takeoff, crashes, and stable night mode all work; no network play)
-- [Flight 1994](https://sgi-demos.github.io/sgi-demos/demos/flight-1994/web/flight-1994_full.html) (Version 3.4, the definitive IRIX flight — RGB, lighting, 8 planes, full-width 3D horizon and instrument panel; no texture/fog/sound/network yet)
+- [Flight 1988](https://sgi-demos.github.io/sgi-demos/demos/flight-1988/web/flight-1988_full.html) (Gary Tarolli; the 1988–89 colormap-mode original, now byte-faithful source — 25 diff lines total — at the authentic 1280×1024; splash, plane menu, takeoff, crashes, and stable night mode all work; no network play)
+- [Flight 1994](https://sgi-demos.github.io/sgi-demos/demos/flight-1994/web/flight-1994_full.html) (Gary Tarolli's flight at Version 3.4, the definitive IRIX release — RGB, lighting, 8 planes, full-width 3D horizon and instrument panel; no texture/fog/sound/network yet)
 - [Arena](https://sgi-demos.github.io/sgi-demos/demos/arena/web/arena_full.html) (no network play)
-- [Gview (Barcelona)](https://sgi-demos.github.io/sgi-demos/demos/gview/web/gview_full.html) (reconstructed from the IRIX 3 binary: fly-through and turntable modes work; no materials, movie loops, or binary model cache)
-- [Electropaint 1988](https://sgi-demos.github.io/sgi-demos/demos/ep-1988/web/ep-1988_full.html) (earliest version, Panel Library v7, from the 1988 Usenet posting; plain sliders)
-- [Electropaint 1989](https://sgi-demos.github.io/sgi-demos/demos/ep-1989/web/ep-1989_full.html) (Panel Library 9.6; IRIS GL, driven by Tristram's authentic default script; keyboard toggles)
+- [Gview (Barcelona)](https://sgi-demos.github.io/sgi-demos/demos/gview/web/gview_full.html) (SGI, late 1980s; reconstructed from the IRIX 3 binary: fly-through and turntable modes work; no materials, movie loops, or binary model cache)
+- [Electropaint 1988](https://sgi-demos.github.io/sgi-demos/demos/ep-1988/web/ep-1988_full.html) (David A. Tristram; earliest version, Panel Library v7, from the 1988 Usenet posting; plain sliders)
+- [Electropaint 1989](https://sgi-demos.github.io/sgi-demos/demos/ep-1989/web/ep-1989_full.html) (David A. Tristram; Panel Library 9.6; IRIS GL, driven by Tristram's authentic default script; keyboard toggles)
 - [Electropaint 1994 (OpenGL, decompiled)](https://sgi-demos.github.io/sgi-demos/demos/ep-1994-ogl-decomp/web/ep-1994-ogl-decomp_full.html) (the real OpenGL IRIX screensaver, decompiled; smooth HLS colour + the famous default script; IRIS-faithful by default — restored 4-fold mirrors + 30° camera — M toggles the shipped 1994 look)
 - [Electropaint 1994 (OpenGL, reversed)](https://sgi-demos.github.io/sgi-demos/demos/ep-1994-ogl-reversed/web/ep-1994-ogl-reversed_full.html) (the OpenGL version with ep.c refactored to readable names — byte-identical output)
 
