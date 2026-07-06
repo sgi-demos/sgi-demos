@@ -12,7 +12,7 @@
 
 /*	SHADOW.C	*/
 #include "flight.h"
-// #include "iconize.h"
+#include "iconize.h"
 #include <stdio.h>
 
 short debug,hud,threat_mode;		/* debug flag		*/
@@ -28,6 +28,7 @@ float tps = 20.0;
 #else
 int tps = 20;
 #endif
+
 
 main (argc,argv)
     int argc;
@@ -51,7 +52,7 @@ main (argc,argv)
 	register char *token;
 	extern char *infile,*outfile;
 
-	for (token = argv[0] + 1; *token; token++)
+	for (token = argv[0] + 1; *token; token++) 
 	switch (*token) {
 	    case 'i':
 		if (--argc > 0) infile = *++argv;
@@ -103,18 +104,17 @@ start:
     qdevice(WINQUIT);	/* in case of quit while an icon */
     qenter(REDRAW);
     qenter (KEYBD,'t');
-
+
     /****************************************************************
     /*	Main loop
     /****************************************************************/
-    while (1)
-	{
+    while (1) {
 	/* read all queue entries	*/
         while (qtest ()) {
 	    type = qread (&val);
    	    if (type == REDRAW) {
 doredraw:
-			make_my_objects(view_switch == TOWER_VIEW ?
+			make_my_objects(view_switch == TOWER_VIEW ? 
 				tower_fov : plane_fov);
 	    }
    	    else if (type == WINQUIT)
@@ -122,9 +122,9 @@ doredraw:
 	    else if (type == KEYBD) {
 		if (val == 27)
 			goto end_of_program;
-		else if(val == 18)
+		else if(val == 18) 
 			goto doredraw;	/* ^R; wsh bleeds through sometimes when scrolling */
-		else if(val == 26)
+		else if(val == 26) 
 			stopit();	/* ^Z suspends (iconizes) the game */
 		else if (val == 'z' || val == 'x') {
 		    if (view_switch == TOWER_VIEW) {
@@ -319,13 +319,14 @@ HEADER_VERSION,
 stopit()
 {
 	int mousex, mousey;
+	extern PSFILE *PostScript;
 
 	/* do most of same stuff as when we exit in ExitComm() */
     replacecolors();
 	mousex = getvaluator(MOUSEX);	/* save mouse position */
 	mousey = getvaluator(MOUSEY);
 
-	// flipiconic(winget());
+	flipiconic(winget());
 
 	/* clear the overlay, underlay, and cursor planes */
 	drawmode(OVERDRAW);

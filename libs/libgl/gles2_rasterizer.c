@@ -464,6 +464,67 @@ void gles2_rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
                      GL_COLOR_BUFFER_BIT);
 }
 
+void gles2_rasterizer_masked_clear(int32_t x0, int32_t y0, int32_t x1, int32_t y1,
+                                   uint32_t n, const uint32_t *rgb_from, const uint32_t *rgb_to)
+{
+    if (!ensure_gl())
+        return;
+    flush_batch();
+
+    if (x0 < 0) x0 = 0;
+    if (y0 < 0) y0 = 0;
+    if (x1 >= (int32_t)fb_width)  x1 = fb_width - 1;
+    if (y1 >= (int32_t)fb_height) y1 = fb_height - 1;
+    if (x0 > x1 || y0 > y1)
+        return;
+    int w = x1 - x0 + 1, h = y1 - y0 + 1;
+
+    unsigned char *px = (unsigned char *)malloc((size_t)w * h * 4);
+    if (!px)
+        return;
+
+    for (int t = 0; t < 2; t++)
+    {
+        gl_buffer *buf = (t == 0) ? back_buf : front_buf;
+        int enabled    = (t == 0) ? backbuffer_draw_enabled : frontbuffer_draw_enabled;
+        if (!enabled)
+            continue;
+
+        glBindFramebuffer(GL_FRAMEBUFFER, buf->fbo);
+        glReadPixels(x0, y0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, px);
+        // unbind before TexSubImage: writing a texture that is attached to
+        // the bound framebuffer is a feedback hazard (undefined on ANGLE)
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        for (size_t i = 0; i < (size_t)w * h; i++)
+        {
+            // same patterned-clear rule as the draw shader (see pattern_tex)
+            if (pattern_enabled)
+            {
+                int sx = x0 + (int)(i % w), sy = y0 + (int)(i / w);
+                if (!(the_pattern[sy % 16] & (1 << (sx % 16))))
+                    continue;
+            }
+            unsigned char *p = px + i * 4;
+            uint32_t rgb = ((uint32_t)p[0] << 16) | ((uint32_t)p[1] << 8) | p[2];
+            for (uint32_t j = 0; j < n; j++)
+                if (rgb == rgb_from[j])
+                {
+                    p[0] = (rgb_to[j] >> 16) & 0xff;
+                    p[1] = (rgb_to[j] >> 8) & 0xff;
+                    p[2] = rgb_to[j] & 0xff;
+                    break;
+                }
+        }
+
+        glBindTexture(GL_TEXTURE_2D, buf->tex);
+        glTexSubImage2D(GL_TEXTURE_2D, 0, x0, y0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, px);
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    free(px);
+}
+
 void gles2_rasterizer_zclear(uint32_t z)
 {
     if (!ensure_gl())
@@ -977,6 +1038,7 @@ const rasterizer_funcs* gles2_rasterizer_get_funcs(void)
         .draw               = gles2_rasterizer_draw,
         .bitmap             = gles2_rasterizer_bitmap,
         .alpha_blit         = gles2_rasterizer_alpha_blit,
+        .masked_clear       = gles2_rasterizer_masked_clear,
         .setpattern         = gles2_rasterizer_setpattern,
         .pattern            = gles2_rasterizer_pattern,
         .cbuffer_draw       = gles2_rasterizer_cbuffer_draw,

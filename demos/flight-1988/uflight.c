@@ -12,9 +12,10 @@
 
 /*	UFLIGHT.C	*/
 
-#include <stdlib.h>
 #include "flight.h"
-#define PLANE_BIT 0x80000000	/* used to flag a plane pointer	*/
+#define PLANE_BIT 0x1L	/* used to flag a plane pointer (was 0x80000000; on
+			   64-bit hosts the tag lives in the low bit of the
+			   aligned pointer instead, cast long not int) */
 #define TYPE_BUILDING 0
 #define TYPE_MOUNTAIN 1
 #define TYPE_THREAT 2
@@ -131,7 +132,6 @@ make_buildings ()
     makemtn (-55000,2500,15000, 4, mtn10);
 
     /* threat patches are in land2.c	*/
-    int makethreat ();
     makethreat (6000,14000,red,17000.0);
     makethreat (-20000,15000,red,10700.0);
     makethreat (3000,34000,red,2700.0);
@@ -246,22 +246,19 @@ draw_buildings (rx,ry,rz, start_plane, num_planes)
     register int i,n,x,z;
     int ex,ey,ez;
     register int *parray;
-    register int *is_plane;
     float *f;
-    void **parray_tag;
+    register Building b, *parray_tag;
     register Plane pp;
     Matrix mat;
     static int static_array[MAX_BUILDINGS+MAX_PLANES];
-    static void *static_array_tag[MAX_BUILDINGS+MAX_PLANES];
-    static int static_is_plane[MAX_BUILDINGS+MAX_PLANES];
+    static Building static_array_tag[MAX_BUILDINGS+MAX_PLANES];
 
     ex = rx;	ey = ry;	ez = rz;
     parray = static_array;		/* copy data into sort arrays	*/
     parray_tag = static_array_tag;
-    is_plane = static_is_plane;
     n = 0;				/* count number of items	*/
     for (i = 0; i < current_building; i++) {
-	Building b = buildings[i];
+	b = buildings[i];
 	z = ez - b -> cz;
 	if (z < 0) then z = -z;
 	x = ex - b -> cx;
@@ -272,7 +269,6 @@ draw_buildings (rx,ry,rz, start_plane, num_planes)
 	    n++;
 	    *parray++ = x * x + z * z;
 	    *parray_tag++ = b;
-            *is_plane++ = 0;
 	}
     }
     for (i = start_plane; i < num_planes; i++) {
@@ -286,11 +282,10 @@ draw_buildings (rx,ry,rz, start_plane, num_planes)
 	    z >>= 5;
 	    n++;
 	    *parray++ = x * x + z * z;	/* flag plane with high bit	*/
-	    *parray_tag++ = pp;
-            *is_plane++ = 1;
+	    *parray_tag++ = (Building) ((long)pp | PLANE_BIT);
 	}
     }
-    sink_sort (n,static_array,static_array_tag,static_is_plane);
+    sink_sort (n,static_array,static_array_tag);
 
 #ifdef DEBUG
 if (debug & (1<<2)) {
@@ -307,15 +302,13 @@ if (debug & (1<<2)) {
 #endif
     x = ex;	z = ez;
     /* plot the data from back to front	*/
-    for (is_plane = &static_is_plane[n-1],
-            parray_tag = &static_array_tag[n-1],
-            parray = &static_array[n-1];
-	 parray_tag >= static_array_tag;
-         is_plane--,parray_tag--,parray--)
+    for (parray_tag = &static_array_tag[n-1], parray = &static_array[n-1];
+	 parray_tag >= static_array_tag; parray_tag--,parray--)
      {
-         if (*is_plane) {
+	b = *parray_tag;
+	if ((long)b & PLANE_BIT) {
 	    /* its a plane - compute above/below	*/
-	    pp = (Plane) *parray_tag;
+	    pp = (Plane)((long)b & ~PLANE_BIT);	/* turn off tag bit	*/
 	    if (*parray < (dist_for_lines<<1)){	/* if close enough	*/
 		n = TRUE;	    
 		callobj (PUSH_IDENTITY);	/* build WTP	*/
@@ -373,9 +366,8 @@ if (debug & (1<<2)) {
 	    then callobj (EXPLOSION + pp->status);
 
 	    popmatrix ();
-	} else {
-	    Building b = (Building) *parray_tag;
-            if (b -> type == TYPE_BUILDING) {	/* its a building	*/
+	}
+	else if (b -> type == TYPE_BUILDING) {	/* its a building	*/
 	    if (*parray < dist_for_lines)	/* if close enough	*/
 	    then n = TRUE;			/* then draw detail	*/
 	    else n = FALSE;
@@ -404,7 +396,6 @@ if (debug & (1<<2)) {
 	else {				/* its a threat		*/
 	    if (threat_mode) then callobj (b -> ury_obj);
 	}
-        }
     }	/* end of each object	*/
     /* always draw my shadow	*/
     if (start_plane > 0) draw_shadow(planes[0],TRUE);
@@ -475,17 +466,17 @@ makethreat (cx,cz, col, radius)
 	    for (i=0, f=thcircle+30; i<10; i++,f+=3)
 		draw2(f[0],f[2]);
 	}
-	poly(20,(Coord (*)[3]) thcircle);
+	poly(20,thcircle);
 	/*
 	translate (0.0,0.5,0.0);
 	scale (.866,.866,.866);
 	*/
 	translate (0.0,0.33,0.0);
 	scale (.94,.94,.94);
-	poly(20,(Coord (*)[3]) thcircle);
+	poly(20,thcircle);
 	translate (0.0,0.33/.94,0.0);
 	scale (.794,.794,.794);
-	poly(20,(Coord (*)[3]) thcircle);
+	poly(20,thcircle);
 	popmatrix ();
     closeobj ();
 }
@@ -671,40 +662,34 @@ facet (obj,n,p)
 }
 
 /* sort an array (and an associated tag array) in increasing order	*/
-sink_sort (n, array, array_tag, array_is_plane)
+sink_sort (n, array, array_tag)
     register int n;
-    int *array, **array_tag, *array_is_plane;
+    int *array, *array_tag;
 {
-    register int *tag, is_plane, *end;
-    register int *top, **top_tag, *bot, **bot_tag, *top_is_plane, *bot_is_plane;
+    register int tag, *end;
+    register int *top, *top_tag, *bot, *bot_tag;
 
     end = &array[n];
 
-    for (bot = array+1, bot_tag = array_tag+1, bot_is_plane = array_is_plane+1;
-            bot < end;
-            bot++, bot_tag++, bot_is_plane++) {
-
-	top = bot - 1;
-        top_tag = bot_tag - 1;
-        top_is_plane = bot_is_plane - 1;
+    for (bot = array+1, bot_tag = array_tag+1; bot < end; bot++, bot_tag++) {
+	top = bot - 1;		    top_tag = bot_tag - 1;
 	n = *bot;
 	if (*top > n) {
 	    tag = *bot_tag;
-            is_plane = *bot_is_plane;
 	sinktest:
-	    top[1] = *top;	top_tag[1] = *top_tag;  top_is_plane[1] = *top_is_plane;
-	    top--;		top_tag--;              top_is_plane--;
+	    top[1] = *top;	top_tag[1] = *top_tag;
+	    top--;		top_tag--;
 	    if (top >= array) {
 		if (*top > n) goto sinktest;
 	    }
 
-	    top[1] = n;	top_tag[1] = tag; top_is_plane[1] = is_plane;
+	    top[1] = n;	top_tag[1] = tag;
 	}
     }
 }
 
 /* generate a random number x, where -maxr <= x <= maxr	*/
-int flight_random (maxr)
+int random (maxr)
     register int maxr;
 {
     static unsigned long randx = 1;

@@ -12,8 +12,6 @@
 
 /* contains init and help stuff		*/
 #include "flight.h"
-extern void redraw_screen ();
-extern int set_sun ();
 
 static Cursor bcursor = {
 	0xffff,0xffff,0xffff,0xe007,
@@ -23,8 +21,6 @@ static Cursor bcursor = {
 };
 short bitplanes, wm_allplanes;
 short building_shade[4][5];
-
-void map_daynight(int daytime);
 
 /************************************************************
 /*	Help procedure
@@ -132,7 +128,7 @@ init_graphics (name)
 #else
     winattach();
 #endif
-    bitplanes = 8; // getplanes();
+    bitplanes = getplanes();
 
     wm_allplanes = (1 << bitplanes) - 1;
     writemask (wm_allplanes);
@@ -204,7 +200,6 @@ init_graphics (name)
 		qdevice (PAD8);
 		qdevice (PAD9);
 		qdevice (KEYBD);
-		qdevice(ESCKEY);
 		setvaluator (MOUSEX, XMIDDLE, 0,XMAXSCREEN);
 		setvaluator (MOUSEY, YMIDDLE, 0,YMAXSCREEN);
 		make_buildings (); 
@@ -214,7 +209,6 @@ init_graphics (name)
 	firsttime = 0;
 }
 
-void
 map_daynight (daytime)
     int daytime;
 {
@@ -473,20 +467,20 @@ make_explosion ()
 	makeobj (i+EXPLOSION);
 	    color (red);
 	    for (; n>0; n--) {
-		temp = flight_random(3);
+		temp = random(3);
 		if (temp>2) color (orange);
 	    r1:
-		x = flight_random(radius);
-		y = flight_random(radius);
-		z = flight_random(radius);
+		x = random(radius);
+		y = random(radius);
+		z = random(radius);
 		if (x*x + y*y + z*z > RADIUS*RADIUS) then goto r1;
 		moves (x,y,z);
 		x = radius >> 3;
-		if (n & 7) then draws (flight_random(x),flight_random(x),flight_random(x));
+		if (n & 7) then draws (random(x),random(x),random(x));
 	    r2:
-		x = flight_random(radius);
-		y = flight_random(radius);
-		z = flight_random(radius);
+		x = random(radius);
+		y = random(radius);
+		z = random(radius);
 		if (x*x + y*y + z*z > RADIUS*RADIUS) then goto r2;
 		draws (x,y,z);
 		if (temp>2) color (red);

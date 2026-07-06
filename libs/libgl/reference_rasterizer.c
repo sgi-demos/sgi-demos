@@ -101,6 +101,43 @@ void ref_rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
     }
 }
 
+static void masked_clear_buffer(int draw_enabled, uint8_t *buffer,
+                                int x0, int y0, int x1, int y1,
+                                uint32_t n, const uint32_t *rgb_from, const uint32_t *rgb_to)
+{
+    if (!draw_enabled || !buffer)
+        return;
+    for (int y = y0; y <= y1; y++) {
+        int buffer_y = DISPLAY_HEIGHT - 1 - y;
+        if (buffer_y < 0 || buffer_y >= DISPLAY_HEIGHT)
+            continue;
+        for (int x = x0; x <= x1; x++) {
+            if (x < 0 || x >= DISPLAY_WIDTH)
+                continue;
+            // clear() honors the current pattern (flight 1988's crashed-
+            // meters effect is a patterned clear through writemask(white))
+            if (pattern_enabled && !(the_pattern[y % 16] & (1 << (x % 16))))
+                continue;
+            uint8_t *p = buffer_pixel(buffer, x, buffer_y);
+            uint32_t rgb = ((uint32_t)p[RED_BYTE] << 16) | ((uint32_t)p[GREEN_BYTE] << 8) | p[BLUE_BYTE];
+            for (uint32_t i = 0; i < n; i++)
+                if (rgb == rgb_from[i]) {
+                    p[RED_BYTE]   = (rgb_to[i] >> 16) & 0xff;
+                    p[GREEN_BYTE] = (rgb_to[i] >> 8) & 0xff;
+                    p[BLUE_BYTE]  = rgb_to[i] & 0xff;
+                    break;
+                }
+        }
+    }
+}
+
+void ref_rasterizer_masked_clear(int32_t x0, int32_t y0, int32_t x1, int32_t y1,
+                                 uint32_t n, const uint32_t *rgb_from, const uint32_t *rgb_to)
+{
+    masked_clear_buffer(backbuffer_draw_enabled, gl_c_backbuffer, x0, y0, x1, y1, n, rgb_from, rgb_to);
+    masked_clear_buffer(frontbuffer_draw_enabled, gl_c_frontbuffer, x0, y0, x1, y1, n, rgb_from, rgb_to);
+}
+
 void ref_rasterizer_linewidth(float w)
 {
     the_linewidth = w;
@@ -665,6 +702,7 @@ const rasterizer_funcs* ref_rasterizer_get_funcs(void)
         .draw               = ref_rasterizer_draw,
         .bitmap             = ref_rasterizer_bitmap,
         .alpha_blit         = ref_rasterizer_alpha_blit,
+        .masked_clear       = ref_rasterizer_masked_clear,
         .setpattern         = ref_rasterizer_setpattern,
         .pattern            = ref_rasterizer_pattern,
         .cbuffer_draw       = ref_rasterizer_cbuffer_draw,

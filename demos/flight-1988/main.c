@@ -22,14 +22,16 @@
  *									  *
  **************************************************************************/
 
-#include <stdlib.h> /* NULL */
 #include "flight.h"
 
 Plane planes[MAX_PLANES];
 
-int main (int argc, char **argv)
+int main (argc,argv)	/* was K&R untyped main(); clang requires char** */
+    int argc;
+    char **argv;
 {
 	flight(argc,argv);
+	return 0;
 }
 
 reset_meters ()
@@ -53,7 +55,7 @@ reset_meters ()
 }
 
 reset_fov (fov)
-    int fov;
+    register int fov;
 {
     float ar,sin,cos;
 
@@ -74,9 +76,9 @@ reset_fov (fov)
 
 display_score ()
 {
-    char *plane_name, **msg;
-    int i;
-    Plane p,*pp;
+    register char *plane_name, **msg;
+    register int i;
+    register Plane p,*pp;
     static char *score_msg[MAX_PLANES+6];
 
     /* init the array first	*/
@@ -125,12 +127,11 @@ display_score ()
 }
 #define DY 14
 
-void
 make_crash (msg)
     char *msg;
 {
-    int y;
-    Plane p;
+    register int y;
+    register Plane p;
 
     p = planes[0];		/* a bold assumption		*/
     if (p -> status <= MEXPLODE) then return;
@@ -179,12 +180,12 @@ clear_report_card ()
 int report_card (descent, roll, vx, vz, wheels, p)
     int descent, vx, vz;
     int roll, wheels;
-    Plane p;
+    register Plane p;
 {
     short on_runway;
-    int azimuth,rating,y;
+    register int azimuth,rating,y;
     float xdist,zdist;
-    char charbuf[80];
+    register char charbuf[80];
 
     azimuth = p -> azimuth;
     on_runway = IN_BOX (p, -100.0, 100.0, -8500.0, 0.0);
@@ -295,12 +296,11 @@ int report_card (descent, roll, vx, vz, wheels, p)
 }
 
 /* check my missile against other planes	*/
-void
 check_missile (p)
-    Plane p;
+    register Plane p;
 {
     char buf[NAME_LENGTH+32];
-    Plane ptest,*pp;
+    register Plane ptest,*pp;
     long last_kill;
 
     last_kill = p -> mkill;
@@ -325,9 +325,9 @@ check_missile (p)
 }
 
 int test_blow_up (m,p)
-    Plane m,p;
+    register Plane m,p;
 {
-    int dx,dy,dz;
+    register int dx,dy,dz;
     static int MDIST[] = {250,350,150};
 
     /* if the plane is not exploding	*/
@@ -348,11 +348,11 @@ int test_blow_up (m,p)
 
 /* find and return the closest plane to me	*/
 Plane find_closest_plane (myp)
-    Plane myp;
+    register Plane myp;
 {
     float myx,myy,myz;
     float dx,dy,dz, d,dbest;
-    Plane p,*pp,pbest;
+    register Plane p,*pp,pbest;
 
     pbest = NULL;
     dbest = 1e30;
@@ -362,7 +362,7 @@ Plane find_closest_plane (myp)
 
     FOR_EACH_PLANE (p,pp)		/* for each plane	*/
     /* if its not me, not exploding, above 150 feet, not C150	*/
-    if (p != myp && p -> status > MEXPLODE &&
+    if (p != myp && p -> status > MEXPLODE && 
 	p -> y > 150.0 && p -> type != C150)
     {
 	dx = myp -> x - p -> x;		/* compute distance	*/
