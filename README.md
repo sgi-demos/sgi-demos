@@ -13,7 +13,7 @@ This is the original SGI demo source code, compiled for the web using Emscripten
 - [Twilight](https://sgi-demos.github.io/sgi-demos/demos/twilight/web/twilight_full.html)
 
 ## Somewhat working demos
-- [Flight 1988](https://sgi-demos.github.io/sgi-demos/demos/flight-1988/web/flight-1988_full.html) (the 1988–89 colormap-mode original; cockpit glitches, planes too slow in web version, night mode 'shimmers', no network play)
+- [Flight 1988](https://sgi-demos.github.io/sgi-demos/demos/flight-1988/web/flight-1988_full.html) (the 1988–89 colormap-mode original, now byte-faithful source — 25 diff lines total — at the authentic 1280×1024; splash, plane menu, takeoff, crashes, and stable night mode all work; no network play)
 - [Flight 1994](https://sgi-demos.github.io/sgi-demos/demos/flight-1994/web/flight-1994_full.html) (Version 3.4, the definitive IRIX flight — RGB, lighting, 8 planes, full-width 3D horizon and instrument panel; no texture/fog/sound/network yet)
 - [Newave](https://sgi-demos.github.io/sgi-demos/demos/newave/web/newave_full.html) (no mesh editing, no popup menus, only wireframe)
 - [Arena](https://sgi-demos.github.io/sgi-demos/demos/arena/web/arena_full.html) (no network play)

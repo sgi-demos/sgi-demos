@@ -18,8 +18,9 @@
 
 /* maximum X and Y screen coordinates */
 
-#define XMAXSCREEN	799
-#define YMAXSCREEN	479
+#define XMAXSCREEN	1279	/* the IRIS 4D screen; flight 1988's layout and
+				   meters.c's /1024.0 scale factors assume it */
+#define YMAXSCREEN	1023
 
 /* various hardware/software limits	*/
 

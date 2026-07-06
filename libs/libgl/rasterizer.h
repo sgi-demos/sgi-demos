@@ -20,6 +20,14 @@ unsigned char* rasterizer_frontbuffer();
 void rasterizer_draw(uint32_t type, uint32_t count, screen_vertex *v); // count is the number of primitives.
 void rasterizer_bitmap(uint32_t width, uint32_t rowbytes, uint32_t height, screen_vertex *sv, uint8_t *bits);
 void rasterizer_alpha_blit(uint32_t width, uint32_t rowbytes, uint32_t height, screen_vertex *sv, uint8_t *alpha, uint8_t r, uint8_t g, uint8_t b);
+// Colormap-plane masked clear (IRIS writemask): recolor every pixel in the
+// inclusive screen rect (y up) whose RGB matches an entry of rgb_from[n] to
+// the corresponding rgb_to[n]. gl.c derives the pairs from the colormap and
+// the writemask (newIndex = (oldIndex & ~wm) | (clearIndex & wm)), so this
+// stays a dumb pixel op with no palette knowledge. Applies to whichever of
+// front/back drawing is enabled; never touches z.
+void rasterizer_masked_clear(int32_t x0, int32_t y0, int32_t x1, int32_t y1,
+                             uint32_t n, const uint32_t *rgb_from, const uint32_t *rgb_to);
 void rasterizer_setpattern(uint16_t pattern[16]);
 void rasterizer_pattern(int enable);
 void rasterizer_cbuffer_draw(int enable_front, int enable_back);
@@ -56,6 +64,8 @@ typedef struct rasterizer_funcs
     void (*draw)(uint32_t type, uint32_t count, screen_vertex *v);
     void (*bitmap)(uint32_t width, uint32_t rowbytes, uint32_t height, screen_vertex *sv, uint8_t *bits);
     void (*alpha_blit)(uint32_t width, uint32_t rowbytes, uint32_t height, screen_vertex *sv, uint8_t *alpha, uint8_t r, uint8_t g, uint8_t b);
+    void (*masked_clear)(int32_t x0, int32_t y0, int32_t x1, int32_t y1,
+                         uint32_t n, const uint32_t *rgb_from, const uint32_t *rgb_to);
     void (*setpattern)(uint16_t pattern[16]);
     void (*pattern)(int enable);
     void (*cbuffer_draw)(int enable_front, int enable_back);

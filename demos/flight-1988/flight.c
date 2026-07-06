@@ -11,22 +11,13 @@
  **************************************************************************/
 
 #include "flight.h"
-// #include "iconize.h" 	/* flipiconic() */
+#include "iconize.h" 	/* flipiconic() */
 #include <sys/types.h>
 #include <sys/times.h>
 #include <sys/param.h>
 #include <stdio.h>
 #include <signal.h>
-// #include <psio.h>
-
-void make_crash ();
-extern void draw_hud (Plane p, int tick, float vx, float vy, float vz, int vv, float mach, float gf, int wheels, int flaps, int spoilers, int autop, int fuel, int thrust);
-void make_meters ();
-void redraw_screen ();
-void map_daynight();
-int draw_buildings ();
-int change_rudder ();
-int my_lookat ();
+#include <psio.h>
 
 #ifdef _4D
 int int_tps = 20;
@@ -80,7 +71,11 @@ short dials = FALSE,		/* TRUE if using dials		*/
 
 #define MINTPS 12	/* See calculate_time().  Olson */
 
-static short type,val,		/* queue reading variables	*/
+flight (argc,argv)
+    int argc;
+    char *argv[];
+{
+    short type,val,		/* queue reading variables	*/
 	view_switch,		/* <0 (none), 1 (plane), 2 (tower) */
 	tick_counter,		/* counts the loop ticks	*/
 	on_ground,		/* TRUE if plane is on ground	*/
@@ -91,10 +86,10 @@ static short type,val,		/* queue reading variables	*/
 	g_limit,		/* TRUE if wing g-limit is hit	*/
 	wing_stall;		/* TRUE if wing is stalling	*/
 
-static int flaps, spoilers,	/* flap and spoiler settings	*/
+    int flaps, spoilers,	/* flap and spoiler settings	*/
 	roll_speed,		/* roll, elevation, azimuth speeds	*/
 	elevation_speed,	/* in 10'ths degrees per tick	*/
-	azimuth_speed,
+	azimuth_speed, 
 	plane_fov, tower_fov,	/* plane, tower field of view	*/
 	fuel,			/* fuel (0 - 12800)		*/
 	thrust,			/* thrust (0 - 100)		*/
@@ -112,10 +107,10 @@ static int flaps, spoilers,	/* flap and spoiler settings	*/
 	wmpos = 0,
 #endif
 	view_angle;		/* rotation of pilot's head	*/
-static int itemp,		/* temp integer variable	*/
+    register int itemp,		/* temp integer variable	*/
 	twist, elevation, azimuth;	/* plane orientation	*/
 
-static float temp,				/* temp float variable	*/
+    float temp,				/* temp float variable	*/
 	rudder, elevator, rollers,	/* control settings	*/
 	last_px, last_py, last_pz,	/* last plane position	*/
 	ax,ay,az,			/* plane acceleration	*/
@@ -134,19 +129,17 @@ static float temp,				/* temp float variable	*/
 	fuel_weight,		/* weight of fuel			*/
 	inverse_mass;		/* 1.0 / mass of plane			*/
 #ifdef WINGMAN
-static float wm_x[6], wm_y[6], wm_z[6];
-static int wingmanview = FALSE;
+    float wm_x[6], wm_y[6], wm_z[6];
+    int wingmanview = FALSE;
 #endif
-static float s,W,Mthrust,b,Cdp;		/* plane design parameters	*/
-static float ipi_AR,ie_pi_AR,Lmax,Lmin,Fmax,Smax,ELEVF,ROLLF,pilot_y,pilot_z;
+    float s,W,Mthrust,b,Cdp;		/* plane design parameters	*/
+    float ipi_AR,ie_pi_AR,Lmax,Lmin,Fmax,Smax,ELEVF,ROLLF,pilot_y,pilot_z;
 
-static long missile_target;		/* plane my missile is after	*/
-static Matrix ptw, incremental;	/* my ptw matrix, temp matrix	*/
-static Plane ptemp,pp;		/* my plane data structure	*/
-static int moreplanes;
-
-void init_flight(int argc, char *argv[])
-{
+    long missile_target;		/* plane my missile is after	*/
+    register Matrix ptw, incremental;	/* my ptw matrix, temp matrix	*/
+    register Plane ptemp,pp;		/* my plane data structure	*/
+	int moreplanes;
+
 #ifdef DOGFIGHT
 static char usage[] = "Usage: dog  [-dh] [-i filename] [-o filename]\n";
 #else
@@ -154,9 +147,9 @@ static char usage[] = "Usage: flight [-dhz]\n";
 #endif
     test_mode = FALSE;			/* swapinterval governor	*/
     while (--argc > 0 && **++argv == '-') {
-	char *token;
+	register char *token;
 
-	for (token = argv[0] + 1; *token; token++)
+	for (token = argv[0] + 1; *token; token++) 
 	switch (*token) {
 #ifdef DOGFIGHT
 	    extern char *infile,*outfile;
@@ -183,11 +176,11 @@ static char usage[] = "Usage: flight [-dhz]\n";
 	}
     }
     if (argc > 0) {
-	fprintf (stderr,"%s", usage);
+	fprintf (stderr,usage);
 	exit (0);
     }
     eye_x = -1950.0;
-    eye_y = 400.0  +1000.0; /* XXXX Extra high tower for debugging purposes */
+    eye_y = 400.0;
     eye_z = -3150.0;
 
     fps_knots = tps * (3600.0/6082.0);
@@ -217,7 +210,7 @@ static char usage[] = "Usage: flight [-dhz]\n";
     number_planes = 2;
     my_ptw = ptw;
 
-    if (dials) init_dials();
+    if (dials) init_dials(); 
 
     make_meters ();
     redraw_screen ();
@@ -235,182 +228,162 @@ static char usage[] = "Usage: flight [-dhz]\n";
     pushmatrix ();
 
     time_start = times (&tms_start_buf);
-}
-typedef enum {DEFAULT_LOCATION, RUNWAY, AIRBORNE, RANDOM} StartLocation;
-void set_start_location(StartLocation location)
-{
-	switch(location)
-	{
-	case DEFAULT_LOCATION: //start:					/* come here for default start	*/
-		pp -> x = START_X;
-		pp -> y = START_Y;
-		pp -> z = START_Z;
-		azimuth = START_AZIMUTH;
-		vz = 0.0;
-		break; //goto mstart;
-	case RUNWAY: //start1:					/* end of runway start		*/
-		pp -> x = 0.0;
-		pp -> y = START_Y;
-		pp -> z = -500.0;
-		azimuth = 0;
-		vz = 0.0;
-		break; //goto mstart;
-	case AIRBORNE: //start2:					/* airborn start		*/
-		pp -> x = flight_random (20000);
-		pp -> y = 8000 + flight_random(6000);
-		pp -> z = flight_random (20000);
-		azimuth = flight_random(3600);
-		vz = (flight_random(60)-80)/fps_knots;
-		break; //goto mstart;
-	case RANDOM: //start3:					/* used for threat runs		*/
-		pp -> x = flight_random (20000);
-		pp -> y = 10000 + flight_random(5000);
-		pp -> z = 100000.0;
-		azimuth = 0;
-		vz = (flight_random(60)-160)/fps_knots;
-		break;
-	};
 
-	//mstart:
-	for (itemp = number_planes-1; itemp >= 0; itemp--)
-		planes[itemp] -> alive = -1;
-	number_planes = 1;
-	reset_meters ();
-	landing_gear_stuck = -1;		/* can toggle landing gear	*/
-	test_mode = FALSE;
-	map_daynight (daytime = TRUE);
-}
-
-void end_of_program()
-{
-    ExitComm ();
-    exit (0);
-}
-
-void pick_and_init_plane()
-{
+start:					/* come here for default start	*/
+    pp -> x = START_X;
+    pp -> y = START_Y;
+    pp -> z = START_Z;
+    azimuth = START_AZIMUTH;
+    vz = 0.0;
+    goto mstart;
+start1:					/* end of runway start		*/
+    pp -> x = 0.0;
+    pp -> y = START_Y;
+    pp -> z = -500.0;
+    azimuth = 0;
+    vz = 0.0;
+    goto mstart;
+start2:					/* airborn start		*/
+    pp -> x = random (20000);
+    pp -> y = 8000 + random(6000);
+    pp -> z = random (20000);
+    azimuth = random(3600);
+    vz = (random(60)-80)/fps_knots;
+    goto mstart;
+start3:					/* used for threat runs		*/
+    pp -> x = random (20000);
+    pp -> y = 10000 + random(5000);
+    pp -> z = 100000.0;
+    azimuth = 0;
+    vz = (random(60)-160)/fps_knots;
+mstart:
+    for (itemp = number_planes-1; itemp >= 0; itemp--)
+	planes[itemp] -> alive = -1;
+    number_planes = 1;
+    reset_meters ();
+    landing_gear_stuck = -1;		/* can toggle landing gear	*/
+    test_mode = FALSE;
+    map_daynight (daytime = TRUE);
+
 pickit:
-    switch (2) { // pick_plane ()) {		/* plane design parameters	*/
-        case 1:
-		plane_type = C150_NAME;
-		pp -> type = C150;
-		s = 157.0;
-		W = 1000.0;
-		fuel_weight = 400.0;;
-		Mthrust = 300.0;
-		b = 28.0;
-		ie_pi_AR = .80;
-		Lmax = 5.0;	Lmin = -3.0;
-		Fmax = 20;	Smax = 0;
-		MAX_RK = 0;	MAX_SW = 0;
-		MIN_LIFT_SPEED = 70;
-		ELEVF = 75.0;
-		ROLLF = 130.0;
-		landing_gear_stuck = 1;		/* stuck down	*/
-		pilot_y = -8.0;
-		pilot_z = 18.0;
-		break;
-	case 2:
-		plane_type = B747_NAME;
-		pp -> type = B747;
-		s = 5500.0;				/* wing area in sq. feet	*/
-		W = 500000.0;			/* weight of plane in lbs.	*/
-		fuel_weight = 100000.0;
-		Mthrust = 200000.0;			/* maximum thrust		*/
-		b = 220.0;				/* wing span in feet		*/
-		ie_pi_AR = .83;			/* efficiency factor		*/
-		Lmax = 4.0;				/* maximum lift before wing breaks */
-		Lmin = -2.0;			/* minimum lift before wing breaks */
-		Fmax = 50;				/* maximum flap deflection	*/
-		Smax = 80;				/* maximum spoiler deflection	*/
-		MAX_RK = 0;	MAX_SW = 0;
-		MIN_LIFT_SPEED = 200;
-		ELEVF = 25.0;			/* elevator rate in degrees/sec	*/
-		ROLLF = 50.0;			/* roll rate (both at 300 mph)	*/
-		pilot_y = -30.0;
-		pilot_z = 92.0;
-		break;
-	case 3:
-		plane_type = F15_NAME;
-		pp -> type = F15;
-		s = 608.0;
-		W = 28000.0;
-		fuel_weight = 14000.0;
-		Mthrust = 46000.0;
-		b = 43.0;
-		ie_pi_AR = .87;
-		Lmax = 8.0;	Lmin = -5.0;
-		Fmax = 30;	Smax = 60;
-		MAX_RK = 4;	MAX_SW = 4;
-		MIN_LIFT_SPEED = 100;
-		ELEVF = 32.0;
-		ROLLF = 140.0;
-		pilot_y = -10.0;
-		pilot_z = 25.0;
-		break;
-	case 4:
-		plane_type = F16_NAME;
-		pp -> type = F16;
-		s = 390.0;
-		W = 18000.0;
-		fuel_weight = 8000.0;
-		Mthrust = 23000.0;
-		b = 32.0;
-		ie_pi_AR = .93;
-		Lmax = 10.0; Lmin = -7.0;
-		Fmax = 40;	Smax = 40;
-		MAX_RK = 2;	MAX_SW = 2;
-		MIN_LIFT_SPEED = 120;
-		ELEVF = 34.0;
-		ROLLF = 180.0;
-		pilot_y = -9.0;
-		pilot_z = 18.0;
-		break;
-	case 5:
-		plane_type = F18_NAME;
-		pp -> type = F18;
-		s = 510.0;
-		W = 24000.0;
-		fuel_weight = 12000.0;
-		Mthrust = 32000.0;
-		b = 38.0;
-		ie_pi_AR = .90;
-		Lmax = 9.0;	Lmin = -6.0;
-		Fmax = 50;	Smax = 60;
-		MAX_RK = 3;	MAX_SW = 3;
-		MIN_LIFT_SPEED = 110;
-		ELEVF = 30.0;
-		ROLLF = 100.0;
-		pilot_y = -10.0;
-		pilot_z = 22.0;
-		break;
-	case 6:
-		plane_type = P38_NAME;
-		pp -> type = P38;
-		s = 327.5;
-		W = 13500.0;
-		fuel_weight = 1600.0;
-		Mthrust = 4000.0;
-		b = 52.0;
-		ie_pi_AR = .90;
-		Lmax = 6.0;	Lmin = -3.5;
-		Fmax = 50;	Smax = 60;
-		MAX_RK = 2;	MAX_SW = 0;
-		MIN_LIFT_SPEED = 75;
-		ELEVF = 30.0;
-		ROLLF = 100.0;
-		pilot_y = -10.0;
-		pilot_z = 22.0;
-		break;
-	case 27-'0':
-		end_of_program();
-	default:
-		goto pickit;
-    };
-}
+    switch (pick_plane ()) {		/* plane design parameters	*/
+case 1:
+    plane_type = C150_NAME;
+    pp -> type = C150;
+    s = 157.0;
+    W = 1000.0;
+    fuel_weight = 400.0;;
+    Mthrust = 300.0;
+    b = 28.0;
+    ie_pi_AR = .80;
+    Lmax = 5.0;	Lmin = -3.0;
+    Fmax = 20;	Smax = 0;
+    MAX_RK = 0;	MAX_SW = 0;
+    MIN_LIFT_SPEED = 70;
+    ELEVF = 75.0;
+    ROLLF = 130.0;
+    landing_gear_stuck = 1;		/* stuck down	*/
+    pilot_y = -8.0;
+    pilot_z = 18.0;
+    break;
+case 2:
+    plane_type = B747_NAME;
+    pp -> type = B747;
+    s = 5500.0;				/* wing area in sq. feet	*/
+    W = 500000.0;			/* weight of plane in lbs.	*/
+    fuel_weight = 100000.0;
+    Mthrust = 200000.0;			/* maximum thrust		*/
+    b = 220.0;				/* wing span in feet		*/
+    ie_pi_AR = .83;			/* efficiency factor		*/
+    Lmax = 4.0;				/* maximum lift before wing breaks */
+    Lmin = -2.0;			/* minimum lift before wing breaks */
+    Fmax = 50;				/* maximum flap deflection	*/
+    Smax = 80;				/* maximum spoiler deflection	*/
+    MAX_RK = 0;	MAX_SW = 0;
+    MIN_LIFT_SPEED = 200;
+    ELEVF = 25.0;			/* elevator rate in degrees/sec	*/
+    ROLLF = 50.0;			/* roll rate (both at 300 mph)	*/
+    pilot_y = -30.0;
+    pilot_z = 92.0;
+    break;
+case 3:
+    plane_type = F15_NAME;
+    pp -> type = F15;
+    s = 608.0;
+    W = 28000.0;
+    fuel_weight = 14000.0;
+    Mthrust = 46000.0;
+    b = 43.0;
+    ie_pi_AR = .87;
+    Lmax = 8.0;	Lmin = -5.0;
+    Fmax = 30;	Smax = 60;
+    MAX_RK = 4;	MAX_SW = 4;
+    MIN_LIFT_SPEED = 100;
+    ELEVF = 32.0;
+    ROLLF = 140.0;
+    pilot_y = -10.0;
+    pilot_z = 25.0;
+    break;
+case 4:
+    plane_type = F16_NAME;
+    pp -> type = F16;
+    s = 390.0;
+    W = 18000.0;
+    fuel_weight = 8000.0;
+    Mthrust = 23000.0;
+    b = 32.0;
+    ie_pi_AR = .93;
+    Lmax = 10.0; Lmin = -7.0;
+    Fmax = 40;	Smax = 40;
+    MAX_RK = 2;	MAX_SW = 2;
+    MIN_LIFT_SPEED = 120;
+    ELEVF = 34.0;
+    ROLLF = 180.0;
+    pilot_y = -9.0;
+    pilot_z = 18.0;
+    break;
+case 5:
+    plane_type = F18_NAME;
+    pp -> type = F18;
+    s = 510.0;
+    W = 24000.0;
+    fuel_weight = 12000.0;
+    Mthrust = 32000.0;
+    b = 38.0;
+    ie_pi_AR = .90;
+    Lmax = 9.0;	Lmin = -6.0;
+    Fmax = 50;	Smax = 60;
+    MAX_RK = 3;	MAX_SW = 3;
+    MIN_LIFT_SPEED = 110;
+    ELEVF = 30.0;
+    ROLLF = 100.0;
+    pilot_y = -10.0;
+    pilot_z = 22.0;
+    break;
+case 6:
+    plane_type = P38_NAME;
+    pp -> type = P38;
+    s = 327.5;
+    W = 13500.0;
+    fuel_weight = 1600.0;
+    Mthrust = 4000.0;
+    b = 52.0;
+    ie_pi_AR = .90;
+    Lmax = 6.0;	Lmin = -3.5;
+    Fmax = 50;	Smax = 60;
+    MAX_RK = 2;	MAX_SW = 0;
+    MIN_LIFT_SPEED = 75;
+    ELEVF = 30.0;
+    ROLLF = 100.0;
+    pilot_y = -10.0;
+    pilot_z = 22.0;
+    break;
+case 27-'0':
+    goto end_of_program;
+default:
+    goto pickit;
+    }
 
-void reset_all()
-{
 	if(moreplanes)	/* haven't made all the planes yet */
 		(void)make_planes(0);
 
@@ -500,31 +473,14 @@ void reset_all()
     else thrust = max_throttle;
     if (on_ground || landing_gear_stuck>0)
     then qenter (KEYBD,'l');	/* put wheels down	*/
-}
-
-void restart(StartLocation location)
-{
-	set_start_location(location);
-	pick_and_init_plane();
-	reset_all();
-}
-
-flight (argc,argv)
-    int argc;
-    char *argv[];
-{
-	init_flight(argc, argv);
-
-	restart(DEFAULT_LOCATION);
-
+
     /****************************************************************
-     *	Main loop
-     ****************************************************************/
-    while(1)
-	{
+    /*	Main loop
+    /****************************************************************/
+    while (1) {
 	/* read all queue entries	*/
-	if (dials) check_dials();
-    while (qtest ()) {
+	if (dials) check_dials(); 
+        while (qtest ()) {
 	    type = qread (&val);
 	    if (type == KEYBD) {
 		switch (val) {
@@ -536,7 +492,7 @@ flight (argc,argv)
 		    stopit();
 			continue;
 		case 27:  /* ESC */
-		    end_of_program();
+		    goto end_of_program;
 		case 'a':
 		    thrust -= 5;
 		    if (thrust < min_throttle) thrust = min_throttle;
@@ -689,15 +645,13 @@ broadcast ("retracted my landing gear while on the ground");
 		case 'R':
 		case 'u':
 		case 'U':
-		    if (pp -> status == 0) {
-				if (val == 'r') then restart(DEFAULT_LOCATION); // goto start;
-				else if (val == 'R') restart(RUNWAY); // goto start1;
-				else if (val == 'U') restart(RANDOM); // goto start3;
-				else restart(AIRBORNE); // goto start2;
-				goto end_of_main_loop;
-			}
+		    if (pp -> status == 0)
+			if (val == 'r') then goto start;
+			else if (val == 'R') goto start1;
+			else if (val == 'U') goto start3;
+			else goto start2;
 		    /* if missile launched, then blow up */
-		    else if (pp->mstatus > MEXPLODE &&
+		    else if (pp->mstatus > MEXPLODE && 
 			     pp->mtype != TYPE_CANNON)
 			 then pp->mstatus = MEXPLODE;
 		    break;
@@ -733,14 +687,14 @@ broadcast ("retracted my landing gear while on the ground");
 		}
 	    }
 
-
+	    
 	    else if (type == REDRAW) {
 
 		redraw_screen();
 		tick_counter = 2;
 	    }
 		else if(type == WINQUIT)	/* should only happen if iconisized */
-		    end_of_program();
+		    goto end_of_program;
 	    else if (val) {	/* only read button down presses	*/
 		if (type == MOUSE3) {		/* left rudder		*/
 		    if (rudder > -.75) then change_rudder (rudder -= .1);
@@ -756,17 +710,7 @@ broadcast ("retracted my landing gear while on the ground");
 		else if (type == RIGHTARROWKEY && view_switch == PLANE_VIEW) {
 		    view_angle -= 900;
 		    if (view_angle < -1800) then view_angle += 3600;
-		}
-        else if (view_switch == TOWER_VIEW) {
-            /* extra view controls from tower view */
-            switch(type) {
-                case LEFTARROWKEY: 	eye_x -= 100; break;
-                case RIGHTARROWKEY: eye_x += 100; break;
-                case UPARROWKEY:	eye_z += 100; break;
-                case DOWNARROWKEY:  eye_z -= 100; break;
-			}
-		}
-		/* and ignore any other types	*/
+		}	/* and ignore any other types	*/
 	    }
 	}		/* of while qtest	*/
 
@@ -801,7 +745,7 @@ broadcast ("retracted my landing gear while on the ground");
 	else if (pp -> status > 0) then pp -> status--;
 #ifdef DOGFIGHT
 	ptemp = get_indata (1);	/* read all input data		*/
-	if (ptemp != NULL) {
+	if (ptemp != NULL) {	
 	    sprintf (charbuf,"You were blown up by an enemy %s fired by %s",
 			WEAPON_NAME[ptemp -> mtype], ptemp -> myname);
 	    make_crash (charbuf);
@@ -829,7 +773,7 @@ broadcast ("retracted my landing gear while on the ground");
 		    else if (rudder > 0.05) then change_rudder (rudder -= .1);
 		    else if (rudder < -0.05) then change_rudder(rudder += .1);
 		    else setvaluator (MOUSEY,	/* lastly pitch		*/
-				itemp+=(int)(diff/-ELEVF/vz),
+				itemp+=(int)(diff/-ELEVF/vz), 
 				0,YMAXSCREEN);
 		}
 	    }
@@ -852,7 +796,7 @@ broadcast ("retracted my landing gear while on the ground");
 	    }
 	    if (thrust > max_throttle) thrust = max_throttle;
 	}
-    int DELAY = (TPS/4);
+#define DELAY (TPS/4)
 	/* tenths of degrees per tick	*/
 	rollers = ROLLF * ((getvaluator (MOUSEX) - XMIDDLE+8) >> 4);
 	itemp = rollers * vz - roll_speed;	/* delta	*/
@@ -862,7 +806,7 @@ broadcast ("retracted my landing gear while on the ground");
 	    else itemp = itemp>0 ? 1 : -1;
 	if (wing_stall > 0) {
 	    itemp >>= wing_stall;
-	    itemp += flight_random(wing_stall << 3);
+	    itemp += random(wing_stall << 3);
 	}
 	roll_speed += itemp;
 
@@ -874,7 +818,7 @@ broadcast ("retracted my landing gear while on the ground");
 	    else itemp = itemp>0 ? 1 : -1;
 	if (wing_stall > 0) {
 	    itemp >>= wing_stall;
-	    itemp += flight_random(wing_stall << 1);
+	    itemp += random(wing_stall << 1);
 	}
 	elevation_speed += itemp;
 
@@ -995,8 +939,8 @@ broadcast ("retracted my landing gear while on the ground");
 	    on_ground = FALSE;
 	}
 	else if (pp -> y < .5) {		/* check for on the ground */
-	    if (IN_BOX (pp,-800.0,100.0, -9500.0,1000.0) ||
-		IN_BOX (pp,100.0,1300.0, -2500.0,-1500.0) ||
+	    if (IN_BOX (pp,-800.0,100.0, -9500.0,1000.0) || 
+		IN_BOX (pp,100.0,1300.0, -2500.0,-1500.0) || 
 		IN_BOX (pp,-2300.0,-800.0, -4900.0,-2000.0))
 	    if (!on_ground) {			/* and not on ground before */
 		int rating,nm;
@@ -1032,9 +976,8 @@ broadcast ("retracted my landing gear while on the ground");
 		rebuild_status ();
 	    } else;
 	    else {
-        // XXXX No swamps for debugging purposes
-		// make_crash ("You crashed into the swamps");
-		// broadcast ("crashed into the swamps");
+		make_crash ("You crashed into the swamps");
+		broadcast ("crashed into the swamps");
 	    }
 	    ptw[3][1] = pp -> y = 0.0;
 	    on_ground = TRUE;
@@ -1182,7 +1125,7 @@ if (debug & (1<<4)) {
 	}
 	else if (view_switch == PLANE_VIEW) 	/* view from the plane	*/
 	{
-	    if (view_angle != 0)
+	    if (view_angle != 0) 
 		rotate(-view_angle, 'y');
 	    translate(0.0, pilot_y, pilot_z);	/* pilot's seat loc.	*/
 
@@ -1243,7 +1186,7 @@ if (debug & (1<<4)) {
 	/****************************************************************
 	/*	compute new velocities, accelerations
 	/****************************************************************/
-            callobj (CLEAR_METERS);		/* sets up viewport, ortho, wm	*/
+	callobj (CLEAR_METERS);		/* sets up viewport, ortho, wm	*/
 
 	/* check my missile against my plane		*/
 	if (pp -> mstatus && pp->mstatus < MEXPLODE && test_blow_up(pp,pp)) {
@@ -1267,7 +1210,7 @@ if (debug & (1<<4)) {
     if (pp -> status > MEXPLODE) {
 	if (pp -> y > gefy) then kl = 1.0;	/* ground effect factor	*/
 	else {
-	    kl = pp -> y/b;
+	    kl = pp -> y/b;		
 	    if (kl > .225)
 	    then kl = .484 * kl + .661;
 	    else kl = 2.533 * kl + .20;
@@ -1354,7 +1297,7 @@ if (debug & (1<<4)) {
 	zdrag = vz * zdrag;
 	if (val) {			/* if vz is positive	*/
 	    ay -= ydrag;
-	    az -= zdrag;
+	    az -= zdrag; 
 	}
 	else {
 	    ay += ydrag;
@@ -1370,8 +1313,8 @@ if (debug & (1<<4)) {
 	ax -= ptw[0][1] * GRAVITY;
 	ay -= ptw[1][1] * GRAVITY;
 	az -= ptw[2][1] * GRAVITY;
-
-	vx += ax;	vz += az;
+    
+	vx += ax;	vz += az;	
 	if (on_ground && pp -> status > MEXPLODE) {
 	    float cos;
 
@@ -1429,7 +1372,7 @@ if (debug & (1<<3)) {
 	/****************************************************************
 	/*	display METERS
 	/****************************************************************/
-	tick_counter--;			/* 7,6,5,4,3,2,1,0	*/
+	tick_counter--;			/* 7,6,5,4,3,2,1,0	*/	
 	if (tick_counter == 2 && !pp -> mstatus) /* zero target if one	*/
 	then missile_target = NULL_PLANE_ID;
 
@@ -1591,8 +1534,7 @@ if (!hud) {
 	     *  calculate the current tps (ticks per second)
 	     */
 	    time_end = times (&tms_end_buf);
-            void calculate_time(char *name);
-	    calculate_time ("main loop");
+	    calculate_time ("main loop", int_tps);
 	    time_start = times (&tms_start_buf);
 
 	    tick_counter = int_tps;
@@ -1618,12 +1560,15 @@ if (!hud) {
 	gravity = G_ACC / tps / tps;
 #endif
 
-end_of_main_loop:
 	swapbuffers ();
     }
-	//end_of_program();
-}
 
+end_of_program:
+    ExitComm ();
+
+    exit (0);	/* was arg-less exit(); modern C requires the status */
+}
+
 addplane ()
 {
     number_planes++;
@@ -1657,13 +1602,12 @@ float fuel_consump (thrust,half_mass)
 #define CLOCKRATE 60
 #endif
 
-void
 calculate_time (name)
     char *name;
 {
-    int y,s60;
-    char charbuf[80];
-    float veldiff;
+    register int y,s60;
+    register char charbuf[80];
+    register float veldiff;
     int current_tps;
 
     s60 = time_end - time_start;
@@ -1708,7 +1652,7 @@ calculate_time (name)
 	cmov2s (150, y-3*dy);
 	charstr (charbuf);
 
-	if (hud)
+	if (hud) 
 	    closeobj();
 	else
 	{
@@ -1722,9 +1666,9 @@ calculate_time (name)
     if (current_tps == int_tps)
     {
 #ifdef _4D
-        tps_add =
+        tps_add = 
 #endif
-	vx_add = vy_add = vz_add =
+	vx_add = vy_add = vz_add = 
 	missile_vx_add = missile_vy_add = missile_vz_add = 0.0;
 	return;
     }
@@ -1755,11 +1699,11 @@ calculate_time (name)
 
 
 #ifndef DOGFIGHT
-broadcast (char *msg) {}
+broadcast (msg) char *msg; {}	/* was arg-less; callers pass a string, which traps wasm */
 
 draw_messages () {}
 
-Plane lookup_plane() {return(NULL);}
+Plane lookup_plane(id) long id; {return(NULL);}	/* was arg-less; callers pass the target id, which traps wasm */
 
 ExitComm () {
     replacecolors();
@@ -1886,7 +1830,7 @@ make_planes(chkkey)
 stopit()
 {
 	int mousex, mousey;
-	/*extern PSFILE *PostScript;*/
+	extern PSFILE *PostScript;
 
 	/* do most of same stuff as when we exit in ExitComm() */
     replacecolors();
@@ -1895,7 +1839,7 @@ stopit()
 
 	/* greset(); */
 
-	/* flipiconic(winget()); */
+	flipiconic(winget());
 
 	/* clear the overlay, underlay, and cursor planes */
 	drawmode(OVERDRAW);
@@ -1914,7 +1858,7 @@ stopit()
 #else
     init_graphics ("flight");
 #endif
-    if (dials) init_dials();
+    if (dials) init_dials(); 
     make_meters ();
 	map_daynight (daytime);
 
@@ -1924,7 +1868,7 @@ stopit()
 
 	/* re-calculate the current tps (ticks per second) */
 	time_end = times (&tms_end_buf);
-	calculate_time ("main loop");
+	calculate_time ("main loop", int_tps);
 	time_start = times (&tms_start_buf);
 	winpop();	/* make sure at top! */
     redraw_screen ();

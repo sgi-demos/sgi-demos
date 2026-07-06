@@ -14,7 +14,13 @@ DEMO_EXCLUDE_SRC=aifflib.c
 # -D_GNU_SOURCE: emscripten's musl hides struct ip_mreq/caddr_t (udpbrdcst.c) without it
 # -include strings.h + vintage_io.h: real prototypes for bzero/bcopy/lseek —
 #   the K&R implicit declarations trap wasm's call-signature checking
-DEMO_CFLAGS=-I. -Ilibgobj -DNO_MS -DHZ=100 -Dregister= -DM_PI=3.14159265358979323846 -D_GNU_SOURCE -include strings.h -include vintage_io.h
+# -w: silence warnings on this frozen vintage source — all verified-benign
+#   (%d-with-long is identical on wasm32 and cosmetic in native dog/radar
+#   prints, BSD sockaddr casts, short* I/O buffers, same-struct pointer
+#   difference via (int) casts in comm.c, feedback-stub buffer type in
+#   libgobj cull(), and SGI's own "&d" printf typo in radar.c's unreached
+#   fatal path)
+DEMO_CFLAGS=-I. -Ilibgobj -DNO_MS -DHZ=100 -Dregister= -DM_PI=3.14159265358979323846 -D_GNU_SOURCE -include strings.h -include vintage_io.h -w
 # mount defs/ at the IRIX default data path so no -D argument is needed
 EM_PRELOAD=--preload-file defs@/usr/demos/data/flight
 include ../../makefiles/make_demo.mk

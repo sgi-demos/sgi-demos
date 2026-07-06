@@ -16,16 +16,15 @@
  *  because flight was originally written for a screen with resolution
  *  of 1024 in X and 768 in Y we must use an adjust ment factor
  */
-#define X_ADJUST (XMAXSCREEN / 1024.0)
-#define Y_ADJUST (YMAXSCREEN / 768.0)
+#define X_ADJUST ((float)XMAXSCREEN / 1024.0)	/* was XMAXSCREEN.0 (IRIX cpp pasted the .0) */
+#define Y_ADJUST ((float)YMAXSCREEN / 768.0)	/* was YMAXSCREEN.0 */
 
 extern short wm_allplanes;
 
 /* make objects for drawing meters	*/
-void
 make_meters ()
 {
-    int i;
+    register int i;
 
     static Pattern16 crash_pattern = {
 	0x0007,0x000e,0x001c,0x0038,
@@ -58,7 +57,6 @@ make_meters ()
 }
 
 #define OLD_XMIDDLE 512
-void
 redraw_screen ()
 {
     static Scoord triangle [3][2] = {
@@ -242,7 +240,7 @@ make_clear_meters ()
 
 make_slow_meters ()
 {
-    int i;
+    register int i;
     float r,sin,cos;
 
     static Scoord gy_triangle [][2] = {
@@ -313,7 +311,7 @@ make_slow_meters ()
 }
 
 genbar (x,y)
-    int x,y;
+    register int x,y;
 {
     move2s (-x,-y);	draw2s (x,-y);
     move2s (-x,y);	draw2s (x,y);
@@ -465,11 +463,10 @@ int pick_plane ()
 "just over the stall speed.  Then use full flaps and don't forget your landing gear!",
 ""
 };
-    int i;
+    register int i;
     i = display_message (plane_menu);
     if (i > 0) then return (i - '0');
     i = -i;
-    if (i == LEFTMOUSE) then return 2;
     if (i == PAD1) then return (1);
     else if (i == PAD2) then return (2);
     else if (i == PAD3) then return (3);
@@ -478,8 +475,8 @@ int pick_plane ()
 }
 
 /************************************************************
- *	Trash procedures
- ************************************************************/
+/*	Trash procedures
+/************************************************************/
 draw_blanking ()
 {
     static Scoord blanking1[][2] = { {90,90}, {70,90}, {90,70} };
@@ -495,7 +492,7 @@ draw_blanking ()
 }
 
 draw_meter (llx, val)
-    int llx,  val;
+    register int llx,  val;
 {
     if (val >= 0) {
 	color (blue);
@@ -535,10 +532,17 @@ static char *numbers[] = {
 	"90","91","92","93","94","95","96","97","98","99","100" 
 };
 
-void draw_hud (Plane p, int tick, float vx, float vy, float vz, int vv, float mach, float gf, int wheels, int flaps, int spoilers, int autop, int fuel, int thrust)
+
+draw_hud (p,tick,vx,vy,vz,vv,mach,gf,wheels,flaps,spoilers,autop,fuel,thrust)
+    register Plane p;
+    int tick;
+    float vx,vy,vz;
+    int vv;
+    float mach,gf;
+    int wheels,flaps,spoilers,autop,fuel,thrust;
 {
-    char buf[32];
-    int a,i,x,y;
+    register char buf[32];
+    register int a,i,x,y;
     float k;
 
     extern char alt_text[], mach_text[], g_text[];
@@ -555,7 +559,7 @@ void draw_hud (Plane p, int tick, float vx, float vy, float vz, int vv, float ma
 	color (orange);
 	goto skipit;
     }
-#endif /* DEBUG */
+#endif DEBUG
 
     editobj (CROSS_HAIRS);
 	objreplace (VV_EDIT);			/* vv marker		*/

@@ -25,6 +25,7 @@ static uint32_t sdl_tied_valuators[2048][2];
 static gl_event sdl_input_queue[INPUT_QUEUE_SIZE];
 static uint32_t sdl_input_queue_head = 0;    // The next item that needs to be read
 static uint32_t sdl_input_queue_length = 0;  // The number of items in the queue (tail = (head + length) % len)
+static int redraw_pulse_outstanding = 0;     // one un-consumed yieldByEventQuery REDRAW pulse at a time
 static uint32_t sdl_window_id = 0;           // Set in events_winopen; used as REDRAW event value
 static int32_t sdl_keycode_to_gl(int32_t sdl_keycode);
 static void enqueue_event(gl_event *e);
@@ -112,19 +113,23 @@ static void keyDownEvent(int sdl_keycode, char *text)
     // printf("sdl_keycode = %d, text = [%s]\n", sdl_keycode, text);
     gl_event ev;
     ev.device = sdl_keycode_to_gl(sdl_keycode);
-    if (ev.device != 0 && (sdl_devices_queued[ev.device] || sdl_devices_queued[KEYBD]))
+
+    // IRIS GL semantics: a raw key device (GKEY, LEFTARROWKEY, ...) is queued
+    // only if the demo qdevice()d that specific device. qdevice(KEYBD) alone
+    // must NOT leak raw key events — flight 1988's wait_for_input treats any
+    // non-KEYBD event as a button and drains the queue "until release",
+    // eating real keystrokes (and no release events exist here).
+    if (ev.device != 0 && sdl_devices_queued[ev.device])
     {
         ev.val = 1;
         enqueue_event(&ev);
-        if (sdl_devices_queued[KEYBD])
-        {
-            if (strlen(text) == 1)
-            {
-                ev.device = KEYBD;
-                ev.val = text[0];
-                enqueue_event(&ev);
-            }
-        }
+    }
+
+    if (sdl_devices_queued[KEYBD] && strlen(text) == 1)
+    {
+        ev.device = KEYBD;
+        ev.val = text[0];
+        enqueue_event(&ev);
     }
 }
 
@@ -479,12 +484,19 @@ static void yieldByEventQuery()
         // REDRAWs the way SGI did. Window id is set in the value field to
         // follow the IRIS GL API, although no demos in the current demo set
         // make use of it.
-        if (sdl_devices_queued[REDRAW])
+        //
+        // Coalesced: at most one outstanding pulse until the demo consumes a
+        // REDRAW (see events_qread_continue). The IRIX window system likewise
+        // coalesced damage. Without this, a demo that blocks in qread and
+        // handles one event per redraw (flight 1988's wait_for_input) queues
+        // a 30Hz REDRAW backlog that keypresses have to wait behind.
+        if (sdl_devices_queued[REDRAW] && !redraw_pulse_outstanding)
         {
             gl_event ev;
             ev.device = REDRAW;
             ev.val = (int16_t)sdl_window_id;
             enqueue_event(&ev);
+            redraw_pulse_outstanding = 1;
         }
 
         // Pump events, redraw, and yield
@@ -519,6 +531,13 @@ int32_t events_qread_block(void)
     SDL_Delay(10);
 #endif
     return 1;
+}
+
+// prefposition() passthrough: pin the framebuffer to the demo-requested size
+// (the display scales it to the window). See sdl_framebuffer.c fbFixedSize.
+void events_set_framebuffer_fixed_size(int32_t width, int32_t height)
+{
+    sdlSetFramebufferFixedSize(width, height);
 }
 
 //
@@ -722,6 +741,8 @@ int32_t events_qread_continue(int16_t *value)
     int32_t device = sdl_input_queue[sdl_input_queue_head].device;
     sdl_input_queue_head = (sdl_input_queue_head + 1) % INPUT_QUEUE_SIZE;
     sdl_input_queue_length--;
+    if (device == REDRAW)
+        redraw_pulse_outstanding = 0;   // pulse consumed; a new one may be sent
     return device;
 }
 

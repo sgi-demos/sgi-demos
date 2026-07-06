@@ -357,9 +357,9 @@ make_lights()
     makeobj(LIGHTS);
 	/* RANDOM LIGHTS	*/
 	color(white);
-	for (x=0; x<40; x++) pnt2s (flight_random(2000), flight_random(2000)-6000);
+	for (x=0; x<40; x++) pnt2s (random(2000), random(2000)-6000);
         /* city lights */
-	for (x=0; x<30; x++) pnt2i (flight_random(3000),flight_random(3000)+60000);
+	for (x=0; x<30; x++) pnt2i (random(3000),random(3000)+60000);
 
 	/* RIGHT SIDE WHITE LIGHTS ON RUNWAY EDGE */
 	for (y= 200;y<=6400;y+=200) pnt2s (80,y);
@@ -402,7 +402,7 @@ make_lights()
 	for (x=50;x<=90;x+=10) pnt2s (x,8500);
 
         /* city lights */
-	for (x=0; x<10; x++) pnt2i (flight_random(1500),flight_random(1500)+60000);
+	for (x=0; x<10; x++) pnt2i (random(1500),random(1500)+60000);
     closeobj();
 }
 

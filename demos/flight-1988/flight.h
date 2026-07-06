@@ -24,13 +24,12 @@
 
 #define HEADER_VERSION HEADER(2.4)
 #define then
-
+#define NULL 0
 #define IN_BOX(p,llx,urx,llz,urz) \
 	(llx <= p -> x && p -> x <= urx && llz <= p -> z && p -> z <= urz)
 
 extern short debug, bitplanes, dogfight, hud, threat_mode;
-extern Angle xasin ();
-extern int dist_for_lines;
+extern int xasin (), dist_for_lines;
 extern float eye_x, eye_y, eye_z;
 extern float (*my_ptw)[4];
 
@@ -140,8 +139,8 @@ extern int tps;
 #define METER_VURY 190
 
 #else
-#define XMIDDLE (XMAXSCREEN/2)
-#define YMIDDLE (YMAXSCREEN/2)
+#define XMIDDLE XMAXSCREEN/2
+#define YMIDDLE YMAXSCREEN/2
 #define METER_VLLX 50
 #define METER_VURX 930
 #define METER_VLLY 100

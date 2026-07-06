@@ -27,6 +27,7 @@
 #include "vector.h"
 #include "rasterizer.h"
 #include "bdffont.h"
+#include "fixed9x15.h"      // default charstr font: X11 Misc-Fixed 9x15 (IRIS-like metrics)
 #include "events.h"
 #include "font.h"
 
@@ -87,6 +88,11 @@ static int DISPLAY_HEIGHT = YMAXSCREEN + 1;
 
 
 static vec3ub colormap[4096];
+static int colormap_max_mapped = 0;
+static uint8_t colormap_mapped[4096];   // indices explicitly set by mapcolor. Unset
+                                        // entries are all black and must not join the
+                                        // masked-clear remap (a black->X pair would
+                                        // recolor the background)
 static vec4f current_color = {1.0f, 1.0f, 1.0f, 1.0f};
 static unsigned short current_color_index = 0;
 static unsigned short current_writemask = 0xffff;
@@ -885,6 +891,10 @@ static int str_width_in_pixels(const char *str) {
 }
 
 void string_draw(screen_vertex* screenvert_, const char *str) {
+    // Default text font: the authentic X11 Misc-Fixed 9x15 (ascent 12,
+    // descent 3), replacing the old 8x16 zero-descent bitmap whose glyphs
+    // extended 16px above the baseline — flight 1988's meter labels bled
+    // into each other and text at the top viewport edge lost its upper rows.
     static screen_vertex screenvert;
 
     screenvert = *screenvert_;
@@ -893,10 +903,11 @@ void string_draw(screen_vertex* screenvert_, const char *str) {
         if (str[i] == '\t') {
             // I don't know whether the original charstr() supported tabs (I can't find
             // a man page), but arena/startup.c uses them. --LK
-            screenvert.x += font_width * SCREEN_VERTEX_V2_SCALE * 8;
+            screenvert.x += 9 * SCREEN_VERTEX_V2_SCALE * 8;
         } else {
-            rasterizer_bitmap(font_width, font_rowbytes, font_height, &screenvert, font_bits + str[i] * font_height * font_rowbytes);
-            screenvert.x += font_width * SCREEN_VERTEX_V2_SCALE;
+            char one[2] = { str[i], 0 };
+            bdf_render_string(&fixed9x15, &screenvert, one);
+            screenvert.x += 9 * SCREEN_VERTEX_V2_SCALE;
         }
     }
 }
@@ -1747,8 +1758,45 @@ void clear() {
 
     TRACE();
 
-    // The clear() command must only clear the viewport. Use a slow rectangle when it's
-    // not full-screen.
+    // The clear() command must only clear the viewport.
+    int vx0 = (int)the_viewport[0], vx1 = (int)the_viewport[1];
+    int vy0 = (int)the_viewport[2], vy1 = (int)the_viewport[3];
+
+    // Colormap-plane masked clear (IRIS writemask): a clear through a partial
+    // writemask only writes the writable planes of each pixel's INDEX:
+    // newIndex = (oldIndex & ~wm) | (clearIndex & wm). flight 1988's meters
+    // depend on this — the scale art lives in planes 0-1 (brown/orange/grey2)
+    // and survives the per-frame writemask(wm_allplanes-3) clear that erases
+    // the blue/red bars. The RGB framebuffer has no index planes, so the
+    // exact equivalent is a palette recoloring of the viewport rect: for
+    // every mapped index, oldRGB -> RGB[newIndex]. (Exact for flat cmode
+    // colors; pixels whose RGB collides across indices take the first match.)
+    if (!rgb_mode && (~current_writemask & 0xfff) != 0) {
+        static uint32_t rgb_from[4096], rgb_to[4096];
+        uint32_t n = 0;
+        int wm = current_writemask & 0xfff;
+        for (int idx = 0; idx <= colormap_max_mapped; idx++) {
+            if (!colormap_mapped[idx])
+                continue;   // unmapped entries are all black; remapping them would recolor the background
+            int nidx = (idx & ~wm) | (current_color_index & wm);
+            uint32_t from = ((uint32_t)colormap[idx][0] << 16) | ((uint32_t)colormap[idx][1] << 8) | colormap[idx][2];
+            uint32_t to   = ((uint32_t)colormap[nidx][0] << 16) | ((uint32_t)colormap[nidx][1] << 8) | colormap[nidx][2];
+            if (from == to)
+                continue;
+            int dup = 0;
+            for (uint32_t i = 0; i < n; i++)
+                if (rgb_from[i] == from) { dup = 1; break; }
+            if (!dup) {
+                rgb_from[n] = from;
+                rgb_to[n] = to;
+                n++;
+            }
+        }
+        if (n > 0)
+            rasterizer_masked_clear(vx0, vy0, vx1, vy1, n, rgb_from, rgb_to);
+        return;
+    }
+
     if (is_full_viewport()) {
         // Full screen, we can use the optimized version.
         rasterizer_clear(current_color[0] * 255.0,
@@ -1756,13 +1804,34 @@ void clear() {
                 current_color[2] * 255.0,
                 current_color_index);
     } else {
-        // Partial viewport, draw polygon. This uses the current color.
-        bgnpolygon();
-        pdri(0, 0, 0);
-        pdri(0, 1, 0);
-        pdri(1, 1, 0);
-        pdri(1, 0, 0);
-        endpolygon();
+        // Partial viewport: fill exactly the viewport rectangle in screen
+        // space. (The old approach drew a unit polygon through the current
+        // matrices, which only covered the viewport when the projection
+        // happened to map 0..1 onto it — flight 1988's CLEAR_* objects set
+        // world-coordinate ortho2 ranges, so their per-frame erases were
+        // no-ops and text/gauges smeared.) Clear ignores the z test but
+        // honors the current pattern, like IRIS GL.
+        screen_vertex q[6];
+        for (int i = 0; i < 6; i++) {
+            q[i].z = 0xffffffff;
+            q[i].r = (uint8_t)(current_color[0] * 255.0);
+            q[i].g = (uint8_t)(current_color[1] * 255.0);
+            q[i].b = (uint8_t)(current_color[2] * 255.0);
+            q[i].a = 255;
+        }
+        int32_t sx0 = vx0 * SCREEN_VERTEX_V2_SCALE, sx1 = (vx1 + 1) * SCREEN_VERTEX_V2_SCALE;
+        int32_t sy0 = vy0 * SCREEN_VERTEX_V2_SCALE, sy1 = (vy1 + 1) * SCREEN_VERTEX_V2_SCALE;
+        q[0].x = sx0; q[0].y = sy0;
+        q[1].x = sx1; q[1].y = sy0;
+        q[2].x = sx1; q[2].y = sy1;
+        q[3].x = sx0; q[3].y = sy0;
+        q[4].x = sx1; q[4].y = sy1;
+        q[5].x = sx0; q[5].y = sy1;
+        if (zbuffer_enabled)
+            rasterizer_zbuffer(0);
+        rasterizer_draw(DRAW_TRIANGLES, 2, q);
+        if (zbuffer_enabled)
+            rasterizer_zbuffer(1);
     }
 }
 
@@ -1792,7 +1861,10 @@ void closeobj() {
 //
 int getplanes() {
     TRACE();
-    return 24;
+    // 12 = the deepest IRIS colormap config (4096 entries, matching our
+    // colormap[]). flight 1988 shifts (1 << getplanes()) into a short, so 24
+    // overflowed; SGI documented flight for 8- or 12-plane cmode.
+    return 12;
 }
 
 void cmode() {
@@ -2044,6 +2116,9 @@ void mapcolor(Colorindex index, int red, int green, int blue) {
     colormap[index][0] = red;
     colormap[index][1] = green;
     colormap[index][2] = blue;
+    colormap_mapped[index] = 1;
+    if (index > colormap_max_mapped)
+        colormap_max_mapped = index;
 }
 
 void multmatrix(Matrix m) {
@@ -3539,7 +3614,16 @@ void prefsize(long width, long height) {
 }
 
 void prefposition(int x1, int x2, int y1, int y2) {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    // IRIS GL: the next winopen creates a window of exactly this size and
+    // position. The canvas/window is our "screen", so the demo instead gets a
+    // FRAMEBUFFER of exactly the requested size, scaled to the window by the
+    // display (both flight demos hard-code their layout to the classic
+    // 1280x1024 screen and never look at the real window size). Position is
+    // ignored.
+    int w = (x2 > x1 ? x2 - x1 : x1 - x2) + 1;
+    int h = (y2 > y1 ? y2 - y1 : y1 - y2) + 1;
+    TRACEF("%d, %d, %d, %d", x1, x2, y1, y2);
+    events_set_framebuffer_fixed_size(w, h);
 }
 
 void rdr2i(Icoord dx, Icoord dy) {
@@ -3871,17 +3955,17 @@ void subpixel (Boolean b)
 /* font metrics for the built-in 8x16 bitmap font (font.h) */
 int strwidth (char *str)
 {
-    return strlen(str) * font_width;
+    return strlen(str) * 9;     /* fixed9x15 is charcell: 9px per glyph */
 }
 
 int getheight ()
 {
-    return font_height;
+    return fixed9x15.ascent + fixed9x15.descent;
 }
 
 int getdescender ()
 {
-    return 0;   /* bitmap font draws from the baseline; no descender rows */
+    return fixed9x15.descent;
 }
 
 void getviewport (Screencoord *left, Screencoord *right, Screencoord *bottom, Screencoord *top)
