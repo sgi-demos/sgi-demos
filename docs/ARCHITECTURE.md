@@ -93,6 +93,10 @@ The IRIS GL implementation uses a software rasterizer forked from the [Alice 4](
 
 The long-term rasterization goal however is to provide a full OGLES2 rasterizer (IRIS GL calls translated and sent directly to the GPU), which would unlock arbitrary window sizes and performant texture mapping. Not to mention eliminating the current irony of a software rasterizer doing the work that was done by a hardware rasterizer some 40 years ago. The framebuffer-texture path is a stepping stone toward this full OGLES2 rasterizer goal.
 
+### Color-index (colormap) mode and the palette LUT
+
+SGI hardware in colormap mode stored a color *index* per pixel and resolved it through the palette LUT on scan-out, so a `mapcolor()` call recolored already-drawn pixels instantly. Most colormap demos never rely on this (they map their palette once at startup), so the shim normally resolves indices to RGB per vertex and rasterizes plain RGB. For demos that edit the palette live (cedit), the reference rasterizer additionally keeps a per-pixel color-index buffer, written in parallel with the RGB buffer (`screen_vertex.ci`, flat per primitive). At each present, if the colormap changed since the pixels were drawn, the front RGB buffer is re-derived from the CI buffer through the current colormap (`rasterizer_resolve_ci_to_rgb`) — the LUT emulation. `readpixels()`/`getapixel()` also read from this buffer. The GLES2 rasterizer keeps no CI buffer; a per-demo quirk in `gl.c` (`apply_demo_quirks`) selects the reference rasterizer for the demos that need it.
+
 ## Browser yielding
 
 An architectural problem with this project was that IRIS GL demos were written to own the event loop: `main()` calls `winopen()`, then enters a `while(1)` loop and never exits. That works fine on native, but on the web it cannot work — the browser's main thread must yield regularly or the page hangs.

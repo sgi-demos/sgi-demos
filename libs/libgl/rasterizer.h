@@ -27,6 +27,23 @@ void rasterizer_zbuffer(int enable);
 void rasterizer_linewidth(float w);
 void rasterizer_frame_sync(void);
 
+// Color-index buffer (SGI hardware palette LUT emulation, CI mode only).
+//
+// rasterizer_ci_frontbuffer: read accessor for the front color-index buffer
+// (one uint16_t per pixel, row 0 = top, same layout as the RGB buffer). In
+// CI mode the CI buffer is the source of truth; the RGB front buffer is a
+// cache populated from it by rasterizer_resolve_ci_to_rgb. Used by
+// readpixels()/getapixel() to read back the index under a screen position.
+// Returns NULL when the rasterizer keeps no CI buffer (gles2).
+unsigned short* rasterizer_ci_frontbuffer(void);
+
+// Walk the front CI buffer and write colormap[ci] into the front RGB buffer
+// for each pixel. Called by the GL layer just before presenting, when in CI
+// mode and the colormap has changed. This emulates the SGI hardware palette
+// LUT: a mapcolor() call is reflected on screen on the next present without
+// the demo redrawing anything. No-op when there is no CI buffer (gles2).
+void rasterizer_resolve_ci_to_rgb(uint8_t colormap[][3]);
+
 // The framebuffer tracks the window size: called once after the window
 // exists (with its initial size) and again on every window resize. The
 // rasterizer (re)allocates its buffers at the new size; contents are
@@ -63,9 +80,17 @@ typedef struct rasterizer_funcs
     void (*linewidth)(float w);
     void (*frame_sync)(void);
     void (*resize)(uint32_t width, uint32_t height);
+    unsigned short* (*ci_frontbuffer)(void);
+    void (*resolve_ci_to_rgb)(uint8_t colormap[][3]);
 } rasterizer_funcs;
 
 const rasterizer_funcs* ref_rasterizer_get_funcs(void);
 const rasterizer_funcs* gles2_rasterizer_get_funcs(void);
+
+// Set the shim-preferred implementation ("ref" or "gles2") before the first
+// rasterizer_* call. Overridden by an explicit GLES2_RASTERIZER env var or
+// ?rast= URL parameter. Used by per-demo quirks (gl.c) — e.g. cedit needs
+// the reference rasterizer's color-index buffer.
+void rasterizer_prefer(const char *mode);
 
 #endif /* __RASTERIZER_H__ */

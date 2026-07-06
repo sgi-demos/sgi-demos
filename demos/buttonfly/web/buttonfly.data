@@ -56,6 +56,11 @@ Newave
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0
 
+Cedit
+	../cedit/bin/cedit
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
 Flight
 	../flight-1988/bin/flight-1988
 	.color. .9 .5 .9

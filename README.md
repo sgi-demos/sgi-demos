@@ -6,16 +6,17 @@ This is the original SGI demo source code, compiled for the web using Emscripten
 ## Working demos
 - [Buttonfly](https://sgi-demos.github.io/)
 - [Bounce](https://sgi-demos.github.io/sgi-demos/demos/bounce/web/bounce_full.html)
+- [Cedit](https://sgi-demos.github.io/sgi-demos/demos/cedit/web/cedit_full.html) (Paul Haeberli's 1984 color editor; live palette editing via emulated hardware colormap LUT)
 - [Ideas](https://sgi-demos.github.io/sgi-demos/demos/ideas/web/ideas_full.html)
 - [Insect](https://sgi-demos.github.io/sgi-demos/demos/insect/web/insect_full.html)
 - [Jello](https://sgi-demos.github.io/sgi-demos/demos/jello/web/jello_full.html)
 - [Logo](https://sgi-demos.github.io/sgi-demos/demos/logo/web/logo_full.html)
+- [Newave](https://sgi-demos.github.io/sgi-demos/demos/newave/web/newave_full.html) (right-click for menus: mesh editing, flat/gouraud shading, depth cueing, top view; the wave starts flat — edit it, then choose 'go')
 - [Twilight](https://sgi-demos.github.io/sgi-demos/demos/twilight/web/twilight_full.html)
 
 ## Somewhat working demos
 - [Flight 1988](https://sgi-demos.github.io/sgi-demos/demos/flight-1988/web/flight-1988_full.html) (the 1988–89 colormap-mode original; cockpit glitches, planes too slow in web version, night mode 'shimmers', no network play)
 - [Flight 1994](https://sgi-demos.github.io/sgi-demos/demos/flight-1994/web/flight-1994_full.html) (Version 3.4, the definitive IRIX flight — RGB, lighting, 8 planes, full-width 3D horizon and instrument panel; no texture/fog/sound/network yet)
-- [Newave](https://sgi-demos.github.io/sgi-demos/demos/newave/web/newave_full.html) (no mesh editing, no popup menus, only wireframe)
 - [Arena](https://sgi-demos.github.io/sgi-demos/demos/arena/web/arena_full.html) (no network play)
 - [Gview (Barcelona)](https://sgi-demos.github.io/sgi-demos/demos/gview/web/gview_full.html) (reconstructed from the IRIX 3 binary: fly-through and turntable modes work; no materials, movie loops, or binary model cache)
 - [Electropaint 1988](https://sgi-demos.github.io/sgi-demos/demos/ep-1988/web/ep-1988_full.html) (earliest version, Panel Library v7, from the 1988 Usenet posting; plain sliders)
@@ -24,7 +25,6 @@ This is the original SGI demo source code, compiled for the web using Emscripten
 - [Electropaint 1994 (OpenGL, reversed)](https://sgi-demos.github.io/sgi-demos/demos/ep-1994-ogl-reversed/web/ep-1994-ogl-reversed_full.html) (the OpenGL version with ep.c refactored to readable names — byte-identical output)
 
 ## Firmly WIP demos
-- [Cedit](https://github.com/sgi-demos/sgi-demos/tree/main/demos/cedit)
 - Sunflower, gltest, colortest
 
 ## Build instructions

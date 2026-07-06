@@ -5,9 +5,7 @@
 
 #define PI 3.1415926536
 #define NRAMPB 832
-#define NRAMPBF 832.0
 #define NRAMPE 1023
-#define NRAMPEF 1023.0
 #define DRAMPB 768
 #define DRAMPE 831
 #define CRAMPB 700
@@ -65,7 +63,7 @@ short oldcolors[1024][3];
 
 long xsize, ysize, xorig, yorig;
 
-menukill()
+menukill() 
 {
 	int really;
 
@@ -93,7 +91,7 @@ menugrid()
 	    grid = 21;
 	break;
     }
-
+    
 }
 
 menuspeed()
@@ -110,7 +108,7 @@ menuspeed()
 	    dt = 0.008;
 	break;
     }
-
+    
 }
 
 
@@ -176,9 +174,7 @@ resetpoints()
 	{
 		force[i][j]=0.0;
 		veloc[i][j]=0.0;
-		//posit[i][j]=0.0;
-		//posit[i][j]=(float)(i == j && i != 0 && j != grid-1)/32.0; // diagonal wave
-		posit[i][j]=(float)(i == j && i == grid/2)/10.0; // middle spike
+		posit[i][j]=0.0;
 		vertvec[i][j][X]=0.0;
 		vertvec[i][j][Y]=0.0;
 		vertvec[i][j][Z]=0.0;
@@ -326,7 +322,7 @@ char	*argv[];
 	zbuffer(TRUE);
 
 	for (i=0; i<32; i++) {
-
+	
 	    makerange (SRAMP + i*16, SRAMP + i*16 + 15,
 		    0, r*i/31,
 		    0, g*i/31,
@@ -347,7 +343,7 @@ grid_menu = defpup("Grid Size %t|small|medium|large");
 menu=defpup("WAVE %t|edit|go|reverse|display menu|spring menu|grid menu|reset|kill");
 
 	doublebuffer();
-	gconfig();
+	gconfig();	
 	color(BLACK);
 	clear(); swapbuffers(); clear();
 	color(CYAN);
@@ -367,7 +363,7 @@ menu=defpup("WAVE %t|edit|go|reverse|display menu|spring menu|grid menu|reset|ki
 	tie (MIDDLEMOUSE, MOUSEX, MOUSEY);
 	tie (LEFTMOUSE, MOUSEX, MOUSEY);
 
-    while(TRUE) {
+	while(TRUE) {
 
 		while(qtest()) {
 			dev=qread(&val);
@@ -427,7 +423,6 @@ menu=defpup("WAVE %t|edit|go|reverse|display menu|spring menu|grid menu|reset|ki
 					}
 					break;
 				case LEFTMOUSE:
-					resetpoints(); // not canon
 					qread(&nmx); qread(&nmy);
 					if (editing=val) {
 					    setvaluator(MOUSEX, nmx,
@@ -469,7 +464,7 @@ menu=defpup("WAVE %t|edit|go|reverse|display menu|spring menu|grid menu|reset|ki
 		    default:
 		        break;
 		    }
-
+		    
 		}
 
 		if (!smode) {
@@ -554,7 +549,7 @@ getforce()
 
 	    d=posit[i][j]-posit[i-1][j-1];
 	    force[i][j] -= d ;
-	    force[i-1][j-1] += d;
+	    force[i-1][j-1] += d;	    	
 
 	}
 }
@@ -580,7 +575,7 @@ getvelocity()
 	for(i=2;i<(grid+1)/2;i++)
 	for(j=(grid+1)/2;j<i+(grid+1)/2-1;j++)
 	    veloc[i][j]+=force[i][j] * dt;
-
+	    
 }
 
 getposition()
@@ -693,12 +688,12 @@ doscreen()
 	    move( (Coord) i, (Coord) i-(grid+1)/2+2, (Coord) posit[i][i-(grid+1)/2+2]);
 	    draw( (Coord) (i+1), (Coord) (i-(grid+1)/2+2), 0.0);
 	}
-
+	
 	for(i=1;i<(grid+1)/2;i++) {
 	    move( (Coord) i, (Coord) (i+(grid+1)/2-2), (Coord)posit[i][i+(grid+1)/2-2]);
 	    draw( (Coord) i, (Coord) (i+(grid+1)/2-1), 0.0);
 	}
-
+	
 
 	move((float)((grid+1)/2-1), (float)(grid-1), 0.0);
 	draw(0.0, (float)((grid+1)/2-1), 0.0);
@@ -707,7 +702,7 @@ doscreen()
 	draw((float)(grid-1), (float)((grid+1)/2-1), 0.0);
 
 	if (smode) select_point();
-
+    
 	swapbuffers();
 	if (antialias && (dmode!=TOPVIEW)) {
 	    czclear(0, 0);
@@ -831,7 +826,10 @@ gouraud_shade() {
 	c = dot(vertvec[i][j], light);
 	if (c<0.0) c=0.0;
 
-	c=(NRAMPEF-NRAMPBF) * c + (NRAMPBF);
+	/* original read "(NRAMPE.0-NRAMPB.0) * c + (NRAMPB.0)" — the K&R
+	   preprocessor pasted "1023" + ".0" into a float literal; modern cpp
+	   can't, and plain int constants promote to float here anyway */
+	c=(NRAMPE-NRAMPB) * c + NRAMPB;
 
 	colur[i][j] = c;
 
@@ -949,7 +947,7 @@ select_point()
 
 	if((x-y)>(grid+2)/2-2) x -= (x-y)-(grid+2)/2+2;
 	if((y-x)>(grid+2)/2-2) y -= (y-x)-(grid+2)/2+2;
-
+		    
     } else {
 	posit[x][y]= 0.006*(float)((my-yorig+2) * grid / ysize - grid/2);
     }
@@ -972,7 +970,7 @@ select_point()
     }
 
     if((dmode==DEPTHCUED)||(dmode==TOPVIEW)) depthcue(TRUE);
-
+	    
 }
 
 
@@ -980,7 +978,7 @@ select_point()
 int getpolycolor(pts)
 float pts[][3];
 {
-    float norm[3];
+    float norm[3]; 
     float v1[3],v2[3], constant;
     int i,get;
     float c;
@@ -1020,7 +1018,7 @@ float pts[][3];
     c = dot(norm,light);
     if (c<0.0) c=0.0;
 
-    c = (NRAMPEF - NRAMPBF) * c + (NRAMPBF);
+    c = (NRAMPE - NRAMPB) * c + NRAMPB; /* was "NRAMPE.0 - NRAMPB.0", see gouraud_shade */
 
     return((int)c);
 }
@@ -1070,7 +1068,7 @@ float pts[][3];
     c = dot(norm,light);
     if (c<0.0) c=0.0;
 
-    c = (NRAMPEF-NRAMPBF) * c + NRAMPBF;
+    c = (NRAMPE-NRAMPB) * c + NRAMPB; /* was "NRAMPE.0-NRAMPB.0", see gouraud_shade */
 
     return(c);
 }
@@ -1159,7 +1157,7 @@ int i, j;
     vertvec[i][j][Y] += d * -0.70710678;
     vertvec[i-1][j-1][Z] += 1.0/200.0;
     vertvec[i-1][j-1][X] += d * -0.70710678;
-    vertvec[i-1][j-1][Y] += d * -0.70710678;
+    vertvec[i-1][j-1][Y] += d * -0.70710678;    
 }
 
 

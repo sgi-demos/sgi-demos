@@ -108,7 +108,7 @@ typedef int Object;
 typedef int Tag;
 typedef int Offset;
 
-extern void	addtopup(long menu, char *add);
+extern void	addtopup(long menu, char *add, ...);
 extern void	arc();
 extern void	arcf();
 extern void	arcfi();

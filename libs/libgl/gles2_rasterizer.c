@@ -375,8 +375,12 @@ static void flush_batch(void)
 
     // The reference rasterizer writes z whenever a pixel passes, even with
     // the z-buffer disabled; GL_ALWAYS with depth writes on matches that.
+    // GL_LEQUAL is the IRIS GL default z-function: later geometry at equal
+    // depth overwrites (newave's edit crosshair repaints mesh lines in
+    // green at the same z). It also lets the front-buffer pass below land
+    // the same pixels the back-buffer pass just wrote z for.
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(zbuffer_enabled ? GL_LESS : GL_ALWAYS);
+    glDepthFunc(zbuffer_enabled ? GL_LEQUAL : GL_ALWAYS);
     glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
     glViewport(0, 0, fb_width, fb_height);
@@ -388,12 +392,6 @@ static void flush_batch(void)
     }
     if (frontbuffer_draw_enabled)
     {
-        // With the shared depth buffer, a preceding back-buffer pass already
-        // wrote these fragments' z values; GL_LESS would reject them all.
-        // GL_LEQUAL lets the front pass land the same pixels the reference's
-        // single test-once-write-both z logic would.
-        if (backbuffer_draw_enabled && zbuffer_enabled)
-            glDepthFunc(GL_LEQUAL);
         glBindFramebuffer(GL_FRAMEBUFFER, front_buf->fbo);
         glDrawArrays(GL_TRIANGLES, 0, batch_count);
     }
@@ -561,6 +559,20 @@ void gles2_rasterizer_copy_back_to_front(void)
 unsigned char* gles2_rasterizer_frontbuffer(void)
 {
     return cpu_front; // NULL until the first resize allocates it
+}
+
+// The GPU rasterizer keeps no per-pixel color-index buffer: colors arrive
+// pre-resolved in the vertex stream. Demos that rely on live palette-LUT
+// behavior (mapcolor() changing already-drawn pixels, readpixels() of
+// indices — e.g. cedit) run on the CPU reference rasterizer instead (see
+// apply_demo_quirks in gl.c).
+unsigned short* gles2_rasterizer_ci_frontbuffer(void)
+{
+    return NULL;
+}
+
+void gles2_rasterizer_resolve_ci_to_rgb(uint8_t colormap[][3])
+{
 }
 
 // The framebuffer tracks the window size: reallocate the CPU buffers and,
@@ -972,6 +984,8 @@ const rasterizer_funcs* gles2_rasterizer_get_funcs(void)
         .linewidth          = gles2_rasterizer_linewidth,
         .frame_sync         = gles2_rasterizer_frame_sync,
         .resize             = gles2_rasterizer_resize,
+        .ci_frontbuffer     = gles2_rasterizer_ci_frontbuffer,
+        .resolve_ci_to_rgb  = gles2_rasterizer_resolve_ci_to_rgb,
     };
     return &funcs;
 }
