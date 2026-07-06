@@ -1,0 +1,16 @@
+#!smake
+# 
+# This makefile creates libgobj which is used to build demos 
+#
+include ${ROOT}/usr/include/make/commondefs
+
+TARGETS = libgobj.a
+CFILES	= read.c write.c draw.c modify.c light.c
+HFILES	= gobj.h
+
+default all: ${TARGETS}
+
+include ${COMMONRULES}
+
+${TARGETS}: ${OBJECTS}
+	${AR} crs $@ ${OBJECTS}

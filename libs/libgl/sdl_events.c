@@ -494,6 +494,34 @@ static void yieldByEventQuery()
 
 
 //
+// events_qread_block - one blocking-wait step for IRIS GL qread().
+//
+// Real IRIS GL qread() blocks until an event arrives (flight 3.4's
+// wait_for_input depends on it; buttonfly's event() documents the same
+// assumption). gl.c's qread calls this in a loop while the GL queue is
+// empty: pump + present via events_frame_complete(), then genuinely idle —
+// a hot spin between throttled yields starves the browser's input delivery
+// (observed as flight 3.4's startup wait wedging the page).
+//
+// Returns 0 (doing nothing) when called from inside the event pump, where
+// blocking would deadlock; qread then falls back to returning 0 (the old
+// non-blocking behavior).
+//
+int32_t events_qread_block(void)
+{
+    if (inSdlProcessEvents)
+        return 0;
+
+    events_frame_complete();
+#ifdef __EMSCRIPTEN__
+    emscripten_sleep(10);
+#else
+    SDL_Delay(10);
+#endif
+    return 1;
+}
+
+//
 // IRIS GL event queue
 //
 

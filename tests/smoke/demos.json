@@ -16,7 +16,8 @@
     { "name": "ep-1989", "path": "demos/ep-1989/web/ep-1989_full.html", "status": "working", "minContent": 0.004 },
     { "name": "ep-1994-ogl-decomp", "path": "demos/ep-1994-ogl-decomp/web/ep-1994-ogl-decomp_full.html", "status": "working", "minContent": 0.004 },
     { "name": "ep-1994-ogl-reversed", "path": "demos/ep-1994-ogl-reversed/web/ep-1994-ogl-reversed_full.html", "status": "working", "minContent": 0.004 },
-    { "name": "flight",    "path": "demos/flight/web/flight_full.html",       "status": "somewhat" },
+    { "name": "flight-1988", "path": "demos/flight-1988/web/flight-1988_full.html", "status": "somewhat" },
+    { "name": "flight-1994", "path": "demos/flight-1994/web/flight-1994_full.html", "status": "somewhat" },
     { "name": "newave",    "path": "demos/newave/web/newave_full.html",       "status": "somewhat", "minContent": 0.01 },
     { "name": "arena",     "path": "demos/arena/web/arena_full.html",         "status": "somewhat" },
     { "name": "gview",     "path": "demos/gview/web/gview_full.html",         "status": "somewhat" }

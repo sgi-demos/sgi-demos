@@ -1,0 +1,15 @@
+import { chromium } from "playwright";
+import { startServer } from "./lib/server.mjs";
+setTimeout(() => { console.log("watchdog"); process.exit(2); }, 45000);
+const server = await startServer("../..");
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1024, height: 768 } });
+page.on("console", (m) => { const t = m.text(); if (/WINSIZE|VIEWPORT|resize window/.test(t)) console.log(t.slice(0,120)); });
+await page.goto(server.url + "/demos/flight-1994/web/flight-1994_full.html?rast=gles2");
+await page.waitForTimeout(7000);
+await page.keyboard.press("g");
+await page.waitForTimeout(3000);
+await page.keyboard.press("5");
+await page.waitForTimeout(8000);
+await browser.close();
+console.log("done"); process.exit(0);

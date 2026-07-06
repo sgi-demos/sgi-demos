@@ -62,6 +62,7 @@
 #define UNDERDRAW       1
 #define CURSORDRAW      2
 #define NORMALDRAW      3
+#define PUPDRAW         4
 
 /* typedefs */
 
@@ -128,8 +129,8 @@ extern void	callfunc();
 extern void	callobj(Object obj);
 extern void	capture();
 extern void	charstr(char *str);
-extern void	circ();
-extern void	circf();
+extern void	circ(Coord x, Coord y, Coord r);
+extern void	circf(Coord x, Coord y, Coord r);
 extern void	circfi();
 extern void	circi(Icoord x, Icoord y, Icoord r);
 extern void	circfs(Scoord x, Scoord y, Scoord r);
@@ -140,8 +141,8 @@ extern void	clkoff();
 extern void	clkon();
 extern void	closeobj();
 extern void	cmode();
-extern void	cmov();
-extern void	cmov2();
+extern void	cmov(Coord x, Coord y, Coord z);
+extern void	cmov2(Coord x, Coord y);
 extern void	cmov2i(Icoord x, Icoord y);
 extern void	cmovi();
 extern void	cmov2s(Scoord x, Scoord y);
@@ -179,15 +180,15 @@ extern void drawmode(int drawmode);
 extern void	drawi(Icoord x, Icoord y, Icoord z);
 extern void	draws(Scoord x, Scoord y, Scoord z);
 extern void	editobj(Object obj);
-extern int	endfeedback();
+extern int	endfeedback(float buffer[]);
 extern void	endfullscrn();
 extern int	endpick();
 extern void	endpupmode();
 // extern int endselect();
-extern void	feedback();
+extern void	feedback(float buffer[], long size);
 extern void	finish();
 extern void	font();
-extern void	foreground();
+extern void	foreground(void);
 extern void	freepup(int popup);
 extern void	frontbuffer(Boolean enable);
 extern void	fudge();
@@ -200,7 +201,7 @@ extern int	getbuffer();
 extern Boolean	getbutton(int button);
 extern Boolean	getcmmode();
 extern int	getcolor();
-extern void	getcpos();
+extern void	getcpos(Screencoord *ix, Screencoord *iy);
 extern void	getcursor();
 extern Boolean	getdcm();
 extern void	getdepth();
@@ -209,7 +210,7 @@ extern int	getdisplaymode();
 extern int	getfont();
 extern int getgdesc (int inquiry);
 extern void	getgpos();
-extern int	getheight();
+extern int	getheight(void);
 extern int	gethitcode();
 extern Boolean	getlsbackup();
 extern int	getlsrepeat();
@@ -232,7 +233,7 @@ extern int	getshade();
 extern void	getsize(long *width, long *height);
 extern void	gettp();
 extern int	getvaluator(int device);
-extern void	getviewport();
+extern void	getviewport(Screencoord *left, Screencoord *right, Screencoord *bottom, Screencoord *top);
 extern int	getwritemask();
 extern Boolean	getzbuffer();
 extern void	gewrite();
@@ -257,7 +258,7 @@ extern void	lampoff();
 extern void	lampon();
 extern void	linewidth(int w);
 extern void	loadmatrix(Matrix m);
-extern void	loadname();
+extern void	loadname(int name);
 extern void	lookat(Coord viewx, Coord viewy, Coord viewz, Coord pointx, Coord pointy, Coord pointz, Angle twist);
 extern void	lsbackup();
 extern void lshaderange (Colorindex lowin, Colorindex highin, long znear, long zfar);
@@ -332,7 +333,7 @@ extern void	polyi(int n, Icoord p[][3]);
 extern void	polys(int n, Scoord p[][3]);
 extern void	popattributes();
 extern void	popmatrix();
-extern void	popname();
+extern void	popname(void);
 extern void	popviewport();
 extern void	prefposition(int x1, int x2, int y1, int y2);
 extern void	prefsize(long width, long height);
@@ -340,7 +341,7 @@ extern void	pupcolor();
 extern void	pupmode();
 extern void	pushattributes();
 extern void	pushmatrix();
-extern void	pushname();
+extern void	pushname(int name);
 extern void	pushviewport();
 extern void	qdevice(Device device);
 extern void	qenter(short qtype, short value);
@@ -401,9 +402,9 @@ extern void	rpmvi();
 extern void	rpmvs();
 extern void	scale(float x, float y, float z);
 extern void	screenspace();
-extern void	scrmask();
+extern void	scrmask(int left, int right, int bottom, int top);
 // extern void	select();
-extern void	setbell();
+extern void	setbell(int durations);
 extern void	setbutton();
 extern void	setcursor(short index, Colorindex color, Colorindex  writemask);
 extern void	setdblights();
@@ -421,6 +422,10 @@ extern long	sginap(long ticks);	/* IRIX libc nap; no-op here (see gl.c) */
 extern void	shaderange();
 extern void	singlebuffer();
 extern void smoothline (long mode);
+/* linesmooth() antialiasing modes (linesmooth is the real IRIS GL name) */
+extern void linesmooth (long mode);
+#define SML_OFF 0
+#define SML_ON  1
 extern void	spclos();
 extern void	splf();
 extern void	splf2();
@@ -429,9 +434,10 @@ extern void	splf2s();
 extern void	splfi();
 extern void	splfs();
 extern void	stepunit();
-extern int	strwidth();
+extern int	strwidth(char *str);
 extern void	swapbuffers();
-extern void	swapinterval();
+extern void	swapinterval(int interval);
+extern void	swaptmesh();
 extern void	textcolor();
 extern void	textinit();
 extern void	textport();
@@ -547,6 +553,57 @@ extern void gl_sincos(Angle angle, float *s, float *c);
 #define MSINGLE 0
 #define MPROJECTION 1
 #define MVIEWING 2
+#define MTEXTURE 3
+
+// blendfunction() (IRIX values):
+#define BF_ZERO 0
+#define BF_ONE  1
+#define BF_DC   2
+#define BF_MDC  3
+#define BF_SA   4
+#define BF_MSA  5
+extern void blendfunction(long sfactor, long dfactor);
+
+// fogvertex():
+#define FG_OFF    0
+#define FG_ON     1
+#define FG_DEFINE 2
+extern void fogvertex(long mode, float *params);
+
+// texdef2d()/tevdef() (IRIX values):
+#define TX_MINFILTER      0x100
+#define TX_MAGFILTER      0x200
+#define TX_POINT          0x110
+#define TX_BILINEAR       0x220
+#define TX_MIPMAP_POINT   0x121
+#define TX_MIPMAP_LINEAR  0x122
+extern void texdef2d(long index, long nc, long width, long height, unsigned long *image, long np, float *props);
+extern void texbind(long target, long index);
+extern void tevdef(long index, long np, float *props);
+extern void tevbind(long target, long index);
+extern void t2f(float t[2]);
+
+extern void subpixel(Boolean b);
+
+// more flight 3.4 surface
+extern void v2i(long v[2]);
+extern void v3i(long v[3]);
+extern int  getdescender();
+extern void overlay(long planes);
+extern void underlay(long planes);
+extern void wmpack(unsigned long pack);
+extern void zwritemask(unsigned long mask);
+
+/* IRIX libfastm-style float math (fasin() etc. were real libm entry points) */
+extern float fasin(float a);
+extern float fcos(float a);
+extern float fexp(float a);
+extern float fsqrt(float a);
+
+/* IRIX <gl/gl.h> convenience macro */
+#ifndef _ABS
+#define _ABS(a) ((a) < 0 ? -(a) : (a))
+#endif
 
 #define FLAT 0
 #define GOURAUD 1

@@ -1,0 +1,49 @@
+#!smake
+#**************************************************************************
+#*									  *
+#* 	       Copyright (C) 1984-1993, Silicon Graphics, Inc.		  *
+#*									  *
+#*  These coded instructions, statements, and computer programs  contain  *
+#*  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
+#*  are protected by Federal copyright law.  They  may  not be disclosed  *
+#*  to  third  parties  or copied or duplicated in any form, in whole or  *
+#*  in part, without the prior written consent of Silicon Graphics, Inc.  *
+#*									  *
+#**************************************************************************
+#
+#  flight/Makefile $Revision: 1.1 $
+#
+
+include ${ROOT}/usr/include/make/commondefs
+
+SRCDIR	= `pwd`
+LCDEFS	= -DAUDIO
+LCINCS	= -I../libgobj
+LLDLIBS = ../libgobj/libgobj.a -lgl -lX11 -lbsd -lm -laudio
+LCOPTS	= -float
+LDIRT	= dog radar shadow
+
+TARGETS = flight
+
+#
+# Files for flight.
+#
+CFILES = aifflib.c collision.c color.c comm.c cull.c density.c flight.c \
+	 exp.c instr.c fog.c ftime.c land1.c land2.c light.c main.c \
+	 mat.c message.c meters.c objext.c radar.c shadow.c sound.c \
+	 tex.c uflight.c udpbrdcst.c xasin.c xatable.c
+HFILES = collision.h Xzmsg.h colors.h flight.h objects.h \
+	 udpbrdcst.h light.h proto.h
+
+FLIGHTOBJS = ${CFILES:.c=.o}
+
+default all:  $(TARGETS)
+
+include ${COMMONRULES}
+
+
+flight:	${FLIGHTOBJS}
+	$(CCF) ${FLIGHTOBJS} $(LDFLAGS)  -o $@
+	${INSTALL} -lns ${SRCDIR}/flight -F ${SRCDIR} dog
+	${INSTALL} -lns ${SRCDIR}/flight -F ${SRCDIR} radar
+	${INSTALL} -lns ${SRCDIR}/flight -F ${SRCDIR} shadow

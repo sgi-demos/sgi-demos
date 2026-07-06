@@ -1,0 +1,117 @@
+
+
+                   ~4Dgifts/src/demos/GL/flight README
+
+
+
+     This is the current incarnation of the classic SGI demo.  It has been
+     cleaned up, combined into one single version and swankified in a big 
+     way by Rob "Mr. Flight" Mace.  
+
+     In order for execution of flight/dog/radar/shadow to work in this 
+     local directory, each program must either be invoked on the command
+     line proceeded by "-D defs", or else run the appropriate ______.sh
+     file where this inclusion of "-D defs" is already specified.  This
+     -D options tells the program where the data definition files exist.
+
+
+     FOR PEOPLE ON MACHINES RUNNING IRIX < 4.0.5G
+
+     In order for flight/dog/radar/shadow to compile on IRIS 4D machines 
+     running < 4.0.5G, the -DNO_MS flag must be specified so the 
+     multisample buffer is not enabled or accessed.  If -DNO_MS is not
+     included in the LCDEFS line of the Makefile and you tried to compile
+     on Irix earlier than 4.0.5G, you would generate the following errors:
+
+
+ccom: Error: land1.c, line 105: GD_MULTISAMPLE undefined
+	if (getgdesc(GD_MULTISAMPLE) > 0)
+      -----------------------------^
+ccom: Error: land1.c, line 128: GD_MULTISAMPLE undefined
+	if (getgdesc(GD_MULTISAMPLE) > 0)
+      -----------------------------^
+ccom: Error: land1.c, line 129: GC_MS_SAMPLES undefined
+	    ms_samples = getgconfig(GC_MS_SAMPLES);
+      -------------------------------------------^
+
+     However, for all running >= 4.0.5G Irix, you will most definitely want
+     to remove the "-DNO_MS" flag from the LCDEFS line:
+
+LCDEFS  = -DAUDIO -DNO_MS
+
+     so that only -DAUDIO is defined:
+
+LCDEFS  = -DAUDIO
+
+     and then do a "make clobber; make"
+
+
+
+     IF one is atttempting to re-compile flight on IRIX 5.2 and finding the 
+     compiler is barking about not finding "AL_MONO", "AL_STEREO", and 
+     "AL_SAMPLE_8", you do not have the dmedia_dev.sw.audio subsystem 
+     loaded.  If it is not possible to get/load this product/subsystem you
+     will have to revert to compiling withOUT audio by changing the line
+
+LCDEFS = -DAUDIO
+
+     to
+
+LCDEFS =
+     
+     in the Makefile.
+
+
+
+     Also, be aware that all of the files included in libgobj.a--draw.c, 
+     gobj.h, light.c, modify.c, read.c, write.c--exist in the ../libgobj
+     directory and not here where the flight source resides.
+
+
+
+     The detail-inclined will notice "dog", "radar" and "shadow" are all 
+     links to the flight executable.  These programs, when invoked as 
+     their own name for argv to recognize, will run as expected.  This is 
+     another one of the swank new features to this single version of 
+     flight.
+
+
+
+
+     A WAY OF PLAYING DOG AGAINST YOURSELF:
+     
+Newsgroups: comp.sys.sgi.misc
+Subject: Re: New Flight Simulator?
+Date: 15 Mar 1994 21:58:49 GMT
+Lines: 46
+Distribution: usa
+
+: : I love the flight simulator on the SGI's, but the only thing is that 
+: : there aren't many here to fly against. I saw a newer flight simulator,
+: : on a Crimson, that had jets you could chase down and shoot. Does 
+: : anyone know about the new flight simulator? 
+
+You can fight yourself in the flight simulator if you want.
+
+Try this:	
+		start simulator at command line and give it
+		an output file name: /usr/demos/bin/dog -o dog1.dat
+	
+		Fly around for a while. Shoot bullets. Dive bomb
+		the airport. Then crash into a hill. Exit this game.
+
+		start simulator again thusly:
+			/usr/demos/bin/dog -i dog1.dat -o dog2.dat
+
+		You will now see your previous flight taking off
+		in front of you. Follow yourself into the sky.
+		Lock in. Fire sidewinder. Blow your sorry ass 
+		out of the sky (as we like to say around here).
+	
+		Kill that game and try:
+			/usr/demos/bin/dog -i dog2.dat -o dog3.dat
+		You'll now have the previous two flights to kill.
+		And then dog3.dat will have 3 flights. And so on.
+		Send up a squadron of 747's and play god.
+
+		Your life should now be measurably less productive.

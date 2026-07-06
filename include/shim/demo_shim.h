@@ -186,7 +186,7 @@ uint32_t ntohl(uint32_t x) {
 #endif
 
 #ifndef M_PI
-#define M_PI 3.141596
+#define M_PI 3.14159265358979323846	/* was mistyped 3.141596 */
 #endif
 
 // Browser-friendly exit(): in the web build a raw exit() tears down the C

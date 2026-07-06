@@ -1,7 +1,7 @@
 .PHONY: demos libs clean smoke smoke-baseline
 
 DEMOS_DIR = demos
-DEMOS = arena bounce buttonfly cedit ep-1988 ep-1989 ep-1994-ogl-decomp ep-1994-ogl-reversed flight gview ideas insect jello logo newave twilight
+DEMOS = arena bounce buttonfly cedit ep-1988 ep-1989 ep-1994-ogl-decomp ep-1994-ogl-reversed flight-1988 flight-1994 gview ideas insect jello logo newave twilight
 
 LIBS_DIR = libs
 LIBS = libgl libdemo

@@ -57,7 +57,12 @@ Newave
 	.highcolor. 1.0 .7 1.0
 
 Flight
-	../flight/bin/flight
+	../flight-1988/bin/flight-1988
+	.color. .9 .5 .9
+	.highcolor. 1.0 .7 1.0
+
+Flight94
+	../flight-1994/bin/flight-1994
 	.color. .9 .5 .9
 	.highcolor. 1.0 .7 1.0
 

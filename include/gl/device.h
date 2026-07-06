@@ -411,6 +411,26 @@
 #define PADASTERKEY 	168
 #define PADPLUSKEY 	169
 
+/* Spaceball devices (used by flight 3.4; never generated here, the codes
+ * just need to exist so qdevice()/switch cases compile) */
+
+#define SBTX		900
+#define SBTY		901
+#define SBTZ		902
+#define SBRX		903
+#define SBRY		904
+#define SBRZ		905
+#define SBPERIOD	906
+#define SBPICK		907
+#define SBBUT1		908
+#define SBBUT2		909
+#define SBBUT3		910
+#define SBBUT4		911
+#define SBBUT5		912
+#define SBBUT6		913
+#define SBBUT7		914
+#define SBBUT8		915
+
 /* input channels */
 
 #define INPUT0		1024	/* input channels */

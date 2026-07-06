@@ -1,6 +1,6 @@
 {
   "meta": {
-    "timestamp": "2026-07-05T17:34:17.616Z",
+    "timestamp": "2026-07-06T00:39:51.165Z",
     "settleMs": 3000,
     "viewport": {
       "width": 1024,
@@ -21,7 +21,8 @@
       "content": 0.14084116617838538,
       "pass": true,
       "reasons": [],
-      "errors": []
+      "errors": [],
+      "retried": true
     },
     {
       "id": "buttonfly.gles2",
@@ -40,7 +41,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.9337806701660156,
+      "content": 0.9435475667317709,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -51,7 +52,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.9293479919433594,
+      "content": 0.8897794087727865,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -62,7 +63,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.4924443562825521,
+      "content": 0.4815394083658854,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -73,7 +74,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.4948450724283854,
+      "content": 0.4837519327799479,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -84,7 +85,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.23114776611328125,
+      "content": 0.23115793863932288,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -95,7 +96,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.23027547200520837,
+      "content": 0.23027801513671875,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -128,7 +129,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.06556193033854163,
+      "content": 0.06318918863932288,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -139,7 +140,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.06583913167317712,
+      "content": 0.05933125813802087,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -172,7 +173,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.029956817626953125,
+      "content": 0.029982248942057255,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -183,7 +184,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.02979532877604163,
+      "content": 0.029815673828125,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -194,7 +195,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.08498636881510413,
+      "content": 0.08543904622395837,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -205,7 +206,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.084527333577474,
+      "content": 0.08192189534505212,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -216,7 +217,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.09602610270182288,
+      "content": 0.0340728759765625,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -227,7 +228,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.01160430908203125,
+      "content": 0.06915537516276038,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -238,7 +239,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.035752614339192745,
+      "content": 0.050960540771484375,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -249,29 +250,51 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.06999333699544275,
+      "content": 0.018385569254557255,
       "pass": true,
       "reasons": [],
       "errors": []
     },
     {
-      "id": "flight.ref",
-      "name": "flight",
+      "id": "flight-1988.ref",
+      "name": "flight-1988",
       "mode": "ref",
       "status": "somewhat",
       "minContent": 0.02,
-      "content": 0.44572575887044275,
+      "content": 0.3308830261230469,
       "pass": true,
       "reasons": [],
       "errors": []
     },
     {
-      "id": "flight.gles2",
-      "name": "flight",
+      "id": "flight-1988.gles2",
+      "name": "flight-1988",
       "mode": "gles2",
       "status": "somewhat",
       "minContent": 0.02,
-      "content": 0.4454536437988281,
+      "content": 0.33060709635416663,
+      "pass": true,
+      "reasons": [],
+      "errors": []
+    },
+    {
+      "id": "flight-1994.ref",
+      "name": "flight-1994",
+      "mode": "ref",
+      "status": "somewhat",
+      "minContent": 0.02,
+      "content": 0.06641006469726562,
+      "pass": true,
+      "reasons": [],
+      "errors": []
+    },
+    {
+      "id": "flight-1994.gles2",
+      "name": "flight-1994",
+      "mode": "gles2",
+      "status": "somewhat",
+      "minContent": 0.02,
+      "content": 0.06782658894856775,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -282,7 +305,7 @@
       "mode": "ref",
       "status": "somewhat",
       "minContent": 0.01,
-      "content": 0.03103129069010413,
+      "content": 0.031167348225911495,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -293,7 +316,7 @@
       "mode": "gles2",
       "status": "somewhat",
       "minContent": 0.01,
-      "content": 0.03094482421875,
+      "content": 0.031012217203776005,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -304,7 +327,7 @@
       "mode": "ref",
       "status": "somewhat",
       "minContent": 0.02,
-      "content": 0.6586354573567708,
+      "content": 0.6584510803222656,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -315,7 +338,7 @@
       "mode": "gles2",
       "status": "somewhat",
       "minContent": 0.02,
-      "content": 0.658709208170573,
+      "content": 0.658459981282552,
       "pass": true,
       "reasons": [],
       "errors": []

@@ -117,7 +117,7 @@ static int input_queue_head = 0;
 // The number of items in the queue (tail = (head + length) % len):
 static int input_queue_length = 0;
 
-#define MAX_PATTERNS 16
+#define MAX_PATTERNS 128   /* flight 3.4 defines explosion patterns at 80+ */
 static Pattern16 patterns[MAX_PATTERNS];
 
 //------------------------------------------------------------------------
@@ -146,7 +146,8 @@ typedef struct lmodel {
     float attenuation[2];
 } lmodel;
 
-#define MAX_MATERIALS 8
+#define MAX_MATERIALS 4352  /* flight 3.4's light.h uses indices up to 52, and its
+                               libgobj registers .d-file materials at 0x1000 + n */
 #define MAX_LIGHTS 8
 #define MAX_LMODELS 2
 static material materials[MAX_MATERIALS];
@@ -1871,6 +1872,10 @@ void defpattern(int index, int size, Pattern16 mask) {
         printf("cannot define pattern 0\n");
         return;
     }
+    if(index < 0 || index >= MAX_PATTERNS) {
+        printf("pattern index %d out of range\n", index);
+        return;
+    }
     for(int i = 0; i < 16; i++)
         patterns[index][i] = mask[i];
 
@@ -2163,7 +2168,13 @@ void perspective(Angle fovy_, float aspect, Coord near, Coord far) {
         matrix4x4f_stack_load(&projection_stack, m);
         matrix4x4f_stack_load(&modelview_stack, identity_4x4f);
     } else
-        matrix4x4f_stack_load(current_stack, m);
+        // In MVIEWING/MPROJECTION, perspective always loads the PROJECTION
+        // matrix (never the viewing matrix) — same as window() below. flight
+        // 3.4 sets perspective while in MVIEWING; loading current_stack (the
+        // modelview in MVIEWING) left projection at identity and squished the
+        // world into a narrow strip. MPROJECTION is unaffected (current_stack
+        // already is the projection stack).
+        matrix4x4f_stack_load(&projection_stack, m);
 }
 
 void ortho2(Coord left, Coord right, Coord bottom, Coord top) {
@@ -2186,7 +2197,8 @@ void ortho2(Coord left, Coord right, Coord bottom, Coord top) {
         matrix4x4f_stack_load(&projection_stack, m);
         matrix4x4f_stack_load(&modelview_stack, identity_4x4f);
     } else
-        matrix4x4f_stack_load(current_stack, m);
+        // Always the PROJECTION matrix in MVIEWING/MPROJECTION (see perspective).
+        matrix4x4f_stack_load(&projection_stack, m);
 }
 
 void poly_(int n, Coord parray[ ][3]) {
@@ -2390,22 +2402,26 @@ void fetch_event_queue() {
     }
 }
 
-// Pops the next event (device number and value) off the head
-// of the queue and returns it.
-// Returns 0 if the event queue is empty.
+// Pops the next event (device number and value) off the head of the queue
+// and returns it. Like real IRIS GL, BLOCKS until an event is available
+// (flight 3.4's wait_for_input spins forever otherwise); while waiting, the
+// events layer pumps input, keeps the frame presented, and idles. The one
+// exception: inside the SDL event pump blocking would deadlock, so there it
+// returns 0 on an empty queue (the old Alice4 behavior).
 int qread(short *val) {
     TRACE();
 
-    if (qtest())
+    while (!qtest())
     {
-        *val = input_queue_val[input_queue_head];
-        int device = input_queue_device[input_queue_head];
-        input_queue_head = (input_queue_head + 1) % INPUT_QUEUE_SIZE;
-        input_queue_length--;
-        return device;
+        if (!events_qread_block())
+            return 0;
     }
-    else
-        return 0;
+
+    *val = input_queue_val[input_queue_head];
+    int device = input_queue_device[input_queue_head];
+    input_queue_head = (input_queue_head + 1) % INPUT_QUEUE_SIZE;
+    input_queue_length--;
+    return device;
 }
 
 // Returns the device number of the first entry.
@@ -3281,6 +3297,10 @@ void lmbind(int target, int index) {
     TRACEF("%d, %d", target, index);
 
     if(target == MATERIAL) {
+        if(index < 0 || index > MAX_MATERIALS) {
+            static int warned = 0; if(!warned) { printf("lmbind: material index %d out of range\n", index); warned = 1; }
+            index = 0;
+        }
         material_bound = (index == 0) ? NULL : &materials[index - 1];
         lighting_enabled = (material_bound != NULL) && (lmodel_bound != NULL);
     } else if(target >= LIGHT0 && target <= LIGHT7) {
@@ -3299,7 +3319,13 @@ void lmdef(int deftype, int index, int numpoints, float properties[]) {
     float *p = properties;
     int next = 0;
     if(deftype == DEFMATERIAL) {
-        material *m = &materials[index];
+        static material dropped;    /* out-of-range defs land here */
+        material *m;
+        if(index < 0 || index >= MAX_MATERIALS) {
+            static int warned = 0; if(!warned) { printf("lmdef: material index %d out of range\n", index + 1); warned = 1; }
+            m = &dropped;
+        } else
+            m = &materials[index];
         if(trace_functions) printf("%*slmdef(DEFMATERIAL, %d, %d, {\n", trace_indent, "", index + 1, numpoints);
         while(*p != LMNULL) {
             switch((int)*p) {
@@ -3599,6 +3625,29 @@ void v2f(float v[2]) {
     v4f(v_);
 }
 
+void v3i(long v[3]) {
+    float v_[4] = {v[0], v[1], v[2], 1.0f};
+    v4f(v_);
+}
+
+void v2i(long v[2]) {
+    float v_[4] = {v[0], v[1], 0.0, 1.0f};
+    v4f(v_);
+}
+
+/* Swap the two retained triangle-strip vertices (IRIS GL tmesh "swap").
+ * Our tmesh buffers the whole strip and triangulates in process_tmesh(),
+ * so emulate by re-appending the next-to-last vertex: the extra degenerate
+ * triangle is invisible and leaves the strip in the swapped order. */
+void swaptmesh() {
+    if(bgn_object_type != BGNTMESH || polygon_vert_count < 2)
+        return;
+    if(polygon_vert_count > POLY_MAX - 2)
+        abort();
+    polygon_verts[polygon_vert_count] = polygon_verts[polygon_vert_count - 2];
+    polygon_vert_count++;
+}
+
 int winattach() {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
     return 0;
@@ -3721,7 +3770,36 @@ int getgdesc (int inquiry)
         case GD_BITS_NORM_SNG_RED:
         case GD_BITS_NORM_SNG_GREEN:
         case GD_BITS_NORM_SNG_BLUE:
+        case GD_BITS_NORM_DBL_RED:
+        case GD_BITS_NORM_DBL_GREEN:
+        case GD_BITS_NORM_DBL_BLUE:
             return 8;
+        case GD_BITS_NORM_SNG_CMODE:
+        case GD_BITS_NORM_DBL_CMODE:
+            return 12;
+        case GD_BITS_NORM_ZBUFFER:
+            return 24;
+        case GD_XPMAX:
+            return DISPLAY_WIDTH;
+        case GD_YPMAX:
+            return DISPLAY_HEIGHT;
+        case GD_ZMIN:
+            return 0;
+        case GD_ZMAX:
+            return 0x7fffff;    /* standard IRIS 24-bit z range */
+        /* features we don\'t have (0 = absent, and vintage code takes the
+           no-feature path cleanly): multisample, texturing, vertex fog,
+           antialiased RGB lines, blending */
+        case GD_MULTISAMPLE:
+        case GD_TEXTURE:
+        case GD_FOGVERTEX:
+        case GD_LINESMOOTH_CMODE:
+        case GD_LINESMOOTH_RGB:
+        case GD_BLEND:
+        case GD_CIFRACT:
+        case GD_BITS_OVER_SNG_CMODE:
+        case GD_BITS_UNDR_SNG_CMODE:
+            return 0;
     }
 
     static int warned = 0; if(!warned) { printf("%s %d unimplemented\n", __FUNCTION__, inquiry); warned = 1; }
@@ -3739,6 +3817,139 @@ void qreset ()
 }
 
 void smoothline (long mode)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+/* the real IRIS GL name for line antialiasing (smoothline above is the
+ * GL2-era alias newave uses) */
+void linesmooth (long mode)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void blendfunction (long sfactor, long dfactor)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void fogvertex (long mode, float *params)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void texdef2d (long index, long nc, long width, long height, unsigned long *image, long np, float *props)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void texbind (long target, long index)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void tevdef (long index, long np, float *props)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void tevbind (long target, long index)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+/* per-vertex texture coordinate: silent no-op until texturing lands */
+void t2f (float t[2])
+{
+}
+
+void subpixel (Boolean b)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+/* font metrics for the built-in 8x16 bitmap font (font.h) */
+int strwidth (char *str)
+{
+    return strlen(str) * font_width;
+}
+
+int getheight ()
+{
+    return font_height;
+}
+
+int getdescender ()
+{
+    return 0;   /* bitmap font draws from the baseline; no descender rows */
+}
+
+void getviewport (Screencoord *left, Screencoord *right, Screencoord *bottom, Screencoord *top)
+{
+    *left = the_viewport[0];
+    *right = the_viewport[1];
+    *bottom = the_viewport[2];
+    *top = the_viewport[3];
+}
+
+/* IRIX libfastm float math, used by flight 3.4 */
+float fasin (float a) { return asinf(a); }
+float fcos (float a) { return cosf(a); }
+float fexp (float a) { return expf(a); }
+float fsqrt (float a) { return sqrtf(a); }
+
+void foreground ()
+{
+    /* "don't fork into the background" — we never do */
+}
+
+void setbell (int durations)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void swapinterval (int interval)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void overlay (long planes)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void underlay (long planes)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+/* GL selection/picking names — flight only uses these in pick mode */
+void loadname (int name)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void pushname (int name)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void popname ()
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void wmpack (unsigned long pack)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void scrmask (int left, int right, int bottom, int top)
+{
+    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+}
+
+void zwritemask (unsigned long mask)
 {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
@@ -3812,7 +4023,56 @@ void circi(Icoord x, Icoord y, Icoord r) {
 }
 
 void circfs(Scoord x, Scoord y, Scoord r) {
-    circi(x, y, r);
+    circf(x, y, r);
+}
+
+void circ(Coord x, Coord y, Coord r) {
+    TRACEF("%f, %f, %f", x, y, r);
+
+    world_vertex v0, v1;
+
+    vec3f_copy(v0.color, current_color);
+    vec3f_copy(v1.color, current_color);
+
+    int save_lighting = lighting_enabled;
+    lighting_enabled = 0;
+
+    v0.coord[2] = 0.0;
+    v0.coord[3] = 1.0;
+    v1.coord[2] = 0.0;
+    v1.coord[3] = 1.0;
+
+    for(int i = 0; i < CIRCLE_SEGMENTS; i++) {
+        v0.coord[0] = x + r * circle_verts[i][0];
+        v0.coord[1] = y + r * circle_verts[i][1];
+        v1.coord[0] = x + r * circle_verts[(i + 1) % CIRCLE_SEGMENTS][0];
+        v1.coord[1] = y + r * circle_verts[(i + 1) % CIRCLE_SEGMENTS][1];
+
+        process_line(&v0, &v1);
+    }
+
+    lighting_enabled = save_lighting;
+}
+
+void circf(Coord x, Coord y, Coord r) {
+    TRACEF("%f, %f, %f", x, y, r);
+
+    static world_vertex verts[CIRCLE_SEGMENTS];
+
+    int save_lighting = lighting_enabled;
+    lighting_enabled = 0;
+
+    for(int i = 0; i < CIRCLE_SEGMENTS; i++) {
+        verts[i].coord[0] = x + r * circle_verts[i][0];
+        verts[i].coord[1] = y + r * circle_verts[i][1];
+        verts[i].coord[2] = 0.0;
+        verts[i].coord[3] = 1.0;
+        vec3f_copy(verts[i].color, current_color);
+        verts[i].color[3] = 1.0;
+    }
+    process_polygon(CIRCLE_SEGMENTS, verts);
+
+    lighting_enabled = save_lighting;
 }
 
 void cmov2i(Icoord x, Icoord y) {
@@ -3835,6 +4095,30 @@ void cmov2s(Scoord x, Scoord y) {
     cmov2i(x, y);
 }
 
+void cmov(Coord x, Coord y, Coord z) {
+    TRACEF("%f, %f, %f", x, y, z);
+
+    vec4f c, p;
+    vec4f_set(c, x, y, z, 1.0);
+    matrix4x4f_mult_vec4f(matrix4x4f_stack_top(&modelview_stack), c, p);
+    matrix4x4f_mult_vec4f(matrix4x4f_stack_top(&projection_stack), p, current_character_position);
+}
+
+void cmov2(Coord x, Coord y) {
+    cmov(x, y, 0.0);
+}
+
+/* current character position, in window coordinates (same transform as
+ * project_vertex) */
+void getcpos(Screencoord *ix, Screencoord *iy) {
+    int viewport_width = the_viewport[1] - the_viewport[0] + 1;
+    int viewport_height = the_viewport[3] - the_viewport[2] + 1;
+    float xndc = current_character_position[0] / current_character_position[3];
+    float yndc = current_character_position[1] / current_character_position[3];
+    *ix = (Screencoord)(viewport_width / 2.0 * xndc + (the_viewport[0] + viewport_width / 2.0));
+    *iy = (Screencoord)(viewport_height / 2.0 * yndc + (the_viewport[2] + viewport_height / 2.0));
+}
+
 void cursoff() {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
@@ -3843,11 +4127,11 @@ void curson() {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
-void feedback() {
+void feedback(float buffer[], long size) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
-int endfeedback() {
+int endfeedback(float buffer[]) {
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
     return 0;
 }
@@ -4083,7 +4367,8 @@ void czclear(int color, int depth) {
 
 int gversion(char *version)
 {
-    strcpy(version, "GITHUB.COM/SGI-DEMOS");
+    /* IRIX callers pass a 12-byte buffer (flight 3.4 passes 16) — keep it short */
+    strcpy(version, "SGI-DEMOS");
     return 0;
 }
 

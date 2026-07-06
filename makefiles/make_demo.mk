@@ -6,8 +6,11 @@ EM_APP = $(EM_APPNAME).html
 # uppercase, and map non-identifier chars (e.g. '-' in electropaint-1988) to '_'
 APPNAME_DEF := -DDEMO_$(shell echo $(APPNAME) | tr 'a-z-' 'A-Z_')
 
-HDRS = $(wildcard *.h) $(wildcard $(INCS_DIR)/gl/*.h)
-SRC = $(wildcard *.c)
+HDRS = $(wildcard *.h) $(wildcard $(INCS_DIR)/gl/*.h) $(DEMO_EXTRA_HDRS)
+# demos with sources beyond the root *.c (e.g. flight-1994's libgobj/) list
+# them in DEMO_EXTRA_SRC before including this file; DEMO_EXCLUDE_SRC drops
+# root sources that can't build yet (e.g. IRIX-audio-only files)
+SRC = $(filter-out $(DEMO_EXCLUDE_SRC),$(wildcard *.c)) $(DEMO_EXTRA_SRC)
 DEMO_OBJS = $(patsubst %.c,$(BIN_DIR)/%.o,$(SRC))
 EM_DEMO_OBJS = $(patsubst %.c,$(WEB_DIR)/%.o,$(SRC))
 OBJS = $(DEMO_OBJS) $(BIN_DIR)/gl_appname.o
@@ -50,6 +53,7 @@ $(WEB_DIR)/gl_appname.o: ../../makefiles/gl_appname.c | $(WEB_DIR)
 	$(MODERN_CODE_EMCC) $(EM_OPT) -DGL_APPNAME='"$(APPNAME)"' $< -c -o $@
 
 $(DEMO_OBJS): $(BIN_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(BIN_DIR)
+	@mkdir -p $(@D)
 	$(DEMO_CODE_CC) $(OPT) $(DEMO_CODE_WARN_OFF) $(APPNAME_DEF) $(DEMO_CFLAGS) $(SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 
 $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
@@ -62,6 +66,7 @@ $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
 	@echo $(CUR_DIR)
 
 $(EM_DEMO_OBJS): $(WEB_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(WEB_DIR)
+	@mkdir -p $(@D)
 	$(DEMO_CODE_EMCC) $(EM_OPT) $(EM_DEMO_CODE_WARN_OFF) $(APPNAME_DEF) $(DEMO_CFLAGS) $(EM_SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 
 $(EM_APP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EM_OBJS)
