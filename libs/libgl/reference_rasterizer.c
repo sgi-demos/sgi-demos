@@ -22,6 +22,12 @@ static int snap_vertices = 0;
 static float the_linewidth;
 static uint16_t the_pattern[16];
 static int pattern_enabled = 0;
+static int blend_enabled = 0;   // BF_SA/BF_MSA source-alpha blending
+// current texture (REPEAT wrap, modulate)
+static int texture_enabled = 0;
+static int tex_width = 0, tex_height = 0, tex_bilinear = 0;
+static uint8_t *tex_rgb = NULL;
+static int zwrite_enabled = 1;  // depth writes (zwritemask); test is zbuffer_enabled
 static int rgb_mode = 0; // color map mode by default
 static int text_antialias_enabled = 1;
 
@@ -123,6 +129,69 @@ void ref_rasterizer_masked_clear(int32_t x0, int32_t y0, int32_t x1, int32_t y1,
 {
     masked_clear_buffer(backbuffer_draw_enabled, gl_c_backbuffer, x0, y0, x1, y1, n, rgb_from, rgb_to);
     masked_clear_buffer(frontbuffer_draw_enabled, gl_c_frontbuffer, x0, y0, x1, y1, n, rgb_from, rgb_to);
+}
+
+void ref_rasterizer_teximage(int width, int height, const uint8_t *rgb, int bilinear)
+{
+    free(tex_rgb);
+    tex_rgb = (uint8_t *)malloc((size_t)width * height * 3);
+    memcpy(tex_rgb, rgb, (size_t)width * height * 3);
+    tex_width = width;
+    tex_height = height;
+    tex_bilinear = bilinear;
+}
+
+void ref_rasterizer_texture(int enable)
+{
+    texture_enabled = enable;
+}
+
+// sample with REPEAT wrap; point or bilinear per the bound filter
+static void tex_sample(float s, float t, int *tr, int *tg, int *tb)
+{
+    if (!tex_rgb) { *tr = *tg = *tb = 255; return; }
+
+    float x = s * tex_width;
+    float y = t * tex_height;
+
+    if (!tex_bilinear) {
+        int xi = ((int)floorf(x)) % tex_width;  if (xi < 0) xi += tex_width;
+        int yi = ((int)floorf(y)) % tex_height; if (yi < 0) yi += tex_height;
+        const uint8_t *p = tex_rgb + (yi * tex_width + xi) * 3;
+        *tr = p[0]; *tg = p[1]; *tb = p[2];
+        return;
+    }
+
+    x -= 0.5f;
+    y -= 0.5f;
+    int x0 = (int)floorf(x), y0 = (int)floorf(y);
+    float ax = x - x0, ay = y - y0;
+    int xs[2] = { x0 % tex_width, (x0 + 1) % tex_width };
+    int ys[2] = { y0 % tex_height, (y0 + 1) % tex_height };
+    if (xs[0] < 0) xs[0] += tex_width;
+    if (xs[1] < 0) xs[1] += tex_width;
+    if (ys[0] < 0) ys[0] += tex_height;
+    if (ys[1] < 0) ys[1] += tex_height;
+    float acc[3] = {0, 0, 0};
+    float wgt[2][2] = {{(1 - ax) * (1 - ay), ax * (1 - ay)}, {(1 - ax) * ay, ax * ay}};
+    for (int j = 0; j < 2; j++)
+        for (int i = 0; i < 2; i++) {
+            const uint8_t *p = tex_rgb + (ys[j] * tex_width + xs[i]) * 3;
+            acc[0] += p[0] * wgt[j][i];
+            acc[1] += p[1] * wgt[j][i];
+            acc[2] += p[2] * wgt[j][i];
+        }
+    *tr = (int)acc[0]; *tg = (int)acc[1]; *tb = (int)acc[2];
+}
+
+void ref_rasterizer_blend(int enable)
+{
+    blend_enabled = enable;
+}
+
+void ref_rasterizer_zwrite(int enable)
+{
+    zwrite_enabled = enable;
 }
 
 void ref_rasterizer_linewidth(float w)
@@ -281,14 +350,21 @@ static void calcHalfPlaneDiffs(float v0[2], float v1[2], float v2[2],
     *dy = evalHalfPlane(v0, v1, v2, 0, 1) - evalHalfPlane(v0, v1, v2, 0, 0);
 }
 
-static void set_buffer_pixel(int draw_enabled, uint8_t *buffer, int y, int x, uint8_t r, uint8_t g, uint8_t b)
+static void set_buffer_pixel(int draw_enabled, uint8_t *buffer, int y, int x, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
     if (draw_enabled)
     {
         uint8_t *p = buffer_pixel(buffer, x, y);
-        p[RED_BYTE] = r;
-        p[GREEN_BYTE] = g;
-        p[BLUE_BYTE] = b;
+        if (blend_enabled && a < 255) {
+            // src-alpha / one-minus-src-alpha (the only IRIS mode demos use)
+            p[RED_BYTE]   = (r * a + p[RED_BYTE]   * (255 - a)) / 255;
+            p[GREEN_BYTE] = (g * a + p[GREEN_BYTE] * (255 - a)) / 255;
+            p[BLUE_BYTE]  = (b * a + p[BLUE_BYTE]  * (255 - a)) / 255;
+        } else {
+            p[RED_BYTE] = r;
+            p[GREEN_BYTE] = g;
+            p[BLUE_BYTE] = b;
+        }
     }
 }
 
@@ -311,6 +387,18 @@ static void triPixel(int x, int y, float bary[3], screen_vertex s[3])
     uint8_t r = (uint8_t)clamp(bary[0] * s[0].r + bary[1] * s[1].r + bary[2] * s[2].r, 0.0, UCHAR_MAX);
     uint8_t g = (uint8_t)clamp(bary[0] * s[0].g + bary[1] * s[1].g + bary[2] * s[2].g, 0.0, UCHAR_MAX);
     uint8_t b = (uint8_t)clamp(bary[0] * s[0].b + bary[1] * s[1].b + bary[2] * s[2].b, 0.0, UCHAR_MAX);
+    uint8_t a = (uint8_t)clamp(bary[0] * s[0].a + bary[1] * s[1].a + bary[2] * s[2].a, 0.0, UCHAR_MAX);
+
+    if (texture_enabled) {
+        // modulate (IRIS TV_MODULATE); affine like the color interpolation
+        float ts = bary[0] * s[0].s + bary[1] * s[1].s + bary[2] * s[2].s;
+        float tt = bary[0] * s[0].t + bary[1] * s[1].t + bary[2] * s[2].t;
+        int tr, tg, tb;
+        tex_sample(ts, tt, &tr, &tg, &tb);
+        r = (uint8_t)(r * tr / 255);
+        g = (uint8_t)(g * tg / 255);
+        b = (uint8_t)(b * tb / 255);
+    }
 
     z_t z = sz_to_zbuffer(bary[0] * s[0].z + bary[1] * s[1].z + bary[2] * s[2].z);
 
@@ -318,9 +406,10 @@ static void triPixel(int x, int y, float bary[3], screen_vertex s[3])
 
     size_t zi = (size_t)buffer_y * DISPLAY_WIDTH + x;
     if (!zbuffer_enabled || (z < z_buffer[zi])) {
-        set_buffer_pixel(backbuffer_draw_enabled, gl_c_backbuffer, buffer_y, x, r, g, b);
-        set_buffer_pixel(frontbuffer_draw_enabled, gl_c_frontbuffer, buffer_y, x, r, g, b);
-        z_buffer[zi] = z;
+        set_buffer_pixel(backbuffer_draw_enabled, gl_c_backbuffer, buffer_y, x, r, g, b, a);
+        set_buffer_pixel(frontbuffer_draw_enabled, gl_c_frontbuffer, buffer_y, x, r, g, b, a);
+        if (zwrite_enabled)
+            z_buffer[zi] = z;
     }
 }
 
@@ -521,9 +610,10 @@ static void draw_point(screen_vertex *sv)
     int buffer_y = DISPLAY_HEIGHT - 1 - y;
     size_t zi = (size_t)buffer_y * DISPLAY_WIDTH + x;
     if (!zbuffer_enabled || (z < z_buffer[zi])) {
-        set_buffer_pixel(backbuffer_draw_enabled, gl_c_backbuffer, buffer_y, x, s.r, s.g, s.b);
-        set_buffer_pixel(frontbuffer_draw_enabled, gl_c_frontbuffer, buffer_y, x, s.r, s.g, s.b);
-        z_buffer[zi] = z;
+        set_buffer_pixel(backbuffer_draw_enabled, gl_c_backbuffer, buffer_y, x, s.r, s.g, s.b, s.a);
+        set_buffer_pixel(frontbuffer_draw_enabled, gl_c_frontbuffer, buffer_y, x, s.r, s.g, s.b, s.a);
+        if (zwrite_enabled)
+            z_buffer[zi] = z;
     }
 }
 
@@ -630,6 +720,10 @@ const rasterizer_funcs* ref_rasterizer_get_funcs(void)
         .pattern            = ref_rasterizer_pattern,
         .cbuffer_draw       = ref_rasterizer_cbuffer_draw,
         .zbuffer            = ref_rasterizer_zbuffer,
+        .blend              = ref_rasterizer_blend,
+        .teximage           = ref_rasterizer_teximage,
+        .texture            = ref_rasterizer_texture,
+        .zwrite             = ref_rasterizer_zwrite,
         .linewidth          = ref_rasterizer_linewidth,
         .frame_sync         = ref_rasterizer_frame_sync,
         .resize             = ref_rasterizer_resize,

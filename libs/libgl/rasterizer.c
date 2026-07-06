@@ -86,6 +86,10 @@ void rasterizer_setpattern(uint16_t pattern[16])        { rast()->setpattern(pat
 void rasterizer_pattern(int enable)                     { rast()->pattern(enable); }
 void rasterizer_cbuffer_draw(int enable_front, int enable_back) { rast()->cbuffer_draw(enable_front, enable_back); }
 void rasterizer_zbuffer(int enable)                     { rast()->zbuffer(enable); }
+void rasterizer_blend(int enable)                       { rast()->blend(enable); }
+void rasterizer_teximage(int width, int height, const uint8_t *rgb, int bilinear) { rast()->teximage(width, height, rgb, bilinear); }
+void rasterizer_texture(int enable)                     { rast()->texture(enable); }
+void rasterizer_zwrite(int enable)                      { rast()->zwrite(enable); }
 void rasterizer_linewidth(float w)                      { rast()->linewidth(w); }
 void rasterizer_frame_sync(void)                        { rast()->frame_sync(); }
 void rasterizer_resize(uint32_t width, uint32_t height) { rast()->resize(width, height); }

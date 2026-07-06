@@ -111,6 +111,7 @@ static int rgb_mode = 0;
 static int matrix_mode = MSINGLE;
 static matrix4x4f_stack modelview_stack;
 static matrix4x4f_stack projection_stack;
+static matrix4x4f_stack texture_stack;      // mmode(MTEXTURE): transforms t2f coords
 static matrix4x4f_stack *current_stack;
 
 static viewport_t the_viewport;
@@ -161,6 +162,23 @@ static light lights[MAX_LIGHTS];
 static lmodel lmodels[MAX_LMODELS];
 
 static int lighting_enabled = 0;
+// texdef2d()/texbind()/t2f() state. One bound texture with REPEAT wrap and
+// modulate env — all flight 3.4 (the only texturing demo) uses.
+#define MAX_TEXTURES 8
+typedef struct {
+    int defined;
+    int width, height;
+    int bilinear;
+    uint8_t *rgb;       // width*height*3
+} gl_texture;
+static gl_texture textures[MAX_TEXTURES];
+static float current_texcoord[2] = {0.0f, 0.0f};
+static int texture_bound = 0;   // texture index, 0 = none
+
+// fogvertex() state (FG_VTX_EXP model: factor = e^(-density * eye_z))
+static int fog_enabled = 0;
+static float fog_density = 0.0f;
+static vec3f fog_color = {0.5f, 0.5f, 0.5f};
 static int normalize_enabled = 1;
 static material *material_bound = NULL;
 static light *lights_bound[MAX_LIGHTS];
@@ -204,12 +222,14 @@ typedef struct world_vertex
     vec4f coord;
     vec3f normal;
     vec4f color;
+    float st[2];    // texture coords (t2f)
 } world_vertex;
 
 typedef struct lit_vertex
 {
     vec4f coord;
     vec4f color;
+    float st[2];
 } lit_vertex;
 
 void light_vertex(material *mtl, vec4f coord, vec3f normal, vec4f color_)
@@ -299,6 +319,28 @@ void transform_and_light_vertex(world_vertex *wv, lit_vertex *lv)
         vec4f_copy(lv->color, wv->color);
     }
 
+    if (texture_bound) {
+        // texture matrix (flight 3.4 scrolls its cloud layer with it)
+        vec4f stv = { wv->st[0], wv->st[1], 0.0f, 1.0f }, str;
+        matrix4x4f_mult_vec4f(matrix4x4f_stack_top(&texture_stack), stv, str);
+        lv->st[0] = str[0];
+        lv->st[1] = str[1];
+    } else {
+        lv->st[0] = wv->st[0];
+        lv->st[1] = wv->st[1];
+    }
+
+    if(fog_enabled) {
+        // IRIS per-vertex fog: blend toward the fog color by e^(-density*z),
+        // z in eye units (tv is the eye-space position here)
+        float fz = tv[2] < 0.0f ? -tv[2] : tv[2];
+        float f = expf(-fog_density * fz);
+        if(f > 1.0f) f = 1.0f;
+        lv->color[0] = f * lv->color[0] + (1.0f - f) * fog_color[0];
+        lv->color[1] = f * lv->color[1] + (1.0f - f) * fog_color[1];
+        lv->color[2] = f * lv->color[2] + (1.0f - f) * fog_color[2];
+    }
+
     matrix4x4f_mult_vec4f_(matrix4x4f_stack_top(&projection_stack), tv, lv->coord);
 }
 
@@ -353,6 +395,8 @@ void project_vertex(lit_vertex *lv, screen_vertex *sv)
     sv->g = unitclamp(lv->color[1]) * 255;
     sv->b = unitclamp(lv->color[2]) * 255;
     sv->a = unitclamp(lv->color[3]) * 255;
+    sv->s = lv->st[0];
+    sv->t = lv->st[1];
 }
 
 enum {
@@ -407,6 +451,8 @@ int clip_line_against_plane(int plane, lit_vertex *input, lit_vertex *output)
             vec4f_blend(input[0].coord, input[1].coord, t, output[n].coord);
             // Should other attributes be hyperbolically interpolated?
             vec4f_blend(input[0].color, input[1].color, t, output[n].color);
+            output[n].st[0] = input[0].st[0] + (input[1].st[0] - input[0].st[0]) * t;
+            output[n].st[1] = input[0].st[1] + (input[1].st[1] - input[0].st[1]) * t;
             n++;
         }
     }
@@ -449,6 +495,8 @@ int clip_polygon_against_plane(int plane, int n, lit_vertex *input, lit_vertex *
                 vec4f_blend(v0->coord, v1->coord, t, output[n2].coord);
                 // Should other attributes be hyperbolically interpolated?
                 vec4f_blend(v0->color, v1->color, t, output[n2].color);
+                output[n2].st[0] = v0->st[0] + (v1->st[0] - v0->st[0]) * t;
+                output[n2].st[1] = v0->st[1] + (v1->st[1] - v0->st[1]) * t;
                 n2++;
             }
         }
@@ -2924,6 +2972,8 @@ void cpack(unsigned int pack)
                  (pack & 0x0000ff00) >> 8,
                  (pack & 0x00ff0000) >> 16};
     c3i(c);
+    // alpha matters when blendfunction(BF_SA, BF_MSA) is active (explosions)
+    current_color[3] = ((pack >> 24) & 0xff) / 255.0f;
 }
 
 void c3f(float c[3]) {
@@ -3560,6 +3610,7 @@ void mmode(int mode) {
     switch(mode) {
         case MSINGLE: current_stack = &modelview_stack; break;
         case MVIEWING: current_stack = &modelview_stack; break;
+        case MTEXTURE: current_stack = &texture_stack; break;
         case MPROJECTION: current_stack = &projection_stack; break;
     }
 }
@@ -3694,6 +3745,8 @@ void v4f(float v[4]) {
 
     world_vertex *wv = polygon_verts + polygon_vert_count;
     vec4f_copy(wv->coord, v);
+    wv->st[0] = current_texcoord[0];
+    wv->st[1] = current_texcoord[1];
     vec4f_copy(wv->color, current_color);
     vec3f_copy(wv->normal, current_normal);
     polygon_vert_count++;
@@ -3874,12 +3927,13 @@ int getgdesc (int inquiry)
         /* features we don\'t have (0 = absent, and vintage code takes the
            no-feature path cleanly): multisample, texturing, vertex fog,
            antialiased RGB lines, blending */
-        case GD_MULTISAMPLE:
-        case GD_TEXTURE:
         case GD_FOGVERTEX:
+        case GD_BLEND:
+        case GD_TEXTURE:
+            return 1;
+        case GD_MULTISAMPLE:
         case GD_LINESMOOTH_CMODE:
         case GD_LINESMOOTH_RGB:
-        case GD_BLEND:
         case GD_CIFRACT:
         case GD_BITS_OVER_SNG_CMODE:
         case GD_BITS_UNDR_SNG_CMODE:
@@ -3914,37 +3968,111 @@ void linesmooth (long mode)
 
 void blendfunction (long sfactor, long dfactor)
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%ld, %ld", sfactor, dfactor);
+
+    if (sfactor == BF_SA && dfactor == BF_MSA)
+        rasterizer_blend(1);
+    else if (sfactor == BF_ONE && dfactor == BF_ZERO)
+        rasterizer_blend(0);
+    else {
+        // the only modes the demos use; anything else falls back to off
+        static int warned = 0; if(!warned) { printf("blendfunction(%ld, %ld) unsupported\n", sfactor, dfactor); warned = 1; }
+        rasterizer_blend(0);
+    }
 }
 
 void fogvertex (long mode, float *params)
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%ld", mode);
+
+    switch(mode) {
+        case FG_DEFINE:
+            // flight 3.4 usage: params[0] = density, params[1..3] = fog RGB
+            fog_density = params[0];
+            vec3f_set(fog_color, params[1], params[2], params[3]);
+            break;
+        case FG_ON:
+            fog_enabled = 1;
+            break;
+        case FG_OFF:
+            fog_enabled = 0;
+            break;
+    }
 }
 
 void texdef2d (long index, long nc, long width, long height, unsigned long *image, long np, float *props)
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%ld, %ld, %ld, %ld", index, nc, width, height);
+
+    if (index <= 0 || index >= MAX_TEXTURES) {
+        printf("texdef2d: index %ld out of range\n", index);
+        return;
+    }
+
+    gl_texture *tx = &textures[index];
+    free(tx->rgb);
+    tx->rgb = (uint8_t *)malloc((size_t)width * height * 3);
+    tx->width = width;
+    tx->height = height;
+    tx->defined = 1;
+
+    // filters: use the mag filter; mipmap min-filter variants collapse to
+    // their base (no mipmapping)
+    tx->bilinear = 0;
+    for (long i = 0; i + 1 < np; i += 2)
+        if ((int)props[i] == TX_MAGFILTER && (int)props[i + 1] == TX_BILINEAR)
+            tx->bilinear = 1;
+
+    if (nc == 1) {
+        // 8-bit intensity texels (flight 3.4's hills.t)
+        const uint8_t *src = (const uint8_t *)image;
+        for (long i = 0; i < width * height; i++) {
+            tx->rgb[i * 3 + 0] = src[i];
+            tx->rgb[i * 3 + 1] = src[i];
+            tx->rgb[i * 3 + 2] = src[i];
+        }
+    } else {
+        // packed RGBA words (untested: no current demo uses nc > 1)
+        const uint32_t *src = (const uint32_t *)image;
+        for (long i = 0; i < width * height; i++) {
+            tx->rgb[i * 3 + 0] = src[i] & 0xff;
+            tx->rgb[i * 3 + 1] = (src[i] >> 8) & 0xff;
+            tx->rgb[i * 3 + 2] = (src[i] >> 16) & 0xff;
+        }
+    }
 }
 
 void texbind (long target, long index)
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%ld, %ld", target, index);
+
+    if (index > 0 && index < MAX_TEXTURES && textures[index].defined) {
+        gl_texture *tx = &textures[index];
+        rasterizer_teximage(tx->width, tx->height, tx->rgb, tx->bilinear);
+        rasterizer_texture(1);
+        texture_bound = index;
+    } else {
+        rasterizer_texture(0);
+        texture_bound = 0;
+    }
 }
 
 void tevdef (long index, long np, float *props)
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    // the texture environment is always TV_MODULATE (flight's tevps is {0})
+    TRACEF("%ld", index);
 }
 
 void tevbind (long target, long index)
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%ld, %ld", target, index);
 }
 
-/* per-vertex texture coordinate: silent no-op until texturing lands */
+/* per-vertex texture coordinate for the next vertex */
 void t2f (float t[2])
 {
+    current_texcoord[0] = t[0];
+    current_texcoord[1] = t[1];
 }
 
 void subpixel (Boolean b)
@@ -4035,7 +4163,11 @@ void scrmask (int left, int right, int bottom, int top)
 
 void zwritemask (unsigned long mask)
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%lu", mask);
+
+    // all-or-nothing depth writes (flight 3.4 uses 0 / 0xffffff around the
+    // blended explosion sprites); the z test itself stays on
+    rasterizer_zwrite(mask != 0);
 }
 
 void zsource (long src)
@@ -4482,6 +4614,7 @@ static void init_gl_state()
 
     matrix4x4f_stack_init(&modelview_stack);
     matrix4x4f_stack_init(&projection_stack);
+    matrix4x4f_stack_init(&texture_stack);
     matrix4x4f_stack_load(&modelview_stack, identity_4x4f);
     matrix4x4f_stack_load(&projection_stack, identity_4x4f);
     current_stack = &modelview_stack;

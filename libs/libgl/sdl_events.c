@@ -558,8 +558,20 @@ int32_t events_get_valuator(int32_t device)
     return 0;
 }
 
-#define GL_KEY_COUNT 78
+#define GL_KEY_COUNT 90
 static int32_t sdl_to_gl_key_map[GL_KEY_COUNT][2] = {
+    {SDLK_F1,           F1KEY},
+    {SDLK_F2,           F2KEY},
+    {SDLK_F3,           F3KEY},
+    {SDLK_F4,           F4KEY},
+    {SDLK_F5,           F5KEY},
+    {SDLK_F6,           F6KEY},
+    {SDLK_F7,           F7KEY},
+    {SDLK_F8,           F8KEY},
+    {SDLK_F9,           F9KEY},
+    {SDLK_F10,          F10KEY},
+    {SDLK_F11,          F11KEY},
+    {SDLK_F12,          F12KEY},
     {SDLK_0,            ZEROKEY},
     {SDLK_1,            ONEKEY},
     {SDLK_2,            TWOKEY},

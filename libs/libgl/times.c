@@ -1,6 +1,31 @@
-// Shim for sys/times.h times() on Windows
+// Shim for sys/times.h times() on Windows and Emscripten
 
-#if defined(_WIN32) && !defined(EMSCRIPTEN)
+#if defined(__EMSCRIPTEN__)
+
+#include <sys/times.h>
+#include <emscripten.h>
+
+// Emscripten's musl times() does not advance, so flight's ticks-per-second
+// estimate (frames per times()-tick) explodes ~100x per measurement and the
+// integer engine-thrust ramp (thrust += 50/tps) truncates to zero — frozen
+// physics. Provide a real one: wall clock in 100Hz ticks (the IRIX HZ both
+// flight demos are built with, matching -DHZ=100). Emscripten's libstubs owns
+// the times symbol (wasm-ld: duplicate), so this lives under its own name;
+// demo web compiles redirect with -Dtimes=sgi_demos_times (platform.mk).
+clock_t sgi_demos_times(struct tms *buf)
+{
+    double ms = emscripten_get_now();
+    clock_t t = (clock_t)(ms / 10.0);   // 100 ticks per second
+    if (buf) {
+        buf->tms_utime = t;
+        buf->tms_stime = 0;
+        buf->tms_cutime = 0;
+        buf->tms_cstime = 0;
+    }
+    return t;
+}
+
+#elif defined(_WIN32) && !defined(EMSCRIPTEN)
 
 #include "sys/times.h"
 #include <windows.h> 

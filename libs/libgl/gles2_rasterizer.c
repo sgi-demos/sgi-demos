@@ -85,6 +85,8 @@ static GLuint draw_prog = 0;        // batched geometry program
 static GLint  u_draw_scale = -1;    // 2/W, 2/H pixel->NDC scale
 static GLint  u_draw_pattern_on = -1;
 static GLint  u_draw_pattern_tex = -1;
+static GLint  u_draw_tex_on = -1;
+static GLint  u_draw_demo_tex = -1;
 
 static GLuint blit_prog = 0;        // alpha_blit program (textured, blended)
 static GLint  u_blit_scale = -1;
@@ -115,6 +117,7 @@ typedef struct gpu_vertex
 {
     float x, y, z;      // x,y in pixels, z in [0,1]
     uint8_t rgba[4];
+    float u, v;
 } gpu_vertex;
 
 #define BATCH_MAX_VERTS (64 * 1024)
@@ -126,6 +129,14 @@ static int batch_count = 0;
 // and bitmap glyphs go through — but points are written directly and are
 // never stippled. Emitters declare which they need; a mismatch flushes.
 static int batch_pattern_on = 0;
+static void restore_depth_mask(void);
+static int blend_enabled = 0;   // BF_SA/BF_MSA blending (batch-affecting: mismatch flushes)
+static int batch_blend_on = 0;
+static int zwrite_enabled = 1;  // depth writes (zwritemask)
+static int texture_enabled = 0; // demo texture bound and on (batch-affecting)
+static int batch_texture_on = 0;
+static GLuint demo_tex = 0;     // the one demo texture (unit 1); pattern_tex stays on unit 0
+static int demo_tex_bilinear = 0;
 
 //
 // shaders
@@ -133,7 +144,9 @@ static int batch_pattern_on = 0;
 static const GLchar *draw_vs_src =
     "attribute vec3 pos;                                                \n" // x,y pixels, z [0,1]
     "attribute vec4 color;                                              \n"
+    "attribute vec2 uv;                                                 \n" // texture coords (tex_on)
     "varying vec4 v_color;                                              \n"
+    "varying vec2 v_uv;                                                 \n"
     "uniform vec2 scale;                                                \n" // 2/W, 2/H
     "void main()                                                        \n"
     "{                                                                  \n"
@@ -141,13 +154,17 @@ static const GLchar *draw_vs_src =
     "                       pos.y * scale.y - 1.0,                      \n"
     "                       pos.z * 2.0 - 1.0, 1.0);                    \n"
     "    v_color = color;                                               \n"
+    "    v_uv = uv;                                                     \n"
     "}                                                                  \n";
 
 static const GLchar *draw_fs_src =
     "precision mediump float;                                           \n"
     "varying vec4 v_color;                                              \n"
+    "varying vec2 v_uv;                                                 \n"
     "uniform sampler2D pattern_tex;                                     \n"
+    "uniform sampler2D demo_tex;                                        \n"
     "uniform bool pattern_on;                                           \n"
+    "uniform bool tex_on;                                               \n"
     "void main()                                                        \n"
     "{                                                                  \n"
     "    if (pattern_on)                                                \n"
@@ -156,7 +173,9 @@ static const GLchar *draw_fs_src =
     "        if (texture2D(pattern_tex, pc).a < 0.5)                    \n"
     "            discard;                                               \n"
     "    }                                                              \n"
-    "    gl_FragColor = v_color;                                        \n"
+    "    gl_FragColor = tex_on                                          \n"
+    "        ? v_color * vec4(texture2D(demo_tex, v_uv).rgb, 1.0)       \n" // IRIS TV_MODULATE
+    "        : v_color;                                                 \n"
     "}                                                                  \n";
 
 static const GLchar *blit_vs_src =
@@ -272,8 +291,12 @@ static int ensure_gl(void)
     glPixelStorei(GL_PACK_ALIGNMENT, 4);
 
     draw_prog = build_program(draw_vs_src, draw_fs_src, "pos", "color", "draw");
+    glBindAttribLocation(draw_prog, 2, "uv");
+    glLinkProgram(draw_prog);   // relink with the uv attribute bound
     u_draw_scale = glGetUniformLocation(draw_prog, "scale");
     u_draw_pattern_on = glGetUniformLocation(draw_prog, "pattern_on");
+    u_draw_tex_on = glGetUniformLocation(draw_prog, "tex_on");
+    u_draw_demo_tex = glGetUniformLocation(draw_prog, "demo_tex");
     u_draw_pattern_tex = glGetUniformLocation(draw_prog, "pattern_tex");
 
     blit_prog = build_program(blit_vs_src, blit_fs_src, "pos", "uv", "blit");
@@ -369,16 +392,32 @@ static void flush_batch(void)
 
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(gpu_vertex), (void *)0);
     glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(gpu_vertex),
                           (void *)offsetof(gpu_vertex, rgba));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(gpu_vertex),
+                          (void *)offsetof(gpu_vertex, u));
+
+    glUniform1i(u_draw_tex_on, batch_texture_on ? 1 : 0);
+    glUniform1i(u_draw_demo_tex, 1);
+    if (batch_texture_on) {
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, demo_tex);
+        glActiveTexture(GL_TEXTURE0);
+    }
 
     // The reference rasterizer writes z whenever a pixel passes, even with
-    // the z-buffer disabled; GL_ALWAYS with depth writes on matches that.
+    // the z-buffer disabled; GL_ALWAYS with depth writes on matches that
+    // (unless the demo turned depth writes off via zwritemask).
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(zbuffer_enabled ? GL_LESS : GL_ALWAYS);
-    glDepthMask(GL_TRUE);
-    glDisable(GL_BLEND);
+    glDepthMask(zwrite_enabled ? GL_TRUE : GL_FALSE);
+    if (batch_blend_on) {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    } else
+        glDisable(GL_BLEND);
     glViewport(0, 0, fb_width, fb_height);
 
     if (backbuffer_draw_enabled)
@@ -400,6 +439,7 @@ static void flush_batch(void)
 
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     batch_count = 0;
@@ -452,6 +492,7 @@ static void clear_gl_buffers(uint8_t r, uint8_t g, uint8_t b,
         glClear(mask);
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    restore_depth_mask();   // clears force depth writes on; restore zwritemask
 }
 
 void gles2_rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
@@ -464,6 +505,11 @@ void gles2_rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
     flush_batch();
     clear_gl_buffers(r, g, b, frontbuffer_draw_enabled, backbuffer_draw_enabled,
                      GL_COLOR_BUFFER_BIT);
+}
+
+static void restore_depth_mask(void)
+{
+    glDepthMask(zwrite_enabled ? GL_TRUE : GL_FALSE);
 }
 
 void gles2_rasterizer_masked_clear(int32_t x0, int32_t y0, int32_t x1, int32_t y1,
@@ -525,6 +571,46 @@ void gles2_rasterizer_masked_clear(int32_t x0, int32_t y0, int32_t x1, int32_t y
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     free(px);
+}
+
+void gles2_rasterizer_teximage(int width, int height, const uint8_t *rgb, int bilinear)
+{
+    if (!ensure_gl())
+        return;
+    flush_batch();
+    if (demo_tex == 0)
+        glGenTextures(1, &demo_tex);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, demo_tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, bilinear ? GL_LINEAR : GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, bilinear ? GL_LINEAR : GL_NEAREST);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, rgb);
+    glActiveTexture(GL_TEXTURE0);
+    demo_tex_bilinear = bilinear;
+}
+
+void gles2_rasterizer_texture(int enable)
+{
+    // batch-affecting; mismatch flush happens in batch_select_texture
+    texture_enabled = enable;
+}
+
+void gles2_rasterizer_blend(int enable)
+{
+    // batch-affecting state; the mismatch flush happens via batch_select_blend
+    blend_enabled = enable;
+}
+
+void gles2_rasterizer_zwrite(int enable)
+{
+    zwrite_enabled = enable;
+    if (gl_ready) {
+        flush_batch();
+        glDepthMask(enable ? GL_TRUE : GL_FALSE);
+    }
 }
 
 void gles2_rasterizer_zclear(uint32_t z)
@@ -706,7 +792,21 @@ static void batch_select_pattern(int want_pattern)
     batch_pattern_on = want_pattern;
 }
 
-static void emit_vertex(float x, float y, float z01, uint8_t r, uint8_t g, uint8_t b)
+static void batch_select_blend(int want_blend)
+{
+    if (batch_count > 0 && want_blend != batch_blend_on)
+        flush_batch();
+    batch_blend_on = want_blend;
+}
+
+static void batch_select_texture(int want_texture)
+{
+    if (batch_count > 0 && want_texture != batch_texture_on)
+        flush_batch();
+    batch_texture_on = want_texture;
+}
+
+static void emit_vertex(float x, float y, float z01, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
     gpu_vertex *v = &batch[batch_count++];
     v->x = x;
@@ -715,7 +815,9 @@ static void emit_vertex(float x, float y, float z01, uint8_t r, uint8_t g, uint8
     v->rgba[0] = r;
     v->rgba[1] = g;
     v->rgba[2] = b;
-    v->rgba[3] = 255;
+    v->rgba[3] = a;
+    v->u = 0.0f;
+    v->v = 0.0f;
 }
 
 static float sv_z01(screen_vertex *s)
@@ -726,13 +828,18 @@ static float sv_z01(screen_vertex *s)
 static void emit_screen_triangle(screen_vertex *s0, screen_vertex *s1, screen_vertex *s2)
 {
     batch_select_pattern(pattern_enabled);
+    batch_select_blend(blend_enabled);
+    batch_select_texture(texture_enabled);
     batch_reserve(3);
     screen_vertex *s[3] = { s0, s1, s2 };
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++) {
         emit_vertex(s[i]->x / (float)SCREEN_VERTEX_V2_SCALE,
                     s[i]->y / (float)SCREEN_VERTEX_V2_SCALE,
                     sv_z01(s[i]),
-                    s[i]->r, s[i]->g, s[i]->b);
+                    s[i]->r, s[i]->g, s[i]->b, s[i]->a);
+        batch[batch_count - 1].u = s[i]->s;
+        batch[batch_count - 1].v = s[i]->t;
+    }
 }
 
 static void screen_vertex_offset_with_clamp(screen_vertex *v, float dx, float dy)
@@ -751,12 +858,12 @@ static void emit_point(screen_vertex *sv)
     float z = sv_z01(sv);
 
     batch_reserve(6);
-    emit_vertex(px,     py,     z, sv->r, sv->g, sv->b);
-    emit_vertex(px + 1, py,     z, sv->r, sv->g, sv->b);
-    emit_vertex(px + 1, py + 1, z, sv->r, sv->g, sv->b);
-    emit_vertex(px + 1, py + 1, z, sv->r, sv->g, sv->b);
-    emit_vertex(px,     py + 1, z, sv->r, sv->g, sv->b);
-    emit_vertex(px,     py,     z, sv->r, sv->g, sv->b);
+    emit_vertex(px,     py,     z, sv->r, sv->g, sv->b, sv->a);
+    emit_vertex(px + 1, py,     z, sv->r, sv->g, sv->b, sv->a);
+    emit_vertex(px + 1, py + 1, z, sv->r, sv->g, sv->b, sv->a);
+    emit_vertex(px + 1, py + 1, z, sv->r, sv->g, sv->b, sv->a);
+    emit_vertex(px,     py + 1, z, sv->r, sv->g, sv->b, sv->a);
+    emit_vertex(px,     py,     z, sv->r, sv->g, sv->b, sv->a);
 }
 
 static void emit_line(screen_vertex *v0, screen_vertex *v1)
@@ -947,7 +1054,7 @@ void gles2_rasterizer_alpha_blit(uint32_t width, uint32_t rowbytes, uint32_t hei
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     glDisable(GL_BLEND);
-    glDepthMask(GL_TRUE);
+    restore_depth_mask();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
@@ -1031,6 +1138,10 @@ const rasterizer_funcs* gles2_rasterizer_get_funcs(void)
         .pattern            = gles2_rasterizer_pattern,
         .cbuffer_draw       = gles2_rasterizer_cbuffer_draw,
         .zbuffer            = gles2_rasterizer_zbuffer,
+        .blend              = gles2_rasterizer_blend,
+        .teximage           = gles2_rasterizer_teximage,
+        .texture            = gles2_rasterizer_texture,
+        .zwrite             = gles2_rasterizer_zwrite,
         .linewidth          = gles2_rasterizer_linewidth,
         .frame_sync         = gles2_rasterizer_frame_sync,
         .resize             = gles2_rasterizer_resize,

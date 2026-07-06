@@ -98,7 +98,9 @@ EMAR = emar rvsc
 
 # Compiler options for original SGI demo code and demo helper libs
 DEMO_CODE_CC = $(CC) -std=c90 $(SHIM_HEADER)
-DEMO_CODE_EMCC = $(EMCC) -std=c90 $(SHIM_HEADER)
+# -Dtimes=...: emscripten's times() never advances (libstubs stub), which
+# freezes times()-paced demo physics (see libs/libgl/times.c)
+DEMO_CODE_EMCC = $(EMCC) -std=c90 $(SHIM_HEADER) -Dtimes=sgi_demos_times
 DEMO_CODE_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat -Wno-pointer-sign -Wno-int-conversion -Wno-out-of-scope-function -Wno-format-extra-args -Wno-unused-command-line-argument -Wno-comment -Wno-deprecated-non-prototype $(DEMO_CODE_WARN_OFF_EXTRA)
 EM_DEMO_CODE_WARN_OFF = $(DEMO_CODE_WARN_OFF)
 

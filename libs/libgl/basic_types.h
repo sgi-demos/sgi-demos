@@ -30,6 +30,7 @@ typedef struct screen_vertex
                     // realistic framebuffer size fits (2^31/32 = 67M pixels)
     uint32_t z;
     uint8_t r, g, b, a;
+    float s, t;     // texture coords (valid when texturing is enabled)
 } screen_vertex;
 
 #define SCREEN_VERTEX_V2_SCALE 32

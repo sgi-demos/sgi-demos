@@ -32,6 +32,12 @@ void rasterizer_setpattern(uint16_t pattern[16]);
 void rasterizer_pattern(int enable);
 void rasterizer_cbuffer_draw(int enable_front, int enable_back);
 void rasterizer_zbuffer(int enable);
+void rasterizer_blend(int enable);   // src-alpha / one-minus-src-alpha only (IRIS BF_SA/BF_MSA)
+// One current texture (all the demos need): RGB8 image, REPEAT wrap,
+// point or bilinear filtering, modulating the base color (IRIS TV_MODULATE).
+void rasterizer_teximage(int width, int height, const uint8_t *rgb, int bilinear);
+void rasterizer_texture(int enable);
+void rasterizer_zwrite(int enable);  // depth WRITES; the z test stays per rasterizer_zbuffer
 void rasterizer_linewidth(float w);
 void rasterizer_frame_sync(void);
 
@@ -70,6 +76,10 @@ typedef struct rasterizer_funcs
     void (*pattern)(int enable);
     void (*cbuffer_draw)(int enable_front, int enable_back);
     void (*zbuffer)(int enable);
+    void (*blend)(int enable);
+    void (*teximage)(int width, int height, const uint8_t *rgb, int bilinear);
+    void (*texture)(int enable);
+    void (*zwrite)(int enable);
     void (*linewidth)(float w);
     void (*frame_sync)(void);
     void (*resize)(uint32_t width, uint32_t height);
