@@ -499,6 +499,15 @@ static void yieldByEventQuery()
             redraw_pulse_outstanding = 1;
         }
 
+        // In CI mode, bake any pending palette change into the front RGB
+        // buffer before presenting (implemented in gl.c). This is the
+        // safety-net present for demos that only poll the event queue
+        // (cedit mid-drag); swapbuffers/gflush call the hook themselves.
+        // events_frame_complete() itself must NOT resolve — dopup presents
+        // its menu through there, and the menu has no CI backing.
+        extern void gl_resolve_ci_if_needed(void);
+        gl_resolve_ci_if_needed();
+
         // Pump events, redraw, and yield
         events_frame_complete();
     }

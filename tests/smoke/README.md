@@ -43,5 +43,15 @@ pass/fail gate.
   (global; per-demo override via a `modes` array on the entry), `minContent`
   (per-demo non-blank threshold; the default 0.02 means >2% of pixels must
   differ from the dominant color).
-- `cedit` is intentionally absent: it has no web page yet. Add it to
-  `demos.json` once `cedit_full.html` exists.
+- `cedit` runs in `ref` mode only: live palette editing needs the reference
+  rasterizer's color-index buffer (a shim quirk selects it by default).
+
+## Interaction driver
+
+`interact.mjs` drives real mouse interactions headlessly — newave's popup
+menus, display modes and mesh editing; cedit's slider drags and colorsys
+menu — and drops annotated screenshots in `results/interact/`. It is a
+manual verification tool, not part of the smoke gate:
+
+    node interact.mjs                     # both demos
+    node interact.mjs --only newave      # subset

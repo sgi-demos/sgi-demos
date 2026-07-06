@@ -108,6 +108,40 @@ static int backface_enabled = 0;
 static int the_linewidth = 1;
 static int rgb_mode = 0;
 
+// Per-buffer staleness of the RGB cache vs. the CI buffer: set on both when
+// a colormap entry changes (mapcolor), swapped along with the buffers at
+// swapbuffers, cleared on the front flag by gl_resolve_ci_if_needed. Pixels
+// carry draw-time-resolved RGB, so a buffer is only stale if the colormap
+// changed since its pixels were drawn — demos with a static palette resolve
+// once and never again (this also keeps the resolve from repainting over
+// writemask masked clears, which recolor RGB without touching the CI
+// buffer — flight 1988's meters). Start 1 so the first presents resolve.
+static int ci_rgb_cache_stale = 1;       // front buffer
+static int ci_rgb_cache_stale_back = 1;  // back buffer
+void gl_resolve_ci_if_needed(void); // defined near mapcolor
+
+// Depth-cueing (CI mode): depthcue() + lshaderange() shade vertices by
+// depth through a colormap ramp. The SGI did this per pixel; this shim
+// computes the ramp index per vertex in project_vertex and lets the
+// rasterizer interpolate the resolved RGB — visually equivalent for the
+// smooth ramps depth-cued demos use. lsetdepth() defines the screen-z units
+// that lshaderange's znear/zfar are expressed in.
+static int depthcue_enabled = 0;
+static int shade_lowin = 0, shade_highin = 7;
+static long shade_znear = 0, shade_zfar = 0x7fffff;
+static long ls_znear = 0, ls_zfar = 0x7fffff;
+
+// smoothline() (CI mode): IRIS GL drew antialiased lines by adding pixel
+// coverage (0..15) to the base color index inside a 16-entry intensity
+// ramp. Without per-pixel coverage we approximate a fully-covered line:
+// index | 15 selects the ramp's brightest entry (ramps are 16-aligned).
+static int smoothline_enabled = 0;
+
+// zsource(ZSRC_COLOR) makes z-comparisons use color values instead of
+// depth (newave's antialiased mode uses it as a painter's trick). We can't
+// emulate color-sourced z, so z-testing is suspended while it's selected.
+static int zsource_color = 0;
+
 static int matrix_mode = MSINGLE;
 static matrix4x4f_stack modelview_stack;
 static matrix4x4f_stack projection_stack;
@@ -217,12 +251,17 @@ void lmodel_init(lmodel *l)
 //----------------------------------------------------------------------------
 // Transformation, lighting, clipping
 
+// ci carries the color index alongside the resolved RGB in CI mode
+// (stamped from current_color_index wherever color is stamped), so the
+// rasterizer can maintain its per-pixel index buffer. It rides through
+// lighting and projection untouched — there is no "lit color index".
 typedef struct world_vertex
 {
     vec4f coord;
     vec3f normal;
     vec4f color;
     float st[2];    // texture coords (t2f)
+    uint16_t ci;
 } world_vertex;
 
 typedef struct lit_vertex
@@ -230,6 +269,7 @@ typedef struct lit_vertex
     vec4f coord;
     vec4f color;
     float st[2];
+    uint16_t ci;
 } lit_vertex;
 
 void light_vertex(material *mtl, vec4f coord, vec3f normal, vec4f color_)
@@ -342,6 +382,8 @@ void transform_and_light_vertex(world_vertex *wv, lit_vertex *lv)
     }
 
     matrix4x4f_mult_vec4f_(matrix4x4f_stack_top(&projection_stack), tv, lv->coord);
+
+    lv->ci = wv->ci;
 }
 
 void screen_vertex_set_color(screen_vertex *sv, unsigned short r, unsigned short g, unsigned short b, unsigned short a)
@@ -350,6 +392,7 @@ void screen_vertex_set_color(screen_vertex *sv, unsigned short r, unsigned short
     sv->g = g;
     sv->b = b;
     sv->a = a;
+    sv->ci = SCREEN_VERTEX_CI_NONE; // shim UI paints RGB directly; no index
 }
 
 void screen_vertex_set_position(screen_vertex* v, float x, float y)
@@ -397,6 +440,22 @@ void project_vertex(lit_vertex *lv, screen_vertex *sv)
     sv->a = unitclamp(lv->color[3]) * 255;
     sv->s = lv->st[0];
     sv->t = lv->st[1];
+    sv->ci = rgb_mode ? SCREEN_VERTEX_CI_NONE : lv->ci;
+
+    // Depth-cueing (CI mode): replace the vertex color with the lshaderange
+    // ramp index for this vertex's depth. zw is window z in [0,1]; scale it
+    // into lsetdepth units to compare against lshaderange's znear/zfar.
+    // Vertices at shade_znear get highin (brightest), at shade_zfar lowin.
+    if (depthcue_enabled && !rgb_mode) {
+        float zscr = ls_znear + zw * (float)(ls_zfar - ls_znear);
+        float t = (shade_zfar == shade_znear) ? 0.0f :
+                  unitclamp((zscr - shade_znear) / (float)(shade_zfar - shade_znear));
+        int index = (int)(shade_highin - t * (shade_highin - shade_lowin) + 0.5f);
+        sv->ci = index;
+        sv->r = colormap[index][0];
+        sv->g = colormap[index][1];
+        sv->b = colormap[index][2];
+    }
 }
 
 enum {
@@ -453,6 +512,7 @@ int clip_line_against_plane(int plane, lit_vertex *input, lit_vertex *output)
             vec4f_blend(input[0].color, input[1].color, t, output[n].color);
             output[n].st[0] = input[0].st[0] + (input[1].st[0] - input[0].st[0]) * t;
             output[n].st[1] = input[0].st[1] + (input[1].st[1] - input[0].st[1]) * t;
+            output[n].ci = input[0].ci; // CI is flat per primitive
             n++;
         }
     }
@@ -497,6 +557,7 @@ int clip_polygon_against_plane(int plane, int n, lit_vertex *input, lit_vertex *
                 vec4f_blend(v0->color, v1->color, t, output[n2].color);
                 output[n2].st[0] = v0->st[0] + (v1->st[0] - v0->st[0]) * t;
                 output[n2].st[1] = v0->st[1] + (v1->st[1] - v0->st[1]) * t;
+                output[n2].ci = v0->ci; // CI is flat per primitive
                 n2++;
             }
         }
@@ -636,6 +697,22 @@ void process_line(world_vertex *wv0, world_vertex *wv1)
     project_vertex(&vp[0], &screenverts[0]);
     project_vertex(&vp[1], &screenverts[1]);
 
+    // smoothline (CI mode): stand in for the hardware's coverage-added
+    // index by drawing with the brightest entry of the vertex's 16-entry
+    // intensity ramp (see smoothline_enabled). Composes with depthcue,
+    // which selects the ramp by depth in project_vertex.
+    if (smoothline_enabled && !rgb_mode) {
+        for (int i = 0; i < 2; i++) {
+            if (screenverts[i].ci == SCREEN_VERTEX_CI_NONE)
+                continue;
+            int index = screenverts[i].ci | 15;
+            screenverts[i].ci = index;
+            screenverts[i].r = colormap[index][0];
+            screenverts[i].g = colormap[index][1];
+            screenverts[i].b = colormap[index][2];
+        }
+    }
+
     rasterizer_draw(DRAW_LINES, 2, screenverts);
 }
 
@@ -740,17 +817,25 @@ void process_polygon(int n, world_vertex *worldverts)
 typedef struct { Icoord x, y; } Icoord2;
 typedef struct { Icoord left, top, right, bottom; } IcoordRect; // Y-up: top > bottom
 
+// %f/%F callbacks are invoked with NO arguments even though IRIS GL passed
+// the item value: the vintage demos that use them define K&R functions with
+// an empty parameter list (newave's normal_mode() etc.), and on WebAssembly
+// an indirect call must match the callee's exact signature — passing an
+// argument to a zero-arg function is a runtime trap there, while ignoring
+// extra args was harmless on MIPS. No demo in this corpus reads the value.
+typedef int (*pup_func)(void);
+
 typedef struct pup_item {
     char *label;
     int value;
     int submenu;
-    int (*func)(int i);
+    pup_func func;
 } pup_item;
 
 typedef struct pup {
     int defd;
     char *title;
-    int (*func)(int i);
+    pup_func func;
     int item_count;
     struct pup_item items[MAX_PUP_ITEMS];
 } pup;
@@ -800,7 +885,7 @@ void pup_set_title(pup *menu, char *title)
     }
 }
 
-void pup_add(pup *menu, char *label, int value, int submenu, int (*func)(int i))
+void pup_add(pup *menu, char *label, int value, int submenu, pup_func func)
 {
     pup_item *item = menu->items + menu->item_count++;
 
@@ -813,7 +898,9 @@ void pup_add(pup *menu, char *label, int value, int submenu, int (*func)(int i))
     item->func = func;
 }
 
-static void pup_parse_string(pup *thepup, const char *menu)
+// Parse a defpup/addtopup menu string. ap supplies the varargs that %f, %F
+// and %m consume, in order of appearance (IRIS GL semantics).
+static void pup_parse_string(pup *thepup, const char *menu, va_list ap)
 {
     char *menu2 = strdup(menu);
     char *menu3 = menu2;
@@ -822,7 +909,7 @@ static void pup_parse_string(pup *thepup, const char *menu)
     while(menu3) {
         char *item = strsep(&menu3, "|");
         int is_title = 0;
-        int (*func)(int) = NULL;
+        pup_func func = NULL;
         int value = -1;
         int submenu = -1;
 
@@ -844,13 +931,17 @@ static void pup_parse_string(pup *thepup, const char *menu)
                 is_title = 1;
                 pup_set_title(thepup, item);
             } else if(*p == 'F') {
-                printf("addtopup/defpup argument %%F ignored\n");
+                // menu-wide function, run on any selection (after any %f)
+                thepup->func = va_arg(ap, pup_func);
             } else if(*p == 'f') {
-                printf("addtopup/defpup argument %%f ignored\n");
+                // per-item function, run when the item is selected; its
+                // return value becomes dopup's result
+                func = va_arg(ap, pup_func);
             } else if(*p == 'n') {
                 printf("addtopup/defpup argument %%n ignored\n");
             } else if(*p == 'm') {
                 printf("addtopup/defpup argument %%m ignored\n");
+                submenu = (int)va_arg(ap, long); // consume to keep later args aligned
             } else if(*p == 'l') {
                 /* %l: underline/separator — not yet rendered */
             } else if(*p == 'x') {
@@ -2007,7 +2098,20 @@ void defpattern(int index, int size, Pattern16 mask) {
 }
 
 void doublebuffer() {
-    // doublebuffer always enabled for now, more work here when/if singlebuffer is implemented
+    frontbuffer_draw_enabled = 0;
+    backbuffer_draw_enabled = 1;
+    rasterizer_cbuffer_draw(frontbuffer_draw_enabled, backbuffer_draw_enabled);
+}
+
+// Historically, SGI's default at winopen() was single-buffer mode, and
+// demos called doublebuffer() to opt in to double buffering. This shim
+// starts double-buffered instead, so a demo relying on the SGI single-
+// buffer default (cedit) must get singlebuffer() called explicitly — done
+// on its behalf in apply_demo_quirks so the original source stays intact.
+void singlebuffer() {
+    frontbuffer_draw_enabled = 1;
+    backbuffer_draw_enabled = 0;
+    rasterizer_cbuffer_draw(frontbuffer_draw_enabled, backbuffer_draw_enabled);
 }
 
 void editobj(Object obj) {
@@ -2092,7 +2196,11 @@ int getvaluator(int device) {
 }
 
 void setvaluator(Device device, int init, int min, int max) {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    // IRIS GL used this to warp the cursor and clamp a valuator's range
+    // (newave constrains MOUSEX/MOUSEY to the window while editing). Our
+    // mouse valuators are already window-relative and framebuffer-clamped
+    // (events_get_valuator), so there is nothing to do.
+    TRACEF("%d, %d, %d, %d", device, init, min, max);
 }
 
 void setlinestyle(int index) {
@@ -2104,6 +2212,7 @@ void gflush() {
     // For single-buffered demos: present the current front buffer and
     // yield. Same yield primitive as swapbuffers(), but with no back/front
     // swap (single-buffered demos draw directly to the front buffer).
+    gl_resolve_ci_if_needed();
     events_frame_complete();
 }
 
@@ -2167,6 +2276,28 @@ void mapcolor(Colorindex index, int red, int green, int blue) {
     colormap_mapped[index] = 1;
     if (index > colormap_max_mapped)
         colormap_max_mapped = index;
+    ci_rgb_cache_stale = 1;
+    ci_rgb_cache_stale_back = 1;
+}
+
+// SGI hardware palette LUT emulation: in CI mode, re-derive the front RGB
+// buffer from the front color-index buffer whenever the colormap changed
+// (mapcolor) or the front CI buffer was replaced (swapbuffers), so palette
+// edits show up on screen without the demo redrawing (cedit's live sliders).
+//
+// Called only from "demo finished a frame, present it" sites — swapbuffers,
+// gflush, qread's blocking wait, and the yieldByEventQuery safety net in
+// sdl_events.c. NOT from events_frame_complete itself: dopup composites its
+// menu into the RGB front buffer (with no CI backing) and presents through
+// there, and a resolve would repaint the scene over the open menu.
+//
+// No-op in RGB mode and on rasterizers with no CI buffer (gles2).
+void gl_resolve_ci_if_needed(void)
+{
+    if (!rgb_mode && ci_rgb_cache_stale) {
+        rasterizer_resolve_ci_to_rgb(colormap);
+        ci_rgb_cache_stale = 0;
+    }
 }
 
 void multmatrix(Matrix m) {
@@ -2333,6 +2464,7 @@ void poly_(int n, Coord parray[ ][3]) {
         vec4f_set(worldverts[i].coord,
             parray[i][0], parray[i][1], parray[i][2], 1.0);
         vec4f_copy(worldverts[i].color, color);
+        worldverts[i].ci = current_color_index;
         vec3f_set(worldverts[i].normal, 1, 0, 0);
     }
 
@@ -2536,6 +2668,10 @@ int qread(short *val) {
 
     while (!qtest())
     {
+        // The blocking wait presents frames while idle; make sure any
+        // pending palette change is baked in before it does (cedit finishes
+        // a slider drag and then blocks here).
+        gl_resolve_ci_if_needed();
         if (!events_qread_block())
             return 0;
     }
@@ -2684,6 +2820,13 @@ void swapbuffers() {
     TRACE();
     rasterizer_swap();
     events_set_framebuffer(rasterizer_frontbuffer());
+    if (!rgb_mode) {
+        // the staleness flags travel with their buffers
+        int t = ci_rgb_cache_stale;
+        ci_rgb_cache_stale = ci_rgb_cache_stale_back;
+        ci_rgb_cache_stale_back = t;
+    }
+    gl_resolve_ci_if_needed();
     events_frame_complete();
 }
 
@@ -2826,11 +2969,20 @@ static int demo_is(const char *title, const char *name) {
 //    -> keep the framebuffer that aspect at any window size
 //  - flight: panel viewports are compile-time 800x480 constants (meters.c,
 //    land2.c) -> classic fixed-size framebuffer, scaled to the window
+//  - cedit: a palette editor — needs the live hardware-LUT emulation
+//    (mapcolor changing already-drawn pixels) and readpixels() of color
+//    indices, both of which require the reference rasterizer's CI buffer;
+//    also relies on SGI's single-buffer-at-winopen default (it never calls
+//    doublebuffer), which this shim inverts
 static void apply_demo_quirks(char *title) {
     if (demo_is(title, "arena"))
         events_keepaspect(XMAXSCREEN + 1, YMAXSCREEN + 1);
     else if (demo_is(title, "flight"))
         events_fix_framebuffer_size(XMAXSCREEN + 1, YMAXSCREEN + 1);
+    else if (demo_is(title, "cedit")) {
+        rasterizer_prefer("ref");
+        singlebuffer();
+    }
 }
 
 int winopen(char *title) {
@@ -2840,6 +2992,11 @@ int winopen(char *title) {
         title = (char *)gl_appname;
 
     TRACEF("%s", title);
+
+    // Quirks must run before the first rasterizer_* call: they may select
+    // which rasterizer implementation gets locked in (cedit -> reference)
+    apply_demo_quirks(title);
+
     int rasterizer_window = rasterizer_winopen(title);
 
     move(0.0, 0.0, 0.0);
@@ -2853,8 +3010,6 @@ int winopen(char *title) {
     // window (native) / centered framebuffer (web). All other demos get a
     // free-form window-sized framebuffer, kept undistorted by the implied
     // reshape (see the_projection / reapply_projection_for_aspect).
-    apply_demo_quirks(title);
-
     int events_window = events_winopen(title);
     window_is_open = 1;
     events_set_framebuffer(rasterizer_frontbuffer());
@@ -3019,8 +3174,12 @@ int defpup(char *menu, ...)
     pup_init(thepup);
     thepup->defd = 1;
 
-    if (menu)
-        pup_parse_string(thepup, menu);
+    if (menu) {
+        va_list ap;
+        va_start(ap, menu);
+        pup_parse_string(thepup, menu, ap);
+        va_end(ap);
+    }
 
     return which;
 }
@@ -3029,12 +3188,15 @@ int newpup() {
     return defpup(NULL);
 }
 
-void addtopup(long which, char *menu) {
+void addtopup(long which, char *menu, ...) {
     if(which < 0 || which >= MAX_PUPS || !pups[which].defd) {
         printf("addtopup: invalid pup id %ld\n", which);
         return;
     }
-    pup_parse_string(pups + which, menu);
+    va_list ap;
+    va_start(ap, menu);
+    pup_parse_string(pups + which, menu, ap);
+    va_end(ap);
 }
 
 int dopup(int pup_index) {
@@ -3156,8 +3318,19 @@ int dopup(int pup_index) {
     vec4f_copy(current_color, previous_color);
     zbuffer(old_zbuffer);
 
-    if (selected >= 0)
-        return thepup->items[selected].value;
+    if (selected >= 0) {
+        pup_item *item = thepup->items + selected;
+        int value = item->value;
+        // %f / %F callbacks run after the menu is closed and drawing state
+        // is restored (they may change GL state themselves — newave's
+        // display-mode menu does). Item function first, then the menu-wide
+        // function, per IRIS GL ordering (see pup_func for why no args).
+        if (item->func)
+            value = item->func();
+        if (thepup->func)
+            value = thepup->func();
+        return value;
+    }
     else
         return -1;
 }
@@ -3240,6 +3413,7 @@ void draw_(Coord x, Coord y, Coord z) {
     world_vertex v0, v1;
     vec4f_copy(v0.coord, current_position);
     vec3f_copy(v0.color, current_color);
+    v0.ci = current_color_index;
 
     current_position[0] = x;
     current_position[1] = y;
@@ -3247,6 +3421,7 @@ void draw_(Coord x, Coord y, Coord z) {
 
     vec4f_copy(v1.coord, current_position);
     vec3f_copy(v1.color, current_color);
+    v1.ci = current_color_index;
 
     int save_lighting = lighting_enabled;
     lighting_enabled = 0;
@@ -3367,6 +3542,7 @@ void pnt(Coord x, Coord y, Coord z)
     static world_vertex wv;
     vec4f_set(wv.coord, x, y, z, 1.0);
     vec4f_copy(wv.color, current_color);
+    wv.ci = current_color_index;
 
     process_point(&wv);
 }
@@ -3683,12 +3859,14 @@ void rdr2i(Icoord dx, Icoord dy) {
     world_vertex v0, v1;
     vec4f_copy(v0.coord, current_position);
     vec3f_copy(v0.color, current_color);
+    v0.ci = current_color_index;
 
     current_position[0] += dx;
     current_position[1] += dy;
 
     vec4f_copy(v1.coord, current_position);
     vec3f_copy(v1.color, current_color);
+    v1.ci = current_color_index;
 
     int save_lighting = lighting_enabled;
     lighting_enabled = 0;
@@ -3748,6 +3926,7 @@ void v4f(float v[4]) {
     wv->st[0] = current_texcoord[0];
     wv->st[1] = current_texcoord[1];
     vec4f_copy(wv->color, current_color);
+    wv->ci = current_color_index;
     vec3f_copy(wv->normal, current_normal);
     polygon_vert_count++;
 }
@@ -3879,13 +4058,20 @@ void polarview(Coord dist, Angle azim, Angle inc, Angle twist) {
     rotate(-azim, 'z');
 }
 
+// Define the screen z range: the units lshaderange's znear/zfar are
+// expressed in. (The z-buffer itself keeps its full internal range; this
+// only affects the depth-cue mapping — see project_vertex.)
 void lsetdepth(int near, int far) {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%d, %d", near, far);
+    ls_znear = near;
+    ls_zfar = far;
 }
 
 // pre-4D name for lsetdepth, with a Screencoord (16-bit) z range
 void setdepth(Screencoord near, Screencoord far) {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%d, %d", near, far);
+    ls_znear = near;
+    ls_zfar = far;
 }
 
 // IRIX libc, not IRIS GL: nap for ticks/100 seconds. Demos call it to be
@@ -3897,7 +4083,8 @@ long sginap(long ticks) {
 
 void depthcue(Boolean enable)
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%d", enable);
+    depthcue_enabled = enable;
 }
 
 int getgdesc (int inquiry)
@@ -3944,26 +4131,45 @@ int getgdesc (int inquiry)
     return 0;
 }
 
+// Set the color-index ramp that depth-cued vertices shade through: a
+// vertex at znear draws with highin (brightest), at zfar with lowin, and
+// linearly in between (see project_vertex). znear/zfar are in lsetdepth
+// units.
 void lshaderange (Colorindex lowin, Colorindex highin, long znear, long zfar)
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%d, %d, %ld, %ld", lowin, highin, znear, zfar);
+    shade_lowin = lowin;
+    shade_highin = highin;
+    shade_znear = znear;
+    shade_zfar = zfar;
 }
 
 void qreset ()
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACE();
+    // Discard all pending events: pull anything queued in the events layer
+    // into the GL queue first, then drop the lot.
+    fetch_event_queue();
+    input_queue_head = 0;
+    input_queue_length = 0;
 }
 
+/* GL2-era name for line antialiasing (newave). We can't reproduce per-pixel
+ * coverage, but in CI mode we approximate its visible effect: smooth lines
+ * draw with the brightest entry of their 16-entry intensity ramp (see
+ * process_line) instead of the ramp base, which is what the hardware
+ * converged to for fully-covered pixels. */
 void smoothline (long mode)
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%ld", mode);
+    smoothline_enabled = (mode != 0);
 }
 
-/* the real IRIS GL name for line antialiasing (smoothline above is the
- * GL2-era alias newave uses) */
+/* the real IRIS GL name for line antialiasing */
 void linesmooth (long mode)
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%ld", mode);
+    smoothline_enabled = (mode != 0);
 }
 
 void blendfunction (long sfactor, long dfactor)
@@ -4170,9 +4376,17 @@ void zwritemask (unsigned long mask)
     rasterizer_zwrite(mask != 0);
 }
 
+// zsource(ZSRC_COLOR) makes z comparisons use color instead of depth
+// (newave's antialiased mode uses it as a brightest-pixel-wins trick for
+// smooth lines). We can't source z from color, so z-testing is suspended
+// while it's selected — the demo's zfunction tricks against a czclear'd
+// buffer degenerate to plain draw-in-order, which is the right look for
+// the wireframes that use this.
 void zsource (long src)
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%ld", src);
+    zsource_color = (src == ZSRC_COLOR);
+    rasterizer_zbuffer(zbuffer_enabled && !zsource_color);
 }
 
 void charstr(char *str) {
@@ -4189,6 +4403,7 @@ void charstr(char *str) {
 
     vec4f_copy(vert.coord, current_character_position);
     vec4f_copy(vert.color, current_color);
+    vert.ci = current_color_index;
 
     int code = classify_vertex(vert.coord);
     if(code != CLIP_ALL_IN)
@@ -4216,7 +4431,9 @@ void circi(Icoord x, Icoord y, Icoord r) {
     world_vertex v0, v1;
 
     vec3f_copy(v0.color, current_color);
+    v0.ci = current_color_index;
     vec3f_copy(v1.color, current_color);
+    v1.ci = current_color_index;
 
     int save_lighting = lighting_enabled;
     lighting_enabled = 0;
@@ -4248,7 +4465,9 @@ void circ(Coord x, Coord y, Coord r) {
     world_vertex v0, v1;
 
     vec3f_copy(v0.color, current_color);
+    v0.ci = current_color_index;
     vec3f_copy(v1.color, current_color);
+    v1.ci = current_color_index;
 
     int save_lighting = lighting_enabled;
     lighting_enabled = 0;
@@ -4285,6 +4504,7 @@ void circf(Coord x, Coord y, Coord r) {
         verts[i].coord[3] = 1.0;
         vec3f_copy(verts[i].color, current_color);
         verts[i].color[3] = 1.0;
+        verts[i].ci = current_color_index;
     }
     process_polygon(CIRCLE_SEGMENTS, verts);
 
@@ -4484,6 +4704,7 @@ void poly(int n, Coord p[][3]) {
         vec4f_set(worldverts[i].coord,
             p[i][0], p[i][1], p[i][2], 1.0);
         vec4f_copy(worldverts[i].color, color);
+        worldverts[i].ci = current_color_index;
         vec3f_set(worldverts[i].normal, 1, 0, 0);
     }
 
@@ -4552,7 +4773,7 @@ void poly2s(int n, Scoord p[][2]) {
 void zbuffer(int enable) {
     TRACEF("%d", enable);
     zbuffer_enabled = enable;
-    rasterizer_zbuffer(enable);
+    rasterizer_zbuffer(enable && !zsource_color);
 }
 
 // XXX rasterizer_zclear()
@@ -4568,7 +4789,15 @@ void zclear() {
 }
 
 void zfunction(int func) {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%d", func);
+    // The rasterizers compare LEQUAL, the IRIS GL default and the only
+    // function the demo corpus asks for. (newave also sets ZF_GEQUAL, but
+    // only together with zsource(ZSRC_COLOR), where z-testing is suspended
+    // anyway — see zsource.)
+    if (func != ZF_LEQUAL) {
+        static int warned = 0;
+        if (!warned) { printf("zfunction: only ZF_LEQUAL emulated\n"); warned = 1; }
+    }
 }
 
 // XXX display list
@@ -4651,6 +4880,12 @@ static void init_gl_state()
     vec3ub_set(colormap[CYAN], 0, 255, 255);
     vec3ub_set(colormap[WHITE], 255, 255, 255);
 
+    // IRIS default colormap also carried a 16-step grey ramp at 16..31
+    // (libdemo port.h: GREY(x) = 16+x); cedit and friends use it without
+    // ever mapping it themselves
+    for(int i = 0; i < 16; i++)
+        vec3ub_set(colormap[16 + i], i * 17, i * 17, i * 17);
+
     for(int i = 0; i < MAX_PUPS; i++)
         pup_init(pups + i);
 
@@ -4665,10 +4900,40 @@ static void init_gl_state()
     memset(devices_queued, 0, sizeof(devices_queued));
 }
 
+// Read back color indices from the front buffer, starting at the current
+// character position and moving right (CI mode; cedit's getapixel uses this
+// for its pick-a-color-off-the-screen clicks). Requires a rasterizer that
+// keeps a CI buffer — on gles2 there is none, so this reads as index 0.
 int readpixels(short number, Colorindex colors[ ])
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
-    return 0;
+    TRACEF("%d", number);
+
+    unsigned short *cibuf = rasterizer_ci_frontbuffer();
+    if (cibuf == NULL) {
+        static int warned = 0;
+        if (!warned) {
+            printf("readpixels: no color-index buffer on this rasterizer (use the reference rasterizer)\n");
+            warned = 1;
+        }
+        for (int i = 0; i < number; i++)
+            colors[i] = 0;
+        return number;
+    }
+
+    Screencoord cx, cy;
+    getcpos(&cx, &cy);
+
+    int count = 0;
+    for (int i = 0; i < number; i++) {
+        int x = cx + i;
+        if (x < 0 || x >= DISPLAY_WIDTH || cy < 0 || cy >= DISPLAY_HEIGHT)
+            break;
+        // window y is up; buffer row 0 is the top row
+        colors[count++] = cibuf[(size_t)(DISPLAY_HEIGHT - 1 - cy) * DISPLAY_WIDTH + x];
+    }
+    // (IRIS GL also advances the character position past the pixels read;
+    // nothing in this corpus depends on that.)
+    return count;
 }
 int readRGB(short number, RGBvalue red[ ], RGBvalue green[ ], RGBvalue blue[ ])
 {
@@ -4686,7 +4951,18 @@ void popattributes()
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
+// Make world coordinates coincide with screen pixels: full-framebuffer
+// viewport and an ortho projection mapping x,y 1:1 onto pixel centers.
+// Loads the matrix stacks directly (no record_projection) so the demo's
+// own recorded projection isn't disturbed; callers bracket this with
+// pushviewport/pushmatrix ... popmatrix/popviewport (libdemo's getapixel),
+// which in MSINGLE mode saves and restores both stacks.
 void screenspace()
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACE();
+    viewport(0, DISPLAY_WIDTH - 1, 0, DISPLAY_HEIGHT - 1);
+    float m[16];
+    ortho2_matrix(m, -0.5, DISPLAY_WIDTH - 0.5, -0.5, DISPLAY_HEIGHT - 0.5);
+    matrix4x4f_stack_load(&projection_stack, m);
+    matrix4x4f_stack_load(&modelview_stack, identity_4x4f);
 }

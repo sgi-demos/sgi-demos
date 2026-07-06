@@ -24,6 +24,17 @@
 
 static const rasterizer_funcs *rast_funcs = NULL;
 
+// Shim-preferred mode (per-demo quirks in gl.c — e.g. cedit needs the
+// reference rasterizer's color-index buffer). Weaker than an explicit
+// GLES2_RASTERIZER env or ?rast= URL choice; must be set before the first
+// rasterizer_* call locks the selection in.
+static const char *preferred_mode = NULL;
+
+void rasterizer_prefer(const char *mode)
+{
+    preferred_mode = mode;
+}
+
 static const char* rasterizer_mode(void)
 {
     const char *mode = getenv("GLES2_RASTERIZER");
@@ -44,6 +55,9 @@ static const char* rasterizer_mode(void)
     // gles2 rasterizer requires; force the CPU reference rasterizer there
     if (getenv("SGI_SDL_FRAMEBUFFER") != NULL)
         mode = "ref";
+
+    if (mode == NULL)
+        mode = preferred_mode;
 
     return mode ? mode : "gles2";
 }
@@ -93,3 +107,5 @@ void rasterizer_zwrite(int enable)                      { rast()->zwrite(enable)
 void rasterizer_linewidth(float w)                      { rast()->linewidth(w); }
 void rasterizer_frame_sync(void)                        { rast()->frame_sync(); }
 void rasterizer_resize(uint32_t width, uint32_t height) { rast()->resize(width, height); }
+unsigned short* rasterizer_ci_frontbuffer(void)         { return rast()->ci_frontbuffer(); }
+void rasterizer_resolve_ci_to_rgb(uint8_t colormap[][3]) { rast()->resolve_ci_to_rgb(colormap); }

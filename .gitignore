@@ -8,3 +8,4 @@ bin
 bin-*-*/
 REPO.md
 logs/*
+frame*.ppm

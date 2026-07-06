@@ -23,6 +23,14 @@ typedef uint8_t bool;
 #define true 1
 #endif
 
+// Color index accompanying each screen vertex in color-map mode. The RGB
+// fields always carry the colormap-resolved color; ci additionally records
+// which index produced it so the rasterizer can maintain a per-pixel color
+// index buffer (the SGI hardware palette LUT emulation — see
+// rasterizer_resolve_ci_to_rgb). SCREEN_VERTEX_CI_NONE marks vertices with
+// no index: shim UI (menus) and RGB-mode geometry.
+#define SCREEN_VERTEX_CI_NONE 0xFFFF
+
 typedef struct screen_vertex
 {
     int32_t x, y;   // pixels in 1/SCREEN_VERTEX_V2_SCALE fixed point; signed
@@ -31,6 +39,7 @@ typedef struct screen_vertex
     uint32_t z;
     uint8_t r, g, b, a;
     float s, t;     // texture coords (valid when texturing is enabled)
+    uint16_t ci;    // color index (CI mode), or SCREEN_VERTEX_CI_NONE
 } screen_vertex;
 
 #define SCREEN_VERTEX_V2_SCALE 32

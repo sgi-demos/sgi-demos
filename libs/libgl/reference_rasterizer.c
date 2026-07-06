@@ -38,6 +38,15 @@ static uint8_t *c_buffer[2] = {NULL, NULL};   // BGRA, DISPLAY_WIDTH*DISPLAY_HEI
 static uint8_t *gl_c_backbuffer = NULL;       // render to back buffer
 static uint8_t *gl_c_frontbuffer = NULL;      // display from front buffer
 
+// double color-index buffers, written in parallel with the RGB buffers in CI
+// mode. The CI front buffer is the source of truth for palette (mapcolor)
+// changes: rasterizer_resolve_ci_to_rgb re-derives front RGB from it, which
+// is how the SGI hardware palette LUT is emulated. One uint16_t per pixel,
+// same row order as the RGB buffers (row 0 = top).
+static uint16_t *ci_buffer[2] = {NULL, NULL};
+static uint16_t *gl_ci_backbuffer = NULL;
+static uint16_t *gl_ci_frontbuffer = NULL;
+
 static size_t color_buffer_bytes(void) { return (size_t)DISPLAY_WIDTH * DISPLAY_HEIGHT * 4; }
 
 // Address of pixel (x, y) in a color buffer (y is buffer row, 0 = top)
@@ -79,9 +88,13 @@ static void clear_cbuffer(int draw_enabled, uint8_t *buffer, uint8_t r, uint8_t 
     }
 }
 
-static void clear_cibuffer(int draw_enabled, short color_index)
+static void clear_cibuffer(int draw_enabled, uint16_t *buffer, short color_index)
 {
-    // color index buffers not implemented; colors arrive pre-resolved in screen_vertex
+    if (draw_enabled && buffer) {
+        size_t n = (size_t)DISPLAY_WIDTH * DISPLAY_HEIGHT;
+        for (size_t i = 0; i < n; i++)
+            buffer[i] = (uint16_t)color_index;
+    }
 }
 
 void ref_rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
@@ -89,8 +102,8 @@ void ref_rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
     clear_cbuffer(backbuffer_draw_enabled, gl_c_backbuffer, r, g, b);
     clear_cbuffer(frontbuffer_draw_enabled, gl_c_frontbuffer, r, g, b);
     if (!rgb_mode) {
-        clear_cibuffer(backbuffer_draw_enabled, color_index);
-        clear_cibuffer(frontbuffer_draw_enabled, color_index);
+        clear_cibuffer(backbuffer_draw_enabled, gl_ci_backbuffer, color_index);
+        clear_cibuffer(frontbuffer_draw_enabled, gl_ci_frontbuffer, color_index);
     }
 }
 
@@ -216,22 +229,54 @@ unsigned char* ref_rasterizer_frontbuffer()
     return gl_c_frontbuffer;
 }
 
+unsigned short* ref_rasterizer_ci_frontbuffer()
+{
+    return gl_ci_frontbuffer;
+}
+
+// Bake the front CI buffer through the given colormap into the front RGB
+// buffer (the SGI hardware palette LUT emulation). Every pixel is rewritten
+// from its recorded index, so anything painted RGB-only (shim UI such as an
+// open popup menu) is overwritten with the underlying scene — which is why
+// the GL layer only calls this at "demo finished a frame" present points,
+// never from inside dopup's modal loop.
+void ref_rasterizer_resolve_ci_to_rgb(uint8_t colormap[][3])
+{
+    if (!gl_ci_frontbuffer || !gl_c_frontbuffer)
+        return;
+    size_t n = (size_t)DISPLAY_WIDTH * DISPLAY_HEIGHT;
+    for (size_t i = 0; i < n; i++) {
+        uint16_t ci = gl_ci_frontbuffer[i];
+        uint8_t *p = gl_c_frontbuffer + i * 4;
+        p[RED_BYTE]   = colormap[ci][0];
+        p[GREEN_BYTE] = colormap[ci][1];
+        p[BLUE_BYTE]  = colormap[ci][2];
+    }
+}
+
+static size_t ci_buffer_bytes(void) { return (size_t)DISPLAY_WIDTH * DISPLAY_HEIGHT * sizeof(uint16_t); }
+
 void ref_rasterizer_copy_front_to_back()
 {
     if (gl_c_backbuffer)
         memcpy(gl_c_backbuffer, gl_c_frontbuffer, color_buffer_bytes());
+    if (gl_ci_backbuffer)
+        memcpy(gl_ci_backbuffer, gl_ci_frontbuffer, ci_buffer_bytes());
 }
 
 void ref_rasterizer_copy_back_to_front()
 {
     if (gl_c_frontbuffer)
         memcpy(gl_c_frontbuffer, gl_c_backbuffer, color_buffer_bytes());
+    if (gl_ci_frontbuffer)
+        memcpy(gl_ci_frontbuffer, gl_ci_backbuffer, ci_buffer_bytes());
 }
 
 void ref_rasterizer_swap()
 {
     // swap back buffer (buffer being rasterized) and front buffer (buffer being displayed)
     uint8_t *_gl_backbuffer = gl_c_backbuffer; gl_c_backbuffer = gl_c_frontbuffer; gl_c_frontbuffer = _gl_backbuffer;
+    uint16_t *_gl_ci_backbuffer = gl_ci_backbuffer; gl_ci_backbuffer = gl_ci_frontbuffer; gl_ci_frontbuffer = _gl_ci_backbuffer;
 
     // optionally dump frames to ppm files
     static int frame = 0;
@@ -368,6 +413,26 @@ static void set_buffer_pixel(int draw_enabled, uint8_t *buffer, int y, int x, ui
     }
 }
 
+static void set_ci_buffer_pixel(int draw_enabled, uint16_t *buffer, int y, int x, uint16_t ci)
+{
+    if (draw_enabled)
+        buffer[(size_t)y * DISPLAY_WIDTH + x] = ci;
+}
+
+// Record the color index of a drawn pixel, parallel to the RGB write. CI
+// mode in this shim is flat-shaded per primitive (index taken from the
+// primitive's first vertex): real SGI hardware could Gouraud-interpolate
+// indices, but for non-ramp palettes the result was nonsense and the demos
+// in this corpus don't rely on it. Vertices carrying SCREEN_VERTEX_CI_NONE
+// (shim UI, RGB mode) leave the CI buffer untouched.
+static void write_ci_pixel(int buffer_y, int x, uint16_t ci)
+{
+    if (!rgb_mode && ci != SCREEN_VERTEX_CI_NONE) {
+        set_ci_buffer_pixel(backbuffer_draw_enabled, gl_ci_backbuffer, buffer_y, x, ci);
+        set_ci_buffer_pixel(frontbuffer_draw_enabled, gl_ci_frontbuffer, buffer_y, x, ci);
+    }
+}
+
 static z_t sz_to_zbuffer(float screenz)
 {
     uint32_t z_ = (uint32_t)clamp(screenz, 0.0, (float)0xFFFFFF7F); // largest float <= UINT_MAX
@@ -404,10 +469,14 @@ static void triPixel(int x, int y, float bary[3], screen_vertex s[3])
 
     int buffer_y = DISPLAY_HEIGHT - 1 - y;
 
+    // z <= : LEQUAL, the IRIS GL default z-function. Later geometry at equal
+    // depth overwrites — newave's edit-mode crosshair redraws mesh lines in
+    // green at the same z and must win, as it did on the real hardware.
     size_t zi = (size_t)buffer_y * DISPLAY_WIDTH + x;
-    if (!zbuffer_enabled || (z < z_buffer[zi])) {
+    if (!zbuffer_enabled || (z <= z_buffer[zi])) {
         set_buffer_pixel(backbuffer_draw_enabled, gl_c_backbuffer, buffer_y, x, r, g, b, a);
         set_buffer_pixel(frontbuffer_draw_enabled, gl_c_frontbuffer, buffer_y, x, r, g, b, a);
+        write_ci_pixel(buffer_y, x, s[0].ci);
         if (zwrite_enabled)
             z_buffer[zi] = z;
     }
@@ -608,10 +677,12 @@ static void draw_point(screen_vertex *sv)
     z_t z = sz_to_zbuffer(s.z);
 
     int buffer_y = DISPLAY_HEIGHT - 1 - y;
+    // z <= : LEQUAL, the IRIS GL default (see triPixel)
     size_t zi = (size_t)buffer_y * DISPLAY_WIDTH + x;
-    if (!zbuffer_enabled || (z < z_buffer[zi])) {
+    if (!zbuffer_enabled || (z <= z_buffer[zi])) {
         set_buffer_pixel(backbuffer_draw_enabled, gl_c_backbuffer, buffer_y, x, s.r, s.g, s.b, s.a);
         set_buffer_pixel(frontbuffer_draw_enabled, gl_c_frontbuffer, buffer_y, x, s.r, s.g, s.b, s.a);
+        write_ci_pixel(buffer_y, x, s.ci);
         if (zwrite_enabled)
             z_buffer[zi] = z;
     }
@@ -683,6 +754,8 @@ void ref_rasterizer_resize(uint32_t width, uint32_t height)
 
     free(c_buffer[0]);
     free(c_buffer[1]);
+    free(ci_buffer[0]);
+    free(ci_buffer[1]);
     free(z_buffer);
 
     DISPLAY_WIDTH = width;
@@ -690,9 +763,13 @@ void ref_rasterizer_resize(uint32_t width, uint32_t height)
 
     c_buffer[0] = calloc(1, color_buffer_bytes()); // calloc = cleared to black
     c_buffer[1] = calloc(1, color_buffer_bytes());
+    ci_buffer[0] = calloc(1, ci_buffer_bytes());   // calloc = cleared to index 0
+    ci_buffer[1] = calloc(1, ci_buffer_bytes());
     z_buffer = malloc((size_t)DISPLAY_WIDTH * DISPLAY_HEIGHT * sizeof(z_t));
     gl_c_backbuffer = c_buffer[0];
     gl_c_frontbuffer = c_buffer[1];
+    gl_ci_backbuffer = ci_buffer[0];
+    gl_ci_frontbuffer = ci_buffer[1];
 
     ref_rasterizer_zclear(Z_MAX);
 
@@ -727,6 +804,8 @@ const rasterizer_funcs* ref_rasterizer_get_funcs(void)
         .linewidth          = ref_rasterizer_linewidth,
         .frame_sync         = ref_rasterizer_frame_sync,
         .resize             = ref_rasterizer_resize,
+        .ci_frontbuffer     = ref_rasterizer_ci_frontbuffer,
+        .resolve_ci_to_rgb  = ref_rasterizer_resolve_ci_to_rgb,
     };
     return &funcs;
 }
