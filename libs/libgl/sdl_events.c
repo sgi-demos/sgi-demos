@@ -81,18 +81,15 @@ static Uint8* getKeyboardState()
     return (unsigned char*)keys;
 }
 
-static bool mouseInsideFramebuffer()
-{
-    return sdlInsideFramebuffer(mousePosX(), mousePosY());
-}
-
-// EVENT: mouse transited framebuffer boundary, in or out
-static void mouseMotionEvent()
+// EVENT: mouse motion — INPUTCHANGE on framebuffer transit, and queued
+// MOUSEX/MOUSEY valuator events (from the event's own coordinates, which
+// are correct even when SDL's polled global state lags the event stream)
+static void mouseMotionEvent(SDL_MouseMotionEvent *motion)
 {
     // detect when mouse transits into or out of framebuffer for INPUTCHANGE events
     // TODO: also perhaps when window loses/gains focus?
     static bool prevMouseInsideFramebuffer = false;
-    bool mouseInsideFB = mouseInsideFramebuffer();
+    bool mouseInsideFB = sdlInsideFramebuffer(motion->x, motion->y);
     if (mouseInsideFB != prevMouseInsideFramebuffer)
     {
         prevMouseInsideFramebuffer = mouseInsideFB;
@@ -104,33 +101,85 @@ static void mouseMotionEvent()
             enqueue_event(&ev);
         }
     }
+
+    // IRIS GL: qdevice(MOUSEX)/qdevice(MOUSEY) queue a valuator event with
+    // the absolute position on every motion — flight steers its control
+    // stick from these queued events, never by polling getvaluator(). Only
+    // queue an axis when its value actually changed, like the hardware.
+    static int32_t prevQueuedX = -1, prevQueuedY = -1;
+    if (sdl_devices_queued[MOUSEX])
+    {
+        int32_t x = sdlClampToFramebufferX(motion->x);
+        if (x != prevQueuedX)
+        {
+            prevQueuedX = x;
+            gl_event ev;
+            ev.device = MOUSEX;
+            ev.val = x;
+            enqueue_event(&ev);
+        }
+    }
+    if (sdl_devices_queued[MOUSEY])
+    {
+        int32_t y = sdlClampToFramebufferY(motion->y);
+        if (y != prevQueuedY)
+        {
+            prevQueuedY = y;
+            gl_event ev;
+            ev.device = MOUSEY;
+            ev.val = y;
+            enqueue_event(&ev);
+        }
+    }
 }
 
-// EVENT: SDL keycode, string
-static void keyDownEvent(int sdl_keycode, char *text)
+// EVENT: raw key device press/release. IRIS GL semantics: a raw key device
+// (GKEY, LEFTARROWKEY, PAD1, ...) is queued only if the demo qdevice()d that
+// specific device — qdevice(KEYBD) alone must not leak raw key events. Both
+// edges are queued, like the real hardware: demos depend on releases (bounce
+// and arena exit on ESCKEY going UP; flight 1988's wait_for_input drains the
+// queue "until release" after any button-like event and would otherwise
+// block, eating every following keystroke).
+static void keyRawEvent(int sdl_keycode, int down)
 {
-    // convert SDL key event to GL and add it to GL event queue
-    // printf("sdl_keycode = %d, text = [%s]\n", sdl_keycode, text);
     gl_event ev;
     ev.device = sdl_keycode_to_gl(sdl_keycode);
-
-    // IRIS GL semantics: a raw key device (GKEY, LEFTARROWKEY, ...) is queued
-    // only if the demo qdevice()d that specific device. qdevice(KEYBD) alone
-    // must NOT leak raw key events — flight 1988's wait_for_input treats any
-    // non-KEYBD event as a button and drains the queue "until release",
-    // eating real keystrokes (and no release events exist here).
     if (ev.device != 0 && sdl_devices_queued[ev.device])
     {
-        ev.val = 1;
+        ev.val = down;
         enqueue_event(&ev);
     }
+}
 
-    if (sdl_devices_queued[KEYBD] && strlen(text) == 1)
+// EVENT: an ascii character for the KEYBD virtual device
+static void keyAsciiEvent(char c)
+{
+    if (sdl_devices_queued[KEYBD])
     {
+        gl_event ev;
         ev.device = KEYBD;
-        ev.val = text[0];
+        ev.val = c;
         enqueue_event(&ev);
     }
+}
+
+// The ascii a key that produces no SDL_TEXTINPUT would have typed on the
+// IRIS keyboard (0 = none). KEYBD carried these on the real machine: flight
+// 1988 quits on ESC (27) and redraws on ^R (18).
+static int keyControlAscii(int sym)
+{
+    switch (sym)
+    {
+        case SDLK_ESCAPE:    return 27;
+        case SDLK_RETURN:
+        case SDLK_KP_ENTER:  return 13;
+        case SDLK_BACKSPACE: return 8;
+        case SDLK_TAB:       return 9;
+        case SDLK_DELETE:    return 127;
+    }
+    if ((SDL_GetModState() & KMOD_CTRL) && sym >= SDLK_a && sym <= SDLK_z)
+        return sym - SDLK_a + 1;    // ^A .. ^Z
+    return 0;
 }
 
 // EVENT: SDL mouse button, button up/down, mouse position
@@ -288,7 +337,10 @@ void sdlProcessEvents()
     inSdlProcessEvents = true;
     SDL_Event event;
     char text[32] = "";
-    int keysym = 0;
+    // The keysym of the most recent SDL_KEYDOWN, kept across pump calls: its
+    // SDL_TEXTINPUT can land in a later pump (browser callbacks push SDL
+    // events between pumps), and the pair must still match up.
+    static int keysym = 0;
 
     // Handle in-progress touch event
     touchEventProcess();
@@ -324,11 +376,20 @@ void sdlProcessEvents()
                 memset(text, 0, sizeof(text));
                 strncpy(text, event.text.text, sizeof(text)-1);
                 //printf("SDL_TEXTINPUT text = [%s] keysym = [%d]\n", text, keysym);
-                if (strlen(SDL_GetKeyName(keysym)) == 1)
+                if (strlen(text) == 1)
                 {
                     if (keysym == SDLK_EXCLAIM)
                         touch.enabled = !touch.enabled;
-                    keyDownEvent(keysym, text);
+                    // Every printing key must reach qdevice(KEYBD) readers as a
+                    // character — flight's "press any character to continue"
+                    // includes SPACE, whose multi-char SDL key name previously
+                    // fell through both this case and SDL_KEYDOWN's. Keys with
+                    // multi-char names already sent their raw device event at
+                    // SDL_KEYDOWN; single-char-named keys queue theirs here,
+                    // paired with the text.
+                    if (strlen(SDL_GetKeyName(keysym)) == 1)
+                        keyRawEvent(keysym, 1);
+                    keyAsciiEvent(text[0]);
                 }
                 break;
 
@@ -336,11 +397,27 @@ void sdlProcessEvents()
                 keysym = event.key.keysym.sym;
                 //printf("SDL_KEYDOWN keysym = %d\n", keysym);
                 if (strlen(SDL_GetKeyName(keysym)) > 1)
-                    keyDownEvent(keysym, "");
+                    keyRawEvent(keysym, 1);
+                // Keys that type nothing (no SDL_TEXTINPUT follows) deliver
+                // their ascii to KEYBD here — flight 1988 quits on ESC (27)
+                // and redraws on ^R (18). A demo that qdevice()d the key's
+                // own raw device claims the key instead (bounce and arena
+                // handle ESCKEY themselves and must not also see KEYBD 27).
+                {
+                    int raw = sdl_keycode_to_gl(keysym);
+                    int ascii = keyControlAscii(keysym);
+                    if (ascii && !(raw != 0 && sdl_devices_queued[raw]))
+                        keyAsciiEvent((char)ascii);
+                }
+                break;
+
+            case SDL_KEYUP:
+                // raw key device releases (val 0); KEYBD is press-only ascii
+                keyRawEvent(event.key.keysym.sym, 0);
                 break;
 
             case SDL_MOUSEMOTION:
-                mouseMotionEvent();
+                mouseMotionEvent(&event.motion);
                 break;
 
             case SDL_MOUSEBUTTONDOWN:

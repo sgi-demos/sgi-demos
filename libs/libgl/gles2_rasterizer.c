@@ -93,9 +93,68 @@ static int layers_in_use = 0;
 static int scissor_enabled = 0;
 static int32_t scissor_rect[4];     // x0, y0, x1, y1 inclusive
 
+// GPU color-index buffer (CI/cmode emulation, needs an ES3 context).
+//
+// In cmode, draws render their INDEX — encoded in the color attachment's
+// bytes (R = index & 0xff, G = index >> 8) — into dedicated CI FBOs, and the
+// present resolves indexes to RGB through a palette LUT texture, exactly the
+// hardware model: mapcolor() changes already-drawn pixels on the next
+// present, and per-draw/clear writemask compositing is exact index math,
+// immune to the palette collisions that break RGB-matching (flight 1988 maps
+// white, white+brown and white+orange to the same RGB but their masked
+// clears must restore three different things).
+//
+// Masked draws sample a snapshot of the CI target (copied before each masked
+// flush — the snapshot's protected planes are always current, since masked
+// draws never write them) and an ES3 shader computes
+// (old & ~wm) | (drawn & wm) per pixel in integer math.
+//
+// Shim UI drawn RGB-only during cmode (popup menus: CI_NONE vertices) lands
+// in the regular RGB buffers, whose alpha marks "UI here" — cmode clears
+// wipe those to alpha 0 and the resolve overlays where alpha is set, which
+// is how newave's menus stay visible over its CI scene.
+static gl_buffer ci_buffers[2];     // encoded-index targets, share the depth rb
+static gl_buffer *back_ci = &ci_buffers[0];
+static gl_buffer *front_ci = &ci_buffers[1];
+static gl_buffer resolved_buf;      // LUT-resolved RGB, the cmode present source
+static GLuint ci_snap_tex = 0;      // masked-composite snapshot of the CI target
+static GLuint lut_tex = 0;          // 64x64 palette LUT (4096 indexes)
+static int lut_dirty = 1;
+static uint8_t (*the_colormap)[3] = NULL;   // GL layer's live palette
+static uint16_t the_writemask = 0xffff;
+static int ci_gpu_ok = 0;           // ES3 context + CI programs built
+
+static GLuint ci_masked_prog = 0;   // masked-composite draw program (ES3)
+static GLint  u_cim_scale = -1;
+static GLint  u_cim_pattern_on = -1;
+static GLint  u_cim_pattern_tex = -1;
+static GLint  u_cim_snap_tex = -1;
+static GLint  u_cim_wm = -1;
+
+static GLuint resolve_prog = 0;     // CI -> RGB present resolve (ES3)
+static GLint  u_res_scale = -1;
+static GLint  u_res_ci_tex = -1;
+static GLint  u_res_lut_tex = -1;
+static GLint  u_res_ui_tex = -1;
+
 // One depth renderbuffer shared by both FBOs, matching the reference
-// rasterizer's single z-buffer (front and back share z state there too)
+// rasterizer's single z-buffer (front and back share z state there too).
+// 24-bit depth when the context provides it (ES3, or the OES_depth24
+// extension): IRIS hardware had 24-bit z, and 16 bits visibly z-fights on
+// flight 3.4's near=4..far=1e6 scene (the F-14 cockpit interior poked
+// through the canopy glass).
 static GLuint shared_depth_rb = 0;
+#ifndef GL_DEPTH_COMPONENT24
+#define GL_DEPTH_COMPONENT24 0x81A6
+#endif
+static GLenum depth_rb_format(void)
+{
+    const char *ver = (const char *)glGetString(GL_VERSION);
+    const char *ext = (const char *)glGetString(GL_EXTENSIONS);
+    if ((ver && strstr(ver, "OpenGL ES 3")) || (ext && strstr(ext, "OES_depth24")))
+        return GL_DEPTH_COMPONENT24;
+    return GL_DEPTH_COMPONENT16;
+}
 
 static GLuint draw_prog = 0;        // batched geometry program
 static GLint  u_draw_scale = -1;    // 2/W, 2/H pixel->NDC scale
@@ -151,10 +210,13 @@ static int batch_count = 0;
 // and bitmap glyphs go through — but points are written directly and are
 // never stippled. Emitters declare which they need; a mismatch flushes.
 static int batch_pattern_on = 0;
+static int batch_ci_on = 0;         // batch targets the CI buffers (encoded indexes)
+static int batch_masked_on = 0;     // batch composites through the writemask (CI only)
 static void restore_depth_mask(void);
 static int blend_enabled = 0;   // BF_SA/BF_MSA blending (batch-affecting: mismatch flushes)
 static int batch_blend_on = 0;
 static int zwrite_enabled = 1;  // depth writes (zwritemask)
+static int colormask_enabled = 1;  // color writes (wmpack); off = z-only draws
 static int texture_enabled = 0; // demo texture bound and on (batch-affecting)
 static int batch_texture_on = 0;
 static GLuint demo_tex = 0;     // the one demo texture (unit 1); pattern_tex stays on unit 0
@@ -259,6 +321,97 @@ static const GLchar *comp_fs_src =
     "    gl_FragColor = vec4(o.a > 0.5 ? o.rgb : base, 1.0);            \n"
     "}                                                                  \n";
 
+//
+// ES3 (GLSL 300 es) programs for the CI buffer path. Batched CI geometry
+// carries its encoded index in the vertex color (exact bytes: flat per
+// primitive + the byte-grid quantize), so the unmasked case reuses draw_prog
+// unchanged; these two cover masked compositing and the present resolve.
+// uint uniforms are passed as floats (glUniform1ui is ES3-API; values are
+// <= 4095 so the float round-trip is exact).
+//
+static const GLchar *ci_vs300_src =
+    "#version 300 es                                                    \n"
+    "in vec3 pos;                                                       \n"
+    "in vec4 color;                                                     \n"
+    "in vec2 uv;                                                        \n"
+    "out vec4 v_color;                                                  \n"
+    "out vec2 v_uv;                                                     \n"
+    "uniform vec2 scale;                                                \n"
+    "void main()                                                        \n"
+    "{                                                                  \n"
+    "    gl_Position = vec4(pos.x * scale.x - 1.0,                      \n"
+    "                       pos.y * scale.y - 1.0,                      \n"
+    "                       pos.z * 2.0 - 1.0, 1.0);                    \n"
+    "    v_color = color;                                               \n"
+    "    v_uv = uv;                                                     \n"
+    "}                                                                  \n";
+
+static const GLchar *ci_masked_fs300_src =
+    "#version 300 es                                                    \n"
+    "precision highp float;                                             \n"
+    "precision highp int;                                               \n"
+    "in vec4 v_color;                                                   \n"
+    "in vec2 v_uv;                                                      \n"
+    "uniform sampler2D pattern_tex;                                     \n"
+    "uniform sampler2D snap_tex;                                        \n"
+    "uniform bool pattern_on;                                           \n"
+    "uniform float wm;                                                  \n" // partial writemask, <= 0xfff
+    "out vec4 frag;                                                     \n"
+    "void main()                                                        \n"
+    "{                                                                  \n"
+    "    if (pattern_on)                                                \n"
+    "    {                                                              \n"
+    "        vec2 pc = mod(gl_FragCoord.xy, 16.0) / 16.0;               \n"
+    "        if (texture(pattern_tex, pc).a < 0.5)                      \n"
+    "            discard;                                               \n"
+    "    }                                                              \n"
+    "    vec4 s = texelFetch(snap_tex, ivec2(gl_FragCoord.xy), 0);      \n"
+    "    uint o = uint(s.r * 255.0 + 0.5)                               \n"
+    "           | (uint(s.g * 255.0 + 0.5) << 8);                       \n"
+    "    uint c = uint(v_color.r * 255.0 + 0.5)                         \n"
+    "           | (uint(v_color.g * 255.0 + 0.5) << 8);                 \n"
+    "    uint m = uint(wm + 0.5);                                       \n"
+    "    uint n = ((o & ~m) | (c & m)) & 4095u;                         \n"
+    "    frag = vec4(float(n & 255u) / 255.0,                           \n"
+    "                float(n >> 8) / 255.0, 0.0, 1.0);                  \n"
+    "}                                                                  \n";
+
+// present resolve: index -> LUT RGB, with RGB-only shim UI (alpha-marked in
+// the regular front buffer) overlaid on top
+static const GLchar *resolve_vs300_src =
+    "#version 300 es                                                    \n"
+    "in vec3 pos;                                                       \n"
+    "in vec2 uv;                                                        \n"
+    "out vec2 v_uv;                                                     \n"
+    "uniform vec2 scale;                                                \n"
+    "void main()                                                        \n"
+    "{                                                                  \n"
+    "    gl_Position = vec4(pos.x * scale.x - 1.0,                      \n"
+    "                       pos.y * scale.y - 1.0, 0.0, 1.0);           \n"
+    "    v_uv = uv;                                                     \n"
+    "}                                                                  \n";
+
+static const GLchar *resolve_fs300_src =
+    "#version 300 es                                                    \n"
+    "precision highp float;                                             \n"
+    "precision highp int;                                               \n"
+    "in vec2 v_uv;                                                      \n"
+    "uniform sampler2D ci_tex;                                          \n"
+    "uniform sampler2D lut_tex;                                         \n" // 64x64 = 4096 palette entries
+    "uniform sampler2D ui_tex;                                          \n"
+    "out vec4 frag;                                                     \n"
+    "void main()                                                        \n"
+    "{                                                                  \n"
+    "    ivec2 p = ivec2(gl_FragCoord.xy);                              \n"
+    "    vec4 s = texelFetch(ci_tex, p, 0);                             \n"
+    "    uint idx = (uint(s.r * 255.0 + 0.5)                            \n"
+    "             | (uint(s.g * 255.0 + 0.5) << 8)) & 4095u;            \n"
+    "    vec3 rgb = texelFetch(lut_tex,                                 \n"
+    "                  ivec2(int(idx & 63u), int(idx >> 6)), 0).rgb;    \n"
+    "    vec4 ui = texelFetch(ui_tex, p, 0);                            \n"
+    "    frag = vec4(ui.a > 0.0 ? ui.rgb : rgb, 1.0);                   \n"
+    "}                                                                  \n";
+
 static float clampf(float v, float low, float high)
 {
     return v > high ? high : (v < low ? low : v);
@@ -352,6 +505,7 @@ static void clear_buffer_transparent(gl_buffer *b)
 static void clear_gl_buffers(uint8_t r, uint8_t g, uint8_t b,
                              int clear_front, int clear_back, GLbitfield mask);
 static void flush_batch(void);
+static void emit_screen_triangle(screen_vertex *s0, screen_vertex *s1, screen_vertex *s2);
 
 // Create all GL resources on the first call after the SDL window/GL context
 // exists. Returns 0 (and does nothing) if the context isn't up yet.
@@ -427,7 +581,7 @@ static int ensure_gl(void)
 
     glGenRenderbuffers(1, &shared_depth_rb);
     glBindRenderbuffer(GL_RENDERBUFFER, shared_depth_rb);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, fb_width, fb_height);
+    glRenderbufferStorage(GL_RENDERBUFFER, depth_rb_format(), fb_width, fb_height);
 
     create_buffer(&buffers[0], 1);
     create_buffer(&buffers[1], 1);
@@ -438,6 +592,70 @@ static int ensure_gl(void)
     clear_buffer_transparent(&layer_bufs[1]);
     clear_buffer_transparent(&display_buf);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // CI buffer path: needs an ES3 context for the GLSL 300 es programs
+    // (integer texel math); everything else stays ES2-level API. On an ES2
+    // context cmode falls back to draw-time RGB resolution as before.
+    {
+        const char *ver = (const char *)glGetString(GL_VERSION);
+        if (ver && strstr(ver, "OpenGL ES 3"))
+        {
+            ci_masked_prog = build_program(ci_vs300_src, ci_masked_fs300_src,
+                                           "pos", "color", "ci-masked");
+            glBindAttribLocation(ci_masked_prog, 2, "uv");
+            glLinkProgram(ci_masked_prog);
+            u_cim_scale = glGetUniformLocation(ci_masked_prog, "scale");
+            u_cim_pattern_on = glGetUniformLocation(ci_masked_prog, "pattern_on");
+            u_cim_pattern_tex = glGetUniformLocation(ci_masked_prog, "pattern_tex");
+            u_cim_snap_tex = glGetUniformLocation(ci_masked_prog, "snap_tex");
+            u_cim_wm = glGetUniformLocation(ci_masked_prog, "wm");
+
+            resolve_prog = build_program(resolve_vs300_src, resolve_fs300_src,
+                                         "pos", "uv", "ci-resolve");
+            u_res_scale = glGetUniformLocation(resolve_prog, "scale");
+            u_res_ci_tex = glGetUniformLocation(resolve_prog, "ci_tex");
+            u_res_lut_tex = glGetUniformLocation(resolve_prog, "lut_tex");
+            u_res_ui_tex = glGetUniformLocation(resolve_prog, "ui_tex");
+
+            GLint ok1 = 0, ok2 = 0;
+            glGetProgramiv(ci_masked_prog, GL_LINK_STATUS, &ok1);
+            glGetProgramiv(resolve_prog, GL_LINK_STATUS, &ok2);
+            ci_gpu_ok = ok1 && ok2;
+        }
+        if (ci_gpu_ok)
+        {
+            create_buffer(&ci_buffers[0], 1);
+            create_buffer(&ci_buffers[1], 1);
+            create_buffer(&resolved_buf, 0);
+            clear_buffer_transparent(&ci_buffers[0]);
+            clear_buffer_transparent(&ci_buffers[1]);
+            clear_buffer_transparent(&resolved_buf);
+
+            glGenTextures(1, &ci_snap_tex);
+            glBindTexture(GL_TEXTURE_2D, ci_snap_tex);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fb_width, fb_height, 0,
+                         GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+            glGenTextures(1, &lut_tex);
+            glBindTexture(GL_TEXTURE_2D, lut_tex);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 64, 0,
+                         GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+            lut_dirty = 1;
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            printf("INFO: gles2 rasterizer CI buffer enabled (ES3)\n");
+        }
+        else
+            printf("INFO: gles2 rasterizer CI buffer unavailable (%s) — cmode approximated\n",
+                   ver ? ver : "no version");
+    }
 
     gl_ready = 1;
 
@@ -459,9 +677,10 @@ static int ensure_gl(void)
 // layer composite + present source (see layer_bufs/display_buf above)
 //
 
-static void composite_layers(void)
+// draw a fullscreen quad (pixel coords) with the currently-bound program;
+// the caller sets up program, uniforms and textures
+static void fullscreen_quad(GLuint target_fbo)
 {
-    // fullscreen quad in pixel coords through the composite program
     struct { float x, y, z, u, v; } quad[6] = {
         { 0,               0,                0, 0, 0 },
         { (float)fb_width, 0,                0, 1, 0 },
@@ -471,23 +690,10 @@ static void composite_layers(void)
         { 0,               (float)fb_height, 0, 0, 1 },
     };
 
-    glBindFramebuffer(GL_FRAMEBUFFER, display_buf.fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, target_fbo);
     glViewport(0, 0, fb_width, fb_height);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
-
-    glUseProgram(comp_prog);
-    glUniform2f(u_comp_scale, 2.0f / fb_width, 2.0f / fb_height);
-    glUniform1i(u_comp_front, 0);
-    glUniform1i(u_comp_under, 2);
-    glUniform1i(u_comp_over, 3);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, front_buf->tex);
-    glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, layer_bufs[0].tex);
-    glActiveTexture(GL_TEXTURE3);
-    glBindTexture(GL_TEXTURE_2D, layer_bufs[1].tex);
-    glActiveTexture(GL_TEXTURE0);
 
     glBindBuffer(GL_ARRAY_BUFFER, blit_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STREAM_DRAW);
@@ -503,19 +709,87 @@ static void composite_layers(void)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+static void composite_layers(GLuint front_tex)
+{
+    glUseProgram(comp_prog);
+    glUniform2f(u_comp_scale, 2.0f / fb_width, 2.0f / fb_height);
+    glUniform1i(u_comp_front, 0);
+    glUniform1i(u_comp_under, 2);
+    glUniform1i(u_comp_over, 3);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, front_tex);
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, layer_bufs[0].tex);
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D, layer_bufs[1].tex);
+    glActiveTexture(GL_TEXTURE0);
+
+    fullscreen_quad(display_buf.fbo);
+}
+
+// bake the live palette into the LUT texture (64x64 = 4096 entries)
+static void upload_lut_if_dirty(void)
+{
+    if (!lut_dirty || lut_tex == 0)
+        return;
+    static uint8_t texels[64 * 64 * 4];
+    for (int i = 0; i < 4096; i++)
+    {
+        texels[i * 4 + 0] = the_colormap ? the_colormap[i][0] : 0;
+        texels[i * 4 + 1] = the_colormap ? the_colormap[i][1] : 0;
+        texels[i * 4 + 2] = the_colormap ? the_colormap[i][2] : 0;
+        texels[i * 4 + 3] = 255;
+    }
+    glBindTexture(GL_TEXTURE_2D, lut_tex);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 64, 64, GL_RGBA, GL_UNSIGNED_BYTE, texels);
+    lut_dirty = 0;
+}
+
+// resolve the front CI buffer through the palette LUT into resolved_buf,
+// overlaying alpha-marked RGB-only shim UI (popup menus) from the regular
+// front buffer — the SGI hardware LUT at present time
+static void resolve_ci(void)
+{
+    upload_lut_if_dirty();
+
+    glUseProgram(resolve_prog);
+    glUniform2f(u_res_scale, 2.0f / fb_width, 2.0f / fb_height);
+    glUniform1i(u_res_ci_tex, 0);
+    glUniform1i(u_res_lut_tex, 5);
+    glUniform1i(u_res_ui_tex, 6);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, front_ci->tex);
+    glActiveTexture(GL_TEXTURE5);
+    glBindTexture(GL_TEXTURE_2D, lut_tex);
+    glActiveTexture(GL_TEXTURE6);
+    glBindTexture(GL_TEXTURE_2D, front_buf->tex);
+    glActiveTexture(GL_TEXTURE0);
+
+    fullscreen_quad(resolved_buf.fbo);
+}
+
 // point the display at the right texture: the raw front FBO (zero-copy)
-// until a layer is used, the composited display buffer after
+// until a layer or the CI buffer is used, a composited/resolved buffer after
 static void present_source(void)
 {
     if (!gl_ready)
         return;
+
+    int cmode_ci = (!rgb_mode && ci_gpu_ok);
+    GLuint front_tex = front_buf->tex;
+    if (cmode_ci)
+    {
+        resolve_ci();
+        front_tex = resolved_buf.tex;
+    }
+
     if (layers_in_use)
     {
-        composite_layers();
+        composite_layers(front_tex);
         sdlSetFramebufferSourceTex(display_buf.tex);
     }
     else
-        sdlSetFramebufferSourceTex(front_buf->tex);
+        sdlSetFramebufferSourceTex(front_tex);
 }
 
 void gles2_rasterizer_layer(int layer)
@@ -563,12 +837,32 @@ static void flush_batch(void)
     glBindBuffer(GL_ARRAY_BUFFER, batch_vbo);
     glBufferData(GL_ARRAY_BUFFER, batch_count * sizeof(gpu_vertex), batch, GL_STREAM_DRAW);
 
-    glUseProgram(draw_prog);
-    glUniform2f(u_draw_scale, 2.0f / fb_width, 2.0f / fb_height);
-    glUniform1i(u_draw_pattern_on, batch_pattern_on ? 1 : 0);   // bool uniform
-    glUniform1i(u_draw_pattern_tex, 0);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, pattern_tex);
+    // masked CI batches composite through ci_masked_prog; everything else —
+    // including unmasked CI batches, whose vertices carry exact encoded
+    // index bytes — uses the regular draw program
+    int use_masked = batch_ci_on && batch_masked_on;
+    if (use_masked)
+    {
+        glUseProgram(ci_masked_prog);
+        glUniform2f(u_cim_scale, 2.0f / fb_width, 2.0f / fb_height);
+        glUniform1i(u_cim_pattern_on, batch_pattern_on ? 1 : 0);
+        glUniform1i(u_cim_pattern_tex, 0);
+        glUniform1i(u_cim_snap_tex, 4);
+        glUniform1f(u_cim_wm, (float)(the_writemask & 0xfff));
+        glActiveTexture(GL_TEXTURE4);
+        glBindTexture(GL_TEXTURE_2D, ci_snap_tex);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, pattern_tex);
+    }
+    else
+    {
+        glUseProgram(draw_prog);
+        glUniform2f(u_draw_scale, 2.0f / fb_width, 2.0f / fb_height);
+        glUniform1i(u_draw_pattern_on, batch_pattern_on ? 1 : 0);   // bool uniform
+        glUniform1i(u_draw_pattern_tex, 0);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, pattern_tex);
+    }
 
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
@@ -579,12 +873,14 @@ static void flush_batch(void)
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(gpu_vertex),
                           (void *)offsetof(gpu_vertex, u));
 
-    glUniform1i(u_draw_tex_on, batch_texture_on ? 1 : 0);
-    glUniform1i(u_draw_demo_tex, 1);
-    if (batch_texture_on) {
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, demo_tex);
-        glActiveTexture(GL_TEXTURE0);
+    if (!use_masked) {
+        glUniform1i(u_draw_tex_on, batch_texture_on ? 1 : 0);
+        glUniform1i(u_draw_demo_tex, 1);
+        if (batch_texture_on) {
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, demo_tex);
+            glActiveTexture(GL_TEXTURE0);
+        }
     }
 
     // IRIS zbuffer(FALSE) means z is neither tested nor updated — flight
@@ -611,6 +907,8 @@ static void flush_batch(void)
                   scissor_rect[2] - scissor_rect[0] + 1,
                   scissor_rect[3] - scissor_rect[1] + 1);
     }
+    if (!colormask_enabled)     // wmpack(0): z-only draws
+        glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 
     if (layer_target > 0)
     {
@@ -621,6 +919,31 @@ static void flush_batch(void)
         glDisable(GL_BLEND);
         glBindFramebuffer(GL_FRAMEBUFFER, layer_bufs[layer_target - 1].fbo);
         glDrawArrays(GL_TRIANGLES, 0, batch_count);
+    }
+    else if (batch_ci_on)
+    {
+        // CI batches render encoded indexes into the CI targets. A masked
+        // batch first snapshots its target: masked draws never write the
+        // protected planes, so the target's protected bits are always
+        // current — compositing against the snapshot is exact.
+        for (int t = 0; t < 2; t++)
+        {
+            gl_buffer *target = (t == 0) ? back_ci : front_ci;
+            int enabled       = (t == 0) ? backbuffer_draw_enabled : frontbuffer_draw_enabled;
+            if (!enabled)
+                continue;
+            if (use_masked)
+            {
+                glBindFramebuffer(GL_FRAMEBUFFER, target->fbo);
+                glActiveTexture(GL_TEXTURE4);
+                glBindTexture(GL_TEXTURE_2D, ci_snap_tex);
+                glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, fb_width, fb_height);
+                glActiveTexture(GL_TEXTURE0);
+            }
+            else
+                glBindFramebuffer(GL_FRAMEBUFFER, target->fbo);
+            glDrawArrays(GL_TRIANGLES, 0, batch_count);
+        }
     }
     else
     {
@@ -638,6 +961,8 @@ static void flush_batch(void)
 
     if (scissor_enabled)
         glDisable(GL_SCISSOR_TEST);
+    if (!colormask_enabled)
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
@@ -669,11 +994,14 @@ static void sync_front_to_cpu(void)
     if (!gl_ready)
         return;
 
-    // frame dumps should show what the display shows: the layer composite
-    // when layers are in use, the raw front FBO otherwise
-    if (layers_in_use)
-        composite_layers();
-    glBindFramebuffer(GL_FRAMEBUFFER, layers_in_use ? display_buf.fbo : front_buf->fbo);
+    // frame dumps should show what the display shows: the layer composite /
+    // CI resolve when those are in use, the raw front FBO otherwise
+    int cmode_ci = (!rgb_mode && ci_gpu_ok);
+    if (layers_in_use || cmode_ci)
+        present_source();
+    glBindFramebuffer(GL_FRAMEBUFFER, layers_in_use ? display_buf.fbo
+                                    : cmode_ci      ? resolved_buf.fbo
+                                                    : front_buf->fbo);
     glReadPixels(0, 0, fb_width, fb_height, GL_RGBA, GL_UNSIGNED_BYTE, readback_rgba);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -698,7 +1026,11 @@ static void sync_front_to_cpu(void)
 static void clear_gl_buffers(uint8_t r, uint8_t g, uint8_t b,
                              int clear_front, int clear_back, GLbitfield mask)
 {
-    glClearColor(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f);
+    // alpha 0: nothing downstream reads destination alpha except the CI
+    // resolve's shim-UI overlay, which must see these pixels as "no UI" —
+    // a cmode demo whose only clears are masked (arena's HUD scheme) never
+    // wipes the RGB pair again after init
+    glClearColor(r / 255.0f, g / 255.0f, b / 255.0f, 0.0f);
     glDepthMask(GL_TRUE);
 
     if (clear_back)
@@ -715,6 +1047,26 @@ static void clear_gl_buffers(uint8_t r, uint8_t g, uint8_t b,
     restore_depth_mask();   // clears force depth writes on; restore zwritemask
 }
 
+// clear a front/back pair honoring the draw enables
+static void clear_pair(gl_buffer *bck, gl_buffer *frt, int clear_front, int clear_back,
+                       float cr, float cg, float cb, float ca, GLbitfield mask)
+{
+    glClearColor(cr, cg, cb, ca);
+    glDepthMask(GL_TRUE);
+    if (clear_back)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, bck->fbo);
+        glClear(mask);
+    }
+    if (clear_front)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, frt->fbo);
+        glClear(mask);
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    restore_depth_mask();
+}
+
 void gles2_rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
 {
     if (!ensure_gl())
@@ -723,6 +1075,19 @@ void gles2_rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
         return;
     }
     flush_batch();
+    if (!rgb_mode && ci_gpu_ok)
+    {
+        // CI planes take the encoded index; the RGB pair is wiped to
+        // transparent black so stale alpha-marked shim UI (popup menus)
+        // stops overlaying the resolve
+        uint16_t ci = (uint16_t)color_index & 0xfff;
+        clear_pair(back_ci, front_ci, frontbuffer_draw_enabled, backbuffer_draw_enabled,
+                   (ci & 0xff) / 255.0f, (ci >> 8) / 255.0f, 0.0f, 1.0f,
+                   GL_COLOR_BUFFER_BIT);
+        clear_pair(back_buf, front_buf, frontbuffer_draw_enabled, backbuffer_draw_enabled,
+                   0.0f, 0.0f, 0.0f, 0.0f, GL_COLOR_BUFFER_BIT);
+        return;
+    }
     clear_gl_buffers(r, g, b, frontbuffer_draw_enabled, backbuffer_draw_enabled,
                      GL_COLOR_BUFFER_BIT);
 }
@@ -736,13 +1101,49 @@ void gles2_rasterizer_masked_clear(int32_t x0, int32_t y0, int32_t x1, int32_t y
                                    uint16_t wm, uint16_t clear_index, uint8_t colormap[][3],
                                    uint32_t n, const uint32_t *rgb_from, const uint32_t *rgb_to)
 {
-    // No CI buffer on the GPU path: the index math (wm/clear_index/colormap)
-    // is approximated by the precomputed RGB remap pairs. Exact for the flat
-    // fills this rasterizer produces for cmode content.
+    if (!ensure_gl())
+        return;
+
+    if (!rgb_mode && ci_gpu_ok)
+    {
+        // Exact index math through the CI buffer: emit the clear rect as a
+        // masked-composite draw with the clear index — the same machinery
+        // as masked draws, which also honors the current pattern (flight
+        // 1988's crashed-meters effect is a patterned clear through
+        // writemask(white)). The clear ignores the z-buffer, like the
+        // reference rasterizer's.
+        (void)colormap; (void)n; (void)rgb_from; (void)rgb_to;
+        flush_batch();
+        uint16_t save_wm = the_writemask;
+        int save_zb = zbuffer_enabled;
+        the_writemask = wm;
+        zbuffer_enabled = 0;
+
+        screen_vertex q[4];
+        memset(q, 0, sizeof(q));
+        int32_t xs[4] = { x0, x1 + 1, x1 + 1, x0 };
+        int32_t ys[4] = { y0, y0, y1 + 1, y1 + 1 };
+        for (int i = 0; i < 4; i++)
+        {
+            q[i].x = xs[i] * SCREEN_VERTEX_V2_SCALE;
+            q[i].y = ys[i] * SCREEN_VERTEX_V2_SCALE;
+            q[i].z = 0;
+            q[i].ci = clear_index;
+        }
+        emit_screen_triangle(&q[0], &q[1], &q[2]);
+        emit_screen_triangle(&q[2], &q[3], &q[0]);
+        flush_batch();
+
+        the_writemask = save_wm;
+        zbuffer_enabled = save_zb;
+        return;
+    }
+
+    // No usable CI buffer (ES2 context): the index math is approximated by
+    // the precomputed RGB remap pairs. Exact for flat cmode fills, but
+    // blind to palette collisions.
     (void)wm; (void)clear_index; (void)colormap;
     if (n == 0)
-        return;
-    if (!ensure_gl())
         return;
     flush_batch();
 
@@ -840,6 +1241,15 @@ void gles2_rasterizer_zwrite(int enable)
     }
 }
 
+void gles2_rasterizer_colormask(int enable)
+{
+    if (enable == colormask_enabled)
+        return;
+    if (gl_ready)
+        flush_batch();      // the mask applies at draw time
+    colormask_enabled = enable;
+}
+
 void gles2_rasterizer_zclear(uint32_t z)
 {
     if (!ensure_gl())
@@ -920,11 +1330,14 @@ void gles2_rasterizer_swap(void)
     }
     frame++;
 
-    // exchange front and back, and hand the new front texture (or the
-    // layer composite of it) to the display quad
+    // exchange front and back (CI pair too), and hand the new front texture
+    // (or the resolve/composite of it) to the display quad
     gl_buffer *tmp = back_buf;
     back_buf = front_buf;
     front_buf = tmp;
+    tmp = back_ci;
+    back_ci = front_ci;
+    front_ci = tmp;
 
     present_source();
 }
@@ -938,6 +1351,12 @@ void gles2_rasterizer_copy_front_to_back(void)
     glBindFramebuffer(GL_FRAMEBUFFER, front_buf->fbo);
     glBindTexture(GL_TEXTURE_2D, back_buf->tex);
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, fb_width, fb_height);
+    if (ci_gpu_ok)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, front_ci->fbo);
+        glBindTexture(GL_TEXTURE_2D, back_ci->tex);
+        glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, fb_width, fb_height);
+    }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
@@ -950,6 +1369,12 @@ void gles2_rasterizer_copy_back_to_front(void)
     glBindFramebuffer(GL_FRAMEBUFFER, back_buf->fbo);
     glBindTexture(GL_TEXTURE_2D, front_buf->tex);
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, fb_width, fb_height);
+    if (ci_gpu_ok)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, back_ci->fbo);
+        glBindTexture(GL_TEXTURE_2D, front_ci->tex);
+        glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, fb_width, fb_height);
+    }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
@@ -958,18 +1383,22 @@ unsigned char* gles2_rasterizer_frontbuffer(void)
     return cpu_front; // NULL until the first resize allocates it
 }
 
-// The GPU rasterizer keeps no per-pixel color-index buffer: colors arrive
-// pre-resolved in the vertex stream. Demos that rely on live palette-LUT
-// behavior (mapcolor() changing already-drawn pixels, readpixels() of
-// indices — e.g. cedit) run on the CPU reference rasterizer instead (see
-// apply_demo_quirks in gl.c).
+// No CPU-side index readback on the GPU path (the CI buffer lives in a
+// texture): demos that readpixels() indices (cedit) run on the reference
+// rasterizer instead (see apply_demo_quirks in gl.c).
 unsigned short* gles2_rasterizer_ci_frontbuffer(void)
 {
     return NULL;
 }
 
+// The GL layer signals "the palette changed since the last present" —
+// re-bake the LUT; the next present's resolve recolors every drawn pixel,
+// which is the hardware palette-LUT behavior.
 void gles2_rasterizer_resolve_ci_to_rgb(uint8_t colormap[][3])
 {
+    if (colormap)
+        the_colormap = colormap;
+    lut_dirty = 1;
 }
 
 // The framebuffer tracks the window size: reallocate the CPU buffers and,
@@ -1006,11 +1435,18 @@ void gles2_rasterizer_resize(uint32_t width, uint32_t height)
     destroy_buffer(&layer_bufs[0]);
     destroy_buffer(&layer_bufs[1]);
     destroy_buffer(&display_buf);
+    if (ci_gpu_ok)
+    {
+        destroy_buffer(&ci_buffers[0]);
+        destroy_buffer(&ci_buffers[1]);
+        destroy_buffer(&resolved_buf);
+        glDeleteTextures(1, &ci_snap_tex);
+    }
     glDeleteRenderbuffers(1, &shared_depth_rb);
 
     glGenRenderbuffers(1, &shared_depth_rb);
     glBindRenderbuffer(GL_RENDERBUFFER, shared_depth_rb);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, fb_width, fb_height);
+    glRenderbufferStorage(GL_RENDERBUFFER, depth_rb_format(), fb_width, fb_height);
 
     create_buffer(&buffers[0], 1);
     create_buffer(&buffers[1], 1);
@@ -1020,6 +1456,24 @@ void gles2_rasterizer_resize(uint32_t width, uint32_t height)
     clear_buffer_transparent(&layer_bufs[0]);
     clear_buffer_transparent(&layer_bufs[1]);
     clear_buffer_transparent(&display_buf);
+    if (ci_gpu_ok)
+    {
+        create_buffer(&ci_buffers[0], 1);
+        create_buffer(&ci_buffers[1], 1);
+        create_buffer(&resolved_buf, 0);
+        clear_buffer_transparent(&ci_buffers[0]);
+        clear_buffer_transparent(&ci_buffers[1]);
+        clear_buffer_transparent(&resolved_buf);
+
+        glGenTextures(1, &ci_snap_tex);
+        glBindTexture(GL_TEXTURE_2D, ci_snap_tex);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fb_width, fb_height, 0,
+                     GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     glClearDepthf(1.0f);
@@ -1040,9 +1494,10 @@ void gles2_rasterizer_frame_sync(void)
         return;
     if (batch_count > 0)
         flush_batch();
-    // refresh the layer composite so front-buffer drawing done since the
-    // last swap (flight's gauges) reaches the display
-    if (layers_in_use)
+    // refresh the layer composite / CI resolve so front-buffer drawing done
+    // since the last swap (flight's gauges) and palette changes reach the
+    // display
+    if (layers_in_use || (!rgb_mode && ci_gpu_ok))
         present_source();
 }
 
@@ -1078,6 +1533,27 @@ static void batch_select_texture(int want_texture)
     batch_texture_on = want_texture;
 }
 
+static void batch_select_ci(int want_ci, int want_masked)
+{
+    if (batch_count > 0 && (want_ci != batch_ci_on || want_masked != batch_masked_on))
+        flush_batch();
+    batch_ci_on = want_ci;
+    batch_masked_on = want_masked;
+}
+
+// Should this primitive render into the CI buffers? Flat per primitive: the
+// reference rasterizer keys each triangle's index off its first vertex too.
+static int primitive_wants_ci(screen_vertex *s0)
+{
+    return !rgb_mode && ci_gpu_ok && layer_target == 0 &&
+           s0->ci != SCREEN_VERTEX_CI_NONE;
+}
+
+static int writemask_is_partial(void)
+{
+    return (~the_writemask & 0xfff) != 0;
+}
+
 static void emit_vertex(float x, float y, float z01, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
     gpu_vertex *v = &batch[batch_count++];
@@ -1099,16 +1575,26 @@ static float sv_z01(screen_vertex *s)
 
 static void emit_screen_triangle(screen_vertex *s0, screen_vertex *s1, screen_vertex *s2)
 {
+    int want_ci = primitive_wants_ci(s0);
     batch_select_pattern(pattern_enabled);
-    batch_select_blend(blend_enabled);
-    batch_select_texture(texture_enabled);
+    batch_select_blend(want_ci ? 0 : blend_enabled);        // CI mode never blends
+    batch_select_texture(want_ci ? 0 : texture_enabled);    // or textures
+    batch_select_ci(want_ci, want_ci && writemask_is_partial());
     batch_reserve(3);
     screen_vertex *s[3] = { s0, s1, s2 };
+    uint16_t ci = s0->ci & 0xfff;
     for (int i = 0; i < 3; i++) {
-        emit_vertex(s[i]->x / (float)SCREEN_VERTEX_V2_SCALE,
-                    s[i]->y / (float)SCREEN_VERTEX_V2_SCALE,
-                    sv_z01(s[i]),
-                    s[i]->r, s[i]->g, s[i]->b, s[i]->a);
+        if (want_ci)
+            // encoded index (R = low byte, G = high nibble), exact bytes
+            emit_vertex(s[i]->x / (float)SCREEN_VERTEX_V2_SCALE,
+                        s[i]->y / (float)SCREEN_VERTEX_V2_SCALE,
+                        sv_z01(s[i]),
+                        ci & 0xff, ci >> 8, 0, 255);
+        else
+            emit_vertex(s[i]->x / (float)SCREEN_VERTEX_V2_SCALE,
+                        s[i]->y / (float)SCREEN_VERTEX_V2_SCALE,
+                        sv_z01(s[i]),
+                        s[i]->r, s[i]->g, s[i]->b, s[i]->a);
         batch[batch_count - 1].u = s[i]->s;
         batch[batch_count - 1].v = s[i]->t;
     }
@@ -1124,18 +1610,27 @@ static void emit_point(screen_vertex *sv)
 {
     // the reference rasterizer writes exactly one pixel, bypassing the
     // pattern test; emit a never-stippled 1x1 quad covering that pixel
+    int want_ci = primitive_wants_ci(sv);
     batch_select_pattern(0);
+    batch_select_blend(want_ci ? 0 : blend_enabled);
+    batch_select_texture(want_ci ? 0 : texture_enabled);
+    batch_select_ci(want_ci, want_ci && writemask_is_partial());
     float px = floorf(clampf(sv->x / (float)SCREEN_VERTEX_V2_SCALE, 0, fb_width - 1));
     float py = floorf(clampf(sv->y / (float)SCREEN_VERTEX_V2_SCALE, 0, fb_height - 1));
     float z = sv_z01(sv);
+    uint16_t ci = sv->ci & 0xfff;
+    uint8_t r = want_ci ? (ci & 0xff) : sv->r;
+    uint8_t g = want_ci ? (ci >> 8)   : sv->g;
+    uint8_t b = want_ci ? 0           : sv->b;
+    uint8_t a = want_ci ? 255         : sv->a;
 
     batch_reserve(6);
-    emit_vertex(px,     py,     z, sv->r, sv->g, sv->b, sv->a);
-    emit_vertex(px + 1, py,     z, sv->r, sv->g, sv->b, sv->a);
-    emit_vertex(px + 1, py + 1, z, sv->r, sv->g, sv->b, sv->a);
-    emit_vertex(px + 1, py + 1, z, sv->r, sv->g, sv->b, sv->a);
-    emit_vertex(px,     py + 1, z, sv->r, sv->g, sv->b, sv->a);
-    emit_vertex(px,     py,     z, sv->r, sv->g, sv->b, sv->a);
+    emit_vertex(px,     py,     z, r, g, b, a);
+    emit_vertex(px + 1, py,     z, r, g, b, a);
+    emit_vertex(px + 1, py + 1, z, r, g, b, a);
+    emit_vertex(px + 1, py + 1, z, r, g, b, a);
+    emit_vertex(px,     py + 1, z, r, g, b, a);
+    emit_vertex(px,     py,     z, r, g, b, a);
 }
 
 static void emit_line(screen_vertex *v0, screen_vertex *v1)
@@ -1336,12 +1831,16 @@ void gles2_rasterizer_alpha_blit(uint32_t width, uint32_t rowbytes, uint32_t hei
 
 void gles2_rasterizer_writemask(uint16_t wm, uint8_t colormap[][3])
 {
-    // No CI buffer on the GPU path: per-draw writemask compositing (index
-    // planes showing through new primitives) can't be reproduced here.
-    // Masked draws keep their flat color — demos that depend on the
-    // compositing (flight 1988's cockpit panel) prefer the reference
-    // rasterizer via apply_demo_quirks.
-    (void)wm; (void)colormap;
+    // a pending masked batch composites with the mask that was up when its
+    // primitives were emitted
+    if (batch_count > 0 && batch_masked_on && wm != the_writemask)
+        flush_batch();
+    the_writemask = wm;
+    if (colormap != the_colormap)
+    {
+        the_colormap = colormap;
+        lut_dirty = 1;
+    }
 }
 
 void gles2_rasterizer_setpattern(uint16_t pattern[16])
@@ -1428,6 +1927,7 @@ const rasterizer_funcs* gles2_rasterizer_get_funcs(void)
         .teximage           = gles2_rasterizer_teximage,
         .texture            = gles2_rasterizer_texture,
         .zwrite             = gles2_rasterizer_zwrite,
+        .colormask          = gles2_rasterizer_colormask,
         .linewidth          = gles2_rasterizer_linewidth,
         .frame_sync         = gles2_rasterizer_frame_sync,
         .resize             = gles2_rasterizer_resize,

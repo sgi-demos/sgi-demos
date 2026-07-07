@@ -28,6 +28,7 @@ static int texture_enabled = 0;
 static int tex_width = 0, tex_height = 0, tex_bilinear = 0;
 static uint8_t *tex_rgb = NULL;
 static int zwrite_enabled = 1;  // depth writes (zwritemask); test is zbuffer_enabled
+static int colormask_enabled = 1;  // color writes (wmpack); off = z-only draws
 static int rgb_mode = 0; // color map mode by default
 static int text_antialias_enabled = 1;
 
@@ -80,14 +81,13 @@ static uint8_t* buffer_pixel(uint8_t *buffer, int x, int y)
     return buffer + ((size_t)y * DISPLAY_WIDTH + x) * 4;
 }
 
-// z buffer
+// z buffer — full 32-bit precision (IRIS hardware had 24-bit z; 16 bits
+// visibly z-fights on flight 3.4's near=4..far=1e6 scene projection, e.g.
+// the F-14 cockpit interior poking through the canopy glass)
 static int zbuffer_enabled = 0;
-typedef uint16_t z_t;
-static const int Z_SHIFT = 16; // Shift computed 32-bit Z into 16-bit Z buffer
+typedef uint32_t z_t;
+static const int Z_SHIFT = 0;
 static const unsigned int Z_MAX = 0xffffffff;
-// Should we just 'upgrade' GL to 32-bit Z since we computed it?
-//typedef uint32_t z_t;
-//static const int Z_SHIFT = 0;
 static z_t *z_buffer = NULL; // DISPLAY_WIDTH*DISPLAY_HEIGHT, 16 bits per pixel
 
 static float min(float a, float b)
@@ -272,6 +272,11 @@ static void tex_sample(float s, float t, int *tr, int *tg, int *tb)
 void ref_rasterizer_blend(int enable)
 {
     blend_enabled = enable;
+}
+
+void ref_rasterizer_colormask(int enable)
+{
+    colormask_enabled = enable;
 }
 
 void ref_rasterizer_zwrite(int enable)
@@ -611,6 +616,8 @@ static void write_pixel(int buffer_y, int x, uint8_t r, uint8_t g, uint8_t b, ui
 {
     if (scissor_enabled &&
         (x < scissor_x0 || x > scissor_x1 || buffer_y < scissor_row0 || buffer_y > scissor_row1))
+        return;
+    if (!colormask_enabled)     // wmpack(0): z-only draws (z written by the caller)
         return;
     if (layer_target > 0) {
         uint8_t *buf = layer_buffer[layer_target - 1];
@@ -1017,6 +1024,7 @@ const rasterizer_funcs* ref_rasterizer_get_funcs(void)
         .teximage           = ref_rasterizer_teximage,
         .texture            = ref_rasterizer_texture,
         .zwrite             = ref_rasterizer_zwrite,
+        .colormask          = ref_rasterizer_colormask,
         .linewidth          = ref_rasterizer_linewidth,
         .frame_sync         = ref_rasterizer_frame_sync,
         .resize             = ref_rasterizer_resize,

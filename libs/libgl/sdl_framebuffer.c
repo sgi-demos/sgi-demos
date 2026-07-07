@@ -484,6 +484,13 @@ uint32_t sdlInitWindow()
         SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
         SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 
+        // ES 3.0 (WebGL2 on web): the gles2 rasterizer's color-index buffer
+        // path needs ES3 shaders. All other GL use stays at the ES2 API
+        // level, so if 3.0 isn't available fall back to a 2.0 context and
+        // the CI path degrades gracefully.
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+
         fb.pWindow = SDL_CreateWindow(
             fb.title,
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -492,6 +499,13 @@ uint32_t sdlInitWindow()
         );
 
         fb.glContext = SDL_GL_CreateContext(fb.pWindow);
+        if (fb.glContext == NULL)
+        {
+            printf("INFO: ES 3.0 context unavailable (%s), falling back to ES 2.0\n", SDL_GetError());
+            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+            fb.glContext = SDL_GL_CreateContext(fb.pWindow);
+        }
         printf("INFO: GL vendor: %s\n", glGetString(GL_VENDOR));
         printf("INFO: GL renderer: %s\n", glGetString(GL_RENDERER));
         printf("INFO: GL version: %s\n", glGetString(GL_VERSION));

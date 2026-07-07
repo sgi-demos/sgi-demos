@@ -24,7 +24,11 @@ INCS_DIR = ../../include
 
 # SDL libs and include
 SDL_LIBS = `sdl2-config --libs`
-EM_SDL_LIBS = -s USE_SDL=2 -s FULL_ES2=1
+# MAX_WEBGL_VERSION=2 lets SDL create a WebGL2 (ES3) context — the gles2
+# rasterizer's color-index buffer path needs ES3 shaders (integer texel
+# math). MIN stays 1: on WebGL1 the context falls back and the CI path
+# degrades gracefully (see gles2_rasterizer ensure_gl).
+EM_SDL_LIBS = -s USE_SDL=2 -s FULL_ES2=1 -s MAX_WEBGL_VERSION=2
 SDL_INC = `sdl2-config --cflags`
 
 # GLES libs and include

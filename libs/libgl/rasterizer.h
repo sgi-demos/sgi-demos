@@ -67,6 +67,10 @@ void rasterizer_blend(int enable);   // src-alpha / one-minus-src-alpha only (IR
 void rasterizer_teximage(int width, int height, const uint8_t *rgb, int bilinear);
 void rasterizer_texture(int enable);
 void rasterizer_zwrite(int enable);  // depth WRITES; the z test stays per rasterizer_zbuffer
+// Color writes (IRIS wmpack): wmpack(0) draws update only the z-buffer —
+// flight 3.4's tail-decal trick paints the tail + skull with z-writes off,
+// then re-draws the tail color-masked to backfill z.
+void rasterizer_colormask(int enable);
 void rasterizer_linewidth(float w);
 void rasterizer_frame_sync(void);
 
@@ -131,6 +135,7 @@ typedef struct rasterizer_funcs
     void (*teximage)(int width, int height, const uint8_t *rgb, int bilinear);
     void (*texture)(int enable);
     void (*zwrite)(int enable);
+    void (*colormask)(int enable);
     void (*linewidth)(float w);
     void (*frame_sync)(void);
     void (*resize)(uint32_t width, uint32_t height);

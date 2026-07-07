@@ -2124,8 +2124,9 @@ void writemask(Colorindex mask) {
     TRACEF("%u", mask);
 
     current_writemask = mask;
-    // Per-draw compositing lives in the rasterizer (reference only; gles2
-    // ignores it) — clear() keeps its own masked path above. Before the
+    // Per-draw compositing lives in the rasterizers (the reference through
+    // its CPU CI buffer, gles2 through the GPU CI buffer on ES3) — clear()
+    // keeps its own masked path above. Before the
     // window exists don't touch the rasterizer: the first rasterizer_* call
     // locks in the implementation ahead of apply_demo_quirks; winopen
     // re-sends the current mask once the choice is made.
@@ -3063,33 +3064,23 @@ static int demo_is(const char *title, const char *name) {
 // get shim policies that recreate it:
 //  - arena: on a <=12-plane IRIS it composites its HUD in colormap
 //    bitplanes, protecting the static yellow overlay with per-draw
-//    writemask()s the GPU rasterizer can't emulate (the reference
-//    rasterizer composites them exactly, but arena doesn't need it).
-//    Report the 24-plane config of the bigger 4Ds instead: arena's
-//    own high-plane path redraws the HUD every frame, which renders
+//    writemask()s. Report the 24-plane config of the bigger 4Ds instead:
+//    arena's own high-plane path redraws the HUD every frame, which renders
 //    correctly in both rasterizers. (Its 1024x768 screen is a compile-time
 //    matter — DEMO_CFLAGS in its Makefile — and prefposition() then gets
 //    it the matching fixed framebuffer, so no display quirk is needed.)
-//  - flight-1988: composites its cockpit panel in colormap bitplanes —
-//    meter bars, compass, and readout text are drawn through
-//    writemask(wm_allplanes-3) over scale art protected in planes 0-1,
-//    then erased by a masked clear. That per-draw compositing needs the
-//    reference rasterizer's CI buffer; on the GPU path the bars paint
-//    over the tick marks and the compass leaves unrepaired trails.
-//    ("flight" is the unstamped-title fallback. flight can't take arena's
-//    24-plane escape: it shifts (1 << getplanes()) into a short, and its
-//    panel has no high-plane redraw path. The fixed 1280x1024 framebuffer
-//    both flights bake in comes from their own prefposition call.)
-//  - cedit: a palette editor — needs the live hardware-LUT emulation
-//    (mapcolor changing already-drawn pixels) and readpixels() of color
-//    indices, both of which require the reference rasterizer's CI buffer;
+//  - cedit: a palette editor — needs readpixels() of color indices, which
+//    requires the reference rasterizer's CPU-side CI buffer (the gles2
+//    rasterizer's CI buffer lives in a texture with no index readback);
 //    also relies on SGI's single-buffer-at-winopen default (it never calls
-//    doublebuffer), which this shim inverts
+//    doublebuffer), which this shim inverts.
+//
+// flight 1988 needs no quirk anymore: its cockpit-panel writemask
+// compositing runs exactly on both rasterizers (the reference through its
+// CPU CI buffer, gles2 through the GPU CI buffer on an ES3 context).
 static void apply_demo_quirks(char *title) {
     if (demo_is(title, "arena"))
         planes_config = 24;
-    else if (demo_is(title, "flight-1988") || demo_is(title, "flight"))
-        rasterizer_prefer("ref");
     else if (demo_is(title, "cedit")) {
         rasterizer_prefer("ref");
         singlebuffer();
@@ -3539,6 +3530,7 @@ void draw_(Coord x, Coord y, Coord z) {
     vec4f_copy(v0.coord, current_position);
     vec4f_copy(v0.color, current_color);
     v0.ci = current_color_index;
+    vec3f_copy(v0.normal, current_normal);
 
     current_position[0] = x;
     current_position[1] = y;
@@ -3547,11 +3539,14 @@ void draw_(Coord x, Coord y, Coord z) {
     vec4f_copy(v1.coord, current_position);
     vec4f_copy(v1.color, current_color);
     v1.ci = current_color_index;
+    vec3f_copy(v1.normal, current_normal);
 
-    int save_lighting = lighting_enabled;
-    lighting_enabled = 0;
+    // move/draw lines light like any other primitive when a material and
+    // lmodel are bound (flight 3.4's ground grid is setmaterial(MAT_DIRT) +
+    // n3f + draw2i — suppressing lighting here left the lines in whatever
+    // color was last set, the sky blue). Demos drawing unlit lines have no
+    // material bound, so lighting_enabled is already off for them.
     process_line(&v0, &v1);
-    lighting_enabled = save_lighting;
 }
 
 void draw(Coord x, Coord y, Coord z) {
@@ -4495,7 +4490,16 @@ void popname ()
 
 void wmpack (unsigned long pack)
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%lu", pack);
+
+    // all-or-nothing color writes: flight 3.4's tail-decal z backfill uses
+    // wmpack(0) / wmpack(0xffffffff). Partial channel masks are not needed
+    // by the demo corpus.
+    if (pack != 0 && pack != 0xffffffff) {
+        static int warned = 0;
+        if (!warned) { printf("wmpack: partial masks unimplemented\n"); warned = 1; }
+    }
+    rasterizer_colormask(pack != 0);
 }
 
 void scrmask (int left, int right, int bottom, int top)

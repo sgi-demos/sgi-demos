@@ -108,6 +108,7 @@ void rasterizer_blend(int enable)                       { rast()->blend(enable);
 void rasterizer_teximage(int width, int height, const uint8_t *rgb, int bilinear) { rast()->teximage(width, height, rgb, bilinear); }
 void rasterizer_texture(int enable)                     { rast()->texture(enable); }
 void rasterizer_zwrite(int enable)                      { rast()->zwrite(enable); }
+void rasterizer_colormask(int enable)                   { rast()->colormask(enable); }
 void rasterizer_linewidth(float w)                      { rast()->linewidth(w); }
 void rasterizer_frame_sync(void)                        { rast()->frame_sync(); }
 void rasterizer_resize(uint32_t width, uint32_t height) { rast()->resize(width, height); }
