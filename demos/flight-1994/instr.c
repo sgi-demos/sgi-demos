@@ -2273,6 +2273,14 @@ draw_mach_meter(mach_meter_t *inst)
     int x;
     char buf[5];
 
+    /*
+     * SGI's original never initialized sl/sr/sb/st here (every other gauge
+     * calls getviewport first) — it worked on IRIX because the stale stack
+     * slots held the previous gauge's getviewport results. wasm's stack
+     * layout differs, so read the viewport properly.
+     */
+    getviewport(&sl,&sr,&sb,&st);
+
     pushmatrix();
     translate(inst->px, inst->py, inst->pz);
     scale(inst->size, inst->size, inst->size);

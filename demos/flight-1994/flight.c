@@ -48,6 +48,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <unistd.h>
 
 
 /*
@@ -334,6 +335,14 @@ static char usage[] = "Usage: flight  [-bdhnsO] [-i filename] [-o filename] [-D 
     test_mode = FALSE;
 
     strncpy(datadir, DATADIR, 80);
+
+    /*
+     *  the web build preloads defs/ at DATADIR; a native run has no such
+     *  mount, so fall back to the defs/ directory beside the demo source
+     *  (still overridable with -D below)
+     */
+    if (access(datadir, F_OK) < 0)
+	strncpy(datadir, "defs/", 80);
 
     if (strcmp(argv[0] + strlen(argv[0]) - strlen("shadow"), "shadow") == 0)
     {
