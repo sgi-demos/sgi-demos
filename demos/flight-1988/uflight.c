@@ -664,10 +664,13 @@ facet (obj,n,p)
 /* sort an array (and an associated tag array) in increasing order	*/
 sink_sort (n, array, array_tag)
     register int n;
-    int *array, *array_tag;
+    int *array;
+    void **array_tag;	/* tags are pointers; must swap full 64 bits	*/
 {
-    register int tag, *end;
-    register int *top, *top_tag, *bot, *bot_tag;
+    register void *tag;
+    register int *end;
+    register int *top, *bot;
+    register void **top_tag, **bot_tag;
 
     end = &array[n];
 
