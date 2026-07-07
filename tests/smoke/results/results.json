@@ -1,6 +1,6 @@
 {
   "meta": {
-    "timestamp": "2026-07-07T18:54:11.186Z",
+    "timestamp": "2026-07-07T22:33:48.760Z",
     "settleMs": 3000,
     "viewport": {
       "width": 1024,
@@ -40,7 +40,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.9402694702148438,
+      "content": 0.8966789245605469,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -51,7 +51,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.8919665018717448,
+      "content": 0.7897440592447916,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -62,7 +62,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.4986419677734375,
+      "content": 0.4890174865722656,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -73,7 +73,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.4943669637044271,
+      "content": 0.4840202331542969,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -84,7 +84,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.23114776611328125,
+      "content": 0.23115793863932288,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -95,7 +95,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.23027547200520837,
+      "content": 0.23027801513671875,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -128,7 +128,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.06599553426106775,
+      "content": 0.06379191080729163,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -139,7 +139,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.06378555297851562,
+      "content": 0.059424082438151005,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -172,7 +172,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.029972076416015625,
+      "content": 0.030029296875,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -183,7 +183,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.029649098714192745,
+      "content": 0.029847462972005245,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -194,7 +194,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.08470662434895837,
+      "content": 0.082787831624349,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -205,7 +205,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.08433151245117188,
+      "content": 0.08235549926757812,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -216,7 +216,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.07760874430338538,
+      "content": 0.034285227457682255,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -227,7 +227,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.06251144409179688,
+      "content": 0.101812998453776,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -238,7 +238,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.13396453857421875,
+      "content": 0.101409912109375,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -249,7 +249,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.10016123453776038,
+      "content": 0.05209604899088538,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -260,7 +260,7 @@
       "mode": "ref",
       "status": "somewhat",
       "minContent": 0.02,
-      "content": 0.500946044921875,
+      "content": 0.5085004170735676,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -271,7 +271,7 @@
       "mode": "gles2",
       "status": "somewhat",
       "minContent": 0.02,
-      "content": 0.4909820556640625,
+      "content": 0.49861653645833337,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -282,7 +282,7 @@
       "mode": "ref",
       "status": "somewhat",
       "minContent": 0.02,
-      "content": 0.5180155436197917,
+      "content": 0.5259132385253906,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -293,7 +293,7 @@
       "mode": "gles2",
       "status": "somewhat",
       "minContent": 0.02,
-      "content": 0.5189565022786458,
+      "content": 0.526934305826823,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -348,7 +348,7 @@
       "mode": "ref",
       "status": "somewhat",
       "minContent": 0.02,
-      "content": 0.5672836303710938,
+      "content": 0.567273457845052,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -359,7 +359,7 @@
       "mode": "gles2",
       "status": "somewhat",
       "minContent": 0.02,
-      "content": 0.5672696431477864,
+      "content": 0.5671831766764324,
       "pass": true,
       "reasons": [],
       "errors": []

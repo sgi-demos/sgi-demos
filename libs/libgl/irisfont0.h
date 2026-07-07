@@ -1,6 +1,6 @@
-// Auto-generated from 9x15.bdf by bake_bdf.py.
-#ifndef __FIXED9X15_H__
-#define __FIXED9X15_H__
+// Auto-generated from defaultfont by bake_irisfont.py.
+#ifndef __IRISFONT0_H__
+#define __IRISFONT0_H__
 
 #include <stdint.h>
 
@@ -8,9 +8,6 @@
 // may be included first.
 #ifndef BDF_STRUCTS_DEFINED
 #define BDF_STRUCTS_DEFINED
-// One glyph's metrics + a slice into the font's bitmap blob.
-// width/height/xoff/yoff are the BDF BBX; advance is DWIDTH x;
-// rowbytes is ceil(width/8); bits points at MSB-first rows.
 typedef struct {
     int16_t encoding;
     uint8_t width, height;
@@ -29,6 +26,6 @@ typedef struct {
 } BdfFont;
 #endif /* BDF_STRUCTS_DEFINED */
 
-extern const BdfFont fixed9x15;
+extern const BdfFont irisfont0;
 
-#endif /* __FIXED9X15_H__ */
+#endif /* __IRISFONT0_H__ */

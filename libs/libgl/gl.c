@@ -27,7 +27,7 @@
 #include "vector.h"
 #include "rasterizer.h"
 #include "bdffont.h"
-#include "fixed9x15.h"      // default charstr font: X11 Misc-Fixed 9x15 (IRIS-like metrics)
+#include "irisfont0.h"      // default charstr font: the recovered IRIX 3 system screen font (IRIS GL font 0)
 #include "events.h"
 #include "font.h"
 
@@ -1063,10 +1063,11 @@ static int str_width_in_pixels(const char *str) {
 }
 
 void string_draw(screen_vertex* screenvert_, const char *str) {
-    // Default text font: the authentic X11 Misc-Fixed 9x15 (ascent 12,
-    // descent 3), replacing the old 8x16 zero-descent bitmap whose glyphs
-    // extended 16px above the baseline — flight 1988's meter labels bled
-    // into each other and text at the top viewport edge lost its upper rows.
+    // Default text font: the recovered IRIX 3 system screen font (IRIS GL
+    // font 0) — the actual bitmap font charstr() drew through on the real
+    // machines, unless a demo loaded its own. 9x15 charcell, fixed 9px
+    // pitch, ascent 13 / descent 2. Replaces the X11 Misc-Fixed 9x15
+    // stand-in that was chosen as a metric-matched guess for exactly this.
     static screen_vertex screenvert;
 
     screenvert = *screenvert_;
@@ -1078,7 +1079,7 @@ void string_draw(screen_vertex* screenvert_, const char *str) {
             screenvert.x += 9 * SCREEN_VERTEX_V2_SCALE * 8;
         } else {
             char one[2] = { str[i], 0 };
-            bdf_render_string(&fixed9x15, &screenvert, one);
+            bdf_render_string(&irisfont0, &screenvert, one);
             screenvert.x += 9 * SCREEN_VERTEX_V2_SCALE;
         }
     }
@@ -4424,20 +4425,20 @@ void subpixel (Boolean b)
     static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
 }
 
-/* font metrics for the built-in 8x16 bitmap font (font.h) */
+/* font metrics for the built-in IRIS GL font 0 (irisfont0) */
 int strwidth (char *str)
 {
-    return strlen(str) * 9;     /* fixed9x15 is charcell: 9px per glyph */
+    return strlen(str) * 9;     /* irisfont0 is charcell: 9px per glyph */
 }
 
 int getheight ()
 {
-    return fixed9x15.ascent + fixed9x15.descent;
+    return irisfont0.ascent + irisfont0.descent;
 }
 
 int getdescender ()
 {
-    return fixed9x15.descent;
+    return irisfont0.descent;
 }
 
 void getviewport (Screencoord *left, Screencoord *right, Screencoord *bottom, Screencoord *top)

@@ -832,6 +832,7 @@ static void flush_batch(void)
         return;
     }
 
+
     upload_pattern_if_dirty();
 
     glBindBuffer(GL_ARRAY_BUFFER, batch_vbo);
@@ -1234,11 +1235,18 @@ void gles2_rasterizer_blend(int enable)
 
 void gles2_rasterizer_zwrite(int enable)
 {
-    zwrite_enabled = enable;
-    if (gl_ready) {
+    if (enable == zwrite_enabled)
+        return;
+    // flush BEFORE updating: the pending batch must draw with the mask it
+    // was emitted under. Updating first flushed the batch with the NEW
+    // mask — flight 3.4's F-14 fuselage/nozzle batch lost its z-writes to
+    // the flames' incoming zwritemask(0), so the nozzle never occluded the
+    // thrust flames that belong inside it.
+    if (gl_ready)
         flush_batch();
+    zwrite_enabled = enable;
+    if (gl_ready)
         glDepthMask((zbuffer_enabled && zwrite_enabled) ? GL_TRUE : GL_FALSE);
-    }
 }
 
 void gles2_rasterizer_colormask(int enable)
