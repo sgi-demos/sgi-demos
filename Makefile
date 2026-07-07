@@ -65,12 +65,16 @@ all:
 
 native:
 	@rm -rf $(LOG_DIR)
+	@for lib in $(LIBS) ; do $(call build_one,$(LIBS_DIR),native,$$lib) done
 	@for demo in $(DEMOS) ; do $(call build_one,$(DEMOS_DIR),native,$$demo) done
+	$(call summarize,$(LIBS))
 	$(call summarize,$(DEMOS))
 
 browser:
 	@rm -rf $(LOG_DIR)
+	@for lib in $(LIBS) ; do $(call build_one,$(LIBS_DIR),browser,$$lib) done
 	@for demo in $(DEMOS) ; do $(call build_one,$(DEMOS_DIR),browser,$$demo) done
+	$(call summarize,$(LIBS))
 	$(call summarize,$(DEMOS))
 
 libs:

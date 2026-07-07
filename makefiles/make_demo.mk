@@ -23,16 +23,23 @@ native: $(APP)
 
 browser: $(EM_APP)
 
-$(GL_LIB):
+# The lib .a targets list the lib sources as prerequisites so an existing
+# archive is rebuilt after lib edits (the sub-make owns the real dependency
+# graph; these wildcards only decide when to recurse). They mirror SRC/HDRS
+# in make_lib.mk.
+LIBGL_SRCS = $(wildcard $(LIBS_DIR)/libgl/*.[ch]) $(wildcard $(INCS_DIR)/gl/*.h)
+LIBDEMO_SRCS = $(wildcard $(LIBS_DIR)/libdemo/*.[ch]) $(wildcard $(INCS_DIR)/gl/*.h)
+
+$(GL_LIB): $(LIBGL_SRCS)
 	make native -C $(LIBS_DIR)/libgl
 
-$(EM_GL_LIB):
+$(EM_GL_LIB): $(LIBGL_SRCS)
 	make browser -C $(LIBS_DIR)/libgl
 
-$(DEMO_LIB):
+$(DEMO_LIB): $(LIBDEMO_SRCS)
 	make native -C $(LIBS_DIR)/libdemo
 
-$(EM_DEMO_LIB):
+$(EM_DEMO_LIB): $(LIBDEMO_SRCS)
 	make browser -C $(LIBS_DIR)/libdemo
 
 $(BIN_DIR):
