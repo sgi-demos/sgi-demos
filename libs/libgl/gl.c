@@ -3069,22 +3069,18 @@ static int demo_is(const char *title, const char *name) {
 //    correctly in both rasterizers. (Its 1024x768 screen is a compile-time
 //    matter — DEMO_CFLAGS in its Makefile — and prefposition() then gets
 //    it the matching fixed framebuffer, so no display quirk is needed.)
-//  - cedit: a palette editor — needs readpixels() of color indices, which
-//    requires the reference rasterizer's CPU-side CI buffer (the gles2
-//    rasterizer's CI buffer lives in a texture with no index readback);
-//    also relies on SGI's single-buffer-at-winopen default (it never calls
-//    doublebuffer), which this shim inverts.
+//  - cedit: relies on SGI's single-buffer-at-winopen default (it never
+//    calls doublebuffer), which this shim inverts.
 //
-// flight 1988 needs no quirk anymore: its cockpit-panel writemask
-// compositing runs exactly on both rasterizers (the reference through its
-// CPU CI buffer, gles2 through the GPU CI buffer on an ES3 context).
+// flight 1988 and cedit need no rasterizer quirk anymore: writemask
+// compositing, the live palette LUT, and index readback all run on both
+// rasterizers (the reference through its CPU CI buffer, gles2 through the
+// GPU CI buffer on an ES3 context).
 static void apply_demo_quirks(char *title) {
     if (demo_is(title, "arena"))
         planes_config = 24;
-    else if (demo_is(title, "cedit")) {
-        rasterizer_prefer("ref");
+    else if (demo_is(title, "cedit"))
         singlebuffer();
-    }
 }
 
 int winopen(char *title) {
@@ -5077,8 +5073,9 @@ static void init_gl_state()
 
 // Read back color indices from the front buffer, starting at the current
 // character position and moving right (CI mode; cedit's getapixel uses this
-// for its pick-a-color-off-the-screen clicks). Requires a rasterizer that
-// keeps a CI buffer — on gles2 there is none, so this reads as index 0.
+// for its pick-a-color-off-the-screen clicks). Both rasterizers provide the
+// CI buffer (gles2 reads its CI FBO back on demand); NULL only when the
+// gles2 CI path is unavailable (ES2 context) — those reads see index 0.
 int readpixels(short number, Colorindex colors[ ])
 {
     TRACEF("%d", number);

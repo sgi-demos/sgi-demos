@@ -43,8 +43,8 @@ pass/fail gate.
   (global; per-demo override via a `modes` array on the entry), `minContent`
   (per-demo non-blank threshold; the default 0.02 means >2% of pixels must
   differ from the dominant color).
-- `cedit` runs in `ref` mode only: live palette editing needs the reference
-  rasterizer's color-index buffer (a shim quirk selects it by default).
+- `cedit` runs in both modes: live palette edits and index readback work on
+  the reference rasterizer's CPU CI buffer and the gles2 GPU CI buffer alike.
 
 ## Interaction driver
 

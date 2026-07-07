@@ -1,5 +1,5 @@
 {
-  "//": "Smoke-test config. Paths are relative to the repo root. Every demo is captured once per entry in 'modes' (?rast=... URL param: 'ref' = CPU reference rasterizer, 'gles2' = GPU rasterizer); override per demo with a 'modes' array on its entry. 'arg' becomes &arg=... on the URL (omit if none). 'minContent' is the minimum fraction of the canvas that must differ from the dominant color for the frame to count as non-blank (0..1). 'status' is just a human note shown in the gallery. Comment a demo out by deleting its entry. 'cedit' runs in ref mode only: it needs the reference rasterizer's color-index buffer for live palette edits (a shim quirk selects it by default; the gles2 capture would render the initial frame fine but the mode isn't meaningful for it).",
+  "//": "Smoke-test config. Paths are relative to the repo root. Every demo is captured once per entry in 'modes' (?rast=... URL param: 'ref' = CPU reference rasterizer, 'gles2' = GPU rasterizer); override per demo with a 'modes' array on its entry. 'arg' becomes &arg=... on the URL (omit if none). 'minContent' is the minimum fraction of the canvas that must differ from the dominant color for the frame to count as non-blank (0..1). 'status' is just a human note shown in the gallery. Comment a demo out by deleting its entry.",
   "settleMs": 3000,
   "viewport": { "width": 1024, "height": 768 },
   "modes": ["ref", "gles2"],
@@ -19,7 +19,7 @@
     { "name": "flight-1988", "path": "demos/flight-1988/web/flight-1988_full.html", "status": "somewhat" },
     { "name": "flight-1994", "path": "demos/flight-1994/web/flight-1994_full.html", "status": "somewhat" },
     { "name": "newave",    "path": "demos/newave/web/newave_full.html",       "status": "working", "minContent": 0.01 },
-    { "name": "cedit",     "path": "demos/cedit/web/cedit_full.html",         "status": "working", "modes": ["ref"], "minContent": 0.01 },
+    { "name": "cedit",     "path": "demos/cedit/web/cedit_full.html",         "status": "working", "minContent": 0.01 },
     { "name": "arena",     "path": "demos/arena/web/arena_full.html",         "status": "somewhat" },
     { "name": "gview",     "path": "demos/gview/web/gview_full.html",         "status": "somewhat" }
   ]

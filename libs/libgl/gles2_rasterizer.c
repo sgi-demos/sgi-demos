@@ -1383,12 +1383,34 @@ unsigned char* gles2_rasterizer_frontbuffer(void)
     return cpu_front; // NULL until the first resize allocates it
 }
 
-// No CPU-side index readback on the GPU path (the CI buffer lives in a
-// texture): demos that readpixels() indices (cedit) run on the reference
-// rasterizer instead (see apply_demo_quirks in gl.c).
+// CPU-side index readback: decode the front CI FBO into a uint16 buffer
+// (row 0 = top, same layout as the reference rasterizer's). A full-frame
+// glReadPixels per call — fine for its consumers (cedit's pick-a-color
+// clicks via readpixels/getapixel), not for per-pixel polling.
+static unsigned short *cpu_ci = NULL;
+
 unsigned short* gles2_rasterizer_ci_frontbuffer(void)
 {
-    return NULL;
+    if (!gl_ready || !ci_gpu_ok || rgb_mode || !readback_rgba)
+        return NULL;
+    flush_batch();  // pending geometry must reach the FBO before reading
+
+    if (cpu_ci == NULL)
+        cpu_ci = malloc((size_t)fb_width * fb_height * sizeof(unsigned short));
+
+    glBindFramebuffer(GL_FRAMEBUFFER, front_ci->fbo);
+    glReadPixels(0, 0, fb_width, fb_height, GL_RGBA, GL_UNSIGNED_BYTE, readback_rgba);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // decode R=low byte, G=high nibble; flip rows (GL row 0 is the bottom)
+    for (int j = 0; j < fb_height; j++)
+    {
+        unsigned char *src = readback_rgba + (size_t)(fb_height - 1 - j) * fb_width * 4;
+        unsigned short *dst = cpu_ci + (size_t)j * fb_width;
+        for (int i = 0; i < fb_width; i++)
+            dst[i] = (unsigned short)(src[i * 4] | (src[i * 4 + 1] << 8)) & 0xfff;
+    }
+    return cpu_ci;
 }
 
 // The GL layer signals "the palette changed since the last present" —
@@ -1417,6 +1439,8 @@ void gles2_rasterizer_resize(uint32_t width, uint32_t height)
     free(readback_rgba);
     cpu_front = calloc(1, (size_t)fb_width * fb_height * 4);
     readback_rgba = malloc((size_t)fb_width * fb_height * 4);
+    free(cpu_ci);       // ci_frontbuffer's decode target; reallocated lazily
+    cpu_ci = NULL;
 
     if (!gl_ready)
     {
