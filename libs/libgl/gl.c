@@ -3729,6 +3729,17 @@ void lmbind(int target, int index) {
         abort();
 }
 
+// IRIS GL clamps color-valued lmdef properties to [0, 1] at definition time.
+// flight 3.4 depends on it: the daytime sun is set_lightcolor(SUN, ...,
+// l*4.4, l, l) — the 4.4 red multiplier only shapes the sunrise ramp and is
+// meant to saturate at 1.0 well before full day. Stored unclamped, the
+// red-heavy sun tints every dark lit material brick-orange (the F-14's
+// engine nozzles read as thrust-flame colored).
+static void vec3f_set_clamped01(vec3f d, float x, float y, float z)
+{
+    vec3f_set(d, unitclamp(x), unitclamp(y), unitclamp(z));
+}
+
 void lmdef(int deftype, int index, int numpoints, float properties[]) {
     if(index == 0)
         abort();
@@ -3748,22 +3759,22 @@ void lmdef(int deftype, int index, int numpoints, float properties[]) {
             switch((int)*p) {
                 case DIFFUSE:
                     if(trace_functions) printf("%*sDIFFUSE, %f, %f, %f,\n", trace_indent + 4, "", p[1], p[2], p[3]);
-                    vec3f_set(m->diffuse, p[1], p[2], p[3]);
+                    vec3f_set_clamped01(m->diffuse, p[1], p[2], p[3]);
                     p+= 4;
                     break;
                 case EMISSION:
                     if(trace_functions) printf("%*sEMISSION, %f, %f, %f,\n", trace_indent + 4, "", p[1], p[2], p[3]);
-                    vec3f_set(m->emission, p[1], p[2], p[3]);
+                    vec3f_set_clamped01(m->emission, p[1], p[2], p[3]);
                     p+= 4;
                     break;
                 case AMBIENT:
                     if(trace_functions) printf("%*sAMBIENT, %f, %f, %f,\n", trace_indent + 4, "", p[1], p[2], p[3]);
-                    vec3f_set(m->ambient, p[1], p[2], p[3]);
+                    vec3f_set_clamped01(m->ambient, p[1], p[2], p[3]);
                     p+= 4;
                     break;
                 case SPECULAR:
                     if(trace_functions) printf("%*sSPECULAR, %f, %f, %f,\n", trace_indent + 4, "", p[1], p[2], p[3]);
-                    vec3f_set(m->specular, p[1], p[2], p[3]);
+                    vec3f_set_clamped01(m->specular, p[1], p[2], p[3]);
                     p+= 4;
                     break;
                 case SHININESS:
@@ -3773,7 +3784,7 @@ void lmdef(int deftype, int index, int numpoints, float properties[]) {
                     break;
                 case ALPHA:
                     if(trace_functions) printf("%*sALPHA, %f,\n", trace_indent + 4, "", p[1]);
-                    m->alpha = p[1];
+                    m->alpha = unitclamp(p[1]);
                     p+= 2;
                     break;
                 default:
@@ -3800,12 +3811,12 @@ void lmdef(int deftype, int index, int numpoints, float properties[]) {
                 }
                 case AMBIENT:
                     if(trace_functions) printf("%*sAMBIENT, %f, %f, %f,\n", trace_indent + 4, "", p[1], p[2], p[3]);
-                    vec3f_set(l->ambient, p[1], p[2], p[3]);
+                    vec3f_set_clamped01(l->ambient, p[1], p[2], p[3]);
                     p+= 4;
                     break;
                 case LCOLOR:
                     if(trace_functions) printf("%*sLCOLOR, %f, %f, %f,\n", trace_indent + 4, "", p[1], p[2], p[3]);
-                    vec3f_set(l->color, p[1], p[2], p[3]);
+                    vec3f_set_clamped01(l->color, p[1], p[2], p[3]);
                     p+= 4;
                     break;
                 case POSITION:
