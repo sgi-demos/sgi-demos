@@ -87,6 +87,7 @@ int32_t rasterizer_winopen(char *title)                 { return rast()->winopen
 void rasterizer_rgbmode(int enable)                     { rast()->rgbmode(enable); }
 void rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index) { rast()->clear(r, g, b, color_index); }
 void rasterizer_zclear(uint32_t z)                      { rast()->zclear(z); }
+void rasterizer_zclear_rect(uint32_t z, int32_t x0, int32_t y0, int32_t x1, int32_t y1) { rast()->zclear_rect(z, x0, y0, x1, y1); }
 void rasterizer_czclear(uint8_t r, uint8_t g, uint8_t b, short color_index, uint32_t z) { rast()->czclear(r, g, b, color_index, z); }
 void rasterizer_swap()                                  { rast()->swap(); }
 void rasterizer_copy_front_to_back()                    { rast()->copy_front_to_back(); }
@@ -95,9 +96,12 @@ unsigned char* rasterizer_frontbuffer()                 { return rast()->frontbu
 void rasterizer_draw(uint32_t type, uint32_t count, screen_vertex *v) { rast()->draw(type, count, v); }
 void rasterizer_bitmap(uint32_t width, uint32_t rowbytes, uint32_t height, screen_vertex *sv, uint8_t *bits) { rast()->bitmap(width, rowbytes, height, sv, bits); }
 void rasterizer_alpha_blit(uint32_t width, uint32_t rowbytes, uint32_t height, screen_vertex *sv, uint8_t *alpha, uint8_t r, uint8_t g, uint8_t b) { rast()->alpha_blit(width, rowbytes, height, sv, alpha, r, g, b); }
-void rasterizer_masked_clear(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t n, const uint32_t *rgb_from, const uint32_t *rgb_to) { rast()->masked_clear(x0, y0, x1, y1, n, rgb_from, rgb_to); }
+void rasterizer_masked_clear(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint16_t wm, uint16_t clear_index, uint8_t colormap[][3], uint32_t n, const uint32_t *rgb_from, const uint32_t *rgb_to) { rast()->masked_clear(x0, y0, x1, y1, wm, clear_index, colormap, n, rgb_from, rgb_to); }
+void rasterizer_writemask(uint16_t wm, uint8_t colormap[][3]) { rast()->writemask(wm, colormap); }
 void rasterizer_setpattern(uint16_t pattern[16])        { rast()->setpattern(pattern); }
 void rasterizer_pattern(int enable)                     { rast()->pattern(enable); }
+void rasterizer_scissor(int enable, int32_t x0, int32_t y0, int32_t x1, int32_t y1) { rast()->scissor(enable, x0, y0, x1, y1); }
+void rasterizer_layer(int layer)                        { rast()->layer(layer); }
 void rasterizer_cbuffer_draw(int enable_front, int enable_back) { rast()->cbuffer_draw(enable_front, enable_back); }
 void rasterizer_zbuffer(int enable)                     { rast()->zbuffer(enable); }
 void rasterizer_blend(int enable)                       { rast()->blend(enable); }

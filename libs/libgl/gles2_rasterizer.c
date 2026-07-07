@@ -77,6 +77,22 @@ static gl_buffer buffers[2];
 static gl_buffer *back_buf = &buffers[0];
 static gl_buffer *front_buf = &buffers[1];
 
+// IRIS layer planes (rasterizer_layer): single-buffered RGBA side buffers
+// with no depth attachment. layer_bufs[0] = underlay, [1] = overlay/pup;
+// a pixel's alpha records "layer index != 0" (0 = transparent/erased).
+// Once any layer is selected, presents go through display_buf, the
+// per-frame composite of overlay-over-front-over-underlay (underlay shows
+// where the front pixel is exactly black — the SGI display priority).
+// Demos that never touch drawmode keep the zero-copy front-texture present.
+static gl_buffer layer_bufs[2];
+static gl_buffer display_buf;
+static int layer_target = 0;        // 0 = normal planes, 1 = underlay, 2 = overlay
+static int layers_in_use = 0;
+
+// IRIS scrmask (rasterizer_scissor): clips batched draws; y up like the batch
+static int scissor_enabled = 0;
+static int32_t scissor_rect[4];     // x0, y0, x1, y1 inclusive
+
 // One depth renderbuffer shared by both FBOs, matching the reference
 // rasterizer's single z-buffer (front and back share z state there too)
 static GLuint shared_depth_rb = 0;
@@ -92,6 +108,12 @@ static GLuint blit_prog = 0;        // alpha_blit program (textured, blended)
 static GLint  u_blit_scale = -1;
 static GLint  u_blit_color = -1;
 static GLint  u_blit_tex = -1;
+
+static GLuint comp_prog = 0;        // layer composite program (see display_buf)
+static GLint  u_comp_scale = -1;
+static GLint  u_comp_front = -1;
+static GLint  u_comp_under = -1;
+static GLint  u_comp_over = -1;
 
 static GLuint pattern_tex = 0;      // 16x16 alpha texture of the_pattern
 static GLuint blit_tex = 0;         // scratch texture for alpha_blit
@@ -158,7 +180,17 @@ static const GLchar *draw_vs_src =
     "}                                                                  \n";
 
 static const GLchar *draw_fs_src =
+    // highp: mediump varyings interpolate at fp16 on Apple GPUs, and across
+    // a screen-filling flat triangle the interpolation error exceeds half a
+    // byte step — flat cmode fills came out off by one (154,150,150 amid
+    // 155,150,150), stranding pixels the masked-clear RGB remap can never
+    // match. fp32 interpolation plus the byte-grid quantize below keeps
+    // cmode fills exactly on palette bytes.
+    "#ifdef GL_FRAGMENT_PRECISION_HIGH                                  \n"
+    "precision highp float;                                             \n"
+    "#else                                                              \n"
     "precision mediump float;                                           \n"
+    "#endif                                                             \n"
     "varying vec4 v_color;                                              \n"
     "varying vec2 v_uv;                                                 \n"
     "uniform sampler2D pattern_tex;                                     \n"
@@ -173,9 +205,15 @@ static const GLchar *draw_fs_src =
     "        if (texture2D(pattern_tex, pc).a < 0.5)                    \n"
     "            discard;                                               \n"
     "    }                                                              \n"
+    // Quantize to the byte grid: perspective-correct varying interpolation
+    // is not byte-exact even across a flat-colored triangle (float noise
+    // lands 154.99 where the vertices said 155), and the masked-clear RGB
+    // remap needs cmode fills to hold exact palette bytes. Equivalent to
+    // what the RGBA8 framebuffer write quantizes anyway, minus the noise.
+    "    vec4 c = floor(v_color * 255.0 + 0.5) / 255.0;                 \n"
     "    gl_FragColor = tex_on                                          \n"
-    "        ? v_color * vec4(texture2D(demo_tex, v_uv).rgb, 1.0)       \n" // IRIS TV_MODULATE
-    "        : v_color;                                                 \n"
+    "        ? c * vec4(texture2D(demo_tex, v_uv).rgb, 1.0)             \n" // IRIS TV_MODULATE
+    "        : c;                                                       \n"
     "}                                                                  \n";
 
 static const GLchar *blit_vs_src =
@@ -199,6 +237,26 @@ static const GLchar *blit_fs_src =
     "void main()                                                        \n"
     "{                                                                  \n"
     "    gl_FragColor = vec4(color.rgb, texture2D(blit_tex, v_uv).a);   \n"
+    "}                                                                  \n";
+
+// layer composite (shares blit_vs_src): SGI display priority — overlay
+// where its index bit (alpha) is set, else the normal planes, else the
+// underlay where the normal planes are exactly black (all channels 0;
+// texels are 8-bit so the float compare against 0.0 is exact)
+static const GLchar *comp_fs_src =
+    "precision mediump float;                                           \n"
+    "varying vec2 v_uv;                                                 \n"
+    "uniform sampler2D front_tex;                                       \n"
+    "uniform sampler2D under_tex;                                       \n"
+    "uniform sampler2D over_tex;                                        \n"
+    "void main()                                                        \n"
+    "{                                                                  \n"
+    "    vec4 o = texture2D(over_tex, v_uv);                            \n"
+    "    vec4 f = texture2D(front_tex, v_uv);                           \n"
+    "    vec4 u = texture2D(under_tex, v_uv);                           \n"
+    "    vec3 base = (f.r + f.g + f.b == 0.0 && u.a > 0.5)              \n"
+    "        ? u.rgb : f.rgb;                                           \n"
+    "    gl_FragColor = vec4(o.a > 0.5 ? o.rgb : base, 1.0);            \n"
     "}                                                                  \n";
 
 static float clampf(float v, float low, float high)
@@ -254,7 +312,7 @@ static GLuint build_program(const GLchar *vs_src, const GLchar *fs_src,
     return prog;
 }
 
-static void create_buffer(gl_buffer *b)
+static void create_buffer(gl_buffer *b, int with_depth)
 {
     glGenTextures(1, &b->tex);
     glBindTexture(GL_TEXTURE_2D, b->tex);
@@ -268,15 +326,32 @@ static void create_buffer(gl_buffer *b)
     glGenFramebuffers(1, &b->fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, b->fbo);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, b->tex, 0);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, shared_depth_rb);
+    if (with_depth)     // layer/display buffers carry no z (see rasterizer_layer)
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, shared_depth_rb);
 
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if (status != GL_FRAMEBUFFER_COMPLETE)
         printf("ERROR: gles2 rasterizer FBO incomplete: 0x%x\n", status);
 }
 
+static void destroy_buffer(gl_buffer *b)
+{
+    glDeleteFramebuffers(1, &b->fbo);
+    glDeleteTextures(1, &b->tex);
+}
+
+// clear a layer/display buffer to transparent black
+static void clear_buffer_transparent(gl_buffer *b)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, b->fbo);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 static void clear_gl_buffers(uint8_t r, uint8_t g, uint8_t b,
                              int clear_front, int clear_back, GLbitfield mask);
+static void flush_batch(void);
 
 // Create all GL resources on the first call after the SDL window/GL context
 // exists. Returns 0 (and does nothing) if the context isn't up yet.
@@ -304,6 +379,12 @@ static int ensure_gl(void)
     u_blit_color = glGetUniformLocation(blit_prog, "color");
     u_blit_tex = glGetUniformLocation(blit_prog, "blit_tex");
 
+    comp_prog = build_program(blit_vs_src, comp_fs_src, "pos", "uv", "composite");
+    u_comp_scale = glGetUniformLocation(comp_prog, "scale");
+    u_comp_front = glGetUniformLocation(comp_prog, "front_tex");
+    u_comp_under = glGetUniformLocation(comp_prog, "under_tex");
+    u_comp_over = glGetUniformLocation(comp_prog, "over_tex");
+
     glGenTextures(1, &pattern_tex);
     glBindTexture(GL_TEXTURE_2D, pattern_tex);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -321,6 +402,26 @@ static int ensure_gl(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
+    // The draw shader statically references demo_tex on unit 1. Leaving the
+    // unit unbound until the first teximage() is technically undefined and
+    // trips driver validation (Apple's GL-on-Metal logs "texture unloadable,
+    // using zero texture" for demos that never texture). Start it as 1x1
+    // white — the identity for the TV_MODULATE multiply — and keep it bound;
+    // teximage() replaces the contents.
+    {
+        static const uint8_t white[3] = {255, 255, 255};
+        glGenTextures(1, &demo_tex);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, demo_tex);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_RGB, GL_UNSIGNED_BYTE, white);
+        glActiveTexture(GL_TEXTURE0);
+    }
+
     glGenBuffers(1, &batch_vbo);
     glGenBuffers(1, &blit_vbo);
 
@@ -328,8 +429,14 @@ static int ensure_gl(void)
     glBindRenderbuffer(GL_RENDERBUFFER, shared_depth_rb);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, fb_width, fb_height);
 
-    create_buffer(&buffers[0]);
-    create_buffer(&buffers[1]);
+    create_buffer(&buffers[0], 1);
+    create_buffer(&buffers[1], 1);
+    create_buffer(&layer_bufs[0], 0);
+    create_buffer(&layer_bufs[1], 0);
+    create_buffer(&display_buf, 0);
+    clear_buffer_transparent(&layer_bufs[0]);
+    clear_buffer_transparent(&layer_bufs[1]);
+    clear_buffer_transparent(&display_buf);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     gl_ready = 1;
@@ -346,6 +453,79 @@ static int ensure_gl(void)
 
     printf("INFO: gles2 rasterizer initialized (%dx%d front/back FBOs)\n", fb_width, fb_height);
     return 1;
+}
+
+//
+// layer composite + present source (see layer_bufs/display_buf above)
+//
+
+static void composite_layers(void)
+{
+    // fullscreen quad in pixel coords through the composite program
+    struct { float x, y, z, u, v; } quad[6] = {
+        { 0,               0,                0, 0, 0 },
+        { (float)fb_width, 0,                0, 1, 0 },
+        { (float)fb_width, (float)fb_height, 0, 1, 1 },
+        { 0,               0,                0, 0, 0 },
+        { (float)fb_width, (float)fb_height, 0, 1, 1 },
+        { 0,               (float)fb_height, 0, 0, 1 },
+    };
+
+    glBindFramebuffer(GL_FRAMEBUFFER, display_buf.fbo);
+    glViewport(0, 0, fb_width, fb_height);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+
+    glUseProgram(comp_prog);
+    glUniform2f(u_comp_scale, 2.0f / fb_width, 2.0f / fb_height);
+    glUniform1i(u_comp_front, 0);
+    glUniform1i(u_comp_under, 2);
+    glUniform1i(u_comp_over, 3);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, front_buf->tex);
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, layer_bufs[0].tex);
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D, layer_bufs[1].tex);
+    glActiveTexture(GL_TEXTURE0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, blit_vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STREAM_DRAW);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(quad[0]), (void *)0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(quad[0]), (void *)(3 * sizeof(float)));
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+
+    glEnable(GL_DEPTH_TEST);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+// point the display at the right texture: the raw front FBO (zero-copy)
+// until a layer is used, the composited display buffer after
+static void present_source(void)
+{
+    if (!gl_ready)
+        return;
+    if (layers_in_use)
+    {
+        composite_layers();
+        sdlSetFramebufferSourceTex(display_buf.tex);
+    }
+    else
+        sdlSetFramebufferSourceTex(front_buf->tex);
+}
+
+void gles2_rasterizer_layer(int layer)
+{
+    if (layer == layer_target)
+        return;
+    flush_batch();
+    layer_target = layer;
+    if (layer > 0)
+        layers_in_use = 1;
 }
 
 //
@@ -407,33 +587,57 @@ static void flush_batch(void)
         glActiveTexture(GL_TEXTURE0);
     }
 
-    // The reference rasterizer writes z whenever a pixel passes, even with
-    // the z-buffer disabled; GL_ALWAYS with depth writes on matches that
-    // (unless the demo turned depth writes off via zwritemask).
+    // IRIS zbuffer(FALSE) means z is neither tested nor updated — flight
+    // 3.4's horizon depends on it: the gauge's z-off black backing square
+    // must not overwrite the far z that the lsetdepth-jammed horizon ball
+    // is later LEQUAL-tested against. zwritemask can additionally turn
+    // writes off while the test stays on.
     // GL_LEQUAL is the IRIS GL default z-function: later geometry at equal
     // depth overwrites (newave's edit crosshair repaints mesh lines in
     // green at the same z). It also lets the front-buffer pass below land
     // the same pixels the back-buffer pass just wrote z for.
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(zbuffer_enabled ? GL_LEQUAL : GL_ALWAYS);
-    glDepthMask(zwrite_enabled ? GL_TRUE : GL_FALSE);
+    glDepthMask((zbuffer_enabled && zwrite_enabled) ? GL_TRUE : GL_FALSE);
     if (batch_blend_on) {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     } else
         glDisable(GL_BLEND);
     glViewport(0, 0, fb_width, fb_height);
+    if (scissor_enabled) {
+        glEnable(GL_SCISSOR_TEST);
+        glScissor(scissor_rect[0], scissor_rect[1],
+                  scissor_rect[2] - scissor_rect[0] + 1,
+                  scissor_rect[3] - scissor_rect[1] + 1);
+    }
 
-    if (backbuffer_draw_enabled)
+    if (layer_target > 0)
     {
-        glBindFramebuffer(GL_FRAMEBUFFER, back_buf->fbo);
+        // layer planes: single-buffered, no depth attachment (the depth
+        // test/writes set above are inert without one). Blending is forced
+        // off so a drawn pixel's alpha (its "index != 0" bit) replaces —
+        // drawing index 0 erases the layer to transparent.
+        glDisable(GL_BLEND);
+        glBindFramebuffer(GL_FRAMEBUFFER, layer_bufs[layer_target - 1].fbo);
         glDrawArrays(GL_TRIANGLES, 0, batch_count);
     }
-    if (frontbuffer_draw_enabled)
+    else
     {
-        glBindFramebuffer(GL_FRAMEBUFFER, front_buf->fbo);
-        glDrawArrays(GL_TRIANGLES, 0, batch_count);
+        if (backbuffer_draw_enabled)
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, back_buf->fbo);
+            glDrawArrays(GL_TRIANGLES, 0, batch_count);
+        }
+        if (frontbuffer_draw_enabled)
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, front_buf->fbo);
+            glDrawArrays(GL_TRIANGLES, 0, batch_count);
+        }
     }
+
+    if (scissor_enabled)
+        glDisable(GL_SCISSOR_TEST);
 
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
@@ -441,6 +645,20 @@ static void flush_batch(void)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     batch_count = 0;
+}
+
+void gles2_rasterizer_scissor(int enable, int32_t x0, int32_t y0, int32_t x1, int32_t y1)
+{
+    if (enable == scissor_enabled &&
+        (!enable || (x0 == scissor_rect[0] && y0 == scissor_rect[1] &&
+                     x1 == scissor_rect[2] && y1 == scissor_rect[3])))
+        return;
+    flush_batch();     // the rect applies at draw time; pending batch keeps the old one
+    scissor_enabled = enable;
+    scissor_rect[0] = x0;
+    scissor_rect[1] = y0;
+    scissor_rect[2] = x1;
+    scissor_rect[3] = y1;
 }
 
 //
@@ -451,7 +669,11 @@ static void sync_front_to_cpu(void)
     if (!gl_ready)
         return;
 
-    glBindFramebuffer(GL_FRAMEBUFFER, front_buf->fbo);
+    // frame dumps should show what the display shows: the layer composite
+    // when layers are in use, the raw front FBO otherwise
+    if (layers_in_use)
+        composite_layers();
+    glBindFramebuffer(GL_FRAMEBUFFER, layers_in_use ? display_buf.fbo : front_buf->fbo);
     glReadPixels(0, 0, fb_width, fb_height, GL_RGBA, GL_UNSIGNED_BYTE, readback_rgba);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -507,12 +729,19 @@ void gles2_rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
 
 static void restore_depth_mask(void)
 {
-    glDepthMask(zwrite_enabled ? GL_TRUE : GL_FALSE);
+    glDepthMask((zbuffer_enabled && zwrite_enabled) ? GL_TRUE : GL_FALSE);
 }
 
 void gles2_rasterizer_masked_clear(int32_t x0, int32_t y0, int32_t x1, int32_t y1,
+                                   uint16_t wm, uint16_t clear_index, uint8_t colormap[][3],
                                    uint32_t n, const uint32_t *rgb_from, const uint32_t *rgb_to)
 {
+    // No CI buffer on the GPU path: the index math (wm/clear_index/colormap)
+    // is approximated by the precomputed RGB remap pairs. Exact for the flat
+    // fills this rasterizer produces for cmode content.
+    (void)wm; (void)clear_index; (void)colormap;
+    if (n == 0)
+        return;
     if (!ensure_gl())
         return;
     flush_batch();
@@ -607,7 +836,7 @@ void gles2_rasterizer_zwrite(int enable)
     zwrite_enabled = enable;
     if (gl_ready) {
         flush_batch();
-        glDepthMask(enable ? GL_TRUE : GL_FALSE);
+        glDepthMask((zbuffer_enabled && zwrite_enabled) ? GL_TRUE : GL_FALSE);
     }
 }
 
@@ -623,6 +852,28 @@ void gles2_rasterizer_zclear(uint32_t z)
     // both FBOs share one depth renderbuffer (like the reference's single
     // z-buffer), so one clear through either FBO clears it for both
     clear_gl_buffers(0, 0, 0, 0, 1, GL_DEPTH_BUFFER_BIT);
+}
+
+void gles2_rasterizer_zclear_rect(uint32_t z, int32_t x0, int32_t y0, int32_t x1, int32_t y1)
+{
+    if (!ensure_gl())
+    {
+        pend_clear_z = z;
+        return;
+    }
+    flush_batch();
+    if (x0 < 0) x0 = 0;
+    if (y0 < 0) y0 = 0;
+    if (x1 >= fb_width)  x1 = fb_width - 1;
+    if (y1 >= fb_height) y1 = fb_height - 1;
+    if (x0 > x1 || y0 > y1)
+        return;
+    glClearDepthf((GLfloat)(z / 4294967295.0));
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(x0, y0, x1 - x0 + 1, y1 - y0 + 1);   // FBO rows are y-up, same as the rect
+    // the depth renderbuffer is shared by both FBOs; clear it through either
+    clear_gl_buffers(0, 0, 0, 0, 1, GL_DEPTH_BUFFER_BIT);
+    glDisable(GL_SCISSOR_TEST);
 }
 
 void gles2_rasterizer_czclear(uint8_t r, uint8_t g, uint8_t b, short color_index, uint32_t z)
@@ -669,14 +920,13 @@ void gles2_rasterizer_swap(void)
     }
     frame++;
 
-    // exchange front and back, and hand the new front texture to the
-    // display quad (zero-readback present)
+    // exchange front and back, and hand the new front texture (or the
+    // layer composite of it) to the display quad
     gl_buffer *tmp = back_buf;
     back_buf = front_buf;
     front_buf = tmp;
 
-    if (gl_ready)
-        sdlSetFramebufferSourceTex(front_buf->tex);
+    present_source();
 }
 
 void gles2_rasterizer_copy_front_to_back(void)
@@ -752,24 +1002,30 @@ void gles2_rasterizer_resize(uint32_t width, uint32_t height)
     // the shared depth renderbuffer
     batch_count = 0; // any batched geometry is in old-framebuffer coords
     for (int i = 0; i < 2; i++)
-    {
-        glDeleteFramebuffers(1, &buffers[i].fbo);
-        glDeleteTextures(1, &buffers[i].tex);
-    }
+        destroy_buffer(&buffers[i]);
+    destroy_buffer(&layer_bufs[0]);
+    destroy_buffer(&layer_bufs[1]);
+    destroy_buffer(&display_buf);
     glDeleteRenderbuffers(1, &shared_depth_rb);
 
     glGenRenderbuffers(1, &shared_depth_rb);
     glBindRenderbuffer(GL_RENDERBUFFER, shared_depth_rb);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, fb_width, fb_height);
 
-    create_buffer(&buffers[0]);
-    create_buffer(&buffers[1]);
+    create_buffer(&buffers[0], 1);
+    create_buffer(&buffers[1], 1);
+    create_buffer(&layer_bufs[0], 0);
+    create_buffer(&layer_bufs[1], 0);
+    create_buffer(&display_buf, 0);
+    clear_buffer_transparent(&layer_bufs[0]);
+    clear_buffer_transparent(&layer_bufs[1]);
+    clear_buffer_transparent(&display_buf);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     glClearDepthf(1.0f);
     clear_gl_buffers(0, 0, 0, 1, 1, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    sdlSetFramebufferSourceTex(front_buf->tex);
+    present_source();
 
     printf("INFO: gles2 rasterizer framebuffer %dx%d\n", fb_width, fb_height);
 }
@@ -784,6 +1040,10 @@ void gles2_rasterizer_frame_sync(void)
         return;
     if (batch_count > 0)
         flush_batch();
+    // refresh the layer composite so front-buffer drawing done since the
+    // last swap (flight's gauges) reaches the display
+    if (layers_in_use)
+        present_source();
 }
 
 //
@@ -1074,6 +1334,16 @@ void gles2_rasterizer_alpha_blit(uint32_t width, uint32_t rowbytes, uint32_t hei
 // state
 //
 
+void gles2_rasterizer_writemask(uint16_t wm, uint8_t colormap[][3])
+{
+    // No CI buffer on the GPU path: per-draw writemask compositing (index
+    // planes showing through new primitives) can't be reproduced here.
+    // Masked draws keep their flat color — demos that depend on the
+    // compositing (flight 1988's cockpit panel) prefer the reference
+    // rasterizer via apply_demo_quirks.
+    (void)wm; (void)colormap;
+}
+
 void gles2_rasterizer_setpattern(uint16_t pattern[16])
 {
     // batched stippled geometry must draw with the mask active when emitted
@@ -1137,6 +1407,7 @@ const rasterizer_funcs* gles2_rasterizer_get_funcs(void)
         .rgbmode            = gles2_rasterizer_rgbmode,
         .clear              = gles2_rasterizer_clear,
         .zclear             = gles2_rasterizer_zclear,
+        .zclear_rect        = gles2_rasterizer_zclear_rect,
         .czclear            = gles2_rasterizer_czclear,
         .swap               = gles2_rasterizer_swap,
         .copy_front_to_back = gles2_rasterizer_copy_front_to_back,
@@ -1146,8 +1417,11 @@ const rasterizer_funcs* gles2_rasterizer_get_funcs(void)
         .bitmap             = gles2_rasterizer_bitmap,
         .alpha_blit         = gles2_rasterizer_alpha_blit,
         .masked_clear       = gles2_rasterizer_masked_clear,
+        .writemask          = gles2_rasterizer_writemask,
         .setpattern         = gles2_rasterizer_setpattern,
         .pattern            = gles2_rasterizer_pattern,
+        .scissor            = gles2_rasterizer_scissor,
+        .layer              = gles2_rasterizer_layer,
         .cbuffer_draw       = gles2_rasterizer_cbuffer_draw,
         .zbuffer            = gles2_rasterizer_zbuffer,
         .blend              = gles2_rasterizer_blend,

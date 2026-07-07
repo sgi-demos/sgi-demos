@@ -47,6 +47,31 @@ static uint16_t *ci_buffer[2] = {NULL, NULL};
 static uint16_t *gl_ci_backbuffer = NULL;
 static uint16_t *gl_ci_frontbuffer = NULL;
 
+// IRIS layer planes (rasterizer_layer): single-buffered BGRA side buffers;
+// a pixel's alpha byte records "layer index != 0" (0 = transparent/erased).
+// Layer draws bypass the z-buffer (the hardware layers had no z). Once any
+// layer is selected, presents go through display_buffer, the per-frame
+// composite of overlay-over-front-over-underlay (underlay shows where the
+// front pixel is exactly black — the SGI display priority); the GL layer
+// picks it up through ref_rasterizer_frontbuffer at each present.
+static int layer_target = 0;        // 0 = normal planes, 1 = underlay, 2 = overlay
+static int layers_in_use = 0;
+static uint8_t *layer_buffer[2] = {NULL, NULL};   // [0] = underlay, [1] = overlay
+static uint8_t *display_buffer = NULL;
+#define LAYER_ALPHA_BYTE 3
+
+// Per-draw IRIS writemask (CI mode): while partial, drawn pixels composite
+// against the CI buffer instead of overwriting it (see write_pixel). the
+// colormap points at the GL layer's live palette (stable static array).
+static uint16_t the_writemask = 0xffff;
+static uint8_t (*the_colormap)[3] = NULL;
+
+void ref_rasterizer_writemask(uint16_t wm, uint8_t colormap[][3])
+{
+    the_writemask = wm;
+    the_colormap = colormap;
+}
+
 static size_t color_buffer_bytes(void) { return (size_t)DISPLAY_WIDTH * DISPLAY_HEIGHT * 4; }
 
 // Address of pixel (x, y) in a color buffer (y is buffer row, 0 = top)
@@ -107,6 +132,47 @@ void ref_rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
     }
 }
 
+// IRIS colormap-plane masked clear, exact form: every pixel's INDEX takes
+// (oldIndex & ~wm) | (clear_index & wm) — index-plane arithmetic through
+// the per-pixel CI buffer, RGB re-resolved through the colormap. Unlike
+// the RGB-matching approximation (gles2, and the fallback below), this is
+// immune to palette collisions and never strands a pixel whose RGB drifted
+// off-palette. Pixels whose index is unchanged keep their RGB bytes as-is,
+// so RGB-only shim overlays (popup menus, which record no CI) survive
+// where the demo's writemask protects the underlying planes.
+static void masked_clear_ci(int draw_enabled, uint8_t *buffer, uint16_t *cibuf,
+                            int x0, int y0, int x1, int y1,
+                            uint16_t wm, uint16_t clear_index, uint8_t colormap[][3])
+{
+    if (!draw_enabled || !buffer || !cibuf)
+        return;
+    for (int y = y0; y <= y1; y++) {
+        int buffer_y = DISPLAY_HEIGHT - 1 - y;
+        if (buffer_y < 0 || buffer_y >= DISPLAY_HEIGHT)
+            continue;
+        for (int x = x0; x <= x1; x++) {
+            if (x < 0 || x >= DISPLAY_WIDTH)
+                continue;
+            // clear() honors the current pattern (flight 1988's crashed-
+            // meters effect is a patterned clear through writemask(white))
+            if (pattern_enabled && !(the_pattern[y % 16] & (1 << (x % 16))))
+                continue;
+            size_t i = (size_t)buffer_y * DISPLAY_WIDTH + x;
+            uint16_t ci = cibuf[i];
+            uint16_t nci = (uint16_t)(((ci & ~wm) | (clear_index & wm)) & 0xfff);
+            if (nci == ci)
+                continue;
+            cibuf[i] = nci;
+            uint8_t *p = buffer_pixel(buffer, x, buffer_y);
+            p[RED_BYTE]   = colormap[nci][0];
+            p[GREEN_BYTE] = colormap[nci][1];
+            p[BLUE_BYTE]  = colormap[nci][2];
+        }
+    }
+}
+
+// RGB-matching fallback for the (shouldn't-happen) case of a masked clear
+// with no CI buffers allocated: recolor pixels matching rgb_from to rgb_to.
 static void masked_clear_buffer(int draw_enabled, uint8_t *buffer,
                                 int x0, int y0, int x1, int y1,
                                 uint32_t n, const uint32_t *rgb_from, const uint32_t *rgb_to)
@@ -120,8 +186,6 @@ static void masked_clear_buffer(int draw_enabled, uint8_t *buffer,
         for (int x = x0; x <= x1; x++) {
             if (x < 0 || x >= DISPLAY_WIDTH)
                 continue;
-            // clear() honors the current pattern (flight 1988's crashed-
-            // meters effect is a patterned clear through writemask(white))
             if (pattern_enabled && !(the_pattern[y % 16] & (1 << (x % 16))))
                 continue;
             uint8_t *p = buffer_pixel(buffer, x, buffer_y);
@@ -138,8 +202,16 @@ static void masked_clear_buffer(int draw_enabled, uint8_t *buffer,
 }
 
 void ref_rasterizer_masked_clear(int32_t x0, int32_t y0, int32_t x1, int32_t y1,
+                                 uint16_t wm, uint16_t clear_index, uint8_t colormap[][3],
                                  uint32_t n, const uint32_t *rgb_from, const uint32_t *rgb_to)
 {
+    if (gl_ci_backbuffer && gl_ci_frontbuffer) {
+        masked_clear_ci(backbuffer_draw_enabled, gl_c_backbuffer, gl_ci_backbuffer,
+                        x0, y0, x1, y1, wm, clear_index, colormap);
+        masked_clear_ci(frontbuffer_draw_enabled, gl_c_frontbuffer, gl_ci_frontbuffer,
+                        x0, y0, x1, y1, wm, clear_index, colormap);
+        return;
+    }
     masked_clear_buffer(backbuffer_draw_enabled, gl_c_backbuffer, x0, y0, x1, y1, n, rgb_from, rgb_to);
     masked_clear_buffer(frontbuffer_draw_enabled, gl_c_frontbuffer, x0, y0, x1, y1, n, rgb_from, rgb_to);
 }
@@ -224,8 +296,45 @@ void ref_rasterizer_pattern(int enable)
     pattern_enabled = enable;
 }
 
+// composite the SGI layer priority into display_buffer: overlay where its
+// index bit (alpha) is set, else the given front buffer, else the underlay
+// where the front pixel is exactly black (all planes 0)
+static void composite_layers_into_display(const uint8_t *front)
+{
+    if (!display_buffer || !front || !layer_buffer[0] || !layer_buffer[1])
+        return;
+    size_t n = (size_t)DISPLAY_WIDTH * DISPLAY_HEIGHT;
+    for (size_t i = 0; i < n; i++) {
+        const uint8_t *f = front + i * 4;
+        const uint8_t *o = layer_buffer[1] + i * 4;
+        const uint8_t *u = layer_buffer[0] + i * 4;
+        const uint8_t *src = f;
+        if (o[LAYER_ALPHA_BYTE])
+            src = o;
+        else if (u[LAYER_ALPHA_BYTE] &&
+                 f[RED_BYTE] == 0 && f[GREEN_BYTE] == 0 && f[BLUE_BYTE] == 0)
+            src = u;
+        uint8_t *d = display_buffer + i * 4;
+        d[RED_BYTE] = src[RED_BYTE];
+        d[GREEN_BYTE] = src[GREEN_BYTE];
+        d[BLUE_BYTE] = src[BLUE_BYTE];
+        d[LAYER_ALPHA_BYTE] = 255;
+    }
+}
+
+void ref_rasterizer_layer(int layer)
+{
+    layer_target = layer;
+    if (layer > 0)
+        layers_in_use = 1;
+}
+
 unsigned char* ref_rasterizer_frontbuffer()
 {
+    // once layers are in use the display reads the per-present composite
+    // (refreshed in ref_rasterizer_frame_sync), not the raw front buffer
+    if (layers_in_use && display_buffer)
+        return display_buffer;
     return gl_c_frontbuffer;
 }
 
@@ -278,10 +387,16 @@ void ref_rasterizer_swap()
     uint8_t *_gl_backbuffer = gl_c_backbuffer; gl_c_backbuffer = gl_c_frontbuffer; gl_c_frontbuffer = _gl_backbuffer;
     uint16_t *_gl_ci_backbuffer = gl_ci_backbuffer; gl_ci_backbuffer = gl_ci_frontbuffer; gl_ci_frontbuffer = _gl_ci_backbuffer;
 
-    // optionally dump frames to ppm files
+    // optionally dump frames to ppm files (through the layer composite when
+    // layers are in use, so dumps show what the display shows)
     static int frame = 0;
     if (gen_ppm_frame_files && gl_c_backbuffer)
     {
+        uint8_t *dump = gl_c_backbuffer;
+        if (layers_in_use && display_buffer) {
+            composite_layers_into_display(gl_c_backbuffer);
+            dump = display_buffer;
+        }
         unsigned char rgb_pixel[3];
         char name[128];
         sprintf(name, "frame%04d.ppm", frame);
@@ -290,7 +405,7 @@ void ref_rasterizer_swap()
             for (int j = 0; j < DISPLAY_HEIGHT; j++) {
                 for (int i = 0; i < DISPLAY_WIDTH; i++) {
                     // PPM expects RGB format
-                    uint8_t *p = buffer_pixel(gl_c_backbuffer, i, j);
+                    uint8_t *p = buffer_pixel(dump, i, j);
                     rgb_pixel[0] = p[RED_BYTE];
                     rgb_pixel[1] = p[GREEN_BYTE];
                     rgb_pixel[2] = p[BLUE_BYTE];
@@ -345,6 +460,21 @@ void ref_rasterizer_zclear(uint32_t z)
     size_t n = (size_t)DISPLAY_WIDTH * DISPLAY_HEIGHT;
     for (size_t i = 0; i < n; i++)
         z_buffer[i] = z;
+}
+
+void ref_rasterizer_zclear_rect(uint32_t z, int32_t x0, int32_t y0, int32_t x1, int32_t y1)
+{
+    if (!z_buffer)
+        return;
+    if (x0 < 0) x0 = 0;
+    if (y0 < 0) y0 = 0;
+    if (x1 >= DISPLAY_WIDTH)  x1 = DISPLAY_WIDTH - 1;
+    if (y1 >= DISPLAY_HEIGHT) y1 = DISPLAY_HEIGHT - 1;
+    for (int32_t y = y0; y <= y1; y++) {
+        z_t *row = z_buffer + (size_t)(DISPLAY_HEIGHT - 1 - y) * DISPLAY_WIDTH;   // rect is y-up
+        for (int32_t x = x0; x <= x1; x++)
+            row[x] = z;
+    }
 }
 
 void ref_rasterizer_czclear(uint8_t r, uint8_t g, uint8_t b, short color_index, uint32_t z)
@@ -433,6 +563,76 @@ static void write_ci_pixel(int buffer_y, int x, uint16_t ci)
     }
 }
 
+// IRIS per-draw writemask compositing, exact form: a drawn pixel's index
+// becomes (oldIndex & ~wm) | (drawnIndex & wm), RGB re-resolved through the
+// colormap. flight 1988 leaves writemask(wm_allplanes-3) up while drawing
+// its meter bars, compass needle, and readout text, so the scale art in
+// planes 0-1 composites through them (blue bar over an orange tick -> index
+// blue|orange, mapcolor'd back to orange). Each buffer composites against
+// its own CI planes, exactly like the hardware did per-bitplane.
+static int masked_draw_active(uint16_t ci)
+{
+    return !rgb_mode && ci != SCREEN_VERTEX_CI_NONE && the_colormap != NULL &&
+           (~the_writemask & 0xfff) != 0;
+}
+
+static void write_masked_ci_pixel(int draw_enabled, uint8_t *buffer, uint16_t *cibuf,
+                                  int buffer_y, int x, uint16_t ci)
+{
+    if (!draw_enabled || !buffer || !cibuf)
+        return;
+    size_t i = (size_t)buffer_y * DISPLAY_WIDTH + x;
+    uint16_t nci = (uint16_t)(((cibuf[i] & ~the_writemask) | (ci & the_writemask)) & 0xfff);
+    cibuf[i] = nci;
+    uint8_t *p = buffer_pixel(buffer, x, buffer_y);
+    p[RED_BYTE]   = the_colormap[nci][0];
+    p[GREEN_BYTE] = the_colormap[nci][1];
+    p[BLUE_BYTE]  = the_colormap[nci][2];
+}
+
+// IRIS scrmask (rasterizer_scissor): scissor rows are precomputed top-down
+// (buffer_y space) so write_pixel compares directly
+static int scissor_enabled = 0;
+static int32_t scissor_x0, scissor_x1, scissor_row0, scissor_row1;
+
+void ref_rasterizer_scissor(int enable, int32_t x0, int32_t y0, int32_t x1, int32_t y1)
+{
+    scissor_enabled = enable;
+    scissor_x0 = x0;
+    scissor_x1 = x1;
+    scissor_row0 = DISPLAY_HEIGHT - 1 - y1;   // rect is y-up; rows are top-down
+    scissor_row1 = DISPLAY_HEIGHT - 1 - y0;
+}
+
+// Single pixel-write entry for all primitives: masked CI compositing when a
+// partial writemask is up in CI mode, the plain RGB(+CI) write otherwise.
+// A selected layer plane captures the write instead (alpha = its index bit).
+static void write_pixel(int buffer_y, int x, uint8_t r, uint8_t g, uint8_t b, uint8_t a, uint16_t ci)
+{
+    if (scissor_enabled &&
+        (x < scissor_x0 || x > scissor_x1 || buffer_y < scissor_row0 || buffer_y > scissor_row1))
+        return;
+    if (layer_target > 0) {
+        uint8_t *buf = layer_buffer[layer_target - 1];
+        if (!buf)
+            return;
+        uint8_t *p = buf + ((size_t)buffer_y * DISPLAY_WIDTH + x) * 4;
+        p[RED_BYTE] = r;
+        p[GREEN_BYTE] = g;
+        p[BLUE_BYTE] = b;
+        p[LAYER_ALPHA_BYTE] = a;
+        return;
+    }
+    if (masked_draw_active(ci)) {
+        write_masked_ci_pixel(backbuffer_draw_enabled, gl_c_backbuffer, gl_ci_backbuffer, buffer_y, x, ci);
+        write_masked_ci_pixel(frontbuffer_draw_enabled, gl_c_frontbuffer, gl_ci_frontbuffer, buffer_y, x, ci);
+        return;
+    }
+    set_buffer_pixel(backbuffer_draw_enabled, gl_c_backbuffer, buffer_y, x, r, g, b, a);
+    set_buffer_pixel(frontbuffer_draw_enabled, gl_c_frontbuffer, buffer_y, x, r, g, b, a);
+    write_ci_pixel(buffer_y, x, ci);
+}
+
 static z_t sz_to_zbuffer(float screenz)
 {
     uint32_t z_ = (uint32_t)clamp(screenz, 0.0, (float)0xFFFFFF7F); // largest float <= UINT_MAX
@@ -449,10 +649,13 @@ static void triPixel(int x, int y, float bary[3], screen_vertex s[3])
             return;
     }
 
-    uint8_t r = (uint8_t)clamp(bary[0] * s[0].r + bary[1] * s[1].r + bary[2] * s[2].r, 0.0, UCHAR_MAX);
-    uint8_t g = (uint8_t)clamp(bary[0] * s[0].g + bary[1] * s[1].g + bary[2] * s[2].g, 0.0, UCHAR_MAX);
-    uint8_t b = (uint8_t)clamp(bary[0] * s[0].b + bary[1] * s[1].b + bary[2] * s[2].b, 0.0, UCHAR_MAX);
-    uint8_t a = (uint8_t)clamp(bary[0] * s[0].a + bary[1] * s[1].a + bary[2] * s[2].a, 0.0, UCHAR_MAX);
+    // Round, don't truncate: the barycentric weights only sum to ~1.0, so
+    // truncation turned flat fills (all three vertices the same color) into
+    // off-by-one pixels — off-palette values in CI-mode demos.
+    uint8_t r = (uint8_t)clamp(bary[0] * s[0].r + bary[1] * s[1].r + bary[2] * s[2].r + 0.5f, 0.0, UCHAR_MAX);
+    uint8_t g = (uint8_t)clamp(bary[0] * s[0].g + bary[1] * s[1].g + bary[2] * s[2].g + 0.5f, 0.0, UCHAR_MAX);
+    uint8_t b = (uint8_t)clamp(bary[0] * s[0].b + bary[1] * s[1].b + bary[2] * s[2].b + 0.5f, 0.0, UCHAR_MAX);
+    uint8_t a = (uint8_t)clamp(bary[0] * s[0].a + bary[1] * s[1].a + bary[2] * s[2].a + 0.5f, 0.0, UCHAR_MAX);
 
     if (texture_enabled) {
         // modulate (IRIS TV_MODULATE); affine like the color interpolation
@@ -472,12 +675,13 @@ static void triPixel(int x, int y, float bary[3], screen_vertex s[3])
     // z <= : LEQUAL, the IRIS GL default z-function. Later geometry at equal
     // depth overwrites — newave's edit-mode crosshair redraws mesh lines in
     // green at the same z and must win, as it did on the real hardware.
+    // IRIS zbuffer(FALSE) neither tests nor WRITES z (flight 3.4's horizon
+    // depends on that — see the gles2 rasterizer's depth-mask comment).
+    // Layer planes carry no z: their draws neither test nor write it.
     size_t zi = (size_t)buffer_y * DISPLAY_WIDTH + x;
-    if (!zbuffer_enabled || (z <= z_buffer[zi])) {
-        set_buffer_pixel(backbuffer_draw_enabled, gl_c_backbuffer, buffer_y, x, r, g, b, a);
-        set_buffer_pixel(frontbuffer_draw_enabled, gl_c_frontbuffer, buffer_y, x, r, g, b, a);
-        write_ci_pixel(buffer_y, x, s[0].ci);
-        if (zwrite_enabled)
+    if (layer_target > 0 || !zbuffer_enabled || (z <= z_buffer[zi])) {
+        write_pixel(buffer_y, x, r, g, b, a, s[0].ci);
+        if (zbuffer_enabled && zwrite_enabled && layer_target == 0)
             z_buffer[zi] = z;
     }
 }
@@ -677,13 +881,12 @@ static void draw_point(screen_vertex *sv)
     z_t z = sz_to_zbuffer(s.z);
 
     int buffer_y = DISPLAY_HEIGHT - 1 - y;
-    // z <= : LEQUAL, the IRIS GL default (see triPixel)
+    // z <= : LEQUAL, the IRIS GL default (see triPixel); layers carry no z,
+    // and zbuffer(FALSE) neither tests nor writes
     size_t zi = (size_t)buffer_y * DISPLAY_WIDTH + x;
-    if (!zbuffer_enabled || (z <= z_buffer[zi])) {
-        set_buffer_pixel(backbuffer_draw_enabled, gl_c_backbuffer, buffer_y, x, s.r, s.g, s.b, s.a);
-        set_buffer_pixel(frontbuffer_draw_enabled, gl_c_frontbuffer, buffer_y, x, s.r, s.g, s.b, s.a);
-        write_ci_pixel(buffer_y, x, s.ci);
-        if (zwrite_enabled)
+    if (layer_target > 0 || !zbuffer_enabled || (z <= z_buffer[zi])) {
+        write_pixel(buffer_y, x, s.r, s.g, s.b, s.a, s.ci);
+        if (zbuffer_enabled && zwrite_enabled && layer_target == 0)
             z_buffer[zi] = z;
     }
 }
@@ -741,7 +944,10 @@ void ref_rasterizer_draw(uint32_t type, uint32_t count, screen_vertex *screenver
 
 void ref_rasterizer_frame_sync(void)
 {
-    // CPU rasterizer renders directly into the front/back buffers; nothing to flush
+    // CPU rasterizer renders directly into the front/back buffers; nothing
+    // to flush — but refresh the layer composite the display reads
+    if (layers_in_use)
+        composite_layers_into_display(gl_c_frontbuffer);
 }
 
 // The framebuffer tracks the window size: reallocate the color and z
@@ -756,6 +962,9 @@ void ref_rasterizer_resize(uint32_t width, uint32_t height)
     free(c_buffer[1]);
     free(ci_buffer[0]);
     free(ci_buffer[1]);
+    free(layer_buffer[0]);
+    free(layer_buffer[1]);
+    free(display_buffer);
     free(z_buffer);
 
     DISPLAY_WIDTH = width;
@@ -765,6 +974,9 @@ void ref_rasterizer_resize(uint32_t width, uint32_t height)
     c_buffer[1] = calloc(1, color_buffer_bytes());
     ci_buffer[0] = calloc(1, ci_buffer_bytes());   // calloc = cleared to index 0
     ci_buffer[1] = calloc(1, ci_buffer_bytes());
+    layer_buffer[0] = calloc(1, color_buffer_bytes()); // calloc = transparent (alpha 0)
+    layer_buffer[1] = calloc(1, color_buffer_bytes());
+    display_buffer = calloc(1, color_buffer_bytes());
     z_buffer = malloc((size_t)DISPLAY_WIDTH * DISPLAY_HEIGHT * sizeof(z_t));
     gl_c_backbuffer = c_buffer[0];
     gl_c_frontbuffer = c_buffer[1];
@@ -784,6 +996,7 @@ const rasterizer_funcs* ref_rasterizer_get_funcs(void)
         .rgbmode            = ref_rasterizer_rgbmode,
         .clear              = ref_rasterizer_clear,
         .zclear             = ref_rasterizer_zclear,
+        .zclear_rect        = ref_rasterizer_zclear_rect,
         .czclear            = ref_rasterizer_czclear,
         .swap               = ref_rasterizer_swap,
         .copy_front_to_back = ref_rasterizer_copy_front_to_back,
@@ -793,8 +1006,11 @@ const rasterizer_funcs* ref_rasterizer_get_funcs(void)
         .bitmap             = ref_rasterizer_bitmap,
         .alpha_blit         = ref_rasterizer_alpha_blit,
         .masked_clear       = ref_rasterizer_masked_clear,
+        .writemask          = ref_rasterizer_writemask,
         .setpattern         = ref_rasterizer_setpattern,
         .pattern            = ref_rasterizer_pattern,
+        .scissor            = ref_rasterizer_scissor,
+        .layer              = ref_rasterizer_layer,
         .cbuffer_draw       = ref_rasterizer_cbuffer_draw,
         .zbuffer            = ref_rasterizer_zbuffer,
         .blend              = ref_rasterizer_blend,

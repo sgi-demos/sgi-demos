@@ -18,9 +18,15 @@
 
 /* maximum X and Y screen coordinates */
 
-#define XMAXSCREEN	1279	/* the IRIS 4D screen; flight 1988's layout and
-				   meters.c's /1024.0 scale factors assume it */
+/* Default: the IRIS 4D screen; flight 1988's layout and meters.c's /1024.0
+   scale factors assume it. Demos authored for the earlier 1024x768 screens
+   (arena) override these from their Makefile via DEMO_CFLAGS. */
+#ifndef XMAXSCREEN
+#define XMAXSCREEN	1279
+#endif
+#ifndef YMAXSCREEN
 #define YMAXSCREEN	1023
+#endif
 
 /* various hardware/software limits	*/
 

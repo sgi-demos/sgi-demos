@@ -96,6 +96,33 @@ static uint8_t colormap_mapped[4096];   // indices explicitly set by mapcolor. U
 static vec4f current_color = {1.0f, 1.0f, 1.0f, 1.0f};
 static unsigned short current_color_index = 0;
 static unsigned short current_writemask = 0xffff;
+
+// IRIS layer planes (drawmode): UNDERDRAW/OVERDRAW/PUPDRAW route color(),
+// mapcolor(), clear() and all drawing to a side layer the rasterizer
+// composites at present time — overlay wherever its own index != 0, then
+// the normal planes, then the underlay where the normal planes are exactly
+// black (the SGI display priority; flight 3.4's gauge faces live in the
+// underlay and show through the black dial interiors). Layer drawing
+// carries its "index != 0" bit in the vertex alpha: color(0) draws
+// transparent (erases the layer). CURSORDRAW is folded into the overlay
+// layer — the only demo touching it (flight 1988) just clears it to 0.
+// Hardware layer colormaps were 2 bits; 256 entries is roomy.
+static int current_drawmode = NORMALDRAW;
+static uint8_t layer_colormap[2][256][3];   // [0] = underlay, [1] = overlay/pup
+
+// -1 = normal planes, 0 = underlay, 1 = overlay
+static int drawmode_layer(int mode) {
+    switch (mode) {
+        case UNDERDRAW:  return 0;
+        case OVERDRAW:
+        case PUPDRAW:
+        case CURSORDRAW: return 1;
+        default:         return -1;
+    }
+}
+// set in winopen; also gates rasterizer calls that would otherwise lock in
+// the rasterizer selection before apply_demo_quirks runs (see writemask)
+static int window_is_open = 0;
 static vec3f current_normal = {1.0f, 1.0f, 1.0f};
 static vec4f current_position = {0.0f, 0.0f, 0.0f, 1.0};
 static vec4f current_character_position = {0.0f, 0.0f, 0.0f, 1.0f};
@@ -113,9 +140,10 @@ static int rgb_mode = 0;
 // swapbuffers, cleared on the front flag by gl_resolve_ci_if_needed. Pixels
 // carry draw-time-resolved RGB, so a buffer is only stale if the colormap
 // changed since its pixels were drawn — demos with a static palette resolve
-// once and never again (this also keeps the resolve from repainting over
-// writemask masked clears, which recolor RGB without touching the CI
-// buffer — flight 1988's meters). Start 1 so the first presents resolve.
+// once and never again. (Writemask masked clears keep CI and RGB in step —
+// the reference rasterizer applies them through the CI buffer — so a later
+// resolve reproduces, not undoes, them.) Start 1 so the first presents
+// resolve.
 static int ci_rgb_cache_stale = 1;       // front buffer
 static int ci_rgb_cache_stale_back = 1;  // back buffer
 void gl_resolve_ci_if_needed(void); // defined near mapcolor
@@ -434,10 +462,15 @@ void project_vertex(lit_vertex *lv, screen_vertex *sv)
     sv->z = clamp(zw * (float)0xFFFFFFFF, // NOTE: ****Must link with -lm or else this always returns zero***
                   0.0,
                   (float)0xFFFFFF7F); // largest float <= UINT_MAX;
-    sv->r = unitclamp(lv->color[0]) * 255;
-    sv->g = unitclamp(lv->color[1]) * 255;
-    sv->b = unitclamp(lv->color[2]) * 255;
-    sv->a = unitclamp(lv->color[3]) * 255;
+    // Round, don't truncate: clipping lerps colors in float, and a result
+    // one ULP under N/255 must still convert to N — screen-edge-clipped
+    // flat polygons otherwise land a whole shade off their palette color
+    // (154,150,150 walls amid 155,150,150), which the masked-clear RGB
+    // remap can never re-match.
+    sv->r = unitclamp(lv->color[0]) * 255 + 0.5f;
+    sv->g = unitclamp(lv->color[1]) * 255 + 0.5f;
+    sv->b = unitclamp(lv->color[2]) * 255 + 0.5f;
+    sv->a = unitclamp(lv->color[3]) * 255 + 0.5f;
     sv->s = lv->st[0];
     sv->t = lv->st[1];
     sv->ci = rgb_mode ? SCREEN_VERTEX_CI_NONE : lv->ci;
@@ -1901,16 +1934,27 @@ void clear() {
     int vx0 = (int)the_viewport[0], vx1 = (int)the_viewport[1];
     int vy0 = (int)the_viewport[2], vy1 = (int)the_viewport[3];
 
+    // Layer clear (drawmode UNDERDRAW/OVERDRAW/PUPDRAW): fill the viewport
+    // rect of the layer buffer with the current layer color; index 0 means
+    // alpha 0 — erase the layer to transparent. Routed through the same
+    // rect-fill draw path as partial normal clears (the rasterizer's layer
+    // target is already selected by drawmode), skipping the cmode/masked
+    // machinery which is normal-planes-only.
+    int clear_layer = drawmode_layer(current_drawmode);
+
     // Colormap-plane masked clear (IRIS writemask): a clear through a partial
     // writemask only writes the writable planes of each pixel's INDEX:
     // newIndex = (oldIndex & ~wm) | (clearIndex & wm). flight 1988's meters
     // depend on this — the scale art lives in planes 0-1 (brown/orange/grey2)
     // and survives the per-frame writemask(wm_allplanes-3) clear that erases
-    // the blue/red bars. The RGB framebuffer has no index planes, so the
-    // exact equivalent is a palette recoloring of the viewport rect: for
-    // every mapped index, oldRGB -> RGB[newIndex]. (Exact for flat cmode
-    // colors; pixels whose RGB collides across indices take the first match.)
-    if (!rgb_mode && (~current_writemask & 0xfff) != 0) {
+    // the blue/red bars. The reference rasterizer applies the index math
+    // exactly, per pixel, through its CI buffer (it gets wm, the clear
+    // index, and the colormap below). The GPU rasterizer has no index
+    // planes, so it approximates with a palette recoloring of the viewport
+    // rect: for every mapped index, oldRGB -> RGB[newIndex]. (Exact for the
+    // GPU's flat cmode fills; pixels whose RGB collides across indices take
+    // the first match.)
+    if (clear_layer < 0 && !rgb_mode && (~current_writemask & 0xfff) != 0) {
         static uint32_t rgb_from[4096], rgb_to[4096];
         uint32_t n = 0;
         int wm = current_writemask & 0xfff;
@@ -1931,12 +1975,13 @@ void clear() {
                 n++;
             }
         }
-        if (n > 0)
-            rasterizer_masked_clear(vx0, vy0, vx1, vy1, n, rgb_from, rgb_to);
+        rasterizer_masked_clear(vx0, vy0, vx1, vy1,
+                                (uint16_t)wm, current_color_index, colormap,
+                                n, rgb_from, rgb_to);
         return;
     }
 
-    if (is_full_viewport()) {
+    if (clear_layer < 0 && is_full_viewport()) {
         // Full screen, we can use the optimized version.
         rasterizer_clear(current_color[0] * 255.0,
                 current_color[1] * 255.0,
@@ -1956,7 +2001,9 @@ void clear() {
             q[i].r = (uint8_t)(current_color[0] * 255.0);
             q[i].g = (uint8_t)(current_color[1] * 255.0);
             q[i].b = (uint8_t)(current_color[2] * 255.0);
-            q[i].a = 255;
+            // layer clears carry the transparency bit (alpha 0 = layer erased)
+            q[i].a = clear_layer >= 0 ? (uint8_t)(current_color[3] * 255.0) : 255;
+            q[i].ci = (rgb_mode || clear_layer >= 0) ? SCREEN_VERTEX_CI_NONE : current_color_index;
         }
         int32_t sx0 = vx0 * SCREEN_VERTEX_V2_SCALE, sx1 = (vx1 + 1) * SCREEN_VERTEX_V2_SCALE;
         int32_t sy0 = vy0 * SCREEN_VERTEX_V2_SCALE, sy1 = (vy1 + 1) * SCREEN_VERTEX_V2_SCALE;
@@ -1968,7 +2015,7 @@ void clear() {
         q[5].x = sx0; q[5].y = sy1;
         if (zbuffer_enabled)
             rasterizer_zbuffer(0);
-        rasterizer_draw(DRAW_TRIANGLES, 2, q);
+        rasterizer_draw(DRAW_TRIANGLES, 6, q);  // 6 vertices = 2 triangles (draw takes vertex counts)
         if (zbuffer_enabled)
             rasterizer_zbuffer(1);
     }
@@ -1998,12 +2045,16 @@ void closeobj() {
 // would customize the colors for other apps too. Imagine the entire desktop changing
 // simultaneously to the same set of colors as the currently running app.
 //
+// 12 = the deepest IRIS colormap config (4096 entries, matching our
+// colormap[]). flight 1988 shifts (1 << getplanes()) into a short, so 24
+// overflowed; SGI documented flight for 8- or 12-plane cmode. Demos whose
+// <=12-plane path needs per-draw writemask compositing this shim can't
+// emulate get a different config in apply_demo_quirks (arena -> 24).
+static int planes_config = 12;
+
 int getplanes() {
     TRACE();
-    // 12 = the deepest IRIS colormap config (4096 entries, matching our
-    // colormap[]). flight 1988 shifts (1 << getplanes()) into a short, so 24
-    // overflowed; SGI documented flight for 8- or 12-plane cmode.
-    return 12;
+    return planes_config;
 }
 
 void cmode() {
@@ -2043,6 +2094,16 @@ void color(Colorindex color) {
     TRACEF("%u", color);
 
     current_color_index = color;
+
+    int layer = drawmode_layer(current_drawmode);
+    if (layer >= 0) {
+        for(int i = 0; i < 3; i++)
+            current_color[i] = layer_colormap[layer][color & 0xff][i] / 255.0;
+        // layer index 0 erases to transparent (see drawmode)
+        current_color[3] = color ? 1.0f : 0.0f;
+        return;
+    }
+
     for(int i = 0; i < 3; i++)
         current_color[i] = colormap[color][i] / 255.0;
     // XXX alpha in color map?
@@ -2063,6 +2124,21 @@ void writemask(Colorindex mask) {
     TRACEF("%u", mask);
 
     current_writemask = mask;
+    // Per-draw compositing lives in the rasterizer (reference only; gles2
+    // ignores it) — clear() keeps its own masked path above. Before the
+    // window exists don't touch the rasterizer: the first rasterizer_* call
+    // locks in the implementation ahead of apply_demo_quirks; winopen
+    // re-sends the current mask once the choice is made.
+    //
+    // Only forward the mask for real cmode configs (<=12 planes). cmode
+    // never exceeded 12 planes on SGI hardware, so a demo quirked to a
+    // deeper config (arena -> 24) is running a fallback path whose mask
+    // constants were dead code on the real machines — compositing through
+    // them wrecks the picture (arena's HUD indicators draw through
+    // MASK_HUD=0x00f, contributing no bits). Those demos get the legacy
+    // semantics in both rasterizers: draws overwrite, only clear() masks.
+    if (window_is_open)
+        rasterizer_writemask(planes_config <= 12 ? mask : 0xffff, colormap);
 }
 
 int getwritemask() {
@@ -2164,6 +2240,14 @@ Tag gentag() {
 
 void getmcolor(Colorindex index, short *red, short *green, short *blue) {
     TRACEF("%d", index);
+
+    int layer = drawmode_layer(current_drawmode);
+    if (layer >= 0) {
+        *red = layer_colormap[layer][index & 0xff][0];
+        *green = layer_colormap[layer][index & 0xff][1];
+        *blue = layer_colormap[layer][index & 0xff][2];
+        return;
+    }
 
     *red = colormap[index][0];
     *green = colormap[index][1];
@@ -2269,6 +2353,14 @@ void maketag(Tag tag) {
 void mapcolor(Colorindex index, int red, int green, int blue) {
     // XXX insect only provides numbers ranging 0..255
     TRACEF("%d, %d, %d, %d", index, red, green, blue);
+
+    int layer = drawmode_layer(current_drawmode);
+    if (layer >= 0) {
+        layer_colormap[layer][index & 0xff][0] = red;
+        layer_colormap[layer][index & 0xff][1] = green;
+        layer_colormap[layer][index & 0xff][2] = blue;
+        return;
+    }
 
     colormap[index][0] = red;
     colormap[index][1] = green;
@@ -2580,6 +2672,11 @@ void pushviewport() {
 
     TRACE();
 
+    // viewport() writes only the_viewport, so the stack top is stale until
+    // synced here; without this, popviewport restores whatever the stack
+    // held at init (zeros) and every later draw clips to a degenerate
+    // viewport (flight 3.4's gauge faces vanished this way)
+    viewport_copy(viewport_stack_top(&viewport_stack), the_viewport);
     viewport_stack_push(&viewport_stack);
 }
 
@@ -2949,7 +3046,6 @@ void gl_framebuffer_resized(int width, int height) {
 
 // IRIX window-constraint semantics: keepaspect after winopen is deferred
 // until the demo calls winconstraints (see keepaspect/winconstraints)
-static int window_is_open = 0;
 static int pending_aspect_x = 0, pending_aspect_y = 0;
 
 // The demo name stamped into the binary by make_demo.mk (see
@@ -2965,10 +3061,25 @@ static int demo_is(const char *title, const char *name) {
 // Shim-level per-demo compatibility quirks. Original demo sources are never
 // modified (rule #1); demos whose code bakes in the classic fixed screen
 // get shim policies that recreate it:
-//  - arena: hardcodes 800:480 projection aspects (main.c perspective calls)
-//    -> keep the framebuffer that aspect at any window size
-//  - flight: panel viewports are compile-time 800x480 constants (meters.c,
-//    land2.c) -> classic fixed-size framebuffer, scaled to the window
+//  - arena: on a <=12-plane IRIS it composites its HUD in colormap
+//    bitplanes, protecting the static yellow overlay with per-draw
+//    writemask()s the GPU rasterizer can't emulate (the reference
+//    rasterizer composites them exactly, but arena doesn't need it).
+//    Report the 24-plane config of the bigger 4Ds instead: arena's
+//    own high-plane path redraws the HUD every frame, which renders
+//    correctly in both rasterizers. (Its 1024x768 screen is a compile-time
+//    matter — DEMO_CFLAGS in its Makefile — and prefposition() then gets
+//    it the matching fixed framebuffer, so no display quirk is needed.)
+//  - flight-1988: composites its cockpit panel in colormap bitplanes —
+//    meter bars, compass, and readout text are drawn through
+//    writemask(wm_allplanes-3) over scale art protected in planes 0-1,
+//    then erased by a masked clear. That per-draw compositing needs the
+//    reference rasterizer's CI buffer; on the GPU path the bars paint
+//    over the tick marks and the compass leaves unrepaired trails.
+//    ("flight" is the unstamped-title fallback. flight can't take arena's
+//    24-plane escape: it shifts (1 << getplanes()) into a short, and its
+//    panel has no high-plane redraw path. The fixed 1280x1024 framebuffer
+//    both flights bake in comes from their own prefposition call.)
 //  - cedit: a palette editor — needs the live hardware-LUT emulation
 //    (mapcolor changing already-drawn pixels) and readpixels() of color
 //    indices, both of which require the reference rasterizer's CI buffer;
@@ -2976,9 +3087,9 @@ static int demo_is(const char *title, const char *name) {
 //    doublebuffer), which this shim inverts
 static void apply_demo_quirks(char *title) {
     if (demo_is(title, "arena"))
-        events_keepaspect(XMAXSCREEN + 1, YMAXSCREEN + 1);
-    else if (demo_is(title, "flight"))
-        events_fix_framebuffer_size(XMAXSCREEN + 1, YMAXSCREEN + 1);
+        planes_config = 24;
+    else if (demo_is(title, "flight-1988") || demo_is(title, "flight"))
+        rasterizer_prefer("ref");
     else if (demo_is(title, "cedit")) {
         rasterizer_prefer("ref");
         singlebuffer();
@@ -3005,6 +3116,11 @@ int winopen(char *title) {
     rasterizer_pattern(0);
     rasterizer_setpattern(patterns[0]);
     rasterizer_cbuffer_draw(frontbuffer_draw_enabled, backbuffer_draw_enabled);
+    // catch up on any writemask() issued before the window existed (same
+    // <=12-plane forwarding rule as writemask())
+    rasterizer_writemask(planes_config <= 12 ? current_writemask : 0xffff, colormap);
+    // likewise a drawmode() issued before the window existed
+    rasterizer_layer(drawmode_layer(current_drawmode) + 1);
 
     // Aspect policy: demos that declared keepaspect() get a conforming
     // window (native) / centered framebuffer (web). All other demos get a
@@ -3405,14 +3521,23 @@ void endpolygon() {
     process_polygon(polygon_vert_count, polygon_verts);
 }
 
-void drawmode(int drawmode) {
-    static int warned = 0; if(!warned) { printf("%s not unimplemented\n", __FUNCTION__); warned = 1; }
+void drawmode(int mode) {
+    TRACEF("%d", mode);
+
+    current_drawmode = mode;
+    if (window_is_open)     // pre-winopen call must not lock in the rasterizer
+        rasterizer_layer(drawmode_layer(mode) + 1);   // 0=normal, 1=under, 2=over
+
+    // vertex alpha carries the layer "index != 0" bit while a layer is
+    // selected; back on the normal planes drawing is opaque again
+    if (drawmode_layer(mode) < 0)
+        current_color[3] = 1.0f;
 }
 
 void draw_(Coord x, Coord y, Coord z) {
     world_vertex v0, v1;
     vec4f_copy(v0.coord, current_position);
-    vec3f_copy(v0.color, current_color);
+    vec4f_copy(v0.color, current_color);
     v0.ci = current_color_index;
 
     current_position[0] = x;
@@ -3420,7 +3545,7 @@ void draw_(Coord x, Coord y, Coord z) {
     current_position[2] = z;
 
     vec4f_copy(v1.coord, current_position);
-    vec3f_copy(v1.color, current_color);
+    vec4f_copy(v1.color, current_color);
     v1.ci = current_color_index;
 
     int save_lighting = lighting_enabled;
@@ -3858,14 +3983,14 @@ void rdr2i(Icoord dx, Icoord dy) {
 
     world_vertex v0, v1;
     vec4f_copy(v0.coord, current_position);
-    vec3f_copy(v0.color, current_color);
+    vec4f_copy(v0.color, current_color);
     v0.ci = current_color_index;
 
     current_position[0] += dx;
     current_position[1] += dy;
 
     vec4f_copy(v1.coord, current_position);
-    vec3f_copy(v1.color, current_color);
+    vec4f_copy(v1.color, current_color);
     v1.ci = current_color_index;
 
     int save_lighting = lighting_enabled;
@@ -4059,12 +4184,20 @@ void polarview(Coord dist, Angle azim, Angle inc, Angle twist) {
 }
 
 // Define the screen z range: the units lshaderange's znear/zfar are
-// expressed in. (The z-buffer itself keeps its full internal range; this
-// only affects the depth-cue mapping — see project_vertex.)
+// expressed in, and (for forward ranges) the window z range projected
+// vertices map into — flight 3.4 jams the horizon ball to the far plane
+// with lsetdepth(zmax, zmax) so the bezel plate's z occludes it into a
+// circle. Reversed ranges (gview's lsetdepth(0x7FFFFF, 0x2000), paired
+// with a zfunction we also don't emulate) stay ignored — that departure
+// is documented in gview.c.
 void lsetdepth(int near, int far) {
     TRACEF("%d, %d", near, far);
     ls_znear = near;
     ls_zfar = far;
+    if (near <= far) {
+        the_viewport[4] = near / (float)0x7fffff;
+        the_viewport[5] = far / (float)0x7fffff;
+    }
 }
 
 // pre-4D name for lsetdepth, with a Screencoord (16-bit) z range
@@ -4122,9 +4255,12 @@ int getgdesc (int inquiry)
         case GD_LINESMOOTH_CMODE:
         case GD_LINESMOOTH_RGB:
         case GD_CIFRACT:
+            return 0;
+        // 2-bit overlay/underlay planes, like mid-range IRIS hardware —
+        // emulated as composited side layers (see rasterizer_layer)
         case GD_BITS_OVER_SNG_CMODE:
         case GD_BITS_UNDR_SNG_CMODE:
-            return 0;
+            return 2;
     }
 
     static int warned = 0; if(!warned) { printf("%s %d unimplemented\n", __FUNCTION__, inquiry); warned = 1; }
@@ -4364,7 +4500,15 @@ void wmpack (unsigned long pack)
 
 void scrmask (int left, int right, int bottom, int top)
 {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+    TRACEF("%d, %d, %d, %d", left, right, bottom, top);
+
+    // full-window mask = no clipping (how demos reset it)
+    if (left <= 0 && bottom <= 0 &&
+        right >= DISPLAY_WIDTH - 1 && top >= DISPLAY_HEIGHT - 1) {
+        rasterizer_scissor(0, 0, 0, 0, 0);
+        return;
+    }
+    rasterizer_scissor(1, left, bottom, right, top);
 }
 
 void zwritemask (unsigned long mask)
@@ -4430,9 +4574,9 @@ void circi(Icoord x, Icoord y, Icoord r) {
 
     world_vertex v0, v1;
 
-    vec3f_copy(v0.color, current_color);
+    vec4f_copy(v0.color, current_color);
     v0.ci = current_color_index;
-    vec3f_copy(v1.color, current_color);
+    vec4f_copy(v1.color, current_color);
     v1.ci = current_color_index;
 
     int save_lighting = lighting_enabled;
@@ -4464,9 +4608,9 @@ void circ(Coord x, Coord y, Coord r) {
 
     world_vertex v0, v1;
 
-    vec3f_copy(v0.color, current_color);
+    vec4f_copy(v0.color, current_color);
     v0.ci = current_color_index;
-    vec3f_copy(v1.color, current_color);
+    vec4f_copy(v1.color, current_color);
     v1.ci = current_color_index;
 
     int save_lighting = lighting_enabled;
@@ -4502,7 +4646,7 @@ void circf(Coord x, Coord y, Coord r) {
         verts[i].coord[1] = y + r * circle_verts[i][1];
         verts[i].coord[2] = 0.0;
         verts[i].coord[3] = 1.0;
-        vec3f_copy(verts[i].color, current_color);
+        vec4f_copy(verts[i].color, current_color);
         verts[i].color[3] = 1.0;
         verts[i].ci = current_color_index;
     }
@@ -4776,13 +4920,23 @@ void zbuffer(int enable) {
     rasterizer_zbuffer(enable && !zsource_color);
 }
 
-// XXX rasterizer_zclear()
 // XXX display list
 void zclear() {
     TRACE();
 
+    // the layer planes carry no z; don't let a layer-mode zclear wipe the
+    // normal planes' shared depth buffer
+    if (drawmode_layer(current_drawmode) >= 0)
+        return;
+
+    // IRIS zclear only clears the viewport — flight 3.4's per-frame scene
+    // zclear must leave the instrument panel's plate z intact (it occludes
+    // the horizon ball inside its bezel)
     if (!is_full_viewport()) {
-        static int warned = 0; if(!warned) { printf("Partial zclear() unimplemented\n"); warned = 1; }
+        rasterizer_zclear_rect(0xffffffff,
+                               (int32_t)the_viewport[0], (int32_t)the_viewport[2],
+                               (int32_t)the_viewport[1], (int32_t)the_viewport[3]);
+        return;
     }
 
     rasterizer_zclear(0xffffffff);
@@ -4803,11 +4957,28 @@ void zfunction(int func) {
 // XXX display list
 void czclear(int color, int depth) {
     TRACE();
-    rasterizer_czclear((color >> 16) & 0xff, (color >>  8) & 0xff, (color >>  0) & 0xff, color, depth);
 
     if (!is_full_viewport()) {
-        static int warned = 0; if(!warned) { printf("Partial czclear() unimplemented\n"); warned = 1; }
+        // viewport-scoped like clear()/zclear(): depth via the rect clear,
+        // color via a viewport rect fill through the draw path
+        rasterizer_zclear_rect((uint32_t)depth,
+                               (int32_t)the_viewport[0], (int32_t)the_viewport[2],
+                               (int32_t)the_viewport[1], (int32_t)the_viewport[3]);
+        vec4f saved_color;
+        unsigned short saved_index = current_color_index;
+        vec4f_copy(saved_color, current_color);
+        current_color[0] = ((color >> 16) & 0xff) / 255.0f;
+        current_color[1] = ((color >>  8) & 0xff) / 255.0f;
+        current_color[2] = ((color >>  0) & 0xff) / 255.0f;
+        current_color[3] = 1.0f;
+        current_color_index = color;
+        clear();
+        vec4f_copy(current_color, saved_color);
+        current_color_index = saved_index;
+        return;
     }
+
+    rasterizer_czclear((color >> 16) & 0xff, (color >>  8) & 0xff, (color >>  0) & 0xff, color, depth);
 }
 
 int gversion(char *version)
