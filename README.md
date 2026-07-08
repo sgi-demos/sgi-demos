@@ -12,13 +12,13 @@ See the [architecture doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs
 - [Bounce](https://sgi-demos.github.io/sgi-demos/demos/bounce/web/)
 - [Buttonfly](https://sgi-demos.github.io/) - Wade Olsen
 - [Cedit](https://sgi-demos.github.io/sgi-demos/demos/cedit/web/) - Paul Haeberli, 1984
-- [Electropaint 1988](https://sgi-demos.github.io/sgi-demos/demos/ep-1988/web/) - David Tristram, 1988; earliest version, Panel Library v7 from the 1988 Usenet posting
-- [Electropaint 1989](https://sgi-demos.github.io/sgi-demos/demos/ep-1989/web/)  - David Tristram, 1989; Panel Library 9.6; IRIS GL, driven by Tristram's authentic default script; keyboard toggles
+- [Electropaint 1988](https://sgi-demos.github.io/sgi-demos/demos/ep-1988/web/) - David Tristram, 1988; IRIS GL, earliest version, Panel Library v7 from the 1988 Usenet posting (no sliders yet)
+- [Electropaint 1989](https://sgi-demos.github.io/sgi-demos/demos/ep-1989/web/)  - David Tristram, 1989; IRIS GL, Panel Library 9.6; driven by Tristram's authentic default script; keyboard toggles
 - [Electropaint 1994 (OpenGL, decompiled)](https://sgi-demos.github.io/sgi-demos/demos/ep-1994-ogl-decomp/web/) - 1994, IRIX screensaver decompiled by drvink; smooth HLS color + the famous default script; IRIX-faithful by default
-- [Electropaint 1994 (OpenGL, reversed)](https://sgi-demos.github.io/sgi-demos/demos/ep-1994-ogl-reversed/web/) Refactored 1994 version to readable names and restored IRIS GL version's 4-fold mirrors + 30° camera  — M toggles the shipped 1994 look
-- [Flight 1988](https://sgi-demos.github.io/sgi-demos/demos/flight-1988/web/) - Gary Tarolli; the 1988–89 colormap-mode original, now byte-faithful source (25 diff lines total) at the authentic 1280×1024; splash, plane menu, takeoff, crashes, and stable night mode all work; no network play
-- [Flight 1994](https://sgi-demos.github.io/sgi-demos/demos/flight-1994/web/) Gary Tarolli & Rob Mace flight at Version 3.4 , the definitive IRIX release — RGB, lighting, 8 planes, full-width 3D horizon and instrument panel; no texture/fog/sound/network yet
-- [Gview (Barcelona)](https://sgi-demos.github.io/sgi-demos/demos/gview/web/) - Late 1980s; reversed from the IRIX 3 binary: fly-through and turntable modes work; no materials, movie loops, or binary model cache; Performer pre-cursor perhaps?
+- [Electropaint 1994 (OpenGL, reversed)](https://sgi-demos.github.io/sgi-demos/demos/ep-1994-ogl-reversed/web/) 1994, reversed to readable code and restored IRIS GL version's 4-fold mirrors + 30° camera  — M toggles the shipped 1994 look
+- [Flight 1988](https://sgi-demos.github.io/sgi-demos/demos/flight-1988/web/) - Gary Tarolli; colormap-mode original, nearly original source (25 diff lines total) at the authentic 1280×1024; splash, plane menu, takeoff, crashes, and stable night mode all work; no network play
+- [Flight 1994](https://sgi-demos.github.io/sgi-demos/demos/flight-1994/web/) Gary Tarolli & Rob Mace flight version 3.4; the definitive IRIX release: RGB, lighting, 8 planes, full-width 3D horizon, instrument panel, HUD, upgraded plane models; no texture/fog/sound/network yet
+- [Gview (Barcelona)](https://sgi-demos.github.io/sgi-demos/demos/gview/web/) - Late 1980s; reversed from IRIX 3 binary: fly-through and turntable modes work; no materials, movie loops, or binary model cache; Performer/Inventor pre-cursor perhaps?
 - [Ideas](https://sgi-demos.github.io/sgi-demos/demos/ideas/web/)
 - [Insect](https://sgi-demos.github.io/sgi-demos/demos/insect/web/) Thant Tessman, mid-1980s; originally for the IRIS 2400
 - [Jello](https://sgi-demos.github.io/sgi-demos/demos/jello/web/) Thant Tessman, 1987
@@ -103,7 +103,7 @@ make
 ## Credits
 - Everyone who worked at [SGI](https://en.wikipedia.org/wiki/Silicon_Graphics), for the eye candy and the baller computers.
 - The [Alice 4 folks](https://lkesteloot.github.io/alice/alice4/), for the inspiration and the GL implementation.
+- [drvink](https://github.com/drvink/electroportis) for the custom MIPS decompiler and resulting ep decompilation, Electroportis
+- [Claude Fable 5](https://claude.ai) for gobbling up the to do list at incredible speed.
 - [Emscripten](https://emscripten.org) and [SDL](https://www.libsdl.org) teams, for making a web port possible.
 - [Internet Archive](https://archive.org/search?query=sgi&and%5B%5D=mediatype%3A%22software%22), [Bitsavers](https://bitsavers.org/bits/SGI/mips/cd/), [WinWorld](https://winworldpc.com/search?q=irix), [IRIXNet](https://irixnet.org/files.html), [fsck.technology](https://fsck.technology/software/Silicon%20Graphics/IRIX%20Install%20Media/), [jrra.zone](https://jrra.zone/sgi/), and others, for saving the history.
-- [drvink](https://github.com/drvink/electroportis) for the custom MIPS decompiler and resulting electropaint decompilation, Electroportis
-- [Claude Fable 5](https://claude.ai) for gobbling up the to do list at incredible speed.
