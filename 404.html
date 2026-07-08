@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>SGI demos — redirecting…</title>
+    <script>
+      // GitHub Pages serves this for any unresolved path under /sgi-demos/.
+      // Old root-structure demo URLs (…/sgi-demos/<demo>/web/…, no demos/ segment,
+      // e.g. shared before demos moved under demos/) get forwarded to the
+      // canonical …/sgi-demos/demos/<demo>/web/. Runs only on a real 404, and
+      // only rewrites paths WITHOUT demos/, so the target never loops back here.
+      (function () {
+        var m = location.pathname.match(/^(\/sgi-demos)\/(?!demos\/)([^/]+)\/web\/[^/]*$/);
+        if (m) location.replace(m[1] + "/demos/" + m[2] + "/web/" + location.search + location.hash);
+      })();
+    </script>
+  </head>
+  <body style="font-family: sans-serif; background:#111; color:#ddd; padding:2rem;">
+    <h1>Page not found</h1>
+    <p>Try the <a href="/sgi-demos/">SGI demos home page</a>.</p>
+  </body>
+</html>
