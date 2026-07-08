@@ -3,7 +3,8 @@
 // Captures every configured demo in every configured rendering mode
 // (?rast=ref CPU reference rasterizer, ?rast=gles2 GPU rasterizer). For each
 // demo x mode it:
-//   1. loads demos/<name>/web/<name>_full.html?rast=<mode> from a local server,
+//   1. loads demos/<name>/web/?rast=<mode> from a local server (web/ serves
+//      the demo's index.html),
 //   2. waits for the .wasm to load, then lets the animation settle,
 //   3. captures the <canvas> via the browser compositor,
 //   4. fails if it threw / aborted / printed "ERROR:", or the frame is blank.
@@ -129,9 +130,10 @@ async function main() {
   if (!demos.length) throw new Error("no demos selected");
 
   // Sanity: warn (don't fail yet) about missing pages so the error is obvious.
+  // d.path is the demo's web/ directory; the served page is its index.html.
   for (const d of demos) {
-    if (!existsSync(join(args.repo, d.path))) {
-      console.warn(`! ${d.name}: ${d.path} not found under repo (did you run 'make browser'?)`);
+    if (!existsSync(join(args.repo, d.path, "index.html"))) {
+      console.warn(`! ${d.name}: ${d.path}index.html not found under repo (did you run 'make browser'?)`);
     }
   }
 

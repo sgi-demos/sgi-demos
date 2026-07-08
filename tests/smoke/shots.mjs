@@ -7,7 +7,7 @@ const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1024, height: 768 } });
 const cdp = await page.context().newCDPSession(page);
 async function shot(name){ const s = await cdp.send("Page.captureScreenshot",{format:"png"}); writeFileSync(`/tmp/${name}.png`, Buffer.from(s.data,"base64")); console.log(name); }
-await page.goto(server.url + "/demos/flight-1994/web/flight-1994_full.html?rast=gles2");
+await page.goto(server.url + "/demos/flight-1994/web/?rast=gles2");
 await page.waitForTimeout(7000);
 await page.keyboard.press("g"); await page.waitForTimeout(3000);
 await page.keyboard.press("5");                 // F-18

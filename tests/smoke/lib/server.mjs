@@ -26,12 +26,19 @@ export function startServer(root) {
     try {
       const urlPath = decodeURIComponent(new URL(req.url, "http://x").pathname);
       // Block path traversal: normalized path must stay under root.
-      const filePath = normalize(join(root, urlPath));
+      let filePath = normalize(join(root, urlPath));
       if (!filePath.startsWith(normalize(root))) {
         res.writeHead(403).end("forbidden");
         return;
       }
-      const info = await stat(filePath).catch(() => null);
+      let info = await stat(filePath).catch(() => null);
+      // Directory index: a request for a directory (e.g. demos/x/web/) serves
+      // its index.html, matching GitHub Pages. This is what lets the demos'
+      // short web/ URL resolve to the fullwindow index.html page.
+      if (info && info.isDirectory()) {
+        filePath = join(filePath, "index.html");
+        info = await stat(filePath).catch(() => null);
+      }
       if (!info || !info.isFile()) {
         res.writeHead(404).end("not found");
         return;

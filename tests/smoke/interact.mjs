@@ -88,7 +88,7 @@ async function newaveDisplayMode(page, k) {
 if (only.includes("newave")) {
   console.log("newave:");
   const page = await context.newPage();
-  const errors = await load(page, "demos/newave/web/newave_full.html");
+  const errors = await load(page, "demos/newave/web/");
   await shot(page, "newave-0-initial.png");
 
   await rightClick(page, 350, 250);
@@ -154,7 +154,7 @@ if (only.includes("newave")) {
 if (only.includes("cedit")) {
   console.log("cedit:");
   const page = await context.newPage();
-  const errors = await load(page, "demos/cedit/web/cedit_full.html");
+  const errors = await load(page, "demos/cedit/web/");
   await shot(page, "cedit-0-initial.png");
 
   // cedit declares keepaspect(1,1): the framebuffer is a square centered in

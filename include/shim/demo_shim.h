@@ -15,7 +15,9 @@ int demo_shim_system(const char *command)
 {
     //
     // Web shim - Transform command line command into web url equivalent, e.g.:
-    // "../bounce/bin/bounce ../bounce/x29.bin" ---> "bounce/web/bounce_full.html?arg=x29.bin"
+    // "../bounce/bin/bounce ../bounce/x29.bin" ---> "bounce/web/?arg=x29.bin"
+    // The page is served from the demo's web/ directory (web/ -> web/index.html),
+    // so the URL is just the directory; no per-demo html filename to track.
     // NOTE: This still gets compiled in the native path for debugging and maintenance purposes.
     //
     printf ("command = %s\n", command);
@@ -55,15 +57,18 @@ int demo_shim_system(const char *command)
         snprintf(param, sizeof(param), "%s", param_to_extract);
     }
 
-    // append "_full.html" and if have param, ?arg=<param>
-    size_t url_len = strlen(url);
-    const char *suffix_full = "_full.html";
-    size_t param_len = strlen(param) ? strlen("?arg=") + strlen(param) : 0;
-    size_t needed_len = url_len + strlen(suffix_full) + param_len;
-    if (needed_len >= sizeof(url))
+    // truncate to the demo's web/ directory, dropping the trailing binary
+    // name: "bounce/web/bounce" -> "bounce/web/" (served as web/index.html)
+    char *web = strstr(url, "/web/");
+    if (!web)
         return -1;
+    web[strlen("/web/")] = '\0';
 
-    strcpy(url + url_len, suffix_full);
+    // append ?arg=<param> if present
+    size_t url_len = strlen(url);
+    size_t param_len = strlen(param) ? strlen("?arg=") + strlen(param) : 0;
+    if (url_len + param_len >= sizeof(url))
+        return -1;
     if (param_len > 0)
     {
         strcat(url, "?arg=");
