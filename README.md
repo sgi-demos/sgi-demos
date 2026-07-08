@@ -1,5 +1,5 @@
 # SGI demos from long ago, running in your browser [today](https://sgi-demos.github.io).
-_Old problems require modern solutions._
+_It's a UNIX system. I know this!_
 
 This is the original SGI demo source code, compiled for the web using Emscripten and SDL2.  Rendering is done using an IRIS GL-to-GLES2/3 rasterizer with a reference software rasterizer forked from the [Alice 4 project](https://lkesteloot.github.io/alice/alice4/libgl.html).  Event handling is done by SDL2, with events translated into GL's event system.
 
