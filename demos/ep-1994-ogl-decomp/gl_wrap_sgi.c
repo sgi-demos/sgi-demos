@@ -25,21 +25,22 @@ static int ep_degenerate = 0;
 static int ep_deg_stack[32];
 static int ep_deg_sp = 0;
 
-/* Shipped-1994 mode (off by default, M toggles).  The OpenGL rewrite of
-   Electropaint accidentally diverged from the IRIS GL ep in two ways:
-   (1) it lost the size wiring, so the 3 mirrored copies of every wing are
-   drawn under scale(0,0,1) -- invisible on real OpenGL, killing the
-   IRIS-era 4-fold symmetry; (2) it passed the IRIS perspective() angle
-   "300" (tenths of a degree) to gluPerspective, which reads degrees,
-   giving an inverted frustum with an effective 60-degree FOV at eye
-   distance 4 (vs the IRIS 30 degrees at polarview distance 10).
+/* Shipped-1994 mode (ON by default for this decompiled build; M toggles).
+   The OpenGL rewrite of Electropaint accidentally diverged from the IRIS
+   GL ep in two ways: (1) it lost the size wiring, so the 3 mirrored copies
+   of every wing are drawn under scale(0,0,1) -- invisible on real OpenGL,
+   killing the IRIS-era 4-fold symmetry; (2) it passed the IRIS
+   perspective() angle "300" (tenths of a degree) to gluPerspective, which
+   reads degrees, giving an inverted frustum with an effective 60-degree
+   FOV at eye distance 4 (vs the IRIS 30 degrees at polarview distance 10).
 
-   Default (0): faithful to the IRIS GL ep -- mirrors restored (the
-   collapsing scale is treated as identity) and the intended camera.
-   M / shipped (1): what the 1994 binary actually rendered -- one visible
-   copy per wing (degenerates discarded as real OpenGL rasterization
-   would) and the accidental wide flipped camera. */
-int ep_shipped_ogl = 0;
+   Shipped (1): what the 1994 binary actually rendered -- one visible copy
+   per wing (degenerates discarded as real OpenGL rasterization would) and
+   the accidental wide flipped camera.  This decompiled build shows that
+   authentic 1994 look by default.
+   M / restored (0): faithful to the IRIS GL ep -- mirrors restored (the
+   collapsing scale is treated as identity) and the intended camera. */
+int ep_shipped_ogl = 1;
 
 void
 ep_gl_pushmatrix(void)

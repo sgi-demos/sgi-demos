@@ -25,17 +25,19 @@ static int ep_degenerate = 0;
 static int ep_deg_stack[32];
 static int ep_deg_sp = 0;
 
-/* Shipped-1994 mode (off by default, M toggles).  The OpenGL rewrite of
-   Electropaint accidentally diverged from the IRIS GL ep in two ways:
-   (1) it lost the size wiring, so the 3 mirrored copies of every wing are
-   drawn under scale(0,0,1) -- invisible on real OpenGL, killing the
-   IRIS-era 4-fold symmetry; (2) it passed the IRIS perspective() angle
-   "300" (tenths of a degree) to gluPerspective, which reads degrees,
-   giving an inverted frustum with an effective 60-degree FOV at eye
-   distance 4 (vs the IRIS 30 degrees at polarview distance 10).
+/* Shipped-1994 mode (off by default for this reversed build; M toggles).
+   The OpenGL rewrite of Electropaint accidentally diverged from the IRIS
+   GL ep in two ways: (1) it lost the size wiring, so the 3 mirrored copies
+   of every wing are drawn under scale(0,0,1) -- invisible on real OpenGL,
+   killing the IRIS-era 4-fold symmetry; (2) it passed the IRIS
+   perspective() angle "300" (tenths of a degree) to gluPerspective, which
+   reads degrees, giving an inverted frustum with an effective 60-degree
+   FOV at eye distance 4 (vs the IRIS 30 degrees at polarview distance 10).
 
    Default (0): faithful to the IRIS GL ep -- mirrors restored (the
-   collapsing scale is treated as identity) and the intended camera.
+   collapsing scale is treated as identity) and the intended camera.  This
+   reversed build restores that IRIS-GL look by default -- the opposite of
+   the decompiled build, which defaults to the shipped-1994 look.
    M / shipped (1): what the 1994 binary actually rendered -- one visible
    copy per wing (degenerates discarded as real OpenGL rasterization
    would) and the accidental wide flipped camera. */
