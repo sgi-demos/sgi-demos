@@ -99,17 +99,31 @@ int demo_shim_system(const char *command)
         // run js
         emscripten_run_script(sys_js);
     #else
+        // Launch the demo with ITS OWN directory as the working directory,
+        // exactly like running it standalone (cd demos/<demo> && ./bin/<demo>).
+        // buttonfly's cwd is demos/buttonfly, so a demo's relative data paths
+        // (flight 3.4 loads "defs/hills.t") would otherwise resolve against
+        // buttonfly's directory and fail. command is "../<demo>/bin/<demo>
+        // [args]"; cd into the part before "/bin/", then run "bin/<demo> ...".
+        char run[MAX_COMMAND_LEN] = "";
+        const char *binseg = strstr(command, "/bin/");
+        if (binseg)
+        {
+            int n = snprintf(run, sizeof(run), "cd %.*s && %s",
+                             (int)(binseg - command), command, binseg + 1);
+            if (n < 0 || (size_t)n >= sizeof(run))
+                return -1;
+        }
+        else
+            snprintf(run, sizeof(run), "%s", command);
+
         #ifdef _WIN32
-            // Windows shim: Convert demo path to Windows format (fwd to backslashes)
-            char win_command[MAX_COMMAND_LEN] = "";
-            snprintf(win_command, sizeof(win_command), "%s", command);
-            for (size_t i = 0; i < strlen(win_command); i++)
-                win_command[i] = (win_command[i] == '/') ? '\\' : win_command[i];
-            printf("win_command = %s\n",win_command);
-            system(win_command);
-        #else
-            system(command);
+            // Windows: forward slashes -> backslashes
+            for (size_t i = 0; i < strlen(run); i++)
+                if (run[i] == '/') run[i] = '\\';
+            printf("win_command = %s\n", run);
         #endif
+        system(run);
     #endif
 
     return 0;
