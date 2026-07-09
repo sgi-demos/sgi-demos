@@ -802,8 +802,7 @@ void sdlFreeFramebufferTexture()
 // framebuffer events
 //
 
-// Returns true when the framebuffer size changed (the caller then resizes
-// the rasterizer via gl_framebuffer_resized and sends the demo a REDRAW)
+// Returns true when the framebuffer size changed
 bool sdlResizeWindow(Uint32 windowID)
 {
     bool fbSizeChanged = false;

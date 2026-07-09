@@ -1,6 +1,6 @@
 {
   "meta": {
-    "timestamp": "2026-07-08T18:07:59.203Z",
+    "timestamp": "2026-07-09T02:14:08.342Z",
     "settleMs": 3000,
     "viewport": {
       "width": 1024,
@@ -40,7 +40,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.9234466552734375,
+      "content": 0.9372482299804688,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -51,7 +51,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.9025344848632812,
+      "content": 0.897210439046224,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -128,7 +128,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.02,
-      "content": 0.06792068481445312,
+      "content": 0.06599553426106775,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -172,7 +172,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.02977244059244788,
+      "content": 0.029972076416015625,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -216,7 +216,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.012765248616536495,
+      "content": 0.07413228352864587,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -227,7 +227,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.035961151123046875,
+      "content": 0.029730478922526005,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -238,7 +238,7 @@
       "mode": "ref",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.05243174235026038,
+      "content": 0.04434458414713538,
       "pass": true,
       "reasons": [],
       "errors": []
@@ -249,7 +249,7 @@
       "mode": "gles2",
       "status": "working",
       "minContent": 0.004,
-      "content": 0.07985941569010413,
+      "content": 0.053373972574869755,
       "pass": true,
       "reasons": [],
       "errors": []

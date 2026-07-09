@@ -194,28 +194,6 @@ uint32_t ntohl(uint32_t x) {
 #define M_PI 3.14159265358979323846	/* was mistyped 3.141596 */
 #endif
 
-// Browser-friendly exit(): in the web build a raw exit() tears down the C
-// runtime but leaves the page sitting there (looks frozen), so instead we
-// navigate away -- back to the previous page, or to the demos home if there
-// is none. Native builds exit normally.
-static void demo_exit(int status)
-{
-#ifdef __EMSCRIPTEN__
-    // Go to previous page, or if none, to the demos home page.
-    const char *exit_js =
-        "if (document.referrer) {                                   "
-        "     window.history.back();                                "
-        "}                                                          "
-        "else {                                                     "
-        "    window.location.href = 'https://sgi-demos.github.io';  "
-        "}                                                          ";
-    extern void emscripten_run_script(const char *);
-    emscripten_run_script(exit_js);
-#endif
-    exit(status);
-}
-
-#define exit demo_exit
 
 // SGI        sizeof(long) == 4, sizeof(int) == 4, sizeof(size_t) == 4
 // Mac M1     sizeof(long) == 8, sizeof(int) == 4, sizeof(size_t) == 8  <--- Bad things happen mixing longs and ints

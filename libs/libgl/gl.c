@@ -173,21 +173,23 @@ static int zsource_color = 0;
 static int matrix_mode = MSINGLE;
 static matrix4x4f_stack modelview_stack;
 static matrix4x4f_stack projection_stack;
-static matrix4x4f_stack texture_stack;      // mmode(MTEXTURE): transforms t2f coords
+static matrix4x4f_stack texture_stack; // mmode(MTEXTURE): transforms t2f coords
 static matrix4x4f_stack *current_stack;
 
 static viewport_t the_viewport;
 static viewport_stack_t viewport_stack;
 
-static unsigned int input_queue_device[INPUT_QUEUE_SIZE];
-static unsigned short input_queue_val[INPUT_QUEUE_SIZE];
-// The next time that needs to be read:
-static int input_queue_head = 0;
-// The number of items in the queue (tail = (head + length) % len):
-static int input_queue_length = 0;
-
 #define MAX_PATTERNS 128   /* flight 3.4 defines explosion patterns at 80+ */
 static Pattern16 patterns[MAX_PATTERNS];
+
+#define CIRCLE_SEGMENTS 80
+static float circle_verts[CIRCLE_SEGMENTS][2];
+
+static int pup_active = 0; // popup menu active
+
+// The device-event queue and the IRIS GL event API (qdevice/qread/qtest/...)
+// now live at bottom of this file.
+
 
 //------------------------------------------------------------------------
 // Lighting & materials
@@ -2272,20 +2274,20 @@ void getsize(long *width, long *height) {
 
 Boolean getbutton(int button) {
     TRACEF("%d", button);
-    return events_get_button(button);
+    return sdl_events_get_button(button);
 }
 
 // valuator = device with continuous input, like a mouse or dial
 int getvaluator(int device) {
     TRACEF("%d", device);
-    return events_get_valuator(device);
+    return sdl_events_get_valuator(device);
 }
 
 void setvaluator(Device device, int init, int min, int max) {
     // IRIS GL used this to warp the cursor and clamp a valuator's range
     // (newave constrains MOUSEX/MOUSEY to the window while editing). Our
     // mouse valuators are already window-relative and framebuffer-clamped
-    // (events_get_valuator), so there is nothing to do.
+    // (sdl_events_get_valuator), so there is nothing to do.
     TRACEF("%d, %d, %d, %d", device, init, min, max);
 }
 
@@ -2299,7 +2301,7 @@ void gflush() {
     // yield. Same yield primitive as swapbuffers(), but with no back/front
     // swap (single-buffered demos draw directly to the front buffer).
     gl_resolve_ci_if_needed();
-    events_frame_complete();
+    sdl_events_frame_complete();
 }
 
 void greset() {
@@ -2381,7 +2383,7 @@ void mapcolor(Colorindex index, int red, int green, int blue) {
 //
 // Called only from "demo finished a frame, present it" sites — swapbuffers,
 // gflush, qread's blocking wait, and the yieldByEventQuery safety net in
-// sdl_events.c. NOT from events_frame_complete itself: dopup composites its
+// sdl_events.c. NOT from sdl_events_frame_complete itself: dopup composites its
 // menu into the RGB front buffer (with no CI backing) and presents through
 // there, and a resolve would repaint the scene over the open menu.
 //
@@ -2694,115 +2696,6 @@ void popviewport() {
     viewport_stack_pop(&viewport_stack);
 }
 
-static void enqueue_device(int device, unsigned short val) {
-    TRACEF("%d, %d", device, val);
-
-    if (input_queue_length == INPUT_QUEUE_SIZE) {
-        printf("Input queue overflow.");
-    } else {
-        int tail = (input_queue_head + input_queue_length) % INPUT_QUEUE_SIZE;
-        input_queue_device[tail] = device;
-        input_queue_val[tail] = val;
-        input_queue_length++;
-    }
-}
-
-static int devices_queued[2048];
-
-/* XXX event_get_qdevice() */
-// We're interested in events from this device.
-void qdevice(Device device) {
-    TRACEF("%d", device);
-
-    devices_queued[device] = 1;
-
-    switch (device) {
-        case REDRAW:
-            // Initial redraw, so the demo's first frame draws even before
-            // any SDL window event arrives.
-            enqueue_device(REDRAW, 0);
-            // Also register REDRAW with the SDL side so it will enqueue
-            // REDRAW events on window expose/resize and via periodic pulse.
-            events_qdevice(device);
-            break;
-
-        case INPUTCHANGE:
-            // Tell app that this window has received input focus
-            enqueue_device(INPUTCHANGE, 1);
-            break;
-
-        default:
-            // Send the device to the server.
-            events_qdevice(device);
-            break;
-    }
-}
-
-void unqdevice(Device device) {
-    devices_queued[device] = 0;
-    events_unqdevice(device);
-}
-
-// XXX events_qread_start
-// XXX events_qread_continue
-void fetch_event_queue() {
-    int count = events_qread_start();
-
-    // First is number of events.
-    for (int i = 0; i < count; i++) {
-        short value;
-        int device = events_qread_continue(&value);
-        enqueue_device(device, value);
-    }
-}
-
-// Pops the next event (device number and value) off the head of the queue
-// and returns it. Like real IRIS GL, BLOCKS until an event is available
-// (flight 3.4's wait_for_input spins forever otherwise); while waiting, the
-// events layer pumps input, keeps the frame presented, and idles. The one
-// exception: inside the SDL event pump blocking would deadlock, so there it
-// returns 0 on an empty queue (the old Alice4 behavior).
-int qread(short *val) {
-    TRACE();
-
-    while (!qtest())
-    {
-        // The blocking wait presents frames while idle; make sure any
-        // pending palette change is baked in before it does (cedit finishes
-        // a slider drag and then blocks here).
-        gl_resolve_ci_if_needed();
-        if (!events_qread_block())
-            return 0;
-    }
-
-    *val = input_queue_val[input_queue_head];
-    int device = input_queue_device[input_queue_head];
-    input_queue_head = (input_queue_head + 1) % INPUT_QUEUE_SIZE;
-    input_queue_length--;
-    return device;
-}
-
-// Returns the device number of the first entry.
-// Returns 0 if the event queue is empty.
-// Doesn't change the queue.
-int qtest() {
-    TRACE();
-
-    if (input_queue_length == 0)
-        fetch_event_queue();
-
-    if (input_queue_length == 0) {
-        // Empty queue.
-        return 0;
-    } else {
-        // Peek at the head.
-        return input_queue_device[input_queue_head];
-    }
-}
-
-void qenter(short qtype, short value) {
-    enqueue_device(qtype, value);
-}
 
 void viewport(Screencoord left, Screencoord right, Screencoord bottom, Screencoord top)
 {
@@ -2918,7 +2811,7 @@ void shademodel(int mode) {
 void swapbuffers() {
     TRACE();
     rasterizer_swap();
-    events_set_framebuffer(rasterizer_frontbuffer());
+    sdl_events_set_framebuffer(rasterizer_frontbuffer());
     if (!rgb_mode) {
         // the staleness flags travel with their buffers
         int t = ci_rgb_cache_stale;
@@ -2926,7 +2819,7 @@ void swapbuffers() {
         ci_rgb_cache_stale_back = t;
     }
     gl_resolve_ci_if_needed();
-    events_frame_complete();
+    sdl_events_frame_complete();
 }
 
 void translate(Coord x, Coord y, Coord z) {
@@ -3035,7 +2928,7 @@ void gl_framebuffer_resized(int width, int height) {
     menu_corner_top = DISPLAY_HEIGHT - 1 - 1 - 10;
 
     rasterizer_resize((uint32_t)width, (uint32_t)height);
-    events_set_framebuffer(rasterizer_frontbuffer());
+    sdl_events_set_framebuffer(rasterizer_frontbuffer());
 
     if (was_full_viewport) {
         the_viewport[1] = DISPLAY_WIDTH - 1.0;
@@ -3084,7 +2977,82 @@ static void apply_demo_quirks(char *title) {
         singlebuffer();
 }
 
+static void init_gl_state()
+{
+    static int initialized = 0;
+    if (initialized)
+        return;
+    initialized = 1;
+
+#if !defined(NDEBUG)
+    if(getenv("TRACE_GL") != NULL)
+        trace_functions = 1;
+#endif
+
+    for(int i = 0; i < MAX_PATTERNS; i++)
+        for(int j = 0; j < 16; j++)
+            patterns[i][j] = 0xffff;
+
+    matrix4x4f_stack_init(&modelview_stack);
+    matrix4x4f_stack_init(&projection_stack);
+    matrix4x4f_stack_init(&texture_stack);
+    matrix4x4f_stack_load(&modelview_stack, identity_4x4f);
+    matrix4x4f_stack_load(&projection_stack, identity_4x4f);
+    current_stack = &modelview_stack;
+
+    the_viewport[0] = 0.0;
+    the_viewport[1] = DISPLAY_WIDTH - 1.0;
+    the_viewport[2] = 0.0;
+    the_viewport[3] = DISPLAY_HEIGHT - 1.0;
+    the_viewport[4] = 0.0;
+    the_viewport[5] = 1.0;
+
+    for(int i = 0; i < MAX_MATERIALS; i++)
+        material_init(&materials[i]);
+    for(int i = 0; i < MAX_LIGHTS; i++)
+        light_init(&lights[i]);
+    for(int i = 0; i < MAX_LMODELS; i++)
+        lmodel_init(&lmodels[i]);
+
+    for(int i = 0; i < MAX_LIGHTS; i++)
+        lights_bound[i] = NULL;
+
+    for(int i = 0; i < CIRCLE_SEGMENTS; i++) {
+        float a = i * M_PI * 2 / CIRCLE_SEGMENTS;
+        circle_verts[i][0] = cos(a);
+        circle_verts[i][1] = sin(a);
+    }
+
+    vec3ub_set(colormap[BLACK], 0, 0, 0);
+    vec3ub_set(colormap[RED], 255, 0, 0);
+    vec3ub_set(colormap[GREEN], 0, 255, 0);
+    vec3ub_set(colormap[YELLOW], 255, 255, 0);
+    vec3ub_set(colormap[BLUE], 0, 0, 255);
+    vec3ub_set(colormap[MAGENTA], 255, 0, 255);
+    vec3ub_set(colormap[CYAN], 0, 255, 255);
+    vec3ub_set(colormap[WHITE], 255, 255, 255);
+
+    // IRIS default colormap also carried a 16-step grey ramp at 16..31
+    // (libdemo port.h: GREY(x) = 16+x); cedit and friends use it without
+    // ever mapping it themselves
+    for(int i = 0; i < 16; i++)
+        vec3ub_set(colormap[16 + i], i * 17, i * 17, i * 17);
+
+    for(int i = 0; i < MAX_PUPS; i++)
+        pup_init(pups + i);
+
+    // BDF font is baked into the binary (see bake_bdf.py). It's a const
+    // global, so no loading/parsing is needed -- just point at it.
+    extern const BdfFont helvBO14_bdf;
+    pup_bdffont = &helvBO14_bdf;
+
+    //signal(SIGWINCH, sigwinch); // window changed event callback, maybe for window resizing
+    //signal(SIGINFO, siginfo);   // status info event callback, Ctrl+T request for program info
+}
+
 int winopen(char *title) {
+    init_gl_state();
+
     // One demo per program: the build-stamped name beats the passed title
     // (web argv[0] is "this.program"; native titles pick up argv paths)
     if (gl_appname)
@@ -3114,11 +3082,12 @@ int winopen(char *title) {
     // window (native) / centered framebuffer (web). All other demos get a
     // free-form window-sized framebuffer, kept undistorted by the implied
     // reshape (see the_projection / reapply_projection_for_aspect).
-    int events_window = events_winopen(title);
+    int sdl_events_window = sdl_events_winopen(title);
     window_is_open = 1;
-    events_set_framebuffer(rasterizer_frontbuffer());
+
+    sdl_events_set_framebuffer(rasterizer_frontbuffer());
     // XXX if we made a multi-window system, we'd tie "rasterizer_window"
-    // and "events_window" together so we could pass the right identifier
+    // and "sdl_events_window" together so we could pass the right identifier
     // to window functions.  But we are fullscreen and no demo we care
     // about uses multiple windows.
     return 1;
@@ -3304,6 +3273,7 @@ void addtopup(long which, char *menu, ...) {
 }
 
 int dopup(int pup_index) {
+    pup_active = 1;
 
     // Save previous drawing state
     int old_zbuffer = zbuffer_enabled;
@@ -3315,13 +3285,13 @@ int dopup(int pup_index) {
 
     pup *thepup = pups + pup_index;
 
-    int larrow_queued = devices_queued[LEFTARROWKEY];
-    int rarrow_queued = devices_queued[RIGHTARROWKEY];
-    int uarrow_queued = devices_queued[UPARROWKEY];
-    int darrow_queued = devices_queued[DOWNARROWKEY];
-    int esc_queued    = devices_queued[ESCKEY];
-    int ret_queued    = devices_queued[RETKEY];
-    int lmouse_queued = devices_queued[LEFTMOUSE];
+    Boolean larrow_queued = sdl_events_device_queued(LEFTARROWKEY),
+            rarrow_queued = sdl_events_device_queued(RIGHTARROWKEY),
+            uarrow_queued = sdl_events_device_queued(UPARROWKEY),
+            darrow_queued = sdl_events_device_queued(DOWNARROWKEY),
+            esc_queued    = sdl_events_device_queued(ESCKEY),
+            ret_queued    = sdl_events_device_queued(RETKEY),
+            lmouse_queued = sdl_events_device_queued(LEFTMOUSE);
 
     qdevice(LEFTARROWKEY);
     qdevice(RIGHTARROWKEY);
@@ -3353,7 +3323,7 @@ int dopup(int pup_index) {
         rasterizer_copy_back_to_front();
         pup_draw(thepup, menu_corner_left, menu_corner_top, selected);
 
-        events_frame_complete();
+        sdl_events_frame_complete();
 
         // Hover: if the cursor is over an item slot, move the highlight to
         // it. If the cursor is over the title, the gap, or outside the menu,
@@ -3368,11 +3338,20 @@ int dopup(int pup_index) {
         if (qtest() != 0) {
             short val;
             int device = qread(&val);
+
+            if (device == ESCKEY) {
+                selected = -1;
+                // if (val) { // ESCKEY down
+                //     printf("PUP esc key down\n");
+                // }
+                if (!val) {     // ESCKEY up
+                    // printf("PUP esc key up\n");
+                    done = 1;               // done
+                }
+            }
+
             if (val) {
                 switch (device) {
-                    case ESCKEY:
-                        done = 1;
-                        /*fallthrough*/
                     case LEFTARROWKEY:
                         selected = -1;
                         break;
@@ -3421,6 +3400,8 @@ int dopup(int pup_index) {
     rasterizer_copy_back_to_front();
     vec4f_copy(current_color, previous_color);
     zbuffer(old_zbuffer);
+
+    pup_active = 0;
 
     if (selected >= 0) {
         pup_item *item = thepup->items + selected;
@@ -3691,7 +3672,7 @@ void keepaspect(int x, int y) {
     // applied at window creation). After winopen it stays pending until the
     // demo calls winconstraints (e.g. buttonfly's SPACE toggle_window).
     if (!window_is_open) {
-        events_keepaspect(x, y);
+        sdl_events_keepaspect(x, y);
     } else {
         pending_aspect_x = x;
         pending_aspect_y = y;
@@ -3978,7 +3959,7 @@ void prefposition(int x1, int x2, int y1, int y2) {
     int w = (x2 > x1 ? x2 - x1 : x1 - x2) + 1;
     int h = (y2 > y1 ? y2 - y1 : y1 - y2) + 1;
     TRACEF("%d, %d, %d, %d", x1, x2, y1, y2);
-    events_set_framebuffer_fixed_size(w, h);
+    sdl_events_set_framebuffer_fixed_size(w, h);
 }
 
 void rdr2i(Icoord dx, Icoord dy) {
@@ -4025,9 +4006,9 @@ void scale(float x, float y, float z) {
     matrix4x4f_stack_mult(current_stack, m);
 }
 
-// XXX events_tie
+// XXX sdl_events_tie
 void tie(int button, int val1, int val2) {
-    events_tie(button, val1, val2);
+    sdl_events_tie(button, val1, val2);
 }
 
 void v4f(float v[4]) {
@@ -4102,7 +4083,7 @@ void winconstraints() {
     // (IRIX one-shot semantics). Only keepaspect is modeled; prefsize/
     // prefposition/winposition remain unimplemented.
     if (pending_aspect_x > 0) {
-        events_keepaspect(pending_aspect_x, pending_aspect_y);
+        sdl_events_keepaspect(pending_aspect_x, pending_aspect_y);
         pending_aspect_x = pending_aspect_y = 0;
     }
 }
@@ -4211,7 +4192,7 @@ void setdepth(Screencoord near, Screencoord far) {
 }
 
 // IRIX libc, not IRIS GL: nap for ticks/100 seconds. Demos call it to be
-// polite with the CPU; our frame pacing happens in events_frame_complete()
+// polite with the CPU; our frame pacing happens in sdl_events_frame_complete()
 // (swapbuffers/gflush/event queries), so there is nothing to do here.
 long sginap(long ticks) {
     return 0;
@@ -4283,15 +4264,6 @@ void lshaderange (Colorindex lowin, Colorindex highin, long znear, long zfar)
     shade_zfar = zfar;
 }
 
-void qreset ()
-{
-    TRACE();
-    // Discard all pending events: pull anything queued in the events layer
-    // into the GL queue first, then drop the lot.
-    fetch_event_queue();
-    input_queue_head = 0;
-    input_queue_length = 0;
-}
 
 /* GL2-era name for line antialiasing (newave). We can't reproduce per-pixel
  * coverage, but in CI mode we approximate its visible effect: smooth lines
@@ -4569,9 +4541,6 @@ void charstr(char *str) {
 
     string_draw(&screenvert, str);
 }
-
-#define CIRCLE_SEGMENTS 80
-static float circle_verts[CIRCLE_SEGMENTS][2];
 
 void circi(Icoord x, Icoord y, Icoord r) {
     if(cur_ptr_to_nextptr != NULL) {
@@ -5012,77 +4981,6 @@ int gversion(char *version)
 //     enqueue_device(RIGHTMOUSE, 0);
 // }
 
-static void init_gl_state() __attribute__((constructor));
-static void init_gl_state()
-{
-#if !defined(NDEBUG)
-    if(getenv("TRACE_GL") != NULL)
-        trace_functions = 1;
-#endif
-
-    for(int i = 0; i < MAX_PATTERNS; i++)
-        for(int j = 0; j < 16; j++)
-            patterns[i][j] = 0xffff;
-
-    matrix4x4f_stack_init(&modelview_stack);
-    matrix4x4f_stack_init(&projection_stack);
-    matrix4x4f_stack_init(&texture_stack);
-    matrix4x4f_stack_load(&modelview_stack, identity_4x4f);
-    matrix4x4f_stack_load(&projection_stack, identity_4x4f);
-    current_stack = &modelview_stack;
-
-    the_viewport[0] = 0.0;
-    the_viewport[1] = DISPLAY_WIDTH - 1.0;
-    the_viewport[2] = 0.0;
-    the_viewport[3] = DISPLAY_HEIGHT - 1.0;
-    the_viewport[4] = 0.0;
-    the_viewport[5] = 1.0;
-
-    for(int i = 0; i < MAX_MATERIALS; i++)
-        material_init(&materials[i]);
-    for(int i = 0; i < MAX_LIGHTS; i++)
-        light_init(&lights[i]);
-    for(int i = 0; i < MAX_LMODELS; i++)
-        lmodel_init(&lmodels[i]);
-
-    for(int i = 0; i < MAX_LIGHTS; i++)
-        lights_bound[i] = NULL;
-
-    for(int i = 0; i < CIRCLE_SEGMENTS; i++) {
-        float a = i * M_PI * 2 / CIRCLE_SEGMENTS;
-        circle_verts[i][0] = cos(a);
-        circle_verts[i][1] = sin(a);
-    }
-
-    vec3ub_set(colormap[BLACK], 0, 0, 0);
-    vec3ub_set(colormap[RED], 255, 0, 0);
-    vec3ub_set(colormap[GREEN], 0, 255, 0);
-    vec3ub_set(colormap[YELLOW], 255, 255, 0);
-    vec3ub_set(colormap[BLUE], 0, 0, 255);
-    vec3ub_set(colormap[MAGENTA], 255, 0, 255);
-    vec3ub_set(colormap[CYAN], 0, 255, 255);
-    vec3ub_set(colormap[WHITE], 255, 255, 255);
-
-    // IRIS default colormap also carried a 16-step grey ramp at 16..31
-    // (libdemo port.h: GREY(x) = 16+x); cedit and friends use it without
-    // ever mapping it themselves
-    for(int i = 0; i < 16; i++)
-        vec3ub_set(colormap[16 + i], i * 17, i * 17, i * 17);
-
-    for(int i = 0; i < MAX_PUPS; i++)
-        pup_init(pups + i);
-
-    // BDF font is baked into the binary (see bake_bdf.py). It's a const
-    // global, so no loading/parsing is needed -- just point at it.
-    extern const BdfFont helvBO14_bdf;
-    pup_bdffont = &helvBO14_bdf;
-
-    //signal(SIGWINCH, sigwinch); // window changed event callback, maybe for window resizing
-    //signal(SIGINFO, siginfo);   // status info event callback, Ctrl+T request for program info
-
-    memset(devices_queued, 0, sizeof(devices_queued));
-}
-
 // Read back color indices from the front buffer, starting at the current
 // character position and moving right (CI mode; cedit's getapixel uses this
 // for its pick-a-color-off-the-screen clicks). Both rasterizers provide the
@@ -5150,3 +5048,171 @@ void screenspace()
     matrix4x4f_stack_load(&projection_stack, m);
     matrix4x4f_stack_load(&modelview_stack, identity_4x4f);
 }
+
+//
+// IRIS GL event handling (gl_events.c)
+//
+// The GL-side event system: the device-event queue and the IRIS GL API that
+// drives it (qdevice/unqdevice/qread/qtest/qenter/qreset), plus the quit
+// policy. It sits above the SDL translation layer (sdl_events.c, the sdl_events_*
+// interface in events.h) and below the demos. gl.c is rendering; this is
+// input.
+//
+
+
+// The GL device-event queue (filled from the SDL layer by fetch_event_queue).
+static unsigned int input_queue_device[INPUT_QUEUE_SIZE];
+static unsigned short input_queue_val[INPUT_QUEUE_SIZE];
+static int input_queue_head = 0;    // next entry to read
+static int input_queue_length = 0;  // entries queued (tail = (head+length)%len)
+
+static void enqueue_device(int device, unsigned short val) {
+    TRACEF("%d, %d", device, val);
+
+    if (input_queue_length == INPUT_QUEUE_SIZE) {
+        printf("Input queue overflow.");
+    } else {
+        int tail = (input_queue_head + input_queue_length) % INPUT_QUEUE_SIZE;
+        input_queue_device[tail] = device;
+        input_queue_val[tail] = val;
+        input_queue_length++;
+    }
+}
+
+/* XXX event_get_qdevice() */
+// We're interested in events from this device.
+void qdevice(Device device) {
+    TRACEF("%d", device);
+
+    switch (device) {
+        case REDRAW:
+            // Initial redraw, so the demo's first frame draws even before
+            // any SDL window event arrives.
+            enqueue_device(REDRAW, 0);
+            // Also register REDRAW with the SDL side so it will enqueue
+            // REDRAW events on window expose/resize and via periodic pulse.
+            sdl_events_qdevice(device);
+            break;
+
+        case INPUTCHANGE:
+            // Tell app that this window has received input focus
+            enqueue_device(INPUTCHANGE, 1);
+            break;
+
+        default:
+            // Send the device to the server.
+            sdl_events_qdevice(device);
+            break;
+    }
+}
+
+void unqdevice(Device device) {
+    sdl_events_unqdevice(device);
+}
+
+// XXX sdl_events_qread_start
+// XXX sdl_events_qread_continue
+static void fetch_event_queue() {
+    int count = sdl_events_qread_start();
+
+    // First is number of events.
+    for (int i = 0; i < count; i++) {
+        short value;
+        int device = sdl_events_qread_continue(&value);
+        enqueue_device(device, value);
+    }
+}
+
+// Pops the next event (device number and value) off the head of the queue
+// and returns it. Like real IRIS GL, BLOCKS until an event is available
+// (flight 3.4's wait_for_input spins forever otherwise); while waiting, the
+// events layer pumps input, keeps the frame presented, and idles. The one
+// exception: inside the SDL event pump blocking would deadlock, so there it
+// returns 0 on an empty queue (the old Alice4 behavior).
+int qread(short *val) {
+    TRACE();
+
+    while (!qtest())
+    {
+        // The blocking wait presents frames while idle; make sure any
+        // pending palette change is baked in before it does (cedit finishes
+        // a slider drag and then blocks here).
+        gl_resolve_ci_if_needed();
+        if (!sdl_events_qread_block())
+            return 0;
+    }
+
+    *val = input_queue_val[input_queue_head];
+    int device = input_queue_device[input_queue_head];
+    input_queue_head = (input_queue_head + 1) % INPUT_QUEUE_SIZE;
+    input_queue_length--;
+
+    // Universal quit via ESC: Exit the demo here whether or not the
+    // demo registered to handle ESC with qdevice(ESCKEY). Don't exit
+    // though if popup menu is active (it uses ESC to quit poup)
+    if (device == ESCKEY || device == WINQUIT)
+    {
+        //printf("qread ESC val = %d\n", *val);
+        // if (*val == 0)
+        //     printf("here!\n");
+        if (!pup_active)
+            gl_exit(0);
+    }
+
+    return device;
+}
+
+// Returns the device number of the first entry.
+// Returns 0 if the event queue is empty.
+// Doesn't change the queue.
+int qtest() {
+    TRACE();
+
+    if (input_queue_length == 0)
+        fetch_event_queue();
+
+    if (input_queue_length == 0) {
+        // Empty queue.
+        return 0;
+    } else {
+        // Peek at the head.
+        return input_queue_device[input_queue_head];
+    }
+}
+
+void qenter(short qtype, short value) {
+    enqueue_device(qtype, value);
+}
+
+void qreset ()
+{
+    TRACE();
+    // Discard all pending events: pull anything queued in the events layer
+    // into the GL queue first, then drop the lot.
+    fetch_event_queue();
+    input_queue_head = 0;
+    input_queue_length = 0;
+}
+
+// Browser-friendly exit(): in the web build a raw exit() tears down the C
+// runtime but leaves the page sitting there (looks frozen), so instead we
+// navigate away -- back to the previous page, or to the demos home if there
+// is none. Native builds exit normally.
+void gl_exit(int status)
+{
+#ifdef __EMSCRIPTEN__
+    // Go to previous page, or if none, to the demos home page.
+    const char *exit_js =
+        "if (document.referrer) {                                   "
+        "     window.history.back();                                "
+        "}                                                          "
+        "else {                                                     "
+        "    window.location.href = 'https://sgi-demos.github.io';  "
+        "}                                                          ";
+    extern void emscripten_run_script(const char *);
+    emscripten_run_script(exit_js);
+#endif
+    exit(status);
+}
+
+// #define exit gl_exit

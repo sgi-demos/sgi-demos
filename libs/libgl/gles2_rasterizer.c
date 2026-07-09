@@ -1516,7 +1516,7 @@ void gles2_rasterizer_resize(uint32_t width, uint32_t height)
     printf("INFO: gles2 rasterizer framebuffer %dx%d\n", fb_width, fb_height);
 }
 
-// Called once per presented frame (events_frame_complete), before the
+// Called once per presented frame (sdl_events_frame_complete), before the
 // display quad samples the front FBO texture: flush pending batched
 // geometry so everything drawn this frame (menus, single-buffered demos)
 // is in the FBO. No readback — the display reads the texture directly.

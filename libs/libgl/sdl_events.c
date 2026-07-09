@@ -26,7 +26,7 @@ static gl_event sdl_input_queue[INPUT_QUEUE_SIZE];
 static uint32_t sdl_input_queue_head = 0;    // The next item that needs to be read
 static uint32_t sdl_input_queue_length = 0;  // The number of items in the queue (tail = (head + length) % len)
 static int redraw_pulse_outstanding = 0;     // one un-consumed yieldByEventQuery REDRAW pulse at a time
-static uint32_t sdl_window_id = 0;           // Set in events_winopen; used as REDRAW event value
+static uint32_t sdl_window_id = 0;           // Set in sdl_events_winopen; used as REDRAW event value
 static int32_t sdl_keycode_to_gl(int32_t sdl_keycode);
 static void enqueue_event(gl_event *e);
 static void enqueueRedrawEvent(void);
@@ -93,7 +93,7 @@ static void mouseMotionEvent(SDL_MouseMotionEvent *motion)
     if (mouseInsideFB != prevMouseInsideFramebuffer)
     {
         prevMouseInsideFramebuffer = mouseInsideFB;
-        if (sdl_devices_queued[INPUTCHANGE])
+        if (sdl_events_device_queued(INPUTCHANGE))
         {
             gl_event ev;
             ev.device = INPUTCHANGE;
@@ -107,7 +107,7 @@ static void mouseMotionEvent(SDL_MouseMotionEvent *motion)
     // stick from these queued events, never by polling getvaluator(). Only
     // queue an axis when its value actually changed, like the hardware.
     static int32_t prevQueuedX = -1, prevQueuedY = -1;
-    if (sdl_devices_queued[MOUSEX])
+    if (sdl_events_device_queued(MOUSEX))
     {
         int32_t x = sdlClampToFramebufferX(motion->x);
         if (x != prevQueuedX)
@@ -119,7 +119,7 @@ static void mouseMotionEvent(SDL_MouseMotionEvent *motion)
             enqueue_event(&ev);
         }
     }
-    if (sdl_devices_queued[MOUSEY])
+    if (sdl_events_device_queued(MOUSEY))
     {
         int32_t y = sdlClampToFramebufferY(motion->y);
         if (y != prevQueuedY)
@@ -144,7 +144,7 @@ static void keyRawEvent(int sdl_keycode, int down)
 {
     gl_event ev;
     ev.device = sdl_keycode_to_gl(sdl_keycode);
-    if (ev.device != 0 && sdl_devices_queued[ev.device])
+    if (ev.device != 0 && sdl_events_device_queued(ev.device))
     {
         ev.val = down;
         enqueue_event(&ev);
@@ -154,7 +154,7 @@ static void keyRawEvent(int sdl_keycode, int down)
 // EVENT: an ascii character for the KEYBD virtual device
 static void keyAsciiEvent(char c)
 {
-    if (sdl_devices_queued[KEYBD])
+    if (sdl_events_device_queued(KEYBD))
     {
         gl_event ev;
         ev.device = KEYBD;
@@ -205,7 +205,7 @@ static void mouseButtonEvent(int sdlButton, bool buttonDown)
     }
 
     // convert SDL mouse button event to GL and add it to GL event queue
-    if (ev.device != NULLDEV && sdl_devices_queued[ev.device])
+    if (ev.device != NULLDEV && sdl_events_device_queued(ev.device))
     {
         ev.val = buttonDown;
         enqueue_event(&ev);
@@ -220,7 +220,7 @@ static void mouseButtonEvent(int sdlButton, bool buttonDown)
             if (sdl_tied_valuators[ev.device][j])
             {
                 tied_ev.device = sdl_tied_valuators[ev.device][j];
-                tied_ev.val = events_get_valuator(sdl_tied_valuators[ev.device][j]);
+                tied_ev.val = sdl_events_get_valuator(sdl_tied_valuators[ev.device][j]);
                 enqueue_event(&tied_ev);
             }
         }
@@ -309,7 +309,7 @@ static void touchEventUp(SDL_TouchFingerEvent *f)
 // Silently guarded in all yield paths:
 //   yieldByEventQuery     - prevents reentrant REDRAW pulse + frame_complete
 //   yieldByFrame          - prevents mid-pump Asyncify suspend
-//   events_frame_complete - prevents any other re-entrant callers
+//   sdl_events_frame_complete - prevents any other re-entrant callers
 //
 // Loudly guarded in sdlProcessEvents() itself, with an actual abort (the three
 // yield-path guards prevent normal expected reentrancy, so reaching this
@@ -406,7 +406,7 @@ void sdlProcessEvents()
                 {
                     int raw = sdl_keycode_to_gl(keysym);
                     int ascii = keyControlAscii(keysym);
-                    if (ascii && !(raw != 0 && sdl_devices_queued[raw]))
+                    if (ascii && !(raw != 0 && sdl_events_device_queued(raw)))
                         keyAsciiEvent((char)ascii);
                 }
                 break;
@@ -487,7 +487,7 @@ void yieldByFrame(Uint32 frameTotalTicks)
 }
 
 //
-//  events_frame_complete - The single platform yield point
+//  sdl_events_frame_complete - The single platform yield point
 //
 //  Called from:
 //    - swapbuffers()       (double-buffered demos)
@@ -499,13 +499,13 @@ void yieldByFrame(Uint32 frameTotalTicks)
 //
 //  This function:
 //    1. Runs SDL event pump (iff pump is not already running).
-//    2. Presents the framebuffer that was last set via events_set_framebuffer().
+//    2. Presents the framebuffer that was last set via sdl_events_set_framebuffer().
 //       In practice, the framebuffer pointer is initialized by winopen and then only
 //       updated by double-buffered demos via swapbuffers().
 //    3. Native:     Delays if necessary to not exceed DEMO_FPS via SDL sleep.
 //       Emscripten: Yields to the browser via emscripten_sleep(), also not exceeding DEMO_FPS.
 //
-void events_frame_complete(void)
+void sdl_events_frame_complete(void)
 {
     // This guards against any reentrant callers that don't go through yieldByEventQuery or yieldByFrame
     if (inSdlProcessEvents)
@@ -533,7 +533,7 @@ void events_frame_complete(void)
 
 //
 // yieldByEventQuery - Guarded and throttled catch-all yield, called from event query
-// functions (events_qread_start, events_get_button, events_get_valuator). This is for
+// functions (sdl_events_qread_start, sdl_events_get_button, sdl_events_get_valuator). This is for
 // demos that don't call swapbuffers or gflush, like twilight, but that do still query
 // for events.
 //
@@ -546,7 +546,7 @@ static void yieldByEventQuery()
     // sdlProcessEvents()
     // └─mouseButtonEvent(SDL_BUTTON_LEFT) // user pressed left mouse
     //   └─enqueue_event(LEFTMOUSE)
-    //   └─events_get_valuator(MOUSEX)     // demo wants mouse x position with left mouse event
+    //   └─sdl_events_get_valuator(MOUSEX)     // demo wants mouse x position with left mouse event
     //     └─yieldByEventQuery()
     //       └─ GUARD NOW PREVENTS -> enqueue REDRAW *AND* sdlProcessEvents()
     //
@@ -563,11 +563,11 @@ static void yieldByEventQuery()
         // make use of it.
         //
         // Coalesced: at most one outstanding pulse until the demo consumes a
-        // REDRAW (see events_qread_continue). The IRIX window system likewise
+        // REDRAW (see sdl_events_qread_continue). The IRIX window system likewise
         // coalesced damage. Without this, a demo that blocks in qread and
         // handles one event per redraw (flight 1988's wait_for_input) queues
         // a 30Hz REDRAW backlog that keypresses have to wait behind.
-        if (sdl_devices_queued[REDRAW] && !redraw_pulse_outstanding)
+        if (sdl_events_device_queued(REDRAW) && !redraw_pulse_outstanding)
         {
             gl_event ev;
             ev.device = REDRAW;
@@ -580,24 +580,24 @@ static void yieldByEventQuery()
         // buffer before presenting (implemented in gl.c). This is the
         // safety-net present for demos that only poll the event queue
         // (cedit mid-drag); swapbuffers/gflush call the hook themselves.
-        // events_frame_complete() itself must NOT resolve — dopup presents
+        // sdl_events_frame_complete() itself must NOT resolve — dopup presents
         // its menu through there, and the menu has no CI backing.
         extern void gl_resolve_ci_if_needed(void);
         gl_resolve_ci_if_needed();
 
         // Pump events, redraw, and yield
-        events_frame_complete();
+        sdl_events_frame_complete();
     }
 }
 
 
 //
-// events_qread_block - one blocking-wait step for IRIS GL qread().
+// sdl_events_qread_block - one blocking-wait step for IRIS GL qread().
 //
 // Real IRIS GL qread() blocks until an event arrives (flight 3.4's
 // wait_for_input depends on it; buttonfly's event() documents the same
 // assumption). gl.c's qread calls this in a loop while the GL queue is
-// empty: pump + present via events_frame_complete(), then genuinely idle —
+// empty: pump + present via sdl_events_frame_complete(), then genuinely idle —
 // a hot spin between throttled yields starves the browser's input delivery
 // (observed as flight 3.4's startup wait wedging the page).
 //
@@ -605,12 +605,12 @@ static void yieldByEventQuery()
 // blocking would deadlock; qread then falls back to returning 0 (the old
 // non-blocking behavior).
 //
-int32_t events_qread_block(void)
+int32_t sdl_events_qread_block(void)
 {
     if (inSdlProcessEvents)
         return 0;
 
-    events_frame_complete();
+    sdl_events_frame_complete();
 #ifdef __EMSCRIPTEN__
     emscripten_sleep(10);
 #else
@@ -621,7 +621,7 @@ int32_t events_qread_block(void)
 
 // prefposition() passthrough: pin the framebuffer to the demo-requested size
 // (the display scales it to the window). See sdl_framebuffer.c fbFixedSize.
-void events_set_framebuffer_fixed_size(int32_t width, int32_t height)
+void sdl_events_set_framebuffer_fixed_size(int32_t width, int32_t height)
 {
     sdlSetFramebufferFixedSize(width, height);
 }
@@ -631,7 +631,7 @@ void events_set_framebuffer_fixed_size(int32_t width, int32_t height)
 //
 
 // QUERY: SDL mouse position at any time
-int32_t events_get_valuator(int32_t device)
+int32_t sdl_events_get_valuator(int32_t device)
 {
     yieldByEventQuery();
     switch (device)
@@ -768,7 +768,7 @@ int32_t sdl_keycode_to_gl(int32_t sdl_keycode)
     return 0;
 }
 
-Boolean events_get_button(int32_t button)
+Boolean sdl_events_get_button(int32_t button)
 {
     yieldByEventQuery();
 
@@ -802,12 +802,17 @@ Boolean events_get_button(int32_t button)
     }
 }
 
-void events_qdevice(int32_t device)
+void sdl_events_qdevice(int32_t device)
 {
     sdl_devices_queued[device] = device;
 }
 
-void events_unqdevice(int32_t device)
+Boolean sdl_events_device_queued(int32_t device)
+{
+    return sdl_devices_queued[device] != 0 || device == ESCKEY;
+}
+
+void sdl_events_unqdevice(int32_t device)
 {
     sdl_devices_queued[device] = 0;
 }
@@ -824,7 +829,7 @@ void enqueue_event(gl_event *e)
     }
 }
 
-uint32_t events_qread_start()
+uint32_t sdl_events_qread_start()
 {
     // This is called by qtest() and qread(), even when the GL-side queue is empty.
     // This is the hot spot where demos like twilight discover "no events"; a throttled
@@ -833,7 +838,7 @@ uint32_t events_qread_start()
     return sdl_input_queue_length;
 }
 
-int32_t events_qread_continue(int16_t *value)
+int32_t sdl_events_qread_continue(int16_t *value)
 {
     *value = sdl_input_queue[sdl_input_queue_head].val;
     int32_t device = sdl_input_queue[sdl_input_queue_head].device;
@@ -871,7 +876,7 @@ static void applyFramebufferConstraintChange(void)
 // keepaspect(): constrain the framebuffer to x:y. Before winopen this just
 // records the constraint (applied at window creation); afterwards it re-fits
 // the framebuffer immediately and tells GL + the demo, same as a resize.
-void events_keepaspect(int32_t x, int32_t y)
+void sdl_events_keepaspect(int32_t x, int32_t y)
 {
     sdlSetFramebufferAspect(x, y);
     applyFramebufferConstraintChange();
@@ -879,13 +884,13 @@ void events_keepaspect(int32_t x, int32_t y)
 
 // Demo compatibility quirk: lock the framebuffer to a fixed (classic) size;
 // the display scales it to the window
-void events_fix_framebuffer_size(int32_t width, int32_t height)
+void sdl_events_fix_framebuffer_size(int32_t width, int32_t height)
 {
     sdlSetFramebufferFixedSize(width, height);
     applyFramebufferConstraintChange();
 }
 
-int32_t events_winopen(char *title)
+int32_t sdl_events_winopen(char *title)
 {
     static int sdl_initialized = 0;
     if (!sdl_initialized) {
@@ -909,7 +914,7 @@ int32_t events_winopen(char *title)
     return 0;
 }
 
-void events_set_framebuffer(unsigned char* framebuffer)
+void sdl_events_set_framebuffer(unsigned char* framebuffer)
 {
     sdlSetFramebufferSourceMem(framebuffer);
 }
@@ -918,7 +923,7 @@ void events_set_framebuffer(unsigned char* framebuffer)
 // button = LEFTMOUSE, MIDDLEMOUSE, RIGHTMOUSE
 // val1 = MOUSEX
 // val2 = MOUSEY
-void events_tie(int32_t button, int32_t val1, int32_t val2)
+void sdl_events_tie(int32_t button, int32_t val1, int32_t val2)
 {
     sdl_tied_valuators[button][0] = val1;
     sdl_tied_valuators[button][1] = val2;
