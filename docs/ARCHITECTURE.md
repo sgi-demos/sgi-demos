@@ -7,7 +7,7 @@ For user-facing overview and build instructions, see [README.md](README.md).
 ## Goals
 
 1. **Source preservation.** Original SGI demo source should compile unaltered, or as closely as possible to the original. The emulator should adapt to the demo code, not the other way round.
-2. **Wide accessibility.** A browser link is the lowest possible barrier to experiencing this software. There is no requirement for the user to install something, or for the developer to be running a particular native platform.
+2. **Wide accessibility.** A browser link is the lowest possible barrier to experiencing this software. There is no requirement for the user to install anything, nor for the developer to be working on a particular native platform.
 3. **Cross-platform parity.** Native (macOS, Linux, Windows) and web (Emscripten) builds share the same code path as much as possible.
 4. **Faithful behavior, not top performance.** Modern hardware is so much faster than an SGI workstation that performance is not currently the binding constraint. Faithful pacing (30Hz) and visual fidelity are the driving factors.
 
@@ -105,11 +105,11 @@ Three solutions were tried/considered:
 
 1. **Restructure the demo's loop into callbacks** This was the project's original approach, allowing the host (browser) to drive the demo.  However, due to preprocessor macro trickery required to split the demo into initialization and event loops, it was messy, fragile, and cost some original source fidelity where macros couldn't help.
 
-2. **Run the demo in its own thread** (Web Worker via pthreads). This would replace macro complexity with the synchronization complexity of any threaded codebase. It would also require `SharedArrayBuffer`, which requires COOP/COEP HTTP headers, which requires service-worker workarounds to run on GitHub Pages or else a self-hosted domain.
+2. **Run the demo in its own thread** (Web Worker via pthreads). This would replace #ifdef complexity with the synchronization complexity of a threaded codebase. It would also require `SharedArrayBuffer`, which requires COOP/COEP HTTP headers, which requires service-worker workarounds to run on GitHub Pages or else a self-hosted domain.
 
 3. **Use Emscripten Asyncify (emscripten_sleep)**  In this approach, the demo's `while(1)` runs to a yield point, Asyncify saves the WebAssembly stack, control returns to the browser event loop, and on the next browser tick (or after sufficient sleep to not exceed target FPS) the stack is restored and execution resumes exactly where it left off. From the demo's perspective nothing happened. On native, we simply SDL_Delay() as necessary to run no faster than target FPS.
 
-The architecture had been option 1.  Option 2 was then considered, but traded one kind of complexity for another.  Option 3 was chosen as it is the best of options 1 and 2: single threaded simplicity as with option 1, no macro trickery as with option 2.  Now the original source runs more closely as-is, no special preprocessor nor web tricks are needed (COOP/COEP), native and web share generally share one code path, and the runtime cost of asyncify should be negligible with SGI-era code running on modern devices.
+The architecture had been option 1.  Option 2 was then considered, but traded one kind of complexity for another.  Option 3 was chosen as it is the best of options 1 and 2: single threaded simplicity as with option 1, no macro trickery as with option 2.  Now the original source runs more closely as-is, no special preprocessor nor web thread tricks are needed (COOP/COEP), and native and web share one code path.  As well, the runtime cost of asyncify should be negligible with SGI-era code running on modern devices.
 
 ### Central yield point
 
@@ -152,7 +152,7 @@ The SDL-side queue (`sdl_input_queue` in `sdl_events.c`) buffers translated SDL 
 
 ### REDRAW synthesis
 
-IRIS GL demos that handle window events expect the window system to inject `REDRAW` events when the window needs repainting. On SGI workstations these came from the X server / 4Sight. In our environment there is no external window system poking the demo, so the SDL layer synthesizes them when the demo has subscribed to `REDRAW` via `qdevice(REDRAW)`. It does this periodically (at most once per frame interval) during GL event queries.  This enables demos like `twilight` to function, which only repaint in response to `REDRAW` events and don't utilize swapbuffers() or gflush() to signal the end of a frame.
+IRIS GL demos that handle window events expect the window system to inject `REDRAW` events when the window needs repainting. On SGI workstations these came from NeWS / 4Sight / X server window managers. In this environment there is no external window system poking the demo, so the SDL layer synthesizes them when the demo has subscribed to `REDRAW` via `qdevice(REDRAW)`. It does this periodically (at most once per frame interval) during GL event queries.  This enables demos like `twilight` to function, which only repaint in response to `REDRAW` events and don't utilize swapbuffers() or gflush() to signal the end of a frame.
 
 ### Event pump integrity
 
@@ -172,7 +172,7 @@ EM_PRELOAD=--preload-file canstick.bin --preload-file doughnut.bin --preload-fil
 include ../../makefiles/make_demo.mk
 ```
 
-`makefiles/make_demo.mk` builds both a native binary (`bin-$(OS)-$(HW)/$(APPNAME)`) and an Emscripten target (`web/$(APPNAME).html` + `.js` + `.wasm`). The shared logic, including platform detection, SDL/GLES paths, and the Asyncify flags, lives in `makefiles/platform.mk`.
+`makefiles/make_demo.mk` builds both a native binary (`bin-$(OS)-$(HW)/$(APPNAME)`) and an Emscripten target (`$(APPNAME)/web/index.html` + `$(APPNAME).js` + `$(APPNAME).wasm`). The shared build logic, including platform detection, SDL/GLES paths, and the Asyncify flags, lives in `makefiles/platform.mk`.
 
 Emscripten flags to enable demos to yield to the browser:
 
@@ -180,7 +180,7 @@ Emscripten flags to enable demos to yield to the browser:
 EM_ASYNCIFY = -sASYNCIFY -sASYNCIFY_STACK_SIZE=65536
 ```
 
-`-sASYNCIFY` instruments the call chain so `emscripten_sleep` can pause and resume the WebAssembly stack. `ASYNCIFY_STACK_SIZE=65536` allocates 64KB to hold the saved stack during a yield — probably generous enough for the demos, but can be expanded further if necessary. Asyncify increases WASM code size, but for 1980s-90s code running on 2026 hardware, this cost should be negligible.
+`-sASYNCIFY` instruments the call chain so `emscripten_sleep` can pause and resume the WebAssembly stack. `ASYNCIFY_STACK_SIZE=65536` allocates 64KB to hold the saved stack during a yield — probably generous enough for the demos, but can be expanded further if necessary. Asyncify increases WASM code size, but for 1980s-90s code running on modern hardware, this cost should be negligible.
 
 ## Demo source modifications
 
@@ -188,9 +188,7 @@ Per the preservation goal, original demo source compiles unmodified for the most
 
 ## Future directions
 
-This project now has a relatively clean foundation for building out further in these main directions:
-
-- **OpenGLES implementation of IRIS GL rendering** - Add a new `ogl_rasterizer.c` implementation of `rasterizer.h`, supplanting `reference_rasterizer.c` once it is fully working.  Use [IGL](https://github.com/sgi-demos/igl) as a starting point for this implementation.
+This project now has a solid foundation for building out further in these main directions:
 
 - **Complete the IrisGL demo set** - Highlights here include the last IrisGL version of `flight`, and `gview` (which is making progress in the reversing process - see `demos\gview`). `electropaint` is in, running headless of its panel-library control panels (see `demos/electropaint/README.md`); a fuller port would bring the panels back.
 
