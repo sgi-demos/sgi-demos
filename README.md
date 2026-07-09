@@ -16,8 +16,8 @@ See the [architecture doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs
 - [Electropaint 1989](https://sgi-demos.github.io/sgi-demos/demos/ep-1989/web/)  - David Tristram, 1989; IRIS GL, Panel Library 9.6; driven by Tristram's authentic default script; keyboard toggles
 - [Electropaint 1994 (OpenGL, decompiled)](https://sgi-demos.github.io/sgi-demos/demos/ep-1994-ogl-decomp/web/) - 1994, IRIX screensaver decompiled by drvink; smooth HLS color + the famous default script
 - [Electropaint 1994 (OpenGL, reversed)](https://sgi-demos.github.io/sgi-demos/demos/ep-1994-ogl-reversed/web/) 1994, reversed to somewhat-readable code and restored IRIS GL version's 4-fold mirrors + 30° camera  — M toggles the original 1994 look
-- [Flight 1988](https://sgi-demos.github.io/sgi-demos/demos/flight-1988/web/) - Gary Tarolli; colormap-mode original, nearly original source (25 diff lines total) at the authentic 1280×1024; splash, plane menu, takeoff, crashes, and stable night mode all work; no network play
-- [Flight 1994](https://sgi-demos.github.io/sgi-demos/demos/flight-1994/web/) Gary Tarolli & Rob Mace flight version 3.4; the definitive IRIX release: RGB, lighting, 8 planes, full-width 3D horizon, instrument panel, HUD, upgraded plane models; no texture/fog/sound/network yet
+- [Flight 1988](https://sgi-demos.github.io/sgi-demos/demos/flight-1988/web/) - Gary Tarolli, 1988; colormap-mode original, nearly original source (25 diff lines total) at the authentic 1280×1024; splash, plane menu, takeoff, crashes, and stable night mode all work; no network play
+- [Flight 1994](https://sgi-demos.github.io/sgi-demos/demos/flight-1994/web/) Rob Mace, 1994, version 3.4; the definitive IRIX release: RGB, lighting, 8 planes, full-width 3D horizon, instrument panel, HUD, upgraded plane models; no texture/fog/sound/network yet
 - [Gview (Barcelona)](https://sgi-demos.github.io/sgi-demos/demos/gview/web/) - Late 1980s; reversed from IRIX 3 binary: fly-through and turntable modes work; no materials, movie loops, or binary model cache; Performer/Inventor pre-cursor perhaps?
 - [Ideas](https://sgi-demos.github.io/sgi-demos/demos/ideas/web/)
 - [Insect](https://sgi-demos.github.io/sgi-demos/demos/insect/web/) Thant Tessman, mid-1980s; originally for the IRIS 2400
@@ -35,7 +35,9 @@ See the [architecture doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs
 - Performer Town, Matterhorn, Yosemite
 
 
-## Build instructions
+## Build
+
+[Latest smoke test](https://sgi-demos.github.io/sgi-demos/tests/smoke/report/index.html)
 
 ### Mac
 
