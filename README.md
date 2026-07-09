@@ -5,7 +5,7 @@ This is the original SGI demo source code, compiled for the web using Emscripten
 
 Each demo is a separate web page, with its own Javascript + WASM compiled by Emscripten from the original C/C++ source.  Native Linux, Mac, and Windows builds are also available. Minimal modifications have been made to the original source, only what is necessary to build them 30+ years later for modern hardware and the browser.
 
-See the [architecture doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs/ARCHITECTURE.md) for more implementation details.
+See the [architecture doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs/ARCHITECTURE.md) for more implementation details, and the latest [smoke test](https://sgi-demos.github.io/sgi-demos/tests/smoke/report/index.html) for build status.
 
 ## Working demos
 - [Arena](https://sgi-demos.github.io/sgi-demos/demos/arena/web/) - no network play yet
@@ -36,8 +36,6 @@ See the [architecture doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs
 
 
 ## Build
-
-[Latest smoke test](https://sgi-demos.github.io/sgi-demos/tests/smoke/report/index.html)
 
 ### Mac
 
