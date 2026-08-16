@@ -194,6 +194,6 @@ This project now has a solid foundation for building out further in these main d
 
 - **Add OpenGL demos** - This will require reworking some project structure since the project is currently IrisGL centric.  Use [GL4ES](https://github.com/sgi-demos/gl4es) and/or something similar, to translate old immediate-mode OpenGL calls to modern retained-mode OpenGL(ES2).
 
-- **Add GLUT demos** - GLUT does its own event handling, and Emscripten has a GLUT implementation already. However, it might be interesting to see if a more robust approach would be to provide an OpenGLES2/SDL2-based port of [FreeGLUT](https://github.com/freeglut/freeglut) and lean on Emscripten's SDL2 implementation and OpenGLES2-to-WebGL transpiling.
+- **Add GLUT demos** - GLUT does its own event handling, and Emscripten has a GLUT implementation already. However, it might be interesting to see if a more robust approach would be to provide an OpenGLES2/SDL2-based port of [FreeGLUT](https://github.com/freeglut/freeglut) and lean on Emscripten's SDL2 implementation and OpenGLES2-to-WebGL cross-compilation.
 
 - **Add Performer and Inventor demos** - [Inventor](https://github.com/sgi-demos/sgi-inventor) already has many open source ports, and [Performer](https://github.com/sgi-demos/sgi-performer) could potentially be reversed via Ghidra and AI tools (Performer file format loader code is already open source). These scene-graph APIs sit on top of OpenGL; so the OpenGL rendering layer could be reused.
