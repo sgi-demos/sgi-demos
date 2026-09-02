@@ -1,4 +1,4 @@
-.PHONY: demos libs clean smoke smoke-baseline
+.PHONY: demos libs clean smoke smoke-baseline thumbs
 
 DEMOS_DIR = demos
 DEMOS = arena bounce buttonfly cedit ep-1988 ep-1989 ep-1994-ogl-decomp ep-1994-ogl-reversed flight-1988 flight-1994 gview ideas insect jello logo newave twilight
@@ -119,3 +119,9 @@ smoke: $(SMOKE_DIR)/node_modules
 # side-by-side eyeball view; not part of the pass/fail gate).
 smoke-baseline: $(SMOKE_DIR)/node_modules
 	cd $(SMOKE_DIR) && node smoke.mjs --repo ../.. --update-baseline
+
+# Browse-page thumbnails: capture every demo's web build into media/<demo>.png
+# (512x384) for sgi-demos.github.io/browse/. Recipes per demo (settle time,
+# keys/mouse to get past splash screens) live in scripts/thumbs.json.
+thumbs: $(SMOKE_DIR)/node_modules
+	node scripts/thumbs.mjs

@@ -1,0 +1,33 @@
+{
+  "//": "Thumbnail capture config for scripts/thumbs.mjs. One entry per demo; 'name' is both demos/<name>/web/ and the output media/<name>.png. Optional per demo: 'settleMs' (wait after the .wasm loads before capturing; default below), 'rast' (?rast= mode, default gles2), 'arg' (&arg=...), and 'steps' — a list run after the settle wait to get the demo into a photogenic state: {\"key\":\"g\"} presses a key (Playwright key name, optional \"repeat\"), {\"wait\":ms} pauses, {\"rightClick\":[x,y]} opens a pup menu at x,y, {\"pick\":[mx,my,k]} clicks item k of the pup menu whose top-left is at mx,my, {\"drag\":[x1,y1,x2,y2]} left-drags. The capture is the whole 1024x768 viewport, box-filtered down 2x to 512x384.",
+  "viewport": { "width": 1024, "height": 768 },
+  "settleMs": 3000,
+  "demos": [
+    { "name": "arena", "settleMs": 8000 },
+    { "name": "bounce" },
+    { "name": "buttonfly" },
+    { "name": "cedit" },
+    { "name": "ep-1988" },
+    { "name": "ep-1989" },
+    { "name": "ep-1994-ogl-decomp", "settleMs": 10000 },
+    { "name": "ep-1994-ogl-reversed", "settleMs": 25000 },
+    { "name": "flight-1988", "settleMs": 5000,
+      "steps": [ { "key": "g" }, { "wait": 2000 }, { "key": "5" }, { "wait": 15000 } ] },
+    { "name": "flight-1994", "settleMs": 6000,
+      "//": "g dismisses the splash, 5 picks the F-18, then set the time of day to noon (it starts at the real local time)",
+      "steps": [ { "key": "g" }, { "wait": 2000 }, { "key": "5" }, { "wait": 6000 },
+                 { "timeOfDay": { "target": 720, "forward": "n", "back": "N", "step": 5 } }, { "wait": 4000 } ] },
+    { "name": "gview" },
+    { "name": "ideas", "settleMs": 8000 },
+    { "name": "insect" },
+    { "name": "jello" },
+    { "name": "logo" },
+    { "name": "newave", "settleMs": 4000,
+      "//": "display menu -> gouraud shaded; the wave starts flat, so edit (pull a mesh point up), then go",
+      "steps": [ { "rightClick": [350, 250] }, { "pick": [350, 250, 3] }, { "pick": [390, 361, 3] }, { "wait": 1200 },
+                 { "rightClick": [350, 250] }, { "pick": [350, 250, 0] }, { "wait": 600 },
+                 { "drag": [512, 400, 512, 200] }, { "wait": 300 },
+                 { "rightClick": [200, 550] }, { "pick": [200, 550, 1] }, { "wait": 1500 } ] },
+    { "name": "twilight" }
+  ]
+}

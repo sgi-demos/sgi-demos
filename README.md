@@ -91,7 +91,6 @@ make
   -  Overlay text in lower corner: Name, author, year, code link, provenance (IRIX version, dev toolbox, demo cd, etc.)
   - Brief description/history/context for each demo - Obtain descriptions from .Info slide files
   - Link to demo man page
-- Add all-demos-in-one page thumbnail screenshot gallery page
 - Add 'inspect demo' mode to pause, orbit, zoom, pan, fly through demo scene (as a hidden override to the demo's own controls)
 - Add popup/overlay help to show available key/mouse inputs
 - Provide virtual mouse and keyboard for touch devices:
