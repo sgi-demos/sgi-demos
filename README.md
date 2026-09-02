@@ -25,6 +25,7 @@ See the [architecture doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs
 - [Logo](https://sgi-demos.github.io/sgi-demos/demos/logo/web/) Thant Tessman, 1987
 - [Newave](https://sgi-demos.github.io/sgi-demos/demos/newave/web/) - Late 1980s \, originally for the 4D/70G; note the wave starts flat: right-click, edit, then go
 - [Twilight](https://sgi-demos.github.io/sgi-demos/demos/twilight/web/) - Howard Look, 1991
+- [Performer Town](https://sgi-demos.github.io/sgi-performer/web/apps/webfly/web/) - WIP; SGI's `perfly` compiled unmodified over an OpenSceneGraph-based Performer shim, from the [sgi-performer](https://github.com/sgi-demos/sgi-performer) repo
 
 
 ## Demos coming next
@@ -32,7 +33,7 @@ See the [architecture doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs
 - Aux/Tk OpenGL demos
 - GLUT OpenGL demos
 - Inventor Slotcars, Maze
-- Performer Town, Matterhorn, Yosemite
+- Performer Matterhorn, Yosemite
 
 
 ## Build
