@@ -28,6 +28,10 @@ Everything else the old port changed at the source level is handled by the runti
 - **REDRAW pulses are coalesced** (at most one outstanding): the events layer pulses REDRAW to waiting demos in lieu of a window system, and flight handles one event per redraw, so an uncoalesced 30 Hz backlog buried keypresses seconds deep.
 - **`prefposition()` is honored as a fixed-size framebuffer**: flight hard-codes its layout to the classic screen and never queries the window size, so it gets exactly the framebuffer it asks for, scaled to the canvas. With `XMAXSCREEN`/`YMAXSCREEN` corrected to the real IRIS 4D 1280×1024 (they were an Alice4-era 800×480 — `meters.c`'s `/1024.0` scale factors give it away), flight renders at its designed resolution.
 
+## Earlier versions
+
+A `flight` version 1.0 executable for the Motorola 68k IRIS 1400, contributed uuencoded by @ara4n (issue #4), was kept under `versions/` until 2026-09-05, when it was removed from the repository along with the other SGI executables (see [docs/COPYRIGHT.md](../../docs/COPYRIGHT.md)). It is kept offline for a future reconstruction; SHA-256 of the decoded binary (176,660 bytes): a0c5d96d634d863f072213e120f3ea64e481fa114a723594c59e3912fb9a9c49.
+
 ## Status
 
 Native + web build; splash → plane menu → takeoff → crash messages all work with the authentic flow (the old port skipped the splash and plane selection entirely and started as a hardcoded 747, with a leftover "extra high tower for debugging" eye offset). The old port's other README issues are fixed:

@@ -1,0 +1,17 @@
+sgi-demos
+Copyright 2023-2026 the sgi-demos contributors
+
+The Apache License, Version 2.0 in the LICENSE file covers only the work authored by the sgi-demos contributors and the material forked from the Alice 4 project (Apache License 2.0, Lawrence Kesteloot and contributors): the GLES2 rasterizer, the SDL2 event and framebuffer layers, the software rasterizer fork, the shim headers, the Electropaint panel stub and script engine, the port harnesses, build files, tests, scripts, thumbnails, and documentation.
+
+It does NOT cover the third-party material in this repository, which retains its own terms and is used under them or under fair use. In particular:
+
+- The original Silicon Graphics, Inc. demo programs, libraries, headers, and data under demos/, libs/libdemo, libs/portlib, include/gl, and include/demo_include are copyright Silicon Graphics, Inc. (now Hewlett Packard Enterprise). twilight, flight-1994, and flight-1994/libgobj carry SGI's permissive license (see the notices in those files). The others carry no license grant; see docs/COPYRIGHT.md for their provenance and the basis for their use here.
+- Electropaint (demos/ep-*) is copyright David A. Tristram / Tristram Visual and is used under the notices in those files: the 1988 version's public-domain-with-conditions notice, the 1989 version's GPL v2-or-later header as distributed by IGL, and the 1994 decompilation's permission from the author (noncommercial; modifications to be shared with him). Electropaint is a registered trademark of Tristram Visual. The non-Electropaint files of the ElectroPortis decompilation are MIT, copyright Mark Laws and Brendan Shanks.
+- libs/libgles contains Khronos Group headers (MIT and Apache 2.0) and prebuilt ANGLE libraries (BSD-3-Clause, The ANGLE Project Authors); see libs/libgles/LICENSE-ANGLE.
+- libs/libgl/helvBO14_bdf.c is generated from the X.Org Adobe Helvetica BDF font, copyright Adobe Systems Incorporated and Digital Equipment Corporation, under the permissive notice in scripts/fonts/helvBO14.bdf.
+
+No SGI library implementation code (libgl, libpf, or any IRIX library) is included; the IRIS GL API is reimplemented here. All original copyright and permission notices in third-party files must be retained.
+
+This project is not affiliated with or endorsed by Hewlett Packard Enterprise, Silicon Graphics, or Tristram Visual. SGI, IRIS, IRIX, OpenGL Performer, and the SGI cube logo are trademarks of their owners and are used only to identify the works being preserved. Rights holders with concerns can open an issue at https://github.com/sgi-demos/sgi-demos/issues.
+
+Full provenance and fair-use record: docs/COPYRIGHT.md

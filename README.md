@@ -100,6 +100,10 @@ make
   - On always for touch devices
   - On/off for mouse/keyboard devices, as hints
 
+## License
+
+The sgi-demos code (the IRIS GL implementation, rasterizers, SDL layers, shims, build files, tests, and docs) is Apache License 2.0; see [LICENSE](LICENSE) and [NOTICE](NOTICE). The original SGI demos, headers, and data, and Electropaint, are not covered by that license and retain their original authors' terms; several carry SGI's or the author's permissive notice, the rest are used under fair use. Every original notice is preserved. The full provenance and fair-use record for every demo and library is in [docs/COPYRIGHT.md](docs/COPYRIGHT.md). This project is not affiliated with or endorsed by Hewlett Packard Enterprise, Silicon Graphics, or Tristram Visual.
+
 ## Credits
 - Everyone who worked at [SGI](https://en.wikipedia.org/wiki/Silicon_Graphics), for the eye candy and the baller computers.
 - The [Alice 4 folks](https://lkesteloot.github.io/alice/alice4/), for the inspiration and the GL implementation.
