@@ -194,6 +194,7 @@ Three points that need additional details:
 | Authors Guild v. Google, 804 F.3d 202 (2d Cir. 2015) | Whole-work copying is not fatal when the purpose needs it | the third factor: a demo cannot run in part |
 | Micro Star v. FormGen, 154 F.3d 1107 (9th Cir. 1998) | Game level data is a copyrightable work | why the data files are inventoried as works and share the code's analysis |
 | Hachette v. Internet Archive, 115 F.4th 163 (2d Cir. 2024) | Preservation framing does not rescue wholesale copying of works with a live market | the fourth factor and its limit; nothing here has a market; the manuals are archived separately in sgi-docs repo |
+| Code of Best Practices in Fair Use for Software Preservation (Association of Research Libraries and the Software Preservation Network, 2018) | Not a case but the field's consensus, written with copyright scholars, that preserving legacy software, migrating it to run on current systems, and providing access for study is fair use when done for that purpose, without commercial substitution, and with the work documented | the whole project: reimplementation of the platform, minimal source changes, attribution and notices kept, and this record are the practices it describes |
 
 - The DMCA's anti-circumvention provision (17 U.S.C. §1201), where most emulation disputes are fought, does not apply: no SGI medium used has encryption or access control.
 - These works stay in copyright until 2079 or later and this project respects that.
