@@ -12,6 +12,17 @@ Imported unmodified (byte-identical to the archives):
 - **`defs/hills.grid`, `defs/hills.t`** (terrain grid + texture) — Developer Toolbox 6.1 tree (absent from the Linux Toolbox mirror). The Developer Toolbox sources carry SGI's proprietary legend rather than the permissive license, but these two files are data and carry no notice; they are the same terrain the permissively licensed flight loads, and are used here on the same fair-use basis as the demo-tape data (see [docs/COPYRIGHT.md](../../docs/COPYRIGHT.md) section 3.6). If a copy in a permissively licensed tree turns up, it should replace these.
 - **`libgobj/`** — the object-file library flight 3.4 loads its `defs/*.d` models with (`objext.c` → `readobj()` etc.), from the Linux Toolbox scrape, also under the permissive license. SGI built it as a sibling `../libgobj/libgobj.a`.
 
+Where 3.4 sits in the flight lineage, from the version catalog of every known release:
+
+| Version | Year | Shipped in | Source |
+|---|---|---|---|
+| 1.0 | 1984 | IRIS 1400 (68k) | binary only |
+| 2.4 | 1988 | IRIS 4D demo tape (CLOVER1); Developer Toolbox 2.0 (1991, WINGMAN revision) | source, proprietary legend (flight-1988) |
+| 3.3 | 1991 | Developer Toolbox 2.0 (CLOVER2) | source, proprietary legend |
+| 3.4 | 1994 | Developer Toolbox 4.0, 4.1, 4.2 (1994), 6.1 (1996), and the 1997 release; revisions 1.1 and 1.31 differ only in copyright wording | source, proprietary legend |
+| 3.4 | 1994 | Linux Developer Toolbox (2003) | source, SGI permissive license (this demo) |
+| 3.4.1 | 1997 | Windows, Cosmo OpenGL | binary only |
+
 `Makefile.orig` is SGI's smake file: 27 CFILES, `-DAUDIO`, `-I../libgobj`, links `libgobj.a -lgl -lX11 -lbsd -lm -laudio`.
 
 ## Port status
