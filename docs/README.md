@@ -2,7 +2,8 @@
 
 - [ARCHITECTURE.md](ARCHITECTURE.md): how the original IRIS GL demo source runs on modern hardware and in the browser.
 - [IRIS_GL_API.md](IRIS_GL_API.md): the IRIS GL API surface, as a single text file generated from SGI's Technical Reference (see below).
-- [COPYRIGHT.md](COPYRIGHT.md): provenance, licensing, and fair-use record for every demo and library, and the list of clean-up tasks.
+- [COPYRIGHT.md](COPYRIGHT.md): provenance, licensing, and fair-use record for every demo and library.
+- [COPYRIGHT_TODO.md](COPYRIGHT_TODO.md): open items from that record.
 
 ## IRIS GL manuals
 

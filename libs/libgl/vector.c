@@ -1,3 +1,8 @@
+// Forked from the Alice 4 project's libgl (https://github.com/lkesteloot/alice),
+// Copyright Lawrence Kesteloot and contributors, Apache License 2.0.
+// Modified by the sgi-demos project (https://github.com/sgi-demos/sgi-demos),
+// Copyright 2023-2026 the sgi-demos contributors, Apache License 2.0.
+// See NOTICE at the repository root.
 #include "vector.h"
 
 const matrix4x4f identity_4x4f = {

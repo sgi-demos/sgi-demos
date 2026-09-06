@@ -6,10 +6,10 @@ It is a separate demo from [flight-1988](../flight-1988), the 1988–89 colormap
 
 ## Provenance
 
-Imported unmodified (byte-identical to the archive; see `~/Downloads/sgi-flight-versions/CATALOG.md` for the full version catalog):
+Imported unmodified (byte-identical to the archives):
 
 - **Sources, `defs/` data, `COPYRIGHT`, `README.orig`, `Makefile.orig`** — SGI Linux Toolbox, March 2003 (`toolbox.sgi.com/linux/src/demos/GL/flight`). This copy carries SGI's **permissive free-use license** ("Permission to use, copy, modify, and distribute this software for any purpose and without fee is hereby granted…"); the IRIX Developer Toolbox trees of the same code are marked proprietary. The model/sound data is byte-identical to the Developer Toolbox 6.1 copies.
-- **`defs/hills.grid`, `defs/hills.t`** (terrain grid + texture) — Developer Toolbox 6.1 tree (absent from the Linux Toolbox mirror).
+- **`defs/hills.grid`, `defs/hills.t`** (terrain grid + texture) — Developer Toolbox 6.1 tree (absent from the Linux Toolbox mirror). The Developer Toolbox sources carry SGI's proprietary legend rather than the permissive license, but these two files are data and carry no notice; they are the same terrain the permissively licensed flight loads, and are used here on the same fair-use basis as the demo-tape data (see [docs/COPYRIGHT.md](../../docs/COPYRIGHT.md) section 3.6). If a copy in a permissively licensed tree turns up, it should replace these.
 - **`libgobj/`** — the object-file library flight 3.4 loads its `defs/*.d` models with (`objext.c` → `readobj()` etc.), from the Linux Toolbox scrape, also under the permissive license. SGI built it as a sibling `../libgobj/libgobj.a`.
 
 `Makefile.orig` is SGI's smake file: 27 CFILES, `-DAUDIO`, `-I../libgobj`, links `libgobj.a -lgl -lX11 -lbsd -lm -laudio`.

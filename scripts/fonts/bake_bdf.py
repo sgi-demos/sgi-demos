@@ -118,7 +118,7 @@ def pack_bitmap_bytes(g):
     return out, rowbytes
 
 
-def emit(name, ascent, descent, glyphs, src_filename):
+def emit(name, ascent, descent, glyphs, src_filename, src_path=None):
     # Build the packed bitmap blob and per-glyph offsets into it.
     blob = []
     recs = []  # (encoding, w, h, xoff, yoff, advance, rowbytes, bitmap_offset)
@@ -174,6 +174,15 @@ def emit(name, ascent, descent, glyphs, src_filename):
     c.append(f"// Auto-generated from {src_filename} by bake_bdf.py.")
     c.append("// Committed as static source data (not a build product);")
     c.append("// regenerate only if the source BDF changes.")
+    # Carry the BDF's COMMENT block (copyright and permission notice) into the
+    # generated file so the notice travels with the data.
+    if src_path:
+        with open(src_path) as bdf:
+            for line in bdf:
+                if line.startswith("STARTPROPERTIES"):
+                    break
+                if line.startswith("COMMENT"):
+                    c.append("// " + line[len("COMMENT"):].strip())
     c.append(f'#include "{name}.h"')
     c.append("")
     c.append(f"static const uint8_t {name}_blob[] = {{")
@@ -220,7 +229,7 @@ def main():
         print(f"error: no glyphs in range {args.first}..{args.last}", file=sys.stderr)
         return 1
 
-    header, body = emit(name, ascent, descent, glyphs, src_filename)
+    header, body = emit(name, ascent, descent, glyphs, src_filename, args.input)
     open(os.path.join(outdir, f"{name}.h"), "w").write(header)
     open(os.path.join(outdir, f"{name}.c"), "w").write(body)
 

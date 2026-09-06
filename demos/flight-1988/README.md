@@ -30,7 +30,7 @@ Everything else the old port changed at the source level is handled by the runti
 
 ## Earlier versions
 
-A `flight` version 1.0 executable for the Motorola 68k IRIS 1400, contributed uuencoded by @ara4n (issue #4), was kept under `versions/` until 2026-09-05, when it was removed from the repository along with the other SGI executables (see [docs/COPYRIGHT.md](../../docs/COPYRIGHT.md)). It is kept offline for a future reconstruction; SHA-256 of the decoded binary (176,660 bytes): a0c5d96d634d863f072213e120f3ea64e481fa114a723594c59e3912fb9a9c49.
+A `flight` version 1.0 executable for the Motorola 68k IRIS 1400, contributed uuencoded by @ara4n (issue #4), was kept under `versions/` until 2026-09-05, when it was removed from the repository along with the other SGI executables (see [docs/COPYRIGHT.md](../../docs/COPYRIGHT.md)). It is kept offline for a future reconstruction; its hash in the [source archives table](../../docs/COPYRIGHT.md#8-source-archives).
 
 ## Status
 

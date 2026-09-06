@@ -1,0 +1,7 @@
+# portlib
+
+Paul Haeberli's port library for the IRIS window manager tools (1984 to 1985): color-map editing (colormod.c, gamma.c, getset.c, getapixel.c), a font reader and writer (fontlib.c), rectangle and area utilities (rectlib.c), turtle graphics (turtle.c), and the small helpers ipc.c, parse.c, percent.c, redraw.c, and subview.c. cedit and sunflower are built on it.
+
+## Provenance
+
+All twelve source files are byte-identical to `mextools/portlib` in the gifts package (`/usr/people/gifts/mextools`) that SGI installed with GL2-W3.6, its May 1989 system release for the IRIS 2400/3000 series, archived at bitsavers as [gl2-w3.6+options.tar.gz](https://bitsavers.org/bits/SGI/iris/gl2-w3.6+options.tar.gz) (Standard System (usr) image; hashes in the [source archives table](../../docs/COPYRIGHT.md#8-source-archives)). SGI installed gifts as source on every IRIS 2400/3000; its README tells the customer to "look at all the source in this whole tree and try to figure out how it works." fontlib.c and rectlib.c also appear on the IRIS demo tape as lib/libfont and lib/librect. The files carry only their author lines, no copyright or license notice; the mextools directory they came from has a [Notice](Notice) file with SGI's 1986 "unpublished proprietary" legend, kept here unchanged. They are used here under fair use as part of a noncommercial preservation port; see [docs/COPYRIGHT.md](../../docs/COPYRIGHT.md) section 3.2. The author lines are retained. The three Makefiles are SGI's originals.
