@@ -8,7 +8,7 @@
  *		 MS 258-5
  *		 Moffett Field, CA  94035
  *		 415-694-4404
- *		 dat at orville.nas.nasa.gov
+ *		 dat@orville.nas.nasa.gov
  */
 #ifndef PNL_EDITOR_PARSING
 #ifndef PNL_EXTERN

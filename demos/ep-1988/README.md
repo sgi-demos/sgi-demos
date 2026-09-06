@@ -1,6 +1,6 @@
 # Electropaint (1988)
 
-The **earliest** known Electropaint, from **Panel Library v7**, which David Tristram posted to `comp.sys.sgi` on 18 August 1988 while at NASA Ames. Source recovered from that Usenet posting — see [../ep-1989/versions/](../ep-1989/versions/README.md) for provenance and the full v7 distribution.
+The **earliest** known Electropaint, from **Panel Library v7**, which David Tristram posted to `comp.sys.sgi` on 18 August 1988 while at NASA Ames. Source recovered from that Usenet posting, the six-part "panel" shar in the comp.sys.sgi August 1988 archive mirrored by nycbug (Message-ID 8808182120.AA25292@orville.nas.nasa.gov); ep.c, panel.h, colormod.c, and fade.c are byte-identical to it, except that the mirror's "@" to " at " munging of Tristram's address in the notices has been reversed. Hash in the [source archives table](../../docs/COPYRIGHT.md#8-source-archives). Every file carries Tristram's notice: "this software is in the public domain, it may not be resold or relicensed. Do not remove this notice." The notice is retained and the files are neither resold nor relicensed; see [docs/COPYRIGHT.md](../../docs/COPYRIGHT.md) section 3.
 
 This is a companion to the [ep-1989](../ep-1989) demo (the later igl 0.1.8 version). Run both side by side to see how the demo changed.
 
