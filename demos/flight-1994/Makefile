@@ -10,8 +10,8 @@ DEMO_EXCLUDE_SRC=aifflib.c
 # -DHZ=100: IRIX <sys/param.h> ticks/sec for times() math (matches
 #   _SC_CLK_TCK on macOS/Linux and Emscripten's musl)
 # -Dregister=: IRIX cc allowed &register-var; modern C90 doesn't
-# -DM_PI: emscripten's strict-c90 math.h hides it
-# -D_GNU_SOURCE: emscripten's musl hides struct ip_mreq/caddr_t (udpbrdcst.c) without it
+# -D_GNU_SOURCE: emscripten's musl hides struct ip_mreq/caddr_t (udpbrdcst.c)
+#   and M_PI under strict c90 without it
 # -include strings.h + vintage_io.h: real prototypes for bzero/bcopy/lseek —
 #   the K&R implicit declarations trap wasm's call-signature checking
 # -w: silence warnings on this frozen vintage source — all verified-benign
@@ -20,7 +20,7 @@ DEMO_EXCLUDE_SRC=aifflib.c
 #   difference via (int) casts in comm.c, feedback-stub buffer type in
 #   libgobj cull(), and SGI's own "&d" printf typo in radar.c's unreached
 #   fatal path)
-DEMO_CFLAGS=-I. -Ilibgobj -DNO_MS -DHZ=100 -Dregister= -DM_PI=3.14159265358979323846 -D_GNU_SOURCE -include strings.h -include vintage_io.h -w
+DEMO_CFLAGS=-I. -Ilibgobj -DNO_MS -DHZ=100 -Dregister= -D_GNU_SOURCE -include strings.h -include vintage_io.h -w
 # mount defs/ at the IRIX default data path so no -D argument is needed
 EM_PRELOAD=--preload-file defs@/usr/demos/data/flight
 include ../../makefiles/make_demo.mk
