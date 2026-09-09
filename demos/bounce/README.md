@@ -1,6 +1,6 @@
 # Bounce
 
-SGI, late 1980s. Three lit, shaded balls bouncing inside a wire-grid room, with a menu of alternative object files (`*.bin`: martini glass, doughnut, VW, X-29, candlestick, SGI logo).
+SGI, late 1980s. Three lit, shaded balls bouncing inside a cubic room, with a menu of alternative object files (`*.bin`: martini glass, doughnut, VW, X-29, candlestick, SGI logo).
 
 ## Provenance
 
