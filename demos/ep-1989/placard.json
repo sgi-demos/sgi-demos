@@ -7,6 +7,7 @@
   "machines": "Personal IRIS · PowerSeries",
   "blurb": "The mature IRIS GL Electropaint from Panel Library 9.6, driven here by Tristram's own default script: self-animating sliders, mirror-fold ribbons, a spectrum colormap.",
   "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/ep-1989",
+  "browse": "https://sgi-demos.org/browse/#ep-1989",
   "more": "https://sgi-demos.org/timeline/#demo-ep-1989",
   "inputs_detected": [
     "mouse: L",

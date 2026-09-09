@@ -7,6 +7,7 @@
   "machines": "Personal IRIS · PowerSeries",
   "blurb": "A wave on a grid under a spinning light, depth-cued through the colormap. The wave starts flat: right-click, edit, pull a point up, then go.",
   "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/newave",
+  "browse": "https://sgi-demos.org/browse/#newave",
   "more": "https://sgi-demos.org/timeline/#demo-newave",
   "inputs_detected": [
     "mouse: L M R drag",

@@ -7,6 +7,7 @@
   "machines": "IRIS 1400 · IRIS 1500",
   "blurb": "A colour editor for the colormap: pick an entry on screen with the left button, then adjust it with the sliders. From the gifts package installed as source on every IRIS 2400 and 3000.",
   "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/cedit",
+  "browse": "https://sgi-demos.org/browse/#cedit",
   "more": "https://sgi-demos.org/timeline/#demo-cedit",
   "inputs_detected": [
     "mouse: L M R drag"

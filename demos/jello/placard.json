@@ -7,6 +7,7 @@
   "machines": "IRIS 3130 · Professional IRIS",
   "blurb": "An elastic body simulated in real time: an icosahedron of 13 masses joined by springs, integrated every frame and dropped into a box with a dithered shadow.",
   "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/jello",
+  "browse": "https://sgi-demos.org/browse/#jello",
   "more": "https://sgi-demos.org/timeline/#demo-jello",
   "inputs_detected": [
     "mouse: L M R drag",

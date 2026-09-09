@@ -7,6 +7,7 @@
   "machines": "IRIS 1400 · IRIS 1500",
   "blurb": "Circles placed along the sunflower spiral, sized by a growth factor: a one-file sketch from the gifts package.",
   "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/sunflower",
+  "browse": "https://sgi-demos.org/browse/#sunflower",
   "more": "https://sgi-demos.org/timeline/#demo-sunflower",
   "inputs_detected": []
 }

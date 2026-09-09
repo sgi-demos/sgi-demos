@@ -7,6 +7,7 @@
   "machines": "IRIS 2400 · IRIS 3130",
   "blurb": "A six-legged walker demonstrating a joint-motion algorithm, written for the 68020 IRIS 2400: hidden surfaces by sorting and backface removal, lighting computed once in software, a matrix-projected shadow.",
   "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/insect",
+  "browse": "https://sgi-demos.org/browse/#insect",
   "more": "https://sgi-demos.org/timeline/#demo-insect",
   "inputs_detected": [
     "mouse: L M drag",

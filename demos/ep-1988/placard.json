@@ -7,6 +7,7 @@
   "machines": "Personal IRIS · PowerSeries",
   "blurb": "The earliest Electropaint, Panel Library v7 as posted to comp.sys.sgi on 18 August 1988: four mirrored copies of a triangle stream steered by plain sliders, in colour-index mode.",
   "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/ep-1988",
+  "browse": "https://sgi-demos.org/browse/#ep-1988",
   "more": "https://sgi-demos.org/timeline/#demo-ep-1988",
   "inputs_detected": [
     "mouse: L",

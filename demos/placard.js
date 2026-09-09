@@ -1,6 +1,7 @@
 // Gallery placard for the web demos: title, author, year, a short blurb, and
 // the inputs the demo listens for, shown in the lower-left corner when the
-// page loads. The x closes it; the minus shrinks it to the title and author
+// page loads, minimized to the title and author lines until the plus opens
+// it. The x closes it; the minus shrinks it to the title and author
 // line, the plus restores it; Tab hides and shows it, and Shift+Tab steps
 // through open, minimized, closed, and back to open, so the card can be run
 // from the keyboard alone (no demo listens for Tab, so it is swallowed before
@@ -24,8 +25,8 @@
     try { state = localStorage.getItem("placard"); } catch (e) {}
     function remember(v) { state = v; try { localStorage.setItem("placard", v); } catch (e) {} }
     if (q === "1" || q === "on") remember("open");   // reopen, and stay open from here on
-    var view = "open";                          // the last visible mode, so Tab reopens as it was
-    try { view = localStorage.getItem("placard-view") || "open"; } catch (e) {}
+    var view = "min";                           // the last visible mode, so Tab reopens as it was; minimized on a first visit
+    try { view = localStorage.getItem("placard-view") || "min"; } catch (e) {}
     if (state === "min" || state === "open") view = state;
     var HOLD_MS = 0;                          // 0: stays until closed; ?placard=<seconds> closes it after that long
     var LAYOUT = "fit";                      // "fit": as wide as its longest line; "wide": a strip across the bottom; "corner": the earlier 420px card
@@ -49,6 +50,7 @@
             "background:rgba(26,42,74,.86);color:#a3b3c9;font:italic 600 12px -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;cursor:pointer;user-select:none}" +
             ".placard-tab:hover{color:#fff}.placard-tab[hidden]{display:none}" +
             ".placard h1{margin:0 0 .15rem;padding-right:3.2rem;font-size:1.05rem;font-weight:600;font-style:italic}" +
+            ".placard h1 a{color:#fff;text-decoration:none}.placard h1 a:hover{text-decoration:underline}" +
             ".placard .who{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.2rem 1.5rem;margin:0 0 .5rem;color:#a3b3c9;font-size:.85rem}" +
             ".placard .who .tech{margin-left:auto;white-space:nowrap}" +
             ".placard .who a.yr{color:#8fc3ea;text-decoration:none}.placard .who a.yr:hover{text-decoration:underline}" +
@@ -108,7 +110,7 @@
         var inputs = d.inputs || d.inputs_detected || [];
         el.innerHTML =
             "<span class='btns'><span class='mn' title='minimize (Shift+Tab steps open, minimized, closed)'>&minus;</span><span class='mx' title='maximize'>+</span><span class='x' title='close (Tab brings it back)'>&times;</span></span>" +
-            "<h1>" + esc(d.title || document.title) + "</h1>" +
+            "<h1>" + (d.browse ? "<a href='" + esc(d.browse) + "' title='browse the demos'>" + esc(d.title || document.title) + "</a>" : esc(d.title || document.title)) + "</h1>" +
             (who || d.machines ? "<div class='who'><span>" + who + "</span>" + (d.machines ? "<span class='tech'>" + esc(d.machines) + "</span>" : "") + "</div>" : "") +
             (d.blurb ? "<p>" + esc(d.blurb) + "</p>" : "") +
             "<div class='foot'>" +

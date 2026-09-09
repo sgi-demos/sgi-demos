@@ -7,6 +7,7 @@
   "machines": "Indy · Onyx",
   "blurb": "The OpenGL screensaver that ran on every idle IRIX screen, recovered by decompiling the MIPS binary: the famous default script with smooth HLS colour. M switches between the shipped look and the IRIS-faithful one.",
   "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/ep-1994-ogl-decomp",
+  "browse": "https://sgi-demos.org/browse/#ep-1994-ogl-decomp",
   "more": "https://sgi-demos.org/timeline/#demo-ep-1994-ogl-decomp",
   "inputs_detected": [
     "esc, M"

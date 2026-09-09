@@ -7,6 +7,7 @@
   "machines": "Indy · Onyx",
   "blurb": "The same decompiled screensaver with readable names in the source, byte-identical in output; this build starts in the IRIS-faithful look with four-fold mirrors. M switches to the shipped 1994 look.",
   "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/ep-1994-ogl-reversed",
+  "browse": "https://sgi-demos.org/browse/#ep-1994-ogl-reversed",
   "more": "https://sgi-demos.org/timeline/#demo-ep-1994-ogl-decomp",
   "inputs_detected": [
     "esc, M"

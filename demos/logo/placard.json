@@ -7,6 +7,7 @@
   "machines": "IRIS 3130 · Professional IRIS",
   "blurb": "The SGI cube grown from 1,296 quadrilaterals rebuilt every frame under two hardware lights and a z-buffer, written in three days for the first IRIS 4D.",
   "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/logo",
+  "browse": "https://sgi-demos.org/browse/#logo",
   "more": "https://sgi-demos.org/timeline/#demo-logo",
   "inputs_detected": [
     "mouse: L M drag",
