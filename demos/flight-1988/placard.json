@@ -1,0 +1,17 @@
+{
+  "title": "Flight",
+  "author": "Gary Tarolli and Rob Mace",
+  "year": "1988",
+  "color": "Colormapped",
+  "depth": "12 bitplanes",
+  "machines": "Personal IRIS · PowerSeries",
+  "blurb": "SGI's flight simulator in its colour-index form, from the IRIS 4D demo tape: six aircraft, a 1280 by 1024 instrument panel composited in the bitplanes. Written in 1983 for the IRIS 1400; dog made it the first networked 3D game.",
+  "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/flight-1988",
+  "more": "https://sgi-demos.org/timeline/#demo-flight-1988",
+  "inputs_detected": [
+    "mouse: L M R drag",
+    "arrow keys, A, C, D, E, F, H, I, L, N, O, P, Q, R, S, T, U, V, W, X, Z, -, ?, ~",
+    "keypad",
+    "dial box"
+  ]
+}

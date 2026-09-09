@@ -1,0 +1,15 @@
+{
+  "title": "Ideas in Motion",
+  "author": "Thant Tessman",
+  "year": "1988",
+  "color": "RGB",
+  "depth": "24-bit",
+  "machines": "Personal IRIS · PowerSeries",
+  "blurb": "Letters spell ideas on a lit tabletop under a lamp with the SGI logo; the logo and lamp lit in hardware, the spotlight on the table in software, all moved every frame. Written for the 4D/70GT.",
+  "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/ideas",
+  "more": "https://sgi-demos.org/timeline/#demo-ideas",
+  "inputs_detected": [
+    "mouse: L",
+    "esc"
+  ]
+}

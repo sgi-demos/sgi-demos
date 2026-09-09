@@ -1,0 +1,18 @@
+{
+  "title": "Flight 3.4",
+  "author": "Rob Mace and Gary Tarolli",
+  "year": "1994",
+  "color": "RGB",
+  "depth": "24-bit",
+  "machines": "Indigo2 · Onyx",
+  "blurb": "The flight everyone remembers from IRIX: RGB with lighting, fog, terrain texture, eight aircraft, a full-width horizon, and a HUD. Republished by SGI in 2003 under a permissive license.",
+  "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/flight-1994",
+  "more": "https://sgi-demos.org/timeline/#demo-flight-1994",
+  "inputs_detected": [
+    "mouse: L M R drag",
+    "space, arrow keys, home, pause, F1, F2, F9, F10, F11, F12, A, B, C, D, E, F, G, H, I, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, #, +, ,, -, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, =, ?, _, ~",
+    "keypad",
+    "dial box",
+    "spaceball"
+  ]
+}

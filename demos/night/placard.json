@@ -1,0 +1,12 @@
+{
+  "title": "Night",
+  "author": "Howard Look",
+  "year": "1990",
+  "color": "RGB",
+  "depth": "24-bit",
+  "machines": "Personal IRIS · PowerSeries VGX",
+  "blurb": "A sunset background for the IRIS root window, posted to comp.sys.sgi in June 1990 and improved by its readers over the following weeks.",
+  "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/night",
+  "more": "https://sgi-demos.org/timeline/#demo-night",
+  "inputs_detected": []
+}

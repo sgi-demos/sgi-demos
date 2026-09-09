@@ -13,7 +13,7 @@ HDRS = $(wildcard *.h) $(wildcard $(INCS_DIR)/gl/*.h) $(DEMO_EXTRA_HDRS)
 SRC = $(filter-out $(DEMO_EXCLUDE_SRC),$(wildcard *.c)) $(DEMO_EXTRA_SRC)
 DEMO_OBJS = $(patsubst %.c,$(BIN_DIR)/%.o,$(SRC))
 EM_DEMO_OBJS = $(patsubst %.c,$(WEB_DIR)/%.o,$(SRC))
-OBJS = $(DEMO_OBJS) $(BIN_DIR)/gl_appname.o
+OBJS = $(DEMO_OBJS) $(BIN_DIR)/gl_appname.o $(BIN_DIR)/placard.o
 EM_OBJS = $(EM_DEMO_OBJS) $(WEB_DIR)/gl_appname.o
 
 
@@ -58,6 +58,15 @@ $(BIN_DIR)/gl_appname.o: ../../makefiles/gl_appname.c | $(BIN_DIR)
 
 $(WEB_DIR)/gl_appname.o: ../../makefiles/gl_appname.c | $(WEB_DIR)
 	$(MODERN_CODE_EMCC) $(EM_OPT) -DGL_APPNAME='"$(APPNAME)"' $< -c -o $@
+
+# the gallery placard (see scripts/placard.py): placard.json -> a C file that
+# prints it to the terminal at startup, native builds only; the web page
+# reads the json itself (demos/placard.js)
+$(BIN_DIR)/placard.c: $(wildcard placard.json) ../../scripts/placard.py | $(BIN_DIR)
+	python3 ../../scripts/placard.py embed placard.json > $@
+
+$(BIN_DIR)/placard.o: $(BIN_DIR)/placard.c
+	$(MODERN_CODE_CC) $(OPT) $< -c -o $@
 
 $(DEMO_OBJS): $(BIN_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(BIN_DIR)
 	@mkdir -p $(@D)

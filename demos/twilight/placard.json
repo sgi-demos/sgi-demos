@@ -1,0 +1,12 @@
+{
+  "title": "Twilight",
+  "author": "Howard Look",
+  "year": "1991",
+  "color": "RGB",
+  "depth": "24-bit",
+  "machines": "Indigo · Crimson",
+  "blurb": "A root-window background that looks like the twilight sky: a colour gradient with 2,500 small stars and a scattering of large ones.",
+  "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/twilight",
+  "more": "https://sgi-demos.org/timeline/#demo-twilight",
+  "inputs_detected": []
+}

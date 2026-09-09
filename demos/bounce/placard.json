@@ -1,0 +1,15 @@
+{
+  "title": "Bounce",
+  "author": "Unattributed",
+  "year": "1988",
+  "color": "RGB",
+  "depth": "24-bit",
+  "machines": "Personal IRIS · PowerSeries",
+  "blurb": "Three lit, shaded balls bouncing in a cubic room; the right-button menu swaps in a martini glass, a doughnut, a VW, an X-29, a candlestick, or the SGI logo.",
+  "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/bounce",
+  "more": "https://sgi-demos.org/timeline/#demo-bounce",
+  "inputs_detected": [
+    "mouse: L R drag",
+    "esc"
+  ]
+}
