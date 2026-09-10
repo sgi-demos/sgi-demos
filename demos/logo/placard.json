@@ -4,6 +4,8 @@
   "year": "1987",
   "color": "RGB",
   "depth": "24-bit",
+  "hidden": "z-buffer",
+  "api": "IRIS GL",
   "machines": "IRIS 3130 · Professional IRIS",
   "blurb": "The SGI cube grown from 1,296 quadrilaterals rebuilt every frame under two hardware lights and a z-buffer, written in three days for the first IRIS 4D.",
   "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/logo",

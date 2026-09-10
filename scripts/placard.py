@@ -171,7 +171,7 @@ def main(argv):
         lines = [data.get("title", "")]
         who = ", ".join(x for x in (data.get("author", ""), data.get("year", "")) if x)
         fb = ", ".join(y for y in (data.get("color", ""), data.get("depth", "")) if y)
-        line = " / ".join(x for x in (who, fb, data.get("machines", "")) if x)
+        line = " / ".join(x for x in (who, fb, data.get("hidden", ""), data.get("api", ""), data.get("machines", "")) if x)
         if line:
             lines.append(line)
         if data.get("blurb"):

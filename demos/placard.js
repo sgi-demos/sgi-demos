@@ -30,7 +30,7 @@
     if (state === "min" || state === "open") view = state;
     var HOLD_MS = 0;                          // 0: stays until closed; ?placard=<seconds> closes it after that long
     var LAYOUT = "fit";                      // "fit": as wide as its longest line; "wide": a strip across the bottom; "corner": the earlier 420px card
-    if (q && /^\d+$/.test(q)) HOLD_MS = (q | 0) * 1000;
+    if (q && /^\d+$/.test(q) && (q | 0) > 1) HOLD_MS = (q | 0) * 1000;   // 1 means reopen (above), not a one-second card
 
     fetch(url).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
         if (!d) return;
@@ -69,8 +69,9 @@
         el.className = "placard " + LAYOUT;
         el.setAttribute("role", "note");
         function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
-        // after the year: colour mode and framebuffer depth; right side of the same line: mid and high-end machines of the year
-        var fb = [d.color, d.depth].filter(Boolean).join(", ");
+        // after the year: colour mode and framebuffer depth, hidden-surface method, API;
+        // right side of the same line: mid and high-end machines of the year
+        var fb = [[d.color, d.depth].filter(Boolean).join(", "), d.hidden, d.api].filter(Boolean).join(" \u00b7 ");
         // the year links to the demo's timeline entry
         var year = d.year ? (d.more ? "<a class='yr' href='" + esc(d.more) + "' title='timeline'>" + esc(d.year) + "</a>" : esc(d.year)) : "";
         var who = [d.author ? esc(d.author) : "", year].filter(Boolean).join(", ") + (fb ? "<span class='sep'> \u00b7 </span><span class='fb'>" + esc(fb) + "</span>" : "");
