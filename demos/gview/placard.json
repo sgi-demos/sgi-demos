@@ -9,6 +9,7 @@
   "api": "IRIS GL",
   "machines": "Personal IRIS · PowerSeries",
   "blurb": "A viewer for radiosity models: Mies van der Rohe's 1929 German Pavilion in 2,676 Gouraud-shaded polygons with precomputed global illumination. No source survived; this is reconstructed from the IRIX 3 executable.",
+  "port": "Reconstructed from the IRIX 3 executable; fly-through and turntable modes work. No materials, movie loops, or binary model cache.",
   "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/gview",
   "browse": "https://sgi-demos.org/browse/#gview",
   "more": "https://sgi-demos.org/timeline/#demo-gview",

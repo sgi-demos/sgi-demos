@@ -177,6 +177,8 @@ def main(argv):
         if data.get("blurb"):
             lines.append("")
             lines.append(data["blurb"])
+        if data.get("port"):
+            lines.append("This port: " + data["port"])
         inputs = data.get("inputs") or data.get("inputs_detected") or []
         if inputs:
             lines.append("")

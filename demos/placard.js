@@ -55,7 +55,7 @@
             ".placard .who{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.2rem 1.5rem;margin:0 0 .5rem;color:#a3b3c9;font-size:.85rem}" +
             ".placard .who .tech{margin-left:auto;white-space:nowrap}" +
             ".placard .who a.yr{color:#8fc3ea;text-decoration:none}.placard .who a.yr:hover{text-decoration:underline}" +
-            ".placard p{margin:0 0 .5rem}" +
+            ".placard p{margin:0 0 .5rem}.placard p.port{color:#a3b3c9;font-size:.85rem;margin-top:-.2rem}" +
             ".placard .foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.25rem 1rem}" +
             ".placard .in{display:flex;flex-wrap:wrap;align-items:center;gap:.25rem .8rem;color:#a3b3c9;font-size:.82rem}" +
             ".placard .in b{color:#fff;font-weight:600}" +
@@ -123,6 +123,7 @@
             "<h1>" + (d.browse ? "<a href='" + esc(d.browse) + "' title='browse the demos'>" + esc(d.title || document.title) + "</a>" : esc(d.title || document.title)) + "</h1>" +
             (who || d.machines ? "<div class='who'><span>" + who + "</span>" + (d.machines ? "<span class='tech'>" + esc(d.machines) + "</span>" : "") + "</div>" : "") +
             (d.blurb ? "<p>" + esc(d.blurb) + "</p>" : "") +
+            (d.port ? "<p class='port'>This port: " + esc(d.port) + "</p>" : "") +
             "<div class='foot'>" +
             "<div class='in'>" + inputsHtml(inputs) + "</div>" +   // never empty: tab is always there
             (d.source ? "<div class='more'>" +

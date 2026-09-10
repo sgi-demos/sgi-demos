@@ -9,6 +9,7 @@
   "api": "IRIS GL",
   "machines": "Indigo2 · Onyx",
   "blurb": "The flight everyone remembers from IRIX: RGB with lighting, fog, terrain texture, eight aircraft, a full-width horizon, and a HUD. Republished by SGI in 2003 under a permissive license.",
+  "port": "Splash, plane menu, instrument panel, HUD, lighting, fog, and terrain texture work. No sound or network play yet.",
   "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/flight-1994",
   "browse": "https://sgi-demos.org/browse/#flight-1994",
   "more": "https://sgi-demos.org/timeline/#demo-flight-1994",

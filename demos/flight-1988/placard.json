@@ -8,6 +8,7 @@
   "api": "IRIS GL",
   "machines": "Personal IRIS · PowerSeries",
   "blurb": "SGI's flight simulator in its colour-index form, from the IRIS 4D demo tape: six aircraft, an instrument panel composited in the bitplanes. Version 1.0 shipped on the IRIS 1400 in 1984; dog, its networked dogfight, is Tarolli's too.",
+  "port": "Nearly original source, 25 changed lines, at the authentic 1280 by 1024; splash, plane menu, takeoff, crashes, and night mode all work. No network play yet.",
   "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/flight-1988",
   "browse": "https://sgi-demos.org/browse/#flight-1988",
   "more": "https://sgi-demos.org/timeline/#demo-flight-1988",

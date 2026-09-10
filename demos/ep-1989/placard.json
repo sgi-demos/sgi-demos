@@ -9,6 +9,7 @@
   "api": "IRIS GL, Panel Library 9.6",
   "machines": "Personal IRIS · PowerSeries",
   "blurb": "The mature IRIS GL Electropaint from Panel Library 9.6, driven here by Tristram's own default script: self-animating sliders, mirror-fold ribbons, a spectrum colormap.",
+  "port": "Runs in colour-index mode with a spectrum colormap; the RGB lighting path is unused.",
   "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/ep-1989",
   "browse": "https://sgi-demos.org/browse/#ep-1989",
   "more": "https://sgi-demos.org/timeline/#demo-ep-1989",
