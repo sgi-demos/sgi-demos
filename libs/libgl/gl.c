@@ -2330,8 +2330,16 @@ void gl_sincos(Angle angle, float *s, float *c) {
     }
 }
 
+// gexit() closes the graphics. Every demo's deliberate quit path calls it
+// just before exit(): the popup-menu Exit in gview and jello, newave's kill
+// menu, the ESC and key handlers in bounce, logo, insect, newave. On the web
+// that exit() would leave a frozen canvas, so gexit takes the road ESC takes
+// (gl_exit: back to the previous page, or the demos home) and never returns.
+// Native builds have nothing to close; the exit() that follows does the rest.
 void gexit() {
-    static int warned = 0; if(!warned) { printf("%s unimplemented\n", __FUNCTION__); warned = 1; }
+#ifdef __EMSCRIPTEN__
+    gl_exit(0);
+#endif
 }
 
 void makeobj(Object obj) {
