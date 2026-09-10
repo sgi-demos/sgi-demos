@@ -46,8 +46,9 @@
             ".placard.wide{right:20px}" +
             ".placard.min{width:max-content}.placard.min p,.placard.min .foot{display:none}.placard.min .who{display:block;margin:0}.placard.min .who .sep{display:none}.placard.min .who .fb,.placard.min .who .tech{display:block;margin-left:0}" +   /* minimized: framebuffer and machines each drop to their own line */
             ".placard.gone{display:none}" +
-            ".placard-tab{position:fixed;left:20px;bottom:20px;z-index:10;padding:.15rem .5rem .2rem;border:1px solid rgba(255,255,255,.18);border-radius:4px;" +
-            "background:rgba(26,42,74,.86);color:#a3b3c9;font:italic 600 12px -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;cursor:pointer;user-select:none}" +
+            ".placard-tab{position:fixed;left:20px;bottom:20px;z-index:10;padding:.1rem .4rem .15rem;border:1px solid rgba(255,255,255,.18);border-radius:4px;" +
+            "background:rgba(26,42,74,.86);color:#a3b3c9;font:italic 600 11px -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;cursor:pointer;user-select:none}" +
+            ".placard-tab .i{font-style:normal;font-size:13px;vertical-align:-1px}" +
             ".placard-tab:hover{color:#fff}.placard-tab[hidden]{display:none}" +
             ".placard h1{margin:0 0 .15rem;padding-right:3.2rem;font-size:1.05rem;font-weight:600;font-style:italic}" +
             ".placard h1 a{color:#fff;text-decoration:none}.placard h1 a:hover{text-decoration:underline}" +
@@ -69,9 +70,10 @@
         el.className = "placard " + LAYOUT;
         el.setAttribute("role", "note");
         function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
-        // after the year: colour mode and framebuffer depth, hidden-surface method, API;
+        // after the year: API, then the framebuffer in one breath: colour mode, depth,
+        // "Z" when it is z-buffered, and single or double buffer ("RGB, 24-bit, Z, double buffer");
         // right side of the same line: mid and high-end machines of the year
-        var fb = [[d.color, d.depth].filter(Boolean).join(", "), d.hidden, d.api].filter(Boolean).join(" \u00b7 ");
+        var fb = [d.api, [d.color, d.depth, d.hidden, d.buffering].filter(Boolean).join(", ")].filter(Boolean).join(" \u00b7 ");
         // the year links to the demo's timeline entry
         var year = d.year ? (d.more ? "<a class='yr' href='" + esc(d.more) + "' title='timeline'>" + esc(d.year) + "</a>" : esc(d.year)) : "";
         var who = [d.author ? esc(d.author) : "", year].filter(Boolean).join(", ") + (fb ? "<span class='sep'> \u00b7 </span><span class='fb'>" + esc(fb) + "</span>" : "");
@@ -95,12 +97,19 @@
         }
         function inputsHtml(items) {
             var html = "";
+            items = items.slice();
+            var ki = -1;
+            items.forEach(function (it, i) { if (!/^mouse:/.test(it) && ki < 0 && !/^(keypad|dial box|spaceball)$/.test(it)) ki = i; });
+            if (ki >= 0) items[ki] = items[ki] + ", tab"; else items.splice(items.findIndex(function (it) { return !/^mouse:/.test(it); }) + 1 || items.length, 0, "tab");
+            // the mouse is always drawn: unlit buttons say the demo doesn't use it
+            if (!items.some(function (it) { return /^mouse:/.test(it); })) items.unshift("mouse:");
             items.forEach(function (it) {
                 var mm = /^mouse:\s*(.*)$/.exec(it);
                 if (mm) {
                     var t = mm[1].split(/\s+/);
                     var l = t.indexOf("L") >= 0, m = t.indexOf("M") >= 0, r = t.indexOf("R") >= 0, drag = t.indexOf("drag") >= 0;
-                    var title = ["left", "middle", "right"].filter(function (n, i) { return [l, m, r][i]; }).join(", ") + " mouse" + (drag ? ", drag" : "");
+                    var used = ["left", "middle", "right"].filter(function (n, i) { return [l, m, r][i]; });
+                    var title = used.length ? used.join(", ") + " mouse" + (drag ? ", drag" : "") : "no mouse input";
                     html += "<span class='mouse' title='" + esc(title) + "'>" + mouseSvg(l, m, r) + (drag ? "drag" : "") + "</span>";
                 } else {
                     html += "<span>" + esc(it.replace(/^keys:\s*/, "")) + "</span>";
@@ -115,7 +124,7 @@
             (who || d.machines ? "<div class='who'><span>" + who + "</span>" + (d.machines ? "<span class='tech'>" + esc(d.machines) + "</span>" : "") + "</div>" : "") +
             (d.blurb ? "<p>" + esc(d.blurb) + "</p>" : "") +
             "<div class='foot'>" +
-            (inputs.length ? "<div class='in'>" + inputsHtml(inputs) + "</div>" : "<span></span>") +
+            "<div class='in'>" + inputsHtml(inputs) + "</div>" +   // never empty: tab is always there
             (d.source ? "<div class='more'>" +
                 (d.source ? "<a href='" + esc(d.source) + "'>source</a>" : "") + "</div>" : "") +
             "</div>";
@@ -150,7 +159,7 @@
         // While the card is closed, a small "tab" in its corner says how to get it back.
         var tab = document.createElement("div");
         tab.className = "placard-tab";
-        tab.textContent = "tab for info";
+        tab.innerHTML = "<span class='i'>&#x24D8;</span>";   // ⓘ
         tab.title = "press Tab to show the placard";
         tab.hidden = true;
         document.body.appendChild(tab);

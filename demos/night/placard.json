@@ -4,7 +4,7 @@
   "year": "1990",
   "color": "RGB",
   "depth": "24-bit",
-  "hidden": "2D",
+  "buffering": "single buffer",
   "api": "IRIS GL",
   "machines": "Personal IRIS · PowerSeries VGX",
   "blurb": "A sunset background for the IRIS root window, posted to comp.sys.sgi in June 1990 and improved by its readers over the following weeks.",

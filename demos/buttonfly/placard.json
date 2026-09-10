@@ -4,7 +4,7 @@
   "year": "1988",
   "color": "RGB",
   "depth": "24-bit",
-  "hidden": "backface only",
+  "buffering": "double buffer",
   "api": "IRIS GL",
   "machines": "Personal IRIS · PowerSeries",
   "blurb": "The demo launcher that fronted /usr/demos from IRIX 3.2 on: a hierarchical menu of 3D buttons. Blue buttons run a demo, purple ones tumble to reveal another set.",
