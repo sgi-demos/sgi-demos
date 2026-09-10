@@ -1,7 +1,7 @@
 // Gallery placard for the web demos: title, author, year, a short blurb, and
-// the inputs the demo listens for, shown in the lower-left corner when the
-// page loads, minimized to the title and author lines until the plus opens
-// it. The x closes it; the minus shrinks it to the title and author
+// the inputs the demo listens for, in the lower-left corner. On a first visit
+// only the small circled-i box shows; Tab or a click on it brings the card up,
+// minimized to its title and author lines until the plus opens it. The x closes it; the minus shrinks it to the title and author
 // line, the plus restores it; Tab hides and shows it, and Shift+Tab steps
 // through open, minimized, closed, and back to open, so the card can be run
 // from the keyboard alone (no demo listens for Tab, so it is swallowed before
@@ -171,7 +171,7 @@
         el.querySelector(".mn").addEventListener("click", function () { setMin(true); remember("min"); });
         el.querySelector(".mx").addEventListener("click", function () { setMin(false); remember("open"); });
         setMin(view === "min");
-        if (state === "closed") { el.classList.add("gone"); tab.hidden = false; }
+        if (state === "closed" || state === null) { el.classList.add("gone"); tab.hidden = false; }   // closed by default
         // Tab toggles the card; Shift+Tab steps open -> minimized -> closed ->
         // open. Captured at the window and stopped there, so neither SDL
         // (listening on the canvas) nor the browser's focus traversal gets it.
