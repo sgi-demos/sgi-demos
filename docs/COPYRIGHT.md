@@ -109,8 +109,8 @@ Three points that need additional details:
 | cedit | Paul Haeberli, SGI, 1984 | GL2-W3.6 gifts package | author line | 10 lines | fair use; no license grant, SGI installed the source on every IRIS and shipped later revisions as 4Dgifts source with IRIX 3.3 and 4.0.1 |
 | ep-1988 | David Tristram, 1988 | comp.sys.sgi posting (also demo tape) | public domain, not to be resold or relicensed | 2 preprocessor fixes; panel stub added | author's notice, conditions met |
 | ep-1989 | David Tristram, 1989 | IGL 0.1.8 | Tristram copyright, IGL's GPL v2+ header | panel stub; script engine from the 1994 decompilation | author's notice and GPL; the script engine is under Tristram's 1994 permission |
-| ep-1994-ogl-decomp | Tristram 1994; Laws, Shanks | bslabs ElectroPortis fork, verbatim | Tristram permission; MIT for non-ep files | none to ep.c; wrapper and harness added | author's permission, noncommercial and shared-source conditions met |
-| ep-1994-ogl-reversed | same | fork of the above | same | identifier renames only | author's permission, as above |
+| ep-1994/decomp | Tristram 1994; Laws, Shanks | bslabs ElectroPortis fork, verbatim | Tristram permission; MIT for non-ep files | none to ep.c; wrapper and harness added | author's permission, noncommercial and shared-source conditions met |
+| ep-1994 | same | fork of the above | same | identifier renames only | author's permission, as above |
 | flight-1988 | Gary Tarolli, SGI, 1988 | demo tape | "unpublished proprietary" | 25 lines, commented in place | fair use; the legend is retained, SGI shipped the source, and SGI later released the successor code permissively |
 | flight-1994 | Rob Mace, SGI, 1984-1994 | Linux Toolbox 2003; hills.grid and hills.t from Developer Toolbox 6.1 | SGI permissive license | vintage-C and loader fixes | express license; the two Toolbox data files carry no notice and rest on fair use |
 | gview | SGI, late 1980s | reconstructed from the IRIX 3 binary; GFO data from the same distribution | none | entire file is new | reverse engineering, original C (Sega, Connectix); the GFO data is fair use like the tape data |

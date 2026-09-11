@@ -1,0 +1,18 @@
+{
+  "title": "Electropaint 1994",
+  "author": "David A. Tristram",
+  "year": "1994",
+  "color": "RGB",
+  "depth": "24-bit",
+  "buffering": "double buffer",
+  "api": "OpenGL",
+  "machines": "Indy · Onyx",
+  "blurb": "The OpenGL screensaver that ran on every idle IRIX screen, recovered by decompiling the MIPS binary: the famous default script with smooth HLS colour. Starts in the IRIS GL look with four-fold mirrors and the intended camera; M switches to the shipped 1994 look.",
+  "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/ep-1994",
+  "browse": "https://sgi-demos.org/browse/#ep-1994",
+  "more": "https://sgi-demos.org/timeline/#demo-ep-1994",
+  "inputs_detected": [
+    "esc, M"
+  ],
+  "port": "Built from a readable rename of the decompiled source; the verbatim decompilation builds alongside in decomp/."
+}

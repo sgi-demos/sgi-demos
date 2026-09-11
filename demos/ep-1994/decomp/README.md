@@ -1,6 +1,6 @@
-# ElectroPortis
+# Electropaint 1994, decompiled (the verbatim build)
 
-The **real** OpenGL IRIX Electropaint screensaver, running in sgi-demos — decompiled from the original 32-bit MIPS binary, not a reimplementation. This is the version with David Tristram's famous default animation script *and* smooth RGB/HLS colour (the earlier [ep-1989](../ep-1989) demo approximates the same script in colour-index mode, which is why its colours step rather than glide).
+The **real** OpenGL IRIX Electropaint screensaver, running in sgi-demos — decompiled from the original 32-bit MIPS binary, not a reimplementation. This is the version with David Tristram's famous default animation script *and* smooth RGB/HLS colour (the earlier [ep-1989](../../ep-1989) demo approximates the same script in colour-index mode, which is why its colours step rather than glide).
 
 ## Provenance
 
@@ -25,8 +25,8 @@ The 1994 OpenGL rewrite silently diverged from the IRIS GL ep in two ways (consi
 
 The shim handles both (`ep_gl_scalef`/`pushmatrix`/`popmatrix`/`ep_gluPerspective` in [gl_wrap_sgi.c](gl_wrap_sgi.c)), as one mode switch:
 
-- **Default — faithful to the IRIS GL ep**: mirrors restored (the collapsing scale is treated as identity, so mirror copies render at the primary copy's size) and the intended camera (30° FOV, eye at distance 10).
-- **Press `M` — the shipped 1994 binary's look**: one visible copy per wing (degenerates discarded exactly as real OpenGL rasterization would, no particles) and the accidental wide flipped camera (60°, distance 4). Verified against the fork's native GLUT/OpenGL build under the same deterministic seed (`-DTEST`): matching composition, zero particles.
+- **The exhibited build ([..](..)) starts faithful to the IRIS GL ep**: mirrors restored (the collapsing scale is treated as identity, so mirror copies render at the primary copy's size) and the intended camera (30° FOV, eye at distance 10).
+- **This verbatim build starts in the shipped 1994 binary's look; `M` switches either way**: one visible copy per wing (degenerates discarded exactly as real OpenGL rasterization would, no particles) and the accidental wide flipped camera (60°, distance 4). Verified against the fork's native GLUT/OpenGL build under the same deterministic seed (`-DTEST`): matching composition, zero particles.
 
 ## What you get
 

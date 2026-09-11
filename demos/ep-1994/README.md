@@ -1,8 +1,8 @@
-# ElectroPortis (readable fork)
+# Electropaint 1994
 
-A human-readable fork of the [ep-1994-ogl-decomp](../ep-1994-ogl-decomp) demo. Same demo, byte-for-byte the same output — but `ep.c` is refactored from the MIPS decompiler's mangled names into readable ones, so you can actually follow how Electropaint works.
+The Electropaint 1994 on exhibit: a human-readable fork of the verbatim decompilation in [decomp/](decomp/). Same demo, byte-for-byte the same output — but `ep.c` is refactored from the MIPS decompiler's mangled names into readable ones, so you can actually follow how Electropaint works.
 
-The sibling [ep-1994-ogl-decomp](../ep-1994-ogl-decomp) demo keeps `ep.c` **verbatim** from Brendan Shanks's bslabs decompilation (minimal changes — see its README for the IRIS GL port mechanism, which this fork reuses unchanged: `gl_wrap.h`, `gl_wrap_sgi.c`, `main_sgi.c`). This fork changes **only names**, never logic.
+The [decomp/](decomp/) build keeps `ep.c` **verbatim** from Brendan Shanks's bslabs decompilation (minimal changes — see its README for the IRIS GL port mechanism, which this fork reuses unchanged: `gl_wrap.h`, `gl_wrap_sgi.c`, `main_sgi.c`). This fork changes **only names**, never logic.
 
 ## What was renamed
 
@@ -16,4 +16,4 @@ The sibling [ep-1994-ogl-decomp](../ep-1994-ogl-decomp) demo keeps `ep.c` **verb
 
 ## Faithfulness check
 
-Built with `-DTEST` (which seeds `srand48(0)` for a deterministic show), this fork and the verbatim `ep-1994-ogl-decomp` demo produce **byte-identical frames** (`cmp` confirms frames 50/100/150 match exactly). The rename touched names only.
+Built with `-DTEST` (which seeds `srand48(0)` for a deterministic show), this fork and the verbatim `decomp/` build produce **byte-identical frames** (`cmp` confirms frames 50/100/150 match exactly). The rename touched names only.

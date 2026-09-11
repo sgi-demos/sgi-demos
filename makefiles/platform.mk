@@ -19,8 +19,10 @@ endif
 SRC_DIR = .
 BIN_DIR = ./bin-$(OS)-$(HW)
 WEB_DIR = ./web
-LIBS_DIR = ../../libs
-INCS_DIR = ../../include
+# the repository root, from this file's own location, so demos can sit at any depth (demos/ep-1994/decomp)
+REPO_ROOT := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))..)
+LIBS_DIR = $(REPO_ROOT)/libs
+INCS_DIR = $(REPO_ROOT)/include
 
 # SDL libs and include
 SDL_LIBS = `sdl2-config --libs`

@@ -1,4 +1,4 @@
-include ../../makefiles/platform.mk
+include $(dir $(lastword $(MAKEFILE_LIST)))platform.mk
 
 APP = $(BIN_DIR)/$(APPNAME)
 EM_APPNAME = $(WEB_DIR)/$(APPNAME)
@@ -53,17 +53,17 @@ $(WEB_DIR):
 	echo "*.[oach]" > $@/.gitignore
 
 # the demo-name stamp (see makefiles/gl_appname.c)
-$(BIN_DIR)/gl_appname.o: ../../makefiles/gl_appname.c | $(BIN_DIR)
+$(BIN_DIR)/gl_appname.o: $(REPO_ROOT)/makefiles/gl_appname.c | $(BIN_DIR)
 	$(MODERN_CODE_CC) $(OPT) -DGL_APPNAME='"$(APPNAME)"' $< -c -o $@
 
-$(WEB_DIR)/gl_appname.o: ../../makefiles/gl_appname.c | $(WEB_DIR)
+$(WEB_DIR)/gl_appname.o: $(REPO_ROOT)/makefiles/gl_appname.c | $(WEB_DIR)
 	$(MODERN_CODE_EMCC) $(EM_OPT) -DGL_APPNAME='"$(APPNAME)"' $< -c -o $@
 
 # the gallery placard (see scripts/placard.py): placard.json -> a C file that
 # prints it to the terminal at startup, native builds only; the web page
 # reads the json itself (demos/placard.js)
-$(BIN_DIR)/placard.c: $(wildcard placard.json) ../../scripts/placard.py | $(BIN_DIR)
-	python3 ../../scripts/placard.py embed placard.json > $@
+$(BIN_DIR)/placard.c: $(wildcard placard.json) $(REPO_ROOT)/scripts/placard.py | $(BIN_DIR)
+	python3 $(REPO_ROOT)/scripts/placard.py embed placard.json > $@
 
 $(BIN_DIR)/placard.o: $(BIN_DIR)/placard.c
 	$(MODERN_CODE_CC) $(OPT) $< -c -o $@

@@ -25,7 +25,7 @@ EXTRA = [
     ("webfly", "Performer Town", "1993", SITE + "/sgi-performer/web/apps/webfly/web/", SITE + "/sgi-performer/media/webfly.png"),
 ]
 # the order of the browse page
-ORDER = ["arena", "bounce", "buttonfly", "cedit", "ep-1988", "ep-1989", "ep-1994-ogl-decomp", "ep-1994-ogl-reversed",
+ORDER = ["arena", "bounce", "buttonfly", "cedit", "ep-1988", "ep-1989", "ep-1994",
          "flight-1988", "flight-1994", "gview", "ideas", "insect", "jello", "logo", "newave", "webfly", "twilight"]
 
 
