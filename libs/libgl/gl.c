@@ -125,8 +125,8 @@ static int drawmode_layer(int mode) {
         default:         return -1;
     }
 }
-// set in winopen; also gates rasterizer calls that would otherwise lock in
-// the rasterizer selection before apply_demo_quirks runs (see writemask)
+// set in winopen; also gates rasterizer calls made before the window, and so
+// the rasterizer, exists (see writemask)
 static int window_is_open = 0;
 static vec3f current_normal = {1.0f, 1.0f, 1.0f};
 static vec4f current_position = {0.0f, 0.0f, 0.0f, 1.0};
@@ -1709,17 +1709,29 @@ dl_element *element_next_in_object(enum object_type t)
     return e;
 }
 
+// While a display list is open (makeobj ... closeobj), an IRIS GL call is
+// recorded into it instead of executed: RECORD_IN_OBJECT appends an element
+// of type T, runs the statements that follow T to fill in its fields (the
+// element is e), and returns from the calling function.
+#define RECORD_IN_OBJECT(T, ...) \
+    do { \
+        if(cur_ptr_to_nextptr != NULL) { \
+            dl_element *e = element_next_in_object(T); \
+            (void)e; \
+            __VA_ARGS__ \
+            return; \
+        } \
+    } while(0)
+
 static enum object_type bgn_object_type;
 
 //----------------------------------------------------------------------------
 // GL API calls
 
 void callobj(Object obj) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(CALLOBJ);
+    RECORD_IN_OBJECT(CALLOBJ,
         e->callobj.obj = obj;
-        return;
-    }
+    );
 
     TRACEF("%d", obj);
 
@@ -1931,10 +1943,7 @@ static int is_full_viewport() {
 }
 
 void clear() {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(CLEAR);
-        return;
-    }
+    RECORD_IN_OBJECT(CLEAR);
 
     TRACE();
 
@@ -2076,13 +2085,11 @@ void RGBmode() {
 }
 
 void RGBcolor(int r, int g, int b) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(RGBCOLOR);
+    RECORD_IN_OBJECT(RGBCOLOR,
         e->rgbcolor.r = r;
         e->rgbcolor.g = g;
         e->rgbcolor.b = b;
-        return;
-    }
+    );
 
     TRACEF("%d, %d, %d", r, g, b);
 
@@ -2093,11 +2100,9 @@ void RGBcolor(int r, int g, int b) {
 }
 
 void color(Colorindex color) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(COLOR);
+    RECORD_IN_OBJECT(COLOR,
         e->color.color = color;
-        return;
-    }
+    );
 
     TRACEF("%u", color);
 
@@ -2123,11 +2128,9 @@ int getcolor()
 }
 
 void writemask(Colorindex mask) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(WRITEMASK);
+    RECORD_IN_OBJECT(WRITEMASK,
         e->writemask.mask = mask;
-        return;
-    }
+    );
 
     TRACEF("%u", mask);
 
@@ -2135,9 +2138,8 @@ void writemask(Colorindex mask) {
     // Per-draw compositing lives in the rasterizers (the reference through
     // its CPU CI buffer, gles2 through the GPU CI buffer on ES3) — clear()
     // keeps its own masked path above. Before the
-    // window exists don't touch the rasterizer: the first rasterizer_* call
-    // locks in the implementation ahead of apply_demo_quirks; winopen
-    // re-sends the current mask once the choice is made.
+    // window exists don't touch the rasterizer; winopen re-sends the current
+    // mask once it is up.
     //
     // Only forward the mask for real cmode configs (<=12 planes). cmode
     // never exceeded 12 planes on SGI hardware, so a demo quirked to a
@@ -2410,11 +2412,9 @@ void gl_resolve_ci_if_needed(void)
 }
 
 void multmatrix(Matrix m) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(MULTMATRIX);
+    RECORD_IN_OBJECT(MULTMATRIX,
         memcpy(e->multmatrix.m, m, sizeof(Matrix));
-        return;
-    }
+    );
 
     if(trace_functions) {
         printf("%*smultmatrix\n", trace_indent, "");
@@ -2513,14 +2513,12 @@ static void window_matrix(float m[16], Coord left, Coord right, Coord bottom, Co
 }
 
 void perspective(Angle fovy_, float aspect, Coord near, Coord far) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(PERSPECTIVE);
+    RECORD_IN_OBJECT(PERSPECTIVE,
         e->perspective.fovy = fovy_;
         e->perspective.aspect = aspect;
         e->perspective.near = near;
         e->perspective.far = far;
-        return;
-    }
+    );
 
     TRACEF("%d, %f, %f, %f", fovy_, aspect, near, far);
 
@@ -2541,14 +2539,12 @@ void perspective(Angle fovy_, float aspect, Coord near, Coord far) {
 }
 
 void ortho2(Coord left, Coord right, Coord bottom, Coord top) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(ORTHO2);
+    RECORD_IN_OBJECT(ORTHO2,
         e->ortho2.left = left;
         e->ortho2.right = right;
         e->ortho2.bottom = bottom;
         e->ortho2.top = top;
-        return;
-    }
+    );
 
     TRACEF("%f, %f, %f, %f", left, right, bottom, top);
 
@@ -2581,13 +2577,11 @@ void poly_(int n, Coord parray[ ][3]) {
 }
 
 void polf(int n, Coord parray[ ][3]) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(POLF);
+    RECORD_IN_OBJECT(POLF,
         e->polf.n = n;
         e->polf.parray = (Coord(*)[]) malloc(sizeof(Coord) * 3 * n);
         memcpy(e->polf.parray, parray, sizeof(Coord) * 3 * n);
-        return;
-    }
+    );
 
     TRACEF("%d", n);
 
@@ -2650,10 +2644,7 @@ void polf2s(int n, Scoord p[][2]) {
 }
 
 void popmatrix() {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(POPMATRIX);
-        return;
-    }
+    RECORD_IN_OBJECT(POPMATRIX);
 
     TRACE();
 
@@ -2666,10 +2657,7 @@ void popmatrix() {
 }
 
 void pushmatrix() {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(PUSHMATRIX);
-        return;
-    }
+    RECORD_IN_OBJECT(PUSHMATRIX);
 
     TRACE();
 
@@ -2682,10 +2670,7 @@ void pushmatrix() {
 }
 
 void pushviewport() {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(PUSHVIEWPORT);
-        return;
-    }
+    RECORD_IN_OBJECT(PUSHVIEWPORT);
 
     TRACE();
 
@@ -2698,10 +2683,7 @@ void pushviewport() {
 }
 
 void popviewport() {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(POPVIEWPORT);
-        return;
-    }
+    RECORD_IN_OBJECT(POPVIEWPORT);
 
     TRACE();
 
@@ -2712,14 +2694,12 @@ void popviewport() {
 
 void viewport(Screencoord left, Screencoord right, Screencoord bottom, Screencoord top)
 {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(VIEWPORT);
+    RECORD_IN_OBJECT(VIEWPORT,
         e->viewport.left = left;
         e->viewport.right = right;
         e->viewport.bottom = bottom;
         e->viewport.top = top;
-        return;
-    }
+    );
 
     TRACEF("%d, %d, %d, %d", left, right, bottom, top);
 
@@ -2739,12 +2719,10 @@ void reshapeviewport() {
 }
 
 void rotate(Angle ang, char axis) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(ROTATE);
+    RECORD_IN_OBJECT(ROTATE,
         e->rotate.angle = ang;
         e->rotate.axis = axis;
-        return;
-    }
+    );
 
     TRACEF("%d, %c", ang, axis);
 
@@ -2798,11 +2776,9 @@ void rot(float ang, char axis) {
 }
 
 void setpattern(int pattern) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(SETPATTERN);
+    RECORD_IN_OBJECT(SETPATTERN,
         e->setpattern.pattern = pattern;
-        return;
-    }
+    );
 
     TRACEF("%d", pattern);
 
@@ -2836,13 +2812,11 @@ void swapbuffers() {
 }
 
 void translate(Coord x, Coord y, Coord z) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(TRANSLATE);
+    RECORD_IN_OBJECT(TRANSLATE,
         e->translate.x = x;
         e->translate.y = y;
         e->translate.z = z;
-        return;
-    }
+    );
 
     TRACEF("%f, %f, %f", x, y, z);
 
@@ -2853,16 +2827,14 @@ void translate(Coord x, Coord y, Coord z) {
 }
 
 void window(Coord left, Coord right, Coord bottom, Coord top, Coord near, Coord far) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(WINDOW);
+    RECORD_IN_OBJECT(WINDOW,
         e->window.left = left;
         e->window.right = right;
         e->window.bottom = bottom;
         e->window.top = top;
         e->window.near = near;
         e->window.left = left;
-        return;
-    }
+    );
 
     TRACEF("%f, %f, %f, %f, %f, %f", left, right, bottom, top, near, far);
 
@@ -3073,8 +3045,7 @@ int winopen(char *title) {
 
     TRACEF("%s", title);
 
-    // Quirks must run before the first rasterizer_* call: they may select
-    // which rasterizer implementation gets locked in (cedit -> reference)
+    // Quirks run before the rasterizer opens its window
     apply_demo_quirks(title);
 
     int rasterizer_window = rasterizer_winopen(title);
@@ -3129,10 +3100,7 @@ void reset_vertex_list()
 void bgntmesh() {
     bgn_object_type = BGNTMESH;
 
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(BGNTMESH);
-        return;
-    }
+    RECORD_IN_OBJECT(BGNTMESH);
 
     TRACE();
 
@@ -3142,10 +3110,7 @@ void bgntmesh() {
 void bgnline() {
     bgn_object_type = BGNLINE;
 
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(BGNLINE);
-        return;
-    }
+    RECORD_IN_OBJECT(BGNLINE);
 
     TRACE();
 
@@ -3156,10 +3121,7 @@ void bgnpoint()
 {
     bgn_object_type = BGNPOINT;
 
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(BGNPOINT);
-        return;
-    }
+    RECORD_IN_OBJECT(BGNPOINT);
 
     TRACE();
 
@@ -3169,10 +3131,7 @@ void bgnpoint()
 void bgnclosedline() {
     bgn_object_type = BGNCLOSEDLINE;
 
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(BGNCLOSEDLINE);
-        return;
-    }
+    RECORD_IN_OBJECT(BGNCLOSEDLINE);
 
     TRACE();
 
@@ -3182,10 +3141,7 @@ void bgnclosedline() {
 void bgnpolygon() {
     bgn_object_type = BGNPOLYGON;
 
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(BGNPOLYGON);
-        return;
-    }
+    RECORD_IN_OBJECT(BGNPOLYGON);
 
     TRACE();
 
@@ -3193,12 +3149,10 @@ void bgnpolygon() {
 }
 
 void c3i(int c[3]) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(C3F);
+    RECORD_IN_OBJECT(C3I,
         for(int i = 0; i < 3; i++)
             e->c3i.c[i] = c[i];
-        return;
-    }
+    );
 
     TRACEF("%d, %d, %d", c[0], c[1], c[2]);
 
@@ -3218,11 +3172,9 @@ void cpack(unsigned int pack)
 }
 
 void c3f(float c[3]) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(C3F);
+    RECORD_IN_OBJECT(C3F,
         vec3f_copy(e->c3f.c, c);
-        return;
-    }
+    );
 
     TRACEF("%f, %f, %f", c[0], c[1], c[2]);
 
@@ -3443,10 +3395,7 @@ void freepup(int popup) {
 
 void endpoint()
 {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(ENDPOINT);
-        return;
-    }
+    RECORD_IN_OBJECT(ENDPOINT);
 
     if(trace_functions) printf("%*sendpoint(); /* %d verts */\n", trace_indent, "", polygon_vert_count);
 
@@ -3456,10 +3405,7 @@ void endpoint()
 }
 
 void endline() {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(ENDLINE);
-        return;
-    }
+    RECORD_IN_OBJECT(ENDLINE);
 
     if(trace_functions) printf("%*sendline(); /* %d verts */\n", trace_indent, "", polygon_vert_count);
 
@@ -3469,10 +3415,7 @@ void endline() {
 }
 
 void endclosedline() {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(ENDCLOSEDLINE);
-        return;
-    }
+    RECORD_IN_OBJECT(ENDCLOSEDLINE);
 
     if(trace_functions) printf("%*sendclosedline(); /* %d verts */\n", trace_indent, "", polygon_vert_count);
 
@@ -3482,10 +3425,7 @@ void endclosedline() {
 }
 
 void endtmesh() {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(ENDTMESH);
-        return;
-    }
+    RECORD_IN_OBJECT(ENDTMESH);
 
     if(trace_functions) printf("%*sendtmesh(); /* %d verts */\n", trace_indent, "", polygon_vert_count);
 
@@ -3493,10 +3433,7 @@ void endtmesh() {
 }
 
 void endpolygon() {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(ENDPOLYGON);
-        return;
-    }
+    RECORD_IN_OBJECT(ENDPOLYGON);
 
     if(trace_functions) printf("%*sendpolygon(); /* %d verts */\n", trace_indent, "", polygon_vert_count);
 
@@ -3507,7 +3444,7 @@ void drawmode(int mode) {
     TRACEF("%d", mode);
 
     current_drawmode = mode;
-    if (window_is_open)     // pre-winopen call must not lock in the rasterizer
+    if (window_is_open)     // no rasterizer before the window exists
         rasterizer_layer(drawmode_layer(mode) + 1);   // 0=normal, 1=under, 2=over
 
     // vertex alpha carries the layer "index != 0" bit while a layer is
@@ -3541,13 +3478,11 @@ void draw_(Coord x, Coord y, Coord z) {
 }
 
 void draw(Coord x, Coord y, Coord z) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(DRAW);
+    RECORD_IN_OBJECT(DRAW,
         e->draw.x = x;
         e->draw.y = y;
         e->draw.z = z;
-        return;
-    }
+    );
 
     TRACEF("%f, %f, %f", x, y, z);
     draw_(x, y, z);
@@ -3642,13 +3577,11 @@ void pmv2s (Scoord x, Scoord y)
 
 void pnt(Coord x, Coord y, Coord z)
 {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(PNT);
+    RECORD_IN_OBJECT(PNT,
         e->pnt.x = x;
         e->pnt.y = y;
         e->pnt.z = z;
-        return;
-    }
+    );
 
     static world_vertex wv;
     vec4f_set(wv.coord, x, y, z, 1.0);
@@ -3699,12 +3632,10 @@ void linewidth(int w) {
 }
 
 void lmbind(int target, int index) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(LMBIND);
+    RECORD_IN_OBJECT(LMBIND,
         e->lmbind.target = target;
         e->lmbind.index = index;
-        return;
-    }
+    );
 
     TRACEF("%d, %d", target, index);
 
@@ -3873,11 +3804,9 @@ void lmdef(int deftype, int index, int numpoints, float properties[]) {
 }
 
 void loadmatrix(Matrix m) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(LOADMATRIX);
+    RECORD_IN_OBJECT(LOADMATRIX,
         memcpy(e->loadmatrix.m, m, sizeof(Matrix));
-        return;
-    }
+    );
 
     if(trace_functions)
     {
@@ -3896,11 +3825,9 @@ void loadmatrix(Matrix m) {
 }
 
 void mmode(int mode) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(MMODE);
+    RECORD_IN_OBJECT(MMODE,
         e->mmode.mode = mode;
-        return;
-    }
+    );
 
     TRACEF("%d", mode);
 
@@ -3914,13 +3841,11 @@ void mmode(int mode) {
 }
 
 void move(Coord x, Coord y, Coord z) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(MOVE);
+    RECORD_IN_OBJECT(MOVE,
         e->move.x = x;
         e->move.y = y;
         e->move.z = z;
-        return;
-    }
+    );
 
     TRACEF("%f, %f, %f", x, y, z);
     vec4f_set(current_position, x, y, z, 1.0);
@@ -3947,11 +3872,9 @@ void move2i(Icoord x, Icoord y) {
 }
 
 void n3f(float n[3]) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(N3F);
+    RECORD_IN_OBJECT(N3F,
         vec3f_copy(e->n3f.n, n);
-        return;
-    }
+    );
 
     TRACEF("%f, %f, %f", n[0], n[1], n[2]);
 
@@ -4003,13 +3926,11 @@ void rmv2i(Icoord dx, Icoord dy) {
 }
 
 void scale(float x, float y, float z) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(SCALE);
+    RECORD_IN_OBJECT(SCALE,
         e->scale.x = x;
         e->scale.y = y;
         e->scale.z = z;
-        return;
-    }
+    );
 
     TRACEF("%f, %f, %f", x, y, z);
 
@@ -4035,11 +3956,9 @@ void v4f(float v[4]) {
             abort();
     }
 
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(V4F);
+    RECORD_IN_OBJECT(V4F,
         vec4f_copy(e->v4f.v, v);
-        return;
-    }
+    );
 
     TRACEF("%f, %f, %f, %f", v[0], v[1], v[2], v[3]);
 
@@ -4121,8 +4040,7 @@ void getmatrix(Matrix m) {
 }
 
 void lookat(Coord viewx,Coord viewy, Coord viewz, Coord pointx, Coord pointy, Coord pointz, Angle twist) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(LOOKAT);
+    RECORD_IN_OBJECT(LOOKAT,
         e->lookat.viewx = viewx;
         e->lookat.viewy = viewy;
         e->lookat.viewz = viewz;
@@ -4130,8 +4048,7 @@ void lookat(Coord viewx,Coord viewy, Coord viewz, Coord pointx, Coord pointy, Co
         e->lookat.pointy = pointy;
         e->lookat.pointz = pointz;
         e->lookat.twist = twist;
-        return;
-    }
+    );
 
     TRACEF("%f, %f, %f, %f, %f, %f, %u", viewx, viewy, viewz, pointx, pointy, pointz, twist);
 
@@ -4531,11 +4448,9 @@ void zsource (long src)
 }
 
 void charstr(char *str) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(CHARSTR);
+    RECORD_IN_OBJECT(CHARSTR,
         e->charstr.str = strdup(str);
-        return;
-    }
+    );
 
     TRACEF("\"%s\"", str);
 
@@ -4556,13 +4471,11 @@ void charstr(char *str) {
 }
 
 void circi(Icoord x, Icoord y, Icoord r) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(CIRCI);
+    RECORD_IN_OBJECT(CIRCI,
         e->circi.x = x;
         e->circi.y = y;
         e->circi.r = r;
-        return;
-    }
+    );
 
     TRACEF("%d, %d, %d", x, y, r);
 
@@ -4650,12 +4563,10 @@ void circf(Coord x, Coord y, Coord r) {
 }
 
 void cmov2i(Icoord x, Icoord y) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(CMOV2I);
+    RECORD_IN_OBJECT(CMOV2I,
         e->cmov2i.x = x;
         e->cmov2i.y = y;
-        return;
-    }
+    );
 
     TRACEF("%d, %d", x, y);
 
@@ -4824,13 +4735,11 @@ void sboxfs(Scoord x1, Scoord y1, Scoord x2, Scoord y2)
 }
 
 void poly(int n, Coord p[][3]) {
-    if(cur_ptr_to_nextptr != NULL) {
-        dl_element *e = element_next_in_object(POLY);
+    RECORD_IN_OBJECT(POLY,
         e->poly.n = n;
         e->poly.p = (Coord(*)[]) malloc(sizeof(Coord) * 3 * n);
         memcpy(e->poly.p, p, sizeof(Coord) * 3 * n);
-        return;
-    }
+    );
 
     TRACEF("%d", n);
 
@@ -5227,5 +5136,3 @@ void gl_exit(int status)
 #endif
     exit(status);
 }
-
-// #define exit gl_exit

@@ -151,11 +151,4 @@ typedef struct rasterizer_funcs
 const rasterizer_funcs* ref_rasterizer_get_funcs(void);
 const rasterizer_funcs* gles2_rasterizer_get_funcs(void);
 
-// Set the shim-preferred implementation ("ref" or "gles") before the first
-// rasterizer_* call. Overridden by an explicit IRISGL_RAST (?rast= on the
-// web).
-// Used by per-demo quirks (gl.c) — e.g. cedit needs the reference
-// rasterizer's color-index buffer.
-void rasterizer_prefer(const char *mode);
-
 #endif /* __RASTERIZER_H__ */

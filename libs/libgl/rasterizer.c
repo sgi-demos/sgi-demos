@@ -24,23 +24,9 @@
 
 static const rasterizer_funcs *rast_funcs = NULL;
 
-// Shim-preferred mode (per-demo quirks in gl.c — e.g. cedit needs the
-// reference rasterizer's color-index buffer). Weaker than an explicit
-// IRISGL_RAST choice; must be set before the first
-// rasterizer_* call locks the selection in.
-static const char *preferred_mode = NULL;
-
-void rasterizer_prefer(const char *mode)
-{
-    preferred_mode = mode;
-}
-
 static const char* rasterizer_mode(void)
 {
     const char *mode = getenv("IRISGL_RAST");
-    if (mode == NULL)
-        mode = preferred_mode;
-
     return mode ? mode : "gles";
 }
 
