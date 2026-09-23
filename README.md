@@ -1,11 +1,11 @@
-# SGI demos from long ago, running in your browser [today](https://sgi-demos.github.io).
+# SGI demos from long ago, running in your browser [today](https://sgi-demos.org).
 _It's a UNIX system. I know this!_
 
 This is the original SGI demo source code, compiled for the web using Emscripten and SDL2.  Rendering is done via an IRIS GL-to-GLES2/3 rasterizer or a reference software rasterizer forked from the [Alice 4 project](https://lkesteloot.github.io/alice/alice4/libgl.html).  Event handling is done by SDL2, with events translated into GL's event system.
 
 Each demo is a separate web page, with its own Javascript + WASM compiled by Emscripten from the original C/C++ source.  Native Linux, Mac, and Windows builds are also available. Minimal modifications have been made to the original source, only what is necessary to build them 30+ years later for modern hardware and the browser.
 
-See the [copyright doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs/COPYRIGHT.md) for thorough copyright considerations, the [architecture doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs/ARCHITECTURE.md) for implementation details, and the latest [smoke test](https://sgi-demos.github.io/sgi-demos/tests/smoke/report/index.html) for build status.
+See the [copyright doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs/COPYRIGHT.md) for thorough copyright considerations, the [architecture doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs/ARCHITECTURE.md) for implementation details, and the latest [smoke test](https://sgi-demos.org/sgi-demos/tests/smoke/report/index.html) for build status.
 
 ## [Working demos](https://sgi-demos.org/browse/)
 
@@ -36,6 +36,8 @@ See the [copyright doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs/CO
 
 ## Build
 
+Every platform needs a C compiler, SDL2, Emscripten, bison (buttonfly's menu parser), and Python 3. `make` then builds every demo twice: natively into `demos/<name>/bin/`, and for the web into `demos/<name>/web/`. `make native` or `make browser` builds just one of the two, and `make list` prints the demos.
+
 ### Mac
 
 1. Install [Homebrew](https://brew.sh/) if you don't have it, then get SDL2 and Emscripten:
@@ -51,6 +53,22 @@ cd sgi-demos
 make
 ```
 
+### Linux
+
+1. Install the compiler, SDL2, bison, and Python (Debian and Ubuntu package names):
+```bash
+sudo apt install build-essential libsdl2-dev bison python3
+```
+
+2. Install [Emscripten](https://emscripten.org/docs/getting_started/downloads.html) with emsdk, following its directions, and add `source /path/to/emsdk/emsdk_env.sh` to your `~/.bashrc`.
+
+3. Build:
+```bash
+git clone https://github.com/sgi-demos/sgi-demos.git
+cd sgi-demos
+make
+```
+
 ### Windows
 
 1. Install [Winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) if you don't have it.
@@ -58,15 +76,15 @@ make
 2. Install [MSYS2](https://www.msys2.org/) from cmd.exe, in order to get the clang compiler:
 ```bash
 winget install MSYS2.MSYS2
-setx PATH "%PATH%C:\msys64\clang64\bin"
+setx PATH "%PATH%;C:\msys64\clang64\bin"
 ```
 
-3. Install clang toolchain, SDL2, and bison (for buttonfly menu parsing) in MSYS2 CLANG64 shell:
+3. Install clang toolchain, SDL2, bison, and Python in MSYS2 CLANG64 shell:
 ```bash
 pacman -Syu
 pacman -S base-devel mingw-w64-clang-x86_64-toolchain
 pacman -S mingw-w64-clang-x86_64-SDL2
-pacman -S bison
+pacman -S bison mingw-w64-clang-x86_64-python
 ```
 
 4. Clone [emscripten](https://emscripten.org/docs/getting_started/downloads.html) from Github.  Cloning seems to work best with MSYS2 rather than using pacman.  Follow the default install directions, not the Windows directions!
@@ -83,15 +101,25 @@ cd sgi-demos
 make
 ```
 
+## Run
+
+A native build runs from its demo's directory, where it finds its data files:
+```bash
+cd demos/jello && ./bin/jello
+```
+
+The web build runs from any local web server at the repository root; `make run-browser -C demos/jello` starts one with emrun and opens the demo. Otherwise:
+```bash
+python3 -m http.server 8000
+```
+then open http://localhost:8000/demos/jello/web/.
+
+Runtime switches, such as `IRISGL_RAST=ref` (`?rast=ref` on the web) for the CPU reference rasterizer, are listed in the [architecture doc](docs/ARCHITECTURE.md#runtime-switches). `make smoke` runs the headless-browser smoke tests of every web build (see [tests/smoke](tests/smoke/README.md)).
+
 ## To do
-- [Demos coming next](README.md#demos-coming-next)
 - Fix logged [issues](https://github.com/sgi-demos/sgi-demos/issues)
-- Provide context for each demo:
-  -  Overlay text in lower corner: Name, author, year, code link, provenance (IRIX version, dev toolbox, demo cd, etc.)
-  - Brief description/history/context for each demo - Obtain descriptions from .Info slide files
-  - Link to demo man page
+- Link each demo's man page from its placard
 - Add 'inspect demo' mode to pause, orbit, zoom, pan, fly through demo scene (as a hidden override to the demo's own controls)
-- Add popup/overlay help to show available key/mouse inputs
 - Provide virtual mouse and keyboard for touch devices:
   - Only display virtual keys and mouse functions used by the demo; use demo's qdevice() calls to determine this
   - Displayed as transparent virtual mouse and key pictures overlaid on demo
