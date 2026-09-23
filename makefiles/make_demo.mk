@@ -79,11 +79,11 @@ $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
 	ln -sF $(BIN_DIR) ./bin
 	@echo
 	@echo BUILT: $@
-	@echo $(CUR_DIR)
+	@echo
 
 $(EM_DEMO_OBJS): $(WEB_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(WEB_DIR)
 	@mkdir -p $(@D)
-	$(DEMO_CODE_EMCC) $(EM_OPT) $(EM_DEMO_CODE_WARN_OFF) $(APPNAME_DEF) $(DEMO_CFLAGS) $(EM_SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
+	$(DEMO_CODE_EMCC) $(EM_OPT) $(DEMO_CODE_WARN_OFF) $(APPNAME_DEF) $(DEMO_CFLAGS) $(EM_SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) $< -c -o $@
 
 $(EM_APP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EM_OBJS)
 	$(MODERN_CODE_EMCC) $(EM_OPT) $(EM_SHIM_INC) $(LIBGL_INC) $(EM_OBJS) $(EM_DEMO_LIB) $(EM_GL_LIB) \
@@ -91,7 +91,7 @@ $(EM_APP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EM_OBJS)
 	$(APPCMDS)
 	@echo
 	@echo BUILT: $@
-	@echo $(CUR_DIR)
+	@echo
 
 .PHONY: all native browser run run-native run-browser clean
 

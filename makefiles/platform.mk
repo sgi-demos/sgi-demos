@@ -90,9 +90,9 @@ EM_ASYNCIFY = -sASYNCIFY -sASYNCIFY_STACK_SIZE=65536
 # instead of aborting on large browser windows
 EM_MEMORY = -sALLOW_MEMORY_GROWTH=1
 
-# Debug options
+# Debug options (native builds always carry them; to debug a web build, add
+# -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK=2 to EMCC)
 EXTRA_DEBUG = -fsanitize=undefined
-EM_EXTRA_DEBUG = $(EXTRA_DEBUG) -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK=2
 
 # The site the web builds live on (sgi-demos.github.io serves it): where a
 # demo goes when it quits, and where buttonfly launches demos from
@@ -112,7 +112,6 @@ DEMO_CODE_CC = $(CC) -std=c90 $(SHIM_HEADER)
 # freezes times()-paced demo physics (see libs/libgl/times.c)
 DEMO_CODE_EMCC = $(EMCC) -std=c90 $(SHIM_HEADER) -Dtimes=sgi_demos_times
 DEMO_CODE_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat -Wno-pointer-sign -Wno-int-conversion -Wno-out-of-scope-function -Wno-format-extra-args -Wno-unused-command-line-argument -Wno-comment -Wno-deprecated-non-prototype $(DEMO_CODE_WARN_OFF_EXTRA)
-EM_DEMO_CODE_WARN_OFF = $(DEMO_CODE_WARN_OFF)
 
 # Compiler options for all other code
 MODERN_CODE_CC = $(CC) -std=gnu17

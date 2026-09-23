@@ -90,9 +90,9 @@ static void showFrameCounter()          { static int frameCt = 0; printf("frame 
 // displayed at 1:1 in that same space, centered (the GL quad spans
 // fb.size * pixelScale device pixels = fb.size points). Both transforms
 // derive from logicalSize so display and hit testing always agree.
-static void displayedFbSizeFwd(int *w, int *h);
-static int windowToFramebufferOffsetX() { int w, h; displayedFbSizeFwd(&w, &h); return fb.logicalSize.width / 2 - w / 2; }
-static int windowToFramebufferOffsetY() { int w, h; displayedFbSizeFwd(&w, &h); return fb.logicalSize.height / 2 - h / 2; }
+static void displayedFbSize(int *w, int *h); // defined below, with the PAR config
+static int windowToFramebufferOffsetX() { int w, h; displayedFbSize(&w, &h); return fb.logicalSize.width / 2 - w / 2; }
+static int windowToFramebufferOffsetY() { int w, h; displayedFbSize(&w, &h); return fb.logicalSize.height / 2 - h / 2; }
 
 // Refresh the window geometry: logical size (points), drawable size (device
 // pixels), and their ratio. Called at window creation and on every resize.
@@ -165,7 +165,6 @@ static void displayedFbSize(int *w, int *h)
         *h = fb.size.height;
     }
 }
-static void displayedFbSizeFwd(int *w, int *h) { displayedFbSize(w, h); }
 
 // Parse the SGI display simulation config
 static void parseDisplayConfig(void)

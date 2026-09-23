@@ -22,4 +22,3 @@ DEMO_EXCLUDE_SRC=comm.c udpcomm.c udpbrdcst.c shadow.c
 #   K&R diagnostic has no -Wno-<name> flag (same story as ep-1988).
 DEMO_CFLAGS=-D_4D -DHZ=100 -Dregister= -Drandom=flight_random -w
 include ../../makefiles/make_demo.mk
-include ../../makefiles/run_networked.mk
