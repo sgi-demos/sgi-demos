@@ -1,12 +1,15 @@
 //
-//  Provide an SDL framebuffer for IRIS GL to render into
+//  The SDL window and GL context, and the display of the IRIS GL framebuffer
 //
-//  Two types of framebuffers are provided:
-//  1. An SDL_texture is updated with ref rasterizer frontbuffer or GLES2 front FBO, and displayed using SDL_RenderCopy & SDL_RenderPresent
-//  2. An OpenGL texture is updated with ref rasterizer frontbuffer or GLES2 front FBO,, and displayed using glDrawArrays & SDL_GL_SwapWindow
+//  Each frame, the rasterizer's front buffer is drawn into the window as a
+//  textured quad (glDrawArrays, then SDL_GL_SwapWindow): the GLES
+//  rasterizer's front FBO texture directly, or the ref rasterizer's CPU
+//  pixels uploaded to a texture first.
 //
-//  The OpenGL texture framebuffer is a stepping stone towards having an OpenGL rasterizer, which opens up
-//  faster rendering -- especially important for arbitrary window sizes and texture mapping.
+//  The framebuffer tracks the window's size (or keeps a fixed size a demo
+//  asked for with prefposition, scaled to fit), is centered in the window,
+//  and is shown with the SGI monitor's 16:15 pixel aspect (IRISGL_PAR=0 turns
+//  that off); mouse coordinates are mapped back into framebuffer pixels.
 //
 #include <stdio.h>
 #include <stdlib.h>
@@ -132,10 +135,8 @@ static Size2D fbAspect = {0, 0};
 
 static bool parEnabled = true;
 
-// Fixed framebuffer size (demo compatibility quirk): some demos are
-// hard-authored for the classic screen (compile-time viewport constants);
-// they get exactly that framebuffer and the display scales it to the
-// window. 0,0 = normal window-tracking framebuffer.
+// Fixed framebuffer size, from prefposition(): the demo gets exactly that
+// framebuffer and the display scales it to the window. 0,0 = track the window.
 static Size2D fbFixedSize = {0, 0};
 
 void sdlSetFramebufferFixedSize(int32_t width, int32_t height)
@@ -212,8 +213,7 @@ static bool updateFramebufferSize()
 
     if (fbFixedSize.width > 0 && fbFixedSize.height > 0)
     {
-        // demo compatibility quirk: classic fixed-size framebuffer; the
-        // display scales it to the window (see displayedFbSize)
+        // prefposition's fixed size; the display scales it to the window
         w = min(fbFixedSize.width, maxFramebufferDim);
         h = min(fbFixedSize.height, maxFramebufferDim);
     }
@@ -243,13 +243,10 @@ static bool updateFramebufferSize()
 
 static void updateShaderVars(); // defined below (needs the shader in scope)
 
-// Re-fit the framebuffer to the current window and aspect constraint,
-// rebuilding the display texture on a size change. Shared by the resize
-// path and keepaspect(). Returns true when the framebuffer size changed
-// (the caller then resizes the rasterizer and sends the demo a REDRAW).
-// Native: snap the window to the (displayed) aspect constraint now — used
-// when a constraint arrives after window creation (e.g. flight calls
-// keepaspect after winopen)
+// Native windows keep the aspect like the IRIX window manager did: snap a
+// non-conforming window to the largest conforming fit. The resize this
+// triggers settles, since a conforming size fits as itself. Browser windows
+// can't be constrained; there the framebuffer centers in the canvas instead.
 static void conformWindowToAspect(void)
 {
 #ifndef __EMSCRIPTEN__
@@ -262,6 +259,11 @@ static void conformWindowToAspect(void)
 #endif
 }
 
+// Re-fit the framebuffer to the current window and aspect constraint,
+// rebuilding the display texture on a size change. Shared by the resize
+// path and keepaspect(), which can arrive after winopen (flight's does).
+// Returns true when the framebuffer size changed (the caller then resizes
+// the rasterizer and sends the demo a REDRAW).
 bool sdlApplyFramebufferSize(void)
 {
     if (!fb.pWindow)
@@ -356,9 +358,7 @@ static void updateShaderVars()
     GLfloat windowSize[2] = {fb.windowSize.width, fb.windowSize.height};
     glUniform2fv(fb.glShaderVpSize, 1, windowSize);
 
-    // the quad geometry uses the DISPLAYED size: PAR stretches the
-    // framebuffer columns 16/15, and a fixed-size framebuffer scales to
-    // the window (see SGI display sim / demo quirks)
+    // the quad geometry uses the DISPLAYED size (see displayedFbSize)
     int dispW, dispH;
     displayedFbSize(&dispW, &dispH);
     GLfloat fbSize[2] = {dispW, dispH};
@@ -367,12 +367,8 @@ static void updateShaderVars()
     glUniform1f(fb.glShaderPixelScale, fb.pixelScale);
 
 
-    // Source-dependent vars. Both sources are exact framebuffer-sized
-    // NPOT textures — legal to sample with CLAMP_TO_EDGE and no mipmaps,
-    // which is how both are built (the old POT requirement came from the
-    // y-flip's GL_REPEAT wrap; the flip is now done in positive texcoord
-    // space). CPU-upload texture: BGRA bytes, top-down. External FBO
-    // texture (gles2 rasterizer): true RGBA, bottom-up.
+    // Source-dependent vars. CPU-upload texture: BGRA bytes, top-down.
+    // External FBO texture (gles2 rasterizer): true RGBA, bottom-up.
     bool useExtTex = fb.extTex != 0;
     glUniform1i(fb.glShaderYFlip, useExtTex ? 0 : 1);        // bool uniform
     glUniform1f(fb.glShaderRBSwap, useExtTex ? 0.0f : 1.0f); // float: used in mix()
@@ -487,8 +483,6 @@ uint32_t sdlInitWindow()
     printf("INFO: GL renderer: %s\n", glGetString(GL_RENDERER));
     printf("INFO: GL version: %s\n", glGetString(GL_VERSION));
 
-    //const float r = 0.2f, g = 0.1f, b = 0.15f, a = 1.0f;
-    //glClearColor(r, g, b, a);
     glClearColor(0,0,0,1.0f);
 
     // All framebuffer textures are exact framebuffer-sized, so the GL
@@ -501,8 +495,7 @@ uint32_t sdlInitWindow()
 
     // Window geometry: logical (mouse) size, drawable (GL) size, and
     // their HIGHDPI ratio. NOTE: must be float division — on web the
-    // canvas can be any size (e.g. fullwindow shells), so the ratio is
-    // not necessarily a whole number
+    // canvas can be any size, so the ratio is not necessarily a whole number
     updateWindowGeometry();
     updateFramebufferSize();
     printf("INFO: GL window: %dx%d points, viewport %dx%d px, pixel scale %f, fb %dx%d\n",
@@ -521,8 +514,7 @@ uint32_t sdlInitWindow()
     return (uint32_t)fb.windowID;
 }
 
-// True once the GL context exists (i.e. after sdlInitWindow on the GL
-// display path). The gles2 rasterizer polls this to lazily create its GL
+// True once the GL context exists (after sdlInitWindow). The gles2 rasterizer polls this to lazily create its GL
 // resources, since rasterizer_winopen runs before the window is created.
 bool sdlGLContextReady()
 {
@@ -608,9 +600,7 @@ static void checkValidTex()
 
 void sdlInitFramebufferTexture()
 {
-    // Exact framebuffer-sized texture. NPOT is fine to sample with
-    // CLAMP_TO_EDGE wrapping and no mipmaps (the y-flip happens in
-    // positive texcoord space, so no GL_REPEAT — the old POT reqmt)
+    // Exact framebuffer-sized texture: NPOT, CLAMP_TO_EDGE, no mipmaps
     SDL_Surface* fbTexture =
         createTexSurface(fb.size.width, fb.size.height, fb.size.width, fb.size.height);
 
@@ -726,23 +716,6 @@ bool sdlResizeWindow(Uint32 windowID)
     if (windowID == fb.windowID)
     {
         updateWindowGeometry();
-
-#ifndef __EMSCRIPTEN__
-        // Native windows keep the aspect like the IRIX window manager did:
-        // snap a non-conforming size back to the largest conforming fit.
-        // The SDL_SetWindowSize triggers another SIZE_CHANGED that settles
-        // (fit of a conforming size is itself). Browser windows can't be
-        // constrained; there the framebuffer centers in the canvas instead.
-        {
-            int fitW = fb.logicalSize.width, fitH = fb.logicalSize.height;
-            aspectFitSize(&fitW, &fitH);
-            if (fitW != fb.logicalSize.width || fitH != fb.logicalSize.height)
-                SDL_SetWindowSize(fb.pWindow, fitW, fitH);
-        }
-#endif
-
-        // the framebuffer tracks the window (aspect-constrained if the demo
-        // called keepaspect); a size change rebuilds the display texture
         fbSizeChanged = sdlApplyFramebufferSize();
         printf("INFO: resize window: %dx%d points, viewport %dx%d px, pixel scale %f, fb %dx%d\n",
                fb.logicalSize.width, fb.logicalSize.height,
@@ -768,9 +741,6 @@ void sdlOpenWindow(char *title)
         SDL_SetWindowTitle(fb.pWindow, fb.title);
 #endif
 
-    // fb.size is owned by updateFramebufferSize (framebuffer tracks the
-    // window); nothing size-related to do here anymore
-
     updateShaderVars();
 }
 
@@ -794,13 +764,12 @@ void sdlSetFramebufferSourceTex(uint32_t tex)
     bool changed = fb.extTex != (GLuint)tex;
     fb.extTex = (GLuint)tex;
 
-    // source-dependent shader vars (texSize, yFlip, rbSwap) follow the source
+    // source-dependent shader vars (yFlip, rbSwap) follow the source
     if (changed && fb.glShaderProg)
         updateShaderVars();
 }
 
-// For now, window and framebuffer dimensions may differ, so convert
-// incoming window coords to framebuffer coords, including inverting y
+// Window coords to framebuffer coords (centering, PAR, fixed size), y up
 static int clamp(int v, int low, int high)          { return v > high ? high : (v < low ? low : v); }
 static bool would_clamp(int v, int low, int high)   { return v < low || v > high; }
 static int framebufferX(int windowX)

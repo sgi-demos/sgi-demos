@@ -140,7 +140,7 @@ void ref_rasterizer_clear(uint8_t r, uint8_t g, uint8_t b, short color_index)
 // IRIS colormap-plane masked clear, exact form: every pixel's INDEX takes
 // (oldIndex & ~wm) | (clear_index & wm) — index-plane arithmetic through
 // the per-pixel CI buffer, RGB re-resolved through the colormap. Unlike
-// the RGB-matching approximation (gles2, and the fallback below), this is
+// RGB matching (gles on an ES2-only context, and the fallback below), this is
 // immune to palette collisions and never strands a pixel whose RGB drifted
 // off-palette. Pixels whose index is unchanged keep their RGB bytes as-is,
 // so RGB-only shim overlays (popup menus, which record no CI) survive
@@ -852,14 +852,11 @@ void ref_rasterizer_alpha_blit(uint32_t width, uint32_t rowbytes, uint32_t heigh
             if (a == 0) continue;
             if (!text_antialias_enabled) {
                 // Hard 50% threshold: opaque or nothing.
-                if (a < 128) continue; // 128
+                if (a < 128) continue;
                 a = 255;
             }
 
-            // Source-over blend: dst = src*a + dst*(1-a), with a in [0,255].
-            // The (x + 127) / 255 rounded-divide form is exact for the
-            // integer math; the cheaper (x*a + x) >> 8 is a near-equivalent
-            // approximation we could use if this turns out to be a hot spot.
+            // Source-over blend, dst = src*a + dst*(1-a), rounded
             if (backbuffer_draw_enabled) {
                 uint8_t *p = buffer_pixel(gl_c_backbuffer, x, y);
                 p[RED_BYTE]   = (uint8_t)((r * a + p[RED_BYTE]   * (255 - a) + 127) / 255);

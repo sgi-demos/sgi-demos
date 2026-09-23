@@ -5,15 +5,15 @@ Run offline, once, and commit the generated .c/.h alongside libgl sources.
 The build's `wildcard *.c` picks up the .c automatically; no Makefile or
 runtime BDF parser needed.
 
-This targets the authentic Adobe X11 bitmaps (e.g. helvO14.bdf from
+This targets the authentic Adobe X11 bitmaps (helvBO14.bdf, from
 freedesktop/xorg-font-adobe-75dpi) so the menu text can be pixel-exact to
 the historic SGI/X11 look. Only ASCII (and optionally Latin-1) glyphs are
 needed for menus; by default we bake encodings 32..126.
 
 Usage:
-    bake_bdf.py helvO14.bdf
-    bake_bdf.py helvO14.bdf --name helv_o_14 --outdir libs/libgl
-    bake_bdf.py helvO14.bdf --first 32 --last 255
+    bake_bdf.py helvBO14.bdf
+    bake_bdf.py helvBO14.bdf --name helvBO14_bdf --outdir libs/libgl
+    bake_bdf.py helvBO14.bdf --first 32 --last 255
 
 Emits (in --outdir, default = input's dir):
     <name>.c  : the glyph table + packed 1bpp bitmap blob + font metrics
@@ -209,7 +209,7 @@ def emit(name, ascent, descent, glyphs, src_filename, src_path=None):
 
 def main():
     ap = argparse.ArgumentParser(description="Bake a BDF font into C.")
-    ap.add_argument("input", help="BDF file (e.g. helvO14.bdf)")
+    ap.add_argument("input", help="BDF file (e.g. helvBO14.bdf)")
     ap.add_argument("--name", help="C identifier (default: sanitized filename)")
     ap.add_argument("--outdir", help="output dir (default: input's dir)")
     ap.add_argument("--first", type=int, default=32, help="first encoding (default 32)")

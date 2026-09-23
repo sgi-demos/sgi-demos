@@ -32,12 +32,11 @@ void rasterizer_bitmap(uint32_t width, uint32_t rowbytes, uint32_t height, scree
 void rasterizer_alpha_blit(uint32_t width, uint32_t rowbytes, uint32_t height, screen_vertex *sv, uint8_t *alpha, uint8_t r, uint8_t g, uint8_t b);
 // Colormap-plane masked clear (IRIS writemask): every pixel in the
 // inclusive screen rect (y up) takes the index (oldIndex & ~wm) |
-// (clear_index & wm). The reference rasterizer applies that math exactly
-// through its per-pixel CI buffer, resolving RGB through colormap[]. The
-// gles2 rasterizer has no CI buffer and approximates by RGB matching:
-// recolor pixels matching rgb_from[n] to rgb_to[n] (pairs precomputed by
-// gl.c from the same index math over the mapcolor'd palette). Applies to
-// whichever of front/back drawing is enabled; never touches z.
+// (clear_index & wm), exactly, through the CI buffer. Without one (gles on
+// an ES2-only context) it falls back to RGB matching: pixels matching
+// rgb_from[n] become rgb_to[n] (pairs precomputed by gl.c from the same
+// index math over the palette). Applies to whichever of front/back drawing
+// is enabled; never touches z.
 void rasterizer_masked_clear(int32_t x0, int32_t y0, int32_t x1, int32_t y1,
                              uint16_t wm, uint16_t clear_index, uint8_t colormap[][3],
                              uint32_t n, const uint32_t *rgb_from, const uint32_t *rgb_to);
@@ -46,9 +45,7 @@ void rasterizer_masked_clear(int32_t x0, int32_t y0, int32_t x1, int32_t y1,
 // colormap[] — so art protected in the masked-off planes shows through new
 // primitives (flight 1988 draws its meter bars and compass needle this way
 // over scale art living in planes 0-1). colormap points at the GL layer's
-// live palette; the reference rasterizer composites exactly through its CI
-// buffer. The gles2 rasterizer has no CI buffer and ignores this — masked
-// draws there keep their flat color (a known approximation).
+// live palette. Without a CI buffer masked draws keep their flat color.
 void rasterizer_writemask(uint16_t wm, uint8_t colormap[][3]);
 void rasterizer_setpattern(uint16_t pattern[16]);
 void rasterizer_pattern(int enable);
@@ -86,14 +83,14 @@ void rasterizer_frame_sync(void);
 // CI mode the CI buffer is the source of truth; the RGB front buffer is a
 // cache populated from it by rasterizer_resolve_ci_to_rgb. Used by
 // readpixels()/getapixel() to read back the index under a screen position.
-// Returns NULL when the rasterizer keeps no CI buffer (gles2).
+// Returns NULL without a CI buffer (RGB mode, or gles on an ES2-only context).
 unsigned short* rasterizer_ci_frontbuffer(void);
 
 // Walk the front CI buffer and write colormap[ci] into the front RGB buffer
 // for each pixel. Called by the GL layer just before presenting, when in CI
 // mode and the colormap has changed. This emulates the SGI hardware palette
 // LUT: a mapcolor() call is reflected on screen on the next present without
-// the demo redrawing anything. No-op when there is no CI buffer (gles2).
+// the demo redrawing anything. No-op without a CI buffer.
 void rasterizer_resolve_ci_to_rgb(uint8_t colormap[][3]);
 
 // The framebuffer tracks the window size: called once after the window
@@ -103,14 +100,8 @@ void rasterizer_resolve_ci_to_rgb(uint8_t colormap[][3]);
 // buffers are the active draw/display targets.
 void rasterizer_resize(uint32_t width, uint32_t height);
 
-//
-// Dual rendering modes: the rasterizer_* API above dispatches through a
-// function table to one of two implementations, selected at startup in
-// rasterizer.c:
-//   - gles2:     GPU rasterizer on OpenGL ES2  (gles2_rasterizer.c) — default
-//   - reference: CPU scanline rasterizer  (reference_rasterizer.c) — for
-//                reference/debugging (IRISGL_RAST=ref / ?rast=ref)
-//
+// The rasterizer_* API above dispatches through this table to one of the two
+// implementations, gles or ref, chosen at startup (see rasterizer.c).
 typedef struct rasterizer_funcs
 {
     int32_t (*winopen)(char *title);

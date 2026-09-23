@@ -78,6 +78,7 @@ makefiles/            Shared build rules, and the web page template
 scripts/              Placards, the README demo grid, thumbnails, fonts,
                       frame comparison
 tests/smoke/          Headless-browser smoke tests of every web build
+tests/native-resize/  Native window-resize harness for the framebuffer fitting
 media/                Demo thumbnails (the README grid and the browse page)
 ```
 

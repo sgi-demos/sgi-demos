@@ -74,7 +74,7 @@ int main(void)
     }
 
     // display-move: park the window on each display in turn (exercises
-    // macOS backing-scale changes, the shot-3 suspect)
+    // macOS backing-scale changes)
     {
         SDL_Window *win = SDL_GL_GetCurrentWindow();
         int n = SDL_GetNumVideoDisplays();

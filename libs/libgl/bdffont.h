@@ -8,13 +8,9 @@
 
 #include <stdint.h>
 #include "rasterizer.h"   // screen_vertex
-// The generated font header defines BdfGlyph / BdfFont. Any baked BDF
-// header (e.g. helvO14.h) provides the same struct layout; we only need
-// the type here, so forward-declare via a representative include is avoided
-// to keep this font-agnostic. The structs are defined by the generated .h,
-// so callers include that before using a specific font. To let this module
-// compile standalone, the struct definitions are mirrored here under a
-// guard the generated header also respects.
+// BdfGlyph / BdfFont are defined here and in each generated font header
+// (helvBO14_bdf.h, irisfont0.h) under a shared guard, so any of them may be
+// included first.
 
 #ifndef BDF_STRUCTS_DEFINED
 #define BDF_STRUCTS_DEFINED

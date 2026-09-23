@@ -7,11 +7,9 @@
 extern "C" {
 #endif
 
-#include <time.h> // For clock_t. This is a standard C header and generally safe.
+// POSIX <sys/times.h> for Windows (times() is in libs/libgl/times.c)
+#include <time.h>
 
-// Definition of struct tms. This needs to be in the header
-// as code calling times() will declare variables of this type
-// and access its members.
 struct tms {
     clock_t tms_utime;  /* user time */
     clock_t tms_stime;  /* system time */
@@ -19,16 +17,9 @@ struct tms {
     clock_t tms_cstime; /* system time of children */
 };
 
-// Declaration of your times() function.
-// This is the function that other code will call.
-// It will have external linkage.
 clock_t times(struct tms *buf);
 
-// The CLK_TCK definition can also go here if user code might need it,
-// or it can be solely an implementation detail in the .c file if preferred.
-// For consistency with how times() results are interpreted, it's good here.
 #ifndef CLK_TCK
-    // CLOCKS_PER_SEC is typically 1000 on Windows (ms resolution)
     #define CLK_TCK ((clock_t)CLOCKS_PER_SEC)
 #endif
 

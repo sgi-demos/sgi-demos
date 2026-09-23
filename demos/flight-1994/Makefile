@@ -8,7 +8,7 @@ DEMO_EXTRA_HDRS=libgobj/gobj.h
 # aifflib.c needs IRIX <audio.h>; sound.c is #ifdef AUDIO (off for now)
 DEMO_EXCLUDE_SRC=aifflib.c
 # -DHZ=100: IRIX <sys/param.h> ticks/sec for times() math (matches
-#   _SC_CLK_TCK on macOS/Linux and Emscripten's musl)
+#   _SC_CLK_TCK natively and libgl's web times(), libs/libgl/times.c)
 # -Dregister=: IRIX cc allowed &register-var; modern C90 doesn't
 # -D_GNU_SOURCE: emscripten's musl hides struct ip_mreq/caddr_t (udpbrdcst.c)
 #   and M_PI under strict c90 without it

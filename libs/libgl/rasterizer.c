@@ -5,9 +5,8 @@
 //   - gles: GPU rasterizer on OpenGL ES2, ES3 where available
 //           (gles2_rasterizer.c) — DEFAULT
 //   - ref:  CPU scanline rasterizer from the Alice 4 project
-//           (reference_rasterizer.c), kept for reference/debugging
-//           (CPU-rasterizing large framebuffers is slow now that the
-//           framebuffer tracks the window size)
+//           (reference_rasterizer.c), the reference to check gles against;
+//           slow on large windows
 //
 // IRISGL_RAST=ref selects the CPU reference rasterizer (on the web, ?rast=ref:
 // demos/switches.js passes URL switches in as environment variables). Any

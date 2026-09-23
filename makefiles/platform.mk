@@ -85,9 +85,8 @@ EM_OPT = $(OPT_TWO)
 # ASYNCIFY_STACK_SIZE: num bytes for storing call stack during yield (64KB is generous for deep call stacks)
 EM_ASYNCIFY = -sASYNCIFY -sASYNCIFY_STACK_SIZE=65536
 
-# The framebuffer tracks the window size, so rasterizer buffers are heap
-# allocated at runtime, so let the WASM heap grow past the 16MB default
-# instead of aborting on large browser windows
+# Rasterizer buffers are heap-allocated at the window's size: let the WASM
+# heap grow past the 16MB default instead of aborting on large windows
 EM_MEMORY = -sALLOW_MEMORY_GROWTH=1
 
 # Debug options (native builds always carry them; to debug a web build, add
@@ -100,7 +99,7 @@ SITE_DEF = -DSGI_DEMOS_SITE='"https://sgi-demos.org"'
 
 # Base compilers
 CC = cc $(EXTRA_DEBUG) $(SITE_DEF)
-EMCC = emcc $(SITE_DEF) # -s WASM=1 -s PRECISE_F32=1 # TODO: warning: linker setting ignored during compilation: -Wunused-command-line-argument
+EMCC = emcc $(SITE_DEF)
 
 # Library archivers
 AR = ar rvsc

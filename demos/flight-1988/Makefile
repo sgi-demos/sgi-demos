@@ -10,8 +10,8 @@ DEMO_EXCLUDE_SRC=comm.c udpcomm.c udpbrdcst.c shadow.c
 # -D_4D: SGI's own LCOPTS (Makefile.orig) — selects the 4D-era float-tps
 #   physics and CLOCKRATE=HZ; without it the IRIS-3000 fallback assumes a
 #   60Hz times() clock and the sim runs ~40% slow ("planes too slow")
-# -DHZ=100: IRIX <sys/param.h> ticks/sec; matches times() on macOS/Linux and
-#   Emscripten's musl
+# -DHZ=100: IRIX <sys/param.h> ticks/sec; matches times() natively and
+#   libgl's web times() (libs/libgl/times.c)
 # -Dregister=: IRIX cc allowed things modern C90 register vars can't do
 # -Drandom=flight_random: uflight.c defines its own random(range), which
 #   collides with libc's random(void); the define renames the definition and

@@ -382,8 +382,7 @@ void sdlProcessEvents()
                         touch.enabled = !touch.enabled;
                     // Every printing key must reach qdevice(KEYBD) readers as a
                     // character — flight's "press any character to continue"
-                    // includes SPACE, whose multi-char SDL key name previously
-                    // fell through both this case and SDL_KEYDOWN's. Keys with
+                    // includes SPACE, whose SDL key name is multi-char. Keys with
                     // multi-char names already sent their raw device event at
                     // SDL_KEYDOWN; single-char-named keys queue theirs here,
                     // paired with the text.
@@ -514,8 +513,8 @@ void sdl_events_frame_complete(void)
     // Translate input events into IRIS GL events
     sdlProcessEvents();
 
-    // Let a GPU rasterizer flush pending geometry and read back the front
-    // buffer before we display it (no-op for the CPU reference rasterizer)
+    // Let a GPU rasterizer flush pending geometry before we display it
+    // (no-op for the CPU reference rasterizer)
     rasterizer_frame_sync();
 
     // Update framebuffer texture with rendered pixels & render it
@@ -602,8 +601,7 @@ static void yieldByEventQuery()
 // (observed as flight 3.4's startup wait wedging the page).
 //
 // Returns 0 (doing nothing) when called from inside the event pump, where
-// blocking would deadlock; qread then falls back to returning 0 (the old
-// non-blocking behavior).
+// blocking would deadlock; qread then returns 0 without blocking.
 //
 int32_t sdl_events_qread_block(void)
 {
@@ -879,14 +877,6 @@ static void applyFramebufferConstraintChange(void)
 void sdl_events_keepaspect(int32_t x, int32_t y)
 {
     sdlSetFramebufferAspect(x, y);
-    applyFramebufferConstraintChange();
-}
-
-// Demo compatibility quirk: lock the framebuffer to a fixed (classic) size;
-// the display scales it to the window
-void sdl_events_fix_framebuffer_size(int32_t width, int32_t height)
-{
-    sdlSetFramebufferFixedSize(width, height);
     applyFramebufferConstraintChange();
 }
 

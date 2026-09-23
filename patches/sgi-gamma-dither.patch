@@ -1,7 +1,7 @@
 diff --git a/libs/libgl/sdl_framebuffer.c b/libs/libgl/sdl_framebuffer.c
 --- a/libs/libgl/sdl_framebuffer.c
 +++ b/libs/libgl/sdl_framebuffer.c
-@@ -43,6 +43,10 @@
+@@ -46,6 +46,10 @@
      GLint   glShaderPixelScale;
      GLint   glShaderYFlip;      // location of bool yFlip: true = source rows are top-down (CPU upload path)
      GLint   glShaderRBSwap;     // location of float rbSwap: 1.0 = source bytes are BGRA (CPU upload path)
@@ -12,7 +12,7 @@ diff --git a/libs/libgl/sdl_framebuffer.c b/libs/libgl/sdl_framebuffer.c
      GLuint  glTex;              // Texture object for displaying the framebuffer
      GLuint  extTex;             // Framebuffer-sized external texture (gles2 rasterizer front FBO, 0 for CPU upload path)
      GLuint  glQuadVBO;          // Quad geometry for displaying the texture
-@@ -67,6 +71,10 @@
+@@ -70,6 +74,10 @@
      .glShaderPixelScale = 0,
      .glShaderYFlip = 0,
      .glShaderRBSwap = 0,
@@ -23,7 +23,7 @@ diff --git a/libs/libgl/sdl_framebuffer.c b/libs/libgl/sdl_framebuffer.c
      .glTex = 0,
      .extTex = 0,
      .glQuadVBO = 0,
-@@ -121,16 +129,31 @@
+@@ -124,16 +132,31 @@
  // is widened 16/15, exactly filling the window (no letterbox) with the
  // authentic CRT proportions. Stretching (magnification) rather than
  // squashing (minification) so no framebuffer row/column is ever dropped by
@@ -57,8 +57,8 @@ diff --git a/libs/libgl/sdl_framebuffer.c b/libs/libgl/sdl_framebuffer.c
 +    {  32,  64,  32 },  // 4: PC 16-bit HighColor (5-6-5)
 +};
  
- // Fixed framebuffer size (demo compatibility quirk): some demos are
- // hard-authored for the classic screen (compile-time viewport constants);
+ // Fixed framebuffer size, from prefposition(): the demo gets exactly that
+ // framebuffer and the display scales it to the window. 0,0 = track the window.
 @@ -172,8 +195,14 @@
  {
      const char *v;
@@ -75,7 +75,7 @@ diff --git a/libs/libgl/sdl_framebuffer.c b/libs/libgl/sdl_framebuffer.c
  }
  
  void sdlSetFramebufferAspect(int32_t x, int32_t y)
-@@ -325,12 +354,67 @@
+@@ -326,12 +355,67 @@
      "varying vec2 texCoord;                                             \n"
      "uniform sampler2D texSampler;                                      \n"
      "uniform float rbSwap;                                              \n"
@@ -144,7 +144,7 @@ diff --git a/libs/libgl/sdl_framebuffer.c b/libs/libgl/sdl_framebuffer.c
      "}                                                                  \n";
  
  static void checkShaderBuilt(const char* shader_name, GLenum status, GLuint shader)
-@@ -366,6 +450,14 @@
+@@ -365,6 +449,14 @@
      glUniform2fv(fb.glShaderFbSize, 1, fbSize);
  
      glUniform1f(fb.glShaderPixelScale, fb.pixelScale);
@@ -158,8 +158,8 @@ diff --git a/libs/libgl/sdl_framebuffer.c b/libs/libgl/sdl_framebuffer.c
 +    glUniform2fv(fb.glShaderFbRes, 1, fbRes);
  
  
-     // Source-dependent vars. Both sources are exact framebuffer-sized
-@@ -406,6 +498,10 @@
+     // Source-dependent vars. CPU-upload texture: BGRA bytes, top-down.
+@@ -401,6 +493,10 @@
      fb.glShaderPixelScale = glGetUniformLocation(fb.glShaderProg, "pixelScale");
      fb.glShaderYFlip      = glGetUniformLocation(fb.glShaderProg, "yFlip");
      fb.glShaderRBSwap     = glGetUniformLocation(fb.glShaderProg, "rbSwap");

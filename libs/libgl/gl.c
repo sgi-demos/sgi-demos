@@ -5,7 +5,6 @@
 // See NOTICE at the repository root.
 // make all implemented functions have trace
 // make all tracefunctions look like C-ish
-// RECORD macro checks display list mode, make, store object...?
 // fix all int usage
 // make trace() function
 // consistent function start
@@ -145,10 +144,9 @@ static int rgb_mode = 0;
 // swapbuffers, cleared on the front flag by gl_resolve_ci_if_needed. Pixels
 // carry draw-time-resolved RGB, so a buffer is only stale if the colormap
 // changed since its pixels were drawn — demos with a static palette resolve
-// once and never again. (Writemask masked clears keep CI and RGB in step —
-// the reference rasterizer applies them through the CI buffer — so a later
-// resolve reproduces, not undoes, them.) Start 1 so the first presents
-// resolve.
+// once and never again. (Masked clears keep CI and RGB in step — the
+// rasterizers apply them through the CI buffer — so a later resolve
+// reproduces, not undoes, them.) Start 1 so the first presents resolve.
 static int ci_rgb_cache_stale = 1;       // front buffer
 static int ci_rgb_cache_stale_back = 1;  // back buffer
 void gl_resolve_ci_if_needed(void); // defined near mapcolor
@@ -193,7 +191,7 @@ static float circle_verts[CIRCLE_SEGMENTS][2];
 static int pup_active = 0; // popup menu active
 
 // The device-event queue and the IRIS GL event API (qdevice/qread/qtest/...)
-// now live at bottom of this file.
+// are at the bottom of this file.
 
 
 //------------------------------------------------------------------------
@@ -1073,8 +1071,7 @@ void string_draw(screen_vertex* screenvert_, const char *str) {
     // Default text font: the recovered IRIX 3 system screen font (IRIS GL
     // font 0) — the actual bitmap font charstr() drew through on the real
     // machines, unless a demo loaded its own. 9x15 charcell, fixed 9px
-    // pitch, ascent 13 / descent 2. Replaces the X11 Misc-Fixed 9x15
-    // stand-in that was chosen as a metric-matched guess for exactly this.
+    // pitch, ascent 13 / descent 2.
     static screen_vertex screenvert;
 
     screenvert = *screenvert_;
@@ -1964,13 +1961,11 @@ void clear() {
     // newIndex = (oldIndex & ~wm) | (clearIndex & wm). flight 1988's meters
     // depend on this — the scale art lives in planes 0-1 (brown/orange/grey2)
     // and survives the per-frame writemask(wm_allplanes-3) clear that erases
-    // the blue/red bars. The reference rasterizer applies the index math
-    // exactly, per pixel, through its CI buffer (it gets wm, the clear
-    // index, and the colormap below). The GPU rasterizer has no index
-    // planes, so it approximates with a palette recoloring of the viewport
-    // rect: for every mapped index, oldRGB -> RGB[newIndex]. (Exact for the
-    // GPU's flat cmode fills; pixels whose RGB collides across indices take
-    // the first match.)
+    // the blue/red bars. The rasterizers apply the index math exactly, per
+    // pixel, through their CI buffers (they get wm, the clear index, and the
+    // colormap below). Without a CI buffer (gles on an ES2-only context) the
+    // RGB remap pairs built here stand in: for every mapped index, oldRGB ->
+    // RGB[newIndex] (exact for flat fills; colliding RGBs take the first match).
     if (clear_layer < 0 && !rgb_mode && (~current_writemask & 0xfff) != 0) {
         static uint32_t rgb_from[4096], rgb_to[4096];
         uint32_t n = 0;
@@ -2006,11 +2001,8 @@ void clear() {
                 current_color_index);
     } else {
         // Partial viewport: fill exactly the viewport rectangle in screen
-        // space. (The old approach drew a unit polygon through the current
-        // matrices, which only covered the viewport when the projection
-        // happened to map 0..1 onto it — flight 1988's CLEAR_* objects set
-        // world-coordinate ortho2 ranges, so their per-frame erases were
-        // no-ops and text/gauges smeared.) Clear ignores the z test but
+        // space, whatever the projection (flight 1988's CLEAR_* objects set
+        // world-coordinate ortho2 ranges). Clear ignores the z test but
         // honors the current pattern, like IRIS GL.
         screen_vertex q[6];
         for (int i = 0; i < 6; i++) {
@@ -2063,10 +2055,7 @@ void closeobj() {
 // simultaneously to the same set of colors as the currently running app.
 //
 // 12 = the deepest IRIS colormap config (4096 entries, matching our
-// colormap[]). flight 1988 shifts (1 << getplanes()) into a short, so 24
-// overflowed; SGI documented flight for 8- or 12-plane cmode. Demos whose
-// <=12-plane path needs per-draw writemask compositing this shim can't
-// emulate get a different config in apply_demo_quirks (arena -> 24).
+// colormap[]); arena is told 24 (see apply_demo_quirks).
 static int planes_config = 12;
 
 int getplanes() {
@@ -2221,10 +2210,8 @@ void backbuffer(Boolean enable) {
 }
 
 void gconfig() {
-    // Nothing to do here really. It's to be called after configuring:
-    // 1. overlay/underlay (not supported)
-    // 2. RGB vs. color map (only RGB supported)
-    // 3. single vs. double buffer (only double buffer supported)
+    // Nothing to do: RGBmode/cmode, single/doublebuffer, and the layer
+    // planes all take effect when called.
 }
 
 Object genobj() {
@@ -2402,7 +2389,7 @@ void mapcolor(Colorindex index, int red, int green, int blue) {
 // menu into the RGB front buffer (with no CI backing) and presents through
 // there, and a resolve would repaint the scene over the open menu.
 //
-// No-op in RGB mode and on rasterizers with no CI buffer (gles2).
+// No-op in RGB mode and without a CI buffer.
 void gl_resolve_ci_if_needed(void)
 {
     if (!rgb_mode && ci_rgb_cache_stale) {
@@ -2938,23 +2925,14 @@ static int demo_is(const char *title, const char *name) {
     return strcmp(title, name) == 0;
 }
 
-// Shim-level per-demo compatibility quirks. Original demo sources are never
-// modified (rule #1); demos whose code bakes in the classic fixed screen
-// get shim policies that recreate it:
+// Per-demo quirks, kept here so the original demo sources stay unmodified:
 //  - arena: on a <=12-plane IRIS it composites its HUD in colormap
 //    bitplanes, protecting the static yellow overlay with per-draw
 //    writemask()s. Report the 24-plane config of the bigger 4Ds instead:
 //    arena's own high-plane path redraws the HUD every frame, which renders
-//    correctly in both rasterizers. (Its 1024x768 screen is a compile-time
-//    matter — DEMO_CFLAGS in its Makefile — and prefposition() then gets
-//    it the matching fixed framebuffer, so no display quirk is needed.)
+//    correctly in both rasterizers.
 //  - cedit: relies on SGI's single-buffer-at-winopen default (it never
 //    calls doublebuffer), which this shim inverts.
-//
-// flight 1988 and cedit need no rasterizer quirk anymore: writemask
-// compositing, the live palette LUT, and index readback all run on both
-// rasterizers (the reference through its CPU CI buffer, gles2 through the
-// GPU CI buffer on an ES3 context).
 static void apply_demo_quirks(char *title) {
     if (demo_is(title, "arena"))
         planes_config = 24;
@@ -3031,8 +3009,6 @@ static void init_gl_state()
     extern const BdfFont helvBO14_bdf;
     pup_bdffont = &helvBO14_bdf;
 
-    //signal(SIGWINCH, sigwinch); // window changed event callback, maybe for window resizing
-    //signal(SIGINFO, siginfo);   // status info event callback, Ctrl+T request for program info
 }
 
 int winopen(char *title) {
@@ -3072,8 +3048,8 @@ int winopen(char *title) {
     sdl_events_set_framebuffer(rasterizer_frontbuffer());
     // XXX if we made a multi-window system, we'd tie "rasterizer_window"
     // and "sdl_events_window" together so we could pass the right identifier
-    // to window functions.  But we are fullscreen and no demo we care
-    // about uses multiple windows.
+    // to window functions.  But there is one window, and no demo we care
+    // about uses more.
     return 1;
 }
 
@@ -3306,12 +3282,8 @@ int dopup(int pup_index) {
 
             if (device == ESCKEY) {
                 selected = -1;
-                // if (val) { // ESCKEY down
-                //     printf("PUP esc key down\n");
-                // }
                 if (!val) {     // ESCKEY up
-                    // printf("PUP esc key up\n");
-                    done = 1;               // done
+                    done = 1;
                 }
             }
 
@@ -4012,8 +3984,8 @@ int winattach() {
 
 void winconstraints() {
     // Applies constraints declared since the last winopen/winconstraints
-    // (IRIX one-shot semantics). Only keepaspect is modeled; prefsize/
-    // prefposition/winposition remain unimplemented.
+    // (IRIX one-shot semantics). Only keepaspect waits for this; prefposition
+    // takes effect when called, and prefsize/winposition are unimplemented.
     if (pending_aspect_x > 0) {
         sdl_events_keepaspect(pending_aspect_x, pending_aspect_y);
         pending_aspect_x = pending_aspect_y = 0;
@@ -4891,18 +4863,6 @@ int gversion(char *version)
     return 0;
 }
 
-// #ifndef SIGINFO
-// #define SIGINFO 29
-// #endif
-// void sigwinch(int s)
-// {
-//     enqueue_device(RIGHTMOUSE, 1);
-// }
-// void siginfo(int s)
-// {
-//     enqueue_device(RIGHTMOUSE, 0);
-// }
-
 // Read back color indices from the front buffer, starting at the current
 // character position and moving right (CI mode; cedit's getapixel uses this
 // for its pick-a-color-off-the-screen clicks). Both rasterizers provide the
@@ -4972,13 +4932,12 @@ void screenspace()
 }
 
 //
-// IRIS GL event handling (gl_events.c)
+// IRIS GL event handling
 //
 // The GL-side event system: the device-event queue and the IRIS GL API that
 // drives it (qdevice/unqdevice/qread/qtest/qenter/qreset), plus the quit
 // policy. It sits above the SDL translation layer (sdl_events.c, the sdl_events_*
-// interface in events.h) and below the demos. gl.c is rendering; this is
-// input.
+// interface in events.h) and below the demos.
 //
 
 
@@ -5069,14 +5028,11 @@ int qread(short *val) {
     input_queue_head = (input_queue_head + 1) % INPUT_QUEUE_SIZE;
     input_queue_length--;
 
-    // Universal quit via ESC: Exit the demo here whether or not the
-    // demo registered to handle ESC with qdevice(ESCKEY). Don't exit
-    // though if popup menu is active (it uses ESC to quit poup)
+    // Universal quit via ESC: exit the demo here whether or not it
+    // qdevice()d ESCKEY — except while a popup menu is open, where ESC
+    // closes the menu
     if (device == ESCKEY || device == WINQUIT)
     {
-        //printf("qread ESC val = %d\n", *val);
-        // if (*val == 0)
-        //     printf("here!\n");
         if (!pup_active)
             gl_exit(0);
     }

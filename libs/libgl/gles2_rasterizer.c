@@ -11,9 +11,9 @@
 //    expanded into quads exactly the way the reference rasterizer does)
 //    and flushed with one glDrawArrays(GL_TRIANGLES) per color buffer.
 //  - IRIS GL's double-buffered model is mirrored with two offscreen FBOs
-//    (front and back), each with an RGBA color texture; one 16-bit depth
-//    renderbuffer is shared by both (the reference rasterizer's z-buffer is
-//    also 16-bit and shared).
+//    (front and back), each with an RGBA color texture; one depth
+//    renderbuffer is shared by both, like the reference rasterizer's single
+//    z-buffer.
 //  - Zero-readback present: the front FBO's color texture is handed to the
 //    display quad directly (sdlSetFramebufferSourceTex), so no glReadPixels
 //    happens per frame. The CPU front buffer copy is refreshed from the
@@ -595,7 +595,7 @@ static int ensure_gl(void)
 
     // CI buffer path: needs an ES3 context for the GLSL 300 es programs
     // (integer texel math); everything else stays ES2-level API. On an ES2
-    // context cmode falls back to draw-time RGB resolution as before.
+    // context cmode falls back to draw-time RGB resolution.
     {
         const char *ver = (const char *)glGetString(GL_VERSION);
         if (ver && strstr(ver, "OpenGL ES 3"))

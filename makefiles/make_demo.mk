@@ -6,7 +6,7 @@ EM_APPNAME = $(WEB_DIR)/$(APPNAME)
 # web/index.html, is makefiles/web_page.html filled in from placard.json
 EM_APP = $(EM_APPNAME).js
 EM_PAGE = $(WEB_DIR)/index.html
-# uppercase, and map non-identifier chars (e.g. '-' in electropaint-1988) to '_'
+# uppercase, and map non-identifier chars (e.g. '-' in ep-1988) to '_'
 APPNAME_DEF := -DDEMO_$(shell echo $(APPNAME) | tr 'a-z-' 'A-Z_')
 
 HDRS = $(wildcard *.h) $(wildcard $(INCS_DIR)/gl/*.h) $(wildcard $(INCS_DIR)/shim/*.h) $(DEMO_EXTRA_HDRS)

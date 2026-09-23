@@ -33,8 +33,7 @@ export function startServer(root) {
       }
       let info = await stat(filePath).catch(() => null);
       // Directory index: a request for a directory (e.g. demos/x/web/) serves
-      // its index.html, matching GitHub Pages. This is what lets the demos'
-      // short web/ URL resolve to the fullwindow index.html page.
+      // its index.html, matching GitHub Pages.
       if (info && info.isDirectory()) {
         filePath = join(filePath, "index.html");
         info = await stat(filePath).catch(() => null);
