@@ -7,12 +7,14 @@
       // Handle unresolved paths:
       // 1. Forward old demo links to the current page for that demo:
       //    …/sgi-demos/<demo>/web/…        (pre-demos/ layout)
-      //    …/sgi-demos/demos/<demo>/web/…  (renamed demo, e.g. flight → flight-1988)
-      //    both go to …/sgi-demos/demos/<current name>/web/
+      //    …/sgi-demos/demos/<demo>/web/…  (renamed demo, e.g. flight → flight-1988,
+      //                                     or a retired page: <demo>_full.html, <demo>.html)
+      //    all go to …/sgi-demos/demos/<current name>/web/, keeping ?query and #hash;
+      //    a variant such as demos/ep-1994/decomp/web/… works the same way
       // 2. All other unresolved paths get the 404 message below
       (function () {
         var renamed = { "flight": "flight-1988" };
-        var m = location.pathname.match(/^\/sgi-demos\/(?:demos\/)?([^/]+)\/web\/[^/]*$/);
+        var m = location.pathname.match(/^\/sgi-demos\/(?:demos\/)?([^/]+(?:\/[^/]+)?)\/web\/[^/]*$/);
         if (!m) return;
         var demo = renamed[m[1]] || m[1];
         var target = "/sgi-demos/demos/" + demo + "/web/";
@@ -24,6 +26,6 @@
     <!-- Absolute path: this page is served at whatever URL missed, so a relative src would miss too -->
     <img src="/sgi-demos/media/404.png" alt="Plane crashing in the swamp" width="640">
     <h1>You crashed into the swamps</h1>
-    <p>Try the <a href="https://sgi-demos.github.io">SGI demos home page</a></p>
+    <p>Try the <a href="https://sgi-demos.org">SGI demos home page</a></p>
   </body>
 </html>

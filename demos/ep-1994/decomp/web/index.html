@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- generated from makefiles/web_page.html by scripts/placard.py page; do not edit -->
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -22,8 +23,21 @@
         <script type="text/javascript">
             var Module = {};
             Module.canvas = document.getElementById('canvas');
+            // The command line, from placard.json: web_flags maps a URL switch to
+            // a flag (?fly adds -f), and web_arg is the default for ?arg=, the
+            // argument buttonfly passes when it launches a demo.
+            var FLAGS = {}, ARG = null;
+            var params = new URLSearchParams(window.location.search);
+            var args = [];
+            Object.keys(FLAGS).forEach(function (k) { if (params.has(k)) args.push(FLAGS[k]); });
+            if (ARG !== null) {
+                var arg = params.get('arg');
+                args.push(arg && /^[A-Za-z0-9_.-]+$/.test(arg) ? arg : ARG);
+            }
+            Module.arguments = args;
         </script>
+        <script src="../../../switches.js"></script>
         <script async type="text/javascript" src="./ep-1994-decomp.js"></script>
-        <script defer src="../../../placard.js"></script>
+        <script defer src="../../../placard.js" data-demo="ep-1994/decomp"></script>
     </body>
 </html>

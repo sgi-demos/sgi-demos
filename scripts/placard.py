@@ -1,22 +1,35 @@
 #!/usr/bin/env python3
 """Gallery placards for the demos.
 
-Each demo carries demos/<name>/placard.json: the text shown as a fading
-overlay when the demo starts (web) or printed to the terminal (native).
+Each demo carries demos/<name>/placard.json, the demo's record: shown in a
+corner card on its web page (demos/placard.js), printed to the terminal by
+native builds, and read by the README grid and the site's browse page.
 
-  scripts/placard.py scan  <demo-dir>        print the inputs found in the source
-  scripts/placard.py update [<demo-dir>...]  write them into placard.json as "inputs_detected"
-  scripts/placard.py embed <placard.json>    emit a C file that prints the placard at startup (used by make_demo.mk)
+  scripts/placard.py scan  <demo-dir>            print the inputs found in the source
+  scripts/placard.py update [<demo-dir>...]      write them into placard.json as "inputs_detected"
+  scripts/placard.py embed <placard.json>        emit a C file that prints the placard at startup (used by make_demo.mk)
+  scripts/placard.py page <demo-dir> <appname>   emit the demo's web page, web/index.html (used by make_demo.mk)
+
+Fields: title, author, year, blurb, and port (what this port does and doesn't
+do yet); the facts line: api (default "IRIS GL"), color, depth, hidden ("Z"
+when z-buffered), buffering, machines; inputs (hand-written) or
+inputs_detected (from update); web_arg and web_flags (the web page's command
+line, see makefiles/web_page.html); and draft (true: not built, tested, or
+listed yet). The links (source, browse, timeline) follow from the demo name.
 
 The scan is a heuristic over the IRIS GL event calls: qdevice(), getbutton(),
 getvaluator(), the character literals a qdevice(KEYBD) demo compares against,
 and Panel Library actuator keys. It reports which inputs exist, not what they
 do. A hand-written "inputs" list in placard.json takes precedence on the page.
 """
+import html
 import json
 import os
 import re
 import sys
+
+# the site the web builds live on (makefiles/platform.mk and demos/placard.js name it too)
+SITE = "https://sgi-demos.org"
 
 # IRIS GL device -> (group, label). Groups are shown in this order.
 GROUPS = ["mouse", "keys", "keypad", "dials", "spaceball"]
@@ -155,9 +168,6 @@ def main(argv):
                 fh.write("\n")
             print(os.path.basename(os.path.abspath(d)) + ": " + ", ".join(data["inputs_detected"]))
     elif cmd == "embed":
-        # A C file defining gl_placard: the placard as plain text lines, or
-        # NULL when the demo has no placard.json. Native builds print it at
-        # winopen; the web pages read placard.json themselves.
         p = argv[2]
         # A C file that prints the placard to the terminal before main() runs
         # (native only; the web pages read placard.json themselves), unless
@@ -171,7 +181,7 @@ def main(argv):
         lines = [data.get("title", "")]
         who = ", ".join(x for x in (data.get("author", ""), data.get("year", "")) if x)
         fb = ", ".join(y for y in (data.get("color", ""), data.get("depth", ""), data.get("hidden", ""), data.get("buffering", "")) if y)
-        line = " / ".join(x for x in (who, data.get("api", ""), fb, data.get("machines", "")) if x)
+        line = " / ".join(x for x in (who, data.get("api", "IRIS GL"), fb, data.get("machines", "")) if x)
         if line:
             lines.append(line)
         if data.get("blurb"):
@@ -194,6 +204,25 @@ def main(argv):
         print("    fflush(stdout);")
         print("}")
         print("#endif")
+    elif cmd == "page":
+        # makefiles/web_page.html filled in for this demo
+        d, appname = os.path.abspath(argv[2]), argv[3]
+        root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+        demos = os.path.join(root, "demos")
+        data = {}
+        if os.path.exists(os.path.join(d, "placard.json")):
+            with open(os.path.join(d, "placard.json")) as fh:
+                data = json.load(fh)
+        with open(os.path.join(root, "makefiles", "web_page.html")) as fh:
+            page = fh.read()
+        for k, v in (("@TITLE@", html.escape(data.get("title", appname))),
+                     ("@APPNAME@", appname),
+                     ("@DEMO@", os.path.relpath(d, demos)),
+                     ("@DEMOS_DIR@", os.path.relpath(demos, os.path.join(d, "web"))),
+                     ("@FLAGS@", json.dumps(data.get("web_flags", {}))),
+                     ("@ARG@", json.dumps(data.get("web_arg")))):
+            page = page.replace(k, v)
+        sys.stdout.write(page)
     else:
         sys.exit(__doc__)
 

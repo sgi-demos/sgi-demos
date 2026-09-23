@@ -11,10 +11,11 @@ grid is a plain HTML table. Run from anywhere:
 """
 import json
 import os
+import subprocess
 import sys
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
-SITE = "https://sgi-demos.org"
+from placard import SITE
 RUN = SITE + "/sgi-demos/demos/{name}/web/"
 THUMB = SITE + "/sgi-demos/media/{name}.png"
 COLS = 6
@@ -24,24 +25,21 @@ WIDTH = 110   # about half the browse page's card width
 EXTRA = [
     ("webfly", "Performer Town", "1993", SITE + "/sgi-performer/web/apps/webfly/web/", SITE + "/sgi-performer/media/webfly.png"),
 ]
-# the order of the browse page
-ORDER = ["arena", "bounce", "buttonfly", "cedit", "ep-1988", "ep-1989", "ep-1994",
-         "flight-1988", "flight-1994", "gview", "ideas", "insect", "jello", "logo", "newave", "webfly", "twilight"]
 
 
 def entries():
-    out = []
-    extra = {e[0]: e for e in EXTRA}
-    for name in ORDER:
-        if name in extra:
-            _, title, year, run, thumb = extra[name]
-        else:
-            with open(os.path.join(ROOT, "demos", name, "placard.json")) as fh:
-                d = json.load(fh)
-            title, year = d["title"], d.get("year", "")
-            run, thumb = RUN.format(name=name), THUMB.format(name=name)
-        out.append((title, year, run, thumb))
-    return out
+    # the demos are the root Makefile's list, without variants (ep-1994/decomp),
+    # plus EXTRA; in title order, like the browse page
+    names = subprocess.run(["make", "--no-print-directory", "-s", "-C", ROOT, "list"],
+                           capture_output=True, text=True, check=True).stdout.split()
+    out = [e[1:] for e in EXTRA]
+    for name in names:
+        if "/" in name:
+            continue
+        with open(os.path.join(ROOT, "demos", name, "placard.json")) as fh:
+            d = json.load(fh)
+        out.append((d["title"], d.get("year", ""), RUN.format(name=name), THUMB.format(name=name)))
+    return sorted(out, key=lambda e: e[0].lower())
 
 
 def table():
@@ -70,7 +68,7 @@ def main():
     s = s[:i] + "\n" + table() + "\n" + s[j:]
     with open(p, "w") as fh:
         fh.write(s)
-    print("README.md: %d demos" % len(ORDER))
+    print("README.md: %d demos" % len(entries()))
 
 
 if __name__ == "__main__":

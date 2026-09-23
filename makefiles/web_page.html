@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Electropaint 1994</title>
+        <title>@TITLE@</title>
         <style>
             .fullwindow {
                 position: absolute;
@@ -26,7 +26,7 @@
             // The command line, from placard.json: web_flags maps a URL switch to
             // a flag (?fly adds -f), and web_arg is the default for ?arg=, the
             // argument buttonfly passes when it launches a demo.
-            var FLAGS = {}, ARG = null;
+            var FLAGS = @FLAGS@, ARG = @ARG@;
             var params = new URLSearchParams(window.location.search);
             var args = [];
             Object.keys(FLAGS).forEach(function (k) { if (params.has(k)) args.push(FLAGS[k]); });
@@ -36,8 +36,8 @@
             }
             Module.arguments = args;
         </script>
-        <script src="../../switches.js"></script>
-        <script async type="text/javascript" src="./ep-1994.js"></script>
-        <script defer src="../../placard.js" data-demo="ep-1994"></script>
+        <script src="@DEMOS_DIR@/switches.js"></script>
+        <script async type="text/javascript" src="./@APPNAME@.js"></script>
+        <script defer src="@DEMOS_DIR@/placard.js" data-demo="@DEMO@"></script>
     </body>
 </html>

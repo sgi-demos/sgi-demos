@@ -1,50 +1,44 @@
 // Gallery placard for the web demos: title, author, year, a short blurb, and
-// the inputs the demo listens for, in the lower-left corner. On a first visit
-// only the small circled-i box shows; Tab or a click on it brings the card up,
-// minimized to its title and author lines until the plus opens it. The x closes it; the minus shrinks it to the title and author
-// line, the plus restores it; Tab hides and shows it, and Shift+Tab steps
-// through open, minimized, closed, and back to open, so the card can be run
-// from the keyboard alone (no demo listens for Tab, so it is swallowed before
-// SDL sees it). Every state change is immediate. Whichever state was last set
-// (open, minimized, closed) is kept for every demo from then on, in
-// localStorage. URL switches: ?placard=0 starts this page without the card
-// and leaves the stored state alone, ?placard=1 reopens it and keeps it open,
-// ?placard=25 closes it by itself after 25 seconds (HOLD_MS is the default,
-// 0 = stay). Each demo page includes this with
-//   <script defer src="../../placard.js"></script>
-// and it reads ../placard.json (demos/<name>/placard.json, next to the source).
-// A page elsewhere (the site's buttonfly front page) names the demo instead:
-//   <script defer src="https://sgi-demos.org/sgi-demos/demos/placard.js" data-demo="buttonfly"></script>
+// the inputs the demo listens for, in the lower-left corner.
+//
+// States: closed (only a small circled-i box shows; the first-visit default),
+// minimized (title and facts lines), and open (everything). The circled-i box
+// or Tab opens the card as it was last shown; the x or Tab closes it; the
+// minus and plus minimize and restore it; Shift+Tab steps open -> minimized ->
+// closed -> open, so the card runs from the keyboard alone (no demo listens
+// for Tab, so it is swallowed before SDL sees it). The last state set is kept
+// for every demo in localStorage. URL switch: ?placard=off (or 0) shows no
+// card on this page and leaves the stored state alone; ?placard=on (or 1)
+// opens it and keeps it open.
+//
+// Each demo page names its demo, and the placard reads
+// demos/<demo>/placard.json next to this file:
+//   <script defer src="../../placard.js" data-demo="bounce"></script>
+// The links (source, browse, timeline) follow from the demo name.
 (function () {
+    var SITE = "https://sgi-demos.org", REPO = "https://github.com/sgi-demos/sgi-demos";   // the site as in makefiles/platform.mk
     var me = document.currentScript;
     var demo = me && me.getAttribute("data-demo");
-    var url = demo ? me.src.replace(/placard\.js(\?.*)?$/, demo + "/placard.json") : "../placard.json";
+    if (!demo) return;
+    var top = demo.split("/")[0];              // a variant (ep-1994/decomp) shares its demo's browse and timeline entries
     var q = new URLSearchParams(window.location.search).get("placard");
     if (q === "0" || q === "off") return;
-    var state = null;                          // "open" | "min" | "closed", kept across demos and visits
+    var state = null;                          // "open" | "min" | "closed"
     try { state = localStorage.getItem("placard"); } catch (e) {}
     function remember(v) { state = v; try { localStorage.setItem("placard", v); } catch (e) {} }
-    if (q === "1" || q === "on") remember("open");   // reopen, and stay open from here on
-    var view = "min";                           // the last visible mode, so Tab reopens as it was; minimized on a first visit
-    try { view = localStorage.getItem("placard-view") || "min"; } catch (e) {}
-    if (state === "min" || state === "open") view = state;
-    var HOLD_MS = 0;                          // 0: stays until closed; ?placard=<seconds> closes it after that long
-    var LAYOUT = "fit";                      // "fit": as wide as its longest line; "wide": a strip across the bottom; "corner": the earlier 420px card
-    if (q && /^\d+$/.test(q) && (q | 0) > 1) HOLD_MS = (q | 0) * 1000;   // 1 means reopen (above), not a one-second card
+    if (q === "1" || q === "on") remember("open");
+    var view = state === "open" ? "open" : "min";   // how the card shows when it opens
 
-    fetch(url).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+    fetch(me.src.replace(/placard\.js(\?.*)?$/, demo + "/placard.json")).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
         if (!d) return;
         var style = document.createElement("style");
         style.textContent =
             "#canvas:focus{outline:none}" +   /* the tabindex below makes the canvas focusable; no focus ring on it */
-            ".placard{position:fixed;left:20px;bottom:20px;z-index:10;box-sizing:border-box;" +
+            ".placard{position:fixed;left:20px;bottom:20px;z-index:10;box-sizing:border-box;width:max-content;max-width:calc(100vw - 40px);" +
             "padding:.8rem 1rem .9rem;border:1px solid rgba(255,255,255,.18);border-radius:6px;" +
             "background:rgba(26,42,74,.86);color:#fff;font:14px/1.45 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;" +
             "box-shadow:0 4px 18px rgba(0,0,0,.35);cursor:default}" +
-            ".placard.fit{width:max-content;max-width:calc(100vw - 40px)}" +
-            ".placard.corner{max-width:min(420px,calc(100vw - 40px))}" +
-            ".placard.wide{right:20px}" +
-            ".placard.min{width:max-content}.placard.min p,.placard.min .foot{display:none}.placard.min .who{display:block;margin:0}.placard.min .who .sep{display:none}.placard.min .who .fb,.placard.min .who .tech{display:block;margin-left:0}" +   /* minimized: framebuffer and machines each drop to their own line */
+            ".placard.min p,.placard.min .foot{display:none}.placard.min .who{display:block;margin:0}.placard.min .who .sep{display:none}.placard.min .who .fb,.placard.min .who .tech{display:block;margin-left:0}" +   /* minimized: framebuffer and machines each drop to their own line */
             ".placard.gone{display:none}" +
             ".placard-tab{position:fixed;left:20px;bottom:20px;z-index:10;padding:.1rem .4rem .15rem;border:1px solid rgba(255,255,255,.18);border-radius:4px;" +
             "background:rgba(26,42,74,.86);color:#a3b3c9;font:italic 600 11px -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;cursor:pointer;user-select:none}" +
@@ -67,16 +61,16 @@
         document.head.appendChild(style);
 
         var el = document.createElement("div");
-        el.className = "placard " + LAYOUT;
+        el.className = "placard";
         el.setAttribute("role", "note");
         function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
         // after the year: API, then the framebuffer in one breath: colour mode, depth,
         // "Z" when it is z-buffered, and single or double buffer ("RGB, 24-bit, Z, double buffer");
         // right side of the same line: mid and high-end machines of the year
-        var fb = [d.api, [d.color, d.depth, d.hidden, d.buffering].filter(Boolean).join(", ")].filter(Boolean).join(" \u00b7 ");
+        var fb = [d.api || "IRIS GL", [d.color, d.depth, d.hidden, d.buffering].filter(Boolean).join(", ")].filter(Boolean).join(" \u00b7 ");
         // the year links to the demo's timeline entry
-        var year = d.year ? (d.more ? "<a class='yr' href='" + esc(d.more) + "' title='timeline'>" + esc(d.year) + "</a>" : esc(d.year)) : "";
-        var who = [d.author ? esc(d.author) : "", year].filter(Boolean).join(", ") + (fb ? "<span class='sep'> \u00b7 </span><span class='fb'>" + esc(fb) + "</span>" : "");
+        var year = d.year ? "<a class='yr' href='" + SITE + "/timeline/#demo-" + esc(top) + "' title='timeline'>" + esc(d.year) + "</a>" : "";
+        var who = [d.author ? esc(d.author) : "", year].filter(Boolean).join(", ") + "<span class='sep'> \u00b7 </span><span class='fb'>" + esc(fb) + "</span>";
         // A three-button mouse with the buttons the demo uses lit; "drag"
         // after it when the demo reads mouse motion.
         var mouseIds = 0;
@@ -95,39 +89,29 @@
                 "<g clip-path='url(#" + id + ")'>" + btn(1, l) + btn(9, m) + btn(17, r) + "</g>" +
                 body + " fill='none' stroke='#a3b3c9' stroke-width='1.4'/></svg>";
         }
+        // the mouse first (always drawn: unlit buttons say the demo doesn't
+        // use it), then the demo's keys and devices, then tab, which runs this card
         function inputsHtml(items) {
-            var html = "";
-            items = items.slice();
-            var ki = -1;
-            items.forEach(function (it, i) { if (!/^mouse:/.test(it) && ki < 0 && !/^(keypad|dial box|spaceball)$/.test(it)) ki = i; });
-            if (ki >= 0) items[ki] = items[ki] + ", tab"; else items.splice(items.findIndex(function (it) { return !/^mouse:/.test(it); }) + 1 || items.length, 0, "tab");
-            // the mouse is always drawn: unlit buttons say the demo doesn't use it
-            if (!items.some(function (it) { return /^mouse:/.test(it); })) items.unshift("mouse:");
+            var mouse = items.filter(function (it) { return /^mouse:/.test(it); })[0] || "mouse:";
+            var t = mouse.replace(/^mouse:\s*/, "").split(/\s+/);
+            var l = t.indexOf("L") >= 0, m = t.indexOf("M") >= 0, r = t.indexOf("R") >= 0, drag = t.indexOf("drag") >= 0;
+            var used = ["left", "middle", "right"].filter(function (n, i) { return [l, m, r][i]; });
+            var title = used.length ? used.join(", ") + " mouse" + (drag ? ", drag" : "") : "no mouse input";
+            var html = "<span class='mouse' title='" + esc(title) + "'>" + mouseSvg(l, m, r) + (drag ? "drag" : "") + "</span>";
             items.forEach(function (it) {
-                var mm = /^mouse:\s*(.*)$/.exec(it);
-                if (mm) {
-                    var t = mm[1].split(/\s+/);
-                    var l = t.indexOf("L") >= 0, m = t.indexOf("M") >= 0, r = t.indexOf("R") >= 0, drag = t.indexOf("drag") >= 0;
-                    var used = ["left", "middle", "right"].filter(function (n, i) { return [l, m, r][i]; });
-                    var title = used.length ? used.join(", ") + " mouse" + (drag ? ", drag" : "") : "no mouse input";
-                    html += "<span class='mouse' title='" + esc(title) + "'>" + mouseSvg(l, m, r) + (drag ? "drag" : "") + "</span>";
-                } else {
-                    html += "<span>" + esc(it.replace(/^keys:\s*/, "")) + "</span>";
-                }
+                if (!/^mouse:/.test(it)) html += "<span>" + esc(it.replace(/^keys:\s*/, "")) + "</span>";
             });
-            return html;
+            return html + "<span title='Tab shows and hides this card'>tab</span>";
         }
-        var inputs = d.inputs || d.inputs_detected || [];
         el.innerHTML =
             "<span class='btns'><span class='mn' title='minimize (Shift+Tab steps open, minimized, closed)'>&minus;</span><span class='mx' title='maximize'>+</span><span class='x' title='close (Tab brings it back)'>&times;</span></span>" +
-            "<h1>" + (d.browse ? "<a href='" + esc(d.browse) + "' title='browse the demos'>" + esc(d.title || document.title) + "</a>" : esc(d.title || document.title)) + "</h1>" +
-            (who || d.machines ? "<div class='who'><span>" + who + "</span>" + (d.machines ? "<span class='tech'>" + esc(d.machines) + "</span>" : "") + "</div>" : "") +
+            "<h1><a href='" + SITE + "/browse/#" + esc(top) + "' title='browse the demos'>" + esc(d.title || document.title) + "</a></h1>" +
+            "<div class='who'><span>" + who + "</span>" + (d.machines ? "<span class='tech'>" + esc(d.machines) + "</span>" : "") + "</div>" +
             (d.blurb ? "<p>" + esc(d.blurb) + "</p>" : "") +
             (d.port ? "<p class='port'>This port: " + esc(d.port) + "</p>" : "") +
             "<div class='foot'>" +
-            "<div class='in'>" + inputsHtml(inputs) + "</div>" +   // never empty: tab is always there
-            (d.source ? "<div class='more'>" +
-                (d.source ? "<a href='" + esc(d.source) + "'>source</a>" : "") + "</div>" : "") +
+            "<div class='in'>" + inputsHtml(d.inputs || d.inputs_detected || []) + "</div>" +
+            "<div class='more'><a href='" + REPO + "/tree/main/demos/" + esc(demo) + "'>source</a></div>" +
             "</div>";
         document.body.appendChild(el);
 
@@ -146,45 +130,37 @@
         focusCanvas();
         window.addEventListener("load", focusCanvas);
 
-        var timer = null, hovering = false;
-        function arm() { clearTimeout(timer); if (HOLD_MS > 0) timer = setTimeout(function () { if (!hovering) hide(); }, HOLD_MS); }
-        el.addEventListener("mouseenter", function () { hovering = true; });
-        el.addEventListener("mouseleave", function () { hovering = false; arm(); });
-        function setMin(on) {
-            el.classList.toggle("min", on);
-            el.querySelector(".mn").style.display = on ? "none" : "";
-            el.querySelector(".mx").style.display = on ? "" : "none";
-            view = on ? "min" : "open";
-            try { localStorage.setItem("placard-view", view); } catch (e) {}
-        }
-        // While the card is closed, a small "tab" in its corner says how to get it back.
+        // While the card is closed, the circled-i box in its corner brings it back.
         var tab = document.createElement("div");
         tab.className = "placard-tab";
         tab.innerHTML = "<span class='i'>&#x24D8;</span>";   // ⓘ
         tab.title = "press Tab to show the placard";
-        tab.hidden = true;
         document.body.appendChild(tab);
+
         // every state change is immediate, so open, minimize, and close all feel the same
-        function hide() { el.classList.add("gone"); tab.hidden = false; remember("closed"); }
-        function show() { el.classList.remove("gone"); tab.hidden = true; setMin(view === "min"); remember(view); }
-        tab.addEventListener("click", function () { show(); setTimeout(focusCanvas, 0); });
-        el.querySelector(".x").addEventListener("click", hide);
-        el.querySelector(".mn").addEventListener("click", function () { setMin(true); remember("min"); });
-        el.querySelector(".mx").addEventListener("click", function () { setMin(false); remember("open"); });
-        setMin(view === "min");
-        if (state === "closed" || state === null) { el.classList.add("gone"); tab.hidden = false; }   // closed by default
+        function set(s) {
+            if (s !== "closed") view = s;
+            el.classList.toggle("gone", s === "closed");
+            el.classList.toggle("min", view === "min");
+            el.querySelector(".mn").style.display = view === "min" ? "none" : "";
+            el.querySelector(".mx").style.display = view === "min" ? "" : "none";
+            tab.hidden = s !== "closed";
+            remember(s);
+        }
+        function closed() { return el.classList.contains("gone"); }
+        tab.addEventListener("click", function () { set(view); setTimeout(focusCanvas, 0); });
+        el.querySelector(".x").addEventListener("click", function () { set("closed"); });
+        el.querySelector(".mn").addEventListener("click", function () { set("min"); });
+        el.querySelector(".mx").addEventListener("click", function () { set("open"); });
+        set(state === "open" || state === "min" ? state : "closed");
         // Tab toggles the card; Shift+Tab steps open -> minimized -> closed ->
         // open. Captured at the window and stopped there, so neither SDL
         // (listening on the canvas) nor the browser's focus traversal gets it.
         window.addEventListener("keydown", function (ev) {
             if (ev.key !== "Tab" || ev.altKey || ev.ctrlKey || ev.metaKey) return;
             ev.preventDefault(); ev.stopImmediatePropagation();
-            var closed = el.classList.contains("gone");
-            if (!ev.shiftKey) { if (closed) show(); else hide(); return; }
-            if (closed) { view = "open"; show(); }
-            else if (!el.classList.contains("min")) { setMin(true); remember("min"); }
-            else hide();
+            if (!ev.shiftKey) set(closed() ? view : "closed");
+            else set(closed() ? "open" : view === "open" ? "min" : "closed");
         }, true);
-        arm();
     }).catch(function () {});
 })();

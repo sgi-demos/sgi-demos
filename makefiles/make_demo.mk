@@ -2,11 +2,14 @@ include $(dir $(lastword $(MAKEFILE_LIST)))platform.mk
 
 APP = $(BIN_DIR)/$(APPNAME)
 EM_APPNAME = $(WEB_DIR)/$(APPNAME)
-EM_APP = $(EM_APPNAME).html
+# emcc writes <appname>.js + .wasm (+ .data); the page that loads them,
+# web/index.html, is makefiles/web_page.html filled in from placard.json
+EM_APP = $(EM_APPNAME).js
+EM_PAGE = $(WEB_DIR)/index.html
 # uppercase, and map non-identifier chars (e.g. '-' in electropaint-1988) to '_'
 APPNAME_DEF := -DDEMO_$(shell echo $(APPNAME) | tr 'a-z-' 'A-Z_')
 
-HDRS = $(wildcard *.h) $(wildcard $(INCS_DIR)/gl/*.h) $(DEMO_EXTRA_HDRS)
+HDRS = $(wildcard *.h) $(wildcard $(INCS_DIR)/gl/*.h) $(wildcard $(INCS_DIR)/shim/*.h) $(DEMO_EXTRA_HDRS)
 # demos with sources beyond the root *.c (e.g. flight-1994's libgobj/) list
 # them in DEMO_EXTRA_SRC before including this file; DEMO_EXCLUDE_SRC drops
 # root sources that can't build yet (e.g. IRIX-audio-only files)
@@ -21,7 +24,7 @@ all: native browser
 
 native: $(APP)
 
-browser: $(EM_APP)
+browser: $(EM_APP) $(EM_PAGE)
 
 # The lib .a targets list the lib sources as prerequisites so an existing
 # archive is rebuilt after lib edits (the sub-make owns the real dependency
@@ -42,15 +45,9 @@ $(DEMO_LIB): $(LIBDEMO_SRCS)
 $(EM_DEMO_LIB): $(LIBDEMO_SRCS)
 	make browser -C $(LIBS_DIR)/libdemo
 
-$(BIN_DIR):
+# build products are ignored by the root .gitignore (bin-*-*/, *.o, *.a)
+$(BIN_DIR) $(WEB_DIR):
 	mkdir -p $@
-	echo "*.[oach]" > $@/.gitignore
-	echo *.dSYM >> $@/.gitignore
-	echo *.$(DYL_EXT) >> $@/.gitignore
-
-$(WEB_DIR):
-	mkdir -p $@
-	echo "*.[oach]" > $@/.gitignore
 
 # the demo-name stamp (see makefiles/gl_appname.c)
 $(BIN_DIR)/gl_appname.o: $(REPO_ROOT)/makefiles/gl_appname.c | $(BIN_DIR)
@@ -67,6 +64,9 @@ $(BIN_DIR)/placard.c: $(wildcard placard.json) $(REPO_ROOT)/scripts/placard.py |
 
 $(BIN_DIR)/placard.o: $(BIN_DIR)/placard.c
 	$(MODERN_CODE_CC) $(OPT) $< -c -o $@
+
+$(EM_PAGE): $(wildcard placard.json) $(REPO_ROOT)/makefiles/web_page.html $(REPO_ROOT)/scripts/placard.py | $(WEB_DIR)
+	python3 $(REPO_ROOT)/scripts/placard.py page . $(APPNAME) > $@
 
 $(DEMO_OBJS): $(BIN_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(BIN_DIR)
 	@mkdir -p $(@D)
@@ -97,7 +97,7 @@ $(EM_APP): $(EM_GL_LIB) $(EM_DEMO_LIB) $(EM_OBJS)
 
 # Run both applications
 run: all
-	$(APP) $(APPARGS) && emrun $(EM_APP)
+	$(APP) $(APPARGS) && emrun --serve_root $(REPO_ROOT) $(EM_PAGE)
 
 # Run only the native application
 run-native: native
@@ -105,10 +105,10 @@ run-native: native
 
 # Run only the emscripten application
 run-browser: browser
-	emrun $(EM_APP)
+	emrun --serve_root $(REPO_ROOT) $(EM_PAGE)
 
 clean:
 	rm -f $(APP) $(OBJS)
 	rm -rf $(APP).dSYM
-	rm -f $(EM_APP) $(EM_OBJS) $(EM_APPNAME).js $(EM_APPNAME).wasm $(EM_APPNAME).data
+	rm -f $(EM_APP) $(EM_PAGE) $(EM_OBJS) $(EM_APPNAME).wasm $(EM_APPNAME).data
 	rm -rf ./bin

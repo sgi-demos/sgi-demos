@@ -5,13 +5,9 @@
   "color": "Color indexed",
   "depth": "8 to 12-bit",
   "buffering": "double buffer",
-  "api": "IRIS GL",
   "machines": "Personal IRIS · PowerSeries",
   "blurb": "Mech combat in a maze, \"a future sport\": flat-shaded colour-index graphics with display lists, and multi-player play over Ethernet in the original.",
   "port": "No network play yet.",
-  "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/arena",
-  "browse": "https://sgi-demos.org/browse/#arena",
-  "more": "https://sgi-demos.org/timeline/#demo-arena",
   "inputs_detected": [
     "mouse: L M R drag",
     "esc, shift, B, C, D, E, G, N, R, S, X, Z, -, _, |"
