@@ -79,7 +79,7 @@ Three points that need additional details:
 
 | Demo | Author, year | Copy came from | Notice | Changed | Basis |
 |---|---|---|---|---|---|
-| arena | SGI, c. 1988 | demo tape | none | ~230 lines, network fenced off | fair use; no license grant, SGI shipped the source |
+| arena | Rob Mace, SGI, 1988 | demo tape | none | ~230 lines, network fenced off | fair use; no license grant, SGI shipped the source |
 | bounce | SGI, c. 1988 | demo tape (Alice 4 and Toolbox 4.0 copies in versions/) | none | ~170 lines, via Alice 4 | fair use; no license grant, SGI shipped the source |
 | buttonfly | Wade Olsen, SGI | demo tape | none | ~60 lines, menus, bison | fair use; no license grant, SGI shipped the source |
 | cedit | Paul Haeberli, SGI, 1984 | GL2-W3.6 gifts package | author line | 10 lines | fair use; no license grant, SGI installed the source on every IRIS and shipped later revisions as 4Dgifts source with IRIX 3.3 and 4.0.1 |
@@ -208,7 +208,7 @@ Source archive hashes are recorded for provenance. Individual demo READMEs name 
 | Archive | Supplies | Where | SHA-256 |
 |---|---|---|---|
 | IRIS 4D demo tape, sgidemos.tar.Z | arena, bounce, buttonfly, ideas, insect, jello, logo, newave, libdemo, flight-1988 (its panel/ep.c is an earlier Panel Library than ep-1988's v7) | [bitsavers](https://bitsavers.org/bits/SGI/iris/sgidemos.tar.Z) (mirror at bitsavers.trailing-edge.com) | be028995b697d885a5b8769ab49b664bc06c6876dba5eadd5d3044eeb76caad5 |
-| GL2-W3.6 release tapes for the IRIS 2400/3000 (10 May 1989), gl2-w3.6+options.tar.gz: a raw dump of the Bootstrap System and Options tapes, each a series of cpio archives | the gifts package: cedit, sunflower, portlib, getapixel.c, port.h, rect.h | [bitsavers](https://bitsavers.org/bits/SGI/iris/gl2-w3.6+options.tar.gz) | 2bbd28466cae6aeeb95ad49bee813d8298e71e6df5405c8f98ae3fbc04ddf58b |
+| GL2-W3.6 release tapes for the IRIS 2400/3000 (a 1987 release; this tape cut 10 May 1989), gl2-w3.6+options.tar.gz: a raw dump of the Bootstrap System and Options tapes, each a series of cpio archives | the gifts package: cedit, sunflower, portlib, getapixel.c, port.h, rect.h | [bitsavers](https://bitsavers.org/bits/SGI/iris/gl2-w3.6+options.tar.gz) | 2bbd28466cae6aeeb95ad49bee813d8298e71e6df5405c8f98ae3fbc04ddf58b |
 | The "Standard System (usr)" archive on that Bootstrap System tape: the fourth cpio file of the dump, named file.20020204.05:25:55.4 by the dumper's timestamp | the archive that actually contains usr/people/gifts; verify against this file | inside the tarball above | ff9499c0b34c50fa79f50ae00f08c3760c98207091d44e07c1c308bf984ed875 |
 | gview, IRIX 3 MIPS ECOFF executable, 86,128 bytes | the binary gview.c was reconstructed from | IRIX 3 installation tape | 28c149f852d10e32e695b4455f1a93214135ad0153589d7caab16257aaf74018 |
 | flight 1.0, IRIS 1400 68k executable, 176,660 bytes | reference for future reconstruction | contributed via [issue #4](https://github.com/sgi-demos/sgi-demos/issues/4) | a0c5d96d634d863f072213e120f3ea64e481fa114a723594c59e3912fb9a9c49 |

@@ -1,6 +1,6 @@
 # Arena
 
-SGI, late 1980s. "Simulates a future sport": MECH combat in a maze, drawn in colorindex mode, with optional multi-player play over Ethernet (`-n`). The demo-tape slide is in [arena.info](arena.info).
+Rob Mace, SGI, 1988. "Simulates a future sport": MECH combat in a maze, drawn in colorindex mode, with optional multi-player play over Ethernet (`-n`). The demo-tape slide is in [arena.info](arena.info).
 
 ## Provenance
 
