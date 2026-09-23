@@ -30,21 +30,7 @@ This document provides a detailed justification of all third-party material used
 | [sgi-docs](https://github.com/sgi-demos/sgi-docs) | SGI manuals |
 | [sgi-demos.github.io](https://github.com/sgi-demos/sgi-demos.github.io) | The site that hosts live demos |
 
-
-On an express grant:
-
-- SGI's permissive notice: twilight, flight-1994, libgobj
-- SGI's Performer sample license: the Performer sources and Town data.
-- SGI's LGPL release: Open Inventor.
-- David Tristram's notices and permission: the three Electropaint generations.
-- Apache 2.0: the Alice 4 fork.
-- Reimplementing the IRIS GL and Performer APIs, and reconstructing gview and Electropaint from binaries, rest on settled precedent (see section 6).
-
-On fair use:
-
-1. The demo-tape sources, the GL2 gifts-package files, the Inventor Games CD sources, the IRIS GL headers, and the data files that go with them carry no license or an "unpublished proprietary" legend. Their use rests on fair use (see section 5), on SGI's own distribution of them, and possibly on a pre-1989 notice defect.
-2. The Performer sample license permits use only "in conjunction with OpenGL Performer," which a port over a reimplementation does not literally meet (see section 3).
-3. The SGI manuals in sgi-docs repo are whole-work reproductions kept for historic preservation and reference.
+In short, with the detail in section 3: SGI's permissive notice (twilight, flight-1994, libgobj), its Performer sample license, its LGPL release of Open Inventor, David Tristram's notices and permission (the three Electropaint generations), and Apache 2.0 (the Alice 4 fork) are express grants. Reimplementing the IRIS GL and Performer APIs, and reconstructing gview and Electropaint from binaries, rest on settled precedent (section 6). The rest — the demo-tape and GL2 gifts-package sources, the Inventor Games CD sources, the IRIS GL headers, the data files that go with them, and the SGI manuals in sgi-docs — carry no license or an "unpublished proprietary" legend; their use rests on fair use (section 5), on SGI's own distribution of them to its customers, and possibly on a pre-1989 notice defect. One express grant is not met to the letter: the Performer sample license's "in conjunction with OpenGL Performer" (see the notes after the section 3 table).
 
 ## 2. Who owns what
 
@@ -59,16 +45,6 @@ On fair use:
 | David A. Tristram / Tristram Visual | Electropaint and the Panel Library, all versions | Author's notices and permission, with conditions (see section 3). Electropaint is a registered trademark. |
 | Mark Laws (drvink), Brendan Shanks (bslabs) | ElectroPortis decompilation tooling and non-Electropaint files | MIT; the Electropaint-derived files carry Tristram's terms |
 | sgi-demos contributors | The GLES2 rasterizer, SDL layers, Performer OSG/SDL2/GLES2 port, Inventor SDL2/GLES2 port, harnesses, shims, tests, scripts, docs, thumbnails, and every modification to the above | Apache License 2.0 (the Inventor port: LGPL 2.1) |
-
-SGI's material by the notice it carries:
-
-| Notice | Files |
-|---|---|
-| SGI permissive license (1991-1994) | twilight, flight-1994, libgobj |
-| Performer sample-code license (1993-1995) | Performer headers, samples, utility libraries, loaders, Town data |
-| LGPL 2.1 (2000) | Open Inventor |
-| "Unpublished proprietary" legend (1984-1994) | flight-1988, the IRIS GL headers, gobj.h, the gifts package's Notice file, most Inventor Games CD sources |
-| No notice | the demo tape sources and data, the gifts package files, the GFO models, the IRIS GL font, the .info slides |
 
 Wherever the individual programmers behind SGI demos can be identified, the [README](../README.md) and the demo READMEs credit them. Most were SGI employees, so their work and its copyright belongs to SGI's successor HPE; attribution is kept for historical record.
 
@@ -227,7 +203,7 @@ This project preserves every existing copyright notice and essential data file:
 
 ## 8. Source archives
 
-Source archive hashes are recorded for provenance. Individual demo READMEs name their source archive and point here.
+Source archive hashes are recorded for provenance. Individual demo READMEs name their source archive and point here. Every change a port made against its archive copy is recorded in git: `git log -p` on a file shows each one, and the archive copy can be diffed directly from the archive listed here.
 
 | Archive | Supplies | Where | SHA-256 |
 |---|---|---|---|
