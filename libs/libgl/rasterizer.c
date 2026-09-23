@@ -2,21 +2,21 @@
 // Rasterizer dispatch — dual rendering modes
 //
 // Selects between the two rasterizer implementations at startup:
-//   - gles2:     GPU rasterizer on OpenGL ES2  (gles2_rasterizer.c) — DEFAULT
-//   - reference: CPU scanline rasterizer  (reference_rasterizer.c), kept for
-//                reference/debugging (CPU-rasterizing large framebuffers is
-//                slow now that the framebuffer tracks the window size)
+//   - gles: GPU rasterizer on OpenGL ES2, ES3 where available
+//           (gles2_rasterizer.c) — DEFAULT
+//   - ref:  CPU scanline rasterizer from the Alice 4 project
+//           (reference_rasterizer.c), kept for reference/debugging
+//           (CPU-rasterizing large framebuffers is slow now that the
+//           framebuffer tracks the window size)
 //
-// Native: set GLES2_RASTERIZER=ref to select the CPU reference rasterizer.
-// Web:    add ?rast=ref to the URL (or set GLES2_RASTERIZER in Module ENV).
+// IRISGL_RAST=ref selects the CPU reference rasterizer (on the web, ?rast=ref:
+// demos/switches.js passes URL switches in as environment variables). Any
+// other value is the default, so a typo or an old ?rast=gles2 link still gets
+// the GPU rasterizer.
 //
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#endif
 
 #include <SDL.h>
 #include "rasterizer.h"
@@ -26,7 +26,7 @@ static const rasterizer_funcs *rast_funcs = NULL;
 
 // Shim-preferred mode (per-demo quirks in gl.c — e.g. cedit needs the
 // reference rasterizer's color-index buffer). Weaker than an explicit
-// GLES2_RASTERIZER env or ?rast= URL choice; must be set before the first
+// IRISGL_RAST choice; must be set before the first
 // rasterizer_* call locks the selection in.
 static const char *preferred_mode = NULL;
 
@@ -37,29 +37,11 @@ void rasterizer_prefer(const char *mode)
 
 static const char* rasterizer_mode(void)
 {
-    const char *mode = getenv("GLES2_RASTERIZER");
-
-#ifdef __EMSCRIPTEN__
-    // Allow ?rast=gles2 / ?rast=ref in the page URL to override
-    int url_mode = EM_ASM_INT({
-        var q = (typeof window !== 'undefined' && window.location) ? window.location.search : "";
-        if (q.indexOf('rast=gles2') >= 0) return 2;
-        if (q.indexOf('rast=ref') >= 0) return 1;
-        return 0;
-    });
-    if (url_mode == 2) mode = "gles2";
-    else if (url_mode == 1) mode = "ref";
-#endif
-
-    // The legacy SDL-renderer display path creates no GL context, which the
-    // gles2 rasterizer requires; force the CPU reference rasterizer there
-    if (getenv("SGI_SDL_FRAMEBUFFER") != NULL)
-        mode = "ref";
-
+    const char *mode = getenv("IRISGL_RAST");
     if (mode == NULL)
         mode = preferred_mode;
 
-    return mode ? mode : "gles2";
+    return mode ? mode : "gles";
 }
 
 static const rasterizer_funcs* rast(void)
@@ -69,15 +51,15 @@ static const rasterizer_funcs* rast(void)
         // Both rasterizers display through the same GL texture-quad present
         // path (sdl_framebuffer.c); this only selects who produces the pixels.
         const char *mode = rasterizer_mode();
-        if (strcmp(mode, "gles2") == 0)
+        if (strcmp(mode, "ref") == 0)
         {
-            rast_funcs = gles2_rasterizer_get_funcs();
-            printf("INFO: rasterizer: gles2 (GPU)\n");
+            rast_funcs = ref_rasterizer_get_funcs();
+            printf("INFO: rasterizer: ref (CPU)\n");
         }
         else
         {
-            rast_funcs = ref_rasterizer_get_funcs();
-            printf("INFO: rasterizer: reference (CPU)\n");
+            rast_funcs = gles2_rasterizer_get_funcs();
+            printf("INFO: rasterizer: gles (GPU)\n");
         }
     }
     return rast_funcs;

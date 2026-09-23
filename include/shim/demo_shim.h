@@ -92,7 +92,7 @@ int demo_shim_system(const char *command)
                 "window.location.href = '../../%s';", url);
         } else {
             n = snprintf(sys_js, sizeof(sys_js),
-                "window.location.href = 'https://sgi-demos.github.io/sgi-demos/demos/%s';", url);
+                "window.location.href = '" SGI_DEMOS_SITE "/sgi-demos/demos/%s';", url);
         }
         if (n < 0 || (size_t)n >= sizeof(sys_js))
             return -1;

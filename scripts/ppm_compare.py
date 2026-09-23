@@ -2,18 +2,18 @@
 """
 ppm_compare.py - compare two directories of frameNNNN.ppm dumps.
 
-Used to verify the gles2 (GPU) rasterizer against the reference (CPU)
+Used to verify the gles (GPU) rasterizer against the ref (CPU)
 rasterizer. Both rasterizers dump frames with identical timing semantics
-when GEN_FRAME_PPM_FILES is set, so same-index frames are comparable for
+when IRISGL_FRAME_PPM is set, so same-index frames are comparable for
 demos whose animation steps per frame (e.g. insect):
 
     # reference (CPU) rasterizer
-    cd demos/insect && GLES2_RASTERIZER=ref GEN_FRAME_PPM_FILES=1 ./bin/insect  # then: mv frame*.ppm ref/
+    cd demos/insect && IRISGL_RAST=ref IRISGL_FRAME_PPM=1 ./bin/insect  # then: mv frame*.ppm ref/
 
-    # gles2 (GPU) rasterizer (the default)
-    GEN_FRAME_PPM_FILES=1 ./bin/insect                        # then: mv frame*.ppm gles2/
+    # gles (GPU) rasterizer (the default)
+    IRISGL_FRAME_PPM=1 ./bin/insect                                  # then: mv frame*.ppm gles/
 
-    python3 ../../scripts/ppm_compare.py ref gles2
+    python3 ../../scripts/ppm_compare.py ref gles
 
 Reports per-frame percentage of differing bytes and the channel-delta
 histogram so off-by-one rounding (benign) is distinguished from structural

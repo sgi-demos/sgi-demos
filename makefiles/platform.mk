@@ -94,9 +94,13 @@ EM_MEMORY = -sALLOW_MEMORY_GROWTH=1
 EXTRA_DEBUG = -fsanitize=undefined
 EM_EXTRA_DEBUG = $(EXTRA_DEBUG) -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK=2
 
+# The site the web builds live on (sgi-demos.github.io serves it): where a
+# demo goes when it quits, and where buttonfly launches demos from
+SITE_DEF = -DSGI_DEMOS_SITE='"https://sgi-demos.org"'
+
 # Base compilers
-CC = cc $(EXTRA_DEBUG)
-EMCC = emcc # -s WASM=1 -s PRECISE_F32=1 # TODO: warning: linker setting ignored during compilation: -Wunused-command-line-argument
+CC = cc $(EXTRA_DEBUG) $(SITE_DEF)
+EMCC = emcc $(SITE_DEF) # -s WASM=1 -s PRECISE_F32=1 # TODO: warning: linker setting ignored during compilation: -Wunused-command-line-argument
 
 # Library archivers
 AR = ar rvsc

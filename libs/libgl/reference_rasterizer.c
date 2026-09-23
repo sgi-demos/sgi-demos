@@ -434,12 +434,12 @@ int32_t ref_rasterizer_winopen(char *title)
     ref_rasterizer_clear(0, 0, 0, 0);
     ref_rasterizer_zclear(Z_MAX);
 
-    if (getenv("GEN_FRAME_PPM_FILES") != NULL) {
+    if (getenv("IRISGL_FRAME_PPM") != NULL) {
         gen_ppm_frame_files = 1;
         printf("Generating .PPM file for each frame\n");
     }
 
-    if (getenv("SNAP_VERTICES") != NULL) {
+    if (getenv("IRISGL_SNAP_VERTICES") != NULL) {
         snap_vertices = 1;
         printf("Vertex values in X and Y will be rounded to nearest pixel corner\n");
     }

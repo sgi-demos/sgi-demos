@@ -12,13 +12,9 @@
 #include <stdlib.h>
 #include <SDL.h>
 #include <SDL_opengles2.h>
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#endif
 #include "sdl_framebuffer.h"
 
 static const int fbBitsPerPixel = 32;
-static bool useGLFramebuffer = true;
 
 // Enable to debug initial test texture
 static bool debugTexBuild = false;
@@ -51,10 +47,6 @@ typedef struct
     GLuint  extTex;             // Framebuffer-sized external texture (gles2 rasterizer front FBO, 0 for CPU upload path)
     GLuint  glQuadVBO;          // Quad geometry for displaying the texture
     SDL_GLContext glContext;    // OGL renderer context
-
-    // SDL framebuffer
-    SDL_Texture*  pSDLTex;      // Texture for displaying the framebuffer
-    SDL_Renderer* pSDLRenderer; // SDL renderer
 } SDLFramebuffer;
 
 static SDLFramebuffer fb = (SDLFramebuffer)
@@ -80,10 +72,6 @@ static SDLFramebuffer fb = (SDLFramebuffer)
     .glQuadVBO = 0,
     .glContext = NULL,
     .pixelScale = 1.0f,
-
-    // SDL framebuffer
-    .pSDLTex = NULL,
-    .pSDLRenderer = NULL,
 };
 
 static int min(int x, int y)            { return x < y ? x : y; }
@@ -112,10 +100,7 @@ static void updateWindowGeometry()
 {
     SDL_GetWindowSize(fb.pWindow, &fb.logicalSize.width, &fb.logicalSize.height);
 
-    if (useGLFramebuffer)
-        SDL_GL_GetDrawableSize(fb.pWindow, &fb.windowSize.width, &fb.windowSize.height);
-    else
-        fb.windowSize = fb.logicalSize;
+    SDL_GL_GetDrawableSize(fb.pWindow, &fb.windowSize.width, &fb.windowSize.height);
 
     fb.pixelScale = (fb.logicalSize.width > 0)
         ? (GLfloat)fb.windowSize.width / (GLfloat)fb.logicalSize.width
@@ -139,8 +124,8 @@ static Size2D fbAspect = {0, 0};
 // the NEAREST sampling, at any display density. Display-only: rasterizer
 // output and PPM dumps are untouched.
 //
-// Config (native env / web URL param):
-//   SGI_PAR=0|1      / ?par=0|1        pixel aspect correction (default 1)
+// Config: IRISGL_PAR=0 turns the pixel aspect correction off (on the web,
+// ?par=0: demos/switches.js passes URL switches in as environment variables).
 //
 #define SGI_PAR_NUM 15  // displayed width = fb columns * 16/15
 #define SGI_PAR_DEN 16
@@ -182,20 +167,11 @@ static void displayedFbSize(int *w, int *h)
 }
 static void displayedFbSizeFwd(int *w, int *h) { displayedFbSize(w, h); }
 
-// Parse the SGI display simulation config: native env vars, web URL params
+// Parse the SGI display simulation config
 static void parseDisplayConfig(void)
 {
     const char *v;
-    if ((v = getenv("SGI_PAR")) != NULL)    parEnabled = atoi(v) != 0;
-
-#ifdef __EMSCRIPTEN__
-    int q;
-    q = EM_ASM_INT({
-        var m = window.location.search.match(/[?&]par=([0-9]+)/);
-        return m ? (m[1] | 0) : -1;
-    });
-    if (q >= 0) parEnabled = q != 0;
-#endif
+    if ((v = getenv("IRISGL_PAR")) != NULL)    parEnabled = atoi(v) != 0;
 
     printf("INFO: SGI display sim: par=%d\n", parEnabled);
 }
@@ -299,8 +275,7 @@ bool sdlApplyFramebufferSize(void)
     {
         sdlFreeFramebufferTexture();
         sdlInitFramebufferTexture();
-        if (useGLFramebuffer)
-            updateShaderVars();
+        updateShaderVars();
     }
     return changed;
 }
@@ -468,95 +443,78 @@ uint32_t sdlInitWindow()
     SDL_GetVersion(&version);
     printf("INFO: SDL version: %d.%d.%d\n", version.major, version.minor, version.patch);
 
-    // OpenGLES framebuffer
-    if (useGLFramebuffer)
+    // Init OpenGLES driver and context
+    SDL_SetHint(SDL_HINT_OPENGL_ES_DRIVER, "1");
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_EGL, 1);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetSwapInterval(1); // 1 = sync framerate to refresh rate (no screen tearing)
+
+    // Explicitly set channel depths, otherwise we might get some < 8
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+
+    // ES 3.0 (WebGL2 on web): the gles2 rasterizer's color-index buffer
+    // path needs ES3 shaders. All other GL use stays at the ES2 API
+    // level, so if 3.0 isn't available fall back to a 2.0 context and
+    // the CI path degrades gracefully.
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+
+    // On the web the page owns the tab title (its <title>, from placard.json):
+    // a NULL title keeps SDL from setting document.title to ours
+    fb.pWindow = SDL_CreateWindow(
+#ifdef __EMSCRIPTEN__
+        NULL,
+#else
+        fb.title,
+#endif
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        fb.windowSize.width, fb.windowSize.height,
+        SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
+    );
+
+    fb.glContext = SDL_GL_CreateContext(fb.pWindow);
+    if (fb.glContext == NULL)
     {
-        // Init OpenGLES driver and context
-        SDL_SetHint(SDL_HINT_OPENGL_ES_DRIVER, "1");
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_EGL, 1);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-        SDL_GL_SetSwapInterval(1); // 1 = sync framerate to refresh rate (no screen tearing)
-
-        // Explicitly set channel depths, otherwise we might get some < 8
-        SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-        SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-        SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-        SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-
-        // ES 3.0 (WebGL2 on web): the gles2 rasterizer's color-index buffer
-        // path needs ES3 shaders. All other GL use stays at the ES2 API
-        // level, so if 3.0 isn't available fall back to a 2.0 context and
-        // the CI path degrades gracefully.
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+        printf("INFO: ES 3.0 context unavailable (%s), falling back to ES 2.0\n", SDL_GetError());
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-
-        fb.pWindow = SDL_CreateWindow(
-            fb.title,
-            SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-            fb.windowSize.width, fb.windowSize.height,
-            SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
-        );
-
         fb.glContext = SDL_GL_CreateContext(fb.pWindow);
-        if (fb.glContext == NULL)
-        {
-            printf("INFO: ES 3.0 context unavailable (%s), falling back to ES 2.0\n", SDL_GetError());
-            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-            fb.glContext = SDL_GL_CreateContext(fb.pWindow);
-        }
-        printf("INFO: GL vendor: %s\n", glGetString(GL_VENDOR));
-        printf("INFO: GL renderer: %s\n", glGetString(GL_RENDERER));
-        printf("INFO: GL version: %s\n", glGetString(GL_VERSION));
-
-        //const float r = 0.2f, g = 0.1f, b = 0.15f, a = 1.0f;
-        //glClearColor(r, g, b, a);
-        glClearColor(0,0,0,1.0f);
-
-        // All framebuffer textures are exact framebuffer-sized, so the GL
-        // max texture size is the framebuffer dimension cap
-        GLint maxTextureSize = 0;
-        glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
-        if (maxTextureSize > 0)
-            maxFramebufferDim = maxTextureSize;
-        printf("INFO: GL max texture size: %d\n", maxFramebufferDim);
-
-        // Window geometry: logical (mouse) size, drawable (GL) size, and
-        // their HIGHDPI ratio. NOTE: must be float division — on web the
-        // canvas can be any size (e.g. fullwindow shells), so the ratio is
-        // not necessarily a whole number
-        updateWindowGeometry();
-        updateFramebufferSize();
-        printf("INFO: GL window: %dx%d points, viewport %dx%d px, pixel scale %f, fb %dx%d\n",
-               fb.logicalSize.width, fb.logicalSize.height,
-               fb.windowSize.width, fb.windowSize.height, fb.pixelScale,
-               fb.size.width, fb.size.height);
-
-        glViewport(0, 0, fb.windowSize.width, fb.windowSize.height);
-
-        initShader();
-        initGeometry();
     }
+    printf("INFO: GL vendor: %s\n", glGetString(GL_VENDOR));
+    printf("INFO: GL renderer: %s\n", glGetString(GL_RENDERER));
+    printf("INFO: GL version: %s\n", glGetString(GL_VERSION));
 
-    // SDL framebuffer
-    else
-    {
-        fb.pWindow = SDL_CreateWindow(
-            fb.title,
-            SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-            fb.windowSize.width, fb.windowSize.height,
-            SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
+    //const float r = 0.2f, g = 0.1f, b = 0.15f, a = 1.0f;
+    //glClearColor(r, g, b, a);
+    glClearColor(0,0,0,1.0f);
 
-        fb.pSDLRenderer = SDL_CreateRenderer(fb.pWindow, -1, 0);
+    // All framebuffer textures are exact framebuffer-sized, so the GL
+    // max texture size is the framebuffer dimension cap
+    GLint maxTextureSize = 0;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
+    if (maxTextureSize > 0)
+        maxFramebufferDim = maxTextureSize;
+    printf("INFO: GL max texture size: %d\n", maxFramebufferDim);
 
-        updateWindowGeometry();
-        updateFramebufferSize();
+    // Window geometry: logical (mouse) size, drawable (GL) size, and
+    // their HIGHDPI ratio. NOTE: must be float division — on web the
+    // canvas can be any size (e.g. fullwindow shells), so the ratio is
+    // not necessarily a whole number
+    updateWindowGeometry();
+    updateFramebufferSize();
+    printf("INFO: GL window: %dx%d points, viewport %dx%d px, pixel scale %f, fb %dx%d\n",
+           fb.logicalSize.width, fb.logicalSize.height,
+           fb.windowSize.width, fb.windowSize.height, fb.pixelScale,
+           fb.size.width, fb.size.height);
 
-        // const Uint8 r = 0.2f * 255, g = 0.1f * 255, b = 0.15f * 255, a = 255;
-        // SDL_SetRenderDrawColor(fb.pSDLRenderer, r, g, b, a);
-        SDL_SetRenderDrawColor(fb.pSDLRenderer, 0, 0, 0, 255);
-    }
+    glViewport(0, 0, fb.windowSize.width, fb.windowSize.height);
+
+    initShader();
+    initGeometry();
 
     fb.windowID = SDL_GetWindowID(fb.pWindow);
     SDL_StartTextInput();
@@ -569,7 +527,7 @@ uint32_t sdlInitWindow()
 // resources, since rasterizer_winopen runs before the window is created.
 bool sdlGLContextReady()
 {
-    return useGLFramebuffer && fb.glContext != NULL;
+    return fb.glContext != NULL;
 }
 
 //
@@ -651,44 +609,34 @@ static void checkValidTex()
 
 void sdlInitFramebufferTexture()
 {
-    if (useGLFramebuffer)
-    {
-        // Exact framebuffer-sized texture. NPOT is fine to sample with
-        // CLAMP_TO_EDGE wrapping and no mipmaps (the y-flip happens in
-        // positive texcoord space, so no GL_REPEAT — the old POT reqmt)
-        SDL_Surface* fbTexture =
-            createTexSurface(fb.size.width, fb.size.height, fb.size.width, fb.size.height);
+    // Exact framebuffer-sized texture. NPOT is fine to sample with
+    // CLAMP_TO_EDGE wrapping and no mipmaps (the y-flip happens in
+    // positive texcoord space, so no GL_REPEAT — the old POT reqmt)
+    SDL_Surface* fbTexture =
+        createTexSurface(fb.size.width, fb.size.height, fb.size.width, fb.size.height);
 
-        // Generate GL texture object and bind as current
-        glGenTextures(1, &fb.glTex);
-        glBindTexture(GL_TEXTURE_2D, fb.glTex);
+    // Generate GL texture object and bind as current
+    glGenTextures(1, &fb.glTex);
+    glBindTexture(GL_TEXTURE_2D, fb.glTex);
 
-        // Set the GL texture's wrapping and stretching properties
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);  // nearest filter = looks vintage
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // nearest filter = looks vintage
+    // Set the GL texture's wrapping and stretching properties
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);  // nearest filter = looks vintage
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // nearest filter = looks vintage
 
-        // Upload SDL image to GL texture
-        GLint level_0 = 0, no_border = 0;
-        glTexImage2D(GL_TEXTURE_2D, level_0, GL_RGBA,
-                     fb.size.width, fb.size.height,
-                     no_border, GL_RGBA, GL_UNSIGNED_BYTE,
-                     fbTexture->pixels);
+    // Upload SDL image to GL texture
+    GLint level_0 = 0, no_border = 0;
+    glTexImage2D(GL_TEXTURE_2D, level_0, GL_RGBA,
+                 fb.size.width, fb.size.height,
+                 no_border, GL_RGBA, GL_UNSIGNED_BYTE,
+                 fbTexture->pixels);
 
-        // Check for errors and free SDL surface
-        checkValidTex();
-        SDL_FreeSurface(fbTexture);
+    // Check for errors and free SDL surface
+    checkValidTex();
+    SDL_FreeSurface(fbTexture);
 
-        updateShaderVars();
-    }
-    else
-    {
-        // Create SDL texture from checkerboard surface
-        SDL_Surface* pSurface = createTexSurface(fb.size.width, fb.size.height, fb.size.width, fb.size.height);
-        fb.pSDLTex = SDL_CreateTextureFromSurface(fb.pSDLRenderer, pSurface);
-        SDL_FreeSurface(pSurface);
-    }
+    updateShaderVars();
 }
 
 static void fillTestFramebuffer(unsigned int* pixels, int texWidth, int texHeight)
@@ -712,74 +660,49 @@ void sdlUpdateFramebufferTexture()
 
     if (fb.pSrcPixels)
     {
-        if (useGLFramebuffer)
-        {
-            // Generate SDL surface for debugging texture updates
-            int texWidth = fb.size.width, texHeight = fb.size.height;
-            unsigned int* pixels = (unsigned int*)fb.pSrcPixels;
+        // Generate SDL surface for debugging texture updates
+        int texWidth = fb.size.width, texHeight = fb.size.height;
+        unsigned int* pixels = (unsigned int*)fb.pSrcPixels;
 
-            if (debugTexUpdate)
-                fillTestFramebuffer(pixels, texWidth, texHeight);
+        if (debugTexUpdate)
+            fillTestFramebuffer(pixels, texWidth, texHeight);
 
-            glBindTexture(GL_TEXTURE_2D, fb.glTex);
+        glBindTexture(GL_TEXTURE_2D, fb.glTex);
 
-            const GLint level_0 = 0, offset_0 = 0;
-            glTexSubImage2D(GL_TEXTURE_2D, level_0,
-                            offset_0, offset_0,
-                            texWidth, texHeight,
-                            GL_RGBA, GL_UNSIGNED_BYTE,
-                            pixels);
-            checkValidTex();
-        }
-        else
-        {
-            int pitch = fb.size.width * 4;
-            SDL_UpdateTexture(fb.pSDLTex, NULL, fb.pSrcPixels, pitch);
-        }
+        const GLint level_0 = 0, offset_0 = 0;
+        glTexSubImage2D(GL_TEXTURE_2D, level_0,
+                        offset_0, offset_0,
+                        texWidth, texHeight,
+                        GL_RGBA, GL_UNSIGNED_BYTE,
+                        pixels);
+        checkValidTex();
     }
 }
 
 void sdlRenderFramebufferTexture()
 {
     // Draw the quad VBO with texture bound and use framebuffer shader
-    if (useGLFramebuffer)
-    {
-        // showFrameCounter();
-        // Reset state the gles2 rasterizer may have changed (it renders
-        // into its own FBOs with depth testing between our frames, and its
-        // clears leave the demo's clear color behind)
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(0, 0, fb.windowSize.width, fb.windowSize.height);
-        glDisable(GL_DEPTH_TEST);
-        glDisable(GL_BLEND);
-        glClearColor(0, 0, 0, 1.0f);
+    // showFrameCounter();
+    // Reset state the gles2 rasterizer may have changed (it renders
+    // into its own FBOs with depth testing between our frames, and its
+    // clears leave the demo's clear color behind)
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, fb.windowSize.width, fb.windowSize.height);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+    glClearColor(0, 0, 0, 1.0f);
 
-        glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(fb.glShaderProg);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, presentTexSource());
-        glBindBuffer(GL_ARRAY_BUFFER, fb.glQuadVBO);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glUseProgram(fb.glShaderProg);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, presentTexSource());
+    glBindBuffer(GL_ARRAY_BUFFER, fb.glQuadVBO);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-        SDL_GL_SwapWindow(fb.pWindow);
-    }
-    else
-    {
-        SDL_RenderClear(fb.pSDLRenderer);
-        SDL_Rect destRect = (SDL_Rect)
-        {
-            .x = windowToFramebufferOffsetX(),
-            .y = windowToFramebufferOffsetY(),
-            fb.size.width,
-            fb.size.height
-        };
-        SDL_RenderCopy(fb.pSDLRenderer, fb.pSDLTex, NULL, &destRect);
-
-        SDL_RenderPresent(fb.pSDLRenderer);
-    }
+    SDL_GL_SwapWindow(fb.pWindow);
 }
 
 void sdlFreeFramebufferTexture()
@@ -789,12 +712,6 @@ void sdlFreeFramebufferTexture()
         glBindTexture(GL_TEXTURE_2D, 0);
         glDeleteTextures(1, &fb.glTex);
         fb.glTex = 0;
-    }
-
-    if (fb.pSDLTex)
-    {
-        SDL_DestroyTexture(fb.pSDLTex);
-        fb.pSDLTex = NULL;
     }
 }
 
@@ -833,11 +750,8 @@ bool sdlResizeWindow(Uint32 windowID)
                fb.windowSize.width, fb.windowSize.height, fb.pixelScale,
                fb.size.width, fb.size.height);
 
-        if (useGLFramebuffer)
-        {
-            glViewport(0, 0, fb.windowSize.width, fb.windowSize.height);
-            updateShaderVars();
-        }
+        glViewport(0, 0, fb.windowSize.width, fb.windowSize.height);
+        updateShaderVars();
     }
 
     return fbSizeChanged;
@@ -849,7 +763,8 @@ void sdlOpenWindow(char *title)
     strncpy(fb.title, title, sizeof(fb.title));
 
 #ifndef __EMSCRIPTEN__
-    // Emscripten sets window title to 'this.program' on calling SDL_SetWindowTitle
+    // native only: on the web SDL_SetWindowTitle would set document.title,
+    // and the page's own <title> stands (see sdlInitWindow)
     if (fb.pWindow)
         SDL_SetWindowTitle(fb.pWindow, fb.title);
 #endif
@@ -857,8 +772,7 @@ void sdlOpenWindow(char *title)
     // fb.size is owned by updateFramebufferSize (framebuffer tracks the
     // window); nothing size-related to do here anymore
 
-    if (useGLFramebuffer)
-        updateShaderVars();
+    updateShaderVars();
 }
 
 void sdlSetFramebufferSourceMem(unsigned char* pSrcPixels)

@@ -3,8 +3,8 @@
 //
 // Implements the rasterizer interface with OpenGL ES2 draw calls instead of
 // the CPU reference rasterizer. The DEFAULT rasterizer (rasterizer.c
-// dispatch; select the CPU reference instead via GLES2_RASTERIZER=ref
-// native, ?rast=ref web).
+// dispatch; select the CPU reference instead via IRISGL_RAST=ref, ?rast=ref
+// on the web).
 //
 // Design:
 //  - Primitives are batched into a vertex array (points and lines are
@@ -17,7 +17,7 @@
 //  - Zero-readback present: the front FBO's color texture is handed to the
 //    display quad directly (sdlSetFramebufferSourceTex), so no glReadPixels
 //    happens per frame. The CPU front buffer copy is refreshed from the
-//    GPU FBO only when GEN_FRAME_PPM_FILES needs it for frame dumps.
+//    GPU FBO only when IRISGL_FRAME_PPM needs it for frame dumps.
 //  - GL resources are created lazily on the first call after the SDL window
 //    and GL context exist (rasterizer_winopen is called before the window
 //    is created, so nothing GL can happen there).
@@ -184,7 +184,7 @@ static int gl_ready = 0;
 //
 // CPU front buffer. The display samples the front FBO texture directly
 // (zero-readback present), so this copy is only refreshed from the GPU
-// front FBO for the GEN_FRAME_PPM_FILES frame dumps; it is also what
+// front FBO for the IRISGL_FRAME_PPM frame dumps; it is also what
 // rasterizer_frontbuffer returns (the display ignores that pointer once a
 // texture source is set).
 //
@@ -1921,7 +1921,7 @@ int32_t gles2_rasterizer_winopen(char *title)
 {
     // no GL context yet — just record env options and init the CPU front
     // buffer; GL resources are created lazily on the first draw/clear
-    if (getenv("GEN_FRAME_PPM_FILES") != NULL)
+    if (getenv("IRISGL_FRAME_PPM") != NULL)
     {
         gen_ppm_frame_files = 1;
         printf("Generating .PPM file for each frame\n");

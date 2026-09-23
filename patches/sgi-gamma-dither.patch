@@ -1,8 +1,7 @@
 diff --git a/libs/libgl/sdl_framebuffer.c b/libs/libgl/sdl_framebuffer.c
-index 9cd37bf..8cf8f75 100644
 --- a/libs/libgl/sdl_framebuffer.c
 +++ b/libs/libgl/sdl_framebuffer.c
-@@ -47,6 +47,10 @@ typedef struct
+@@ -43,6 +43,10 @@
      GLint   glShaderPixelScale;
      GLint   glShaderYFlip;      // location of bool yFlip: true = source rows are top-down (CPU upload path)
      GLint   glShaderRBSwap;     // location of float rbSwap: 1.0 = source bytes are BGRA (CPU upload path)
@@ -13,7 +12,7 @@ index 9cd37bf..8cf8f75 100644
      GLuint  glTex;              // Texture object for displaying the framebuffer
      GLuint  extTex;             // Framebuffer-sized external texture (gles2 rasterizer front FBO, 0 for CPU upload path)
      GLuint  glQuadVBO;          // Quad geometry for displaying the texture
-@@ -75,6 +79,10 @@ static SDLFramebuffer fb = (SDLFramebuffer)
+@@ -67,6 +71,10 @@
      .glShaderPixelScale = 0,
      .glShaderYFlip = 0,
      .glShaderRBSwap = 0,
@@ -24,7 +23,7 @@ index 9cd37bf..8cf8f75 100644
      .glTex = 0,
      .extTex = 0,
      .glQuadVBO = 0,
-@@ -136,16 +144,31 @@ static Size2D fbAspect = {0, 0};
+@@ -121,16 +129,31 @@
  // is widened 16/15, exactly filling the window (no letterbox) with the
  // authentic CRT proportions. Stretching (magnification) rather than
  // squashing (minification) so no framebuffer row/column is ever dropped by
@@ -35,12 +34,14 @@ index 9cd37bf..8cf8f75 100644
 +// selectable bit depths. All display-only: rasterizer output and PPM dumps
 +// are untouched.
  //
- // Config (native env / web URL param):
- //   SGI_PAR=0|1      / ?par=0|1        pixel aspect correction (default 1)
-+//   SGI_GAMMA=0|1    / ?gamma=0|1      gamma 2.4 -> 2.2       (default 1)
-+//   SGI_DITHER=0..4  / ?dither=0..4    0 off (default), 1 Indy 8-bit XL
-+//                                      (3-3-2), 2 Indigo2 12-bit (4-4-4),
-+//                                      3 15-bit (5-5-5), 4 16-bit (5-6-5)
+-// Config: IRISGL_PAR=0 turns the pixel aspect correction off (on the web,
+-// ?par=0: demos/switches.js passes URL switches in as environment variables).
++// Config (on the web, the URL switch: demos/switches.js passes it in):
++//   IRISGL_PAR=0|1      ?par=0|1        pixel aspect correction (default 1)
++//   IRISGL_GAMMA=0|1    ?gamma=0|1      gamma 2.4 -> 2.2       (default 1)
++//   IRISGL_DITHER=0..4  ?dither=0..4    0 off (default), 1 Indy 8-bit XL
++//                                       (3-3-2), 2 Indigo2 12-bit (4-4-4),
++//                                       3 15-bit (5-5-5), 4 16-bit (5-6-5)
  //
  #define SGI_PAR_NUM 15  // displayed width = fb columns * 16/15
  #define SGI_PAR_DEN 16
@@ -58,30 +59,12 @@ index 9cd37bf..8cf8f75 100644
  
  // Fixed framebuffer size (demo compatibility quirk): some demos are
  // hard-authored for the classic screen (compile-time viewport constants);
-@@ -187,6 +210,8 @@ static void parseDisplayConfig(void)
+@@ -172,8 +195,14 @@
  {
      const char *v;
-     if ((v = getenv("SGI_PAR")) != NULL)    parEnabled = atoi(v) != 0;
-+    if ((v = getenv("SGI_GAMMA")) != NULL)  gammaEnabled = atoi(v) != 0;
-+    if ((v = getenv("SGI_DITHER")) != NULL) ditherMode = atoi(v);
- 
- #ifdef __EMSCRIPTEN__
-     int q;
-@@ -195,9 +220,23 @@ static void parseDisplayConfig(void)
-         return m ? (m[1] | 0) : -1;
-     });
-     if (q >= 0) parEnabled = q != 0;
-+    q = EM_ASM_INT({
-+        var m = window.location.search.match(/[?&]gamma=([0-9]+)/);
-+        return m ? (m[1] | 0) : -1;
-+    });
-+    if (q >= 0) gammaEnabled = q != 0;
-+    q = EM_ASM_INT({
-+        var m = window.location.search.match(/[?&]dither=([0-9]+)/);
-+        return m ? (m[1] | 0) : -1;
-+    });
-+    if (q >= 0) ditherMode = q;
- #endif
+     if ((v = getenv("IRISGL_PAR")) != NULL)    parEnabled = atoi(v) != 0;
++    if ((v = getenv("IRISGL_GAMMA")) != NULL)  gammaEnabled = atoi(v) != 0;
++    if ((v = getenv("IRISGL_DITHER")) != NULL) ditherMode = atoi(v);
  
 -    printf("INFO: SGI display sim: par=%d\n", parEnabled);
 +    if (ditherMode < 0 || ditherMode > 4)
@@ -92,7 +75,7 @@ index 9cd37bf..8cf8f75 100644
  }
  
  void sdlSetFramebufferAspect(int32_t x, int32_t y)
-@@ -350,12 +389,67 @@ const GLchar* fbFragmentSource =
+@@ -325,12 +354,67 @@
      "varying vec2 texCoord;                                             \n"
      "uniform sampler2D texSampler;                                      \n"
      "uniform float rbSwap;                                              \n"
@@ -161,10 +144,11 @@ index 9cd37bf..8cf8f75 100644
      "}                                                                  \n";
  
  static void checkShaderBuilt(const char* shader_name, GLenum status, GLuint shader)
-@@ -392,6 +486,14 @@ static void updateShaderVars()
+@@ -366,6 +450,14 @@
+     glUniform2fv(fb.glShaderFbSize, 1, fbSize);
  
      glUniform1f(fb.glShaderPixelScale, fb.pixelScale);
- 
++
 +    // SGI display simulation: gamma 2.4 decoded for a 2.2 display, and the
 +    // REX3 Bayer dither at the configured bit depth
 +    glUniform1f(fb.glShaderGammaPow, gammaEnabled ? (2.4f / 2.2f) : 1.0f);
@@ -172,11 +156,10 @@ index 9cd37bf..8cf8f75 100644
 +    glUniform3fv(fb.glShaderDitherLvls, 1, ditherLevels[ditherMode]);
 +    GLfloat fbRes[2] = {fb.size.width, fb.size.height};
 +    glUniform2fv(fb.glShaderFbRes, 1, fbRes);
-+
+ 
  
      // Source-dependent vars. Both sources are exact framebuffer-sized
-     // NPOT textures — legal to sample with CLAMP_TO_EDGE and no mipmaps,
-@@ -431,6 +533,10 @@ static void initShader()
+@@ -406,6 +498,10 @@
      fb.glShaderPixelScale = glGetUniformLocation(fb.glShaderProg, "pixelScale");
      fb.glShaderYFlip      = glGetUniformLocation(fb.glShaderProg, "yFlip");
      fb.glShaderRBSwap     = glGetUniformLocation(fb.glShaderProg, "rbSwap");
@@ -187,3 +170,15 @@ index 9cd37bf..8cf8f75 100644
  
      updateShaderVars();
  }
+diff --git a/demos/switches.js b/demos/switches.js
+--- a/demos/switches.js
++++ b/demos/switches.js
+@@ -5,7 +5,7 @@
+ // demo's .js:
+ //   <script src="../../switches.js"></script>
+ (function () {
+-    var SWITCHES = { rast: "IRISGL_RAST", par: "IRISGL_PAR" };
++    var SWITCHES = { rast: "IRISGL_RAST", par: "IRISGL_PAR", gamma: "IRISGL_GAMMA", dither: "IRISGL_DITHER" };
+     var params = new URLSearchParams(window.location.search);
+     Module.preRun = (Module.preRun || []).concat(function () {
+         Object.keys(SWITCHES).forEach(function (k) {

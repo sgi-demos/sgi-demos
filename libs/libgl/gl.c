@@ -42,9 +42,9 @@
  * Define NDEBUG for targets with optimization.  Tracing will not be enable-able.
  *
  * In order to show a GL function trace, DON'T enable NDEBUG and
- * set TRACE_GL environment variable to anything.
+ * set IRISGL_TRACE environment variable to anything.
  *
- * If NDEBUG is defined or if TRACE_GL environment variable is not
+ * If NDEBUG is defined or if IRISGL_TRACE environment variable is not
  * set, you'll see no tracing.
  */
 
@@ -2998,7 +2998,7 @@ static void init_gl_state()
     initialized = 1;
 
 #if !defined(NDEBUG)
-    if(getenv("TRACE_GL") != NULL)
+    if(getenv("IRISGL_TRACE") != NULL)
         trace_functions = 1;
 #endif
 
@@ -5220,7 +5220,7 @@ void gl_exit(int status)
         "     window.history.back();                                "
         "}                                                          "
         "else {                                                     "
-        "    window.location.href = 'https://sgi-demos.github.io';  "
+        "    window.location.href = '" SGI_DEMOS_SITE "';           "
         "}                                                          ";
     extern void emscripten_run_script(const char *);
     emscripten_run_script(exit_js);

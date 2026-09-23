@@ -109,7 +109,7 @@ void rasterizer_resize(uint32_t width, uint32_t height);
 // rasterizer.c:
 //   - gles2:     GPU rasterizer on OpenGL ES2  (gles2_rasterizer.c) — default
 //   - reference: CPU scanline rasterizer  (reference_rasterizer.c) — for
-//                reference/debugging (GLES2_RASTERIZER=ref / ?rast=ref)
+//                reference/debugging (IRISGL_RAST=ref / ?rast=ref)
 //
 typedef struct rasterizer_funcs
 {
@@ -151,10 +151,11 @@ typedef struct rasterizer_funcs
 const rasterizer_funcs* ref_rasterizer_get_funcs(void);
 const rasterizer_funcs* gles2_rasterizer_get_funcs(void);
 
-// Set the shim-preferred implementation ("ref" or "gles2") before the first
-// rasterizer_* call. Overridden by an explicit GLES2_RASTERIZER env var or
-// ?rast= URL parameter. Used by per-demo quirks (gl.c) — e.g. cedit needs
-// the reference rasterizer's color-index buffer.
+// Set the shim-preferred implementation ("ref" or "gles") before the first
+// rasterizer_* call. Overridden by an explicit IRISGL_RAST (?rast= on the
+// web).
+// Used by per-demo quirks (gl.c) — e.g. cedit needs the reference
+// rasterizer's color-index buffer.
 void rasterizer_prefer(const char *mode);
 
 #endif /* __RASTERIZER_H__ */
