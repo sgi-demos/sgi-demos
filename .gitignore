@@ -11,3 +11,5 @@ REPO.md
 logs/*
 frame*.ppm
 __pycache__/
+# the draft sunflower port is not built or published; its local web build stays out
+demos/sunflower/web/
