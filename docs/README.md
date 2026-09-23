@@ -1,6 +1,7 @@
 # Docs
 
 - [ARCHITECTURE.md](ARCHITECTURE.md): how the original IRIS GL demo source runs on modern hardware and in the browser.
+- [ADD_A_DEMO.md](ADD_A_DEMO.md): the steps from original source to a demo on exhibit.
 - [COPYRIGHT.md](COPYRIGHT.md): provenance, licensing, and fair-use record for every demo and library.
 - [COPYRIGHT_TODO.md](COPYRIGHT_TODO.md): open items from that record.
 
