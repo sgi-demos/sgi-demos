@@ -2,7 +2,7 @@
 
 The Electropaint 1994 on exhibit: a human-readable fork of the verbatim decompilation in [decomp/](decomp/). Same demo, byte-for-byte the same output — but `ep.c` is refactored from the MIPS decompiler's mangled names into readable ones, so you can actually follow how Electropaint works.
 
-The [decomp/](decomp/) build keeps `ep.c` **verbatim** from Brendan Shanks's bslabs decompilation (minimal changes — see its README for the IRIS GL port mechanism, which this fork reuses unchanged: `gl_wrap.h`, `gl_wrap_sgi.c`, `main_sgi.c`). This fork changes **only names**, never logic.
+The [decomp/](decomp/) build keeps `ep.c` **verbatim** from Brendan Shanks's bslabs decompilation (minimal changes — see its README for the IRIS GL port mechanism, which lives here and which decomp/ shares: `gl_wrap.h`, `gl_wrap_sgi.c`, `main_sgi.c`, `stdafx.h`). This fork changes **only names**, never logic.
 
 ## What was renamed
 

@@ -55,6 +55,7 @@ IGNORE = {"REDRAW", "INPUTCHANGE", "WINQUIT", "WINSHUT", "WINFREEZE", "WINTHAW",
 RE_DEV = re.compile(r"\b(?:qdevice|getbutton|getvaluator|unqdevice)\s*\(\s*([A-Z][A-Z0-9_]*)\s*\)")
 RE_CASE = re.compile(r"case\s*'(\\?.)'\s*:")
 RE_EQ = re.compile(r"==\s*'(\\?.)'")
+RE_INCLUDE_C = re.compile(r'^\s*#\s*include\s+"([^"]+\.c)"', re.M)
 RE_PNL = re.compile(r"\bkey\s*=\s*'(\\?.)'")
 RE_PNL_DEV = re.compile(r"->\s*key\s*=\s*([A-Z])KEY\b")   # Panel Library actuators: button->key = OKEY
 
@@ -67,7 +68,13 @@ def sources(demo_dir):
         for f in files:
             # the port's own harness files (main_sgi.c) count: they define the port's inputs
             if f.endswith((".c", ".h")) and not f.startswith(("panelstub", "epscript", "gl_wrap", "parser.tab", "lexer")):
-                yield os.path.join(root, f)
+                path = os.path.join(root, f)
+                yield path
+                # a variant that shares its demo's harness includes it: decomp/main_sgi.c is #include "../main_sgi.c"
+                if f.endswith(".c"):
+                    with open(path, encoding="latin-1") as fh:
+                        for inc in RE_INCLUDE_C.findall(fh.read()):
+                            yield os.path.normpath(os.path.join(root, inc))
 
 
 def scan(demo_dir):
