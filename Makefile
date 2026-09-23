@@ -1,4 +1,4 @@
-.PHONY: all native browser clean list smoke smoke-baseline thumbs
+.PHONY: all native browser libs clean list smoke smoke-baseline thumbs
 
 # The one list of demos: every demos/<name>/ or demos/<name>/<variant>/ with a
 # Makefile, except draft ports (placard.json "draft": true). The smoke tests,
@@ -8,17 +8,18 @@ DRAFTS := $(patsubst %/placard.json,%,$(shell grep -l '"draft": *true' $(wildcar
 DEMOS := $(sort $(patsubst demos/%,%,$(filter-out $(DRAFTS),$(DEMO_DIRS))))
 
 LIBS = libgl libdemo
+LIB_DIRS = $(LIBS:%=libs/%)
 
 LOG_DIR = logs
 
-# Build every lib, then every demo, with one make target ($1: empty for both
-# native and browser, or native, or browser). Each item's output is teed to
+# Build each directory in $2 with one make target ($1: empty for both native
+# and browser, or native, or browser). Each item's output is teed to
 # $(LOG_DIR)/<item>.log and its exit code kept in <item>.rc, so the loop runs
 # past failures and the summary reports them. Items in a subdirectory
 # (ep-1994/decomp) log as ep-1994-decomp.
 define build
 	@rm -rf $(LOG_DIR) ; mkdir -p $(LOG_DIR) ; \
-	for item in $(LIBS:%=libs/%) $(DEMOS:%=demos/%) ; do \
+	for item in $(2) ; do \
 	    name=$$(echo $${item#*/} | tr / -) ; \
 	    echo "" ; echo "BUILDING: $$name" ; echo "" ; \
 	    ( $(MAKE) $(1) -C $$item 2>&1 ; echo $$? > $(LOG_DIR)/$$name.rc ) | tee $(LOG_DIR)/$$name.log ; \
@@ -27,13 +28,14 @@ define build
 	echo "==================== BUILD SUMMARY ===========================" ; \
 	printf "%-22s %12s %12s %13s\n" "TARGET" "ERRORS" "WARNINGS" "STATUS" ; \
 	fail=0 ; \
-	for item in $(LIBS) $(subst /,-,$(DEMOS)) ; do \
-	    log=$(LOG_DIR)/$$item.log ; \
+	for item in $(2) ; do \
+	    name=$$(echo $${item#*/} | tr / -) ; \
+	    log=$(LOG_DIR)/$$name.log ; \
 	    errs=$$(grep -c 'error:' $$log 2>/dev/null) ; \
 	    warns=$$(grep -c 'warning:' $$log 2>/dev/null) ; \
-	    rc=$$(cat $(LOG_DIR)/$$item.rc 2>/dev/null || echo '?') ; \
+	    rc=$$(cat $(LOG_DIR)/$$name.rc 2>/dev/null || echo '?') ; \
 	    if [ "$$rc" != "0" ] ; then fail=1 ; fi ; \
-	    printf "%-22s %12s %12s %13s\n" $$item $${errs:-?} $${warns:-?} $$rc ; \
+	    printf "%-22s %12s %12s %13s\n" $$name $${errs:-?} $${warns:-?} $$rc ; \
 	done ; \
 	echo "==============================================================" ; \
 	if [ $$fail -ne 0 ] ; then \
@@ -45,13 +47,17 @@ define build
 endef
 
 all:
-	$(call build,)
+	$(call build,,$(LIB_DIRS) $(DEMOS:%=demos/%))
 
 native browser:
-	$(call build,$@)
+	$(call build,$@,$(LIB_DIRS) $(DEMOS:%=demos/%))
+
+# just the libs, native and browser: a quick compile check while editing one
+libs:
+	$(call build,,$(LIB_DIRS))
 
 clean:
-	@for item in $(DEMOS:%=demos/%) $(LIBS:%=libs/%) ; do echo "" ; echo "CLEANING: $$item" ; $(MAKE) clean -C $$item ; done
+	@for item in $(DEMOS:%=demos/%) $(LIB_DIRS) ; do echo "" ; echo "CLEANING: $$item" ; $(MAKE) clean -C $$item ; done
 	rm -rf $(LOG_DIR)
 
 list:

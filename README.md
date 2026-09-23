@@ -36,7 +36,7 @@ See the [copyright doc](https://github.com/sgi-demos/sgi-demos/blob/main/docs/CO
 
 ## Build
 
-Every platform needs a C compiler, SDL2, Emscripten, bison (buttonfly's menu parser), and Python 3. `make` then builds every demo twice: natively into `demos/<name>/bin/`, and for the web into `demos/<name>/web/`. `make native` or `make browser` builds just one of the two, and `make list` prints the demos.
+Every platform needs a C compiler, SDL2, Emscripten, bison (buttonfly's menu parser), and Python 3. `make` then builds every demo twice: natively into `demos/<name>/bin/`, and for the web into `demos/<name>/web/`. `make native` or `make browser` builds just one of the two, `make libs` just the libraries (a quick compile check while editing one), and `make list` prints the demos.
 
 ### Mac
 
