@@ -1,8 +1,8 @@
-// Thumbnail generator for the browse page (sgi-demos.github.io/browse/).
+// Thumbnail generator for the browse page (sgi-demos.org/browse/).
 //
 // Loads each demo's web build (demos/<name>/web/) in headless Chromium, waits
 // for it to settle, optionally drives keys/mouse to get past splash screens
-// and menus (scripts/thumbs.json), and writes media/<name>.png — a 512x384
+// and menus (the recipes in scripts/thumbs.json), and writes media/<name>.png — a 512x384
 // (4:3) PNG, box-filtered down from the 1024x768 capture.
 //
 // Reuses the smoke suite's Chromium + static server: run `make thumbs` (which
@@ -15,6 +15,7 @@ import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve } from "node:path";
 import { startServer } from "../tests/smoke/lib/server.mjs";
+import { listDemos } from "../tests/smoke/lib/demos.mjs";
 
 // playwright + pngjs live in tests/smoke/node_modules (both are CommonJS).
 const require = createRequire(new URL("../tests/smoke/package.json", import.meta.url));
@@ -118,7 +119,7 @@ async function capture(context, baseUrl, demo, cfg) {
   page.on("pageerror", (e) => errors.push(e.message));
   page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
   try {
-    let url = `${baseUrl}/demos/${demo.name}/web/?rast=${encodeURIComponent(demo.rast ?? "gles2")}`;
+    let url = `${baseUrl}/demos/${demo.name}/web/?rast=${encodeURIComponent(demo.rast ?? "gles")}`;
     if (demo.arg) url += `&arg=${encodeURIComponent(demo.arg)}`;
     await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
     await page.waitForResponse((r) => /\.wasm(\?|$)/.test(r.url()), { timeout: 15000 });
@@ -134,7 +135,9 @@ async function capture(context, baseUrl, demo, cfg) {
 async function main() {
   const args = parseArgs(process.argv);
   const cfg = JSON.parse(await readFile(args.config, "utf8"));
-  let demos = cfg.demos;
+  // the gallery's demos: `make list` without the variants (ep-1994/decomp)
+  let demos = listDemos(REPO).filter((d) => !d.name.includes("/"))
+    .map((d) => ({ ...(cfg.demos?.[d.name] ?? {}), name: d.name }));
   if (args.only) demos = demos.filter((d) => args.only.includes(d.name));
   if (!demos.length) throw new Error("no demos selected");
   for (const d of demos) {

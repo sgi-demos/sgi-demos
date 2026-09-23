@@ -1,4 +1,4 @@
-include ../../makefiles/platform.mk
+include $(dir $(lastword $(MAKEFILE_LIST)))platform.mk
 
 LIB = $(BIN_DIR)/$(LIBNAME).a
 EM_LIBNAME = $(WEB_DIR)/$(LIBNAME)
@@ -22,14 +22,9 @@ native: $(LIB)
 
 browser: $(EM_LIB)
 
-$(BIN_DIR):
+# build products are ignored by the root .gitignore (bin-*-*/, *.o, *.a)
+$(BIN_DIR) $(WEB_DIR):
 	mkdir -p $@
-	echo "*.[oach]" > $@/.gitignore
-	echo *.dSYM >> $@/.gitignore
-
-$(WEB_DIR):
-	mkdir -p $@
-	echo "*.[oach]" > $@/.gitignore
 
 $(OBJS): $(BIN_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(BIN_DIR)
 	$(LIB_CC) $(SHIM_INC) $(LIBGL_INC) $(LIBDEMO_INC) -D EM_CHILD_APP $(SDL_INC) $(GLES_INC) $< -c -o $@

@@ -1,101 +1,61 @@
-.PHONY: demos libs clean smoke smoke-baseline thumbs
+.PHONY: all native browser clean list smoke smoke-baseline thumbs
 
-DEMOS_DIR = demos
-DEMOS = arena bounce buttonfly cedit ep-1988 ep-1989 ep-1994 ep-1994/decomp flight-1988 flight-1994 gview ideas insect jello logo newave twilight
+# The one list of demos: every demos/<name>/ or demos/<name>/<variant>/ with a
+# Makefile, except draft ports (placard.json "draft": true). The smoke tests,
+# thumbnails, and README grid read it too, through `make list`.
+DEMO_DIRS := $(patsubst %/Makefile,%,$(wildcard demos/*/Makefile demos/*/*/Makefile))
+DRAFTS := $(patsubst %/placard.json,%,$(shell grep -l '"draft": *true' $(wildcard $(DEMO_DIRS:=/placard.json)) /dev/null))
+DEMOS := $(sort $(patsubst demos/%,%,$(filter-out $(DRAFTS),$(DEMO_DIRS))))
 
-LIBS_DIR = libs
 LIBS = libgl libdemo
 
 LOG_DIR = logs
 
-# Build one target ($2) in one subdir ($1/$3), tee to a log file, and
-# remember the exit code. Always returns 0 from the outer command so
-# the for loop continues past failures; failures are surfaced in the
-# summary by reading the .rc file.
-#
-# $1 = subdir family (demos or libs)
-# $2 = make target (empty, native, browser, clean)
-# $3 = item name (e.g. cedit, libgl)
-define build_one
-    mkdir -p $(LOG_DIR) ; \
-    LOG=$(LOG_DIR)/$(3).log ; \
-    echo "" ; echo "BUILDING: $(3)" ; echo "" ; \
-    ( make $(2) -C $(1)/$(3) 2>&1 ; echo $$? > $(LOG_DIR)/$(3).rc ) | tee $$LOG ;
-endef
-
-# Summarize all .log/.rc files in $(LOG_DIR). Counts error and
-# warning lines per file; reports overall pass/fail.
-define summarize
-    @echo "" ; \
-    echo "==================== BUILD SUMMARY ===========================" ; \
-    printf "%-22s %12s %12s %13s\n" "TARGET" "ERRORS" "WARNINGS" "STATUS" ; \
-    fail=0 ; \
-    for item in $(1) ; do \
-        log=$(LOG_DIR)/$$item.log ; \
-        rc_file=$(LOG_DIR)/$$item.rc ; \
-        if [ -f $$log ] ; then \
-            errs=$$(grep -c 'error:' $$log 2>/dev/null) ; errs=$${errs:-0} ; \
-            warns=$$(grep -c 'warning:' $$log 2>/dev/null) ; warns=$${warns:-0} ; \
-        else \
-            errs=? ; warns=? ; \
-        fi ; \
-        if [ -f $$rc_file ] ; then \
-            rc=$$(cat $$rc_file) ; \
-        else \
-            rc=? ; \
-        fi ; \
-        if [ "$$rc" != "0" ] ; then fail=1 ; fi ; \
-        printf "%-22s %12s %12s %13s\n" $$item $$errs $$warns $$rc ; \
-    done ; \
-    echo "==============================================================" ; \
-    if [ $$fail -ne 0 ] ; then \
-        echo "BUILD FAILED: See $(LOG_DIR)/<target>.log for details." ; \
-        exit 1 ; \
-    else \
-        echo "BUILD OK: All targets built." ; \
-    fi
+# Build every lib, then every demo, with one make target ($1: empty for both
+# native and browser, or native, or browser). Each item's output is teed to
+# $(LOG_DIR)/<item>.log and its exit code kept in <item>.rc, so the loop runs
+# past failures and the summary reports them. Items in a subdirectory
+# (ep-1994/decomp) log as ep-1994-decomp.
+define build
+	@rm -rf $(LOG_DIR) ; mkdir -p $(LOG_DIR) ; \
+	for item in $(LIBS:%=libs/%) $(DEMOS:%=demos/%) ; do \
+	    name=$$(echo $${item#*/} | tr / -) ; \
+	    echo "" ; echo "BUILDING: $$name" ; echo "" ; \
+	    ( $(MAKE) $(1) -C $$item 2>&1 ; echo $$? > $(LOG_DIR)/$$name.rc ) | tee $(LOG_DIR)/$$name.log ; \
+	done
+	@echo "" ; \
+	echo "==================== BUILD SUMMARY ===========================" ; \
+	printf "%-22s %12s %12s %13s\n" "TARGET" "ERRORS" "WARNINGS" "STATUS" ; \
+	fail=0 ; \
+	for item in $(LIBS) $(subst /,-,$(DEMOS)) ; do \
+	    log=$(LOG_DIR)/$$item.log ; \
+	    errs=$$(grep -c 'error:' $$log 2>/dev/null) ; \
+	    warns=$$(grep -c 'warning:' $$log 2>/dev/null) ; \
+	    rc=$$(cat $(LOG_DIR)/$$item.rc 2>/dev/null || echo '?') ; \
+	    if [ "$$rc" != "0" ] ; then fail=1 ; fi ; \
+	    printf "%-22s %12s %12s %13s\n" $$item $${errs:-?} $${warns:-?} $$rc ; \
+	done ; \
+	echo "==============================================================" ; \
+	if [ $$fail -ne 0 ] ; then \
+	    echo "BUILD FAILED: See $(LOG_DIR)/<target>.log for details." ; \
+	    exit 1 ; \
+	else \
+	    echo "BUILD OK: All targets built." ; \
+	fi
 endef
 
 all:
-	@rm -rf $(LOG_DIR)
-	@for lib in $(LIBS) ; do $(call build_one,$(LIBS_DIR),,$$lib) done
-	@for demo in $(DEMOS) ; do $(call build_one,$(DEMOS_DIR),,$$demo) done
-	$(call summarize,$(LIBS))
-	$(call summarize,$(DEMOS))
+	$(call build,)
 
-native:
-	@rm -rf $(LOG_DIR)
-	@for lib in $(LIBS) ; do $(call build_one,$(LIBS_DIR),native,$$lib) done
-	@for demo in $(DEMOS) ; do $(call build_one,$(DEMOS_DIR),native,$$demo) done
-	$(call summarize,$(LIBS))
-	$(call summarize,$(DEMOS))
-
-browser:
-	@rm -rf $(LOG_DIR)
-	@for lib in $(LIBS) ; do $(call build_one,$(LIBS_DIR),browser,$$lib) done
-	@for demo in $(DEMOS) ; do $(call build_one,$(DEMOS_DIR),browser,$$demo) done
-	$(call summarize,$(LIBS))
-	$(call summarize,$(DEMOS))
-
-libs:
-	@rm -rf $(LOG_DIR)
-	@for lib in $(LIBS) ; do $(call build_one,$(LIBS_DIR),,$$lib) done
-	$(call summarize,$(LIBS))
-
-libs-native:
-	@rm -rf $(LOG_DIR)
-	@for lib in $(LIBS) ; do $(call build_one,$(LIBS_DIR),native,$$lib) done
-	$(call summarize,$(LIBS))
-
-libs-browser:
-	@rm -rf $(LOG_DIR)
-	@for lib in $(LIBS) ; do $(call build_one,$(LIBS_DIR),browser,$$lib) done
-	$(call summarize,$(LIBS))
+native browser:
+	$(call build,$@)
 
 clean:
-	for demo in $(DEMOS) ; do echo "" ; echo "CLEANING: $$demo" ; echo "" ; make clean -C $(DEMOS_DIR)/$$demo ; done
-	for lib in $(LIBS) ; do echo "" ; echo "CLEANING: $$lib" ; echo "" ; make clean -C $(LIBS_DIR)/$$lib ; done
+	@for item in $(DEMOS:%=demos/%) $(LIBS:%=libs/%) ; do echo "" ; echo "CLEANING: $$item" ; $(MAKE) clean -C $$item ; done
 	rm -rf $(LOG_DIR)
+
+list:
+	@for d in $(DEMOS) ; do echo $$d ; done
 
 # ============================================================================
 # Visual smoke tests (web targets) — see tests/smoke/README.md
@@ -121,7 +81,8 @@ smoke-baseline: $(SMOKE_DIR)/node_modules
 	cd $(SMOKE_DIR) && node smoke.mjs --repo ../.. --update-baseline
 
 # Browse-page thumbnails: capture every demo's web build into media/<demo>.png
-# (512x384) for sgi-demos.github.io/browse/. Recipes per demo (settle time,
-# keys/mouse to get past splash screens) live in scripts/thumbs.json.
+# (512x384) for sgi-demos.github.io/browse/. Recipes for the demos that need
+# them (settle time, keys/mouse to get past splash screens) live in
+# scripts/thumbs.json.
 thumbs: $(SMOKE_DIR)/node_modules
 	node scripts/thumbs.mjs

@@ -1,6 +1,6 @@
 // Builds the human-review gallery (tests/smoke/report/index.html) from a
 // results array. One card per demo, with its rendering modes (ref CPU,
-// gles2 GPU) side by side as clickable thumbnails, a PASS/FAIL badge per
+// gles GPU) side by side as clickable thumbnails, a PASS/FAIL badge per
 // mode, the measured content number, and any captured errors. If baseline
 // images exist they're shown in a collapsible row so you can eyeball drift,
 // but the PASS/FAIL gate does NOT depend on them.
@@ -65,10 +65,10 @@ export async function writeReport(reportDir, results, meta) {
         )
         .join("");
 
-      const status = captures[0]?.status || "?";
+      const port = captures[0]?.port;
       return `<div class="card ${allPass ? "ok" : "bad"}">
         <h2>${esc(name)}</h2>
-        <div class="meta">status: ${esc(status)} &middot; min content ${captures[0]?.minContent}</div>
+        <div class="meta">${port ? `this port: ${esc(port)} &middot; ` : ""}min content ${captures[0]?.minContent}</div>
         <div class="pair">${figures}</div>
         ${baseline}
         ${reasonsHtml}

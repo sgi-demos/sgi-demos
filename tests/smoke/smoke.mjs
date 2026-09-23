@@ -1,7 +1,7 @@
 // sgi-demos visual smoke runner (web targets, headless Chromium).
 //
-// Captures every configured demo in every configured rendering mode
-// (?rast=ref CPU reference rasterizer, ?rast=gles2 GPU rasterizer). For each
+// Captures every demo (`make list`) in every configured rendering mode
+// (?rast=ref CPU reference rasterizer, ?rast=gles GPU rasterizer). For each
 // demo x mode it:
 //   1. loads demos/<name>/web/?rast=<mode> from a local server (web/ serves
 //      the demo's index.html),
@@ -14,7 +14,7 @@
 // any capture fails, so `make smoke` gates a commit.
 //
 // Usage:
-//   node smoke.mjs [--repo <path>] [--only a,b,c] [--modes ref,gles2]
+//   node smoke.mjs [--repo <path>] [--only a,b,c] [--modes ref,gles]
 //                  [--config demos.json] [--update-baseline]
 import { chromium } from "playwright";
 import { readFile, writeFile, mkdir, copyFile, rm } from "node:fs/promises";
@@ -24,6 +24,7 @@ import { dirname, join, resolve } from "node:path";
 import { startServer } from "./lib/server.mjs";
 import { analyzePng } from "./lib/analyze.mjs";
 import { writeReport } from "./lib/report.mjs";
+import { listDemos } from "./lib/demos.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -105,7 +106,7 @@ async function captureOne(context, baseUrl, demo, mode, cfg) {
     id,
     name: demo.name,
     mode,
-    status: demo.status,
+    port: demo.port,
     minContent: demo.minContent,
     content,
     pass,
@@ -117,20 +118,27 @@ async function captureOne(context, baseUrl, demo, mode, cfg) {
 
 async function main() {
   const args = parseArgs(process.argv);
-  const cfgRaw = JSON.parse(await readFile(args.config, "utf8"));
-  const defaults = cfgRaw.defaults || { minContent: 0.02 };
-  const settleMs = cfgRaw.settleMs ?? 3000;
-  const viewport = cfgRaw.viewport ?? { width: 1024, height: 768 };
-  let modes = cfgRaw.modes ?? ["ref"];
+  const cfg = JSON.parse(await readFile(args.config, "utf8"));
+  const settleMs = cfg.settleMs ?? 3000;
+  const viewport = cfg.viewport ?? { width: 1024, height: 768 };
+  let modes = cfg.modes ?? ["ref"];
   if (args.modes) modes = modes.filter((m) => args.modes.includes(m));
   if (!modes.length) throw new Error("no modes selected");
 
-  let demos = cfgRaw.demos.map((d) => ({ minContent: defaults.minContent, ...d }));
+  // name is the smoke id (ep-1994-decomp), path the demo's web/ directory;
+  // the placard's port note is shown in the gallery
+  let demos = listDemos(args.repo).map((d) => ({
+    minContent: cfg.minContent ?? 0.02,
+    ...(cfg.demos?.[d.id] ?? {}),
+    name: d.id,
+    path: `demos/${d.name}/web/`,
+    port: d.placard.port,
+  }));
   if (args.only) demos = demos.filter((d) => args.only.includes(d.name));
   if (!demos.length) throw new Error("no demos selected");
 
   // Sanity: warn (don't fail yet) about missing pages so the error is obvious.
-  // d.path is the demo's web/ directory; the served page is its index.html.
+  // The served page is the web/ directory's index.html.
   for (const d of demos) {
     if (!existsSync(join(args.repo, d.path, "index.html"))) {
       console.warn(`! ${d.name}: ${d.path}index.html not found under repo (did you run 'make browser'?)`);

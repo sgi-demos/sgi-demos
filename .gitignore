@@ -4,8 +4,10 @@
 Thumbs.db
 *.dSYM
 *.o
+*.a
 bin
 bin-*-*/
 REPO.md
 logs/*
 frame*.ppm
+__pycache__/
