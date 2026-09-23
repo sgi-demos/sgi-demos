@@ -3,7 +3,7 @@
 
 Each demo carries demos/<name>/placard.json, the demo's record: shown in a
 corner card on its web page (demos/placard.js), printed to the terminal by
-native builds, and read by the README grid and the site's browse page.
+native builds, and read into the gallery (scripts/gallery.py).
 
   scripts/placard.py scan  <demo-dir>            print the inputs found in the source
   scripts/placard.py update [<demo-dir>...]      write them into placard.json as "inputs_detected"

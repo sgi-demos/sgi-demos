@@ -1,8 +1,8 @@
-.PHONY: all native browser libs clean list smoke smoke-baseline thumbs
+.PHONY: all native browser libs clean list gallery smoke smoke-baseline thumbs
 
 # The one list of demos: every demos/<name>/ or demos/<name>/<variant>/ with a
 # Makefile, except draft ports (placard.json "draft": true). The smoke tests,
-# thumbnails, and README grid read it too, through `make list`.
+# thumbnails, and gallery read it too, through `make list`.
 DEMO_DIRS := $(patsubst %/Makefile,%,$(wildcard demos/*/Makefile demos/*/*/Makefile))
 DRAFTS := $(patsubst %/placard.json,%,$(shell grep -l '"draft": *true' $(wildcard $(DEMO_DIRS:=/placard.json)) /dev/null))
 DEMOS := $(sort $(patsubst demos/%,%,$(filter-out $(DRAFTS),$(DEMO_DIRS))))
@@ -62,6 +62,11 @@ clean:
 
 list:
 	@for d in $(DEMOS) ; do echo $$d ; done
+
+# The gallery, demos/gallery.json (the site's browse page) and the README's
+# Working demos grid: run after adding a demo or changing a title
+gallery:
+	python3 scripts/gallery.py
 
 # ============================================================================
 # Visual smoke tests (web targets) — see tests/smoke/README.md

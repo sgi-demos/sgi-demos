@@ -1,0 +1,138 @@
+[
+  {
+    "name": "arena",
+    "title": "Arena",
+    "sub": "Rob Mace, 1988",
+    "run": "https://sgi-demos.org/sgi-demos/demos/arena/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/arena",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/arena.png"
+  },
+  {
+    "name": "bounce",
+    "title": "Bounce",
+    "sub": "Unattributed, 1988",
+    "run": "https://sgi-demos.org/sgi-demos/demos/bounce/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/bounce",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/bounce.png"
+  },
+  {
+    "name": "buttonfly",
+    "title": "Buttonfly",
+    "sub": "Wade Olsen, 1988",
+    "run": "https://sgi-demos.org/sgi-demos/demos/buttonfly/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/buttonfly",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/buttonfly.png"
+  },
+  {
+    "name": "cedit",
+    "title": "Cedit",
+    "sub": "Paul Haeberli, 1984",
+    "run": "https://sgi-demos.org/sgi-demos/demos/cedit/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/cedit",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/cedit.png"
+  },
+  {
+    "name": "ep-1988",
+    "title": "Electropaint 1988",
+    "sub": "David A. Tristram, NASA Ames, 1988",
+    "run": "https://sgi-demos.org/sgi-demos/demos/ep-1988/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/ep-1988",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/ep-1988.png"
+  },
+  {
+    "name": "ep-1989",
+    "title": "Electropaint 1989",
+    "sub": "David A. Tristram, NASA Ames, 1989",
+    "run": "https://sgi-demos.org/sgi-demos/demos/ep-1989/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/ep-1989",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/ep-1989.png"
+  },
+  {
+    "name": "ep-1994",
+    "title": "Electropaint 1994",
+    "sub": "David A. Tristram, 1994",
+    "run": "https://sgi-demos.org/sgi-demos/demos/ep-1994/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/ep-1994",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/ep-1994.png"
+  },
+  {
+    "name": "flight-1988",
+    "title": "Flight",
+    "sub": "Gary Tarolli and Rob Mace, 1988",
+    "run": "https://sgi-demos.org/sgi-demos/demos/flight-1988/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/flight-1988",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/flight-1988.png"
+  },
+  {
+    "name": "flight-1994",
+    "title": "Flight 3.4",
+    "sub": "Rob Mace and Gary Tarolli, 1994",
+    "run": "https://sgi-demos.org/sgi-demos/demos/flight-1994/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/flight-1994",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/flight-1994.png"
+  },
+  {
+    "name": "gview",
+    "title": "Gview: the Barcelona Pavilion",
+    "sub": "Unattributed, 1988",
+    "run": "https://sgi-demos.org/sgi-demos/demos/gview/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/gview",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/gview.png"
+  },
+  {
+    "name": "ideas",
+    "title": "Ideas in Motion",
+    "sub": "Thant Tessman, 1988",
+    "run": "https://sgi-demos.org/sgi-demos/demos/ideas/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/ideas",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/ideas.png"
+  },
+  {
+    "name": "insect",
+    "title": "Insect",
+    "sub": "Thant Tessman, 1986",
+    "run": "https://sgi-demos.org/sgi-demos/demos/insect/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/insect",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/insect.png"
+  },
+  {
+    "name": "jello",
+    "title": "Jello",
+    "sub": "Thant Tessman, 1987",
+    "run": "https://sgi-demos.org/sgi-demos/demos/jello/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/jello",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/jello.png"
+  },
+  {
+    "name": "logo",
+    "title": "Logo",
+    "sub": "Thant Tessman, 1987",
+    "run": "https://sgi-demos.org/sgi-demos/demos/logo/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/logo",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/logo.png"
+  },
+  {
+    "name": "newave",
+    "title": "Newave",
+    "sub": "Unattributed, 1988",
+    "run": "https://sgi-demos.org/sgi-demos/demos/newave/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/newave",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/newave.png"
+  },
+  {
+    "name": "webfly",
+    "title": "Performer Town",
+    "sub": "Unattributed, 1993",
+    "run": "https://sgi-demos.org/sgi-performer/web/apps/webfly/web/",
+    "source": "https://github.com/sgi-demos/sgi-performer/tree/main/web/apps/webfly",
+    "thumb": "https://sgi-demos.org/sgi-performer/media/webfly.png"
+  },
+  {
+    "name": "twilight",
+    "title": "Twilight",
+    "sub": "Howard Look, 1991",
+    "run": "https://sgi-demos.org/sgi-demos/demos/twilight/web/",
+    "source": "https://github.com/sgi-demos/sgi-demos/tree/main/demos/twilight",
+    "thumb": "https://sgi-demos.org/sgi-demos/media/twilight.png"
+  }
+]

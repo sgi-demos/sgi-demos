@@ -61,6 +61,7 @@ demos/                One directory per demo: the original source, a short
                       and web/, the built web package that GitHub Pages serves
 demos/placard.js      The corner card on every demo page, read from placard.json
 demos/switches.js     URL switches (?rast=, ?par=) into the environment, per page
+demos/gallery.json    The demos on exhibit, for the site's browse page (make gallery)
 
 include/gl/           IRIS GL public headers: gl.h, device.h
 include/shim/         Old-to-modern shims: demo_shim.h, sys/termio.h, ...
@@ -75,7 +76,7 @@ libs/libgles/         OpenGL ES2 and EGL headers, and the ANGLE libraries
                       native builds link against
 
 makefiles/            Shared build rules, and the web page template
-scripts/              Placards, the README demo grid, thumbnails, fonts,
+scripts/              Placards, the gallery, thumbnails, fonts,
                       frame comparison
 tests/smoke/          Headless-browser smoke tests of every web build
 tests/native-resize/  Native window-resize harness for the framebuffer fitting
@@ -197,7 +198,7 @@ include ../../makefiles/make_demo.mk
 
 `makefiles/make_demo.mk` builds both a native binary (`bin-$(OS)-$(HW)/$(APPNAME)`) and the web package in `web/`: `$(APPNAME).js` + `$(APPNAME).wasm` (+ `.data` for preloaded files) from Emscripten, and `index.html`, the page that loads them, filled in from `makefiles/web_page.html` and the demo's `placard.json` by `scripts/placard.py page`. The shared build logic, including platform detection, SDL/GLES paths, and the Asyncify flags, lives in `makefiles/platform.mk`.
 
-The root `Makefile` builds every demo: every `demos/<name>/` (or `demos/<name>/<variant>/`, such as `ep-1994/decomp`) with a Makefile, except drafts (`"draft": true` in placard.json). `make list` prints that list, and the smoke tests, thumbnails, and README grid all read it from there.
+The root `Makefile` builds every demo: every `demos/<name>/` (or `demos/<name>/<variant>/`, such as `ep-1994/decomp`) with a Makefile, except drafts (`"draft": true` in placard.json). `make list` prints that list, and the smoke tests, thumbnails, and gallery (the README grid and `demos/gallery.json`, which the site's browse page reads) all read it from there.
 
 Emscripten flags to enable demos to yield to the browser:
 
