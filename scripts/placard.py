@@ -222,14 +222,17 @@ def main(argv):
                 data = json.load(fh)
         with open(os.path.join(root, "makefiles", "web_page.html")) as fh:
             page = fh.read()
+        # the paths go in URLs: / on Windows too
+        url = lambda p: p.replace(os.sep, "/")
         for k, v in (("@TITLE@", html.escape(data.get("title", appname))),
                      ("@APPNAME@", appname),
-                     ("@DEMO@", os.path.relpath(d, demos)),
-                     ("@DEMOS_DIR@", os.path.relpath(demos, os.path.join(d, "web"))),
+                     ("@DEMO@", url(os.path.relpath(d, demos))),
+                     ("@DEMOS_DIR@", url(os.path.relpath(demos, os.path.join(d, "web")))),
                      ("@FLAGS@", json.dumps(data.get("web_flags", {}))),
                      ("@ARG@", json.dumps(data.get("web_arg")))):
             page = page.replace(k, v)
-        sys.stdout.write(page)
+        # LF line endings on Windows too, like the committed pages
+        sys.stdout.buffer.write(page.encode("utf-8"))
     else:
         sys.exit(__doc__)
 
