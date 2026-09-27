@@ -110,7 +110,10 @@ DEMO_CODE_CC = $(CC) -std=c90 $(SHIM_HEADER)
 # -Dtimes=...: emscripten's times() never advances (libstubs stub), which
 # freezes times()-paced demo physics (see libs/libgl/times.c)
 DEMO_CODE_EMCC = $(EMCC) -std=c90 $(SHIM_HEADER) -Dtimes=sgi_demos_times
-DEMO_CODE_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat -Wno-pointer-sign -Wno-int-conversion -Wno-out-of-scope-function -Wno-format-extra-args -Wno-unused-command-line-argument -Wno-comment -Wno-deprecated-non-prototype $(DEMO_CODE_WARN_OFF_EXTRA)
+# -Wno-incompatible-pointer-types: an error by default from clang 22; K&R
+# code passes float[60] as float(*)[3] (flight-1988) and sockaddr_in* as
+# sockaddr* (flight-1994)
+DEMO_CODE_WARN_OFF = -Wno-implicit-function-declaration -Wno-implicit-int -Wno-unused-value -Wno-return-type -Wno-parentheses -Wno-gcc-compat -Wno-pointer-sign -Wno-int-conversion -Wno-incompatible-pointer-types -Wno-out-of-scope-function -Wno-format-extra-args -Wno-unused-command-line-argument -Wno-comment -Wno-deprecated-non-prototype $(DEMO_CODE_WARN_OFF_EXTRA)
 
 # Compiler options for all other code
 MODERN_CODE_CC = $(CC) -std=gnu17
