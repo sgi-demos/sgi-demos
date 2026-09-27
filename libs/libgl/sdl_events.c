@@ -7,6 +7,8 @@
 
 #include <SDL.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "sdl_framebuffer.h"
 
 // IRIS GL
@@ -485,6 +487,38 @@ void yieldByFrame(Uint32 frameTotalTicks)
 #endif
 }
 
+// fpsCount - IRISGL_FPS=1 (?fps=1 on the web): count presented frames and
+// print the rate once a second as "IRISGL_FPS <frames per second>", for the
+// perf smoke test (tests/smoke/perf.mjs), followed by the frames and
+// milliseconds it counted. stdout, not stderr: on the web stderr is
+// console.error, which the smoke gate counts as a failure.
+static void fpsCount(void)
+{
+    static int enabled = -1;
+    static Uint32 windowStartTicks = 0;
+    static Uint32 windowFrames = 0;
+
+    if (enabled < 0)
+    {
+        const char *v = getenv("IRISGL_FPS");
+        enabled = v != NULL && atoi(v) != 0;
+        windowStartTicks = SDL_GetTicks();
+    }
+    if (!enabled)
+        return;
+
+    windowFrames++;
+    Uint32 elapsed = SDL_GetTicks() - windowStartTicks;
+    if (elapsed >= 1000)
+    {
+        printf("IRISGL_FPS %.2f %u %u\n", windowFrames * 1000.0 / elapsed,
+               (unsigned)windowFrames, (unsigned)elapsed);
+        fflush(stdout);
+        windowStartTicks += elapsed;
+        windowFrames = 0;
+    }
+}
+
 //
 //  sdl_events_frame_complete - The single platform yield point
 //
@@ -520,6 +554,7 @@ void sdl_events_frame_complete(void)
     // Update framebuffer texture with rendered pixels & render it
     sdlUpdateFramebufferTexture();
     sdlRenderFramebufferTexture();
+    fpsCount();
 
     // Yield to browser every frame, and don't exceed DEMO_FPS in both browser & native
     Uint32 frameTotalTicks = SDL_GetTicks() - frameStartTicks;

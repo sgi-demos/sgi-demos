@@ -179,6 +179,7 @@ Each switch is an environment variable. On the web, `demos/switches.js` passes t
 |---|---|---|
 | `IRISGL_RAST=ref` | `?rast=ref` | the ref (CPU) rasterizer instead of gles (GPU) |
 | `IRISGL_PAR=0` | `?par=0` | no 16:15 pixel aspect correction |
+| `IRISGL_FPS=1` | `?fps=1` | print the frame rate once a second, as `IRISGL_FPS <fps> <frames> <ms>` (see `tests/smoke/perf.mjs`) |
 | `IRISGL_FRAME_PPM=1` | | dump every frame as `frameNNNN.ppm` (native; see `scripts/ppm_compare.py`) |
 | `IRISGL_TRACE=1` | | print every IRIS GL call (native debug builds) |
 | `IRISGL_SNAP_VERTICES=1` | | snap vertices to whole pixels (ref rasterizer) |

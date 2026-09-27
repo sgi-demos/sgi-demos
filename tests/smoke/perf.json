@@ -1,0 +1,17 @@
+{
+  "//": "Perf smoke config (perf.mjs). The demos come from the root Makefile (make list). Each demo runs once per entry in 'modes' (IRISGL_RAST / ?rast=: 'gles' GPU, the default; 'ref' CPU is the reference rasterizer, for correctness, not speed, so it is left out) for 'warmupSamples' one-second windows that are dropped, then 'seconds' that are measured; a run WARNs when its slowest one-second window is under 'warnFps'. 'startSeconds' is how long to wait for a demo's first frame. 'chromiumArgs' ask for the hardware GPU and keep timers unthrottled (web only; the report prints the WebGL renderer it got). 'demos' overrides 'modes' per demo (by id: ep-1994-decomp).",
+  "seconds": 10,
+  "warmupSamples": 1,
+  "warnFps": 15,
+  "startSeconds": 30,
+  "modes": ["gles"],
+  "viewport": { "width": 1024, "height": 768 },
+  "chromiumArgs": [
+    "--enable-gpu",
+    "--ignore-gpu-blocklist",
+    "--disable-background-timer-throttling",
+    "--disable-renderer-backgrounding",
+    "--disable-backgrounding-occluded-windows"
+  ],
+  "demos": {}
+}

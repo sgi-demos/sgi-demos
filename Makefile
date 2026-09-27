@@ -1,4 +1,4 @@
-.PHONY: all native browser libs clean list gallery smoke smoke-baseline thumbs
+.PHONY: all native browser libs clean list gallery smoke smoke-baseline perf perf-native perf-web thumbs
 
 # The one list of demos: every demos/<name>/ or demos/<name>/<variant>/ with a
 # Makefile, except draft ports (placard.json "draft": true). The smoke tests,
@@ -90,6 +90,18 @@ smoke: $(SMOKE_DIR)/node_modules
 # side-by-side eyeball view; not part of the pass/fail gate).
 smoke-baseline: $(SMOKE_DIR)/node_modules
 	cd $(SMOKE_DIR) && node smoke.mjs --repo ../.. --update-baseline
+
+# Frame-rate smoke tests — see tests/smoke/README.md. Each runs every demo
+# for 10s (gles rasterizer) with IRISGL_FPS=1 and prints LOW/AVG/HIGH fps in a
+# PERF SUMMARY table (also written to tests/smoke/perf/<platform>.txt).
+# `make perf-native` needs `make native` first, `make perf-web` `make browser`.
+perf-native:
+	cd $(SMOKE_DIR) && node perf.mjs --repo ../.. --target native
+
+perf-web: $(SMOKE_DIR)/node_modules
+	cd $(SMOKE_DIR) && node perf.mjs --repo ../.. --target web
+
+perf: perf-native perf-web
 
 # Browse-page thumbnails: capture every demo's web build into media/<demo>.png
 # (512x384) for sgi-demos.org/browse/. Recipes for the demos that need

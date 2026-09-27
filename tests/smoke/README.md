@@ -33,6 +33,23 @@ Baselines (`baseline/`, created by `make smoke-baseline`) are shown in a collaps
 
 `demos.json` holds the settings: `settleMs` (wait for first real frames), `modes`, and `minContent` (the non-blank threshold; the default 0.02 means more than 2% of pixels must differ from the dominant color). Its `demos` object overrides them for the demos that need it (the sparse Electropaints, newave, and cedit), and can add an `arg`.
 
+## Frame rate (perf)
+
+`perf.mjs` runs every demo for 10 seconds with the gles (GPU) rasterizer and reports its frame rate — native (Windows, macOS, Linux) or web (Chromium). The ref (CPU) rasterizer is the reference for correctness, not speed, so it is left out; `--modes ref` measures it anyway.
+
+    make perf-native        # needs `make native`
+    make perf-web           # needs `make browser`
+    make perf               # both
+
+With `IRISGL_FPS=1` (`?fps=1` on the web), libgl prints `IRISGL_FPS <fps> <frames> <ms>` once a second from the one place every frame is presented (`sdl_events_frame_complete`). The runner drops the first second (warmup: first frames, shader builds) and reports, per demo, LOW (the slowest one-second window), AVG (total frames over total time), and HIGH (the fastest window), and WARNs when LOW is under 15 fps. The demos are paced to 30 fps, so ~30 is the ceiling. The PERF SUMMARY table is printed and written to `perf/<platform>.txt` (platform is `web`, `win`, `mac`, or `linux`), with the numbers in `perf/<platform>.json` and each run's output in `perf/logs/<platform>/`. It exits non-zero only if a demo produced no frames; warnings are a report, not a gate.
+
+A native demo runs from its directory with its placard's `web_arg`, as on the web. Native builds are `-O0 -g -fsanitize=undefined`, so they are slower than the `-O2` web builds. The web report names the WebGL renderer Chromium gave it: if that is SwiftShader (software), the gles numbers measure the CPU, not the GPU — try `--headed`.
+
+    cd tests/smoke
+    node perf.mjs --target web --only insect,jello --seconds 5 --headed
+
+`perf.json` holds the settings: `seconds`, `warnFps`, `modes`, and per-demo `modes` overrides.
+
 ## Interaction driver
 
 `interact.mjs` drives real mouse interactions headlessly — newave's popup menus, display modes and mesh editing; cedit's slider drags and colorsys menu — and drops annotated screenshots in `results/interact/`. It is a manual verification tool, not part of the smoke gate:

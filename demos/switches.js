@@ -5,7 +5,7 @@
 // demo's .js:
 //   <script src="../../switches.js"></script>
 (function () {
-    var SWITCHES = { rast: "IRISGL_RAST", par: "IRISGL_PAR" };
+    var SWITCHES = { rast: "IRISGL_RAST", par: "IRISGL_PAR", fps: "IRISGL_FPS" };
     var params = new URLSearchParams(window.location.search);
     Module.preRun = (Module.preRun || []).concat(function () {
         Object.keys(SWITCHES).forEach(function (k) {
