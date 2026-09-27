@@ -41,7 +41,8 @@ static void check(const char *label, int setW, int setH)
     if (!aspectOK || !fbOK) failures++;
 }
 
-int main(void)
+// argc/argv unused, but on Windows SDL renames main to SDL_main(int, char **)
+int main(int argc, char *argv[])
 {
     keepaspect(5, 4);
     winopen("resizetest");
