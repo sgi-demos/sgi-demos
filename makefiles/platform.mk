@@ -18,6 +18,15 @@ endif
 # Source and executable dirs
 SRC_DIR = .
 BIN_DIR = ./bin-$(OS)-$(HW)
+# ./bin points at BIN_DIR, so every platform runs a demo as ./bin/<demo>.
+# -n replaces an existing link rather than linking inside the dir it points
+# to. MSYS2's ln -s copies instead of linking (unless MSYS=winsymlinks), and
+# ln can't replace a real dir, so on Windows refresh the copy instead.
+ifeq ($(OS),win)
+	BIN_LINK = rm -rf ./bin && cp -r $(BIN_DIR) ./bin
+else
+	BIN_LINK = ln -sfn $(BIN_DIR) ./bin
+endif
 WEB_DIR = ./web
 # the repository root, from this file's own location, so demos can sit at any depth (demos/ep-1994/decomp)
 REPO_ROOT := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))..)

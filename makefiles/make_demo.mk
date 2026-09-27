@@ -76,7 +76,7 @@ $(APP): $(GL_LIB) $(DEMO_LIB) $(OBJS)
 	$(MODERN_CODE_CC) $(OPT) $(SHIM_INC) $(LIBGL_INC) $(OBJS) $(DEMO_LIB) $(GL_LIB) \
 		$(SDL_INC) $(SDL_LIBS) $(GLES_INC) $(GLES_LIBS) $(GLES_LINK) -lm $(CONSOLE_FLAGS) -o $@
 	$(call GLES_INSTALL)
-	ln -sF $(BIN_DIR) ./bin
+	$(BIN_LINK)
 	@echo
 	@echo BUILT: $@
 	@echo
