@@ -26,7 +26,7 @@
 //
 // Usage:
 //   node perf.mjs --target native|web [--repo <path>] [--only a,b,c]
-//                 [--modes ref,gles] [--seconds 10] [--warn 15] [--headed]
+//                 [--modes ref,gles] [--seconds 10] [--warn 25] [--headed]
 //                 [--config perf.json]
 import { readFile, writeFile, mkdir, rm } from "node:fs/promises";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
@@ -248,7 +248,7 @@ async function main() {
   const args = parseArgs(process.argv);
   const cfg = JSON.parse(await readFile(args.config, "utf8"));
   const seconds = args.seconds ?? cfg.seconds ?? 10;
-  const warnFps = args.warn ?? cfg.warnFps ?? 15;
+  const warnFps = args.warn ?? cfg.warnFps ?? 25;
   const warmup = cfg.warmupSamples ?? 1;
   let modes = cfg.modes ?? ["gles"];
   if (args.modes) modes = args.modes;

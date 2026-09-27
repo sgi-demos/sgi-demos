@@ -1,0 +1,181 @@
+{
+  "header": [
+    "date: 2026-09-27T18:38:07.439Z",
+    "host: Windows_NT 10.0.19045 x64, Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz",
+    "each run: 1s warmup + 10s measured; WARN when LOW < 25 fps (paced to 30)"
+  ],
+  "warnFps": 25,
+  "seconds": 10,
+  "rows": [
+    {
+      "name": "arena",
+      "mode": "gles",
+      "low": 29.91,
+      "avg": 29.99006951340616,
+      "high": 30.1,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "bounce",
+      "mode": "gles",
+      "low": 29.56,
+      "avg": 29.98236331569665,
+      "high": 30.19,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "buttonfly",
+      "mode": "gles",
+      "low": 29.79,
+      "avg": 29.932378679395384,
+      "high": 30.07,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "cedit",
+      "mode": "gles",
+      "low": 29.88,
+      "avg": 29.975186104218363,
+      "high": 30.07,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "ep-1988",
+      "mode": "gles",
+      "low": 29.73,
+      "avg": 29.98132311019365,
+      "high": 30.24,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "ep-1989",
+      "mode": "gles",
+      "low": 29.76,
+      "avg": 29.98027613412229,
+      "high": 30.24,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "ep-1994",
+      "mode": "gles",
+      "low": 29.64,
+      "avg": 29.96550024642681,
+      "high": 30.27,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "ep-1994-decomp",
+      "mode": "gles",
+      "low": 29.82,
+      "avg": 29.97731979094764,
+      "high": 30.21,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "flight-1988",
+      "mode": "gles",
+      "low": 29.88,
+      "avg": 29.973291126718767,
+      "high": 30.1,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "flight-1994",
+      "mode": "gles",
+      "low": 29.88,
+      "avg": 29.97140885339643,
+      "high": 30.04,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "gview",
+      "mode": "gles",
+      "low": 29.79,
+      "avg": 29.94367032315446,
+      "high": 30.07,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "ideas",
+      "mode": "gles",
+      "low": 29.62,
+      "avg": 29.920015799348278,
+      "high": 30.13,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "insect",
+      "mode": "gles",
+      "low": 29.82,
+      "avg": 29.994060582062957,
+      "high": 30.27,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "jello",
+      "mode": "gles",
+      "low": 29.73,
+      "avg": 29.895070283112254,
+      "high": 30.07,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "logo",
+      "mode": "gles",
+      "low": 29.59,
+      "avg": 29.89639861864825,
+      "high": 30.21,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "newave",
+      "mode": "gles",
+      "low": 29.88,
+      "avg": 29.984114376489277,
+      "high": 30.1,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    },
+    {
+      "name": "twilight",
+      "mode": "gles",
+      "low": 29.88,
+      "avg": 29.98027613412229,
+      "high": 30.1,
+      "samples": 10,
+      "stalled": false,
+      "status": "OK"
+    }
+  ]
+}

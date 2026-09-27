@@ -1,0 +1,25 @@
+====================== PERF SUMMARY: win =======================
+date: 2026-09-27T18:38:07.439Z
+host: Windows_NT 10.0.19045 x64, Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz
+each run: 1s warmup + 10s measured; WARN when LOW < 25 fps (paced to 30)
+
+TARGET                  RAST      LOW      AVG     HIGH   STATUS
+arena                   gles     29.9     30.0     30.1       OK
+bounce                  gles     29.6     30.0     30.2       OK
+buttonfly               gles     29.8     29.9     30.1       OK
+cedit                   gles     29.9     30.0     30.1       OK
+ep-1988                 gles     29.7     30.0     30.2       OK
+ep-1989                 gles     29.8     30.0     30.2       OK
+ep-1994                 gles     29.6     30.0     30.3       OK
+ep-1994-decomp          gles     29.8     30.0     30.2       OK
+flight-1988             gles     29.9     30.0     30.1       OK
+flight-1994             gles     29.9     30.0     30.0       OK
+gview                   gles     29.8     29.9     30.1       OK
+ideas                   gles     29.6     29.9     30.1       OK
+insect                  gles     29.8     30.0     30.3       OK
+jello                   gles     29.7     29.9     30.1       OK
+logo                    gles     29.6     29.9     30.2       OK
+newave                  gles     29.9     30.0     30.1       OK
+twilight                gles     29.9     30.0     30.1       OK
+================================================================
+PERF OK: every run stayed at or above 25 fps.
